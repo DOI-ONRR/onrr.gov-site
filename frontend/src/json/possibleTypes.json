@@ -1,0 +1,36 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "OBJECT",
+        "name": "UNION",
+        "possibleTypes": [
+          {
+            "name": "section_heading_blocks"
+          },
+          {
+            "name": "text_blocks"
+          },
+          {
+            "name": "tab_blocks"
+          },
+          {
+            "name": "content_blocks"
+          }
+        ]
+      },
+      {
+        "kind": "UNION",
+        "name": "tab_blocks_tab_block_item_union",
+        "possibleTypes": [
+          {
+            "name": "tab_blocks_contents"
+          },
+          {
+            "name": "content_blocks"
+          }
+        ]
+      }
+    ]
+  }
+}

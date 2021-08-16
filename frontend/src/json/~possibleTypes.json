@@ -1,0 +1,282 @@
+{
+  "data": {
+    "__schema": {
+      "types": [
+        {
+          "kind": "OBJECT",
+          "name": "Query",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "content_blocks",
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "ID",
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "String",
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Int",
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Date",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "pages",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "pages_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "number_filter_operators",
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Float",
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Boolean",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "string_filter_operators",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "date_filter_operators",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "directus_files_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "directus_folders_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "pages_page_blocks_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "directus_files",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "directus_folders",
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "JSON",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "pages_page_blocks",
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "pages_page_blocks_item_union",
+          "possibleTypes": [
+            {
+              "name": "section_heading_blocks"
+            },
+            {
+              "name": "text_blocks"
+            },
+            {
+              "name": "tab_blocks"
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "section_heading_blocks",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "text_blocks",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "tab_blocks",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "tab_blocks_tab_block",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "tab_blocks_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "tab_blocks_tab_block_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "UNION",
+          "name": "tab_blocks_tab_block_item_union",
+          "possibleTypes": [
+            {
+              "name": "tab_blocks_contents"
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "tab_blocks_contents",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "content_blocks_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "boolean_filter_operators",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "companies",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "companies_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "contacts",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "contacts_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "announcements",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "announcements_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "events",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "events_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "menu_items",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "menu_items_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "section_heading_blocks_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "text_blocks_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "tab_blocks_contents_filter",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "__Schema",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "__Type",
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "__TypeKind",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "__Field",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "__InputValue",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "__EnumValue",
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "__Directive",
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "__DirectiveLocation",
+          "possibleTypes": null
+        }
+      ]
+    }
+  }
+}
