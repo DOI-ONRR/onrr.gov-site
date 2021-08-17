@@ -15,6 +15,6 @@
     "npm": "6.x"
   },
   "dependencies": {
-    "directus": "^9.0.0-rc.83"
+    "directus": "^9.0.0-rc.90"
   }
 }
