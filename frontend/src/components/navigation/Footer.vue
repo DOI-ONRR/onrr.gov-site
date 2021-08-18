@@ -72,8 +72,7 @@
           <v-icon>{{ `mdi-${ item.menu_label.toLowerCase() }` }}</v-icon>
         </v-btn>
         <v-btn
-          text  
-          flat
+          text
           to="/about-onrr/contact-us"
         >
           <v-icon>mdi-phone</v-icon>

@@ -16,7 +16,7 @@ const cache = new InMemoryCache({
   fragmentMatcher
 })
 
-console.log('cache yo ------> ', cache)
+// console.log('cache yo ------> ', cache)
 
 const apolloClient = new ApolloClient({
   uri: `${ process.env.VUE_APP_API_URL }/graphql`,

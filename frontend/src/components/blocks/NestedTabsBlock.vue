@@ -16,7 +16,7 @@
           :key="index"
           :value="`tab-${index}`"
         >
-          <v-card flat>
+          <v-card text>
             <v-card-text>
               <div v-for="(b, index) in block.item.tab_blocks" :key="index">
                 <div v-for="(item, index) in b" :key="index">
