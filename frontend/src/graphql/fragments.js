@@ -51,6 +51,7 @@ export const tabBlocksContents = gql`
 `
 
 export const pageFields = gql`
+ ${contentBlocks}
   fragment pageFields on pages {
     id
     title
@@ -58,7 +59,12 @@ export const pageFields = gql`
     hero_image {
       id
     }
-    page_builder
+    page_blocks {
+      item {
+        __typename
+        ...contentBlocks
+      }
+    }
   }
 `
 
