@@ -6,11 +6,12 @@ orbs:
 
 jobs:
   dev-onrr-frontend:
+    working_directory: ~/frontend
     docker:
       - image: cimg/node:15.1
-    working_directory: ~/frontend
     steps:
-      - checkout
+      - checkout:
+          path: ~/frontend
       - node/install-packages
 
       - run: 
