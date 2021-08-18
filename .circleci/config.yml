@@ -10,13 +10,12 @@ jobs:
       - image: cimg/node:15.1
     working_directory: ~/frontend
     steps:
-      - checkout:
-          path: '~/frontend'
+      - checkout
       - node/install-packages
 
       - run: 
           name: Build app
-          command: npm run build
+          command: cd frontend && npm run build
           
       - run: 
           name: Deploy to cloud.gov
