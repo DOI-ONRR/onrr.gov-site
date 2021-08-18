@@ -1,0 +1,10 @@
+---
+applications: 
+- name: dev-onrr-frontend
+  path: ./build
+  instances: 1
+  disk_quota: 1G
+  memory: 100M
+  random-route: false
+  buildpacks:
+    - staticfile_buildpack
