@@ -16,7 +16,7 @@ jobs:
 
       - run: 
           name: Build app
-          command: cd frontend && npm run build
+          command: npm run build
           
       - run: 
           name: Deploy to cloud.gov
