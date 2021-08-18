@@ -18,7 +18,7 @@
         :key="index"
         :value="`tab-${ index }`">
         <v-card
-          flat>
+          text>
           <v-card-text v-if="checkNested(tab.item.tab_blocks)">
             <NestedTabsBlock :content="tab.item.tab_blocks"></NestedTabsBlock>
           </v-card-text>
