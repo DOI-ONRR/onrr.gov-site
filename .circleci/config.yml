@@ -29,7 +29,7 @@ jobs:
             cf api https://api.fr.cloud.gov
             cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
             cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
-            cf push dev-onrr-frontend -f ./frontend/manifest.yml
+            cf push dev-onrr-frontend -f ./manifest.yml
 
 workflows:
   build:
