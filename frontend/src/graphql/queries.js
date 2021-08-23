@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
 import {
-  pageFields,
-  sectionHeadingBlocks,
-  contentBlocks,
-  cardBlocks,
-  tabBlocks
+  pageFields
+  // sectionHeadingBlocks,
+  // contentBlocks,
+  // cardBlocks,
+  // tabBlocks
 } from './fragments'
 
 // Main menu query
@@ -51,22 +51,18 @@ query {
 // Page query
 export const PAGES_BY_ID_QUERY = gql`
 ${pageFields}
-${contentBlocks}
-${sectionHeadingBlocks}
-${cardBlocks}
-${tabBlocks}
 query PagesById($ID: ID!) {
   pages_by_id (id: $ID) {
     ...pageFields
-    page_blocks {
-      item {
-        __typename
-        ...contentBlocks
-        ...sectionHeadingBlocks
-	      ...cardBlocks
-	      ...tabBlocks
-      }
-    }
+    # page_blocks {
+    #   item {
+    #     __typename
+    #     ...contentBlocks
+    #     ...sectionHeadingBlocks
+	  #     ...cardBlocks
+	  #     ...tabBlocks
+    #   }
+    # }
   }
 }`
 

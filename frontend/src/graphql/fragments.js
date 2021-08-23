@@ -65,6 +65,7 @@ export const pageFields = gql`
         ...contentBlocks
       }
     }
+    page_builder
   }
 `
 
