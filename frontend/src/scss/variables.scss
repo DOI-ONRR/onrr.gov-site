@@ -4,26 +4,17 @@ $body-font-family: 'Lato', sans-serif;
 $heading-font-family: 'Lato', sans-serif;
 $headings: (
   'h1': (
-      'size': 2.25rem,
-      'line-height': 2.25rem,
+      'size': 36px,
+      'line-height': 36px,
       'weight': 400,
-      'margin-bottom': 24px
   ),
   'h2': (
-      'size': 2rem,
-      'line-height': 2rem,
+      'size': 32px,
+      'line-height': 32px,
       'weight': 400,
-      'margin-bottom': 24px
   ),
 );
 
 $card-title-word-break: 'break-word';
 
 $btn-text-transform: 'inherit';
-
-.text-h2 {
-  font-size: 34px;
-  line-height: 34px;
-  font-weight: 400;
-  margin-bottom: 24px;
-}

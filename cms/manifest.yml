@@ -1,10 +1,9 @@
 ---
 applications: 
-- name: dev-onrr-frontend
-  path: ./dist
+- name: dev-onrr-cms
   instances: 1
   disk_quota: 1G
-  memory: 100M
+  memory: 512M
   random-route: false
   buildpacks:
-    - staticfile_buildpack
+    - nodejs_buildpack

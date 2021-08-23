@@ -5,23 +5,24 @@
     </div>
     <div v-else class="page-wrap">
       <Breadcrumbs />
-      <div v-if="page.content" v-html="page.content" class="body-1" />
-      <div v-for="block in page.page_blocks" :key="block.id">
-        <div v-if="block.item && block.item.__typename === 'section_heading_blocks'">
-          <ContentBlock :content="block.item.section_heading" :contentType="block.item.section_heading_type"></ContentBlock>
-        </div>
-        <div v-if="block.item && block.item.__typename === 'content_blocks'">
-          <ContentBlock :content="block.item.content" contentType="body-1"></ContentBlock>
-        </div>
-        <div v-if="block.item && block.item.__typename === 'tab_blocks'">
-          <TabsBlock :content="block.item.tab_block" contentType="body-1"></TabsBlock>
-        </div>
-        <div v-if="block.item && block.item.__typename === 'card_blocks'">
-          {{ block.length }}
-          <CardBlock
-            :cardTitle="block.item.card_title"
-            :cardSubtitle="block.item.card_subtitle"
-            :cardContent="block.item.card_content_block"></CardBlock>
+      <!-- <div v-if="page.content" v-html="page.content" class="body-1" /> -->
+      <div v-if="page.page_builder">
+        <div v-for="block in page.page_builder.blocks" :key="block.id">
+          <div v-if="block && (block.type === 'header' || block.type === 'paragraph')">
+            <TextBlock :content="block.data.text" :contentType="block.type" :contentLevel="block.data.level"></TextBlock>
+          </div>
+
+          <div v-if="block && block.type === 'list'">
+            <ListBlock :content="block.data.items" :listStyle="block.data.style"></ListBlock>
+          </div>
+
+          <div v-if="block && block.type === 'tabs'">
+            <TabsBlock :content="block.data" :contentType="block.type"></TabsBlock>
+          </div>
+
+          <div v-if="block && block.type === 'table'">
+            <TableBlock :tableContent="block.data.content"></TableBlock>
+          </div>
         </div>
       </div>
     </div>
@@ -31,17 +32,19 @@
 <script>
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import Breadcrumbs from '@/components/sections/Breadcrumbs'
-import ContentBlock from '@/components/blocks/ContentBlock'
+import TextBlock from '@/components/blocks/TextBlock'
 import TabsBlock from '@/components/blocks/TabsBlock'
-import CardBlock from '@/components/blocks/CardBlock'
+import ListBlock from '@/components/blocks/ListBlock'
+import TableBlock from '@/components/blocks/TableBlock'
 
 export default {
   name: 'Page',
   components: {
     Breadcrumbs,
-    ContentBlock,
+    TextBlock,
     TabsBlock,
-    CardBlock
+    ListBlock,
+    TableBlock
   },
   data() {
     return {
@@ -62,7 +65,7 @@ export default {
           ID: this.findPageBySlug.id
         }
       },
-      fetchPolicy: 'cache-and-network'
+      // fetchPolicy: 'cache-and-network'
     }
   },
   props: {
