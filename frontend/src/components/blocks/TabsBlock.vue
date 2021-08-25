@@ -5,7 +5,7 @@
       background-color="secondary"
       dark>
       <v-tab 
-        v-for="(tab, index) in content.tabs"
+        v-for="(tab, index) in tabs"
         :key="index"
         :href="`#tab-${ index }`">
         {{ tab }}
@@ -14,7 +14,7 @@
     <v-tabs-items
       v-model="model">
       <v-tab-item
-        v-for="(tab, index) in content.tabContents"
+        v-for="(tab, index) in tabContents"
         :key="index"
         :value="`tab-${ index }`">
         <v-card
@@ -40,12 +40,9 @@ export default {
     }
   },
   props: {
-    content: {
+    block: {
       type: [Object]
     },
-    contentType: {
-      type: String
-    }
   },
   components: {
     // TODO
@@ -54,6 +51,14 @@ export default {
   methods: {
     checkNested(obj, ...args) {
       return args.reduce((obj, level) => obj && obj[level], obj)
+    }
+  },
+  computed: {
+    tabs() {
+      return this.block.data.tabs
+    },
+    tabContents() {
+      return this.block.data.tabContents
     }
   }
 }
