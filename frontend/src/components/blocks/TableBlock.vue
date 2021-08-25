@@ -6,7 +6,7 @@
           <th 
             v-for="(item, index) in tableHeaderItems"
             :key="index" class="text-left">
-            <strong>{{ item }}</strong>
+            <span v-html="item"></span>
           </th>
         </tr>
       </thead>
@@ -18,7 +18,7 @@
             v-for="(item, index) in items"
             :key="index" class="text-left"
           >
-            {{ item }}
+            <span v-html="item"></span>
           </td>
         </tr>
       </tbody>
