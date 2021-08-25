@@ -31,8 +31,8 @@
 
 <script>
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
-import SideMenu from '@/components/navigation/SideMenu'
-import HeroImage from '@/components/sections/HeroImage'
+const SideMenu = () => import('@/components/navigation/SideMenu')
+const HeroImage = () =>  import('@/components/sections/HeroImage')
 
 export default {
   name: "TwoColumnLeft",

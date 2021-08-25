@@ -5,24 +5,12 @@
     </div>
     <div v-else class="page-wrap">
       <Breadcrumbs />
-      <!-- <div v-if="page.content" v-html="page.content" class="body-1" /> -->
       <div v-if="page.page_builder">
         <div v-for="block in page.page_builder.blocks" :key="block.id">
-          <div v-if="block && (block.type === 'header' || block.type === 'paragraph')">
-            <TextBlock :content="block.data.text" :contentType="block.type" :contentLevel="block.data.level"></TextBlock>
-          </div>
-
-          <div v-if="block && block.type === 'list'">
-            <ListBlock :content="block.data.items" :listStyle="block.data.style"></ListBlock>
-          </div>
-
-          <div v-if="block && block.type === 'tabs'">
-            <TabsBlock :content="block.data" :contentType="block.type"></TabsBlock>
-          </div>
-
-          <div v-if="block && block.type === 'table'">
-            <TableBlock :tableContent="block.data.content"></TableBlock>
-          </div>
+          <!-- Dynamic components yo -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
+          <keep-alive>
+            <component :is="pageBlock(block.type)" :block="block" :key="block.id"></component>
+          </keep-alive>
         </div>
       </div>
     </div>
@@ -31,11 +19,12 @@
 
 <script>
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
-import Breadcrumbs from '@/components/sections/Breadcrumbs'
-import TextBlock from '@/components/blocks/TextBlock'
-import TabsBlock from '@/components/blocks/TabsBlock'
-import ListBlock from '@/components/blocks/ListBlock'
-import TableBlock from '@/components/blocks/TableBlock'
+const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
+const TextBlock = () => import(/* webpackChunkName: "TextBlock" */ '@/components/blocks/TextBlock')
+const TabsBlock = () => import(/* webpackChunkName: "TabsBlock" */ '@/components/blocks/TabsBlock')
+const ListBlock = () => import(/* webpackChunkName: "ListBlock" */ '@/components/blocks/ListBlock')
+const TableBlock = () => import(/* webpackChunkName: "TableBlock" */ '@/components/blocks/TableBlock')
+const CodeBlock = () => import(/* webpackChunkName: "CodeBlock" */ '@/components/blocks/CodeBlock')
 
 export default {
   name: 'Page',
@@ -44,12 +33,14 @@ export default {
     TextBlock,
     TabsBlock,
     ListBlock,
-    TableBlock
+    TableBlock,
+    CodeBlock
   },
   data() {
     return {
       pages: [],
-      pages_by_id: []
+      pages_by_id: [],
+      code: ''
     }
   },
   apollo: {
@@ -74,6 +65,33 @@ export default {
   created () {
     this.$apollo.queries.pages_by_id.refetch()
   },
+  methods: {
+    pageBlock: function(type) { 
+      let block
+      switch (type) {
+        case 'header':
+        case 'paragraph':
+          block = TextBlock
+          break
+        case 'tabs':
+          block = TabsBlock
+          break
+        case 'list':
+          block = ListBlock 
+          break
+        case 'table':
+          block = TableBlock 
+          break
+        case 'code':
+          block = CodeBlock
+          break
+        default:
+          block = TextBlock
+          break
+      }
+      return block
+    }
+  },
   computed: {
     findPageBySlug () {
       const str = this.$route.path
@@ -91,7 +109,8 @@ export default {
     cardBlockCount () {
       const cardBlocks = this.pages_by_id && this.pages_by_id.page_blocks.filter(block => block.item.__typename === 'card_blocks')
       return cardBlocks
-    }
+    },
+    
   }
 }
 </script>

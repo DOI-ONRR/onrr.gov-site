@@ -33,19 +33,19 @@ export default {
     return {}
   },
   props: {
-    tableContent: {
-      type: [Array]
+    block: {
+      type: [Object]
     },
   },
   methods: {
   },
   computed: {
     tableHeaderItems() {
-      const hItems = this.tableContent[0]
+      const hItems = this.block.data.content[0]
       return hItems
     },
     tableRowItems() {
-      const rItems = this.tableContent.filter((item, index) => index > 0)
+      const rItems = this.block.data.content.filter((item, index) => index > 0)
       return rItems
     }
   }
