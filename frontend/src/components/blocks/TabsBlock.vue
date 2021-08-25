@@ -8,7 +8,7 @@
         v-for="(tab, index) in tabs"
         :key="index"
         :href="`#tab-${ index }`">
-        {{ tab }}
+        <span v-html="tab"></span>
       </v-tab>
     </v-tabs>
     <v-tabs-items
@@ -19,9 +19,7 @@
         :value="`tab-${ index }`">
         <v-card
           text>
-          <v-card-text>
-            {{ tab }}
-          </v-card-text>
+          <v-card-text v-html="tab"></v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
