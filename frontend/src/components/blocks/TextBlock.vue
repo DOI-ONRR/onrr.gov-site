@@ -12,22 +12,16 @@ export default {
     return {}
   },
   props: {
-    content: {
-      type: String
-    },
-    contentLevel: {
-      type: String
-    },
-    contentType: {
-      type: String
+    block: {
+      type: Object
     }
   },
   computed: {
     textClass() {
       let textClass = ''
-      switch (this.contentType) {
+      switch (this.block.type) {
         case 'header':
-          textClass = `text-h${ this.contentLevel }`
+          textClass = `text-h${ this.block.data.level }`
           break
         case 'paragraph':
           textClass = `text-body1`
@@ -38,6 +32,9 @@ export default {
       }
 
       return textClass
+    },
+    content() {
+      return this.block.data.text
     }
   }
 }

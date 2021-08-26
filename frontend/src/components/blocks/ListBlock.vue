@@ -17,17 +17,17 @@ export default {
     return {}
   },
   props: {
-    content: {
-      type: [Array]
+    block: {
+      type: [Object]
     },
-    listStyle: {
-      type: String
-    }
   },
   computed: {
     listTag() {
-      const tag = this.listStyle === 'ordered' ? 'ol' : 'ul'
+      const tag = this.block.style === 'ordered' ? 'ol' : 'ul'
       return tag
+    },
+    content() {
+      return this.block.data.items
     }
   }
 }

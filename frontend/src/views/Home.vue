@@ -88,10 +88,10 @@
 
 <script>
 import { PAGES_BY_ID_QUERY } from '@/graphql/queries'
-import Announcements from '@/components/sections/Announcements'
-import FilesBlock from '@/components/blocks/FilesBlock'
-import RevenueBlock from '@/components/blocks/RevenueBlock'
-import HeroImage from '@/components/sections/HeroImage'
+const Announcements = () => import('@/components/sections/Announcements')
+const FilesBlock = () => import('@/components/blocks/FilesBlock')
+const RevenueBlock = () => import('@/components/blocks/RevenueBlock')
+const HeroImage = () => import('@/components/sections/HeroImage')
 
 export default {
   name: 'Home',
@@ -135,12 +135,7 @@ export default {
   mounted () {
     console.log('breakpoint yo-------> ', this.$vuetify.breakpoint.width)
   },
-  methods: {
-    //  contentBlocks () {
-    //   const contentBlocks = this.pages_by_id && this.pages_by_id.page_blocks.filter(block => block.item.__typename === 'content_blocks')
-    //   return contentBlocks
-    // },
-  },
+  methods: {},
   computed: {
     firstRowBlocks () {
       const blocks = this.contentBlocks.filter((block, index) => index <= 1)

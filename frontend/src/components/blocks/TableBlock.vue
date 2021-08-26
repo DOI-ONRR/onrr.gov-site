@@ -6,7 +6,7 @@
           <th 
             v-for="(item, index) in tableHeaderItems"
             :key="index" class="text-left">
-            <strong>{{ item }}</strong>
+            <span v-html="item"></span>
           </th>
         </tr>
       </thead>
@@ -18,7 +18,7 @@
             v-for="(item, index) in items"
             :key="index" class="text-left"
           >
-            {{ item }}
+            <span v-html="item"></span>
           </td>
         </tr>
       </tbody>
@@ -33,19 +33,19 @@ export default {
     return {}
   },
   props: {
-    tableContent: {
-      type: [Array]
+    block: {
+      type: [Object]
     },
   },
   methods: {
   },
   computed: {
     tableHeaderItems() {
-      const hItems = this.tableContent[0]
+      const hItems = this.block.data.content[0]
       return hItems
     },
     tableRowItems() {
-      const rItems = this.tableContent.filter((item, index) => index > 0)
+      const rItems = this.block.data.content.filter((item, index) => index > 0)
       return rItems
     }
   }
