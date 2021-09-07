@@ -9,7 +9,7 @@
         <div v-for="block in page.page_builder.blocks" :key="block.id">
           <!-- Dynamic components yo -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
           <keep-alive>
-            <component :is="pageBlock(block.type)" :block="block" :key="block.id"></component>
+            <component :is="pageBlock(block.type)" :block="block" :key="block.id" class="block-component"></component>
           </keep-alive>
         </div>
       </div>
@@ -25,6 +25,7 @@ const TabsBlock = () => import(/* webpackChunkName: "TabsBlock" */ '@/components
 const ListBlock = () => import(/* webpackChunkName: "ListBlock" */ '@/components/blocks/ListBlock')
 const TableBlock = () => import(/* webpackChunkName: "TableBlock" */ '@/components/blocks/TableBlock')
 const CodeBlock = () => import(/* webpackChunkName: "CodeBlock" */ '@/components/blocks/CodeBlock')
+const ImageBlock = () => import(/* webpackChunkName: "ImageBlock" */ '@/components/blocks/ImageBlock')
 
 export default {
   name: 'Page',
@@ -34,7 +35,8 @@ export default {
     TabsBlock,
     ListBlock,
     TableBlock,
-    CodeBlock
+    CodeBlock,
+    ImageBlock
   },
   data() {
     return {
@@ -85,6 +87,9 @@ export default {
         case 'code':
           block = CodeBlock
           break
+        case 'image':
+          block = ImageBlock 
+          break
         default:
           block = TextBlock
           break
@@ -118,5 +123,9 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   padding-top: 25px;
+}
+
+.block-component {
+  margin: 24px 0;
 }
 </style>
