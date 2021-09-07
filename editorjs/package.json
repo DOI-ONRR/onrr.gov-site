@@ -1,0 +1,55 @@
+{
+  "name": "directus-extension-editorjs",
+  "version": "v1.0.0-rc.88",
+  "author": {
+    "email": "dimitrov.adrian@gmail.com",
+    "name": "Adrian Dimitrov"
+  },
+  "license": "gpl-3.0",
+  "keywords": [
+    "directus",
+    "directus-extension",
+    "directus-custom-interface",
+    "editorjs",
+    "block-editor"
+  ],
+  "directus:extension": {
+    "type": "interface",
+    "path": "dist/index.js",
+    "source": "src/index.js",
+    "host": "^v9.0.0-rc.90",
+    "hidden": false
+  },
+  "scripts": {
+    "dist": "directus-extension build && mv dist editorjs && zip -r editorjs.zip editorjs",
+    "prepack": "directus-extension build"
+  },
+  "devDependencies": {
+    "@canburaks/text-align-editorjs": "^1.0.4",
+    "@directus/extension-sdk": "^9.0.0-rc.85",
+    "@editorjs/attaches": "^1.1.0",
+    "@editorjs/checklist": "^1.3.0",
+    "@editorjs/code": "^2.7.0",
+    "@editorjs/delimiter": "^1.2.0",
+    "@editorjs/editorjs": "^2.22.1",
+    "@editorjs/embed": "^2.4.6",
+    "@editorjs/header": "^2.6.1",
+    "@editorjs/image": "^2.6.0",
+    "@editorjs/inline-code": "^1.3.1",
+    "@editorjs/link": "^2.3.1",
+    "@editorjs/marker": "^1.2.2",
+    "@editorjs/paragraph": "^2.8.0",
+    "@editorjs/personality": "^2.0.2",
+    "@editorjs/quote": "^2.4.0",
+    "@editorjs/raw": "^2.3.0",
+    "@editorjs/simple-image": "^1.4.1",
+    "@editorjs/table": "^1.3.0",
+    "@editorjs/underline": "^1.0.0",
+    "@editorjs/warning": "^1.2.0",
+    "@itech-indrustries/editorjs-strikethrough": "^1.0.0",
+    "debounce": "^1.2.1",
+    "editorjs-alert": "^1.0.3",
+    "editorjs-list": "^2.1.4"
+  },
+  "dependencies": {}
+}
