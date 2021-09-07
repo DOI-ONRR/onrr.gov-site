@@ -2,3 +2,9 @@ node_modules/
 
 cms/docker-compose.yml
 cms/.env
+
+editorjs/node_modules
+editorjs/editorjs
+editorjs/dist
+editorjs/*.tgz
+editorjs/*.zip
