@@ -42,6 +42,7 @@ export default class Uploader {
 	uploadSelectedFile({ onPreview }) {
 		this.config.uploader.picker((file) => {
 			if (file) {
+				// console.log('file yo -----------> ', file);
 				const response = {
 					success: 1,
 					file: {
@@ -52,6 +53,8 @@ export default class Uploader {
 						fileId: file.id,
 						fileURL: this.config.uploader.baseURL + "files/" + file.id,
 						url: this.config.uploader.baseURL + "assets/" + file.id,
+						height: file.height,
+						width: file.width,
 					},
 				};
 				onPreview(this.config.uploader.addTokenToURL(response.file.fileURL));
