@@ -3,9 +3,11 @@
     <v-img
       :aspect-ratio="16/9"
       :width="width"
+      :height="height"
       :src="fileSrc"
       :lazy-src="lazyImg"
       :class="['img-block', classObj]"
+      :alt="altTag"
       >
         <template v-slot:placeholder>
           <v-row
@@ -40,8 +42,15 @@ export default {
       return `${ process.env.VUE_APP_API_URL }${ this.block.data.file.url }?fit=cover&width=50`
     },
     width() {
-      const w = (this.block.data.stretched) ? '100%' : 'auto'
+      const w = (this.block.data.stretched) ? '100%' : this.block.data.file.width
       return w
+    },
+    height() {
+      const h = (this.block.data.stretched) ? 'auto' : this.block.data.file.height
+      return h
+    },
+    altTag() {
+      return this.block.data.file.title
     },
     classObj() {
       let classes = ''
