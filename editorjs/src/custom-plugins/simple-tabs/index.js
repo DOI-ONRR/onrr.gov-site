@@ -223,7 +223,7 @@ class SimpleTabs {
           { 
             id: `tabBtn__${ index }`, 
             innerHTML: tab,
-            contentEditable: true,
+            contentEditable: !this.readOnly,
             onclick: (event) => {
               this.setActiveClass(event)
             } 
@@ -271,7 +271,7 @@ class SimpleTabs {
         { 
           id: `tabBtn__${ this.tabCount }`, 
           innerHTML: `Tab ${ this.tabCount }`,
-          contentEditable: true,
+          contentEditable: !this.readOnly,
           onclick: (event) => {
             this.setActiveClass(event)
           }   
@@ -294,7 +294,7 @@ class SimpleTabs {
         [this.CSS.tabContentItem, 'active'], 
         { 
           id: `tabContent__${ this.tabCount }`, 
-          contentEditable: true,
+          contentEditable: !this.readOnly,
           innerHTML: `Tab content ${ this.tabCount }...`  
         }
       )
@@ -315,6 +315,14 @@ class SimpleTabs {
     document.getElementById(`tabContent__${ targetId }`).remove()
   }
 
+  /**
+   * Notify core that read-only mode is suppoorted
+   *
+   * @returns {boolean}
+   */
+  static get isReadOnlySupported() {
+    return true;
+  }
 
   /**
    * Helper for making Elements with attributes
