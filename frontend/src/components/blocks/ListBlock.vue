@@ -1,13 +1,20 @@
 <template>
-  <v-list
-    :tag="listTag">
-    <v-list-item
-    v-for="(item, i) in content"
-    :key="i"
-    tag="li">
-    {{ item }}
-    </v-list-item>
-  </v-list>
+  <div>
+    <ul v-if="blockStyle === 'unordered'">
+      <li
+      v-for="(item, i) in content"
+      :key="i">
+      {{ item }}
+      </li>
+    </ul>
+     <ol else>
+      <li
+      v-for="(item, i) in content"
+      :key="i">
+      {{ item }}
+      </li>
+    </ol>
+  </div>
 </template>
 
 <script>
@@ -22,9 +29,8 @@ export default {
     },
   },
   computed: {
-    listTag() {
-      const tag = this.block.style === 'ordered' ? 'ol' : 'ul'
-      return tag
+    blockStyle() {
+      return this.block.style
     },
     content() {
       return this.block.data.items
