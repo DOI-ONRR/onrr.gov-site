@@ -1,5 +1,5 @@
 node_modules/
-
+.env
 cms/docker-compose.yml
 cms/.env
 
