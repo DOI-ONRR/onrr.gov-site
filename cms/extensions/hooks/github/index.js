@@ -11,7 +11,7 @@ const github = {
   baseUrl: 'https://api.github.com',
   owner: 'onrr',
   repo: 'onrr.gov-site',
-  token: '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'
+  token: process.env.github_token,
 };
 
 const headers = new fetch.Headers();
