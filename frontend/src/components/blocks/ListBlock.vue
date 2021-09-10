@@ -1,20 +1,11 @@
 <template>
-  <div>
-    <ul v-if="blockStyle === 'unordered'">
-      <li
-      v-for="(item, i) in content"
-      :key="i">
-      {{ item }}
-      </li>
-    </ul>
-     <ol else>
-      <li
-      v-for="(item, i) in content"
-      :key="i">
-      {{ item }}
-      </li>
-    </ol>
-  </div>
+  <component :is="blockStyle === 'unordered' ? 'ul' : 'ol'">
+    <li
+    v-for="(item, i) in content"
+    :key="i">
+    {{ item }}
+    </li>
+  </component>
 </template>
 
 <script>
@@ -30,7 +21,7 @@ export default {
   },
   computed: {
     blockStyle() {
-      return this.block.style
+      return this.block.data.style
     },
     content() {
       return this.block.data.items
