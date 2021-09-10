@@ -1,8 +1,9 @@
-/backup
-/ddl
-/src 
-/static 
-/uploads 
+backup
+ddl
+src 
+static 
+uploads 
 cors.json
 docker-compose.yml
-/node_modules
+node_modules
+extensions/hooks
