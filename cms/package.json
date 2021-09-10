@@ -15,7 +15,6 @@
     "npm": "6.x"
   },
   "dependencies": {
-    "@octokit/core": "^3.5.1",
-    "directus": "^9.0.0-rc.91"
+    "directus": "^9.0.0-rc.92"
   }
 }
