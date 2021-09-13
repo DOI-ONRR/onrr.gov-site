@@ -16,6 +16,10 @@
 import { PAGES_BY_ID_QUERY } from '@/graphql/queries'
 
 export default {
+  name: 'PageNotFound',
+  metaInfo: {
+    title: 'Page not found',
+  },
   data() {
     return {
       page: null
