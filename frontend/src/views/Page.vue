@@ -29,6 +29,18 @@ const ImageBlock = () => import(/* webpackChunkName: "ImageBlock" */ '@/componen
 
 export default {
   name: 'Page',
+  metaInfo () {
+    return {
+      title: this.metaTitle || this.pageTitle,
+      meta: [
+        { name: 'description', content: this.metaDescription },
+        { property: 'og:title', content: this.metaTitle },
+        { property: 'og:site_name', content: 'Office of Natural Resources Revenue' },
+        { property: 'og:type', content: 'website' },
+        { name: 'robots', content: 'index,follow' }
+      ]
+    }
+  },
   components: {
     Breadcrumbs,
     TextBlock,
@@ -115,7 +127,15 @@ export default {
       const cardBlocks = this.pages_by_id && this.pages_by_id.page_blocks.filter(block => block.item.__typename === 'card_blocks')
       return cardBlocks
     },
-    
+    metaTitle () {
+      return this.pages_by_id.meta_title
+    },
+    metaDescription () {
+      return this.pages_by_id.meta_description
+    },
+    pageTitle () {
+      return this.pages_by_id.title
+    }
   }
 }
 </script>
