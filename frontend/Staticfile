@@ -1,3 +1,4 @@
 root: dist
+pushstate: enabled
 status_codes:
   404: /index.html
