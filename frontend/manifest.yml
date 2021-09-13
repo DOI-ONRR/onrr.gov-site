@@ -1,7 +1,7 @@
 ---
 applications: 
 - name: dev-onrr-frontend
-  path: public
+  path: ./dist
   instances: 1
   disk_quota: 1G
   memory: 100M
