@@ -1,2 +1,3 @@
+root: dist
 status_codes:
   404: /index.html
