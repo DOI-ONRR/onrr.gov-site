@@ -19,7 +19,7 @@
         :value="`tab-${ index }`">
         <v-card
           text>
-          <v-card-text v-html="tab"></v-card-text>
+          <v-card-text v-html="tab" style="white-space: pre-line;"></v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
