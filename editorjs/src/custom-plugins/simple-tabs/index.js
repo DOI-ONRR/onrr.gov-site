@@ -1,7 +1,7 @@
 /**
  * Build Styles
  */
-// require('./index.css').toString()
+require('./index.css').toString()
 
 class SimpleTabs {
   static get toolbox() {
@@ -11,7 +11,7 @@ class SimpleTabs {
     }
   }
 
-  constructor({ data, config, api, readOnly }) {
+  constructor({ data, api, readOnly }) {
 
     this.data = {
       tabs: data.tabs || [],
@@ -126,13 +126,13 @@ class SimpleTabs {
     const tabs = blockContent.querySelectorAll(`.cdx-tab-list .${ this.CSS.tabButton }`)
     const tabContent = blockContent.querySelectorAll(`.cdx-tab-content-list .${ this.CSS.tabContentItem }`)
 
-    const sanitizerConfig = {
-      b: true, 
-      a: {
-        href: true
-      },
-      i: true
-    }
+    // const sanitizerConfig = {
+    //   b: true, 
+    //   a: {
+    //     href: true
+    //   },
+    //   i: true
+    // }
 
     Array.from(tabs).forEach(element => {
       tabsArr.push(element.innerText || '')
@@ -168,7 +168,7 @@ class SimpleTabs {
 
   // active classes
   setActiveClass(event) {
-    const activeElements = document.querySelectorAll('.ce-block--focused .active')
+    // const activeElements = document.querySelectorAll('.ce-block--focused .active')
     const tabItems = document.querySelectorAll('.ce-block--focused .cdx-tab-list .cdx-tab-item .active')
     const tabs = document.querySelectorAll('.ce-block--focused .cdx-tab-list .active')
     const tabContents = document.querySelectorAll('.ce-block--focused .cdx-tab-content-list .active')
@@ -187,7 +187,7 @@ class SimpleTabs {
         if (index !== 0) element.classList.remove('active')
       })
     } else {
-      tabs.forEach((element, index) => {
+      tabs.forEach((element) => {
         element.classList.remove('active')
       })
       event.target.classList += ' active'
@@ -196,7 +196,7 @@ class SimpleTabs {
       const targetId = event.target.id.replace('tabBtn__', '')
       const targetContent = document.querySelector(`.ce-block--focused #tabContent__${ targetId }`)
 
-      tabContents.forEach((element, index) => {
+      tabContents.forEach((element) => {
         element.classList.remove('active')
       })
 
