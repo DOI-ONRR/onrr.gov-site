@@ -35,4 +35,8 @@ jobs:
 workflows:
   build:
     jobs:
-      - dev-onrr-frontend
+      - dev-onrr-frontend:
+          filters:
+            branches:
+              only:
+                - dev
