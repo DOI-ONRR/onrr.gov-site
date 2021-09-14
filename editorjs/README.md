@@ -25,7 +25,7 @@ npm run lint
 import MyCustomPlugin from '../custom-plugins/my-custom-plugin'
 ```
 
-### Once plugin is ready add it to ~/interface.vue and index.js as as tool
+### Once plugin is ready add your new tool to ~/interface.vue and index.js
 ```
 import MyCustomPlugin from '../custom-plugins/my-custom-plugin'
 ```
