@@ -1,0 +1,4 @@
+root: public
+pushstate: enabled
+status_codes:
+  404: /index.html
