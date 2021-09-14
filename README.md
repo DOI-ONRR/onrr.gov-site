@@ -15,7 +15,7 @@ This includes complete code for the Office of Natural Resources Revenue Site, in
 
 ## Verified that there is a directus database
 - Window users -- use winty for interactivity on windows
-- [winty] docker exec -it database bash
+- [winpty] docker exec -it database bash
 - psql -U directus
 
 ## View docker container details like IP address host
@@ -23,7 +23,7 @@ This includes complete code for the Office of Natural Resources Revenue Site, in
 
 ## Restore database from dev backup
 - Windows users -- use winty for interactivity on windows
-- [winty] docker exec -it database bash -c 'pg_restore --verbose  --user=directus --host=host.docker.internal --clean  --no-owner --no-acl --dbname=directus ./backup/dev_database_backup.pg'
+- [winpty] docker exec -it database bash -c 'pg_restore --verbose  --user=directus --host=host.docker.internal --clean  --no-owner --no-acl --dbname=directus ./backup/dev_database_backup.pg'
 
 ## Start up directus
 - cd cms docker compose up -d
