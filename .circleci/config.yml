@@ -36,7 +36,3 @@ workflows:
   build:
     jobs:
       - dev-onrr-frontend
-        filters:
-          branches:
-            ignore:
-              - master
