@@ -21,8 +21,9 @@
     "hidden": false
   },
   "scripts": {
-    "dist": "directus-extension build && mv dist editorjs && zip -r editorjs.zip editorjs",
-    "prepack": "directus-extension build"
+    "dist": "directus-extension build && move dist editorjs && zip -r editorjs.zip editorjs",
+    "prepack": "directus-extension build",
+    "copy": "copy editorjs ../cms/extensions/interfaces"
   },
   "devDependencies": {
     "@canburaks/text-align-editorjs": "^1.0.4",

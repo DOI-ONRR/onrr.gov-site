@@ -1,7 +1,7 @@
 /**
  * Build Styles
  */
-// require('./index.css').toString()
+require('./index.css').toString()
 
 class SimpleTabs {
   static get toolbox() {
