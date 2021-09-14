@@ -344,7 +344,8 @@ export default defineComponent({
 
 			for (const toolName of props.tools) {
 				// @ts-ignore
-				if (defaults.hasOwnProperty(toolName)) {
+				const defaultsHasProperty = Object.prototype.hasOwnProperty.call(defaults, toolName);
+				if (defaultsHasProperty) {
 					tools[toolName.toString()] = defaults[toolName];
 				}
 			}
