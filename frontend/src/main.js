@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueMeta from 'vue-meta'
 import router from './router'
 import VueApollo from 'vue-apollo'
 import ApolloClient from 'apollo-boost'
@@ -47,6 +48,7 @@ const apolloProvider = new VueApollo({
 
 Vue.config.productionTip = false
 Vue.use(VueApollo)
+Vue.use(VueMeta)
 
 new Vue({
   vuetify,

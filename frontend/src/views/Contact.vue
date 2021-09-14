@@ -41,6 +41,9 @@ import Breadcrumbs from '@/components/sections/Breadcrumbs'
 
 export default {
   name: 'Contact',
+  metaInfo: {
+  title: 'Contact',
+  },
   data () {
     return {
       contacts: []

@@ -95,6 +95,11 @@ const HeroImage = () => import('@/components/sections/HeroImage')
 
 export default {
   name: 'Home',
+  metaInfo: {
+    title: 'Home',
+    // overrid the parent template and just use the above title only
+    // titleTemplate: 'Home'
+  },
   data() {
     return {
       API_URL: process.env.VUE_APP_API_URL,

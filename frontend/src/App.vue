@@ -16,7 +16,20 @@ import Footer from '@/components/navigation/Footer'
 
 export default {
   name: 'App',
-
+  metaInfo() {
+    return {
+      // if no subcompoents specify a metaInfo.title, this title will be used
+      title: 'Office of Natural Resources Revenue',
+      // all page titles will be injected into this template
+      titleTemplate: '%s | Office of Natual Resources Revenue',
+      meta: [
+        { property: 'og:site_name', content: 'Office of Natural Resources Revenue' },
+        { property: 'og:type', content: 'website' },
+        { name: 'robots', content: 'index,follow' }
+      ]
+    }
+    
+  },
   components: {
     AppToolbar,
     Footer

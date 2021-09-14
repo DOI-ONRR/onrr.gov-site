@@ -66,6 +66,8 @@ export const pageFields = gql`
       }
     }
     page_builder
+    meta_title
+    meta_description
   }
 `
 
