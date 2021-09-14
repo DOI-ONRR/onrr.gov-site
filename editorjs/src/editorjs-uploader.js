@@ -26,7 +26,9 @@ export default class Uploader {
 						files: [file],
 					},
 				});
-			} catch (error) {}
+			} catch (error) {
+				console.error(error);
+			}
 		}, 500);
 	}
 
