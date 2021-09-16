@@ -7,7 +7,10 @@
     </div>
     <v-container class="page__wrap" v-else>
       <h2 class="title">{{ page.title }}</h2>
-      <div v-html="page.content" />
+      <p align="center">The page you're looking for doesn't exist, was renamed, or was moved.</p>
+      <p align="center"><img src="https://dev-onrr-cms.app.cloud.gov/assets/64c18520-76a1-4892-8dbd-baa17bac4ee6" alt="Rig 404" width="null" height="null" /></p>
+      <p align="center">If you have reached this page from a link on our website, please email&nbsp;<a href="mailto:onrrweb@onrr.gov?subject=ONRR.gov%20feedback" rel="external">onrrweb@onrr.gov</a>&nbsp;with the incorrect url, so we can update the page.</p>
+      <p align="center"><a title="" href="/" target="_self">Return to homepage</a></p>
     </v-container>
   </div>
 </template>
@@ -36,7 +39,6 @@ export default {
       },
        result ({ data }) {
         if (data) {
-          console.debug('404 data---------> ', data)
           this.page = data.pages_by_id
         }
       }

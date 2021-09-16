@@ -170,7 +170,7 @@ const routes = [
       },
       {
         path: 'contact-us',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Contact"),
+        component: () => import(/* webpackChunkName: "Contact" */ "../views/Contact"),
         props: true,
         meta: {
           breadcrumb: 'Contact Us'
@@ -184,18 +184,23 @@ const routes = [
         meta: {
           breadcrumb: ''
         },
-      },
+      }
     ],
     meta: {
       breadcrumb: "About ONRR"
     },
   },
   {
-    path: '*',
+    path: '/404',
+    name: 'PageNotFound',
     component: () => import(/* webpackChunkName: "PageNotFound" */ "../views/PageNotFound"),
     meta: {
       breadcrumb: "Page Not Found"
-    },
+    }
+  },
+  {
+    path: '*',
+    redirect: '/404'
   }
   
 ]
