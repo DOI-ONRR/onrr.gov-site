@@ -1,6 +1,9 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
-import Home from "../views/Home"
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import { apolloClient } from '@/main.js'
+import { PAGES_QUERY } from '@/graphql/queries'
+
+import Home from '../views/Home'
 
 Vue.use(VueRouter)
 
@@ -209,6 +212,30 @@ const router = new VueRouter({
   mode: "history",
   linkExactActiveClass: "nav-active-class",
   routes
+})
+
+// If url path doesn't exist lets redirect to the 404 page
+// Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
+router.beforeEach((to, from, next) => {
+  // console.log('beforeRouteEnter to, from, next ------------>', to, from, next)
+  apolloClient.query({
+    query: PAGES_QUERY 
+  })
+  .then((res) => {
+    // console.log(res.data)
+    if (res.data) {
+      const pages = res.data.pages
+      const found = pages.find(page => page.url === to.path)
+
+      // if not page url is found lets redirect to 404 page
+      if (!found) {
+        next({ name: 'PageNotFound' })
+      }
+
+      next()
+    }
+  })
+  .catch((err) => console.warn(err))
 })
 
 export default router
