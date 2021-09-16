@@ -45,6 +45,7 @@ query {
     id
     slug
     title
+    url
   }
 }`
 
