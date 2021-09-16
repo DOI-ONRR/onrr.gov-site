@@ -5,7 +5,7 @@ LANGUAGE PLPGSQL
 AS $$ 
 BEGIN
 IF NEW.status = 'published' THEN
-insert into links(url, label, category,status, date_created) values (concat('/',NEW.slug), NEW.title, 'Pages', 'published',now() ); 
+insert into links(url, label, category,status, date_created) values (NEW.url, NEW.title, 'Pages', 'published',now() ); 
 END IF;
 RETURN NEW;
 END;
