@@ -101,29 +101,6 @@ export default {
       return page
     }
   },
-  beforeRouteEnter(to, from, next) {
-    
-    console.log('beforeRouteEnter------->', to, from, next)
-    // if (this?.pages === undefined) {
-    //   next({ name: 'PageNotFound' })
-    // }
-
-    // next()
-    console.log('beforeRouteEnter to, from, next: ', to, from, next)
-  },
-  beforeRouteUpdate(to, from, next) {
-    
-    console.log('beforeRouteUpdate to, from, next: ', to, from, next)
-    // if (this?.pages === undefined) {
-    //   next({ name: 'PageNotFound' })
-    // }
-
-    // next()
-    console.log('beforeRouteUpdate to, from, next: ', to, from, next)
-  },
-  beforeRouteLeave(to, from, next) {
-    console.log('beforeRouteLeave to, from, next: ', to, from, next)
-  }
 }
 </script>
 
