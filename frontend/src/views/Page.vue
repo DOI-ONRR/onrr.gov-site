@@ -123,10 +123,6 @@ export default {
     page () {
       return this.pages_by_id
     },
-    cardBlockCount () {
-      const cardBlocks = this.pages_by_id && this.pages_by_id.page_blocks.filter(block => block.item.__typename === 'card_blocks')
-      return cardBlocks
-    },
     metaTitle () {
       return this.pages_by_id.meta_title
     },

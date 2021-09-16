@@ -91,11 +91,38 @@ export default {
       if(this.pages) {
         page = (this.slug !== undefined) 
           ? this.pages.find(page => page.slug === this.slug)
-          : this.pages.find(page => page.slug === routes[routes.length - 1])
+          : this.pages.find(page => page.slug === routes[routes.length - 1]) || false
       }
       this.page = page
       return page
     },
+    getPageBySlug: function(slug) {
+      const page = this.pages.find(page => page.slug === slug)
+      return page
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    
+    console.log('beforeRouteEnter------->', to, from, next)
+    // if (this?.pages === undefined) {
+    //   next({ name: 'PageNotFound' })
+    // }
+
+    // next()
+    console.log('beforeRouteEnter to, from, next: ', to, from, next)
+  },
+  beforeRouteUpdate(to, from, next) {
+    
+    console.log('beforeRouteUpdate to, from, next: ', to, from, next)
+    // if (this?.pages === undefined) {
+    //   next({ name: 'PageNotFound' })
+    // }
+
+    // next()
+    console.log('beforeRouteUpdate to, from, next: ', to, from, next)
+  },
+  beforeRouteLeave(to, from, next) {
+    console.log('beforeRouteLeave to, from, next: ', to, from, next)
   }
 }
 </script>
