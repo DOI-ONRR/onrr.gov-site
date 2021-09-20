@@ -22,13 +22,13 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item :to="`/${ item.key.link_to_page.slug }`" class="menu-btn">
+              <v-list-item :to="item.key.link_to_page.url" class="menu-btn">
                 {{ `${ item.key.menu_label } Home` }}
               </v-list-item>
               <v-list-item
                 v-for="child in item.data"
                 :key="child.id"
-                :to="`/${ item.key.link_to_page.slug }/${ child.link_to_page ? child.link_to_page.slug : '' }`"
+                :to="`${ child.link_to_page.url  }`"
                 class="menu-btn"
               >
                   {{ child.menu_label }}
