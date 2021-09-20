@@ -1,12 +1,16 @@
 <template>
   <div class="side-menu-wrap">
     <v-list>
-      <v-subheader>{{ `${ parentTitle } Home` }}</v-subheader>
+      <v-subheader>
+        <router-link :to="`${ parentSlug }`">
+          {{ `${ parentTitle } Home` }}
+        </router-link>
+      </v-subheader>
       <v-list-item-group
         color="primary" v-for="item in menuItems" :key="item.key.id">
         <v-list-item v-for="cItem in item.data" :key="cItem.id">
           <v-list-item-content>
-            <router-link :to="`/${ item.key.link_to_page.slug }/${ cItem.link_to_page.slug }`">
+            <router-link :to="`${ cItem.link_to_page.url }`">
               {{ cItem.menu_label }}
             </router-link>  
           </v-list-item-content>
@@ -87,11 +91,18 @@ export default {
       const page = this.pages.find(page => page.slug === this.parentSlug)
       this.parentTitle = page.title
     },
+    parentUrl () {
+      const page = this.page.find(page => page.slug === this.parentSlug)
+      this.parentSlug = page.url
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.v-subheader {
+  font-size: 16px;
+}
 a.router-link-active {
   font-weight: bold;
   color: rgb(6, 33, 53);
