@@ -17,6 +17,7 @@ export const MENU_QUERY = gql`query {
     link_to_page {
       id
       slug
+      url
     }
     parent {
       id
@@ -24,6 +25,7 @@ export const MENU_QUERY = gql`query {
       link_to_page {
         id
         slug
+        url
       }
     }
   }
@@ -45,24 +47,44 @@ query {
     id
     slug
     title
+    url
   }
 }`
 
-// Page query
+// Redirects query
+export const REDIRECTS_QUERY = gql`
+query {
+  redirects {
+    id
+    from 
+    to
+  }  
+}
+`
+
+// Pages and Redirects queries
+export const PAGES_REDIRECTS_QUERY = gql`
+query {
+  pages {
+    id
+    slug
+    title
+    url
+  }
+  redirects {
+    id
+    from 
+    to
+  }  
+}
+`
+
+// Page by id query
 export const PAGES_BY_ID_QUERY = gql`
 ${pageFields}
 query PagesById($ID: ID!) {
   pages_by_id (id: $ID) {
     ...pageFields
-    # page_blocks {
-    #   item {
-    #     __typename
-    #     ...contentBlocks
-    #     ...sectionHeadingBlocks
-	  #     ...cardBlocks
-	  #     ...tabBlocks
-    #   }
-    # }
   }
 }`
 

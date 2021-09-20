@@ -34,6 +34,8 @@ import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 const SideMenu = () => import(/* webpackChunkName: "Sidemenu" */ '@/components/navigation/SideMenu')
 const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/components/sections/HeroImage')
 
+
+
 export default {
   name: "TwoColumnLeft",
   data() {
@@ -79,7 +81,7 @@ export default {
       type: String,
     }
   },
-  created () {
+  created() {
     this.findPageBySlug()
   },
   methods: {
@@ -100,7 +102,7 @@ export default {
       const page = this.pages.find(page => page.slug === slug)
       return page
     }
-  },
+  }
 }
 </script>
 
