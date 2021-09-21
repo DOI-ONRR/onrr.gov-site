@@ -15,7 +15,7 @@ export default class extends LinkAutocomplete {
      this.linkAutocomplete=new LinkAutocomplete({config, api})
      this.selection = this.linkAutocomplete.selection
      
-     console.debug("Overloading constructor?");
+     //console.debug("Overloading constructor?");
     /**
      * Config params
      */
@@ -114,7 +114,7 @@ export default class extends LinkAutocomplete {
          searchResponse.items=tmpSearchResponse.data.map( item => {return({href: item.href, name: item.label + ' (' + item.href + ')'})})
 
          searchResponse.success=true;
-         console.debug("Overloading search request?", searchResponse)
+         //console.debug("Overloading search request?", searchResponse)
       
 
          if (searchResponse && searchResponse.success) {
