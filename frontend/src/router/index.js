@@ -205,13 +205,20 @@ const routes = [
       breadcrumb: "Page Not Found"
     }
   },
+  // Dynamic route matching for bulk redirects
+  {
+    path: '/reportpay/Handbooks/pdfdocs/:fileName',
+    redirect: to => {
+      return { path: `/admin/files/folders/40500496-25af-4a4f-8571-c9d6fede04ce/${ to.params.fileName }` }
+    }
+  }
   // {
   //   path: '*',
   //   redirect: '/404'
   // }
 ]
 
-// console.log('routes---------->', routes)
+console.log('routes---------->', routes)
 
 const router = new VueRouter({
   mode: "history",
@@ -241,8 +248,6 @@ function addRedirectsToRoutes (data) {
 router.beforeEach((to, from, next) => {
   // console.log('beforeRouteEnter to.path ------------>', to, from, next)
 
-  // getRedirects()
-
   // Pages query
   apolloClient.query({
     query: PAGES_REDIRECTS_QUERY
@@ -259,13 +264,15 @@ router.beforeEach((to, from, next) => {
       addRedirectsToRoutes(redirects)
 
       const path = location.pathname.toString()
+      console.log('path------------------> ', path)
       const pageFound = pages.find(page => page.url === to.fullPath)
-      const redirectFound = redirects.find(redirect => redirect.from === path)
-
-      // console.log('redirectFound------------->', redirectFound)
+      // TODO: find better way to acheive whether redirect is found
+      const redirectFound = (redirects.find(redirect => redirect.from === path) || routes.find(route => Object.prototype.hasOwnProperty.call(route, 'redirect')))
+      console.log('redirectFound------------->', redirectFound)
 
       // if not page found lets redirect to 404 page
       if (redirectFound) {
+        console.log('redirectFound yo!!!')
         next()
       }
       else {
