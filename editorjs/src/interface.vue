@@ -52,6 +52,7 @@ import ImageTool from './custom-plugins/plugin-image-patch';
 import AttachesTool from './custom-plugins/plugin-attaches-patch';
 import PersonalityTool from './custom-plugins/plugin-personality-patch';
 import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
+import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
 
 export default defineComponent({
 	emits: ['input', 'error'],
@@ -333,10 +334,17 @@ export default defineComponent({
 						uploader: uploaderConfig,
 					},
 				},
-        tabs: {
+                                tabs: {
 					class: SimpleTabs,
 					inlineToolbar: true,
 				},
+                                link: {
+                                        class: LinkAutocomplete,
+                                        config: {
+                                          endpoint: '/items/links',
+                                          queryParam: 'search'
+                                        },
+                                },
 			};
 
 			// Build current tools config.

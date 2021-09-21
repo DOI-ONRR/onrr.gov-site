@@ -20,6 +20,7 @@ import EditorJS from "@editorjs/editorjs"
 import Header from "@editorjs/header"
 import Paragraph from "@editorjs/paragraph"
 import List from "@editorjs/list"
+import LinkAutocomplete from "../custom-plugins/plugin-link-autocomplete-patch.js"
 import SimpleTabs from '../custom-plugins/simple-tabs'
 
 export default {
@@ -60,6 +61,13 @@ export default {
           tabs: {
             class: SimpleTabs,
             inlineToolbar: true
+          },
+          link: {
+            class: LinkAutocomplete,
+            config: {
+             endpoint: 'http://localhost:8055/items/links',
+             queryParam: 'search'
+            }
           },
         },
         onReady: function() {
