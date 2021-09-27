@@ -4,7 +4,6 @@
   "author": "Chris Robey <robey.christopher98@gmail.com>",
 
   "scripts": {
-    "test": "echo \"test\"",
     "dbstart": "cd database && docker-compose up -d",
     "dbbackup": "docker exec -it database bash -c 'pg_dump -U directus -W -F t directus > ./backup/database_dump.pg'",
     "cmstart": "cd cms && docker-compose up -d",
