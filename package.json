@@ -1,0 +1,19 @@
+{
+  "name": "onrr.gov-site",
+  "version": "0.1.0",
+  "author": "Chris Robey <robey.christopher98@gmail.com>",
+
+  "scripts": {
+    "test": "echo \"test\"",
+    "dbstart": "cd database && docker-compose up -d",
+    "dbbackup": "docker exec -it database bash -c 'pg_dump -U directus -W -F t directus > ./backup/database_dump.pg'",
+    "cmstart": "cd cms && docker-compose up -d",
+    "start": "cd database && docker-compose up -d && cd ../cms && docker-compose up -d",
+    "stop": "cd cms && docker-compose down && cd ../database && docker-compose down && npx kill-port 8080",
+    "clean": "cd database && docker-compose down --rmi all --volumes --remove-orphans && docker-compose up -d && cd ../cms docker-compose down --rmi all --volumes --remove-orphans && docker-compose up -d",
+    "dbrestore": "docker exec -it database bash -c 'pg_restore -U directus --clean --no-owner --no-acl --dbname=directus ./backup/dev_database_backup.pg' && docker compose down && docker compose up -d",
+    "psql": "docker exec -it database bash",
+    "frontend": "cd frontend && nohup npm run serve > /dev/null 2>&1 &"
+  }
+
+}
