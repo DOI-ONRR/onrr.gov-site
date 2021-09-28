@@ -47,7 +47,7 @@ Connect to psql instance in cloud.gov
 Backup dev database to local machine  
 `pg_dump postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME} --verbose --no-acl --no-owner -Fc -f ./backup/dev_database_backup.pg`
 
-Restore local docker container db from dev  
+Restore local docker container db from dev backup
 `docker exec -it database bash -c 'pg_restore -d 'postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME}' --verbose --clean --no-password --no-owner --no-acl ./backup/dev_database_backup.pg'`
 
 Restore dev db from local file  
