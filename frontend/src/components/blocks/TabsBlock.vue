@@ -19,7 +19,14 @@
         :value="`tab-${ index }`">
         <v-card
           text>
-          <v-card-text v-html="tab" style="white-space: pre-line;"></v-card-text>
+          <v-card-text style="white-space: pre-line;">
+            <div v-for="block in tab.blocks" :key="block.id">
+              <EditorBlock :blockContent="block"></EditorBlock>
+            </div>
+            <div>
+              
+            </div>
+          </v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -29,8 +36,14 @@
 <script>
 // import NestedTabsBlock from '@/components/blocks/NestedTabsBlock'
 
+import { 
+  pageBlockMixin,
+  pageLayoutMixin,
+  editorBlockMixin
+} from '@/mixins'
+
 export default {
-  
+  mixins: [pageBlockMixin, pageLayoutMixin, editorBlockMixin],
   name: 'TabsBlock',
   data () {
     return {
@@ -38,26 +51,30 @@ export default {
     }
   },
   props: {
-    block: {
-      type: [Object]
-    },
+    // block: {
+    //   type: [Array, Object]
+    // },
   },
   components: {
     // TODO
     // NestedTabsBlock
+    // EditorBlock
   },
   methods: {
-    checkNested(obj, ...args) {
-      return args.reduce((obj, level) => obj && obj[level], obj)
-    }
+    // checkNested(obj, ...args) {
+    //   return args.reduce((obj, level) => obj && obj[level], obj)
+    // }
   },
   computed: {
     tabs() {
-      return this.block.data.tabs
+      return this.block.tab_items.map(item => item.tab_label)
     },
     tabContents() {
-      return this.block.data.tabContents
+      return this.block.tab_items.map(item => item.tab_content_one_column)
     }
+  },
+  mounted() {
+    console.log('tabs block mounted!')
   }
 }
 </script>
