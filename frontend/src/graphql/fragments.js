@@ -6,6 +6,20 @@ export const contentBlocks = gql`
   }
 `
 
+export const blockFields = gql`
+  fragment blockFields on blocks {
+    id
+    block_label
+    block_type
+    block_layout
+    block_content_column_one
+    block_content_column_two
+    block_content_column_three
+    tab_items
+    nested_tab_items
+  }
+`
+
 export const sectionHeadingBlocks = gql`
   fragment sectionHeadingBlocks on section_heading_blocks {
     section_heading
@@ -51,7 +65,7 @@ export const tabBlocksContents = gql`
 `
 
 export const pageFields = gql`
- ${contentBlocks}
+ ${blockFields}
   fragment pageFields on pages {
     id
     title
@@ -60,12 +74,13 @@ export const pageFields = gql`
       id
     }
     page_blocks {
+      id
       item {
         __typename
-        ...contentBlocks
+        ...blockFields
       }
     }
-    page_builder
+    # page_builder
     meta_title
     meta_description
   }

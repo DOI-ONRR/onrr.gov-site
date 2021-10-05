@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="v-tabs__wrap" v-if="content[0].item.tab_block">
+    <div class="v-tabs__wrap">
       <v-tabs v-model="model">
         <v-tab
           v-for="(tab, index) in content[0].item.tab_block"
@@ -44,22 +44,6 @@
           </v-card>
         </v-tab-item>
       </v-tabs-items>
-    </div>
-    <div else>
-      <div v-for="(block, index) in content" :key="index">
-        <div v-if="block.item.__typename === 'section_heading_blocks'">
-          <ContentBlock
-            :content="block.item.section_heading"
-            :contentType="block.item.section_heading_type"
-          ></ContentBlock>
-        </div>
-        <div v-if="block.item.__typename === 'content_blocks'">
-          <ContentBlock
-            v-html="block.item.content"
-            contentType="body-1"
-          ></ContentBlock>
-        </div>
-      </div>
     </div>
   </div>
 </template>
