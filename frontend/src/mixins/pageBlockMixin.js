@@ -7,6 +7,11 @@ const CodeBlock = () => import(/* webpackChunkName: "CodeBlock" */ '@/components
 const ImageBlock = () => import(/* webpackChunkName: "ImageBlock" */ '@/components/blocks/ImageBlock')
 
 export const pageBlockMixin = {
+  data() {
+    return {
+      content: []
+    }
+  },
   props: {
     blockContent: [Array, Object]
   },
@@ -54,5 +59,6 @@ export const pageBlockMixin = {
       }
       return block
     }
-  }
+  },
+  computed: {}
 }
