@@ -1,6 +1,5 @@
 <template>
   <div>
-    Content block yo!
     <EditorBlock :blockContent="block"></EditorBlock>
   </div>
 </template>

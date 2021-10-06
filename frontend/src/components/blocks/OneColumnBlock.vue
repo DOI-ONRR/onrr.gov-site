@@ -2,8 +2,8 @@
   <v-container>
     <v-row>
       <v-col cols="12" sm="12">
-        <div v-if="block.block_content_column_one !== null">
-          <div v-for="blockItem in block.block_content_column_one.blocks" :key="blockItem.id">
+        <div v-if="block.column_one && block.column_one !== null">
+          <div v-for="blockItem in block.column_one.blocks" :key="blockItem.id">
             <EditorBlock :blockContent="blockItem"></EditorBlock>
           </div>
         </div>

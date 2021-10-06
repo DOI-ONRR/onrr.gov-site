@@ -12,11 +12,10 @@ export const blockFields = gql`
     block_label
     block_type
     block_layout
-    block_content_column_one
-    block_content_column_two
-    block_content_column_three
+    column_one
+    column_two
+    column_three
     tab_items
-    nested_tab_items
   }
 `
 
