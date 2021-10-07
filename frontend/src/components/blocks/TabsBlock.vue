@@ -2,8 +2,9 @@
   <div class="v-tabs__wrap">
     <v-tabs
       v-model="model"
-      background-color="secondary"
-      dark>
+      color="white"
+      show-arrows
+      slider-color="white">
       <v-tab 
         v-for="(tab, index) in tabs"
         :key="index"
@@ -18,8 +19,18 @@
         :key="index"
         :value="`tab-${ index }`">
         <v-card
-          text>
-          <v-card-text v-html="tab" style="white-space: pre-line;"></v-card-text>
+          text
+          elevation="0">
+          <v-card-text style="white-space: pre-line;" class="pa-0">
+            <component :is="pageLayout(tab.tab_layout)" :block="tab">
+              <div v-for="block in tab.blocks" :key="block.id">
+                {{ block }}
+              </div>
+            </component>
+            <div v-if="tab.tab_items">
+              <TabsBlock :block="nestedTabs" class="nested-tabs"></TabsBlock>
+            </div>
+          </v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -27,43 +38,71 @@
 </template>
 
 <script>
-// import NestedTabsBlock from '@/components/blocks/NestedTabsBlock'
+import { 
+  pageBlockMixin,
+  pageLayoutMixin,
+  editorBlockMixin
+} from '@/mixins'
 
 export default {
-  
+  mixins: [pageBlockMixin, pageLayoutMixin, editorBlockMixin],
   name: 'TabsBlock',
+  template: '<div><TabsBlock></TabsBlock></div>',
   data () {
     return {
       model: 'tab-0'
     }
   },
   props: {
-    block: {
-      type: [Object]
-    },
+    block: [Array, Object]
   },
-  components: {
-    // TODO
-    // NestedTabsBlock
-  },
-  methods: {
-    checkNested(obj, ...args) {
-      return args.reduce((obj, level) => obj && obj[level], obj)
-    }
-  },
+  // components: {},
+  // methods: {},
   computed: {
     tabs() {
-      return this.block.data.tabs
+      const tabs = this.block && this.block.tab_items.map(item => item.tab_label)
+
+      return tabs
     },
     tabContents() {
-      return this.block.data.tabContents
+      return this.block.tab_items
+    },
+    nestedTabs() {
+      const tItems = this.block.tab_items
+      const nItems = tItems.filter(item => Object.prototype.hasOwnProperty.call(item, 'tab_items'))
+      let nObj = {}
+      nObj = nItems[0]
+  
+      return nObj
+    },
+    tabsBackgroundColor() {
+      let color = this.block.tab_items.length > 0 ? 'deeppink': 'secondary'
+      return color
     }
+  },
+  mounted() {
+    console.log('tabs block mounted!')
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .v-tabs__wrap {
   margin-bottom: 16px;
 }
+
+.v-tab--active {
+  background-color: var(--v-secondary-base);
+}
+
+.nested-tabs .v-tab--active {
+  background-color: var(--v-secondary-lighten6);
+}
+
+.v-slide-group__content {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: black;
+}
+
 </style>

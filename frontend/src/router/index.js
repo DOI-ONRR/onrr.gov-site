@@ -205,10 +205,10 @@ const routes = [
       breadcrumb: "Page Not Found"
     }
   },
-  // {
-  //   path: '*',
-  //   redirect: '/404'
-  // }
+  {
+    path: '*',
+    redirect: '/404'
+  }
 ]
 
 // console.log('routes---------->', routes)

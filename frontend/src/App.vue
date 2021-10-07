@@ -51,4 +51,10 @@ export default {
   padding: 0 !important;
   top: 5px;
 }
+
+.theme--light.v-breadcrumbs .v-breadcrumbs__item--disabled {
+  font-weight: bold;
+  color: black !important; 
+  /* shouldn't have to do this, need to figure out correct method https://vuetifyjs.com/en/api/v-breadcrumbs/ */
+}
 </style>
