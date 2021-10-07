@@ -1,10 +1,10 @@
 <template>
   <div class="v-tabs__wrap">
     <v-tabs
-      :background-color="`${ this.nestedTabs ? 'secondary' : 'shades white' }`"
-      :color="`${ this.nestedTabs ? 'white' : 'grey darken-4' }`"
       v-model="model"
-      dark>
+      color="white"
+      show-arrows
+      slider-color="white">
       <v-tab 
         v-for="(tab, index) in tabs"
         :key="index"
@@ -21,7 +21,7 @@
         <v-card
           text
           elevation="0">
-          <v-card-text style="white-space: pre-line;">
+          <v-card-text style="white-space: pre-line;" class="pa-0">
             <component :is="pageLayout(tab.tab_layout)" :block="tab">
               <div v-for="block in tab.blocks" :key="block.id">
                 {{ block }}
@@ -30,7 +30,6 @@
             <div v-if="tab.tab_items">
               <TabsBlock :block="nestedTabs" class="nested-tabs"></TabsBlock>
             </div>
-            
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -87,12 +86,23 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .v-tabs__wrap {
   margin-bottom: 16px;
 }
 
-// .v-tabs__wrap.nested-tabs .v-slide-group__content {
-//   background: transparent;
-// }
+.v-tab--active {
+  background-color: var(--v-secondary-base);
+}
+
+.nested-tabs .v-tab--active {
+  background-color: var(--v-secondary-lighten6);
+}
+
+.v-slide-group__content {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: black;
+}
+
 </style>
