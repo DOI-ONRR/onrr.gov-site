@@ -5,12 +5,13 @@
     </div>
     <div v-else class="page-wrap">
       <Breadcrumbs />
-      <div v-if="page.page_builder">
-        <div v-for="block in page.page_builder.blocks" :key="block.id">
-          <!-- Dynamic components yo -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
-          <keep-alive>
-            <component :is="pageBlock(block.type)" :block="block" :key="block.id" class="block-component"></component>
-          </keep-alive>
+      <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
+      <div class="text-h1 page-title" v-if="page.title">{{ page.title }}</div>
+      <div v-if="page.page_blocks">
+        <div v-for="block in page.page_blocks" :key="block.id">
+          <component :is="pageLayout(block.item.block_layout)" :block="block.item">
+            <component :is="pageBlock(block.item.block_type)" :block="block.item" class="block-component"></component>
+          </component>
         </div>
       </div>
     </div>
@@ -19,15 +20,16 @@
 
 <script>
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
+import { 
+  pageBlockMixin,
+  pageLayoutMixin,
+  editorBlockMixin
+} from '@/mixins'
+
 const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
-const TextBlock = () => import(/* webpackChunkName: "TextBlock" */ '@/components/blocks/TextBlock')
-const TabsBlock = () => import(/* webpackChunkName: "TabsBlock" */ '@/components/blocks/TabsBlock')
-const ListBlock = () => import(/* webpackChunkName: "ListBlock" */ '@/components/blocks/ListBlock')
-const TableBlock = () => import(/* webpackChunkName: "TableBlock" */ '@/components/blocks/TableBlock')
-const CodeBlock = () => import(/* webpackChunkName: "CodeBlock" */ '@/components/blocks/CodeBlock')
-const ImageBlock = () => import(/* webpackChunkName: "ImageBlock" */ '@/components/blocks/ImageBlock')
 
 export default {
+  mixins: [pageBlockMixin, pageLayoutMixin, editorBlockMixin],
   name: 'Page',
   metaInfo () {
     return {
@@ -42,19 +44,14 @@ export default {
     }
   },
   components: {
-    Breadcrumbs,
-    TextBlock,
-    TabsBlock,
-    ListBlock,
-    TableBlock,
-    CodeBlock,
-    ImageBlock
+    Breadcrumbs
   },
   data() {
     return {
       pages: [],
       pages_by_id: [],
-      code: ''
+      code: '',
+      colCount: 1
     }
   },
   apollo: {
@@ -78,36 +75,6 @@ export default {
   },
   created () {
     this.$apollo.queries.pages_by_id.refetch()
-  },
-  methods: {
-    pageBlock: function(type) { 
-      let block
-      switch (type) {
-        case 'header':
-        case 'paragraph':
-          block = TextBlock
-          break
-        case 'tabs':
-          block = TabsBlock
-          break
-        case 'list':
-          block = ListBlock 
-          break
-        case 'table':
-          block = TableBlock 
-          break
-        case 'code':
-          block = CodeBlock
-          break
-        case 'image':
-          block = ImageBlock 
-          break
-        default:
-          block = TextBlock
-          break
-      }
-      return block
-    }
   },
   computed: {
     findPageBySlug () {
@@ -141,7 +108,15 @@ export default {
   padding-top: 25px;
 }
 
+.page-title {
+  width: 100%;
+  padding-bottom: 8px;
+  border-bottom: 4px solid var(--v-yellow-lighten1);;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
 .block-component {
-  margin: 24px 0;
+  margin: 0;
 }
 </style>

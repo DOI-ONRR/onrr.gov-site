@@ -1,24 +1,17 @@
 <template>
-  <div
-    :class="[`text-${ contentType } content-block`]"
-    v-html="content">
+  <div>
+    <EditorBlock :blockContent="block"></EditorBlock>
   </div>
 </template>
 
 <script>
+import { editorBlockMixin } from '@/mixins'
 export default {
+  mixins: [editorBlockMixin],
   name: 'ContentBlock',
   data () {
     return {}
   },
-  props: {
-    content: {
-      type: String
-    },
-    contentType: {
-      type: String
-    }
-  }
 }
 </script>
 

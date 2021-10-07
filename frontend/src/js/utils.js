@@ -49,3 +49,10 @@ export const titleCase = (str) => {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
   })
 }
+
+export const convertToSlug = (text) => {
+  return text 
+    .toLowerCase()
+    .replace(/ /g, '-') // replaces spaces with underscore 
+    .replace(/[^\w-]+/g, '') // removes anything not alphanumeric, underscore, or hypin
+}
