@@ -79,4 +79,9 @@ export default {
   padding-top: 0;
   margin-bottom: 24px;
 }
+
+.v-breadcrumbs__item--disabled {
+  font-weight: bold;
+  color: black !important;
+}
 </style>

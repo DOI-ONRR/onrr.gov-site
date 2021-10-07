@@ -5,7 +5,7 @@
     </div>
     <div v-else class="page-wrap">
       <Breadcrumbs />
-      <!-- Dynamic components yo -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
+      <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
       <div class="text-h1 page-title" v-if="page.title">{{ page.title }}</div>
       <div v-if="page.page_blocks">
         <div v-for="block in page.page_blocks" :key="block.id">
@@ -113,6 +113,7 @@ export default {
   padding-bottom: 8px;
   border-bottom: 4px solid var(--v-yellow-lighten1);;
   font-weight: 500;
+  margin-bottom: 24px;
 }
 
 .block-component {

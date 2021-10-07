@@ -148,6 +148,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-btn
+      color="primary"
       v-scroll="onScroll"
       v-show="fab"
       fab
@@ -155,9 +156,9 @@
       fixed
       bottom
       left
-      color="primary"
+      elevation="2"
       @click="toTop">
-      <v-icon dark>mdi-chevron-up</v-icon>
+      <v-icon>mdi-cheveron-up</v-icon>
     </v-btn>
   </div>
 </template>

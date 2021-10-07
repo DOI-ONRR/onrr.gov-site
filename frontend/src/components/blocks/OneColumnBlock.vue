@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" sm="12">
+      <v-col cols="12" sm="12" class="pa-0">
         <div v-if="block.column_one && block.column_one !== null">
           <div v-for="blockItem in block.column_one.blocks" :key="blockItem.id">
             <EditorBlock :blockContent="blockItem"></EditorBlock>
