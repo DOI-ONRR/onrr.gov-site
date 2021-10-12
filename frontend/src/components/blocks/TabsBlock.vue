@@ -22,11 +22,12 @@
           text
           elevation="0">
           <v-card-text style="white-space: pre-line;" class="pa-0">
-            <component :is="pageLayout(tab.tab_layout)" :block="tab">
+            <LayoutBlock :layout="tab.tab_layout" :block="tab">
               <div v-for="block in tab.blocks" :key="block.id">
-                {{ block }}
+                <EditorBlock :blockContent="block"></EditorBlock>
               </div>
-            </component>
+            </LayoutBlock>
+            
             <div v-if="tab.tab_items">
               <TabsBlock :block="nestedTabs" class="nested-tabs"></TabsBlock>
             </div>
@@ -38,14 +39,15 @@
 </template>
 
 <script>
+const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
+
 import { 
   pageBlockMixin,
-  pageLayoutMixin,
   editorBlockMixin
 } from '@/mixins'
 
 export default {
-  mixins: [pageBlockMixin, pageLayoutMixin, editorBlockMixin],
+  mixins: [pageBlockMixin, editorBlockMixin],
   name: 'TabsBlock',
   template: '<div><TabsBlock></TabsBlock></div>',
   data () {
@@ -56,7 +58,9 @@ export default {
   props: {
     block: [Array, Object]
   },
-  // components: {},
+  components: {
+    LayoutBlock
+  },
   // methods: {},
   computed: {
     tabs() {
@@ -103,6 +107,19 @@ export default {
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: black;
+}
+
+.v-tab {
+  text-transform: initial !important;
+}
+
+.v-card__text {
+  font-size: 16px;
+  color: inherit !important;
+}
+
+.v-tabs-bar .v-tab:not(.v-tab--active) {
+  color: rgb(0, 0, 0, 1) !important;
 }
 
 </style>

@@ -5,13 +5,13 @@
     </div>
     <div v-else class="page-wrap">
       <Breadcrumbs />
-      <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
       <div class="text-h1 page-title" v-if="page.title">{{ page.title }}</div>
       <div v-if="page.page_blocks">
         <div v-for="block in page.page_blocks" :key="block.id">
-          <component :is="pageLayout(block.item.block_layout)" :block="block.item">
+          <LayoutBlock :layout="block.item.block_layout" :block="block.item">
+            <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
             <component :is="pageBlock(block.item.block_type)" :block="block.item" class="block-component"></component>
-          </component>
+          </LayoutBlock>
         </div>
       </div>
     </div>
@@ -22,14 +22,14 @@
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import { 
   pageBlockMixin,
-  pageLayoutMixin,
   editorBlockMixin
 } from '@/mixins'
 
 const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
+const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 
 export default {
-  mixins: [pageBlockMixin, pageLayoutMixin, editorBlockMixin],
+  mixins: [pageBlockMixin, editorBlockMixin],
   name: 'Page',
   metaInfo () {
     return {
@@ -44,7 +44,8 @@ export default {
     }
   },
   components: {
-    Breadcrumbs
+    Breadcrumbs,
+    LayoutBlock
   },
   data() {
     return {
@@ -111,7 +112,7 @@ export default {
 .page-title {
   width: 100%;
   padding-bottom: 8px;
-  border-bottom: 4px solid var(--v-yellow-lighten1);;
+  border-bottom: 4px solid var(--v-yellow-lighten1);
   font-weight: 500;
   margin-bottom: 24px;
 }
