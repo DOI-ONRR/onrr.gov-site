@@ -118,7 +118,7 @@ const routes = [
     },
   },
   {
-    path: "/compliance-enforcement",
+    path: "/compliance",
     name: "TwoColumnLeft",
     props: true,
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
@@ -142,7 +142,7 @@ const routes = [
     },
   },
   {
-    path: "/indian-resources",
+    path: "/indian",
     name: "TwoColumnLeft",
     props: true,
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
@@ -166,7 +166,7 @@ const routes = [
     },
   },
   {
-    path: "/about-onrr",
+    path: "/about",
     name: "TwoColumnLeft",
     props: true,
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
