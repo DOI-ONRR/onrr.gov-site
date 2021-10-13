@@ -6,7 +6,7 @@
         <v-list-item 
           link
           active-class="active"
-          :to="`${ parentSlug }`">
+          :to="`${ parentUrl }`">
                {{ `${ parentTitle } Home` }}
         </v-list-item>
         <div v-for="item in menuItems" :key="item.key.id">
@@ -75,6 +75,7 @@ export default {
   methods: {
     getParentSlug () {
       const fullPath = this.$route.fullPath
+
       // get first segement of full url path
       fullPath.indexOf(1)
       fullPath.toLowerCase()
@@ -84,11 +85,8 @@ export default {
     getParentPageTitleBySlug () {
       const page = this.pages.find(page => page.slug === this.parentSlug)
       this.parentTitle = page.title
-    },
-    parentUrl () {
-      const page = this.page.find(page => page.slug === this.parentSlug)
-      this.parentSlug = page.url
-    },
+      this.parentUrl = page.url
+    }
   }
 }
 </script>
