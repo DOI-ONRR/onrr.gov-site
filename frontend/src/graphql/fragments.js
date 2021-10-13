@@ -72,6 +72,7 @@ export const pageFields = gql`
     hero_image {
       id
     }
+    hero_title
     page_blocks {
       id
       item {
