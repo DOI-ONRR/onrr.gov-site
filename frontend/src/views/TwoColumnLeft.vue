@@ -8,7 +8,7 @@
     <div v-else>
       <HeroImage
         v-if="page && pages_by_id" 
-        :title="page.title" 
+        :title="page.hero_title"
         :image="`${ API_URL }/assets/${ pages_by_id.hero_image ? pages_by_id.hero_image.id : '36cdee7e-e6e8-435f-850c-05636e551723' }?fit=cover&quality=80`"
         :isHome="false" />
       <v-container>

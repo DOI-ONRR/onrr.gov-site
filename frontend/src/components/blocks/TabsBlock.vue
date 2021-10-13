@@ -3,6 +3,8 @@
     <v-tabs
       v-model="model"
       color="white"
+      dark
+      background-color="white"
       show-arrows
       slider-color="white">
       <v-tab 
