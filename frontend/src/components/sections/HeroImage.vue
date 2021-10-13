@@ -3,9 +3,10 @@
     <img 
     :src="image"
     :alt="title" />
-    <!-- <h1 :class="[isHome ? 'hero__home-text' : 'hero__text']" v-if="title">
+
+    <h1 :class="[isHome ? 'hero__home-text' : 'hero__text']" v-if="title">
       {{ title }}
-    </h1> -->
+    </h1>
   </div>
 </template>
 
