@@ -11,7 +11,7 @@ This includes complete code for the Office of Natural Resources Revenue Site, in
 - Add .env file outside of the repository.
 
 ### Initializing
-Commands should be run in the main directory of the repository.
+Commands should be run in the main directory of the repository. Commands in Windows should be run with git bash.
 ```bash
 npm run install
 npm run init
