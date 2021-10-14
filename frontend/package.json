@@ -23,7 +23,7 @@
     "vue-apollo": "^3.0.7",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.5.2",
-    "vuetify": "^2.4.0"
+    "vuetify": "^2.5.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

@@ -5,7 +5,7 @@
         color="primary">
         <v-list-item 
           link
-          active-class="active"
+          exact
           :to="`${ parentUrl }`">
                {{ `${ parentTitle } Home` }}
         </v-list-item>
@@ -16,9 +16,7 @@
           v-for="cItem in item.data" 
           :key="cItem.id"
           :to="`${ cItem.link_to_page.url }`">
-          
               {{ cItem.menu_label }}
-
         </v-list-item>
         </div>
       </v-list-item-group>
