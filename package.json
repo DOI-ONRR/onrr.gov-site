@@ -18,6 +18,7 @@
     "psql": "run-script-os",
     "psql:default": "docker exec -it database bash",
     "psql:windows": "winpty docker exec -it database bash",
+    "install": "npm install --save-dev run-script-os || echo $? && cd frontend && npm install",
     "frontend": "run-script-os",
     "frontend:windows": "cd frontend && npm run serve",
     "frontend:default": "cd frontend && nohup npm run serve > /dev/null 2>&1 &",
