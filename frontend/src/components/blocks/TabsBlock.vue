@@ -2,11 +2,10 @@
   <div class="v-tabs__wrap">
     <v-tabs
       v-model="model"
-      color="white"
       dark
+      color="white"
       background-color="white"
-      show-arrows
-      slider-color="white">
+      show-arrows>
       <v-tab 
         v-for="(tab, index) in tabs"
         :key="index"
@@ -117,11 +116,15 @@ export default {
 
 .v-card__text {
   font-size: 16px;
-  color: inherit !important;
+  color: rgba(0, 0, 0, 1) !important;
 }
 
 .v-tabs-bar .v-tab:not(.v-tab--active) {
   color: rgb(0, 0, 0, 1) !important;
+}
+
+.v-icon {
+  color: rgba(0,0,0,1) !important;
 }
 
 </style>
