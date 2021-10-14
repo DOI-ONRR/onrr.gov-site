@@ -4,30 +4,41 @@ This includes complete code for the Office of Natural Resources Revenue Site, in
 - Directus CMS 
 - VueJs frontend using Vuetify
 
-## Clone repo into directory
-- git clone https://github.com/ONRR/onrr.gov-site.git
-- add .env file outside of repo
+## Getting Started
 
-- get updated directus release version 
+### Clone repository into directory
+- ```git clone git@github.com:ONRR/onrr.gov-site.git```
+- Add .env file outside of the repository.
 
-## Start up postgres database
-- cd database docker compose up -d
-
-## Verified that there is a directus database
-- Window users -- use winty for interactivity on windows
-- [winpty] docker exec -it database bash
-- psql -U directus
-
-## View docker container details like IP address host
-- docker inspect database
-
-## Restore database from dev backup
-- Windows users -- use winty for interactivity on windows
-- [winpty] docker exec -it database bash -c 'pg_restore --verbose  --user=directus --host=host.docker.internal --clean  --no-owner --no-acl --dbname=directus ./backup/dev_database_backup.pg'
-
-## Start up directus
-- cd cms docker compose up -d
-
-## Start up frontend
-- cd frontend npm install
-- cd frontend npm serve
+### Initializing
+Commands should be run in the main directory of the repository.
+```bash
+npm run install
+npm run init
+```
+### Starting and Stopping
+```bash
+npm run start
+```
+```bash
+npm run stop
+```
+## Commands
+All commands are run with npm.
+```bash 
+npm run [command]
+```
+- ascii: Displays ascii art for ONRR
+- clean: Starts clean instances of CMS and database
+- clear: Clears database and CMS
+- cmstart: Starts CMS
+- dbbackup: Dumps the database
+- dbrestore: Restores the database
+- dbstart: Starts the database
+- frontend: Starts the frontend
+- init: Runs first time setup
+- install: Installs ```run-script-os`` to allow scripts for different Operating Sytems. Also installs frontend dependencies.
+- psql: Opens database bash
+- restart: Stops and restarts CMS, database, and frontend
+- start: Starts CMS, database, and frontend
+- stop: Stops CMS, database, and frontend
