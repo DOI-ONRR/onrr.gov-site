@@ -25,9 +25,6 @@ export default new Vuetify({
           lighten2: '#303e9b',
           lighten1: '#28348f',
           darken1: '#000051',
-          // darken2: string,
-          // darken3: string,
-          // darken4: string.
         },
         secondary: {
           base: '#0076a3',
@@ -39,29 +36,29 @@ export default new Vuetify({
           lighten3: '#19a6d6',
           lighten2: '#0f98c9',
           lighten1: '#0086b6',
-          darken1: '#005682'
+          darken1: '#005682',
         },
         anchor: '#0076a3',
         accent: '#534aae',
         green: {
           base: '#097d4d',
           lighten1: '#4aad79',
-          darken1: '#005024'
+          darken1: '#005024',
         },
         purple: {
           base: '#650d79',
           lighten1: '#960d79',
-          darken1: '#36004c'
+          darken1: '#36004c',
         },
         yellow: {
           base: '#b6890f',
           lighten1: '#ecb947',
-          darken1: '#825c100'
+          darken1: '#825c100',
         },
         neutrals: {
           base: '#262431',
           lighten1: '#484554',
-          lighten2: '#ebebed'
+          lighten2: '#ebebed',
         }
       }
     },
