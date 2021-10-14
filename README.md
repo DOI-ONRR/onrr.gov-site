@@ -37,7 +37,7 @@ npm run [command]
 - dbstart: Starts the database
 - frontend: Starts the frontend
 - init: Runs first time setup
-- install: Installs ```run-script-os`` to allow scripts for different Operating Sytems. Also installs frontend dependencies.
+- install: Installs ```run-script-os``` to allow scripts for different Operating Sytems. Also installs frontend dependencies.
 - psql: Opens database bash
 - restart: Stops and restarts CMS, database, and frontend
 - start: Starts CMS, database, and frontend
