@@ -154,3 +154,17 @@ export const CONTACTS_QUERY = gql`
     }
   }
 `
+
+// Events Query
+export const EVENTS_QUERY = gql`
+  query {
+    events {
+      id
+      title
+      contact {
+        id
+        primary_phone
+    }
+  }
+}
+`
