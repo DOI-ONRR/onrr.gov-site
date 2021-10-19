@@ -9,24 +9,22 @@
     >
     
     <v-list>
-      <v-header v-text="event.title"> {{ event.title }} </v-header>
-      <!-- <v-list-item>
+      <v-header class="event_title event_item" v-text="event.title"> {{ event.title }} </v-header>
+      <v-subheader class="event_description event_item" v-text="event.description"> {{ event.description}} </v-subheader>
         <v-list-item-content>
-          <v-list-item-title v-text="event.description">{{ event.description }}</v-list-item-title>
+          <v-list-item-title class="event_item"> Location Placeholder </v-list-item-title>
         </v-list-item-content>
-
+      <v-list-item>
         <v-list-item-content>
-          <v-list-item-title v-text="event.location">{{ event.location }}</v-list-item-title>
-          <span style="margin-left: 8px;">{{ contact.primary_email }}</span>
+          <v-list-item-title class="event_contact event_item" v-text="event.contact.primary_contact"> {{event.contact.primary_contact}} </v-list-item-title>
         </v-list-item-content>
-
-        <v-list-item-icon v-if="event.location">
-          <v-icon>
-            mdi-flag
-          </v-icon>
-          <span style="margin-left: 8px;">{{ event.location }}</span>
-        </v-list-item-icon>
-      </v-list-item> -->
+        <v-list-item-content>
+          <v-list-item-title class="event_contact event_item" v-text="event.contact.primary_email"> {{event.contact.primary_email}} </v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-content>
+          <v-list-item-title class="event_contact event_item" v-text="event.contact.primary_phone"> {{event.contact.primary_phone}} </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
   </v-card>
   </div>
@@ -70,5 +68,20 @@ export default {
 }
 .v-card {
   margin-bottom: 16px;
+}
+.event_item {
+  padding-left: 25px;
+  padding-top: 40px;
+}
+.event_title {
+  font-size: 30px;
+  font-weight: bold;
+}
+.event_description {
+  font-size: 18px;
+}
+.event_contact {
+  padding-left: 10px;
+  padding-top: 0px;
 }
 </style>
