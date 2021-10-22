@@ -1,6 +1,8 @@
 <template>
   <div>
-    <EditorBlock :blockContent="block"></EditorBlock>
+    <div v-for="blockItem in block" :key="blockItem.id">
+      <EditorBlock :blockContent="blockItem"></EditorBlock>
+    </div>
   </div>
 </template>
 
@@ -12,6 +14,9 @@ export default {
   data () {
     return {}
   },
+  props: {
+    block: [Array, Object]
+  }
 }
 </script>
 

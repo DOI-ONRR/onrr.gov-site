@@ -2,52 +2,26 @@
   <div>
     <v-row v-if="layout === 'one_column'">
       <v-col cols="12" sm="12">
-        <div v-if="block.column_one && block.column_one !== null">
-          <div v-for="blockItem in block.column_one.blocks" :key="blockItem.id">
-            <EditorBlock :blockContent="blockItem"></EditorBlock>
-          </div>
-        </div>
-        <div v-else>
-          <slot></slot>
-        </div>
+        <component :is="pageBlock(block.__typename)" :block="column(1)" :blockColor="block.block_color" class="block-component"></component>
       </v-col>
     </v-row>
     <v-row v-if="layout === 'two_column'">
-      <v-col cols="12" sm="6">
-        <div v-for="blockItem in block.column_one.blocks" :key="blockItem.id">
-          <EditorBlock :blockContent="blockItem"></EditorBlock>
-        </div>
-      </v-col>
-      <v-col cols="12" sm="6">
-        <div v-for="blockItem in block.column_two.blocks" :key="blockItem.id">
-          <EditorBlock :blockContent="blockItem"></EditorBlock>
-        </div>
+      <v-col cols="12" sm="6" v-for="i in 2" :key="i" class="block-container">
+        <component :is="pageBlock(block.__typename)" :block="column(i)" :blockColor="block.block_color" class="block-component"></component>
       </v-col>
     </v-row>
     <v-row v-if="layout === 'three_column'">
-      <v-col cols="12" sm="4">
-        <div v-for="blockItem in block.column_one.blocks" :key="blockItem.id">
-          <EditorBlock :blockContent="blockItem"></EditorBlock>
-        </div>
-      </v-col>
-      <v-col cols="12" sm="4">
-        <div v-for="blockItem in block.column_two.blocks" :key="blockItem.id">
-          <EditorBlock :blockContent="blockItem"></EditorBlock>
-        </div>
-      </v-col>
-      <v-col cols="12" sm="4">
-        <div v-for="blockItem in block.column_three.blocks" :key="blockItem.id">
-          <EditorBlock :blockContent="blockItem"></EditorBlock>
-        </div>
+      <v-col cols="12" sm="4" v-for="i in 3" :key="i" class="block-container">
+        <component :is="pageBlock(block.__typename)" :block="column(i)" :blockColor="block.block_color" class="block-component"></component>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-import { editorBlockMixin } from '@/mixins'
+import { editorBlockMixin, pageBlockMixin } from '@/mixins'
 export default {
-  mixins: [editorBlockMixin],
+  mixins: [editorBlockMixin, pageBlockMixin],
   name: 'LayoutBlock',
   data() {
     return {}
@@ -56,28 +30,35 @@ export default {
     layout: String,
     block: Object
   },
-  mounted() {
-    this.pageLayout(this.layout)
-  },
+  mounted() {},
   methods: {
-    pageLayout: function(type) {
-      let layout
-      switch (type) {
-        case 'three_column':
-          layout = type
+    column(num) {
+      let n
+      let blocksArr = ['tab_blocks']
+
+      switch (num) {
+        case 1:
+          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_one.blocks
           break
-        case 'two_column':
-          layout = type
+        case 2:
+          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_two.blocks
           break
-        case 'one_column':
-          layout = type
+        case 3:
+          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_three.blocks
           break
         default:
-          layout = 'one_column'
+          n = undefined
           break
       }
-      return layout
+      return n
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.block-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>

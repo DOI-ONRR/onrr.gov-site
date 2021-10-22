@@ -81,5 +81,6 @@ export default {
   height: auto;
   text-align: left;
   padding: 16px;
+  border-radius: 4px;
 }
 </style>

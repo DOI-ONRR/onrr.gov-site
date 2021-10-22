@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[textClass, 'text-block']"
+    :class="[textClass]"
     v-html="content">
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
       let textClass = ''
       switch (this.block.type) {
         case 'header':
-          textClass = `text-h${ this.block.data.level }`
+          textClass = `text-h${ this.block.data.level } mt-1 mb-3`
           break
         case 'paragraph':
           textClass = `text-body1`

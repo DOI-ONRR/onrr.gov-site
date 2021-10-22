@@ -49,52 +49,8 @@
 
         <v-spacer></v-spacer>
 
-        <div class="d-none d-lg-block">
-          <v-btn
-            text
-            to="/about-onrr/contact-us"
-            class="no-btn-hover"
-          >
-            <span class="v-btn__content">
-              <v-icon>mdi-phone</v-icon>
-              <span class="mr-2">Contact Us</span>
-            </span>
-            
-          </v-btn>
-          <v-btn
-            text
-            to="/references/reporter-training"
-            class="no-btn-hover"
-          >
-            <span class="v-btn__content">
-              <v-icon>mdi-calendar</v-icon>
-              <span class="mr-2">Events</span>
-            </span>
-          </v-btn>
-          <v-btn
-            href="https://revenuedata.doi.gov"
-            target="_blank"
-            text
-            class="no-btn-hover"
-          >
-            <span class="v-btn__content">
-              <v-icon>mdi-chart-bar</v-icon>
-              <span class="mr-2">Revenue Data</span>
-            </span>
-          </v-btn>
-          <v-btn 
-            plain
-            v-if="hostname === 'localhost' || hostname === '192.168.0.22'">
-            <v-switch
-              v-model="themeSwitch"
-              flat
-              color="anchor"
-              label="">
-            </v-switch>
-          </v-btn>
-          
-
-        </div>
+        <!-- Header Menu -->
+        <HeaderMenu></HeaderMenu>
 
         <!-- Mobile Menu -->
         <div class="d-lg-none">
@@ -149,22 +105,23 @@
     </v-navigation-drawer>
     <v-btn
       color="primary"
-      v-scroll="onScroll"
-      v-show="fab"
-      fab
       dark
+      fab
       fixed
       bottom
       left
       elevation="2"
+      v-scroll="onScroll"
+      v-show="fab"
       @click="toTop">
-      <v-icon>mdi-cheveron-up</v-icon>
+      <v-icon>mdi-chevron-up</v-icon>
     </v-btn>
   </div>
 </template>
 
 <script>
 import { MENU_QUERY } from '@/graphql/queries'
+import HeaderMenu from '@/components/navigation/HeaderMenu'
 import MainMenu from '@/components/navigation/MainMenu'
 
 const OFFSET = 30
@@ -174,13 +131,11 @@ export default {
   name: 'AppToolbar',
   data () {
     return {
-      hostname: location.hostname,
       showSystemBar: true, 
       lastScrollPosition: 0,
       scrollValue: 0,
       drawer: false,
       group: null,
-      themeSwitch: false,
       isMobile: false,
       fab: false,
     }
@@ -192,6 +147,7 @@ export default {
     }
   },
   components: {
+    HeaderMenu,
     MainMenu
   },
   beforeDestroy () {
@@ -217,9 +173,6 @@ export default {
     group () {
       this.drawer = false
     },
-    themeSwitch () {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-    }
   },
   methods: {
     toggleTheme () {
@@ -346,18 +299,6 @@ export default {
   justify-content: center;
   align-items: center;
   line-height: 30px;
-}
-
-.v-btn__content {
-  flex-direction: column;
-}
-
-.no-btn-hover {
-  text-transform: none;
-}
-
-.no-btn-hover::before {
-  background-color: transparent !important;
 }
 
 .system-bar {
