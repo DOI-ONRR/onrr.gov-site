@@ -1,14 +1,16 @@
 <template>
-  <v-card class="v-card__item">
-    <v-card-title class="text-h5" v-if="cardTitle">
+  <v-card class="card v-card__item" :class="blockColor">
+    <v-card-title v-if="cardTitle" class="text-h5 black--text">
       {{ cardTitle }}
     </v-card-title>
-    <v-card-subtitle v-if="cardSubtitle" class="v-card__subtitle">
+    <v-card-subtitle v-if="cardSubtitle" class="v-card__subtitle black--text">
       {{ cardSubtitle }}
     </v-card-subtitle>
-    <v-card-text
-      class="v-card__content"
-      v-html="cardContent[0].item.content"></v-card-text>
+    <v-card-text class="text--primary body-1">
+      <div v-for="blockItem in block" :key="blockItem.id">
+        <EditorBlock :blockContent="blockItem"></EditorBlock>
+      </div>
+    </v-card-text>
     <!-- <v-card-actions>
       Actions here...
     </v-card-actions> -->
@@ -16,7 +18,10 @@
 </template>
 
 <script>
+import { editorBlockMixin, pageBlockMixin } from '@/mixins'
+// const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 export default {
+  mixins: [editorBlockMixin, pageBlockMixin],
   name: 'CardBlock',
   data () {
     return {
@@ -32,7 +37,22 @@ export default {
     },
     cardContent: {
       type: [String, Array]
-    }
+    },
+    block: [Array, Object],
+    blockColor: String
+  },
+  components: {
+    // LayoutBlock
+  },
+  mounted() {
+    console.log('Hello, from CardBlock!')
+  },
+  computed: {
+    blocks() {
+      const blocks = this.block 
+
+      return blocks
+    },
   }
 }
 </script>
@@ -44,5 +64,34 @@ export default {
 
 .v-card-text {
   margin-top: 50px;
+}
+
+.card {
+  border-top-width: 6px;
+  border-top-style: solid;
+}
+
+.anchor--color {
+  border-top-color: var(--v-secondary-base);
+}
+
+.primary--color {
+  border-top-color: var(--v-primary-base);
+}
+
+.secondary--color {
+  border-top-color: var(--v-secondary-base);
+}
+
+.green--color {
+  border-top-color: var(--v-green-lighten1);
+}
+
+.purple--color {
+  border-top-color: var(--v-purple-base);
+}
+
+.yellow--color {
+  border-top-color: var(--v-yellow-lighten1)
 }
 </style>

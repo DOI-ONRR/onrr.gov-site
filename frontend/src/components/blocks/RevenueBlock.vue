@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="text-h2">{{ title }}</h2>
+    <h2 class="text-h2 mt-1 mb-3">{{ title }}</h2>
     <div class="text-body-1">
       <p>Fiscal year {{ maxFiscalRevenueYear }} revenue: 
         <span style="font-weight: bold;">{{ formatToDollarInt(totalYearlyFiscalRevenue) }}</span>

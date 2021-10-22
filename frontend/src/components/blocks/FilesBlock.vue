@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="text-h2">{{ title  || 'Files'}}</h2>
+    <h2 class="text-h2 mt-1 mb-3">{{ title  || 'Files'}}</h2>
     <v-card v-for="file in fileItems" :key="file.id"
     class="announcement-card"
     elevation="0">

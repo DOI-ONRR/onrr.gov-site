@@ -6,15 +6,46 @@ export const contentBlocks = gql`
   }
 `
 
-export const blockFields = gql`
-  fragment blockFields on blocks {
+// export const blockFields = gql`
+//   fragment blockFields on blocks {
+//     id
+//     block_label
+//     block_type
+//     block_layout
+//     column_one
+//     column_two
+//     column_three
+//     tab_items
+//   }
+// `
+
+export const contentBlockFields = gql`
+  fragment contentBlockFields on content_blocks {
     id
     block_label
-    block_type
     block_layout
     column_one
     column_two
     column_three
+  }
+`
+
+export const cardBlockFields = gql`
+  fragment cardBlockFields on card_blocks {
+    id
+    block_label
+    block_layout 
+    block_color
+    column_one
+    column_two
+    column_three
+  }
+`
+
+export const tabBlockFields = gql`
+  fragment tabBlockFields on tab_blocks {
+    id
+    tab_block_label
     tab_items
   }
 `
@@ -64,7 +95,9 @@ export const tabBlocksContents = gql`
 `
 
 export const pageFields = gql`
- ${blockFields}
+ ${contentBlockFields}
+ ${tabBlockFields}
+ ${cardBlockFields}
   fragment pageFields on pages {
     id
     title
@@ -77,7 +110,9 @@ export const pageFields = gql`
       id
       item {
         __typename
-        ...blockFields
+        ...contentBlockFields
+        ...tabBlockFields
+        ...cardBlockFields
       }
     }
     # page_builder
