@@ -82,7 +82,7 @@ export default {
 }
 .event_item {
   padding-left: 25px;
-  padding-top: 40px;
+  padding-top: 10px;
 }
 .event_title {
   font-size: 30px;
@@ -90,6 +90,9 @@ export default {
 }
 .event_description {
   font-size: 18px;
+  display: inline-block;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 .event_contact {
   padding-left: 10px;
