@@ -22,7 +22,7 @@
         <v-card
           text
           elevation="0">
-          <v-card-text style="white-space: pre-line;" class="pa-0">
+          <v-card-text style="white-space: pre-line;" class="pl-0 pr-0 pt-4 pb-4">
             <LayoutBlock :layout="tab.tab_layout" :block="tab"></LayoutBlock>
 
             <div v-if="tab.tab_items">

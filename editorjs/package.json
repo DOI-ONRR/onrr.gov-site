@@ -1,7 +1,22 @@
 {
   "name": "editorjs",
-  "version": "0.1.0",
+  "version": "1.0.0-rc.97",
   "private": true,
+  "license": "gpl-3.0",
+  "keywords": [
+    "directus",
+    "directus-extension",
+    "directus-custom-interface",
+    "editorjs",
+    "block-editor"
+  ],
+  "directus:extension": {
+    "type": "interface",
+    "path": "dist/index.js",
+    "source": "src/index.js",
+    "host": "^v9.0.0-rc.94",
+    "hidden": false
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -10,6 +25,7 @@
     "prepack": "directus-extension build"
   },
   "dependencies": {
+    "@directus/extensions-sdk": "^9.0.0-rc.99",
     "@editorjs/list": "^1.6.2",
     "core-js": "^3.6.5",
     "vue": "^3.0.0"

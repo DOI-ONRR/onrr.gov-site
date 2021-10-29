@@ -39,7 +39,7 @@ export default {
       type: [String, Array]
     },
     block: [Array, Object],
-    blockColor: String
+    blockItem: Object
   },
   components: {
     // LayoutBlock
@@ -53,6 +53,9 @@ export default {
 
       return blocks
     },
+    blockColor() {
+      return this.blockItem.block_color
+    }
   }
 }
 </script>

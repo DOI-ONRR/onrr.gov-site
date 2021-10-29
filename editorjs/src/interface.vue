@@ -51,7 +51,8 @@ import ListTool from './custom-plugins/plugin-list-patch';
 import ImageTool from './custom-plugins/plugin-image-patch';
 import AttachesTool from './custom-plugins/plugin-attaches-patch';
 import PersonalityTool from './custom-plugins/plugin-personality-patch';
-import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
+// import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
+import CollectionsTool from "./custom-plugins/plugin-collections";
 
 export default defineComponent({
 	emits: ['input', 'error'],
@@ -70,7 +71,7 @@ export default defineComponent({
 		},
 		tools: {
 			type: Array,
-			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'delimiter', 'checklist', 'quote', 'underline'],
+			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'quote', 'underline', 'collection'],
 		},
 		font: {
 			type: String,
@@ -333,10 +334,17 @@ export default defineComponent({
 						uploader: uploaderConfig,
 					},
 				},
-        tabs: {
-					class: SimpleTabs,
-					inlineToolbar: true,
+				collection: {
+					class: CollectionsTool,
+					config: {
+						collectionsEndpoint: '/collections',
+						fieldsEndpoint: '/fields'
+					}
 				},
+				// tabs: {
+				// 	class: SimpleTabs,
+				// 	inlineToolbar: true,
+				// },
 			};
 
 			// Build current tools config.

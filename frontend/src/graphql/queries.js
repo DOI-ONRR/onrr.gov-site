@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import {
-  pageFields
+  pageFields,
+  // fileCollectionFields
   // sectionHeadingBlocks,
   // contentBlocks,
   // cardBlocks,
@@ -151,6 +152,37 @@ export const CONTACTS_QUERY = gql`
       primary_contact
       primary_email
       primary_phone
+    }
+  }
+`
+
+
+// Press Release Query 
+export const PRESS_RELEASES_QUERY = gql`
+  query {
+    press_releases {
+      id
+      title
+      date
+      file {
+        id
+      }
+      link
+      excerpt
+    }
+  }
+`
+
+export const REPORTER_LETTERS_QUERY = gql`
+  query {
+    reporter_letters {
+      id
+      title
+      date
+      file {
+        id
+      }
+      link
     }
   }
 `

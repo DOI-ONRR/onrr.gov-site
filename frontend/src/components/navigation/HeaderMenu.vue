@@ -7,7 +7,7 @@
       class="no-btn-hover"
     >
       <span class="v-btn__content">
-        <v-icon>mdi-phone</v-icon>
+        <v-icon color="white">mdi-phone</v-icon>
         <span class="mr-2">Contact Us</span>
       </span>
       
@@ -19,7 +19,7 @@
       class="no-btn-hover"
     >
       <span class="v-btn__content">
-        <v-icon>mdi-calendar</v-icon>
+        <v-icon color="white">mdi-calendar</v-icon>
         <span class="mr-2">Events</span>
       </span>
     </v-btn>
@@ -31,7 +31,7 @@
       class="no-btn-hover"
     >
       <span class="v-btn__content">
-        <v-icon>mdi-chart-bar</v-icon>
+        <v-icon color="white">mdi-chart-bar</v-icon>
         <span class="mr-2">Revenue Data</span>
       </span>
     </v-btn>
