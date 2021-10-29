@@ -114,7 +114,7 @@
       v-scroll="onScroll"
       v-show="fab"
       @click="toTop">
-      <v-icon>mdi-chevron-up</v-icon>
+      <v-icon color="white">mdi-chevron-up</v-icon>
     </v-btn>
   </div>
 </template>

@@ -33,14 +33,16 @@ export const contentBlockFields = gql`
 export const cardBlockFields = gql`
   fragment cardBlockFields on card_blocks {
     id
+    # block_collections
+    block_color
     block_label
     block_layout 
-    block_color
     column_one
     column_two
     column_three
   }
 `
+
 
 export const tabBlockFields = gql`
   fragment tabBlockFields on tab_blocks {
@@ -146,6 +148,17 @@ export const tabBlocks = gql`
         __typename
         ...tabBlocksContents
       }
+    }
+  }
+`
+
+export const fileCollectionFields = gql`
+  fragment fileCollectionFields on reporter_letters {
+    id
+    title
+    date
+    file {
+        id
     }
   }
 `

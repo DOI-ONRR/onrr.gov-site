@@ -23,22 +23,8 @@
               </LayoutBlock>
             </div>
 
-            <!-- Fourth row of block content -->
-            <v-row class="fourth-row">
-              <v-col cols="12" xs="12" md="6" class="block-container">
-                <v-card outlined elevation="0" class="card">
-                  <FilesBlock title="Reporter Letters" filterBy="Reporter Letters"  class="text-body-1" />
-                </v-card>
-              </v-col>
-              <v-col xs="12" md="6" class="block-container">
-                <v-card outlined elevation="0" class="card">
-                  <FilesBlock title="Press Releases" filterBy="Press Releases"  class="text-body-1" />
-                </v-card>
-              </v-col>
-            </v-row>
-
-            <!-- Fifth row of block content -->
-            <v-row class="fifth-row">
+            <!-- Revenue Data block content -->
+            <v-row class="revenue-row">
               <v-col cols="12" xs="12" md="12">
                 <v-card outlined elevation="0" class="card">
                   <RevenueBlock title="Revenue Statistics" />
@@ -99,6 +85,11 @@ export default {
         
       },
       fetchPolicy: 'cache-and-network'
+    },
+    collection: {
+      query() {
+      },
+      update: data => data
     }
   }, 
   components: {
@@ -153,12 +144,7 @@ img {
   margin: 20px 0;
 }
 
-.fourth-row .card {
-  border-top-color: var(--v-purple-base);
-  border-top-width: 6px;
-}
-
-.fifth-row .card {
+.revenue-row .card {
   border-top-color: var(--v-green-lighten1);
   border-top-width: 6px;
 }

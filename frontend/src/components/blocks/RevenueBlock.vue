@@ -1,24 +1,36 @@
 <template>
   <v-container>
-    <h2 class="text-h2 mt-1 mb-3">{{ title }}</h2>
-    <div class="text-body-1">
-      <p>Fiscal year {{ maxFiscalRevenueYear }} revenue: 
-        <span style="font-weight: bold;">{{ formatToDollarInt(totalYearlyFiscalRevenue) }}</span>
-      </p>
-      <p>Fiscal year {{ maxFiscalDisbursementYear }} disbursements: 
-        <span style="font-weight: bold;">{{ formatToDollarInt(totalYearlyDisbursements) }}</span>
-      </p><a href="">Press release</a>
-      <p>Fiscal year {{ maxFiscalDisbursementYear }} GOMESA disbursements: 
-        <span style="font-weight: bold;">{{ formatToDollarInt(totalYearlyGoMesaDisbursements) }}</span>
-      </p><a href="">Press release</a>
-      <a href="https://revenuedata.doi.gov/">Explore Revenue Statistics</a>
-    </div>
+    <v-row no-gutters>
+      <v-col cols="12" sm="12" v-if="title">
+        <h2 class="text-h2 mt-1 mb-3">{{ title }}</h2>
+      </v-col>
+      <v-col cols="12" sm="2">
+        <NrrdOilRigIcon class="revenue-icon" />
+      </v-col>
+      <v-col cols="12" sm="10" class="text-body-1">
+        <div class="text-body-1">Fiscal year {{ maxFiscalRevenueYear }} revenue: 
+          <span style="font-weight: bold;">{{ formatToDollarInt(totalYearlyFiscalRevenue) }}</span>
+        </div>
+        <div class="text-body-1">Fiscal year {{ maxFiscalDisbursementYear }} disbursements: 
+          <span style="font-weight: bold;">{{ formatToDollarInt(totalYearlyDisbursements) }}</span>
+        </div>
+        <div class="text-body-1">Fiscal year {{ maxFiscalDisbursementYear }} GOMESA disbursements: 
+          <span style="font-weight: bold;">{{ formatToDollarInt(totalYearlyGoMesaDisbursements) }}</span><v-icon color="secondary" class="ml-2">mdi-file-document-outline</v-icon><a href="https://www.onrr.gov/PDFDocs/GOMESA.National.Release.pdf">Press release</a>
+        </div>
+        <div class="text-body-1">
+          <a href="https://revenuedata.doi.gov/">Explore Revenue Statistics</a><v-icon color="secondary" class="ml-2">mdi-launch</v-icon>
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import { TOTAL_REVENUE_QUERY } from '@/graphql/queries';
 import { formatToDollarInt } from '@/js/utils'
+import NrrdOilRigIcon from '@/assets/images/icons/nrrd-oil-rig.svg'
+
+
 export default {
   name: 'RevenueBlock',
   data() {
@@ -29,6 +41,9 @@ export default {
       total_yearly_fiscal_disbursement: '',
       disbursement_gomesa: '',
     }
+  },
+  components: {
+    NrrdOilRigIcon
   },
   apollo: {
     revenue_fiscal_years: {
@@ -84,3 +99,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.revenue-icon {
+  height: 100px;
+}
+</style>
