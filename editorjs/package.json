@@ -25,15 +25,14 @@
     "prepack": "directus-extension build"
   },
   "dependencies": {
-    "@directus/extensions-sdk": "^9.0.0-rc.99",
+    "@directus/extensions-sdk": "^9.0.0-rc.101",
     "@editorjs/list": "^1.6.2",
-    "core-js": "^3.6.5",
-    "vue": "^3.0.0"
+    "core-js": "^3.19.1",
+    "vue": "^3.2.21"
   },
   "devDependencies": {
-    "@canburaks/text-align-editorjs": "^1.0.4",
-    "@directus/extension-sdk": "^9.0.0-rc.85",
-    "@editorjs/attaches": "^1.1.0",
+    "@canburaks/text-align-editorjs": "^1.1.0",
+    "@editorjs/attaches": "^1.2.0",
     "@editorjs/checklist": "^1.3.0",
     "@editorjs/code": "^2.7.0",
     "@editorjs/delimiter": "^1.2.0",
@@ -49,20 +48,20 @@
     "@editorjs/quote": "^2.4.0",
     "@editorjs/raw": "^2.3.0",
     "@editorjs/simple-image": "^1.4.1",
-    "@editorjs/table": "^1.3.0",
+    "@editorjs/table": "^2.0.1",
     "@editorjs/underline": "^1.0.0",
     "@editorjs/warning": "^1.2.0",
     "@itech-indrustries/editorjs-strikethrough": "^1.0.0",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/cli-plugin-babel": "^4.5.15",
+    "@vue/cli-plugin-eslint": "^4.5.15",
+    "@vue/cli-service": "^4.5.15",
+    "@vue/compiler-sfc": "^3.2.21",
     "babel-eslint": "^10.1.0",
     "debounce": "^1.2.1",
     "editorjs-alert": "^1.0.3",
     "editorjs-list": "^2.1.4",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0"
+    "eslint-plugin-vue": "^7.20.0"
   },
   "eslintConfig": {
     "root": true,
