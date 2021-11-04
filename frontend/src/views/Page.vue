@@ -6,7 +6,7 @@
     <div v-else class="page-wrap">
       <Breadcrumbs />
       <div class="text-h1 page-title" v-if="page.title">{{ page.title }}</div>
-      <div v-if="page.page_blocks">
+      <div v-if="page.page_blocks" class="fade-transition">
         <div v-for="block in page.page_blocks" :key="block.id">
           <LayoutBlock :layout="block.item.block_layout || 'one_column'" :block="block.item">
             <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->

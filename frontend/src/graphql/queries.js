@@ -38,6 +38,7 @@ export const ANNOUNCEMENTS_QUERY = gql`query {
     id
     title 
     content
+    status
   }
 }`
 
@@ -86,6 +87,16 @@ ${pageFields}
 query PagesById($ID: ID!) {
   pages_by_id (id: $ID) {
     ...pageFields
+  }
+}`
+
+// Home page query
+export const HOME_PAGE_QUERY = gql`
+${pageFields}
+query PagesById($ID: ID!) {
+  pages_by_id (id: $ID) {
+    ...pageFields
+    sidebar_blocks
   }
 }`
 
@@ -149,6 +160,7 @@ export const CONTACTS_QUERY = gql`
   query {
     contacts {
       id
+      status
       primary_contact
       primary_email
       primary_phone
@@ -169,6 +181,7 @@ export const PRESS_RELEASES_QUERY = gql`
       }
       link
       excerpt
+      status
     }
   }
 `
@@ -183,6 +196,7 @@ export const REPORTER_LETTERS_QUERY = gql`
         id
       }
       link
+      status
     }
   }
 `

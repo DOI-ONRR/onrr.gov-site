@@ -46,13 +46,15 @@ export default class CollectionsTool {
     //           "field": "published_on",
     //           "type": "timestamp"
     //       }
-    //   ]
-    // }
+    //   ],
+    //   status: "archived",
+    // };
 
     this.data = {
       collection: data.collection || '',
       fields: data.fields || [],
-      layout: data.layout || ''
+      layout: data.layout || '',
+      status: data.status || '',
     };
 
     this.api = api;
@@ -102,8 +104,15 @@ export default class CollectionsTool {
   render() {
     // console.log('render this.data ----------> ', this.data)
     const wrapper = this._make('div', [this.CSS.wrapper]),
+      selectInputLabel = this._make('label'),
       selectInput = this._make('select', [this.CSS.input]),
+      selectLayoutInputLabel = this._make('label'),
       selectLayoutInput = this._make('select', [this.CSS.input]),
+      selectStatusInputLabel = this._make('label'),
+      selectStatusInput = this._make('select', [this.CSS.input]),
+      selectFieldsCol1 = this._make('div', [this.CSS.baseClass]),
+      selectFieldsCol2 = this._make('div', [this.CSS.baseClass]),
+      selectFieldsCol3 = this._make('div', [this.CSS.baseClass]),
       collectionBox = this._make('div');
 
 
@@ -116,18 +125,54 @@ export default class CollectionsTool {
         text: 'Full',
         value: 'full',
       },
-    ]
+    ];
+
+    const statusOptions = [
+      {
+        text: 'Published',
+        value: 'published',
+      },
+      {
+        text: 'Archived',
+        value: 'archived',
+      },
+    ];
+
 
     let selectOption = this._make('option');
     let selectLayoutOption = this._make('option');
+    let selectStatusOption = this._make('option');
+
+    selectInputLabel.innerHTML = 'Collection';
+    selectInputLabel.setAttribute('for', 'collectionsSelector');
+
+    selectLayoutInputLabel.innerHTML = 'Layout';
+    selectLayoutInputLabel.setAttribute('for', 'collectionsLayoutSelector');
+    
+    selectStatusInputLabel.innerHTML = 'Status';
+    selectStatusInputLabel.setAttribute('for', 'collectionsStatusSelector');
 
     selectInput.id = 'collectionsSelector';
-    selectOption.value = this.data && this.data.collection ? this.data.collection : '';
-    selectOption.text = this.data && this.data.collection ? this.data.collection : 'Choose one';
+    selectOption.value = '';
+    selectOption.text = 'Choose one';
     selectInput.appendChild(selectOption);
 
-    selectInput.style.width = '48%';
-    
+    this.fetchCollections().then(collections => {
+      collections.forEach((item, i) => {
+        // console.log('item: ', item);
+
+        selectOption = this._make('option')
+        selectOption.value = collections[i];
+        selectOption.text = collections[i].replace(/_/g, ' ');
+        selectInput.appendChild(selectOption)
+      });
+
+      if (this.data && this.data.collection) {
+        const foundIndex = Array.from(selectInput.options).findIndex(item => item.value === this.data.collection)
+        selectInput.options[foundIndex || 0].selected = true
+      }
+    })
+
 
     selectLayoutInput.id = 'collectionsLayoutSelector';
     layoutOptions.forEach(item => {
@@ -137,55 +182,70 @@ export default class CollectionsTool {
       selectLayoutInput.appendChild(selectLayoutOption);
     });
 
+
+    selectStatusInput.id = 'collectionsStatusSelector';
+    statusOptions.forEach(item => {
+      selectStatusOption = this._make('option')
+      selectStatusOption.value = item.value;
+      selectStatusOption.text = item.text;
+      selectStatusInput.appendChild(selectStatusOption);
+    });
+
+    
+
     if (this.data && this.data.layout) {
       const foundIndex = Array.from(selectLayoutInput.options).findIndex(item => item.value === this.data.layout)
       selectLayoutInput.options[foundIndex || 0].selected = true
     }
 
-    selectLayoutInput.style.width = '48%';
+    if (this.data && this.data.status) {
+      const foundIndex = Array.from(selectStatusInput.options).findIndex(item => item.value === this.data.status)
+      selectStatusInput.options[foundIndex || 0].selected = true
+    }
     
-
-    
-    if (this.data && this.data.collection && this.data.layout) {
+    if (this.data && this.data.collection && this.data.layout && this.data.status) {
       collectionBox.style.padding = '10px';
       collectionBox.style.border = '5px dashed #00c897';
       collectionBox.style.textAlign = 'center';
       collectionBox.style.margin = '10px 0';
       collectionBox.style.width = '100%';
-      collectionBox.innerHTML = `${ this.data.collection } -- ${ this.data.layout } layout`;
+      collectionBox.innerHTML = `${ this.data.collection } -- ${ this.data.layout } layout -- ${ this.data.status }`;
     }
 
     selectInput.addEventListener("change", () => {
-      this.fetchFields(selectInput.value, selectLayoutInput.value);
+      this.fetchFields(selectInput.value, selectLayoutInput.value, selectStatusInput.value);
     });
 
     selectLayoutInput.addEventListener("change", () => {
-      this.fetchFields(selectInput.value, selectLayoutInput.value);
+      this.fetchFields(selectInput.value, selectLayoutInput.value, selectStatusInput.value);
     });
 
-    this.fetchCollections().then(collections => {
-      collections.forEach((item, i) => {
-        // console.log('item: ', item);
-
-        // let str = collections[i].replace(/_/g, ' ');
-
-        selectOption = this._make('option')
-        selectOption.value = collections[i];
-        selectOption.text = collections[i].replace(/_/g, ' ');
-        selectInput.appendChild(selectOption)
-      });
+    selectStatusInput.addEventListener("change", () => {
+      this.fetchFields(selectInput.value, selectLayoutInput.value, selectStatusInput.value);
     })
 
+    selectFieldsCol1.style.marginRight = '8px';
+    selectFieldsCol2.style.marginRight = '8px';
+    selectFieldsCol3.style.marginRight = '8px';
 
-    wrapper.appendChild(selectInput);
-    wrapper.appendChild(selectLayoutInput);
 
-    if (this.data && this.data.collection && this.data.layout) {
+    selectFieldsCol1.appendChild(selectInputLabel);
+    selectFieldsCol1.appendChild(selectInput);
+    selectFieldsCol2.appendChild(selectLayoutInputLabel);
+    selectFieldsCol2.appendChild(selectLayoutInput);
+    selectFieldsCol3.appendChild(selectStatusInputLabel);
+    selectFieldsCol3.appendChild(selectStatusInput);
+
+    wrapper.appendChild(selectFieldsCol1);
+    wrapper.appendChild(selectFieldsCol2);
+    wrapper.appendChild(selectFieldsCol3);
+
+    if (this.data && this.data.collection && this.data.layout && this.data.status) {
       wrapper.appendChild(collectionBox);
     }
     wrapper.style.margin = '10px 0';
     wrapper.style.display = 'flex';
-    wrapper.style.justifyContent = 'space-between';
+    wrapper.style.justifyContent = 'flex-start';
     wrapper.style.flexBasis = '100%';
     wrapper.style.flexWrap = 'wrap';
 
@@ -195,6 +255,7 @@ export default class CollectionsTool {
   save(blockContent) {
     const select = blockContent.querySelector('#collectionsSelector');
     const selectLayout = blockContent.querySelector('#collectionsLayoutSelector');
+    const selectStatus = blockContent.querySelector('#collectionsStatusSelector');
 
     // console.log('save select ------> ', select.value, selectLayout.value);
 
@@ -205,6 +266,7 @@ export default class CollectionsTool {
     return Object.assign(this.data, {
       collection: select.value,
       layout: selectLayout.value,
+      status: selectStatus.value,
     });
   }
 
@@ -245,7 +307,7 @@ export default class CollectionsTool {
    *
    * @collection {string}
    */
-  async fetchFields(collection, layout) {
+  async fetchFields(collection, layout, status) {
     try {
       const response = await fetch(`${ this.fieldsEndpoint }`);
       const collectionItems = await response.json();
@@ -261,6 +323,7 @@ export default class CollectionsTool {
       this.data.collection = collection;
       this.data.fields = fields;
       this.data.layout = layout;
+      this.data.status = status;
    
       // waits until the request completes...
       // console.log('response from api yo -----> ', collection, fields, items);
