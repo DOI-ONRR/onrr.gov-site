@@ -32,8 +32,12 @@
               </v-col>
             </v-row>
           </v-col>
+          <!-- Sidebar -->
           <v-col cols="12" xs="12" sm="4">
-            <Announcements title="Announcements" />
+            <div v-for="block in page.sidebar_blocks.blocks" :key="block.id">
+                <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
+                <component :is="pageBlock(block.type)" :block="block" class="block-component"></component>
+            </div>
           </v-col>
         </v-row>
         
@@ -43,12 +47,11 @@
 </template>
 
 <script>
-import { PAGES_BY_ID_QUERY } from '@/graphql/queries'
+import { HOME_PAGE_QUERY } from '@/graphql/queries'
 import { 
   pageBlockMixin
 } from '@/mixins'
-const Announcements = () => import('@/components/sections/Announcements')
-const FilesBlock = () => import('@/components/blocks/FilesBlock')
+
 const RevenueBlock = () => import('@/components/blocks/RevenueBlock')
 const HeroImage = () => import('@/components/sections/HeroImage')
 const LayoutBlock = () => import('@/components/blocks/LayoutBlock')
@@ -58,18 +61,15 @@ export default {
   name: 'Home',
   metaInfo: {
     title: 'Home',
-    // overrid the parent template and just use the above title only
-    // titleTemplate: 'Home'
   },
   data() {
     return {
       API_URL: process.env.VUE_APP_API_URL,
-      contentBlocks: [],
     }
   },
   apollo: {
     pages_by_id: {
-      query: PAGES_BY_ID_QUERY,
+      query: HOME_PAGE_QUERY,
       loadingKey: 'loading...',
       variables () {
         return {
@@ -79,8 +79,6 @@ export default {
       result ({ data }) {
         if (data) {
           console.log('contentBlocks data: ', data)
-          const blocks = data.pages_by_id.page_blocks.filter(block => block.item.__typename === 'blocks')
-          this.contentBlocks = blocks
         }
         
       },
@@ -93,8 +91,6 @@ export default {
     }
   }, 
   components: {
-    Announcements,
-    FilesBlock,
     RevenueBlock,
     HeroImage,
     LayoutBlock

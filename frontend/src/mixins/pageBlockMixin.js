@@ -26,7 +26,7 @@ export const pageBlockMixin = {
     ImageBlock,
     ContentBlock,
     CardBlock,
-    CollectionBlock
+    CollectionBlock,
   },
   created() {
     console.log('Hello from the pageBlockMixin!')
