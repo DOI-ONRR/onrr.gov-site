@@ -3,6 +3,8 @@ node_modules/
 .env
 cms/docker-compose.yml
 cms/.env
+cms/config.js
+cms/Dockerfile
 
 editorjs/node_modules
 editorjs/editorjs
