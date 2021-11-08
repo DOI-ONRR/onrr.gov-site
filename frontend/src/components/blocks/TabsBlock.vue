@@ -22,13 +22,9 @@
         <v-card
           text
           elevation="0">
-          <v-card-text style="white-space: pre-line;" class="pa-0">
-            <LayoutBlock :layout="tab.tab_layout" :block="tab">
-              <div v-for="block in tab.blocks" :key="block.id">
-                <EditorBlock :blockContent="block"></EditorBlock>
-              </div>
-            </LayoutBlock>
-            
+          <v-card-text style="white-space: pre-line;" class="pl-0 pr-0 pt-4 pb-4">
+            <LayoutBlock :layout="tab.tab_layout" :block="tab"></LayoutBlock>
+
             <div v-if="tab.tab_items">
               <TabsBlock :block="nestedTabs" class="nested-tabs"></TabsBlock>
             </div>
@@ -65,7 +61,7 @@ export default {
   // methods: {},
   computed: {
     tabs() {
-      const tabs = this.block && this.block.tab_items.map(item => item.tab_label)
+      const tabs = this.block.tab_items.map(item => item.tab_label)
 
       return tabs
     },
@@ -79,10 +75,6 @@ export default {
       nObj = nItems[0]
   
       return nObj
-    },
-    tabsBackgroundColor() {
-      let color = this.block.tab_items.length > 0 ? 'deeppink': 'secondary'
-      return color
     }
   },
   mounted() {
@@ -116,7 +108,6 @@ export default {
 
 .v-card__text {
   font-size: 16px;
-  color: rgba(0, 0, 0, 1) !important;
 }
 
 .v-tabs-bar .v-tab:not(.v-tab--active) {

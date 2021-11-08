@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import {
-  pageFields
+  pageFields,
+  // fileCollectionFields
   // sectionHeadingBlocks,
   // contentBlocks,
   // cardBlocks,
@@ -37,6 +38,7 @@ export const ANNOUNCEMENTS_QUERY = gql`query {
     id
     title 
     content
+    status
   }
 }`
 
@@ -85,6 +87,16 @@ ${pageFields}
 query PagesById($ID: ID!) {
   pages_by_id (id: $ID) {
     ...pageFields
+  }
+}`
+
+// Home page query
+export const HOME_PAGE_QUERY = gql`
+${pageFields}
+query PagesById($ID: ID!) {
+  pages_by_id (id: $ID) {
+    ...pageFields
+    sidebar_blocks
   }
 }`
 
@@ -148,9 +160,43 @@ export const CONTACTS_QUERY = gql`
   query {
     contacts {
       id
+      status
       primary_contact
       primary_email
       primary_phone
+    }
+  }
+`
+
+
+// Press Release Query 
+export const PRESS_RELEASES_QUERY = gql`
+  query {
+    press_releases {
+      id
+      title
+      date
+      file {
+        id
+      }
+      link
+      excerpt
+      status
+    }
+  }
+`
+
+export const REPORTER_LETTERS_QUERY = gql`
+  query {
+    reporter_letters {
+      id
+      title
+      date
+      file {
+        id
+      }
+      link
+      status
     }
   }
 `

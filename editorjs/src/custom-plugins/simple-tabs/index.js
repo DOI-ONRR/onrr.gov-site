@@ -108,7 +108,6 @@ class SimpleTabs {
     // this.nodes.tabSaveBtn = tabSaveBtn
     // this.nodes.output = output
 
-    console.log('this yo------->', this)
     if (this.data && this.data.tabs.length > 0) {
       this.createTabs(this.data)
     } else {

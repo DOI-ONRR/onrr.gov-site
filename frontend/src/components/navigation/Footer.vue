@@ -66,17 +66,16 @@
           v-for="item in socialMenuItems"
           :key="item.id"
           :to="item.slug"
-          icon
-          color="secondary">
+          text>
           <!-- <span class="mr-2">{{ item.menu_label }}</span> -->
-          <v-icon>{{ `mdi-${ item.menu_label.toLowerCase() }` }}</v-icon>
+          <v-icon color="white">{{ `mdi-${ item.menu_label.toLowerCase() }` }}</v-icon>
         </v-btn>
         <v-btn
           text
           to="/about-onrr/contact-us"
         >
-          <v-icon>mdi-phone</v-icon>
-          <span class="mr-2">Contact Us</span>
+          <v-icon color="white">mdi-phone</v-icon>
+          <span class="ml-2">Contact Us</span>
         </v-btn> 
       </v-toolbar-items>
     </v-toolbar>

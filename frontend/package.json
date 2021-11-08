@@ -38,6 +38,7 @@
     "sass": "^1.32.13",
     "sass-loader": "^10.2.0",
     "vue-cli-plugin-vuetify": "~2.4.1",
+    "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"
   },
