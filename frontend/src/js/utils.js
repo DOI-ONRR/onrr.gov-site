@@ -56,3 +56,24 @@ export const convertToSlug = (text) => {
     .replace(/ /g, '-') // replaces spaces with underscore 
     .replace(/[^\w-]+/g, '') // removes anything not alphanumeric, underscore, or hypin
 }
+
+export const getDay = (date, type) => {
+  const d = new Date(date)
+  return d.toLocaleString('en-us', { day: type })
+}
+
+export const getMonth = (date, type) => {
+  const d = new Date(date)
+  return d.toLocaleString('en-us', { month: type })
+}
+
+export const getFullDate = (date) => {
+  const d = new Date(date)
+  let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+  return d.toLocaleString('en-US', options)
+}
+
+export const getYear = (date) => {
+  const d = new Date(date)
+  return d.toLocaleString('en-us', { year: 'numeric' })
+}

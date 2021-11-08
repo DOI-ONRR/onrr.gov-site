@@ -5,6 +5,8 @@ const ListBlock = () => import(/* webpackChunkName: "ListBlock" */ '@/components
 const TableBlock = () => import(/* webpackChunkName: "TableBlock" */ '@/components/blocks/TableBlock')
 const CodeBlock = () => import(/* webpackChunkName: "CodeBlock" */ '@/components/blocks/CodeBlock')
 const ImageBlock = () => import(/* webpackChunkName: "ImageBlock" */ '@/components/blocks/ImageBlock')
+const CardBlock = () => import(/* webpackChunkName: "CardBlock" */ '@/components/blocks/CardBlock')
+const CollectionBlock = () => import(/* webpackChunkName: "CollectionBlock" */ '@/components/blocks/CollectionBlock')
 
 export const pageBlockMixin = {
   data() {
@@ -21,25 +23,31 @@ export const pageBlockMixin = {
     ListBlock,
     TableBlock,
     CodeBlock,
-    ImageBlock
+    ImageBlock,
+    ContentBlock,
+    CardBlock,
+    CollectionBlock,
   },
   created() {
     console.log('Hello from the pageBlockMixin!')
   },
   methods: {
     pageBlock(type) {
-      // console.log('pageBlockMixin pageBlock type: ', type)
+      console.log('pageBlockMixin pageBlock type: ', type)
       let block
       switch (type) {
+        case 'tab_blocks':
+          block = TabsBlock
+          break
+        case 'content_blocks':
+          block = ContentBlock
+          break
+        case 'card_blocks':
+          block = CardBlock
+          break
         case 'header':
         case 'paragraph':
           block = TextBlock
-          break
-        case 'tab_block':
-          block = TabsBlock
-          break
-        case 'content_block':
-          block = ContentBlock
           break
         case 'list':
           block = ListBlock 
@@ -53,8 +61,11 @@ export const pageBlockMixin = {
         case 'image':
           block = ImageBlock 
           break
+        case 'collection':
+          block = CollectionBlock 
+          break
         default:
-          block = TextBlock
+          block = ContentBlock
           break
       }
       return block

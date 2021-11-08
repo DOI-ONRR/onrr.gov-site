@@ -6,7 +6,7 @@
     <div v-else>
       <HeroImage 
         v-if="pages_by_id" 
-        :title="heroContent" 
+        :title="pages_by_id.hero_title" 
         :image="`${ API_URL }/assets/${ pages_by_id.hero_image.id }?fit=cover&quality=80`"
         :isHome="true" />
       <v-container class="home__content">
@@ -15,60 +15,16 @@
             cols="12"
             xs="12"
             sm="8">
-            <!-- <div v-html="pages_by_id.content" /> -->
-            <!-- First row of block content -->
-            <v-row class="first-row">
-              <v-col cols="12" xs="12" sm="6" v-for="(block, index) in firstRowBlocks" :key="index">
-                <v-card 
-                  outlined
-                  elevation="0" 
-                  class="card"
-                  v-if="index <= 1">
-                  <v-card-text>
-                    <div class="text-body-1" v-html="block.item.content"></div>
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
 
-            <!-- Second row block content -->
-            <v-row class="second-row">
-              <v-col cols="12" xs="12" md="4" v-for="(block, index) in secondRowBlocks" :key="index">
-                <v-card outlined elevation="0" class="card" >
-                  <v-card-text>
-                    <div class="text-body-1" v-html="block.item.content"></div>
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
+            <div v-for="block in page.page_blocks" :key="block.id">
+              <LayoutBlock :layout="block.item.block_layout" :block="block.item">
+                <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
+                <component :is="pageBlock(block.item.__typename)" :block="block.item" class="block-component"></component>
+              </LayoutBlock>
+            </div>
 
-            <!-- Third row block content -->
-            <v-row class="third-row">
-              <v-col cols="12" xs="12" md="4" v-for="(block, index) in thirdRowBlocks" :key="index">
-                <v-card outlined elevation="0" class="card">
-                  <v-card-text>
-                    <div class="text-body-1" v-html="block.item.content"></div>
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-
-            <!-- Fourth row of block content -->
-            <v-row class="fourth-row">
-              <v-col cols="12" xs="12" md="6">
-                <v-card outlined elevation="0" class="card">
-                  <FilesBlock title="Reporter Letters" filterBy="Reporter Letters"  class="text-body-1" />
-                </v-card>
-              </v-col>
-              <v-col xs="12" md="6">
-                <v-card outlined elevation="0" class="card">
-                  <FilesBlock title="Press Releases" filterBy="Press Releases"  class="text-body-1" />
-                </v-card>
-              </v-col>
-            </v-row>
-
-            <!-- Fifth row of block content -->
-            <v-row class="fifth-row">
+            <!-- Revenue Data block content -->
+            <v-row class="revenue-row">
               <v-col cols="12" xs="12" md="12">
                 <v-card outlined elevation="0" class="card">
                   <RevenueBlock title="Revenue Statistics" />
@@ -76,8 +32,12 @@
               </v-col>
             </v-row>
           </v-col>
+          <!-- Sidebar -->
           <v-col cols="12" xs="12" sm="4">
-            <Announcements title="Announcements" />
+            <div v-for="block in page.sidebar_blocks.blocks" :key="block.id">
+                <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
+                <component :is="pageBlock(block.type)" :block="block" class="block-component"></component>
+            </div>
           </v-col>
         </v-row>
         
@@ -87,29 +47,29 @@
 </template>
 
 <script>
-import { PAGES_BY_ID_QUERY } from '@/graphql/queries'
-const Announcements = () => import('@/components/sections/Announcements')
-const FilesBlock = () => import('@/components/blocks/FilesBlock')
+import { HOME_PAGE_QUERY } from '@/graphql/queries'
+import { 
+  pageBlockMixin
+} from '@/mixins'
+
 const RevenueBlock = () => import('@/components/blocks/RevenueBlock')
 const HeroImage = () => import('@/components/sections/HeroImage')
+const LayoutBlock = () => import('@/components/blocks/LayoutBlock')
 
 export default {
+  mixins: [pageBlockMixin],
   name: 'Home',
   metaInfo: {
     title: 'Home',
-    // overrid the parent template and just use the above title only
-    // titleTemplate: 'Home'
   },
   data() {
     return {
       API_URL: process.env.VUE_APP_API_URL,
-      contentBlocks: [],
-      heroContent: `The Office of Natural Resources Revenue (ONRR - pronounced like "honor") collects, accounts for, and verifies energy and mineral revenues. We then distribute the funds to States, American Indians, and the U.S. Treasury.`
     }
   },
   apollo: {
     pages_by_id: {
-      query: PAGES_BY_ID_QUERY,
+      query: HOME_PAGE_QUERY,
       loadingKey: 'loading...',
       variables () {
         return {
@@ -119,46 +79,39 @@ export default {
       result ({ data }) {
         if (data) {
           console.log('contentBlocks data: ', data)
-          const blocks = data.pages_by_id.page_blocks.filter(block => block.item.__typename === 'content_blocks')
-          this.contentBlocks = blocks
         }
         
       },
       fetchPolicy: 'cache-and-network'
+    },
+    collection: {
+      query() {
+      },
+      update: data => data
     }
   }, 
   components: {
-    Announcements,
-    FilesBlock,
     RevenueBlock,
-    HeroImage
+    HeroImage,
+    LayoutBlock
   },
   created () {
     // this.contentBlocks()
     console.log('view vuetify obj--------->', this.$vuetify)
   },
   mounted () {
-    console.log('breakpoint yo-------> ', this.$vuetify.breakpoint.width)
+    console.log('breakpoint-------> ', this.$vuetify.breakpoint.width)
   },
   methods: {},
   computed: {
-    firstRowBlocks () {
-      const blocks = this.contentBlocks.filter((block, index) => index <= 1)
-      return blocks
-    },
-    secondRowBlocks () {
-      const blocks = this.contentBlocks.filter((block, index) => index >= 2 && index <= 4)
-      return blocks
-    },
-    thirdRowBlocks () {
-      const blocks = this.contentBlocks.filter((block, index) => index >= 5 && index <= 7)
-      return blocks
-    },
     cssProps () {
       return {
         '--anchor-color': this.$vuetify.theme.themes.dark.anchor
       }
     },
+    page () {
+      return this.pages_by_id
+    }
   }
 }
 </script>
@@ -187,34 +140,13 @@ img {
   margin: 20px 0;
 }
 
-.first-row .card {
-  min-height: 350px;
-  border-top-color: var(--v-secondary-base);
-  border-top-width: 6px;
-}
-
-.second-row .card {
-  min-height: 450px;
-}
-
-.third-row .card {
-  min-height: 275px;
-}
-
-.second-row .card,
-.third-row .card {
-  border-top-color: var(--v-primary-base);
-  border-top-width: 6px;
-}
-
-.fourth-row .card {
-  min-height: 375px;
-  border-top-color: var(--v-purple-base);
-  border-top-width: 6px;
-}
-
-.fifth-row .card {
+.revenue-row .card {
   border-top-color: var(--v-green-lighten1);
   border-top-width: 6px;
+}
+
+.block-container {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

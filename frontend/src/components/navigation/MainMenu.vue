@@ -42,6 +42,7 @@
             dense
             label="Search"
             prepend-inner-icon="mdi-magnify"
+            color="white"
             class="search-input">
           </v-text-field>
         </li>

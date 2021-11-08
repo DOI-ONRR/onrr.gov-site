@@ -20,7 +20,8 @@ import EditorJS from "@editorjs/editorjs"
 import Header from "@editorjs/header"
 import Paragraph from "@editorjs/paragraph"
 import List from "@editorjs/list"
-import SimpleTabs from '../custom-plugins/simple-tabs'
+// import SimpleTabs from '../custom-plugins/simple-tabs'
+import Collections from '../custom-plugins/plugin-collections'
 
 export default {
   data() {
@@ -57,10 +58,18 @@ export default {
               placeholder: "."
             }
           },
-          tabs: {
-            class: SimpleTabs,
-            inlineToolbar: true
-          },
+          // tabs: {
+          //   class: SimpleTabs,
+          //   inlineToolbar: true
+          // },
+          collection: {
+            class: Collections,
+            inlineToolbar: true,
+            config: {
+              collectionsEndpoint: 'http://localhost:8055/collections',
+              fieldsEndpoint: 'http://localhost:8055/fields'
+            }
+          }
         },
         onReady: function() {
           console.log("ready")

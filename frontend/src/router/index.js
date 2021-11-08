@@ -176,14 +176,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
       },
       {
-        path: 'contact-us',
-        component: () => import(/* webpackChunkName: "Contact" */ "../views/Contact"),
-        props: true,
-        meta: {
-          breadcrumb: 'Contact Us'
-        },
-      },
-      {
         path: ':slug',
         name: 'TwoColumnLeft',
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
