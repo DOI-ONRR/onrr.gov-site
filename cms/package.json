@@ -5,6 +5,7 @@
   "description": "Directus CMS",
   "scripts": {
     "update": "npx directus database migrate:lastest",
+    "bootstrap": "directus bootstrap",
     "start": "CONFIG_PATH='./config.js' npx directus start"
   },
   "engines": {

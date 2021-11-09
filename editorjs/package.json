@@ -14,7 +14,7 @@
     "type": "interface",
     "path": "dist/index.js",
     "source": "src/index.js",
-    "host": "^v9.0.0-rc.94",
+    "host": "^v9.0.0",
     "hidden": false
   },
   "scripts": {
