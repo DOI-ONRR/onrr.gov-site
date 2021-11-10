@@ -20,8 +20,7 @@ import EditorJS from "@editorjs/editorjs"
 import Header from "@editorjs/header"
 import Paragraph from "@editorjs/paragraph"
 import List from "@editorjs/list"
-// import SimpleTabs from '../custom-plugins/simple-tabs'
-import Collections from '../custom-plugins/plugin-collections'
+import LinkAutocomplete from "../custom-plugins/plugin-link-autocomplete-patch.js"
 
 export default {
   data() {
@@ -58,18 +57,13 @@ export default {
               placeholder: "."
             }
           },
-          // tabs: {
-          //   class: SimpleTabs,
-          //   inlineToolbar: true
-          // },
-          collection: {
-            class: Collections,
-            inlineToolbar: true,
+          link: {
+            class: LinkAutocomplete,
             config: {
-              collectionsEndpoint: 'http://localhost:8055/collections',
-              fieldsEndpoint: 'http://localhost:8055/fields'
+             endpoint: 'http://localhost:8055/items/links',
+             queryParam: 'search'
             }
-          }
+          },
         },
         onReady: function() {
           console.log("ready")
