@@ -51,8 +51,8 @@ import ListTool from './custom-plugins/plugin-list-patch';
 import ImageTool from './custom-plugins/plugin-image-patch';
 import AttachesTool from './custom-plugins/plugin-attaches-patch';
 import PersonalityTool from './custom-plugins/plugin-personality-patch';
+import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
 // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
-import CollectionsTool from "./custom-plugins/plugin-collections";
 
 export default defineComponent({
 	emits: ['input', 'error'],
@@ -345,6 +345,13 @@ export default defineComponent({
 				// 	class: SimpleTabs,
 				// 	inlineToolbar: true,
 				// },
+                                link: {
+                                        class: LinkAutocomplete,
+                                        config: {
+                                          endpoint: '/items/links',
+                                          queryParam: 'search'
+                                        },
+                                },
 			};
 
 			// Build current tools config.
