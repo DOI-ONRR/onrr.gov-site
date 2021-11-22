@@ -8,7 +8,7 @@
     <div v-else>
       <HeroImage
         v-if="page && pages_by_id" 
-        :title="page.title" 
+        :title="page.hero_title"
         :image="`${ API_URL }/assets/${ pages_by_id.hero_image ? pages_by_id.hero_image.id : '36cdee7e-e6e8-435f-850c-05636e551723' }?fit=cover&quality=80`"
         :isHome="false" />
       <v-container>
@@ -33,6 +33,8 @@
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 const SideMenu = () => import(/* webpackChunkName: "Sidemenu" */ '@/components/navigation/SideMenu')
 const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/components/sections/HeroImage')
+
+
 
 export default {
   name: "TwoColumnLeft",
@@ -79,7 +81,7 @@ export default {
       type: String,
     }
   },
-  created () {
+  created() {
     this.findPageBySlug()
   },
   methods: {
@@ -91,11 +93,15 @@ export default {
       if(this.pages) {
         page = (this.slug !== undefined) 
           ? this.pages.find(page => page.slug === this.slug)
-          : this.pages.find(page => page.slug === routes[routes.length - 1])
+          : this.pages.find(page => page.slug === routes[routes.length - 1]) || false
       }
       this.page = page
       return page
     },
+    getPageBySlug: function(slug) {
+      const page = this.pages.find(page => page.slug === slug)
+      return page
+    }
   }
 }
 </script>

@@ -20,7 +20,7 @@ const cache = new InMemoryCache({
 
 // console.log('cache yo ------> ', cache)
 
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
   fetch: fetch,
   uri: `${ process.env.VUE_APP_API_URL }/graphql`,
   cache

@@ -6,6 +6,52 @@ export const contentBlocks = gql`
   }
 `
 
+// export const blockFields = gql`
+//   fragment blockFields on blocks {
+//     id
+//     block_label
+//     block_type
+//     block_layout
+//     column_one
+//     column_two
+//     column_three
+//     tab_items
+//   }
+// `
+
+export const contentBlockFields = gql`
+  fragment contentBlockFields on content_blocks {
+    id
+    block_label
+    block_layout
+    column_one
+    column_two
+    column_three
+  }
+`
+
+export const cardBlockFields = gql`
+  fragment cardBlockFields on card_blocks {
+    id
+    # block_collections
+    block_color
+    block_label
+    block_layout 
+    column_one
+    column_two
+    column_three
+  }
+`
+
+
+export const tabBlockFields = gql`
+  fragment tabBlockFields on tab_blocks {
+    id
+    tab_block_label
+    tab_items
+  }
+`
+
 export const sectionHeadingBlocks = gql`
   fragment sectionHeadingBlocks on section_heading_blocks {
     section_heading
@@ -51,7 +97,9 @@ export const tabBlocksContents = gql`
 `
 
 export const pageFields = gql`
- ${contentBlocks}
+ ${contentBlockFields}
+ ${tabBlockFields}
+ ${cardBlockFields}
   fragment pageFields on pages {
     id
     title
@@ -59,13 +107,17 @@ export const pageFields = gql`
     hero_image {
       id
     }
+    hero_title
     page_blocks {
+      id
       item {
         __typename
-        ...contentBlocks
+        ...contentBlockFields
+        ...tabBlockFields
+        ...cardBlockFields
       }
     }
-    page_builder
+    # page_builder
     meta_title
     meta_description
   }
@@ -96,6 +148,17 @@ export const tabBlocks = gql`
         __typename
         ...tabBlocksContents
       }
+    }
+  }
+`
+
+export const fileCollectionFields = gql`
+  fragment fileCollectionFields on reporter_letters {
+    id
+    title
+    date
+    file {
+        id
     }
   }
 `

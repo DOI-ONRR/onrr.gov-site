@@ -3,6 +3,7 @@
     <img 
     :src="image"
     :alt="title" />
+
     <h1 :class="[isHome ? 'hero__home-text' : 'hero__text']" v-if="title">
       {{ title }}
     </h1>
@@ -80,5 +81,6 @@ export default {
   height: auto;
   text-align: left;
   padding: 16px;
+  border-radius: 4px;
 }
 </style>

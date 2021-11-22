@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import {
-  pageFields
+  pageFields,
+  // fileCollectionFields
   // sectionHeadingBlocks,
   // contentBlocks,
   // cardBlocks,
@@ -17,6 +18,7 @@ export const MENU_QUERY = gql`query {
     link_to_page {
       id
       slug
+      url
     }
     parent {
       id
@@ -24,6 +26,7 @@ export const MENU_QUERY = gql`query {
       link_to_page {
         id
         slug
+        url
       }
     }
   }
@@ -35,6 +38,7 @@ export const ANNOUNCEMENTS_QUERY = gql`query {
     id
     title 
     content
+    status
   }
 }`
 
@@ -45,24 +49,54 @@ query {
     id
     slug
     title
+    url
   }
 }`
 
-// Page query
+// Redirects query
+export const REDIRECTS_QUERY = gql`
+query {
+  redirects {
+    id
+    from 
+    to
+  }  
+}
+`
+
+// Pages and Redirects queries
+export const PAGES_REDIRECTS_QUERY = gql`
+query {
+  pages {
+    id
+    slug
+    title
+    url
+  }
+  redirects {
+    id
+    from 
+    to
+  }  
+}
+`
+
+// Page by id query
 export const PAGES_BY_ID_QUERY = gql`
 ${pageFields}
 query PagesById($ID: ID!) {
   pages_by_id (id: $ID) {
     ...pageFields
-    # page_blocks {
-    #   item {
-    #     __typename
-    #     ...contentBlocks
-    #     ...sectionHeadingBlocks
-	  #     ...cardBlocks
-	  #     ...tabBlocks
-    #   }
-    # }
+  }
+}`
+
+// Home page query
+export const HOME_PAGE_QUERY = gql`
+${pageFields}
+query PagesById($ID: ID!) {
+  pages_by_id (id: $ID) {
+    ...pageFields
+    sidebar_blocks
   }
 }`
 
@@ -126,9 +160,43 @@ export const CONTACTS_QUERY = gql`
   query {
     contacts {
       id
+      status
       primary_contact
       primary_email
       primary_phone
+    }
+  }
+`
+
+
+// Press Release Query 
+export const PRESS_RELEASES_QUERY = gql`
+  query {
+    press_releases {
+      id
+      title
+      date
+      file {
+        id
+      }
+      link
+      excerpt
+      status
+    }
+  }
+`
+
+export const REPORTER_LETTERS_QUERY = gql`
+  query {
+    reporter_letters {
+      id
+      title
+      date
+      file {
+        id
+      }
+      link
+      status
     }
   }
 `
