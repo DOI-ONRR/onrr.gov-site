@@ -3,23 +3,23 @@
   "version": "0.1.0",
   "author": "Chris Robey <robey.christopher98@gmail.com>",
   "scripts": {
-    "dbstart": "cd database && docker-compose up -d",
+    "ascii": "clear && echo \" ██████╗ ███╗   ██╗██████╗ ██████╗ \" && echo \"██╔═══██╗████╗  ██║██╔══██╗██╔══██╗\" && echo \"██║   ██║██╔██╗ ██║██████╔╝██████╔╝\" && echo \"██║   ██║██║╚██╗██║██╔══██╗██╔══██╗\" && echo \"╚██████╔╝██║ ╚████║██║  ██║██║  ██║\" && echo \" ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝\" && echo \"_______________________________________________________________\"",
+    "clean": "cd database && docker-compose down --rmi all --volumes --remove-orphans && docker-compose up -d && cd ../cms docker-compose down --rmi all --volumes --remove-orphans && docker-compose up -d",
+    "clear": "npm run ascii && cd database && docker-compose down --rmi all --volumes --remove-orphans && cd ../cms && docker-compose down --rmi all --volumes --remove-orphans && npx kill-port 8080 && echo \"Database and CMS cleared successfully.\"",
+    "cmstart": "cd cms && docker-compose up -d",
     "dbbackup": "run-script-os",
     "dbbackup:default": "docker exec -it database bash -c 'pg_dump -U directus -W -F t directus > ./backup/database_dump.pg'",
     "dbbackup:windows": "winpty docker exec -it database bash -c 'pg_dump -U directus -W -F t directus > ./backup/database_dump.pg'",
-    "cmstart": "cd cms && docker-compose up -d",
-    "start": "npm run ascii && cd database && docker-compose up -d && cd ../cms && docker-compose up -d && cd ../ && npm run frontend && echo \"$(tput setaf 3)Use $(tput setaf 1)npm run dbrestore $(tput setaf 3)to restore the database. \" && echo \"Use $(tput setaf 1)npm run restart$(tput setaf 3) to restart after the restore.\" && echo \"\" && echo \"$(tput sgr0)Database started successfully. Located at http://localhost:5432\" && echo \"CMS started successfully. Located at http://localhost:8055\" && echo \"Frontend started successfully. Located at http://localhost:8080\"",
-    "stop": "npm run ascii && cd cms && docker-compose down && cd ../database && docker-compose down && npx kill-port 8080 && echo \"Datbase, CMS, and Frontend stopped successfully.\"",
-    "restart": "npm run stop && npm run start",
-    "clean": "cd database && docker-compose down --rmi all --volumes --remove-orphans && docker-compose up -d && cd ../cms docker-compose down --rmi all --volumes --remove-orphans && docker-compose up -d",
     "dbrestore": "docker exec -it database bash -c 'pg_restore -U directus --clean --no-owner --no-acl --dbname=directus ./backup/dev_database_backup.pg' || echo $?",
-    "psql": "docker exec -it database bash",
+    "dbstart": "cd database && docker-compose up -d",
     "frontend": "cd frontend && npm run serve",
-    "ascii": "clear && echo \" ██████╗ ███╗   ██╗██████╗ ██████╗ \" && echo \"██╔═══██╗████╗  ██║██╔══██╗██╔══██╗\" && echo \"██║   ██║██╔██╗ ██║██████╔╝██████╔╝\" && echo \"██║   ██║██║╚██╗██║██╔══██╗██╔══██╗\" && echo \"╚██████╔╝██║ ╚████║██║  ██║██║  ██║\" && echo \" ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝\" && echo \"_______________________________________________________________\"",
-    "clear": "npm run ascii && cd database && docker-compose down --rmi all --volumes --remove-orphans && cd ../cms && docker-compose down --rmi all --volumes --remove-orphans && npx kill-port 8080 && echo \"Database and CMS cleared successfully.\"",
     "init": "run-script-os",
     "init:default": "npm run ascii && cd database && docker-compose up -d && cd ../cms && docker-compose up -d && cd ../ && npm run dbrestore && npm run frontend && echo \"$(tput setaf 3)Use $(tput setaf 1)npm run dbrestore $(tput setaf 3)to restore the database. \" && echo \"Use $(tput setaf 1)npm run restart$(tput setaf 3) to restart after the restore.\" && echo \"\" && echo \"$(tput sgr0)Database started successfully. Located at http://localhost:5432\" && echo \"CMS started successfully. Located at http://localhost:8055\" && echo \"Frontend started successfully. Located at http://localhost:8080\"",
-    "init:windows": "npm run ascii && cd database && docker-compose up -d && cd ../cms && docker-compose up -d && cd ../ && npm run dbrestore && npm run frontend && echo \"Use npm run dbrestore to restore the database. \" && echo \"Use npm run restart to restart after the restore.\" && echo \"\" && echo \"$Database started successfully. Located at http://localhost:5432\" && echo \"CMS started successfully. Located at http://localhost:8055\" && echo \"Frontend started successfully. Located at http://localhost:8080\""
+    "init:windows": "npm run ascii && cd database && docker-compose up -d && cd ../cms && docker-compose up -d && cd ../ && npm run dbrestore && npm run frontend && echo \"Use npm run dbrestore to restore the database. \" && echo \"Use npm run restart to restart after the restore.\" && echo \"\" && echo \"$Database started successfully. Located at http://localhost:5432\" && echo \"CMS started successfully. Located at http://localhost:8055\" && echo \"Frontend started successfully. Located at http://localhost:8080\"",
+    "psql": "docker exec -it database bash",
+    "restart": "npm run stop && npm run start",
+    "start": "npm run ascii && cd database && docker-compose up -d && cd ../cms && docker-compose up -d && cd ../ && npm run frontend && echo \"$(tput setaf 3)Use $(tput setaf 1)npm run dbrestore $(tput setaf 3)to restore the database. \" && echo \"Use $(tput setaf 1)npm run restart$(tput setaf 3) to restart after the restore.\" && echo \"\" && echo \"$(tput sgr0)Database started successfully. Located at http://localhost:5432\" && echo \"CMS started successfully. Located at http://localhost:8055\" && echo \"Frontend started successfully. Located at http://localhost:8080\"",
+    "stop": "npm run ascii && cd cms && docker-compose down && cd ../database && docker-compose down && npx kill-port 8080 && echo \"Datbase, CMS, and Frontend stopped successfully.\""
   },
   "devDependencies": {
     "run-script-os": "^1.1.6"
