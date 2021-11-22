@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@apollo/client": "^3.4.17",
+    "@apollo/client": "^3.5.4",
     "@vue/apollo-composable": "^4.0.0-alpha.15",
     "@vue/apollo-option": "^4.0.0-alpha.15",
     "@vue/composition-api": "^1.4.0",
@@ -17,7 +17,7 @@
     "core-js": "^3.19.1",
     "graphql": "^16.0.1",
     "graphql-tag": "^2.12.6",
-    "node-fetch": "^3.1.0",
+    "node-fetch": "^2.6.1",
     "react": "^17.0.2",
     "vue": "^2.6.11",
     "vue-apollo": "^3.1.0",
@@ -35,12 +35,12 @@
     "eslint-plugin-vue": "^6.2.2",
     "fs": "0.0.1-security",
     "node-sass": "^6.0.1",
-    "sass": "^1.43.4",
+    "sass": "^1.32.6",
     "sass-loader": "^10.2.0",
     "vue-cli-plugin-vuetify": "^2.4.4",
     "vue-svg-loader": "^0.16.0",
     "vue-template-compiler": "^2.6.11",
-    "vuetify-loader": "^2.0.0-alpha.8"
+    "vuetify-loader": "^1.7.3"
   },
   "eslintConfig": {
     "root": true,
