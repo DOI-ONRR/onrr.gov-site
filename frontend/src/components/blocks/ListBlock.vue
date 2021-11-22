@@ -3,7 +3,7 @@
     <li
     v-for="(item, i) in content"
     :key="i">
-    {{ item }}
+      <span v-html="item"></span>
     </li>
   </component>
 </template>

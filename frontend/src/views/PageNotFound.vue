@@ -6,14 +6,14 @@
       </div>
     </div>
     <v-container class="page__wrap" v-else>
-      <h2 class="title">{{ page.title }}</h2>
-      <div v-html="page.content" />
+      <Page :slug="pageSlug" />
     </v-container>
   </div>
 </template>
 
 <script>
 import { PAGES_BY_ID_QUERY } from '@/graphql/queries'
+import Page from '@/views/Page'
 
 export default {
   name: 'PageNotFound',
@@ -36,11 +36,18 @@ export default {
       },
        result ({ data }) {
         if (data) {
-          console.debug('404 data---------> ', data)
           this.page = data.pages_by_id
         }
       }
     },
+  },
+  components: {
+    Page
+  },
+  computed: {
+    pageSlug() {
+      return this.pages_by_id.slug
+    }
   }
 }
 </script>
