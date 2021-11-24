@@ -12,3 +12,4 @@ editorjs/dist
 editorjs/*.tgz
 editorjs/*.zipcms/.env
 database/.creds
+database/.tunnelrc
