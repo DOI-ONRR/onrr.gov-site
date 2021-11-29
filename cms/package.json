@@ -8,6 +8,6 @@
     "npm": "6.x"
   },
   "dependencies": {
-    "directus": "^9.0.1"
+    "directus": "^9.1.0"
   }
 }
