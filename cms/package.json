@@ -1,18 +1,13 @@
 {
-  "name": "directus-data",
+  "name": "cms",
   "version": "1.0.0",
   "author": "Mojo Nichols <mojo.nichols@onrr.gov>",
   "description": "Directus CMS",
-  "scripts": {
-    "update": "npx directus database migrate:lastest",
-    "bootstrap": "directus bootstrap",
-    "start": "CONFIG_PATH='./config.js' npx directus start"
-  },
   "engines": {
     "node": "14.x",
     "npm": "6.x"
   },
   "dependencies": {
-    "directus": "^9.0.1"
+    "directus": "^9.1.0"
   }
 }

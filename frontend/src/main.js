@@ -3,19 +3,14 @@ import VueMeta from 'vue-meta'
 import router from './router'
 import VueApollo from 'vue-apollo'
 import ApolloClient from 'apollo-boost'
-import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
+import { InMemoryCache } from '@apollo/client'
 import fetch from 'node-fetch'
 import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import introspectionQueryResultData from './json/possibleTypes.json'
 
-
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-  introspectionQueryResultData
-})
-
 const cache = new InMemoryCache({
-  fragmentMatcher
+  introspectionQueryResultData
 })
 
 // console.log('cache yo ------> ', cache)
