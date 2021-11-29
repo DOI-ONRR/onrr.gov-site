@@ -2,7 +2,7 @@ module.exports = function(env) {
   const vcap_services = JSON.parse(env.VCAP_SERVICES)
   const vcap_application = JSON.parse(env.VCAP_APPLICATION)
 
-  console.log('vcap_services ----------> ', vcap_services)
+  // console.log('vcap_services ----------> ', vcap_services)
 
   return {
     PORT: 8055,
