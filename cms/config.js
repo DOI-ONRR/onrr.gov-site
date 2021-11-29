@@ -5,7 +5,7 @@ module.exports = function(env) {
   // console.log('vcap_services ----------> ', vcap_services)
 
   return {
-    PORT: 8080,
+    PORT: 8055,
     PUBLIC_URL: `https://${ vcap_application.uris[0] }`,
     LOG_LEVEL: "info",
     LOG_STYLE: "pretty",
