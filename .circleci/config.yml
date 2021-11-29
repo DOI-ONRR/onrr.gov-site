@@ -37,7 +37,7 @@ jobs:
             cf push dev-onrr-frontend -f ./manifest.yml
 
   update-cms:
-    working_directory: ~/onrr.gov-site/cms
+    working_directory: ~/onrr.gov-site
     docker:
       - image: cimg/node:16.13
     steps:
