@@ -1,9 +1,6 @@
-backup
-ddl
 src 
 static 
-uploads 
-cors.json
+uploads
 docker-compose.yml
 node_modules
 extensions/hooks

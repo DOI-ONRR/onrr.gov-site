@@ -37,7 +37,6 @@ jobs:
             cf push dev-onrr-frontend -f ./manifest.yml
 
   update-cms:
-    working_directory: ~/onrr.gov-site/cms
     docker:
       - image: cimg/node:16.13
     steps:
@@ -45,7 +44,7 @@ jobs:
       - run:
           name: Update cms and deploy to cloud.gov
           command: |
-            pwd && ls -l
+            cd cms
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
             sudo dpkg -i cf-cli_amd64.deb  
             # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
