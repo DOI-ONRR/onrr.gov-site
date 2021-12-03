@@ -3,7 +3,7 @@
     <v-btn
       v-for="item in menuItems"
       :key="item.id"
-      :to="item.custom_url || item.link_to_page.url"
+      :to="(item.custom_url !== null) ? item.custom_url : item.link_to_page.url"
       text
       dark
       class="no-btn-hover"
