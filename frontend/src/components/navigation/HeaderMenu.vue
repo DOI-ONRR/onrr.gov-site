@@ -3,7 +3,8 @@
     <v-btn
       v-for="item in menuItems"
       :key="item.id"
-      :to="item.custom_url || item.link_to_page.url"
+      :to="item.link_to_page && item.link_to_page.url"
+      :href="item.custom_url && item.custom_url"
       text
       dark
       class="no-btn-hover"

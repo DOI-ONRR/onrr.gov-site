@@ -138,6 +138,7 @@ export default {
       group: null,
       isMobile: false,
       fab: false,
+      menus: []
     }
   },
   apollo: {
