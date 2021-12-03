@@ -72,25 +72,25 @@
       <v-list>
         <v-list-group
           v-for="item in menuItems"
-          :key="item.key.id"
+          :key="item.id"
           no-action
         >
           <template v-slot:activator>
             <v-list-item-content>
-              <v-list-item-title v-text="item.key.menu_label"></v-list-item-title>
+              <v-list-item-title v-text="item.menu_label"></v-list-item-title>
             </v-list-item-content>
           </template>
 
           <v-list>
             <v-list-item 
-              :to="`/${ item.key.link_to_page.url }`"
+              :to="`/${ item.link_to_page.url }`"
               class="child-item">
-              {{ `${ item.key.menu_label } Home` }}
+              {{ `${ item.menu_label } Home` }}
             </v-list-item>
             <v-list-item
-              v-for="child in item.data"
+              v-for="child in item.menu_children"
               :key="child.id"
-              :to="child.link_to_page.url"
+              :to="child.pages_id.url"
               class="child-item"
             >
               <v-list-item-content>
@@ -141,7 +141,7 @@ export default {
     }
   },
   apollo: {
-    menu_items: {
+    menus: {
       query: MENU_QUERY,
       loadingKey: 'loading...',
     }
@@ -203,18 +203,8 @@ export default {
     }
   },
   computed: {
-    menuItems () {
-      const mItems = []
-      if (this.menu_items) {
-        const childItems = this.menu_items.filter(item => (item.menu === 'header' || item.menu === 'main') && item.parent !== null)
-        this.menu_items.filter(item => item.menu === 'main').map(item => {
-          if (item.parent === null) {
-            mItems.push({ key: item, data: [...childItems.filter(child => child.parent.id === item.id)] })
-          }
-        }) 
-      }
-      
-      return mItems
+    menuItems() {
+      return this.menus.filter(item => item.menu === 'main')
     },
     height () {
       switch (this.$vuetify.breakpoint.name) {
