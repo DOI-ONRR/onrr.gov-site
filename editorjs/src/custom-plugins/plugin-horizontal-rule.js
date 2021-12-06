@@ -6,7 +6,7 @@ export default class HorizontalRuleTool {
   static get toolbox() {
     return {
       title: 'Horizontal Rule',
-      icon: '<svg width="20" height="20" viewBox="0 0 22 22"><path fill="#6F6F6F" d="M0,24H24V20H0V24Z"></path></svg>'
+      icon: '<svg width="20" height="20" viewBox="0 0 22 22"><path d="M0,24H24V20H0V24Z"></path></svg>'
     };
   }
 
@@ -20,7 +20,7 @@ export default class HorizontalRuleTool {
 
   save(blockContent) {
     return {
-      hr: blockContent.value
+      horizontalrule: blockContent.value || true
     }
   }
 
