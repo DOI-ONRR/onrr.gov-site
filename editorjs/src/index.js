@@ -53,7 +53,7 @@ export default {
 					"underline",
 					"link",
 					"collections",
-					// "tabs",
+					"horizontalrule",
 				],
 			},
 			meta: {
@@ -84,7 +84,7 @@ export default {
 						{ value: "raw", text: "Raw HTML" },
 						{ value: 'link', text: "Link" },
 						{ value: 'collection', text: 'Collections'},
-						// { value: 'tabs', text: 'Tabs'},
+						{ value: 'horizontalrule', text: 'Horizontal Rule'},
 					],
 				},
 			},
