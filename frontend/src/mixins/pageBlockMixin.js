@@ -65,7 +65,8 @@ export const pageBlockMixin = {
           block = CollectionBlock 
           break
         default:
-          block = ContentBlock
+          // block = ContentBlock
+          console.warn('pageBlock not found!', type)
           break
       }
       return block

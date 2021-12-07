@@ -4,9 +4,9 @@
     <nav id="main-menu" class="primary" v-else>
       <ul>
         <li v-for="item in menuItems" :key="item.id">
-          <v-menu 
-            offset-y
-            open-on-hover>
+          <v-menu
+            open-on-hover
+            offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="white"
@@ -14,8 +14,6 @@
                 dark
                 v-bind="attrs"
                 v-on="on"
-                v-on:hover="getChildItems(item.id)"
-                v-on:click="onClick($event.target.innerText); getChildItems(item.id)"
                 class="menu-btn"
               >
                   {{ item.menu_label }}
@@ -26,8 +24,8 @@
                 {{ `${ item.menu_label } Home` }}
               </v-list-item>
               <v-list-item
-                v-for="child in item.menu_children"
-                :key="child.id"
+                v-for="(child, i) in item.menu_children"
+                :key="i"
                 :to="`${ child.pages_id.url  }`"
                 class="menu-btn"
               >
@@ -59,6 +57,7 @@ export default {
   data () {
     return {
       menus: [],
+      cItems: []
     }
   },
   apollo: {
@@ -72,12 +71,16 @@ export default {
       if (event) {
         console.debug(`You clicked ${ event }`)
       }
+    },
+    childItems(parentId) {
+      this.cItems = this.menus && this.menus.filter(item => item.id === parentId)[0].menu_children
     }
   },
   computed: {
     menuItems() {
       return this.menus.filter(item => item.menu === 'main')
-    }
+    },
+    
   }
 }
 </script>
