@@ -72,6 +72,7 @@ export default {
 .card {
   border-top-width: 6px;
   border-top-style: solid;
+  width: 100%;
 }
 
 .anchor--color {
