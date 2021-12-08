@@ -167,6 +167,26 @@ export const CONTACTS_QUERY = gql`
     }
   }
 `
+// Contacts query
+export const NYMEX_QUERY = gql`
+  query {
+    NYMEX {
+      id
+      status
+      Month
+      Average
+      Roll
+      Spreadsheet {
+        id
+      }
+    }
+  }
+`
+// Spreadsheet {
+//id
+//filename_disk
+
+
 
 
 // Press Release Query 

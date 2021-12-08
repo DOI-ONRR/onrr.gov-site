@@ -9,17 +9,22 @@
 </template>
 
 <script>
+
+// import collections
 const FilesCollection = () => import(/* webpackChunkName: "FilesCollection" */ '@/components/collections/FilesCollection')
 const AnnouncementsCollection = () => import(/* webpackChunkName: "AnnouncementsCollection" */ '@/components/collections/AnnouncementsCollection')
 const EventsCollection = () => import(/* webpackChunkName: "EventsCollection" */ '@/components/collections/EventsCollection')
 const CompaniesCollection = () => import(/* webpackChunkName: "CompaniesCollection" */ '@/components/collections/CompaniesCollection')
 const ContactsCollection = () => import(/* webpackChunkName: "ContactsCollection" */ '@/components/collections/ContactsCollection')
+const NYMEX = () => import(/* webpackChunkName: "ContactsCollection" */ '@/components/collections/NYMEX')
+
 
 import { 
   REPORTER_LETTERS_QUERY,
   PRESS_RELEASES_QUERY,
   ANNOUNCEMENTS_QUERY,
-  CONTACTS_QUERY
+  CONTACTS_QUERY,
+  NYMEX_QUERY
 } from '@/graphql/queries'
 
 export default {
@@ -48,6 +53,9 @@ export default {
         else if (this.block.data.collection === 'contacts') {
           return CONTACTS_QUERY
         }
+	else if (this.block.data.collection === 'NYMEX') {
+          return NYMEX_QUERY
+        }
       },
       update: data => data
     }
@@ -71,6 +79,9 @@ export default {
           break
         case 'contacts':
           collectionBlock = ContactsCollection
+          break
+        case 'NYMEX':
+          collectionBlock = NYMEX
           break
         default:
           console.warn('No collection block found.')
