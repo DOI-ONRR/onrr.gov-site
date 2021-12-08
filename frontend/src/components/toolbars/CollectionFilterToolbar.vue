@@ -17,24 +17,24 @@
             icon="mdi-magnify"
             @update="onUpdateStore('searchQuery', $event)" />
         </v-col>
-        <!-- <v-col
+        <v-col
           cols="12"
           sm="4"
         >
           <CustomInput 
-            v-model="getYear"
+            v-model="year"
             label="Year"
             type="text"
             :items="items"
             inputType="select"
             @update="onUpdateStore('year', $event)" />
-        </v-col> -->
+        </v-col>
         <v-col
           cols="12"
           sm="4"
           class="mt-1"
         >
-          <v-chip>{{ (collection.length > 1) ? `${ collection.length } items` : `${ collection.length } item` }}</v-chip>
+          <v-chip>{{ (collection.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
         </v-col>
       </v-row>
     </v-container>
@@ -43,6 +43,7 @@
 
 <script>
 import { store, mutations } from '@/store'
+import { getYear } from '@/js/utils'
 const CustomInput = () => import(/* webpackChunkName: "CustomInput" */ '@/components/inputs/CustomInput')
 export default {
   name: 'CollectionFilterToolbar',
@@ -51,7 +52,7 @@ export default {
       search: store.collections.searchQuery,
       color: '',
       email: '',
-      items: [2021, 2020, 2019, 2018], 
+      items: [], 
     }
   },
   props: {
@@ -60,6 +61,9 @@ export default {
     },
     showToolbar: {
       type: Boolean,
+    },
+    searchResults: {
+      type: String
     }
   },
   components: {
@@ -68,14 +72,19 @@ export default {
   methods: {
      onUpdateStore(key, value) {
         mutations.updateCollections(key, value)
-     }
+     },
+     getYears() {
+       const years = this.collection.map(item => this.getYear(item.date))
+       this.items = [... new Set(years)]
+     },
+     getYear: getYear,
+  },
+  created() {
+    this.getYears()
   },
   computed: {
     year() {
       return store.collections.year
-    },
-    getYear() {
-      return this.year || this.items[0]
     },
     getItems() {
       return this.collection(item => item.date)

@@ -29,12 +29,12 @@
     </div>
     <div v-if="collectionLayout === 'full'">
 
-      <CollectionFilterToolbar :collection="collection"></CollectionFilterToolbar>
+      <CollectionFilterToolbar :collection="collection" :searchResults="filterCollection"></CollectionFilterToolbar>
       
-      <div v-if="collection.length">
+      <div v-if="filterCollection.length">
         <v-card 
           elevation="1"
-          v-for="(item, i) in searchResults"
+          v-for="(item, i) in filterCollection"
           :key="i"
           class="ml-1 mr-1 mt-1 mb-4">
             <v-list-item 
@@ -93,6 +93,10 @@ export default {
     CollectionFilterToolbar,
   },
   methods: {
+    getDay: getDay,
+    getMonth: getMonth,
+    getFullDate: getFullDate,
+    getYear: getYear,
     fileLink(item) {
       let link
       if (item.file) {
@@ -102,30 +106,32 @@ export default {
       }
       return link
     },
-    getDay: getDay,
-    getMonth: getMonth,
-    getFullDate: getFullDate,
-    getYear: getYear,
+    filterCollectionBySearch(collection) {
+      return collection.filter(item => this.search.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v)))
+    },
+    filterCollectionByYear(collection) {
+      return collection.filter(item => this.getYear(item.date) === this.year)
+    }
   },
   computed: {
     search() {
-      return store.collections.searchQuery
+      return store.collections.searchQuery || ''
     },
     year() {
       return store.collections.year
     },
-    searchResults() {
-      // search input results
-      if(this.search) {
-        return this.collection.filter((item) => {
-          // this.collection.filter(item => parseInt(this.getYear(item.date)) === this.year)
-          const results = this.search.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v))
-          return results
-        })    
-      } else {
-        return this.collection
-      }
-    },
+    // searchResults() {
+    //   // search input results
+    //   if(this.search && this.year) {
+    //     return this.collection.filter((item) => this.search.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v)) 
+    //     && this.getYear(item.date) === this.year)  
+    //   } else {
+    //     return this.collection
+    //   }
+    // },
+    filterCollection() {
+      return this.filterCollectionByYear(this.filterCollectionBySearch(this.collection))
+    }
   }
 }
 </script>
