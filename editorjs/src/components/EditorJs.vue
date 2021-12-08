@@ -22,6 +22,7 @@ import Paragraph from "@editorjs/paragraph"
 import List from "@editorjs/list"
 // import SimpleTabs from '../custom-plugins/simple-tabs'
 import Collections from '../custom-plugins/plugin-collections'
+import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
 
 export default {
   data() {
@@ -58,10 +59,10 @@ export default {
               placeholder: "."
             }
           },
-          // tabs: {
-          //   class: SimpleTabs,
-          //   inlineToolbar: true
-          // },
+          horizontalrule: {
+            class: HorizontalRuleTool,
+            inlineToolbar: true,
+          },
           collection: {
             class: Collections,
             inlineToolbar: true,
