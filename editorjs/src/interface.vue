@@ -53,6 +53,7 @@ import AttachesTool from './custom-plugins/plugin-attaches-patch';
 import PersonalityTool from './custom-plugins/plugin-personality-patch';
 // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
 import CollectionsTool from "./custom-plugins/plugin-collections";
+import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
 
 export default defineComponent({
 	emits: ['input', 'error'],
@@ -71,7 +72,7 @@ export default defineComponent({
 		},
 		tools: {
 			type: Array,
-			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'quote', 'underline', 'collection'],
+			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'quote', 'underline', 'collection', 'horizontalrule'],
 		},
 		font: {
 			type: String,
@@ -341,10 +342,10 @@ export default defineComponent({
 						fieldsEndpoint: '/fields'
 					}
 				},
-				// tabs: {
-				// 	class: SimpleTabs,
-				// 	inlineToolbar: true,
-				// },
+				horizontalrule: {
+					class: HorizontalRuleTool,
+					inlineToolbar: true,
+				}
 			};
 
 			// Build current tools config.
