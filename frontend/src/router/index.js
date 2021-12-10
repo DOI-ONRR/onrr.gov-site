@@ -118,7 +118,7 @@ const routes = [
     },
   },
   {
-    path: "/compliance",
+    path: "/compliance-enforcement",
     name: "TwoColumnLeft",
     props: true,
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
