@@ -22,8 +22,9 @@
           sm="4"
         >
           <CustomInput 
-            v-model="year"
-            label="Year"
+            v-model="collectionItems[0]"
+            :item-value="collectionItems[0]"
+            label="All Years"
             type="text"
             :items="items"
             inputType="select"
@@ -50,20 +51,24 @@ export default {
   data() {
     return {
       search: store.collections.searchQuery,
+      year: store.collections.year,
       color: '',
       email: '',
-      items: [], 
+      items: [],
     }
   },
   props: {
     collection: {
       type: [Object, Array]
     },
+    collectionItems: {
+      type: [Array]
+    },
     showToolbar: {
       type: Boolean,
     },
     searchResults: {
-      type: String
+      type: Array
     }
   },
   components: {
@@ -83,9 +88,6 @@ export default {
     this.getYears()
   },
   computed: {
-    year() {
-      return store.collections.year
-    },
     getItems() {
       return this.collection(item => item.date)
     }

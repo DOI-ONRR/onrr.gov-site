@@ -72,7 +72,7 @@ export default defineComponent({
 		},
 		tools: {
 			type: Array,
-			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'quote', 'underline', 'collection', 'horizontalrule'],
+			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule'],
 		},
 		font: {
 			type: String,

@@ -25,7 +25,7 @@ import {
 export default {
   name: 'CollectionBlock',
   props: {
-    block: [Array, Object],
+    block: [Array, Object, String],
   },
   apollo: {
     collectionItems: {

@@ -29,14 +29,18 @@
     </div>
     <div v-if="collectionLayout === 'full'">
 
-      <CollectionFilterToolbar :collection="collection" :searchResults="filterCollection"></CollectionFilterToolbar>
+      <CollectionFilterToolbar 
+        :collection="collection" 
+        :collectionItems="items"
+        :searchResults="filterCollection"></CollectionFilterToolbar>
       
-      <div v-if="filterCollection.length">
+      <div v-if="filterCollection.length > 0">
         <v-card 
           elevation="1"
           v-for="(item, i) in filterCollection"
           :key="i"
-          class="ml-1 mr-1 mt-1 mb-4">
+          class="ml-1 mr-1 mt-1 mb-4"
+          transition="fade-transition">
             <v-list-item 
               three-line
               class="pa-2">
@@ -50,13 +54,13 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title class="text-h5 mb-1 text-wrap">
-                  {{ item.title }}
+                  {{ item.title }} <v-chip v-if="item.status === 'archived'" small color="orange" outlined>{{ item.status }}</v-chip>
                 </v-list-item-title>
                 <v-list-item-subtitle class="mb-2 black--text">
                   <v-icon>mdi-calendar-month</v-icon> {{ getFullDate(item.date) }}
                 </v-list-item-subtitle>
                 <div class="mb-2 text-body-1" v-if="item.excerpt" v-html="item.excerpt"></div>
-                <div><a :href="fileLink(item)">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
+                <div v-if="fileLink(item)"><a :href="fileLink(item)">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
               </v-list-item-content>
             </v-list-item>
         </v-card>
@@ -80,7 +84,8 @@ export default {
   name: 'FilesBlock',
   data() {
     return {
-      API: process.env.VUE_APP_API_URL
+      API: process.env.VUE_APP_API_URL,
+      items: []
     }
   },
   props: {
@@ -90,7 +95,7 @@ export default {
     showToolbar: Boolean,
   },
   components: {
-    CollectionFilterToolbar,
+    CollectionFilterToolbar
   },
   methods: {
     getDay: getDay,
@@ -106,7 +111,12 @@ export default {
       }
       return link
     },
+    getYears() {
+      const years = this.collection.map(item => this.getYear(item.date))
+      this.items = [... new Set(years)]
+    },
     filterCollectionBySearch(collection) {
+      console.log('collection --------> ', collection)
       return collection.filter(item => this.search.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v)))
     },
     filterCollectionByYear(collection) {
@@ -120,18 +130,13 @@ export default {
     year() {
       return store.collections.year
     },
-    // searchResults() {
-    //   // search input results
-    //   if(this.search && this.year) {
-    //     return this.collection.filter((item) => this.search.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v)) 
-    //     && this.getYear(item.date) === this.year)  
-    //   } else {
-    //     return this.collection
-    //   }
-    // },
     filterCollection() {
-      return this.filterCollectionByYear(this.filterCollectionBySearch(this.collection))
+      const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(this.collection))
+      return filteredCollection.length === 0 ? this.collection : filteredCollection
     }
+  },
+  created() {
+    this.filterCollection()
   }
 }
 </script>
