@@ -39,7 +39,7 @@ Execute pg_dump from docker container
 `docker exec -it database bash -c 'pg_dump -Fc --verbose --username=directus --format=c > ./backup/database_dump.pg'`  
 
 Connect to psql instance in cloud.gov  
-`psql postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME}`
+` .`
 
 Backup dev database to local machine  
 `pg_dump postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME} --verbose --no-acl --no-owner -Fc -f ./backup/dev_database_backup.pg`
