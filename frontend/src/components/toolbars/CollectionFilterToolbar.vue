@@ -22,8 +22,8 @@
           sm="4"
         >
           <CustomInput 
-            v-model="collectionItems[0]"
-            :item-value="collectionItems[0]"
+            v-model="year"
+            :item-value="year"
             label="All Years"
             type="text"
             :items="items"
@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       search: store.collections.searchQuery,
-      year: store.collections.year,
+      year: '',
       color: '',
       email: '',
       items: [],
@@ -81,6 +81,8 @@ export default {
      getYears() {
        const years = this.collection.map(item => this.getYear(item.date))
        this.items = [... new Set(years)]
+       this.year = this.items[0]
+       this.onUpdateStore('year', this.items[0])
      },
      getYear: getYear,
   },
