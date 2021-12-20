@@ -10,6 +10,6 @@ export const store = Vue.observable({
 export const mutations = {
   updateCollections(key, value) {
     console.log('updateCollectionsSearchQuery --------> ', value)
-    store.collections[key] = value
+    if (value !== undefined) store.collections[key] = value
   },
 }

@@ -1,9 +1,6 @@
 <template>
   <v-form>
     <v-container class="pa-0">
-      <!-- {{search}} -- {{ color }} -- {{ email }} -->
-      <!-- <CustomInput v-model="color" label="Select color" type="color" inputType="text" />
-      <CustomInput v-model="email" label="Email" type="email" inputType="text" /> -->
       <v-row>
         <v-col
           cols="12"
@@ -35,7 +32,7 @@
           sm="4"
           class="mt-1"
         >
-          <v-chip>{{ (collection.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
+          <v-chip>{{ (items.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
         </v-col>
       </v-row>
     </v-container>
@@ -50,19 +47,14 @@ export default {
   name: 'CollectionFilterToolbar',
   data() {
     return {
-      search: store.collections.searchQuery,
-      year: '',
-      color: '',
-      email: '',
+      year: '', 
       items: [],
+      search: store.collections.searchQuery
     }
   },
   props: {
     collection: {
       type: [Object, Array]
-    },
-    collectionItems: {
-      type: [Array]
     },
     showToolbar: {
       type: Boolean,
@@ -79,7 +71,7 @@ export default {
         mutations.updateCollections(key, value)
      },
      getYears() {
-       const years = this.collection.map(item => this.getYear(item.date))
+       const years = this.collection && this.collection.map(item => this.getYear(item.date))
        this.items = [... new Set(years)]
        this.year = this.items[0]
        this.onUpdateStore('year', this.items[0])
@@ -88,11 +80,7 @@ export default {
   },
   created() {
     this.getYears()
+    this.onUpdateStore('year', this.items[0])
   },
-  computed: {
-    getItems() {
-      return this.collection(item => item.date)
-    }
-  }
 }
 </script>

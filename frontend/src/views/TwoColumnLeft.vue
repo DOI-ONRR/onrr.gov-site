@@ -21,7 +21,8 @@
           <v-col
             sm="12"
             md="9">
-            <router-view />
+
+              <router-view />
           </v-col>
         </v-row>
       </v-container>
@@ -54,8 +55,10 @@ export default {
         if (data) {
           const str = this.$route.path
           const routes = str.split('/')
-          const page = this.slug 
-            ? data.pages.find(page => page.slug === this.slug)
+          console.log('whats this -----------> ', this.slug)
+          const slug = (this.slug && this.slug.includes('?') !== undefined) ? this.slug.split('?')[0] : this.slug
+          const page = slug 
+            ? data.pages.find(page => page.slug === slug)
             : this.pages.find(page => page.slug === routes[routes.length - 1])
           this.page = page
           this.pageId = page.id
@@ -88,18 +91,22 @@ export default {
     findPageBySlug: function () {
       const str = this.$route.path
       const routes = str.split('/')
+      console.log('whats this -----------> ', this.slug.includes('?'))
+      const slug = (this.slug && this.slug.includes('?') !== undefined) ? this.slug.split('?')[0] : this.slug
 
       let page
       if(this.pages) {
-        page = (this.slug !== undefined) 
-          ? this.pages.find(page => page.slug === this.slug)
+        page = (slug !== undefined) 
+          ? this.pages.find(page => page.slug === slug)
           : this.pages.find(page => page.slug === routes[routes.length - 1]) || false
       }
       this.page = page
       return page
     },
     getPageBySlug: function(slug) {
-      const page = this.pages.find(page => page.slug === slug)
+      console.log('whats this -----------> ', slug.includes('?'))
+      const formattedSlug = (slug && slug.includes('?') !== undefined) ? slug.split('?')[0] : slug
+      const page = this.pages.find(page => page.url === formattedSlug)
       return page
     }
   }

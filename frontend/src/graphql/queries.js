@@ -194,6 +194,9 @@ export const REPORTER_LETTERS_QUERY = gql`
       file {
         id
       }
+      accessible_version {
+        id
+      }
       link
       status
     }
