@@ -326,7 +326,7 @@ export default class CollectionsTool {
       this.data.status = status;
    
       // waits until the request completes...
-      // console.log('response from api yo -----> ', collection, fields, items);
+      console.log('response from api yo -----> ', collection, fields, items);
 
     } catch(err){
       console.error(err);

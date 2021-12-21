@@ -26,7 +26,7 @@
               <v-list-item
                 v-for="(child, i) in item.menu_children"
                 :key="i"
-                :to="`${ child.pages_id.url  }`"
+                :href="`${ child.pages_id.url  }`"
                 class="menu-btn"
               >
                   {{ child.pages_id.title }}
@@ -74,7 +74,7 @@ export default {
     },
     childItems(parentId) {
       this.cItems = this.menus && this.menus.filter(item => item.id === parentId)[0].menu_children
-    }
+    },
   },
   computed: {
     menuItems() {

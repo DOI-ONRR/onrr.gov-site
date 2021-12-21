@@ -1,5 +1,4 @@
-// Opting to go with Internationalization API
-// import currencyFormatter from 'currency-formatter'
+import slugify from 'slugify'
 
 export const formatToDollarInt = (value) => {
  const fVal = new Intl.NumberFormat('en-US', 
@@ -76,4 +75,28 @@ export const getFullDate = (date) => {
 export const getYear = (date) => {
   const d = new Date(date)
   return d.toLocaleString('en-us', { year: 'numeric' })
+}
+
+export const addParamsToLocation = (params, route) => {
+  history.pushState(
+    {},
+    null,
+    route +
+      '?' +
+      Object.keys(params)
+        .map(key => {
+          return (
+            encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
+          )
+        })
+        .join('&')
+  )
+}
+
+export const formatToSlug = name => {
+  return slugify(name, {
+    lower: true,
+    // eslint-disable-next-line no-useless-escape
+    remove: /[$*_+~.()'"!\:@,?]/g
+  }).replace('-and-', '-')
 }

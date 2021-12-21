@@ -38,6 +38,9 @@ export default {
   data: () => ({
     //
   }),
+  created() {
+    console.log('this.$route.fullPath --------------------> ', this.$route.fullPath)
+  }
 };
 </script>
 
