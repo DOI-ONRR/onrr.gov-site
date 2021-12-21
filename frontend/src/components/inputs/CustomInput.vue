@@ -10,6 +10,7 @@
       :label="label"
       :type="type"
       :value="value"
+      :ref="reference"
       @input="$emit('update', $event)"
     ></v-text-field>
 
@@ -23,6 +24,7 @@
       :label="label"
       :type="type"
       :value="value"
+      :ref="reference"
       @input="$emit('update', $event)"
     ></v-select>
   </div>
@@ -62,6 +64,9 @@ export default {
     icon: {
       type: String,
       default: '',
+    },
+    reference: {
+      type: String,
     },
     items: {
       type: [Array]

@@ -32,8 +32,9 @@
       <div v-if="collectionName === 'press_releases'">
 
         <CollectionFilterToolbar
-          :collection="filterCollection" 
-          :searchResults="filterCollection"></CollectionFilterToolbar>
+          :collection="collection"
+          :searchResults="filterCollection"
+          ref="collectionFilterToolbar"></CollectionFilterToolbar>
 
         <template>
           <v-card
@@ -92,7 +93,7 @@ export default {
   name: 'FilesCollection',
   data() {
     return {
-      API: process.env.VUE_APP_API_URL
+      API: process.env.VUE_APP_API_URL,
     }
   },
   props: {
@@ -106,19 +107,9 @@ export default {
     ReporterLetters
   },
   computed: {
-    // search: function() {
-    //   return store.collections.searchQuery || ''
-    // },
-    // year: function() {
-    //   return store.collections.year
-    // },
     filterCollection() {
-      console.log('filterCollection store state ----------------> ', store)
       const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(this.collection))
-      console.log('filteredCollection ----------->', filteredCollection)
-      const collection = (filteredCollection && filteredCollection.length > 0) ? filteredCollection : this.collection
-      console.log('collection to return yo ----------->', collection)
-      return collection
+      return (!filteredCollection || filteredCollection.length === 0) ? this.collection : filteredCollection
     }
   },
   methods: {
@@ -135,18 +126,24 @@ export default {
       }
       return link
     },
-    getYears() {
-      const years = this.collection.map(item => this.getYear(item.date))
-      this.items = [... new Set(years)]
-    },
     filterCollectionBySearch(collection) {
       const search = store.collections.searchQuery || ''
-      return search ? collection.filter(item => search.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v))) : collection
+      const filteredSearch = (search !== '') ? collection.filter(item => search.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v))) : collection
+      return filteredSearch
     },
     filterCollectionByYear(collection) {
       const year = store.collections.year
-      return collection && collection.filter(item => this.getYear(item.date) === year)
+      const filteredYear = collection && collection.filter(item => this.getYear(item.date) === year)
+      return filteredYear
     },
   },
+  // created() {
+  //   this.filterCollection()
+  // },
+  // watch: {
+  //   '$route.query.tab'() {
+  //     this.filterCollection()
+  //   }
+  // },
 }
 </script>

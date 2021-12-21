@@ -2,8 +2,12 @@
   <v-data-table
     :headers="headers"
     :items="collection">
+    <template v-slot:item.title="{ item }">
+      <a href="#">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
+      <div v-if="item.accessible_version"><a href="#">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
+    </template>
     <template v-slot:item.date="{ item }">
-      <v-chip>{{ getYear(item.date, 'numeric') }}</v-chip>
+      {{ formatNiceDate(item.date) }}
     </template>
   </v-data-table>
 </template>
@@ -29,6 +33,7 @@ export default {
         text: 'Date',
         align: 'start',
         sortable: true,
+        value: 'date'
       }
     ]
   }),
@@ -39,7 +44,10 @@ export default {
     getFullDate: getFullDate,
     getYear: getYear,
     getMonth: getMonth,
-    getDay: getDay
+    getDay: getDay,
+    formatNiceDate(d) {
+      return `${ getMonth(d, 'numeric') }/${ getDay(d, 'numeric') }/${ getYear(d) }`
+    }
   },
   computed: {
   }

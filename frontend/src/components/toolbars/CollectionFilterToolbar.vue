@@ -12,7 +12,8 @@
             type="search"
             inputType="text"
             icon="mdi-magnify"
-            @update="onUpdateStore('searchQuery', $event)" />
+            ref="searchInput"
+            @update="onUpdateStore('searchQuery', $event); $emit('searchUpdateEvent', search);" />
         </v-col>
         <v-col
           cols="12"
@@ -25,14 +26,15 @@
             type="text"
             :items="items"
             inputType="select"
-            @update="onUpdateStore('year', $event)" />
+            ref="yearSelectInput"
+            @update="onUpdateStore('year', $event);  $emit('yearUpdateEvent', year);" />
         </v-col>
         <v-col
           cols="12"
           sm="4"
           class="mt-1"
         >
-          <v-chip>{{ (items.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
+          <v-chip>{{ (searchResults && items.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
         </v-col>
       </v-row>
     </v-container>
@@ -47,9 +49,9 @@ export default {
   name: 'CollectionFilterToolbar',
   data() {
     return {
-      year: '', 
+      year: store.collections.year, 
+      search: store.collections.searchQuery,
       items: [],
-      search: store.collections.searchQuery
     }
   },
   props: {
@@ -71,16 +73,20 @@ export default {
         mutations.updateCollections(key, value)
      },
      getYears() {
-       const years = this.collection && this.collection.map(item => this.getYear(item.date))
-       this.items = [... new Set(years)]
-       this.year = this.items[0]
-       this.onUpdateStore('year', this.items[0])
+      const years = this.collection.map(item => this.getYear(item.date))
+      this.items = [... new Set(years)]
+      this.year = this.items[0]
+      this.onUpdateStore('year', this.items[0])
      },
      getYear: getYear,
   },
+  watch: {
+    '$route.query.tab'() {
+      this.onUpdateStore('year', this.$refs.yearSelectInput.value || this.items[0])
+    }
+  },
   created() {
-    this.getYears()
-    this.onUpdateStore('year', this.items[0])
+    setTimeout(function () { this.getYears() }.bind(this), 500)
   },
 }
 </script>
