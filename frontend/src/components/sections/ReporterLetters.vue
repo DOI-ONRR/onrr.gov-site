@@ -1,15 +1,37 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="collection">
-    <template v-slot:item.title="{ item }">
-      <a href="#">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
-      <div v-if="item.accessible_version"><a href="#">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
-    </template>
-    <template v-slot:item.date="{ item }">
-      {{ formatNiceDate(item.date) }}
-    </template>
-  </v-data-table>
+  <v-card>
+    <v-card-title>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        outlined
+        dense
+        hide-details
+        color="secondary"
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="collection"
+      :search="search">
+      <template v-slot:header.title="{ header }">
+        <div class="text-h6 text-capitalize">{{ header.text}}</div>
+      </template>
+      <template v-slot:header.date="{ header }">
+        <div class="text-h6 text-capitalize">{{ header.text }}</div>
+      </template>
+      <template v-slot:item.title="{ item }">
+        <a href="#">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
+        <div v-if="item.accessible_version"><a href="#">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
+      </template>
+      <template v-slot:item.date="{ item }">
+        {{ formatNiceDate(item.date) }}
+      </template>
+    </v-data-table>
+  </v-card>
 </template>
 
 <script>
