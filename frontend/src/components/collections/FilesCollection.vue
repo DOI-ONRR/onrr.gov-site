@@ -63,7 +63,7 @@
                     <v-icon>mdi-calendar-month</v-icon> {{ getFullDate(item.date) }}
                   </v-list-item-subtitle>
                   <div class="mb-2 text-body-1" v-if="item.excerpt" v-html="item.excerpt"></div>
-                  <div v-if="fileLink(item)"><a :href="fileLink(item)">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
+                  <div v-if="fileLink(item)"><a :href="fileLink(item)" target="_blank">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
                 </v-list-item-content>
               </v-list-item>
           </v-card>

@@ -24,8 +24,8 @@
         <div class="text-h6 text-capitalize">{{ header.text }}</div>
       </template>
       <template v-slot:item.title="{ item }">
-        <a href="#">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
-        <div v-if="item.accessible_version"><a href="#">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
+        <a :href="fileLink(item)" target="_blank">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
+        <div v-if="item.accessible_file"><a :href="fileLink(item)" target="_blank">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
       </template>
       <template v-slot:item.date="{ item }">
         {{ formatNiceDate(item.date) }}
@@ -43,6 +43,7 @@ import {
 } from '@/js/utils'
 export default {
   data: () => ({
+    API: process.env.VUE_APP_API_URL,
     search: '',
     headers: [
       {
@@ -69,7 +70,18 @@ export default {
     getDay: getDay,
     formatNiceDate(d) {
       return `${ getMonth(d, 'numeric') }/${ getDay(d, 'numeric') }/${ getYear(d) }`
-    }
+    },
+    fileLink(item) {
+      let link
+      if (item.file) {
+        link = `${ this.API }/assets/${ item.file.id }`
+      } else if (item.accessible) {
+        link = `${ this.API }/assets/${ item.accessible_file.id }`
+      } else if (item.link ) {
+        link = item.link
+      }
+      return link
+    },
   },
   computed: {
   }
