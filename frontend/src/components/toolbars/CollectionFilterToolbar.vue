@@ -73,7 +73,7 @@ export default {
         mutations.updateCollections(key, value)
      },
      getYears() {
-      const years = this.collection.map(item => this.getYear(item.date))
+      const years = this.collection.map(item => this.getYear(item.date)).sort((a, b) => b - a)
       this.items = [... new Set(years)]
       this.year = this.items[0]
       this.onUpdateStore('year', this.items[0])
