@@ -2,14 +2,14 @@ import Vue from "vue"
 
 export const store = Vue.observable({
   collections: {
-    searchQuery: null,
-    year: null,
+    searchQuery: '',
+    year: new Date().getFullYear()
   }
 })
 
 export const mutations = {
   updateCollections(key, value) {
     console.log('updateCollectionsSearchQuery --------> ', value)
-    if (value !== undefined) store.collections[key] = value
+    store.collections[key] = value
   },
 }

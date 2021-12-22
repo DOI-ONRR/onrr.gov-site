@@ -45,6 +45,7 @@ Vue.config.productionTip = false
 Vue.use(VueApollo)
 Vue.use(VueMeta)
 
+
 new Vue({
   vuetify,
   apolloProvider,

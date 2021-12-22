@@ -176,7 +176,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
       },
       {
-        path: ':slug?',
+        path: ':slug',
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
         props: true,
         meta: {
@@ -259,7 +259,7 @@ router.beforeEach((to, from, next) => {
       const redirectFound = redirects.find(redirect => redirect.from === path)
 
       // console.log('redirectFound------------->', redirectFound)
-      console.log('pageFound-------------->', pageFound)
+      // console.log('pageFound-------------->', pageFound)
 
       // if not page found lets redirect to 404 page
       if (redirectFound) {

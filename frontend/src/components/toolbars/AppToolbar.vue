@@ -28,10 +28,10 @@
         <div class="d-flex logo">
           <router-link to="/">
             <v-img
-              alt="Vuetify Logo"
+              alt="Office of Natural Resources and Revenue (ONRR) Logo"
               class="logo shrink mr-2"
               contain
-              src="../../assets/images/icons/onrr-logo-200x200.png"
+              src="../../assets/images/logos/ONRR-mark-200x200.png"
               transition="scale-transition"
             />
             </router-link>

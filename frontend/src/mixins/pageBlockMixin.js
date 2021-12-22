@@ -7,7 +7,7 @@ const CodeBlock = () => import(/* webpackChunkName: "CodeBlock" */ '@/components
 const ImageBlock = () => import(/* webpackChunkName: "ImageBlock" */ '@/components/blocks/ImageBlock')
 const CardBlock = () => import(/* webpackChunkName: "CardBlock" */ '@/components/blocks/CardBlock')
 const CollectionBlock = () => import(/* webpackChunkName: "CollectionBlock" */ '@/components/blocks/CollectionBlock')
-const HorizontalRuleBlock = () => import(/* webpackChunkName: "CollectionBlock" */ '@/components/blocks/HorizontalRuleBlock')
+const HorizontalRuleBlock = () => import(/* webpackChunkName: "HorizontalRuleBlock" */ '@/components/blocks/HorizontalRuleBlock')
 
 export const pageBlockMixin = {
   data() {

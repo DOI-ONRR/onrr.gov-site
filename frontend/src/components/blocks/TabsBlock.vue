@@ -10,21 +10,23 @@
         v-for="(tab, index) in tabs"
         :key="index"
         :href="`#${ formattedLabel(tabs[index]) }`"
-        @click="addParamsToLocation({ tab: formattedLabel(tabs[index])  }); $emit('tabChangeEvent', formattedLabel(tabs[index]));">
+        @click="addParamsToLocation({ tab: formattedLabel(tabs[index])  });">
         <span v-html="tab"></span>
       </v-tab>
     </v-tabs>
     <v-tabs-items
-      v-model="model">
+      v-model="model"
+      :key="componentKey">
       <v-tab-item
         v-for="(tab, i) in tabContents"
         :key="i"
         :value="formattedLabel(tabs[i])">
         <v-card
           text
-          elevation="0">
+          elevation="0"
+          >
           <v-card-text style="white-space: pre-line;" class="pl-0 pr-0 pt-4 pb-4">
-              <LayoutBlock :layout="tab.tab_layout" :block="tab"></LayoutBlock>
+            <LayoutBlock :layout="tab.tab_layout" :block="tab" ></LayoutBlock>
 
             <div v-if="tab.tab_items">
                 <TabsBlock :block="nestedTabs" class="nested-tabs"></TabsBlock>
@@ -37,7 +39,7 @@
 </template>
 
 <script>
-import { addParamsToLocation, formatToSlug } from '@/js/utils'
+import { formatToSlug } from '@/js/utils'
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 
 import { 
@@ -51,7 +53,8 @@ export default {
   template: '<div><TabsBlock></TabsBlock></div>',
   data () {
     return {
-      model: ''
+      model: '',
+      componentKey: 0,
     }
   },
   props: {
@@ -62,11 +65,15 @@ export default {
   },
   methods: {
     addParamsToLocation(params) {
-      return addParamsToLocation(params, this.$route.path)
+      this.$router.replace({ path: this.$route.path, query: params })
+      this.forceRerender()
     },
     formattedLabel(label) {
       return formatToSlug(label)
     },
+    forceRerender() {
+      return this.componentKey += 1
+    }
   },
   computed: {
     tabs() {
@@ -84,7 +91,6 @@ export default {
   
       return nObj
     },
-    
   },
   created() {
     console.log('tab query params --------> ', this.$route.query.tab)
