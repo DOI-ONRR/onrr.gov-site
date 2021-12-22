@@ -10,7 +10,9 @@
         <div v-for="block in page.page_blocks" :key="block.id">
           <LayoutBlock :layout="block.item.block_layout || 'one_column'" :block="block.item">
             <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
-            <component :is="pageBlock(block.item.__typename)" :block="block.item" class="block-component"></component>
+            <keep-alive>
+              <component :is="pageBlock(block.item.__typename)" :block="block.item" class="block-component"></component>
+            </keep-alive>
           </LayoutBlock>
         </div>
       </div>
@@ -65,7 +67,7 @@ export default {
       loadingKey: 'loading...',
       variables () {
         return {
-          ID: this.findPageBySlug.id
+          ID: this.findPageByUrl.id
         }
       },
       // fetchPolicy: 'cache-and-network'
@@ -78,15 +80,10 @@ export default {
     this.$apollo.queries.pages_by_id.refetch()
   },
   computed: {
-    findPageBySlug () {
-      const str = this.$route.path
-      const route = str.replace(/\//g, '')
-      let page
-      if(this.pages) {
-        page = this.slug ? this.pages.find(page => page.slug === this.slug) : this.pages.find(page => page.slug === route)
-      }
-
-      return page
+    findPageByUrl () {
+      const routePath = this.$route.fullPath.split('?')[0]
+      // console.log('routePath yo ------------> ', routePath)
+      return this.pages.find(page => page.url === routePath)
     },
     page () {
       return this.pages_by_id

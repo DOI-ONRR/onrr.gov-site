@@ -1,9 +1,6 @@
 <template>
   <v-form>
     <v-container class="pa-0">
-      <!-- {{search}} -- {{ color }} -- {{ email }} -->
-      <!-- <CustomInput v-model="color" label="Select color" type="color" inputType="text" />
-      <CustomInput v-model="email" label="Email" type="email" inputType="text" /> -->
       <v-row>
         <v-col
           cols="12"
@@ -15,7 +12,8 @@
             type="search"
             inputType="text"
             icon="mdi-magnify"
-            @update="onUpdateStore('searchQuery', $event)" />
+            ref="searchInput"
+            @update="onUpdateStore('searchQuery', $event); $emit('searchUpdateEvent', search);" />
         </v-col>
         <v-col
           cols="12"
@@ -28,14 +26,15 @@
             type="text"
             :items="items"
             inputType="select"
-            @update="onUpdateStore('year', $event)" />
+            ref="yearSelectInput"
+            @update="onUpdateStore('year', $event);  $emit('yearUpdateEvent', year);" />
         </v-col>
         <v-col
           cols="12"
           sm="4"
           class="mt-1"
         >
-          <v-chip>{{ (collection.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
+          <v-chip>{{ (searchResults && items.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
         </v-col>
       </v-row>
     </v-container>
@@ -50,19 +49,14 @@ export default {
   name: 'CollectionFilterToolbar',
   data() {
     return {
+      year: store.collections.year, 
       search: store.collections.searchQuery,
-      year: '',
-      color: '',
-      email: '',
       items: [],
     }
   },
   props: {
     collection: {
       type: [Object, Array]
-    },
-    collectionItems: {
-      type: [Array]
     },
     showToolbar: {
       type: Boolean,
@@ -79,20 +73,20 @@ export default {
         mutations.updateCollections(key, value)
      },
      getYears() {
-       const years = this.collection.map(item => this.getYear(item.date))
-       this.items = [... new Set(years)]
-       this.year = this.items[0]
-       this.onUpdateStore('year', this.items[0])
+      const years = this.collection.map(item => this.getYear(item.date)).sort((a, b) => b - a)
+      this.items = [... new Set(years)]
+      this.year = this.items[0]
+      this.onUpdateStore('year', this.items[0])
      },
      getYear: getYear,
   },
-  created() {
-    this.getYears()
-  },
-  computed: {
-    getItems() {
-      return this.collection(item => item.date)
+  watch: {
+    '$route.query.tab'() {
+      this.onUpdateStore('year', this.$refs.yearSelectInput.value || this.items[0])
     }
-  }
+  },
+  created() {
+    setTimeout(function () { this.getYears() }.bind(this), 500)
+  },
 }
 </script>

@@ -46,7 +46,7 @@
               alt="ONNR Logo"
               class="shrink mr-2"
               contain
-              src="../../assets/images/icons/onrr-logo-200x200.png"
+              src="../../assets/images/logos/ONRR-mark-200x200.png"
               transition="scale-transition"
               width="70"
             />

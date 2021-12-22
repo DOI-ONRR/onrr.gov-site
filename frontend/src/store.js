@@ -2,8 +2,8 @@ import Vue from "vue"
 
 export const store = Vue.observable({
   collections: {
-    searchQuery: null,
-    year: null,
+    searchQuery: '',
+    year: new Date().getFullYear()
   }
 })
 
