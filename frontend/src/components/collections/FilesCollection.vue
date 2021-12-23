@@ -6,7 +6,7 @@
             color="secondary"
           >
             <v-list-item
-              v-for="(item, i) in collection"
+              v-for="(item, i) in collection.slice(0, 5)"
               :key="i"
               :href="fileLink(item)"
               class="pa-0"
