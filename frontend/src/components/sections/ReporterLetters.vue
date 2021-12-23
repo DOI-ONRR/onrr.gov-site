@@ -58,7 +58,10 @@ export default {
         sortable: true,
         value: 'date'
       }
-    ]
+    ],
+    pagination: {
+      totalItems: 777
+    }
   }),
   props: {
     collection: [Array, Object]
