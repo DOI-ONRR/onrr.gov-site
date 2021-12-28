@@ -1,5 +1,5 @@
 {
-  "name": "directus-data",
+  "name": "cms",
   "version": "1.0.0",
   "author": "Mojo Nichols <mojo.nichols@onrr.gov>",
   "description": "Directus CMS",
@@ -13,8 +13,9 @@
     "npm": "6.x"
   },
   "dependencies": {
+
     "axios": "^0.24.0",
-    "directus": "^9.2.1",
+    "directus": "^9.2.2",
     "jszip": "^3.7.1",
     "read-excel-file": "^5.2.25"
   },

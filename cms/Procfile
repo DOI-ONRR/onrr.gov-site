@@ -1,0 +1,1 @@
+web: npm install && CONFIG_PATH='./config.js' directus bootstrap && CONFIG_PATH='./config.js' npx directus start

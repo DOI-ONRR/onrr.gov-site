@@ -19,7 +19,7 @@ export default {
     return {}
   },
   props: {
-    collection: Object,
+    collection: [Object, Array],
     collectionName: String,
     collectionLayout: String,
   },

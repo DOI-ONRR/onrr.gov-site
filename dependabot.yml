@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecostystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    # Raise pull requests for version updates
+    # to pip against the `1125-CmsDeployment` branch
+    target-branch: "1125-CmsDeployment"
+    # Labls on pull requests for versi0n updates only
+    labels:
+      - "pip dependencies"
+
+  - package-ecostystem: "npm"
+    directory: "/"
+    schedule: 
+      interval: "weekly"
+      # Check for npm updates on Sundays
+      day: "sunday"
+    # Labels on pull requests for security and version updates 
+    labels:
+      - "npm dependencies"

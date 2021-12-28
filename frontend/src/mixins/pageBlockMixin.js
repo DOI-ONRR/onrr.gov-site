@@ -7,6 +7,7 @@ const CodeBlock = () => import(/* webpackChunkName: "CodeBlock" */ '@/components
 const ImageBlock = () => import(/* webpackChunkName: "ImageBlock" */ '@/components/blocks/ImageBlock')
 const CardBlock = () => import(/* webpackChunkName: "CardBlock" */ '@/components/blocks/CardBlock')
 const CollectionBlock = () => import(/* webpackChunkName: "CollectionBlock" */ '@/components/blocks/CollectionBlock')
+const HorizontalRuleBlock = () => import(/* webpackChunkName: "CollectionBlock" */ '@/components/blocks/HorizontalRuleBlock')
 
 export const pageBlockMixin = {
   data() {
@@ -27,6 +28,7 @@ export const pageBlockMixin = {
     ContentBlock,
     CardBlock,
     CollectionBlock,
+    HorizontalRuleBlock
   },
   created() {
     console.log('Hello from the pageBlockMixin!')
@@ -64,7 +66,12 @@ export const pageBlockMixin = {
         case 'collection':
           block = CollectionBlock 
           break
+        case 'horizontalrule':
+          block = HorizontalRuleBlock 
+          break
         default:
+          
+          console.warn('pageBlock not found!', type)
           block = ContentBlock
           break
       }

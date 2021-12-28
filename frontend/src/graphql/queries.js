@@ -10,25 +10,24 @@ import {
 
 // Main menu query
 export const MENU_QUERY = gql`query {
-  menu_items {
+  menus {
     id
-    menu_label
     custom_url
-    menu
     link_to_page {
       id
       slug
       url
     }
-    parent {
-      id
-      custom_url
-      link_to_page {
+    menu
+    menu_children {
+      pages_id {
         id
-        slug
+        title
         url
       }
     }
+    menu_icon
+    menu_label
   }
 }`
 

@@ -84,11 +84,11 @@ export default {
       },
       fetchPolicy: 'cache-and-network'
     },
-    collection: {
-      query() {
-      },
-      update: data => data
-    }
+    // collection: {
+    //   query() {
+    //   },
+    //   update: data => data
+    // }
   }, 
   components: {
     RevenueBlock,
