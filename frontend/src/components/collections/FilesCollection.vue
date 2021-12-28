@@ -107,12 +107,10 @@ export default {
     ReporterLetters
   },
   computed: {
-    filterCollection() {
-      const collection = this.collection
-      collection.sort((a, b) => (a.date < b.date) ? 1 : -1)
-      const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(collection))
-      return (!filteredCollection || filteredCollection.length === 0) ? collection : filteredCollection
-    }
+    filterCollection() {      
+      const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(this.collection))
+      return (!filteredCollection || filteredCollection.length === 0) ? this.collection : filteredCollection
+    },
   },
   methods: {
     getDay: getDay,
