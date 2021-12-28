@@ -11,22 +11,17 @@
 </template>
 
 <script>
-
-// import collections
 const FilesCollection = () => import(/* webpackChunkName: "FilesCollection" */ '@/components/collections/FilesCollection')
 const AnnouncementsCollection = () => import(/* webpackChunkName: "AnnouncementsCollection" */ '@/components/collections/AnnouncementsCollection')
 const EventsCollection = () => import(/* webpackChunkName: "EventsCollection" */ '@/components/collections/EventsCollection')
 const CompaniesCollection = () => import(/* webpackChunkName: "CompaniesCollection" */ '@/components/collections/CompaniesCollection')
 const ContactsCollection = () => import(/* webpackChunkName: "ContactsCollection" */ '@/components/collections/ContactsCollection')
-const NYMEX = () => import(/* webpackChunkName: "ContactsCollection" */ '@/components/collections/NYMEX')
-
 
 import { 
   REPORTER_LETTERS_QUERY,
   PRESS_RELEASES_QUERY,
   ANNOUNCEMENTS_QUERY,
-  CONTACTS_QUERY,
-  NYMEX_QUERY
+  CONTACTS_QUERY
 } from '@/graphql/queries'
 
 export default {
@@ -55,9 +50,6 @@ export default {
         else if (this.block.data.collection === 'contacts') {
           return CONTACTS_QUERY
         }
-	else if (this.block.data.collection === 'NYMEX') {
-          return NYMEX_QUERY
-        }
       },
       update: data => data
     }
@@ -82,9 +74,6 @@ export default {
         case 'contacts':
           collectionBlock = ContactsCollection
           break
-        case 'NYMEX':
-          collectionBlock = NYMEX
-          break
         default:
           console.warn('No collection block found.')
           collectionBlock = undefined
@@ -102,19 +91,7 @@ export default {
       return this.block.data.layout
     },
     items() {
-      const collection = this.block.data.collection
-      let items = []
-      switch (collection) {
-          case 'reporter_letters':
-          case 'press_releases':
-            items = this.collectionItems && this.collectionItems[this.block.data.collection]
-              .filter(item => item.status === this.block.data.status)
-              .sort((a, b) => (a.date < b.date) ? 1 : -1)
-          break;
-        default:
-          items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)
-          break;
-      }
+      const items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)
       return items
     }
   }
