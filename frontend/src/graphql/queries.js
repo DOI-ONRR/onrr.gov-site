@@ -187,7 +187,7 @@ export const PRESS_RELEASES_QUERY = gql`
 
 export const REPORTER_LETTERS_QUERY = gql`
   query {
-    reporter_letters {
+    reporter_letters(limit: -1) {
       id
       title
       date
