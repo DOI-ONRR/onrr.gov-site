@@ -171,7 +171,7 @@ export const CONTACTS_QUERY = gql`
 // Press Release Query 
 export const PRESS_RELEASES_QUERY = gql`
   query {
-    press_releases {
+    press_releases(limit: -1) {
       id
       title
       date
@@ -187,11 +187,14 @@ export const PRESS_RELEASES_QUERY = gql`
 
 export const REPORTER_LETTERS_QUERY = gql`
   query {
-    reporter_letters {
+    reporter_letters(limit: -1) {
       id
       title
       date
       file {
+        id
+      }
+      accessible_file {
         id
       }
       link

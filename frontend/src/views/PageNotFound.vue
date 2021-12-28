@@ -31,7 +31,7 @@ export default {
       loadingKey: 'loading...',
       variables () {
         return {
-          ID: "53" // 404 page id
+          ID: "53" // 404 page id cms
         }
       },
        result ({ data }) {

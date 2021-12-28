@@ -1,9 +1,6 @@
 <template>
   <v-form>
     <v-container class="pa-0">
-      <!-- {{search}} -- {{ color }} -- {{ email }} -->
-      <!-- <CustomInput v-model="color" label="Select color" type="color" inputType="text" />
-      <CustomInput v-model="email" label="Email" type="email" inputType="text" /> -->
       <v-row>
         <v-col
           cols="12"
@@ -15,26 +12,29 @@
             type="search"
             inputType="text"
             icon="mdi-magnify"
-            @update="onUpdateStore('searchQuery', $event)" />
+            ref="searchInput"
+            @update="onUpdateStore('searchQuery', $event); $emit('searchUpdateEvent', search);" />
         </v-col>
-        <!-- <v-col
+        <v-col
           cols="12"
           sm="4"
         >
           <CustomInput 
-            v-model="getYear"
-            label="Year"
+            v-model="year"
+            :item-value="year"
+            label="All Years"
             type="text"
             :items="items"
             inputType="select"
-            @update="onUpdateStore('year', $event)" />
-        </v-col> -->
+            ref="yearSelectInput"
+            @update="onUpdateStore('year', $event);  $emit('yearUpdateEvent', year);" />
+        </v-col>
         <v-col
           cols="12"
           sm="4"
           class="mt-1"
         >
-          <v-chip>{{ (collection.length > 1) ? `${ collection.length } items` : `${ collection.length } item` }}</v-chip>
+          <v-chip>{{ (searchResults && searchResults.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
         </v-col>
       </v-row>
     </v-container>
@@ -43,15 +43,15 @@
 
 <script>
 import { store, mutations } from '@/store'
+import { getYear } from '@/js/utils'
 const CustomInput = () => import(/* webpackChunkName: "CustomInput" */ '@/components/inputs/CustomInput')
 export default {
   name: 'CollectionFilterToolbar',
   data() {
     return {
+      year: store.collections.year, 
       search: store.collections.searchQuery,
-      color: '',
-      email: '',
-      items: [2021, 2020, 2019, 2018], 
+      items: [],
     }
   },
   props: {
@@ -60,6 +60,9 @@ export default {
     },
     showToolbar: {
       type: Boolean,
+    },
+    searchResults: {
+      type: Array
     }
   },
   components: {
@@ -68,18 +71,22 @@ export default {
   methods: {
      onUpdateStore(key, value) {
         mutations.updateCollections(key, value)
-     }
+     },
+     getYears() {
+      const years = this.collection.map(item => this.getYear(item.date)).sort((a, b) => b - a)
+      this.items = [... new Set(years)]
+      this.year = this.items[0]
+      this.onUpdateStore('year', this.items[0])
+     },
+     getYear: getYear,
   },
-  computed: {
-    year() {
-      return store.collections.year
-    },
-    getYear() {
-      return this.year || this.items[0]
-    },
-    getItems() {
-      return this.collection(item => item.date)
+  watch: {
+    '$route.query.tab'() {
+      this.onUpdateStore('year', this.$refs.yearSelectInput.value || this.items[0])
     }
-  }
+  },
+  created() {
+    setTimeout(function () { this.getYears() }.bind(this), 500)
+  },
 }
 </script>

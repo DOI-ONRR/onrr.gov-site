@@ -118,7 +118,7 @@ const routes = [
     },
   },
   {
-    path: "/compliance",
+    path: "/compliance-enforcement",
     name: "TwoColumnLeft",
     props: true,
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
@@ -172,18 +172,17 @@ const routes = [
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
     children: [
       {
-        path: '/',
+        path: '',
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
       },
       {
         path: ':slug',
-        name: 'TwoColumnLeft',
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
         props: true,
         meta: {
           breadcrumb: ''
         },
-      }
+      },
     ],
     meta: {
       breadcrumb: "About ONRR"
@@ -198,7 +197,7 @@ const routes = [
     }
   },
   {
-    path: '*',
+    path: ':catchAll(.*)',
     redirect: '/404'
   }
 ]
@@ -228,6 +227,10 @@ function addRedirectsToRoutes (data) {
   }, 1000);
 }
 
+function hasQueryParams(route) {
+  return !!Object.keys(route.query).length
+}
+
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach((to, from, next) => {
@@ -251,10 +254,12 @@ router.beforeEach((to, from, next) => {
       addRedirectsToRoutes(redirects)
 
       const path = location.pathname.toString()
-      const pageFound = pages.find(page => page.url === to.fullPath)
+      const fullPath = to.fullPath.includes('?')? to.fullPath.split('?')[0] : to.fullPath
+      const pageFound = pages.find(page => page.url === fullPath)
       const redirectFound = redirects.find(redirect => redirect.from === path)
 
       // console.log('redirectFound------------->', redirectFound)
+      // console.log('pageFound-------------->', pageFound)
 
       // if not page found lets redirect to 404 page
       if (redirectFound) {
@@ -274,6 +279,13 @@ router.beforeEach((to, from, next) => {
 
   })
   .catch((err) => console.err(err))
+
+  // check for query params
+  if (!hasQueryParams(to) && hasQueryParams(from)) {
+    next({ name: to.name, query: from.query })
+  } else {
+    next()
+  }
 
 })
 

@@ -1,10 +1,12 @@
 <template>
   <div>
-    <component 
-      :is="collectionBlock(collection)" 
-      :collection="items" 
-      :collectionName="collection"
-      :collectionLayout="collectionLayout"></component>
+    <keep-alive>
+      <component 
+        :is="collectionBlock(collection)" 
+        :collection="items" 
+        :collectionName="collection"
+        :collectionLayout="collectionLayout"></component>
+    </keep-alive>
   </div>
 </template>
 
@@ -25,7 +27,7 @@ import {
 export default {
   name: 'CollectionBlock',
   props: {
-    block: [Array, Object],
+    block: [Array, Object, String],
   },
   apollo: {
     collectionItems: {
