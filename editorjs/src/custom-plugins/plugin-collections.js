@@ -336,7 +336,7 @@ export default class CollectionsTool {
 
   async fetchCollections() {
 
-    const cItems = ['announcements', 'companies', 'contacts', 'events', 'press_releases', 'reporter_letters'];
+      const cItems = ['announcements', 'companies', 'contacts', 'events', 'press_releases', 'reporter_letters','NYMEX'];
     let nArr = []
     
     try {

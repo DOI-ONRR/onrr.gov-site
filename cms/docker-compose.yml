@@ -9,7 +9,7 @@ services:
 
   directus:
     container_name: directus
-    image: directus/directus:9.3.0
+    image: directus/directus:9.2.1
     ports:
       - 8055:8055
     volumes:
@@ -21,6 +21,8 @@ services:
       # - ./database:/directus/database
       # If you want to load extensions from the host
       - ./extensions:/directus/extensions
+      - ./node_modules:/directus/extensions_node_modules
+      - ./cms-package.json:/directus/package.json
     networks:
       - directus
     depends_on:
