@@ -108,8 +108,10 @@ export default {
   },
   computed: {
     filterCollection() {
-      const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(this.collection))
-      return (!filteredCollection || filteredCollection.length === 0) ? this.collection : filteredCollection
+      const collection = this.collection
+      collection.sort((a, b) => (a.date < b.date) ? 1 : -1)
+      const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(collection))
+      return (!filteredCollection || filteredCollection.length === 0) ? collection : filteredCollection
     }
   },
   methods: {
