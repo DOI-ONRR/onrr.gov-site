@@ -166,27 +166,21 @@ export const CONTACTS_QUERY = gql`
     }
   }
 `
-// Contacts query
+// NYMEX query
 export const NYMEX_QUERY = gql`
   query {
     NYMEX {
       id
       status
-      Month
-      Average
-      Roll
+      date
+      average
+      roll
       Spreadsheet {
         id
       }
     }
   }
 `
-// Spreadsheet {
-//id
-//filename_disk
-
-
-
 
 // Press Release Query 
 export const PRESS_RELEASES_QUERY = gql`

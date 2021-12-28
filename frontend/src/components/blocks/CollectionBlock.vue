@@ -16,12 +16,14 @@ const AnnouncementsCollection = () => import(/* webpackChunkName: "Announcements
 const EventsCollection = () => import(/* webpackChunkName: "EventsCollection" */ '@/components/collections/EventsCollection')
 const CompaniesCollection = () => import(/* webpackChunkName: "CompaniesCollection" */ '@/components/collections/CompaniesCollection')
 const ContactsCollection = () => import(/* webpackChunkName: "ContactsCollection" */ '@/components/collections/ContactsCollection')
+const NYMEXCollection = () => import(/* webpackChunkName: "NYMEXCollection" */ '@/components/collections/NYMEX')
 
 import { 
   REPORTER_LETTERS_QUERY,
   PRESS_RELEASES_QUERY,
   ANNOUNCEMENTS_QUERY,
-  CONTACTS_QUERY
+  CONTACTS_QUERY,
+  NYMEX_QUERY
 } from '@/graphql/queries'
 
 export default {
@@ -50,6 +52,9 @@ export default {
         else if (this.block.data.collection === 'contacts') {
           return CONTACTS_QUERY
         }
+        else if (this.block.data.collection === 'NYMEX') {
+          return NYMEX_QUERY
+        }
       },
       update: data => data
     }
@@ -73,6 +78,9 @@ export default {
           break
         case 'contacts':
           collectionBlock = ContactsCollection
+          break
+        case 'NYMEX':
+          collectionBlock = NYMEXCollection
           break
         default:
           console.warn('No collection block found.')

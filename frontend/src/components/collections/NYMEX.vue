@@ -24,9 +24,9 @@
           v-for="item in collection"
           :key="item.id"
         >
-          <td>{{ item.Month }}</td>
-          <td>{{ item.Average }}</td>
-          <td>{{ item.Roll }}</td>
+          <td>{{ item.month }}</td>
+          <td>{{ item.average }}</td>
+          <td>{{ item.roll }}</td>
           <div><a :href="fileLink(item.Spreadsheet.id)">Download</a><v-icon color="secondary">mdi-file-xlsx-box</v-icon></div>
         </tr>
       </tbody>
