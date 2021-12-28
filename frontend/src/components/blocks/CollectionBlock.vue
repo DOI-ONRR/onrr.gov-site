@@ -102,7 +102,19 @@ export default {
       return this.block.data.layout
     },
     items() {
-      const items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)
+      const collection = this.block.data.collection
+      let items = []
+      switch (collection) {
+          case 'reporter_letters':
+          case 'press_releases':
+            items = this.collectionItems && this.collectionItems[this.block.data.collection]
+              .filter(item => item.status === this.block.data.status)
+              .sort((a, b) => (a.date < b.date) ? 1 : -1)
+          break;
+        default:
+          items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)
+          break;
+      }
       return items
     }
   }
