@@ -16,7 +16,7 @@
     "axios": "^0.24.0",
     "directus": "^9.4.0",
     "jszip": "^3.7.1",
-    "node-fetch": "^3.1.0",
+    "node-fetch": "^2.6.6",
     "read-excel-file": "^5.2.25"
   },
   "main": "index.js",
