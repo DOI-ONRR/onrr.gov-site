@@ -119,13 +119,13 @@ const getS3File = (async (payload,filePath) => {
 const getFile = (async (payload,filePath,url) => {
 
 
-/*    console.log("------------------------------------------------------------------------------------")
+    console.log("------------------------------------------------------------------------------------")
     console.log("                                                                    ")
     console.log("url:  ", url)
     console.log("                                                                    ")
     console.log("------------------------------------------------------------------------------------")
-  const params={Bucket: ENV.STORAGE_AWS_BUCKET, Key: payload.Spreadsheet+'.xlsx'}
-*/
+
+
   
     let response = await fetch(url)
     let promise = streamToFile(response.body, filePath);
@@ -147,10 +147,15 @@ const streamToFile = (inputStream, filePath) => {
 module.exports = function Nymex({ filter, action }) {
 
     filter('items.create', async (payload, meta,context) => {
-	
+
+	console.debug("ENVIRONMENT: ", process.env);
+	let base_url=(ENV.PUBLIC_URL !== '/') ? ENV.PUBLIC_URL : 'http://localhost:8055/assets/'
+	console.debug("base_url                        ", base_url);
+	const url=base_url+payload.Spreadsheet+'.xlsx'
+
 	
 	const filePath='/tmp/'+payload.Spreadsheet+'.xlsx';
-	const url='http://localhost:8055/assets/'+payload.Spreadsheet+'.xlsx'
+
 	console.log('Payload!',payload);
 	//console.log('PROCESS.ENV XXX!',process.env);
 	await getFile(payload,filePath,url);
