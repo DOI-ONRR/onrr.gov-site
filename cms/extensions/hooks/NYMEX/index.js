@@ -5,11 +5,11 @@ const readXlsxFile=require('read-excel-file/node'); //absolultely requires /node
 const util = require('util')
 const fs = require('fs')
 const streamPipeline = util.promisify(require('stream').pipeline)
-const AWS = require('aws-sdk');
+// const AWS = require('aws-sdk');
 const ENV=process.env
 
 
-
+/*
 AWS.config.update({region: ENV.STORAGE_AWS_REGION,
 		   maxRetries: 3,
 		   httpOptions: {timeout: 30000, connectTimeout: 5000},
@@ -20,6 +20,7 @@ AWS.config.update({region: ENV.STORAGE_AWS_REGION,
 const s3 = new AWS.S3({bucketEndpoint: ENV.STORAGE_AWS_ENDPOINT
 		      })
 
+*/
 
 		  
 		  
@@ -65,23 +66,16 @@ const download = async (url,file) => {
 // }
 
 const ExcelDateToJSDate = (serial) => {
-    var utc_days  = Math.floor(serial - 25568);
-    
-   var utc_value = utc_days * 86400;                                        
-
-    var date_info = new Date(utc_value * 1000);
-    console.debug("date_info: ", serial, utc_days, utc_value, date_info)
-    
-   var fractional_day = serial - Math.floor(serial) + 0.0000001;
-
-   var total_seconds = Math.floor(86400 * fractional_day);
-
-   var seconds = total_seconds % 60;
-
-   total_seconds -= seconds;
-
-    var hours = Math.floor(total_seconds / (60 * 60));//
-   var minutes = Math.floor(total_seconds / 60) % 60;
+    let utc_days  = Math.floor(serial - 25568);
+    let utc_value = utc_days * 86400;                                        
+    let date_info = new Date(utc_value * 1000);
+   // console.debug("date_info: ", serial, utc_days, utc_value, date_info)
+    let fractional_day = serial - Math.floor(serial) + 0.0000001;
+    let total_seconds = Math.floor(86400 * fractional_day);
+    let seconds = total_seconds % 60;
+    total_seconds -= seconds;
+    let hours = Math.floor(total_seconds / (60 * 60));//
+    let minutes = Math.floor(total_seconds / 60) % 60;
 
    return new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
 }
@@ -112,11 +106,29 @@ const downloadFile = (filePath, bucketName, key) => {
     console.log(`${filePath} has been created!`);
   });
 };
-
-const getFile = (async (payload,filePath) => {
+/*
+const getS3File = (async (payload,filePath) => {
     const params={Bucket: ENV.STORAGE_AWS_BUCKET, Key: payload.Spreadsheet+'.xlsx'}
     let readStream = s3.getObject(params).createReadStream();
     let promise = streamToFile(readStream, filePath);
+    return promise
+    
+});
+*/
+
+const getFile = (async (payload,filePath,url) => {
+
+
+    console.log("------------------------------------------------------------------------------------")
+    console.log("                                                                    ")
+    console.log("url:  ", url)
+    console.log("                                                                    ")
+    console.log("------------------------------------------------------------------------------------")
+
+
+  
+    let response = await fetch(url)
+    let promise = streamToFile(response.body, filePath);
     return promise
     
 });
@@ -135,13 +147,18 @@ const streamToFile = (inputStream, filePath) => {
 module.exports = function Nymex({ filter, action }) {
 
     filter('items.create', async (payload, meta,context) => {
-	
+
+	console.debug("ENVIRONMENT: ", process.env);
+	let base_url=(ENV.PUBLIC_URL !== '/') ? ENV.PUBLIC_URL : 'http://localhost:8055/assets/'
+	console.debug("base_url                        ", base_url);
+	const url=base_url+payload.Spreadsheet+'.xlsx'
+
 	
 	const filePath='/tmp/'+payload.Spreadsheet+'.xlsx';
-	
+
 	console.log('Payload!',payload);
 	//console.log('PROCESS.ENV XXX!',process.env);
-	await getFile(payload,filePath);
+	await getFile(payload,filePath,url);
 	await parseFile(payload,filePath);
 	
     });
