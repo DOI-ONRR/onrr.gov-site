@@ -107,9 +107,10 @@ export default {
     ReporterLetters
   },
   computed: {
-    filterCollection() {      
-      const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(this.collection))
-      return (!filteredCollection || filteredCollection.length === 0) ? this.collection : filteredCollection
+    filterCollection() {     
+      const sortedCollection = this.collection && [...this.collection].sort((a,b) => (a.date < b.date) ? 1 : -1)
+      const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(sortedCollection))
+      return (!filteredCollection || filteredCollection.length === 0) ? sortedCollection : filteredCollection
     },
   },
   methods: {
