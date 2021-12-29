@@ -149,7 +149,7 @@ module.exports = function Nymex({ filter, action }) {
     filter('items.create', async (payload, meta,context) => {
 
 	console.debug("ENVIRONMENT: ", process.env);
-	let base_url=(ENV.PUBLIC_URL !== '/') ? ENV.PUBLIC_URL : 'http://localhost:8055/assets/'
+	let base_url=(ENV.PUBLIC_URL !== '/') ? ENV.PUBLIC_URL + '/assets/' : 'http://localhost:8055/assets/'
 	console.debug("base_url                        ", base_url);
 	const url=base_url+payload.Spreadsheet+'.xlsx'
 
