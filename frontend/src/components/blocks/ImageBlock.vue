@@ -8,6 +8,7 @@
       :lazy-src="lazyImg"
       :class="['img-block', classObj]"
       :alt="altTag"
+      contain
       >
         <template v-slot:placeholder>
           <v-row
