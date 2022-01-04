@@ -4,8 +4,9 @@
       v-model="model"
       dark
       color="white"
-      background-color="white"
+      background-color="neutrals-lighten2"
       show-arrows>
+
       <v-tab 
         v-for="(tab, index) in tabs"
         :key="index"
@@ -58,7 +59,7 @@ export default {
     }
   },
   props: {
-    block: [Array, Object]
+    block: [Array, Object],
   },
   components: {
     LayoutBlock
@@ -73,7 +74,7 @@ export default {
     },
     forceRerender() {
       return this.componentKey += 1
-    }
+    },
   },
   computed: {
     tabs() {
@@ -100,8 +101,20 @@ export default {
 </script>
 
 <style lang="scss">
+.theme--dark.v-icon.v-icon.v-icon--disabled {
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
 .v-tabs__wrap {
   margin-bottom: 16px;
+}
+
+.v-tabs__wrap .v-icon {
+  color: black !important;
+}
+
+.v-slide-group__prev--disabled {
+  color: rgba(0, 0, 0, 0.5) !important;
 }
 
 .v-tab--active {
@@ -110,6 +123,17 @@ export default {
 
 .nested-tabs .v-tab--active {
   background-color: var(--v-secondary-lighten6);
+  color: black;
+}
+
+.v-tabs-slider {
+  background-color: white !important;
+  caret-color: white !important;
+}
+
+.nested-tabs .v-tabs-slider {
+  background-color: black !important;
+  caret-color: black !important;
 }
 
 .v-slide-group__content {
