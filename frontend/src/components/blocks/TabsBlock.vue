@@ -4,7 +4,7 @@
       v-model="model"
       dark
       color="white"
-      background-color="neutrals-lighten2"
+      background-color="white"
       show-arrows>
 
       <v-tab 
