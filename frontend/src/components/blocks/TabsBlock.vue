@@ -123,7 +123,7 @@ export default {
 
 .nested-tabs .v-tab--active {
   background-color: var(--v-secondary-lighten6);
-  color: black;
+  color: black !important;
 }
 
 .v-tabs-slider {
