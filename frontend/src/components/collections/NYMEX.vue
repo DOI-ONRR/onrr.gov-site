@@ -111,15 +111,16 @@ export default {
     
     const year=this.year() 
 
-
-    const filtered= this.collection && this.collection.filter( item => this.getYear(item.date) === year)
+    const filtered= this.collection && this.collection.filter( item => this.getYear(item.date) === year).sort( (a, b) =>{
+    return new Date(a.date) - new Date(b.date)
+    })	;
     return filtered
 
     },  
     searchResults() {
             // search input results
 
-            const results=this.collection.filter(item => parseInt(this.getYear(item.date)) === this.year)
+            const results=this.collection.filter(item => parseInt(this.getYear(item.date)) === this.year).sort( (a, b) => b.date - a.date);
             return results
 
     },
