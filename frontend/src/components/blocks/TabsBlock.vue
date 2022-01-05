@@ -4,7 +4,7 @@
       v-model="model"
       dark
       color="white"
-      background-color="neutrals-lighten2"
+      background-color="white"
       show-arrows>
 
       <v-tab 
@@ -123,7 +123,7 @@ export default {
 
 .nested-tabs .v-tab--active {
   background-color: var(--v-secondary-lighten6);
-  color: black;
+  color: black !important;
 }
 
 .v-tabs-slider {
