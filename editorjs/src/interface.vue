@@ -54,6 +54,7 @@ import PersonalityTool from './custom-plugins/plugin-personality-patch';
 // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
 import CollectionsTool from "./custom-plugins/plugin-collections";
 import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
+import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
 
 export default defineComponent({
 	emits: ['input', 'error'],
@@ -72,7 +73,7 @@ export default defineComponent({
 		},
 		tools: {
 			type: Array,
-			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule'],
+			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'link'],
 		},
 		font: {
 			type: String,
@@ -345,7 +346,15 @@ export default defineComponent({
 				horizontalrule: {
 					class: HorizontalRuleTool,
 					inlineToolbar: true,
-				}
+				},
+                                link: {
+                                        class: LinkAutocomplete,
+					inlineToolbar: true,
+                                        config: {
+                                          endpoint: '/items/links',
+                                          queryParam: 'search'
+                                        },
+                                },
 			};
 
 			// Build current tools config.
@@ -353,6 +362,7 @@ export default defineComponent({
 
 			for (const toolName of props.tools) {
 				// @ts-ignore
+				console.debug(" inline editor defaults : ", defaults, " tool name: ", toolName);
 				const defaultsHasProperty = Object.prototype.hasOwnProperty.call(defaults, toolName);
 				if (defaultsHasProperty) {
 					tools[toolName.toString()] = defaults[toolName];

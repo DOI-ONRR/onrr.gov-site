@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@directus/extensions-sdk": "^9.0.1",
+    "@editorjs/link-autocomplete": "0.0.0",
     "@editorjs/list": "^1.6.2",
     "core-js": "^3.19.1",
     "vue": "^3.2.22"

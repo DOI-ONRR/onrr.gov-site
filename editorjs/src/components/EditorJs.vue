@@ -15,6 +15,8 @@
   </div>
 </template>
 
+
+
 <script>
 import EditorJS from "@editorjs/editorjs"
 import Header from "@editorjs/header"
@@ -23,6 +25,7 @@ import List from "@editorjs/list"
 // import SimpleTabs from '../custom-plugins/simple-tabs'
 import Collections from '../custom-plugins/plugin-collections'
 import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
+import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
 
 export default {
   data() {
@@ -70,10 +73,23 @@ export default {
               collectionsEndpoint: 'http://localhost:8055/collections',
               fieldsEndpoint: 'http://localhost:8055/fields'
             }
-          }
+          },
+          horizontalrule2: {
+            class: HorizontalRuleTool,
+            inlineToolbar: true,
+          },
+
+          link: {
+            class: LinkAutocomplete,
+            inlineToolbar: true,
+            config: {
+             endpoint: 'http://localhost:8055/items/links',
+             queryParam: 'search'
+            }
+          },
         },
         onReady: function() {
-          console.log("ready")
+          console.log("ready 123")
         },
         onChange: function() {
           console.log("change")
@@ -82,6 +98,7 @@ export default {
     }
   },
   mounted: function() {
+  console.debug("DWGH: ", this)
     this.myEditor()
   }
 }
