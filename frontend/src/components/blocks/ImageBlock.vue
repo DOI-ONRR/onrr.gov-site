@@ -1,28 +1,30 @@
 <template>
-  <figure>
-    <v-img
-      :aspect-ratio="16/9"
-      :width="width"
-      :height="height"
-      :src="fileSrc"
-      :lazy-src="lazyImg"
-      :class="['img-block', classObj]"
-      :alt="altTag"
-      contain
-      >
-        <template v-slot:placeholder>
-          <v-row
-            class="fill-height ma-0"
-            align="center"
-            justify="center">
-            <v-progress-circular 
-              indeterminate
-              color="grey lighten-5"></v-progress-circular>  
-          </v-row>
-        </template>
-      </v-img>
-      <figcaption v-if="block.data.caption">{{ block.data.caption }}</figcaption>
-  </figure>
+  <v-row>
+    <v-col>
+      <figure>
+        <v-img
+          
+          :src="fileSrc"
+          :lazy-src="lazyImg"
+          :class="['img-block', classObj]"
+          :alt="altTag"
+          contain
+          >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center">
+                <v-progress-circular 
+                  indeterminate
+                  color="grey lighten-5"></v-progress-circular>  
+              </v-row>
+            </template>
+          </v-img>
+          <figcaption v-if="block.data.caption">{{ block.data.caption }}</figcaption>
+      </figure>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -40,14 +42,16 @@ export default {
       return `${ process.env.VUE_APP_API_URL }${ this.block.data.file.url }`
     },
     lazyImg() {
-      return `${ process.env.VUE_APP_API_URL }${ this.block.data.file.url }?fit=cover&width=50`
+      return `${ process.env.VUE_APP_API_URL }${ this.block.data.file.url }?fit=cover`
     },
     width() {
       const w = (this.block.data.stretched) ? '100%' : this.block.data.file.width
+      // const w = '100%'
       return w
     },
     height() {
       const h = (this.block.data.stretched) ? 'auto' : this.block.data.file.height
+      // const h = 'auto'
       return h
     },
     altTag() {
@@ -71,6 +75,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.img-block img {
+  width: 100%; 
+  height: auto; 
+  object-fit: contain;
+}
 .img--border {
   border-style: solid;
   border-width: 2px;

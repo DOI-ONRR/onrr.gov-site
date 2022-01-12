@@ -6,7 +6,8 @@
   "scripts": {
     "update": "npx directus database migrate:latest",
     "bootstrap": "CONFIG_PATH='../../.env' directus bootstrap",
-    "start": "CONFIG_PATH='../../.env' npx directus start"
+    "start": "CONFIG_PATH='../../.env' npx directus start",
+    "start:windows": "set CONFIG_PATH='../../.env' && npx directus start"
   },
   "engines": {
     "node": "14.x",

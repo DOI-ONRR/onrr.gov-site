@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div v-for="blockItem in block" :key="blockItem.id">
-      <EditorBlock :blockContent="blockItem"></EditorBlock>
+    <div v-for="block in block.item.block_content.blocks" :key="block.id">
+      <EditorBlock :blockContent="block"></EditorBlock>
     </div>
   </div>
 </template>
 
 <script>
-import { editorBlockMixin } from '@/mixins'
+import { editorBlockMixin, pageBlockMixin } from '@/mixins'
 export default {
-  mixins: [editorBlockMixin],
+  mixins: [editorBlockMixin, pageBlockMixin],
   name: 'ContentBlock',
   data () {
     return {}

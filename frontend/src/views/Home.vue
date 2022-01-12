@@ -16,12 +16,7 @@
             xs="12"
             sm="8">
 
-            <div v-for="block in page.page_blocks" :key="block.id">
-              <LayoutBlock :layout="block.item.block_layout" :block="block.item">
-                <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
-                <component :is="pageBlock(block.item.__typename)" :block="block.item" class="block-component"></component>
-              </LayoutBlock>
-            </div>
+            <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
 
             <!-- Revenue Data block content -->
             <v-row class="revenue-row">
@@ -143,10 +138,5 @@ img {
 .revenue-row .card {
   border-top-color: var(--v-green-lighten1);
   border-top-width: 6px;
-}
-
-.block-container {
-  display: flex;
-  flex-wrap: wrap;
 }
 </style>

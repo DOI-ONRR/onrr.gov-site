@@ -7,8 +7,8 @@
       {{ cardSubtitle }}
     </v-card-subtitle>
     <v-card-text class="text--primary body-1">
-      <div v-for="blockItem in block" :key="blockItem.id">
-        <EditorBlock :blockContent="blockItem"></EditorBlock>
+      <div v-for="block in block.item.block_content.blocks" :key="block.id">
+        <EditorBlock :blockContent="block"></EditorBlock>
       </div>
     </v-card-text>
     <!-- <v-card-actions>
@@ -39,7 +39,6 @@ export default {
       type: [String, Array]
     },
     block: [Array, Object],
-    blockItem: Object
   },
   components: {
     // LayoutBlock
@@ -49,12 +48,12 @@ export default {
   },
   computed: {
     blocks() {
-      const blocks = this.block 
+      const blocks = this.block.block_content.blocks
 
       return blocks
     },
     blockColor() {
-      return this.blockItem.block_color
+      return this.block.item.block_color
     }
   }
 }
