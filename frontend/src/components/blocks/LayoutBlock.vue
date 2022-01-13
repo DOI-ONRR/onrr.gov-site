@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col v-for="block in layoutBlocks" :key="block.id" sm="12" :md="block.item.block_v_col">
+    <v-col v-for="block in layoutBlocks" :key="block.id" sm="12" :md="block.item.block_v_col"  class="block-container">
       <component :is="pageBlock(block.item.__typename)" :block="block" class="block-component"></component>
     </v-col>
   </v-row>
@@ -44,4 +44,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.home-content .block-container {
+  display: flex;
+  flex-wrap: wrap;
+}
 </style>

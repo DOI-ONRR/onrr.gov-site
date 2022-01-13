@@ -9,7 +9,7 @@
         :title="pages_by_id.hero_title" 
         :image="`${ API_URL }/assets/${ pages_by_id.hero_image.id }?fit=cover&quality=80`"
         :isHome="true" />
-      <v-container class="home__content">
+      <v-container class="home-content">
         <v-row>
           <v-col
             cols="12"
