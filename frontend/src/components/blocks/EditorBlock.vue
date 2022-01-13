@@ -1,7 +1,7 @@
 <template>
   <div>
     <keep-alive>
-      <component :is="pageBlock(blockContent.type)" :block="blockContent" :key="blockContent.id" class="block-component"></component>
+      <component :is="pageBlock(blockContent.type)" :block="blockContent" class="block-component"></component>
     </keep-alive>
   </div>
 </template>

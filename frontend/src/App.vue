@@ -60,4 +60,5 @@ export default {
   color: black !important; 
   /* shouldn't have to do this, need to figure out correct method https://vuetifyjs.com/en/api/v-breadcrumbs/ */
 }
+
 </style>

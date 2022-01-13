@@ -9,19 +9,14 @@
         :title="pages_by_id.hero_title" 
         :image="`${ API_URL }/assets/${ pages_by_id.hero_image.id }?fit=cover&quality=80`"
         :isHome="true" />
-      <v-container class="home__content">
+      <v-container class="home-content">
         <v-row>
           <v-col
             cols="12"
             xs="12"
             sm="8">
 
-            <div v-for="block in page.page_blocks" :key="block.id">
-              <LayoutBlock :layout="block.item.block_layout" :block="block.item">
-                <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
-                <component :is="pageBlock(block.item.__typename)" :block="block.item" class="block-component"></component>
-              </LayoutBlock>
-            </div>
+            <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
 
             <!-- Revenue Data block content -->
             <v-row class="revenue-row">
@@ -145,8 +140,4 @@ img {
   border-top-width: 6px;
 }
 
-.block-container {
-  display: flex;
-  flex-wrap: wrap;
-}
 </style>

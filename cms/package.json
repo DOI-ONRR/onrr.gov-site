@@ -6,7 +6,8 @@
   "scripts": {
     "update": "npx directus database migrate:latest",
     "bootstrap": "CONFIG_PATH='../../.env' directus bootstrap",
-    "start": "CONFIG_PATH='../../.env' npx directus start"
+    "start": "CONFIG_PATH='../../.env' npx directus start",
+    "start:windows": "set CONFIG_PATH='../../.env' && npx directus start"
   },
   "engines": {
     "node": "14.x",
@@ -14,7 +15,7 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
-    "directus": "^9.4.2",
+    "directus": "^9.4.3",
     "jszip": "^3.7.1",
     "node-fetch": "^2.6.6",
     "read-excel-file": "^5.2.25"
