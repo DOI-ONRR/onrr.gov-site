@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.home-content .block-container {
+.block-container {
   display: flex;
   flex-wrap: wrap;
 }
