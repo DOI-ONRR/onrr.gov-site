@@ -1,5 +1,5 @@
 <template>
-  <v-card class="card v-card__item" :class="blockColor">
+  <v-card class="card v-card__item card-block" :class="blockColor">
     <v-card-title v-if="cardTitle" class="text-h5 black--text">
       {{ cardTitle }}
     </v-card-title>
