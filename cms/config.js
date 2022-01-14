@@ -1,6 +1,7 @@
 module.exports = function(env) {
   const vcap_services = JSON.parse(env.VCAP_SERVICES)
   const vcap_application = JSON.parse(env.VCAP_APPLICATION)
+  const github_token = JSON.parse(env.GITHUB_TOKEN)
 
   // console.log('vcap_services ----------> ', vcap_services)
 
@@ -38,6 +39,7 @@ module.exports = function(env) {
     EMAIL_SENDMAIL_NEW_LINE: "unix",
     EMAIL_SENDMAIL_PATH: "/usr/sbin/sendmail",
     EMAIL_FROM: "no-reply@directus.io", 
-    EMAIL_TRANSPORT: "sendmail"
+    EMAIL_TRANSPORT: "sendmail",
+    GITHUB_TOKEN: github_token
   }
 };
