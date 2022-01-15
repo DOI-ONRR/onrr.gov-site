@@ -1,10 +1,10 @@
 // const axios = require('axios');
 const fetch = require('node-fetch');
 
-// console.log('github:: process ------> ', process.env)
+console.log('github:: process ------> ', process.env)
 
 const directus = {
-  baseUrl: 'http://localhost:8055',
+  baseUrl: process.env.PUBLIC_URL || 'http://localhost:8055',
   devUrl: 'https://dev-onrr-cms.app.cloud.gov',
 };
 
@@ -38,7 +38,7 @@ const fiveMin = 5*60*1000;
  * Updates collection item with github issue number
  */
 function updateCollectionItem (collection, collectionKey, number) {
-  console.log('updateCollection item, data: ', item, number)
+  console.log('updateCollection number: ', number)
   fetch(`${ directus.baseUrl }/items/${ collection }/${ collectionKey }`,
     {
       method: 'PATCH',
