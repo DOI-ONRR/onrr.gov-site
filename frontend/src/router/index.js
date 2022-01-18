@@ -39,6 +39,17 @@ const routes = [
         meta: {
           breadcrumb: ''
         },
+        children: [
+          {
+            path: ':slug',
+            name: 'TwoColumnLeft',
+            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
+            props: true,
+            meta: {
+              breadcrumb: ''
+            },
+          },
+        ]
       },
     ],
     meta: {
@@ -63,6 +74,17 @@ const routes = [
         meta: {
           breadcrumb: ''
         },
+        children: [
+          {
+            path: ':slug',
+            name: 'TwoColumnLeft',
+            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
+            props: true,
+            meta: {
+              breadcrumb: ''
+            },
+          },
+        ]
       },
     ],
     meta: {
@@ -87,6 +109,17 @@ const routes = [
         meta: {
           breadcrumb: ''
         },
+        children: [
+          {
+            path: ':slug',
+            name: 'TwoColumnLeft',
+            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
+            props: true,
+            meta: {
+              breadcrumb: ''
+            },
+          },
+        ]
       },
     ],
     meta: {
@@ -111,6 +144,17 @@ const routes = [
         meta: {
           breadcrumb: ''
         },
+        children: [
+          {
+            path: ':slug',
+            name: 'TwoColumnLeft',
+            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
+            props: true,
+            meta: {
+              breadcrumb: ''
+            },
+          },
+        ]
       },
     ],
     meta: {
@@ -135,6 +179,17 @@ const routes = [
         meta: {
           breadcrumb: ''
         },
+        children: [
+          {
+            path: ':slug',
+            name: 'TwoColumnLeft',
+            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
+            props: true,
+            meta: {
+              breadcrumb: ''
+            },
+          },
+        ]
       },
     ],
     meta: {
@@ -182,6 +237,17 @@ const routes = [
         meta: {
           breadcrumb: ''
         },
+        children: [
+          {
+            path: ':slug',
+            name: 'TwoColumnLeft',
+            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
+            props: true,
+            meta: {
+              breadcrumb: ''
+            },
+          },
+        ]
       },
     ],
     meta: {
