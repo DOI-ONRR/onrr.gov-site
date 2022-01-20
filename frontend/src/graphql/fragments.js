@@ -6,19 +6,6 @@ export const contentBlocks = gql`
   }
 `
 
-// export const blockFields = gql`
-//   fragment blockFields on blocks {
-//     id
-//     block_label
-//     block_type
-//     block_layout
-//     column_one
-//     column_two
-//     column_three
-//     tab_items
-//   }
-// `
-
 export const contentBlockFields = gql`
   fragment contentBlockFields on content_blocks {
     id
@@ -39,11 +26,6 @@ export const cardBlockFields = gql`
     block_label
     block_v_col
     block_content
-    # block_collections
-    # block_layout 
-    # column_one
-    # column_two
-    # column_three
   }
 `
 
@@ -53,29 +35,6 @@ export const tabBlockLabelFields = gql`
     tab_block_label
   }
 `
-
-// export const tabBlockFields = gql`
-//   ${tabBlockLabelFields}
-//   ${contentBlockFields}
-//   ${cardBlockFields}
-//   fragment tabBlockFields on tab_blocks {
-//     id
-//     tab_block_label
-//     # block_v_col
-//     # block_content
-//     # tab_items
-//     tab_blocks {
-//       id
-//       item {
-//           __typename
-//           ...tabBlockLabelFields
-//           ...contentBlockFields
-//           ...cardBlockFields
-//           ...tabBlockContents
-//       }
-//     }
-//   }
-// `
 
 export const sectionHeadingBlocks = gql`
   fragment sectionHeadingBlocks on section_heading_blocks {
@@ -102,11 +61,38 @@ export const nestTabBlockFields = gql`
   }
 `
 
+export const expansionPanelBlockLabel = gql`
+  fragment expansionPanelBlockLabel on expansion_panel_block_label {
+    id
+    block_label
+  }
+`
+
+export const expansionPanelBlockFields = gql`
+  ${expansionPanelBlockLabel}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  fragment expansionPanelBlockFields on expansion_panels {
+    id
+    block_label
+    expansion_panel_blocks {
+      id
+      item {
+        __typename
+        ...expansionPanelBlockLabel
+        ...contentBlockFields
+        ...cardBlockFields
+      }
+    }
+  }
+`
+
 export const tabBlockFields = gql`
   ${tabBlockLabelFields}
   ${contentBlockFields}
   ${cardBlockFields}
   ${nestTabBlockFields}
+  ${expansionPanelBlockFields}
   fragment tabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -117,6 +103,7 @@ export const tabBlockFields = gql`
           ...contentBlockFields
           ...cardBlockFields
           ...nestedTabBlockFields
+          ...expansionPanelBlockFields
         }
     }
   }
@@ -126,6 +113,7 @@ export const pageFields = gql`
  ${contentBlockFields}
  ${tabBlockFields}
  ${cardBlockFields}
+ ${expansionPanelBlockFields}
   fragment pageFields on pages {
     id
     title
@@ -141,6 +129,7 @@ export const pageFields = gql`
         ...contentBlockFields
         ...tabBlockFields
         ...cardBlockFields
+        ...expansionPanelBlockFields
       }
     }
     # page_builder

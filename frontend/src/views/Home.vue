@@ -14,7 +14,8 @@
           <v-col
             cols="12"
             xs="12"
-            sm="8">
+            sm="8"
+            class="pt-6">
 
             <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
 
