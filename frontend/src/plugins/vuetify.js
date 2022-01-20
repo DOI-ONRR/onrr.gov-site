@@ -59,7 +59,8 @@ export default new Vuetify({
           base: '#262431',
           lighten1: '#484554',
           lighten2: '#ebebed',
-        }
+        },
+        expansionPanel: '#ebebed'
       }
     },
     options: {

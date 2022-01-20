@@ -60,9 +60,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-card__item {
-  margin-bottom: 24px;
-}
 
 .v-card-text {
   margin-top: 50px;

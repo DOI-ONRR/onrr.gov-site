@@ -16,29 +16,6 @@ export default {
   },
   props: {
     layoutBlocks: Array
-  },
-  mounted() {},
-  methods: {
-    column(num) {
-      let n
-      let blocksArr = ['tab_blocks']
-
-      switch (num) {
-        case 1:
-          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_one.blocks
-          break
-        case 2:
-          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_two.blocks
-          break
-        case 3:
-          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_three.blocks
-          break
-        default:
-          n = undefined
-          break
-      }
-      return n
-    },
   }
 }
 </script>

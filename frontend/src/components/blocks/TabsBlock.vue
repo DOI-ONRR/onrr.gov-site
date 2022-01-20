@@ -27,14 +27,7 @@
           elevation="0"
           >
           <v-card-text style="white-space: pre-line;" class="pl-1 pr-1 pt-4 pb-4 tab-content">
-            <!-- {{ block.tabBlocks }} -->
             <LayoutBlock :layoutBlocks="block.tabBlocks"></LayoutBlock>
-            <!-- <LayoutBlock :layoutBlocks="tab.item.block_content.blocks"></LayoutBlock> -->
-            <!-- <LayoutBlock :layout="tab.tab_layout" :block="tab" ></LayoutBlock> -->
-
-            <!-- <div v-if="tab.tab_items">
-                <TabsBlock :block="nestedTabs" class="nested-tabs"></TabsBlock>
-            </div> -->
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -54,7 +47,6 @@ import {
 export default {
   mixins: [pageBlockMixin, editorBlockMixin],
   name: 'TabsBlock',
-  template: '<div><TabsBlock></TabsBlock></div>',
   data () {
     return {
       model: '',
@@ -86,19 +78,22 @@ export default {
       const tabItems = []
 
       tabBlocks && tabBlocks.forEach(obj => {
-        console.log('obj: ', obj)
-        if (obj.item.__typename === 'tab_block_label') {
-          tabItems.push({ ...obj, tabBlocks: [] })
-        } else {
-          tabItems[tabItems.length - 1].tabBlocks.push(obj)
+        // console.log('obj: ', obj)
+        if(obj.item !== null) {
+          if (obj.item.__typename === 'tab_block_label') {
+            tabItems.push({ ...obj, tabBlocks: [] })
+          } else {
+            tabItems[tabItems.length - 1].tabBlocks.push(obj)
+          }
         }
+        
       })
-      console.log('tabItems: ', tabItems)
+      // console.log('tabItems: ', tabItems)
       return tabItems
     },
   },
   created() {
-    console.log('tab query params --------> ', this.$route.query.tab)
+    // console.log('tab query params --------> ', this.$route.query.tab)
     this.model = this.$route.query.tab || this.formattedLabel(this.tabItems[0].item.tab_block_label)
   },
 }
@@ -113,9 +108,9 @@ export default {
   margin-bottom: 16px;
 }
 
-.v-tabs__wrap .v-icon {
-  color: black !important;
-}
+// .v-tabs__wrap .v-icon {
+//   color: black !important;
+// }
 
 .v-slide-group__prev--disabled {
   color: rgba(0, 0, 0, 0.5) !important;
@@ -158,8 +153,8 @@ export default {
   color: rgb(0, 0, 0, 1) !important;
 }
 
-.v-icon {
-  color: rgba(0,0,0,1) !important;
-}
+// .v-icon {
+//   color: rgba(0,0,0,1) !important;
+// }
 
 </style>
