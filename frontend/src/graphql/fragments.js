@@ -12,10 +12,6 @@ export const contentBlockFields = gql`
     block_label
     block_v_col
     block_content
-    # block_layout
-    # column_one
-    # column_two
-    # column_three
   }
 `
 
@@ -81,6 +77,9 @@ export const expansionPanelBlockFields = gql`
   fragment expansionPanelBlockFields on expansion_panels {
     id
     block_label
+    open_by_default {
+      id
+    }
     expansion_panel_blocks {
       id
       item {

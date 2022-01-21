@@ -10,7 +10,8 @@
       <v-tab 
         v-for="(tab, index) in tabItems"
         :key="index"
-        :href="`#${ formattedLabel(tab.item.tab_block_label) }`">
+        :href="`#${ formattedLabel(tab.item.tab_block_label) }`"
+        @click="addParamsToLocation({ tab: formattedLabel(tab.item.tab_block_label)  });">
         <span v-html="tab.item.tab_block_label"></span>
       </v-tab>
     </v-tabs>
@@ -60,10 +61,10 @@ export default {
   },
   methods: {
     // TODO: update params to handle levels of tabs
-    // addParamsToLocation(params) {
-    //   this.$router.replace({ path: this.$route.path, query: params })
-    //   this.forceRerender()
-    // },
+    addParamsToLocation(params) {
+      this.$router.replace({ path: this.$route.path, query: params })
+      this.forceRerender()
+    },
     formattedLabel(label) {
       console.log('label yo --------> ', label)
       return formatToSlug(label)
