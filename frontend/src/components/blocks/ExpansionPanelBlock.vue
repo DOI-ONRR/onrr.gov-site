@@ -2,7 +2,7 @@
     <div class="pa-1">
         <v-expansion-panels
             accordion
-            multiple>
+            :value="openedPanel">
             <v-expansion-panel
             v-for="(block,i) in blockItems"
             :key="i"
@@ -41,7 +41,7 @@ export default {
     name: 'ExpansionPanelBlock',
     data() {
         return {
-            isOpen: false
+            panels: []
         }
     },
     props: {
@@ -51,6 +51,14 @@ export default {
         LayoutBlock
     },
     methods: {
+        getAllIndexes(arr, val) {
+            const indexes = []
+            let i = -1
+            while ((i = arr.indexOf(val, i+1)) != -1){
+                indexes.push(i)
+            }
+            return indexes
+        }
     },
     computed: {
         blockItems() {
@@ -60,6 +68,7 @@ export default {
             blocks && blocks.forEach(obj => {
                 if(obj.item !== null) {
                     if (obj && obj.item.__typename === 'expansion_panel_block_label') {
+                        this.panels.push(obj)
                         blockItems.push({ ...obj, panelBlocks: [] })
                     } else {
                         blockItems[blockItems.length - 1].panelBlocks.push(obj)
@@ -68,6 +77,14 @@ export default {
             })
             return blockItems
         },
+        openedPanel() {
+            const defaultBlockId = this.block.item.open_by_default?.id
+            let defaultId
+            if (defaultBlockId) {
+                defaultId = this.panels.findIndex(block => block.item.id === defaultBlockId)
+            }
+            return defaultId
+        }
     }
 }
 </script>
