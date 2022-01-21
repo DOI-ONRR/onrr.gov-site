@@ -81,9 +81,6 @@ export const expansionPanelBlockFields = gql`
   fragment expansionPanelBlockFields on expansion_panels {
     id
     block_label
-    open_by_default {
-      id
-    }
     expansion_panel_blocks {
       id
       item {
