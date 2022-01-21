@@ -7,9 +7,13 @@
       {{ cardSubtitle }}
     </v-card-subtitle>
     <v-card-text class="text--primary body-1">
-      <div v-for="block in block.item.block_content.blocks" :key="block.id">
-        <EditorBlock :blockContent="block"></EditorBlock>
+      <div v-if="blockItems.length === 0">
+        <div v-for="block in block.item.block_content.blocks" :key="block.id">
+          <EditorBlock :blockContent="block"></EditorBlock>
+        </div>
       </div>
+      
+      <LayoutBlock :layoutBlocks="blockItems" v-if="blockItems.length > 1"></LayoutBlock>
     </v-card-text>
     <!-- <v-card-actions>
       Actions here...
@@ -19,7 +23,7 @@
 
 <script>
 import { editorBlockMixin, pageBlockMixin } from '@/mixins'
-// const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
+const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 export default {
   mixins: [editorBlockMixin, pageBlockMixin],
   name: 'CardBlock',
@@ -41,20 +45,23 @@ export default {
     block: [Array, Object],
   },
   components: {
-    // LayoutBlock
+    LayoutBlock
   },
   mounted() {
-    console.log('Hello, from CardBlock!')
+    // console.log('Hello, from CardBlock!')
   },
   computed: {
     blocks() {
       const blocks = this.block.block_content.blocks
-
       return blocks
     },
     blockColor() {
       return this.block.item.block_color
-    }
+    },
+    blockItems() {
+      const blocks = [...this.block.item.card_content_blocks.filter(block => block.item !== null)]
+      return blocks
+    },
   }
 }
 </script>

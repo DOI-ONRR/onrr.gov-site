@@ -26,6 +26,12 @@ export const cardBlockFields = gql`
     block_label
     block_v_col
     block_content
+    card_content_blocks {
+      id
+      item {
+        ...contentBlockFields
+      }
+    }
   }
 `
 
