@@ -66,7 +66,7 @@ query {
 // Pages and Redirects queries
 export const PAGES_REDIRECTS_QUERY = gql`
 query {
-  pages {
+  pages(limit: -1) {
     id
     slug
     title
