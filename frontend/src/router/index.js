@@ -203,7 +203,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
     children: [
       {
-        path: '',
+        path: '/',
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
       },
       {
@@ -214,6 +214,17 @@ const routes = [
         meta: {
           breadcrumb: ''
         },
+        children: [
+          {
+            path: ':slug',
+            name: 'TwoColumnLeft',
+            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
+            props: true,
+            meta: {
+              breadcrumb: ''
+            },
+          },
+        ]
       },
     ],
     meta: {
