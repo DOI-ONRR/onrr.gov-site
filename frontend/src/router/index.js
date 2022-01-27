@@ -203,7 +203,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
     children: [
       {
-        path: '/',
+        path: '',
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
       },
       {

@@ -68,7 +68,7 @@ export default {
     slug: String,
   },
   created () {
-    this.$apollo.queries.pages_by_id.refetch()
+    // this.$apollo.queries.pages_by_id.refetch()
   },
   computed: {
     findPageByUrl () {
