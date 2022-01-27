@@ -17,6 +17,6 @@ export default {
 
 <style lang="scss" scoped>
 .block-component {
-  margin: 0;
+  margin: 16px 0;
 }
 </style>

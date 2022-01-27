@@ -6,7 +6,7 @@
             color="secondary"
           >
             <v-list-item
-              v-for="(item, i) in collection.slice(0, 5)"
+              v-for="(item, i) in slicedCollection"
               :key="i"
               :href="fileLink(item)"
               class="pa-0"
@@ -112,6 +112,10 @@ export default {
       const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(sortedCollection))
       return (!filteredCollection || filteredCollection.length === 0) ? sortedCollection : filteredCollection
     },
+    slicedCollection() {
+      const c = this.collection && this.collection.slice(0,5)
+      return c
+    }
   },
   methods: {
     getDay: getDay,
@@ -137,14 +141,6 @@ export default {
       const filteredYear = collection && collection.filter(item => this.getYear(item.date) === year)
       return filteredYear
     },
-  },
-  // created() {
-  //   this.filterCollection()
-  // },
-  // watch: {
-  //   '$route.query.tab'() {
-  //     this.filterCollection()
-  //   }
-  // },
+  }
 }
 </script>
