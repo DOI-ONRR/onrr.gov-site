@@ -39,7 +39,7 @@ export default {
     //
   }),
   created() {
-    console.log('this.$route.fullPath --------------------> ', this.$route.fullPath)
+    // console.log('this.$route.fullPath --------------------> ', this.$route.fullPath)
   }
 };
 </script>

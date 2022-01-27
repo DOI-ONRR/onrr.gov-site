@@ -134,7 +134,7 @@ function hasQueryParams(route) {
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach((to, from, next) => {
-  console.log('beforeRouteEnter to.path ------------>', to, from, next)
+  // console.log('beforeRouteEnter to.path ------------>', to, from, next)
 
   // getRedirects()
 

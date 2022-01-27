@@ -33,7 +33,7 @@ export const pageBlockMixin = {
     ExpansionPanelBlock
   },
   created() {
-    console.log('Hello from the pageBlockMixin!')
+    // console.log('Hello from the pageBlockMixin!')
   },
   methods: {
     pageBlock(type) {
