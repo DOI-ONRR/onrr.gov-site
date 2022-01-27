@@ -53,7 +53,7 @@ export default new Vuetify({
         yellow: {
           base: '#b6890f',
           lighten1: '#ecb947',
-          darken1: '#825c100',
+          darken1: '#825c10',
         },
         neutrals: {
           base: '#262431',

@@ -55,7 +55,7 @@ export default {
         if (data) {
           const str = this.$route.path
           const routes = str.split('/')
-          console.log('whats this -----------> ', this.slug)
+          // console.log('whats this -----------> ', this.slug)
           const slug = (this.slug && this.slug.includes('?') !== undefined) ? this.slug.split('?')[0] : this.slug
           const page = slug 
             ? data.pages.find(page => page.slug === slug)
@@ -91,7 +91,7 @@ export default {
     findPageBySlug: function () {
       const str = this.$route.path
       const routes = str.split('/')
-      console.log('whats this -----------> ', this.slug.includes('?'))
+      // console.log('whats this -----------> ', this.slug.includes('?'))
       const slug = (this.slug && this.slug.includes('?') !== undefined) ? this.slug.split('?')[0] : this.slug
 
       let page
@@ -104,7 +104,7 @@ export default {
       return page
     },
     getPageBySlug: function(slug) {
-      console.log('whats this -----------> ', slug.includes('?'))
+      // console.log('whats this -----------> ', slug.includes('?'))
       const formattedSlug = (slug && slug.includes('?') !== undefined) ? slug.split('?')[0] : slug
       const page = this.pages.find(page => page.url === formattedSlug)
       return page

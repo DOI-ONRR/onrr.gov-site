@@ -66,7 +66,6 @@ export default {
       this.forceRerender()
     },
     formattedLabel(label) {
-      console.log('label yo --------> ', label)
       return formatToSlug(label)
     },
     forceRerender() {

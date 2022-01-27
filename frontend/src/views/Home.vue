@@ -72,19 +72,8 @@ export default {
           ID: 1
         }
       },
-      result ({ data }) {
-        if (data) {
-          console.log('contentBlocks data: ', data)
-        }
-        
-      },
       fetchPolicy: 'cache-and-network'
     },
-    // collection: {
-    //   query() {
-    //   },
-    //   update: data => data
-    // }
   }, 
   components: {
     RevenueBlock,
@@ -96,7 +85,7 @@ export default {
     console.log('view vuetify obj--------->', this.$vuetify)
   },
   mounted () {
-    console.log('breakpoint-------> ', this.$vuetify.breakpoint.width)
+    // console.log('breakpoint-------> ', this.$vuetify.breakpoint.width)
   },
   methods: {},
   computed: {

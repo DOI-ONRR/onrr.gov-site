@@ -49,6 +49,10 @@ query {
     slug
     title
     url
+    template
+    parent {
+      id
+    }
   }
 }`
 

@@ -1,13 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { apolloClient } from '@/main.js'
+// import Home from '@/views/Home'
+// import TwoColumnLeft from '@/views/TwoColumnLeft'
+
 import { 
   // PAGES_QUERY, 
   // REDIRECTS_QUERY,
   PAGES_REDIRECTS_QUERY
 } from '@/graphql/queries'
 
-import Home from '../views/Home'
+
 
 Vue.use(VueRouter)
 
@@ -15,255 +18,11 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    components: {
-      default:  Home,
-    },
+    component: () => import(/* webpackChunkName: "Home" */ "@/views/Home"),
     meta: {
       breadcrumb: "Home"
     },
     props: true,
-  },
-  {
-    path: "/getting-started",
-    props: true,
-    component: () => import(/* webpackChunkName: "TwoColumnleft" */ "../views/TwoColumnLeft"),
-    children: [
-      {
-        path: '/',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
-      },
-      {
-        path: ':slug',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-        props: true,
-        meta: {
-          breadcrumb: ''
-        },
-        children: [
-          {
-            path: ':slug',
-            name: 'TwoColumnLeft',
-            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-            props: true,
-            meta: {
-              breadcrumb: ''
-            },
-          },
-        ]
-      },
-    ],
-    meta: {
-      breadcrumb: "Getting Started"
-    },
-  },
-  {
-    path: "/reporting",
-    name: "TwoColumnLeft",
-    props: true,
-    component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
-    children: [
-      {
-        path: '/',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
-      },
-      {
-        path: ':slug',
-        name: 'TwoColumnLeft',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page") ,
-        props: true,
-        meta: {
-          breadcrumb: ''
-        },
-        children: [
-          {
-            path: ':slug',
-            name: 'TwoColumnLeft',
-            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-            props: true,
-            meta: {
-              breadcrumb: ''
-            },
-          },
-        ]
-      },
-    ],
-    meta: {
-      breadcrumb: "Reporting"
-    },
-  },
-  {
-    path: "/references",
-    name: "TwoColumnLeft",
-    props: true,
-    component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
-    children: [
-      {
-        path: '/',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
-      },
-      {
-        path: ':slug',
-        name: 'TwoColumnLeft',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-        props: true,
-        meta: {
-          breadcrumb: ''
-        },
-        children: [
-          {
-            path: ':slug',
-            name: 'TwoColumnLeft',
-            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-            props: true,
-            meta: {
-              breadcrumb: ''
-            },
-          },
-        ]
-      },
-    ],
-    meta: {
-      breadcrumb: "References"
-    },
-  },
-  {
-    path: "/paying",
-    name: "TwoColumnLeft",
-    props: true,
-    component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
-    children: [
-      {
-        path: '/',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
-      },
-      {
-        path: ':slug',
-        name: 'TwoColumnLeft',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-        props: true,
-        meta: {
-          breadcrumb: ''
-        },
-        children: [
-          {
-            path: ':slug',
-            name: 'TwoColumnLeft',
-            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-            props: true,
-            meta: {
-              breadcrumb: ''
-            },
-          },
-        ]
-      },
-    ],
-    meta: {
-      breadcrumb: "Paying"
-    },
-  },
-  {
-    path: "/compliance-enforcement",
-    name: "TwoColumnLeft",
-    props: true,
-    component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
-    children: [
-      {
-        path: '/',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
-      },
-      {
-        path: ':slug',
-        name: 'TwoColumnLeft',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-        props: true,
-        meta: {
-          breadcrumb: ''
-        },
-        children: [
-          {
-            path: ':slug',
-            name: 'TwoColumnLeft',
-            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-            props: true,
-            meta: {
-              breadcrumb: ''
-            },
-          },
-        ]
-      },
-    ],
-    meta: {
-      breadcrumb: "Compliance Enforcement"
-    },
-  },
-  {
-    path: "/indian",
-    name: "TwoColumnLeft",
-    props: true,
-    component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
-    children: [
-      {
-        path: '/',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
-      },
-      {
-        path: ':slug',
-        name: 'TwoColumnLeft',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-        props: true,
-        meta: {
-          breadcrumb: ''
-        },
-        children: [
-          {
-            path: ':slug',
-            name: 'TwoColumnLeft',
-            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-            props: true,
-            meta: {
-              breadcrumb: ''
-            },
-          },
-        ]
-      },
-    ],
-    meta: {
-      breadcrumb: "Indian Resources"
-    },
-  },
-  {
-    path: "/about",
-    name: "TwoColumnLeft",
-    props: true,
-    component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "../views/TwoColumnLeft"),
-    children: [
-      {
-        path: '',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
-      },
-      {
-        path: ':slug',
-        component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-        props: true,
-        meta: {
-          breadcrumb: ''
-        },
-        children: [
-          {
-            path: ':slug',
-            name: 'TwoColumnLeft',
-            component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
-            props: true,
-            meta: {
-              breadcrumb: ''
-            },
-          },
-        ]
-      },
-    ],
-    meta: {
-      breadcrumb: "About ONRR"
-    },
   },
   {
     path: '/404',
@@ -274,18 +33,82 @@ const routes = [
     }
   },
   {
+    path: '/:slug',
+    name: 'TwoColumnLeft',
+    component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "@/views/TwoColumnLeft"),
+    props: true,
+    meta: {
+      breadcrumb: ''
+    },
+    children: [
+      {
+        path: '/',
+        component: () => import(/* webpackChunkName: "Page" */ "@/views/Page"),
+      },
+      {
+        path: ':slug1',
+        component: () => import(/* webpackChunkName: "Page" */ "@/views/Page"),
+        props: true,
+        meta: {
+          breadcrumb: ''
+        },
+        children: [
+          {
+            path: ':slug2',
+            component: () => import(/* webpackChunkName: "Page" */ "@/views/Page"),
+            props: true,
+            meta: {
+              breadcrumb: ''
+            },
+            children: [
+              {
+                path: ':slug3',
+                component: () => import(/* webpackChunkName: "Page" */ "@/views/Page"),
+                props: true,
+                meta: {
+                  breadcrumb: ''
+                },
+                children: [
+                  {
+                    path: ':slug4',
+                    component: () => import(/* webpackChunkName: "Page" */ "@/views/Page"),
+                    props: true,
+                    meta: {
+                      breadcrumb: ''
+                    },
+                    children: [
+                      {
+                        path: ':slug5',
+                        component: () => import(/* webpackChunkName: "Page" */ "@/views/Page"),
+                        props: true,
+                        meta: {
+                          breadcrumb: ''
+                        },
+                        
+                      },
+                    ]
+                  },
+                ]
+              },
+            ]
+          },
+        ]
+      },
+    ]
+  },
+  {
     path: ':catchAll(.*)',
     redirect: '/404'
   }
 ]
 
-// console.log('routes---------->', routes)
 
 const router = new VueRouter({
   mode: "history",
   linkExactActiveClass: "nav-active-class",
   routes
 })
+
 
 function addRedirectsToRoutes (data) {
   setTimeout(() => {
@@ -331,31 +154,32 @@ router.beforeEach((to, from, next) => {
       addRedirectsToRoutes(redirects)
 
       const path = location.pathname.toString()
-      const fullPath = to.fullPath.includes('?')? to.fullPath.split('?')[0] : to.fullPath
+      // console.log('path: ', path)
+      const fullPath = to.fullPath.includes('?') ? to.fullPath.split('?')[0] : to.fullPath
+      // console.log('fullPath: ', fullPath)
       const pageFound = pages.find(page => page.url === fullPath)
       const redirectFound = redirects.find(redirect => redirect.from === path)
 
       // console.log('redirectFound------------->', redirectFound)
       // console.log('pageFound-------------->', pageFound)
 
-      // if not page found lets redirect to 404 page
+      // if no page found lets redirect to 404 page
+      if (pageFound === undefined) {
+        next({ path: '/404' })
+      }
+
+
       if (redirectFound) {
-        next()
+        next({ path: redirectFound.to, replace: true })
       }
       else {
-        if (pageFound === undefined) {
-          next({ name: 'PageNotFound' })
-        }
-          
-        
         if (pageFound) next()
       }
-      
 
     }
 
   })
-  .catch((err) => console.err(err))
+  .catch((err) => console.error(err))
 
   // check for query params
   if (!hasQueryParams(to) && hasQueryParams(from)) {
