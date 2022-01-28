@@ -18,3 +18,4 @@ CREATE TRIGGER trigger_page_links AFTER INSERT OR UPDATE ON PAGES
 FOR EACH ROW
 EXECUTE PROCEDURE  function_page_link_upsert()
 ;
+

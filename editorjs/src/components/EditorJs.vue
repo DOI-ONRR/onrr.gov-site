@@ -26,6 +26,8 @@ import List from "@editorjs/list"
 import Collections from '../custom-plugins/plugin-collections'
 import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
 import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
+import LinkTool from '@editorjs/link';
+import Links from '../custom-plugins/plugin-links'
 
 export default {
   data() {
@@ -74,11 +76,27 @@ export default {
               fieldsEndpoint: 'http://localhost:8055/fields'
             }
           },
+          links: {
+            class: Links,
+            inlineToolbar: true,
+            config: {
+              linksEndpoint: 'http://localhost:8055/items/links',
+              fieldsEndpoint: 'http://localhost:8055/fields'
+            }
+          },
           horizontalrule2: {
             class: HorizontalRuleTool,
             inlineToolbar: true,
           },
-
+	            linkTool: {
+            class: LinkTool,
+              config: {
+               endpoint: 'http://localhost:8055/items/links', // Your backend endpoint for url data fetching,
+               headers: {
+                'Access-Control-Allow-Origin': "*"
+                }	       
+              } 
+          }, 
           link: {
             class: LinkAutocomplete,
             inlineToolbar: true,

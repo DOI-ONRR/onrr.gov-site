@@ -53,6 +53,7 @@ import AttachesTool from './custom-plugins/plugin-attaches-patch';
 import PersonalityTool from './custom-plugins/plugin-personality-patch';
 // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
 import CollectionsTool from "./custom-plugins/plugin-collections";
+import LinksTool from "./custom-plugins/plugin-links";
 import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
 import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
 
@@ -73,7 +74,7 @@ export default defineComponent({
 		},
 		tools: {
 			type: Array,
-			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'link'],
+			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'links', 'horizontalrule', 'link'],
 		},
 		font: {
 			type: String,
@@ -341,6 +342,12 @@ export default defineComponent({
 					config: {
 						collectionsEndpoint: '/collections',
 						fieldsEndpoint: '/fields'
+					}
+				},
+				links: {
+					class: LinksTool,
+					config: {
+						collectionsEndpoint: '/item/links',
 					}
 				},
 				horizontalrule: {
