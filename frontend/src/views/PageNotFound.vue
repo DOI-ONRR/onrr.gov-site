@@ -6,14 +6,18 @@
       </div>
     </div>
     <v-container class="page__wrap" v-else>
-      <Page :slug="pageSlug" />
+      <Breadcrumbs />
+      <div class="text-h1 page-title text-center" v-if="page.title">{{ page.title }}</div>
+      <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
     </v-container>
   </div>
 </template>
 
 <script>
 import { PAGES_BY_ID_QUERY } from '@/graphql/queries'
-import Page from '@/views/Page'
+const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
+const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
+
 
 export default {
   name: 'PageNotFound',
@@ -21,9 +25,7 @@ export default {
     title: 'Page not found',
   },
   data() {
-    return {
-      page: null
-    }
+    return {}
   },
   apollo: {
     pages_by_id: {
@@ -34,19 +36,18 @@ export default {
           ID: "53" // 404 page id cms
         }
       },
-       result ({ data }) {
-        if (data) {
-          this.page = data.pages_by_id
-        }
-      }
     },
   },
   components: {
-    Page
+    Breadcrumbs,
+    LayoutBlock
   },
   computed: {
     pageSlug() {
       return this.pages_by_id.slug
+    },
+    page() {
+      return this.pages_by_id && this.pages_by_id
     }
   }
 }

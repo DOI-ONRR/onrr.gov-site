@@ -6,49 +6,35 @@ export const contentBlocks = gql`
   }
 `
 
-// export const blockFields = gql`
-//   fragment blockFields on blocks {
-//     id
-//     block_label
-//     block_type
-//     block_layout
-//     column_one
-//     column_two
-//     column_three
-//     tab_items
-//   }
-// `
-
 export const contentBlockFields = gql`
   fragment contentBlockFields on content_blocks {
     id
     block_label
-    block_layout
-    column_one
-    column_two
-    column_three
+    block_v_col
+    block_content
   }
 `
 
 export const cardBlockFields = gql`
   fragment cardBlockFields on card_blocks {
     id
-    # block_collections
     block_color
     block_label
-    block_layout 
-    column_one
-    column_two
-    column_three
+    block_v_col
+    block_content
+    card_content_blocks {
+      id
+      item {
+        ...contentBlockFields
+      }
+    }
   }
 `
 
-
-export const tabBlockFields = gql`
-  fragment tabBlockFields on tab_blocks {
+export const tabBlockLabelFields = gql`
+  fragment tabBlockLabelFields on tab_block_label {
     id
     tab_block_label
-    tab_items
   }
 `
 
@@ -59,39 +45,71 @@ export const sectionHeadingBlocks = gql`
   }
 `
 
-export const tabBlocksContents = gql`
-  fragment tabBlocksContents on tab_blocks_contents {
-    tab_label
+export const nestTabBlockFields = gql`
+  ${tabBlockLabelFields}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  fragment nestedTabBlockFields on tab_blocks {
+    id
     tab_blocks {
+        id
+        item {
+          __typename
+          ...tabBlockLabelFields
+          ...contentBlockFields
+          ...cardBlockFields
+        }
+    }
+  }
+`
+
+export const expansionPanelBlockLabel = gql`
+  fragment expansionPanelBlockLabel on expansion_panel_block_label {
+    id
+    block_label
+  }
+`
+
+export const expansionPanelBlockFields = gql`
+  ${expansionPanelBlockLabel}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  fragment expansionPanelBlockFields on expansion_panels {
+    id
+    block_label
+    open_by_default {
+      id
+    }
+    expansion_panel_blocks {
+      id
       item {
-        ... on section_heading_blocks {
-          section_heading
-          section_heading_type
-        }
-        ... on content_blocks {
-          content
-        }
-        ... on tab_blocks {
-          tab_block {
-            item {
-              ... on tab_blocks_contents {
-                tab_label
-                tab_blocks {
-                  item {
-                    ... on section_heading_blocks {
-                      section_heading
-                      section_heading_type
-                    }
-                    ... on content_blocks {
-                      content
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        __typename
+        ...expansionPanelBlockLabel
+        ...contentBlockFields
+        ...cardBlockFields
       }
+    }
+  }
+`
+
+export const tabBlockFields = gql`
+  ${tabBlockLabelFields}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  ${nestTabBlockFields}
+  ${expansionPanelBlockFields}
+  fragment tabBlockFields on tab_blocks {
+    id
+    tab_blocks {
+        id
+        item {
+          __typename
+          ...tabBlockLabelFields
+          ...contentBlockFields
+          ...cardBlockFields
+          ...nestedTabBlockFields
+          ...expansionPanelBlockFields
+        }
     }
   }
 `
@@ -100,6 +118,7 @@ export const pageFields = gql`
  ${contentBlockFields}
  ${tabBlockFields}
  ${cardBlockFields}
+ ${expansionPanelBlockFields}
   fragment pageFields on pages {
     id
     title
@@ -115,6 +134,7 @@ export const pageFields = gql`
         ...contentBlockFields
         ...tabBlockFields
         ...cardBlockFields
+        ...expansionPanelBlockFields
       }
     }
     # page_builder
@@ -132,21 +152,6 @@ export const cardBlocks = gql`
       item {
         __typename
         ...contentBlocks
-      }
-    }
-  }
-`
-
-export const tabBlocks = gql`
-  ${tabBlocksContents}
-  fragment tabBlocks on tab_blocks {
-    __typename
-    id
-    block_label
-    tab_block {
-      item {
-        __typename
-        ...tabBlocksContents
       }
     }
   }

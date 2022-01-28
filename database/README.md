@@ -49,3 +49,6 @@ Restore local docker container db from dev backup
 
 Restore dev db from local file  
 `pg_restore -d 'postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME}' --verbose --clean --no-password --no-owner --no-acl  ./backup/docker_database_dump.pg`
+
+Update table in dev
+`psql -U ${DB_USER} -d 'postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME}' -f ./path/to/file.sql`

@@ -15,7 +15,7 @@
           active-class="active"
           v-for="cItem in item.menu_children" 
           :key="cItem.id"
-          :to="`${ cItem.pages_id.url }`">
+          :to="`${ cItem.pages_id.url }` ">
               {{ cItem.pages_id.title }}
         </v-list-item>
         </div>

@@ -44,11 +44,15 @@ export const ANNOUNCEMENTS_QUERY = gql`query {
 // Pages query 
 export const PAGES_QUERY = gql`
 query {
-  pages {
+  pages(limit: -1) {
     id
     slug
     title
     url
+    template
+    parent {
+      id
+    }
   }
 }`
 
@@ -66,7 +70,7 @@ query {
 // Pages and Redirects queries
 export const PAGES_REDIRECTS_QUERY = gql`
 query {
-  pages {
+  pages(limit: -1) {
     id
     slug
     title

@@ -8,30 +8,26 @@
       show-arrows>
 
       <v-tab 
-        v-for="(tab, index) in tabs"
+        v-for="(tab, index) in tabItems"
         :key="index"
-        :href="`#${ formattedLabel(tabs[index]) }`"
-        @click="addParamsToLocation({ tab: formattedLabel(tabs[index])  });">
-        <span v-html="tab"></span>
+        :href="`#${ formattedLabel(tab.item.tab_block_label) }`"
+        @click="addParamsToLocation({ tab: formattedLabel(tab.item.tab_block_label)  });">
+        <span v-html="tab.item.tab_block_label"></span>
       </v-tab>
     </v-tabs>
     <v-tabs-items
       v-model="model"
       :key="componentKey">
       <v-tab-item
-        v-for="(tab, i) in tabContents"
+        v-for="(block, i) in tabItems"
         :key="i"
-        :value="formattedLabel(tabs[i])">
+        :value="formattedLabel(block.item.tab_block_label)">
         <v-card
           text
           elevation="0"
           >
-          <v-card-text style="white-space: pre-line;" class="pl-0 pr-0 pt-4 pb-4">
-            <LayoutBlock :layout="tab.tab_layout" :block="tab" ></LayoutBlock>
-
-            <div v-if="tab.tab_items">
-                <TabsBlock :block="nestedTabs" class="nested-tabs"></TabsBlock>
-            </div>
+          <v-card-text style="white-space: pre-line;" class="pl-1 pr-1 pt-4 pb-4 tab-content">
+            <LayoutBlock :layoutBlocks="block.tabBlocks"></LayoutBlock>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -51,7 +47,6 @@ import {
 export default {
   mixins: [pageBlockMixin, editorBlockMixin],
   name: 'TabsBlock',
-  template: '<div><TabsBlock></TabsBlock></div>',
   data () {
     return {
       model: '',
@@ -65,6 +60,7 @@ export default {
     LayoutBlock
   },
   methods: {
+    // TODO: update params to handle levels of tabs
     addParamsToLocation(params) {
       this.$router.replace({ path: this.$route.path, query: params })
       this.forceRerender()
@@ -77,25 +73,28 @@ export default {
     },
   },
   computed: {
-    tabs() {
-      const tabs = this.block.tab_items.map(item => item.tab_label)
-      return tabs
-    },
-    tabContents() {
-      return this.block.tab_items
-    },
-    nestedTabs() {
-      const tItems = this.block.tab_items
-      const nItems = tItems.filter(item => Object.prototype.hasOwnProperty.call(item, 'tab_items'))
-      let nObj = {}
-      nObj = nItems[0]
-  
-      return nObj
+    tabItems() {
+      const tabBlocks = this.block.item.tab_blocks
+      const tabItems = []
+
+      tabBlocks && tabBlocks.forEach(obj => {
+        // console.log('obj: ', obj)
+        if(obj.item !== null) {
+          if (obj.item.__typename === 'tab_block_label') {
+            tabItems.push({ ...obj, tabBlocks: [] })
+          } else {
+            tabItems[tabItems.length - 1].tabBlocks.push(obj)
+          }
+        }
+        
+      })
+      // console.log('tabItems: ', tabItems)
+      return tabItems
     },
   },
   created() {
-    console.log('tab query params --------> ', this.$route.query.tab)
-    this.model = this.$route.query.tab || this.formattedLabel(this.tabs[0])
+    // console.log('tab query params --------> ', this.$route.query.tab)
+    this.model = this.$route.query.tab || this.formattedLabel(this.tabItems[0].item.tab_block_label)
   },
 }
 </script>
@@ -109,9 +108,9 @@ export default {
   margin-bottom: 16px;
 }
 
-.v-tabs__wrap .v-icon {
-  color: black !important;
-}
+// .v-tabs__wrap .v-icon {
+//   color: black !important;
+// }
 
 .v-slide-group__prev--disabled {
   color: rgba(0, 0, 0, 0.5) !important;
@@ -121,19 +120,19 @@ export default {
   background-color: var(--v-secondary-base);
 }
 
-.nested-tabs .v-tab--active {
+.tab-content .v-tab--active {
   background-color: var(--v-secondary-lighten6);
   color: black !important;
+}
+
+.tab-content .v-tabs-slider {
+  background-color: black !important;
+  caret-color: black !important;
 }
 
 .v-tabs-slider {
   background-color: white !important;
   caret-color: white !important;
-}
-
-.nested-tabs .v-tabs-slider {
-  background-color: black !important;
-  caret-color: black !important;
 }
 
 .v-slide-group__content {
@@ -154,8 +153,8 @@ export default {
   color: rgb(0, 0, 0, 1) !important;
 }
 
-.v-icon {
-  color: rgba(0,0,0,1) !important;
-}
+// .v-icon {
+//   color: rgba(0,0,0,1) !important;
+// }
 
 </style>

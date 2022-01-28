@@ -8,6 +8,7 @@ const ImageBlock = () => import(/* webpackChunkName: "ImageBlock" */ '@/componen
 const CardBlock = () => import(/* webpackChunkName: "CardBlock" */ '@/components/blocks/CardBlock')
 const CollectionBlock = () => import(/* webpackChunkName: "CollectionBlock" */ '@/components/blocks/CollectionBlock')
 const HorizontalRuleBlock = () => import(/* webpackChunkName: "HorizontalRuleBlock" */ '@/components/blocks/HorizontalRuleBlock')
+const ExpansionPanelBlock = () => import(/* webpackChunkName: "ExpansionPanelBlock" */ '@/components/blocks/ExpansionPanelBlock')
 
 export const pageBlockMixin = {
   data() {
@@ -28,10 +29,11 @@ export const pageBlockMixin = {
     ContentBlock,
     CardBlock,
     CollectionBlock,
-    HorizontalRuleBlock
+    HorizontalRuleBlock,
+    ExpansionPanelBlock
   },
   created() {
-    console.log('Hello from the pageBlockMixin!')
+    // console.log('Hello from the pageBlockMixin!')
   },
   methods: {
     pageBlock(type) {
@@ -69,8 +71,10 @@ export const pageBlockMixin = {
         case 'horizontalrule':
           block = HorizontalRuleBlock 
           break
+        case 'expansion_panels':
+          block = ExpansionPanelBlock 
+          break
         default:
-          
           console.warn('pageBlock not found!', type)
           block = ContentBlock
           break

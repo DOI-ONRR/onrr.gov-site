@@ -6,16 +6,7 @@
     <div v-else class="page-wrap">
       <Breadcrumbs />
       <div class="text-h1 page-title" v-if="page.title">{{ page.title }}</div>
-      <div v-if="page.page_blocks" class="fade-transition">
-        <div v-for="block in page.page_blocks" :key="block.id">
-          <LayoutBlock :layout="block.item.block_layout || 'one_column'" :block="block.item">
-            <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
-            <keep-alive>
-              <component :is="pageBlock(block.item.__typename)" :block="block.item" class="block-component"></component>
-            </keep-alive>
-          </LayoutBlock>
-        </div>
-      </div>
+      <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
     </div>
   </div>
 </template>
@@ -77,7 +68,7 @@ export default {
     slug: String,
   },
   created () {
-    this.$apollo.queries.pages_by_id.refetch()
+    // this.$apollo.queries.pages_by_id.refetch()
   },
   computed: {
     findPageByUrl () {

@@ -58,10 +58,7 @@ export default {
         sortable: true,
         value: 'date'
       }
-    ],
-    pagination: {
-      totalItems: 777
-    }
+    ]
   }),
   props: {
     collection: [Array, Object]
@@ -75,6 +72,7 @@ export default {
       return `${ getMonth(d, 'numeric') }/${ getDay(d, 'numeric') }/${ getYear(d) }`
     },
     fileLink(item) {
+      // console.log('fileLink item ----------> ', item)
       let link
       if (item.file) {
         link = `${ this.API }/assets/${ item.file.id }`
@@ -83,6 +81,7 @@ export default {
       } else if (item.link ) {
         link = item.link
       }
+      // console.log('fileLink ----------> ', link)
       return link
     },
   },

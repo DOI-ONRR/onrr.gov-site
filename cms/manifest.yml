@@ -2,7 +2,7 @@
 applications: 
 - name: dev-onrr-cms
   instances: 1
-  disk_quota: 1G
+  disk_quota: 2G
   memory: 2G
   random-route: false
   buildpacks:

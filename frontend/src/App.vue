@@ -39,7 +39,7 @@ export default {
     //
   }),
   created() {
-    console.log('this.$route.fullPath --------------------> ', this.$route.fullPath)
+    // console.log('this.$route.fullPath --------------------> ', this.$route.fullPath)
   }
 };
 </script>
@@ -60,4 +60,5 @@ export default {
   color: black !important; 
   /* shouldn't have to do this, need to figure out correct method https://vuetifyjs.com/en/api/v-breadcrumbs/ */
 }
+
 </style>
