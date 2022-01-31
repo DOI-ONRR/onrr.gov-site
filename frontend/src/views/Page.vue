@@ -73,7 +73,7 @@ export default {
   computed: {
     findPageByUrl () {
       const routePath = this.$route.fullPath.split('?')[0]
-      // console.log('routePath yo ------------> ', routePath)
+      console.log('routePath yo ------------> ', routePath)
       return this.pages.find(page => page.url === routePath)
     },
     page () {
