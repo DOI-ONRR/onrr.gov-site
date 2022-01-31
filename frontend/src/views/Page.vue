@@ -5,7 +5,7 @@
     </div>
     <div v-else class="page-wrap">
       <Breadcrumbs />
-      <div class="text-h1 page-title" v-if="page.title">{{ page.title }}</div>
+      <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
       <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
     </div>
   </div>
@@ -99,10 +99,9 @@ export default {
 
 .page-title {
   width: 100%;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   border-bottom: 4px solid var(--v-yellow-lighten1);
-  font-weight: 500;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 
 .block-component {

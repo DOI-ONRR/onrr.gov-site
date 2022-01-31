@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[textClass]"
+    :class="[textClass, 'black--text']"
     v-html="content">
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
       let textClass = ''
       switch (this.block.type) {
         case 'header':
-          textClass = `text-h${ this.block.data.level } mt-1 mb-3`
+          textClass = `text-h${ this.block.data.level } mt-4 mb-6`
           break
         case 'paragraph':
           textClass = `text-body1`
@@ -41,7 +41,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .text-block {
   margin-bottom: 24px;
+}
+
+.text-h1 {
+  color: 'pink';
 }
 </style>
