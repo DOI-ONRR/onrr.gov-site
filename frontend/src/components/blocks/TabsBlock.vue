@@ -78,7 +78,7 @@ export default {
       const tabItems = []
 
       tabBlocks && tabBlocks.forEach(obj => {
-        // console.log('obj: ', obj)
+        console.log('obj: ', obj)
         if(obj.item !== null) {
           if (obj.item.__typename === 'tab_block_label') {
             tabItems.push({ ...obj, tabBlocks: [] })
