@@ -1,12 +1,13 @@
 <template>
- <CollectionDropdown
-   title="Simple Filter"
-  . text="Click to filter"
-   :items="[
-     {text: 'Item 1'},
-     {text: 'Item 2'}
-   ]">
-  </CollectionDropdown>
+  <div>
+  <CollectionDropdown
+    title="Simple Filter"
+    . text="Click to filter"
+    :items="[
+      {text: 'Item 1'},
+      {text: 'Item 2'}
+    ]">
+    </CollectionDropdown>
 </templated>
 
 

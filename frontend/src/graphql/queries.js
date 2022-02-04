@@ -217,6 +217,7 @@ export const REPORTER_LETTERS_QUERY = gql`
       }
       link
       status
+      topics
     }
   }
 `

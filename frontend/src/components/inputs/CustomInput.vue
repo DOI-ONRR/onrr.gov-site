@@ -26,6 +26,7 @@
       :value="value"
       :ref="reference"
       @input="$emit('update', $event)"
+      @change="$emit('change', $event)"
     ></v-select>
   </div>
 </template>
