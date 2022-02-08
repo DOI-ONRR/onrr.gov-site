@@ -6,28 +6,17 @@
           cols="12"
           sm="4"
         >
-          <CustomInput 
-            v-model="search"
-            label="Search"
-            type="search"
-            inputType="text"
-            icon="mdi-magnify"
-            ref="searchInput"
-            @update="onUpdateStore('searchQuery', $event); $emit('searchUpdateEvent', search);" />
+          <TextField 
+            :fields="searchInputField" 
+            @update="onUpdateStore('searchQuery', $event); $emit('searchUpdateEvent', searchInputField.text);"></TextField>
         </v-col>
         <v-col
           cols="12"
           sm="4"
         >
-          <CustomInput 
-            v-model="year"
-            :item-value="year"
-            label="All Years"
-            type="text"
-            :items="items"
-            inputType="select"
-            ref="yearSelectInput"
-            @update="onUpdateStore('year', $event);  $emit('yearUpdateEvent', year);" />
+          <SelectField 
+            :fields="yearSelectField" 
+            @update="onUpdateStore('year', $event);  $emit('yearUpdateEvent', year);"></SelectField>
         </v-col>
         <v-col
           cols="12"
@@ -44,7 +33,10 @@
 <script>
 import { store, mutations } from '@/store'
 import { getYear } from '@/js/utils'
-const CustomInput = () => import(/* webpackChunkName: "CustomInput" */ '@/components/inputs/CustomInput')
+
+const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
+const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
+
 export default {
   name: 'CollectionFilterToolbar',
   data() {
@@ -52,6 +44,22 @@ export default {
       year: store.collections.year, 
       search: store.collections.searchQuery,
       items: [],
+      searchInputField: {
+        label: 'Search',
+        text:  store.collections.searchQuery,
+        ref: 'searchInput',
+        color: 'secondary',
+        icon: 'mdi-magnify',
+        update: this.onUpdateStore('searchQuery')
+      },
+      yearSelectField: {
+        items: [],
+        label: 'All Years',
+        ref: 'yearSelectInput',
+        selected: null,
+        color: 'secondary',
+        icon: 'mdi-chevron-down',
+      }
     }
   },
   props: {
@@ -66,7 +74,8 @@ export default {
     }
   },
   components: {
-    CustomInput
+    TextField,
+    SelectField
   },
   methods: {
      onUpdateStore(key, value) {
@@ -74,15 +83,15 @@ export default {
      },
      getYears() {
       const years = this.collection.map(item => this.getYear(item.date)).sort((a, b) => b - a)
-      this.items = [... new Set(years)]
-      this.year = this.items[0]
-      this.onUpdateStore('year', this.items[0])
+      this.yearSelectField.items = [... new Set(years)]
+      this.yearSelectField.selected = this.yearSelectField.items[0]
+      this.onUpdateStore('year', this.yearSelectField.items[0])
      },
      getYear: getYear,
   },
   watch: {
     '$route.query.tab'() {
-      this.onUpdateStore('year', this.$refs.yearSelectInput.value || this.items[0])
+      this.onUpdateStore('year', this.$refs.yearSelectInput.value || this.yearSelectField.items[0])
     }
   },
   created() {

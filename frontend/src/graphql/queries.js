@@ -221,3 +221,18 @@ export const REPORTER_LETTERS_QUERY = gql`
     }
   }
 `
+
+export const RULEMAKINGS_QUERY = gql`
+  query {
+    rulemakings {
+      id
+      status
+      final_publication_date
+      rin
+      rule_title
+      informal_title
+      commodity_subject_matter
+      webpage_link
+    }
+  }
+`
