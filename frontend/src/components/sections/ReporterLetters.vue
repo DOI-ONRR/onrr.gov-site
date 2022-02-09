@@ -1,54 +1,43 @@
 <template>
   <v-card>
     <v-card-title>
-      <CustomInput
-        v-model="topicFilterValue"
-        label="All Topics"
-        type="text"
-        :items="topicItems"
-        inputType="select"
-        ref="topicSelectInput"
-        @change="addParamsToLocation({ topic: topicFilterValue  })" />
+      <SelectField :fields="topicsInputField"></SelectField>
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="titleFilterValue"
-        append-icon="mdi-magnify"
-        label="Search"
-        outlined
-        dense
-        color="secondary"
-      ></v-text-field>
+      <TextField :fields="titleInputField"></TextField>
     </v-card-title>
     <v-data-table
-      :headers="headers"
-      :items="collection"
-      item-key="title">
-      <template v-slot:header.title="{ header }">
-        <div class="text-h6 text-capitalize">{{ header.text}}</div>
-      </template>
-      <template v-slot:header.date="{ header }">
-        <div class="text-h6 text-capitalize">{{ header.text }}</div>
-      </template>
-      <template v-slot:header.topics="{ header }">
-        <div class="text-h6 text-capitalize">{{ header.text }}</div>
-      </template>
-      <template v-slot:item.title="{ item }">
-        <a :href="fileLink(item)" target="_blank">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
-        <div v-if="item.accessible_file"><a :href="fileLink(item)" target="_blank">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
-      </template>
-      <template v-slot:item.date="{ item }">
-        {{ formatNiceDate(item.date) }}
-      </template>
-      <template v-slot:item.topics="{ item }">
-        {{ getTopics(item.topics) }}
-      </template>
+        :headers="headers"
+        :items="collection"
+        item-key="title">
+        <template v-slot:header.title="{ header }">
+            <div class="text-h6 text-capitalize">{{ header.text}}</div>
+        </template>
+        <template v-slot:header.date="{ header }">
+            <div class="text-h6 text-capitalize">{{ header.text }}</div>
+        </template>
+        <template v-slot:header.topics="{ header }">
+            <div class="text-h6 text-capitalize">{{ header.text }}</div>
+        </template>
+        <template v-slot:item.title="{ item }">
+            <a :href="fileLink(item)" target="_blank">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
+            <div v-if="item.accessible_file"><a :href="fileLink(item)" target="_blank">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
+        </template>
+        <template v-slot:item.date="{ item }">
+            {{ formatNiceDate(item.date) }}
+        </template>
+        <template v-slot:item.topics="{ item }">
+            {{ getTopics(item.topics) }}
+        </template>
     </v-data-table>
   </v-card>
 </template>
 
 <script>
 import { formatToSlug } from '@/js/utils'
-const CustomInput = () => import(/* webpackChunkName: "CustomInput" */ '@/components/inputs/CustomInput')
+const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
+const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
+// const DataTable = () => import(/* webpackChunkName: "DataTable" */ '@/components/tables/DataTable')
+
 import {
   getFullDate,
   getYear,
@@ -58,15 +47,30 @@ import {
 export default {
   data: () => ({
     API: process.env.VUE_APP_API_URL,
-    topicFilterValue: null,
-    titleFilterValue: '',
-    topicItems: [],
+    titleInputField: {
+      label: 'Search',
+      text: '',
+      ref: 'searchInput',
+      color: 'secondary',
+      icon: 'mdi-magnify',
+    },
+    topicsInputField: {
+      items: [],
+      label: 'All Topics',
+      ref: 'topicSelectInput',
+      selected: null,
+      color: 'secondary',
+      icon: 'mdi-chevron-down',
+      params: 'topic'
+    }
   }),
   props: {
     collection: [Array, Object]
   },
   components: {
-    CustomInput
+    SelectField,
+    TextField,
+    // DataTable
   },
   methods: {
     getFullDate: getFullDate,
@@ -113,21 +117,21 @@ export default {
         
       })
 
-      this.topicItems = ["All", ...topicArr.sort()]
+      this.topicsInputField.items = ["All", ...topicArr.sort()]
     },
     titleFilter(value) {
-      if (!this.titleFilterValue) {
+      if (!this.titleInputField.text) {
         return true
       }
 
-      return value.toLowerCase().includes(this.titleFilterValue.toLowerCase())
+      return value.toLowerCase().includes(this.titleInputField.text.toLowerCase())
     },
     topicsFilter(value) {
-      if (!this.topicFilterValue || this.topicFilterValue === 'All') {
+      if (!this.topicsInputField.selected || this.topicsInputField.selected === 'All') {
         return true
       }
 
-      return value.includes(this.topicFilterValue)
+      return value.includes(this.topicsInputField.selected)
     },
     addParamsToLocation(params) {
       this.$router.replace({ path: this.$route.path, query: params })
@@ -153,7 +157,7 @@ export default {
         {
           text: 'Date',
           align: 'start',
-          sortable: false,
+          sortable: true,
           value: 'date'
         },
         {
@@ -170,7 +174,7 @@ export default {
     setTimeout(function () { this.topicList() }.bind(this), 500)
   },
   mounted() {
-    this.topicFilterValue = this.$route.query.topic || null
+    this.topicsInputField.selected = this.$route.query.topic || null
   }
 }
 </script>
