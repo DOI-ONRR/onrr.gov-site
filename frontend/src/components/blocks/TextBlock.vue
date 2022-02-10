@@ -19,15 +19,17 @@ export default {
   computed: {
     textClass() {
       let textClass = ''
+      let alignmentClass = `text-${ this.block?.tunes?.alignmentTune?.alignment }` || 'text-left'
+
       switch (this.block.type) {
         case 'header':
-          textClass = `text-h${ this.block.data.level } mt-4 mb-6`
+          textClass = `text-h${ this.block.data.level } ${ alignmentClass } mt-4 mb-6`
           break
         case 'paragraph':
-          textClass = `text-body1`
+          textClass = `text-body1 ${ alignmentClass }`
           break
         default:
-          textClass = 'text-body1'
+          textClass = `text-body1 ${ alignmentClass }`
           break
       }
 
