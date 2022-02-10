@@ -1,27 +1,27 @@
 <template>
-	<v-dialog :model-value="fileHandler !== null" @update:model-value="unsetFileHandler" @esc="unsetFileHandler">
+	<v-dialog :model-value='fileHandler !== null' @update:model-value='unsetFileHandler' @esc='unsetFileHandler'>
 		<v-card>
 			<v-card-title>
-				<i18n-t keypath="upload_from_device" />
+				<i18n-t keypath='upload_from_device' />
 			</v-card-title>
 			<v-card-text>
 				<v-upload
-					:ref="uploaderComponentElement"
-					@input="handleFile"
-					:multiple="false"
-					:folder="folder"
+					:ref='uploaderComponentElement'
+					@input='handleFile'
+					:multiple='false'
+					:folder='folder'
 					from-library
 					from-url
 				/>
 			</v-card-text>
 			<v-card-actions>
-				<v-button secondary @click="unsetFileHandler">
-					<i18n-t keypath="cancel" />
+				<v-button secondary @click='unsetFileHandler'>
+					<i18n-t keypath='cancel' />
 				</v-button>
 			</v-card-actions>
 		</v-card>
 	</v-dialog>
-	<div :class="className" ref="editorElement"></div>
+	<div :class='className' ref='editorElement'></div>
 </template>
 
 <script>
@@ -44,16 +44,17 @@ import EmbedTool from '@editorjs/embed';
 import MarkerTool from '@editorjs/marker';
 import RawToolTool from '@editorjs/raw';
 import InlineCodeTool from '@editorjs/inline-code';
-import TextAlignTool from '@canburaks/text-align-editorjs';
+// import TextAlignTool from '@canburaks/text-align-editorjs';
 import AlertTool from 'editorjs-alert';
 import StrikethroughTool from '@itech-indrustries/editorjs-strikethrough';
 import ListTool from './custom-plugins/plugin-list-patch';
 import ImageTool from './custom-plugins/plugin-image-patch';
 import AttachesTool from './custom-plugins/plugin-attaches-patch';
 import PersonalityTool from './custom-plugins/plugin-personality-patch';
-// import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
-import CollectionsTool from "./custom-plugins/plugin-collections";
-import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
+// import SimpleTabs from './custom-plugins/simple-tabs/index.js';
+import CollectionsTool from './custom-plugins/plugin-collections';
+import HorizontalRuleTool from './custom-plugins/plugin-horizontal-rule';
+import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
 
 export default defineComponent({
 	emits: ['input', 'error'],
@@ -276,11 +277,6 @@ export default defineComponent({
 					class: UnderlineTool,
 					shortcut: 'CMD+SHIFT+U',
 				},
-				textalign: {
-					class: TextAlignTool,
-					inlineToolbar: true,
-					shortcut: 'CMD+SHIFT+A',
-				},
 				strikethrough: {
 					class: StrikethroughTool,
 				},
@@ -345,6 +341,9 @@ export default defineComponent({
 				horizontalrule: {
 					class: HorizontalRuleTool,
 					inlineToolbar: true,
+				},
+				alignmentTune: {
+					class: AlignmentTuneTool
 				}
 			};
 
@@ -359,13 +358,27 @@ export default defineComponent({
 				}
 			}
 
+			if ('alignmentTune' in tools) {
+				if ('paragraph' in tools) {
+					tools.paragraph.tunes = ['alignmentTune'];
+				}
+
+				if ('header' in tools) {
+					tools.header.tunes = ['alignmentTune'];
+				}
+
+				if ('table' in tools) {
+					tools.table.tunes = ['alignmentTune']
+				}
+			}
+
 			return tools;
 		}
 	},
 });
 </script>
 
-<style lang="css" scoped>
+<style lang='css' scoped>
 .bordered {
 	padding: var(--input-padding);
 	background-color: var(--background-page);
@@ -394,5 +407,5 @@ export default defineComponent({
 }
 </style>
 
-<style src="./editorjs-content-reset.css"></style>
-<style src="./editorjs-components.css"></style>
+<style src='./editorjs-content-reset.css'></style>
+<style src='./editorjs-components.css'></style>

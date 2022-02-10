@@ -20,9 +20,11 @@ import EditorJS from "@editorjs/editorjs"
 import Header from "@editorjs/header"
 import Paragraph from "@editorjs/paragraph"
 import List from "@editorjs/list"
+import ImageTool from "@editorjs/image";
 // import SimpleTabs from '../custom-plugins/simple-tabs'
 import Collections from '../custom-plugins/plugin-collections'
 import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
+import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
 
 export default {
   data() {
@@ -48,16 +50,18 @@ export default {
         tools: {
           header: {
             class: Header,
-            shortcut: "CMD+SHIFT+H"
+            shortcut: "CMD+SHIFT+H",
+            tunes: ['alignmentTune']
           },
           list: {
-            class: List
+            class: List,
           },
           paragraph: {
             class: Paragraph,
             config: {
               placeholder: "."
-            }
+            },
+            tunes: ['alignmentTune']
           },
           horizontalrule: {
             class: HorizontalRuleTool,
@@ -70,6 +74,20 @@ export default {
               collectionsEndpoint: 'http://localhost:8055/collections',
               fieldsEndpoint: 'http://localhost:8055/fields'
             }
+          },
+          image: {
+            class: ImageTool,
+          },
+          alignmentTune: {
+            class: AlignmentTuneTool,
+            // config: {
+            //   default: 'left',
+            //   blocks: {
+            //     header: 'left',
+            //     list: 'left',
+            //     paragraph: 'left'
+            //   }
+            // }
           }
         },
         onReady: function() {
