@@ -1,10 +1,13 @@
 <template>
   <v-card>
-    <v-card-title>
-      <SelectField :fields="topicsInputField"></SelectField>
-      <v-spacer></v-spacer>
-      <TextField :fields="titleInputField"></TextField>
-    </v-card-title>
+    <v-row>
+      <v-col sm="6">
+        <MultipleSelectField :fields="topicsInputField"></MultipleSelectField>
+      </v-col>
+      <v-col sm="6">
+       <TextField :fields="titleInputField"></TextField>
+      </v-col>
+    </v-row>
     <v-data-table
         :headers="headers"
         :items="collection"
@@ -34,7 +37,7 @@
 
 <script>
 import { formatToSlug } from '@/js/utils'
-const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
+const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectField" */ '@/components/inputs/MultipleSelectField')
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 // const DataTable = () => import(/* webpackChunkName: "DataTable" */ '@/components/tables/DataTable')
 
@@ -68,7 +71,7 @@ export default {
     collection: [Array, Object]
   },
   components: {
-    SelectField,
+    MultipleSelectField,
     TextField,
     // DataTable
   },
@@ -117,7 +120,7 @@ export default {
         
       })
 
-      this.topicsInputField.items = ["All", ...topicArr.sort()]
+      this.topicsInputField.items = [...topicArr.sort()]
     },
     titleFilter(value) {
       if (!this.titleInputField.text) {
@@ -127,11 +130,12 @@ export default {
       return value.toLowerCase().includes(this.titleInputField.text.toLowerCase())
     },
     topicsFilter(value) {
-      if (!this.topicsInputField.selected || this.topicsInputField.selected === 'All') {
-        return true
-      }
+        console.log('topcis filter value --------> ', value)
+        if (!this.topicsInputField.selected || this.topicsInputField.selected === null || this.topicsInputField.selected.length === 0) {
+            return true
+        }
 
-      return value.includes(this.topicsInputField.selected)
+        return value.some(item => this.topicsInputField.selected.indexOf(item) >= 0)
     },
     addParamsToLocation(params) {
       this.$router.replace({ path: this.$route.path, query: params })
@@ -174,7 +178,8 @@ export default {
     setTimeout(function () { this.topicList() }.bind(this), 500)
   },
   mounted() {
-    this.topicsInputField.selected = this.$route.query.topic || null
+    const topics = this.$route.query.topic.split(',')
+    this.topicsInputField.selected = topics || null
   }
 }
 </script>

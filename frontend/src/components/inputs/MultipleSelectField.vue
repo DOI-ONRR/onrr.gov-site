@@ -3,21 +3,25 @@
         <v-select
             outlined
             dense
+            multiple
+            small-chips
             v-model="field.selected"
             :items="field.items"
-            :value="field.selected"
             :color="field.color"
+            :item-color="field.color"
             :append-icon="field.icon"
             :label="field.label"
             :ref="field.ref"
+            max-width="250px"
             @input="$emit('update', $event)"
-            @change="addParamsToLocation({ [field.params]: field.selected })" ></v-select>
+            @change="(field.selected.length > 0) && addParamsToLocation({ [field.params]: field.selected.join(',') })" >
+        </v-select>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'SelectField',
+    name: 'MultipleSelectField',
     props: ['fields'],
     data() {
         return {
