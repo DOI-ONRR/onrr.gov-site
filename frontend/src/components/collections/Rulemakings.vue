@@ -1,18 +1,22 @@
 <template>
     <div class="pt-4">
         <v-card>
-            <v-row>
-            <v-col sm="6">
-                <MultipleSelectField :fields="topicsInputField"></MultipleSelectField>
-            </v-col>
-            <v-col sm="6">
-            <TextField :fields="titleInputField"></TextField>
-            </v-col>
-            </v-row>
             <v-data-table
                 :headers="headers"
                 :items="collection"
                 item-key="title">
+                <template v-slot:top>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" sm="6">
+                                <MultipleSelectField :fields="topicsInputField"></MultipleSelectField>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <TextField :fields="titleInputField"></TextField>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </template>
                 <template v-slot:item.rule_title="{ item }">
                     <a :href="item.webpage_link">{{ item.rule_title }}</a><br>
                     <span v-if="item.informal_title">"{{ item.informal_title }}"</span>

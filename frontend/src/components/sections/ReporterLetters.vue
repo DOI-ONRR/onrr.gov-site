@@ -1,17 +1,21 @@
 <template>
   <v-card>
-    <v-row>
-      <v-col sm="6">
-        <MultipleSelectField :fields="topicsInputField"></MultipleSelectField>
-      </v-col>
-      <v-col sm="6">
-       <TextField :fields="titleInputField"></TextField>
-      </v-col>
-    </v-row>
     <v-data-table
         :headers="headers"
         :items="collection"
         item-key="title">
+        <template v-slot:top>
+            <v-container>
+                <v-row>
+                    <v-col cols="12" sm="6">
+                        <MultipleSelectField :fields="topicsInputField"></MultipleSelectField>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                        <TextField :fields="titleInputField"></TextField>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </template>
         <template v-slot:header.title="{ header }">
             <div class="text-h6 text-capitalize">{{ header.text}}</div>
         </template>
