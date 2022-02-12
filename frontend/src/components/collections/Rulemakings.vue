@@ -1,15 +1,22 @@
 <template>
     <div class="pt-4">
         <v-card>
-            <v-card-title>
-            <SelectField :fields="topicsInputField"></SelectField>
-            <v-spacer></v-spacer>
-            <TextField :fields="titleInputField"></TextField>
-            </v-card-title>
             <v-data-table
                 :headers="headers"
                 :items="collection"
                 item-key="title">
+                <template v-slot:top>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12" sm="6">
+                                <MultipleSelectField :fields="topicsInputField"></MultipleSelectField>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <TextField :fields="titleInputField"></TextField>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </template>
                 <template v-slot:item.rule_title="{ item }">
                     <a :href="item.webpage_link">{{ item.rule_title }}</a><br>
                     <span v-if="item.informal_title">"{{ item.informal_title }}"</span>
@@ -26,7 +33,7 @@
 </template>
 
 <script>
-const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
+const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectField" */ '@/components/inputs/MultipleSelectField')
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 
 import {
@@ -57,7 +64,7 @@ export default {
         }
     }),
     components: {
-        SelectField,
+        MultipleSelectField,
         TextField
     },
     props: {
@@ -83,7 +90,7 @@ export default {
                 
             })
 
-            this.topicsInputField.items = ["All", ...topicArr.sort()]
+            this.topicsInputField.items = [...topicArr.sort()]
         },
         getTopics(topicsArr) {
             let topics
@@ -102,11 +109,11 @@ export default {
             return value.toLowerCase().includes(this.titleInputField.text.toLowerCase())
         },
         topicsFilter(value) {
-            if (!this.topicsInputField.selected || this.topicsInputField.selected === 'All') {
+            if (!this.topicsInputField.selected || this.topicsInputField.selected === null || this.topicsInputField.selected.length === 0) {
                 return true
             }
 
-            return value.includes(this.topicsInputField.selected)
+            return value.some(item => this.topicsInputField.selected.indexOf(item) >= 0)
         },
         formatNiceDate(d) {
             return `${ getMonth(d, 'numeric') }/${ getDay(d, 'numeric') }/${ getYear(d) }`
@@ -148,6 +155,10 @@ export default {
     created() {
         setTimeout(function () { this.topicList() }.bind(this), 500)
     },
+    mounted() {
+        const topics = this.$route.query.topic.split(',')
+        this.topicsInputField.selected = topics || null
+    }
 }
 </script>
 
