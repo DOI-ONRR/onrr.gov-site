@@ -22,14 +22,16 @@ import EditorJS from "@editorjs/editorjs"
 import Header from "@editorjs/header"
 import Paragraph from "@editorjs/paragraph"
 import List from "@editorjs/list"
+import ImageTool from "@editorjs/image";
 // import SimpleTabs from '../custom-plugins/simple-tabs'
 import Collections from '../custom-plugins/plugin-collections'
 import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
 import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
 import LinkTool from '@editorjs/link';
-  import Links from '../custom-plugins/plugin-links';
-  import LinksInline from '../custom-plugins/plugin-links-inline';
-  import LinksList from '../custom-plugins/plugin-links-list';
+import Links from '../custom-plugins/plugin-links';
+import LinksInline from '../custom-plugins/plugin-links-inline';
+import LinksList from '../custom-plugins/plugin-links-list';
+import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
 
   export default {
   data() {
@@ -55,16 +57,18 @@ import LinkTool from '@editorjs/link';
         tools: {
           header: {
             class: Header,
-            shortcut: "CMD+SHIFT+H"
+            shortcut: "CMD+SHIFT+H",
+            tunes: ['alignmentTune']
           },
           list: {
-            class: List
+            class: List,
           },
           paragraph: {
             class: Paragraph,
             config: {
               placeholder: "."
-            }
+            },
+            tunes: ['alignmentTune']
           },
           horizontalrule: {
             class: HorizontalRuleTool,
@@ -90,16 +94,16 @@ import LinkTool from '@editorjs/link';
            class: LinksInline,
             inlineToolbar: true,    
             config: {
-              linksEndpoint: 'http://localhost:8055/items/links',
-              fieldsEndpoint: 'http://localhost:8055/fields'
+              endpoint: 'http://localhost:8055/items/links?limits=-1',
+              fields: 'http://localhost:8055/fields'
             }
           },
           linksList: {
            class: LinksList,
             inlineToolbar: true,    
             config: {
-              linksEndpoint: 'http://localhost:8055/items/links',
-              fieldsEndpoint: 'http://localhost:8055/fields'
+              endpoint: 'http://localhost:8055/items/links?limits=-1',
+              fields: 'http://localhost:8055/fields'
             }
           },
 
@@ -125,6 +129,20 @@ horizontalrule2: {
             }
           },
 
+          image: {
+            class: ImageTool,
+          },
+          alignmentTune: {
+            class: AlignmentTuneTool,
+            // config: {
+            //   default: 'left',
+            //   blocks: {
+            //     header: 'left',
+            //     list: 'left',
+            //     paragraph: 'left'
+            //   }
+            // }
+          }
         },
         onReady: function() {
           console.log("ready 123")

@@ -75,9 +75,8 @@ export default {
 
 <style lang="scss" scoped>
 .v-breadcrumbs {
-  padding-left: 0;
-  padding-top: 0;
-  margin-bottom: 24px;
+  padding: 0;
+  margin-bottom: 50px;
 }
 
 .v-breadcrumbs__item--disabled {

@@ -26,7 +26,7 @@
           text
           elevation="0"
           >
-          <v-card-text style="white-space: pre-line;" class="pl-1 pr-1 pt-4 pb-4 tab-content">
+          <v-card-text style="white-space: pre-line;" class="pl-1 pr-1 pt-4 pb-4 text-body-1 tab-content">
             <LayoutBlock :layoutBlocks="block.tabBlocks"></LayoutBlock>
           </v-card-text>
         </v-card>
@@ -78,7 +78,7 @@ export default {
       const tabItems = []
 
       tabBlocks && tabBlocks.forEach(obj => {
-        // console.log('obj: ', obj)
+        console.log('obj: ', obj)
         if(obj.item !== null) {
           if (obj.item.__typename === 'tab_block_label') {
             tabItems.push({ ...obj, tabBlocks: [] })
@@ -153,8 +153,8 @@ export default {
   color: rgb(0, 0, 0, 1) !important;
 }
 
-// .v-icon {
-//   color: rgba(0,0,0,1) !important;
-// }
+.theme--light.v-card > .v-card__text, .theme--light.v-card > .v-card__subtitle {
+  color: rgb(0, 0, 0, 1) !important;
+}
 
 </style>

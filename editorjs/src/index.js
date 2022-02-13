@@ -1,3 +1,4 @@
+import AlignmentBlockTune from "./custom-plugins/alignment-block-tool";
 import InterfaceComponent from "./interface.vue";
 
 export default {
@@ -57,6 +58,8 @@ export default {
           "linksInline",
           "linksList",
           "horizontalrule",
+          "alignmentTune",
+
         ],
       },
       meta: {
@@ -91,6 +94,7 @@ export default {
             { value: 'linksList', text: "Links List" },
             { value: 'collection', text: 'Collections'},
             { value: 'horizontalrule', text: 'Horizontal Rule'},
+                 						{ value: 'alignmentTune', text: 'Alignment' },
           ],
         },
       },

@@ -40,6 +40,7 @@ export default new Vuetify({
         },
         anchor: '#0076a3',
         accent: '#534aae',
+        black: '#000000',
         green: {
           base: '#097d4d',
           lighten1: '#4aad79',
@@ -55,12 +56,13 @@ export default new Vuetify({
           lighten1: '#ecb947',
           darken1: '#825c10',
         },
+        white: '#ffffff',
         neutrals: {
           base: '#262431',
           lighten1: '#484554',
           lighten2: '#ebebed',
         },
-        expansionPanel: '#ebebed'
+        expansionPanel: '#ebebed',
       }
     },
     options: {

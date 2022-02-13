@@ -20,6 +20,8 @@ export default class LinksList {
     this.selection = new SelectionUtils();
     //this.selection=null;
 
+    this.endpoint=this.config.endpoint;
+    this.queryParam=this.config.queryParam;
 
 
     this.button = null;
@@ -109,7 +111,7 @@ export default class LinksList {
       pagination: true,
       columns: ["url", "label", "category"],
       server: {
-        url: 'http://localhost:8055/items/links?limit=-1',
+        url: this.endpoint,
         then: data => data.data.map(item => [item.url, item.label, item.category])
       } 
     });
@@ -192,13 +194,13 @@ export default class LinksList {
 
     
   }
-   static get sanitize() {
-        return {
-          ul: {},
-          li: {},
-          a: {}
-        };
-    }
+  static get sanitize() {
+    return {
+      ul: {},
+      li: {},
+      a: {}
+    };
+  }
 
   /**
    * Handle clicks on the Inline Toolbar icon

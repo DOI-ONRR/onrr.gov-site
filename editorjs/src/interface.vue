@@ -57,8 +57,8 @@
   import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
   import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
-    import LinksList from "./custom-plugins/plugin-links-list.js"
-
+  import LinksList from "./custom-plugins/plugin-links-list.js";
+  import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
   export default defineComponent({
     emits: ['input', 'error'],
@@ -350,8 +350,8 @@
           links: {
             class: Links,
             config: {
-              linksEndpoint: 'http://localhost:8055/items/links',
-              fieldsEndpoint: 'http://localhost:8055/fields'
+              linksEndpoint: '/items/links',
+              fieldsEndpoint: '/fields'
             }
 
           },
@@ -359,6 +359,9 @@
             class: HorizontalRuleTool,
             inlineToolbar: true,
           },
+ 	  alignmentTune: {
+	    class: AlignmentTuneTool
+	  },
           linkAutocomplete: {
             class: LinkAutocomplete,
             inlineToolbar: true,
@@ -371,7 +374,7 @@
             class: LinksInline,
             inlineToolbar: true,
             config: {
-              endpoint: '/items/links',
+              endpoint: '/items/links?limits=-1',
               queryParam: 'search'
             },
           },
@@ -379,7 +382,7 @@
             class: LinksList,
             inlineToolbar: true,
             config: {
-              endpoint: '/items/links',
+              endpoint: '/items/links?limits=-1',
               queryParam: 'search'
             },
           },
@@ -434,3 +437,4 @@
 
 <style src="./editorjs-content-reset.css"></style>
 <style src="./editorjs-components.css"></style>
+

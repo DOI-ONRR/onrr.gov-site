@@ -45,23 +45,6 @@ export const sectionHeadingBlocks = gql`
   }
 `
 
-export const nestTabBlockFields = gql`
-  ${tabBlockLabelFields}
-  ${contentBlockFields}
-  ${cardBlockFields}
-  fragment nestedTabBlockFields on tab_blocks {
-    id
-    tab_blocks {
-        id
-        item {
-          __typename
-          ...tabBlockLabelFields
-          ...contentBlockFields
-          ...cardBlockFields
-        }
-    }
-  }
-`
 
 export const expansionPanelBlockLabel = gql`
   fragment expansionPanelBlockLabel on expansion_panel_block_label {
@@ -92,13 +75,12 @@ export const expansionPanelBlockFields = gql`
   }
 `
 
-export const tabBlockFields = gql`
+export const nestedNestedTabBlockFields = gql`
   ${tabBlockLabelFields}
   ${contentBlockFields}
   ${cardBlockFields}
-  ${nestTabBlockFields}
   ${expansionPanelBlockFields}
-  fragment tabBlockFields on tab_blocks {
+  fragment nestedNestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
         id
@@ -107,9 +89,51 @@ export const tabBlockFields = gql`
           ...tabBlockLabelFields
           ...contentBlockFields
           ...cardBlockFields
-          ...nestedTabBlockFields
           ...expansionPanelBlockFields
         }
+    }
+  }
+`
+
+export const nestedTabBlockFields = gql`
+  ${tabBlockLabelFields}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  ${nestedNestedTabBlockFields}
+  fragment nestedTabBlockFields on tab_blocks {
+    id
+    tab_blocks {
+        id
+        item {
+          __typename
+          ...tabBlockLabelFields
+          ...contentBlockFields
+          ...cardBlockFields
+          ...nestedNestedTabBlockFields
+          ...expansionPanelBlockFields
+        }
+    }
+  }
+`
+
+export const tabBlockFields = gql`
+  ${tabBlockLabelFields}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  ${nestedTabBlockFields}
+  ${expansionPanelBlockFields}
+  fragment tabBlockFields on tab_blocks {
+    id
+    tab_blocks {
+      id
+      item {
+        __typename
+        ...tabBlockLabelFields
+        ...contentBlockFields
+        ...cardBlockFields
+        ...nestedTabBlockFields
+        ...expansionPanelBlockFields
+      }
     }
   }
 `

@@ -5,7 +5,8 @@
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
-            :key="index" class="text-left">
+            :key="index"
+            :class="[textClass, 'black--text']">
             <span v-html="item"></span>
           </th>
         </tr>
@@ -13,11 +14,12 @@
       <tbody>
         <tr
           v-for="(items, index) in tableRowItems"
-            :key="index" class="text-left">
+            :key="index"
+            :class="[textClass, 'black--text']">
           <td
             v-for="(item, index) in items"
-            :key="index" class="text-left"
-          >
+            :key="index"
+            :class="[textClass, 'black--text']">
             <span v-html="item"></span>
           </td>
         </tr>
@@ -47,6 +49,10 @@ export default {
     tableRowItems() {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
       return rItems
+    },
+    textClass() {
+      let alignmentClass = `text-${ this.block?.tunes?.alignmentTune?.alignment }` || 'text-left'
+      return alignmentClass
     }
   }
 }

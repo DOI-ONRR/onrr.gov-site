@@ -20,8 +20,9 @@ export default class LinksInline {
     this.selection = new SelectionUtils();
     //this.selection=null;
 
-
-
+    this.endpoint=this.config.endpoint;
+    this.queryParam=this.config.queryParam;
+    console.debug('endpoint ---------------------->', this.endpoint, this.config);
     this.button = null;
     this.state = false;
     this.textNode = null;
@@ -102,14 +103,15 @@ export default class LinksInline {
      *
      * @type {HTMLDivElement}
      */
-
+    console.debug('endpoint iinline ---------------------->', this.endpoint);
+    
     const grid = new Grid({
       search: true,
       sort: true,
       pagination: true,
       columns: ["url", "label", "category"],
       server: {
-        url: 'http://localhost:8055/items/links?limit=-1',
+        url: this.endpoint,
         then: data => data.data.map(item => [item.url, item.label, item.category])
       } 
     });

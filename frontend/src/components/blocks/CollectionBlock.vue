@@ -17,13 +17,15 @@ const EventsCollection = () => import(/* webpackChunkName: "EventsCollection" */
 const CompaniesCollection = () => import(/* webpackChunkName: "CompaniesCollection" */ '@/components/collections/CompaniesCollection')
 const ContactsCollection = () => import(/* webpackChunkName: "ContactsCollection" */ '@/components/collections/ContactsCollection')
 const NYMEXCollection = () => import(/* webpackChunkName: "NYMEXCollection" */ '@/components/collections/NYMEX')
+const RulemakingsCollection = () => import(/* webpackChunkName: "Rulemakings" */ '@/components/collections/Rulemakings')
 
 import { 
   REPORTER_LETTERS_QUERY,
   PRESS_RELEASES_QUERY,
   ANNOUNCEMENTS_QUERY,
   CONTACTS_QUERY,
-  NYMEX_QUERY
+  NYMEX_QUERY,
+  RULEMAKINGS_QUERY
 } from '@/graphql/queries'
 
 export default {
@@ -55,6 +57,9 @@ export default {
         else if (this.block.data.collection === 'NYMEX') {
           return NYMEX_QUERY
         }
+        else if (this.block.data.collection === 'rulemakings') {
+          return RULEMAKINGS_QUERY
+        }
       },
       update: data => data
     }
@@ -81,6 +86,9 @@ export default {
           break
         case 'NYMEX':
           collectionBlock = NYMEXCollection
+          break
+        case 'rulemakings':
+          collectionBlock = RulemakingsCollection
           break
         default:
           console.warn('No collection block found.')

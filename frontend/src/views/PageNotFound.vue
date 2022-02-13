@@ -7,7 +7,7 @@
     </div>
     <v-container class="page__wrap" v-else>
       <Breadcrumbs />
-      <div class="text-h1 page-title text-center" v-if="page.title">{{ page.title }}</div>
+      <div class="text-h1 text-center" v-if="page.title">{{ page.title }}</div>
       <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
     </v-container>
   </div>
