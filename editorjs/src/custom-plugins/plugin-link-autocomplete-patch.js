@@ -1,11 +1,12 @@
-import LinkAutocomplete from "@editorjs/link-autocomplete";
+import LinkAutocomplete from '@editorjs/link-autocomplete';
+//import LinkAutocomplete from "./plugin-link-autocomplete";
 import notifier from 'codex-notifier';
 
 
 export default class extends LinkAutocomplete {
     //
-
- constructor({ config, api }) {
+    
+    constructor({ config, api }) {
 
      super({config, api});
      /**
@@ -47,6 +48,7 @@ export default class extends LinkAutocomplete {
      *        |- description
      */
 
+      
      
     this.nodes = {
       toolButtons: null,
@@ -114,8 +116,8 @@ export default class extends LinkAutocomplete {
           */
          const tmpSearchResponse = await searchResponseRaw.json();
          let searchResponse={}
- 
-         searchResponse.items=tmpSearchResponse.data.map( item => {return({href: item.href, name: item.label + ' (' + item.href + ')'})})
+
+         searchResponse.items=tmpSearchResponse.data.map( item => {return({href: item.url, name: item.label + ' (' + item.url + ')'})})
 
          searchResponse.success=true;
          //console.debug("Overloading search request?", searchResponse)

@@ -27,9 +27,11 @@ import Collections from '../custom-plugins/plugin-collections'
 import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
 import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
 import LinkTool from '@editorjs/link';
-import Links from '../custom-plugins/plugin-links'
+  import Links from '../custom-plugins/plugin-links';
+  import LinksInline from '../custom-plugins/plugin-links-inline';
+  import LinksList from '../custom-plugins/plugin-links-list';
 
-export default {
+  export default {
   data() {
     return {
       value: null
@@ -78,17 +80,34 @@ export default {
           },
           links: {
             class: Links,
-            inlineToolbar: true,
+            inlineToolbar: true,    
             config: {
               linksEndpoint: 'http://localhost:8055/items/links',
               fieldsEndpoint: 'http://localhost:8055/fields'
             }
           },
-          horizontalrule2: {
+          linksInline: {
+           class: LinksInline,
+            inlineToolbar: true,    
+            config: {
+              linksEndpoint: 'http://localhost:8055/items/links',
+              fieldsEndpoint: 'http://localhost:8055/fields'
+            }
+          },
+          linksList: {
+           class: LinksList,
+            inlineToolbar: true,    
+            config: {
+              linksEndpoint: 'http://localhost:8055/items/links',
+              fieldsEndpoint: 'http://localhost:8055/fields'
+            }
+          },
+
+horizontalrule2: {
             class: HorizontalRuleTool,
             inlineToolbar: true,
           },
-	            linkTool: {
+         linkTool: {
             class: LinkTool,
               config: {
                endpoint: 'http://localhost:8055/items/links', // Your backend endpoint for url data fetching,
@@ -97,7 +116,7 @@ export default {
                 }	       
               } 
           }, 
-          link: {
+        link: {
             class: LinkAutocomplete,
             inlineToolbar: true,
             config: {
@@ -105,6 +124,7 @@ export default {
              queryParam: 'search'
             }
           },
+
         },
         onReady: function() {
           console.log("ready 123")
@@ -140,4 +160,6 @@ export default {
     rgba(0, 212, 255, 1) 100%
   )
 }
+
+
 </style>

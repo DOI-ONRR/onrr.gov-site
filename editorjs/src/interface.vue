@@ -1,414 +1,435 @@
 <template>
-	<v-dialog :model-value="fileHandler !== null" @update:model-value="unsetFileHandler" @esc="unsetFileHandler">
-		<v-card>
-			<v-card-title>
-				<i18n-t keypath="upload_from_device" />
-			</v-card-title>
-			<v-card-text>
-				<v-upload
-					:ref="uploaderComponentElement"
-					@input="handleFile"
-					:multiple="false"
-					:folder="folder"
-					from-library
-					from-url
-				/>
-			</v-card-text>
-			<v-card-actions>
-				<v-button secondary @click="unsetFileHandler">
-					<i18n-t keypath="cancel" />
-				</v-button>
-			</v-card-actions>
-		</v-card>
-	</v-dialog>
-	<div :class="className" ref="editorElement"></div>
+  <v-dialog :model-value="fileHandler !== null" @update:model-value="unsetFileHandler" @esc="unsetFileHandler">
+  <v-card>
+  <v-card-title>
+  <i18n-t keypath="upload_from_device" />
+</v-card-title>
+  <v-card-text>
+  <v-upload
+     :ref="uploaderComponentElement"
+     @input="handleFile"
+     :multiple="false"
+     :folder="folder"
+     from-library
+    from-url
+/>
+</v-card-text>
+  <v-card-actions>
+  <v-button secondary @click="unsetFileHandler">
+  <i18n-t keypath="cancel" />
+  </v-button>
+  </v-card-actions>
+  </v-card>
+  </v-dialog>
+  <div :class="className" ref="editorElement"></div>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, onUnmounted, watch, inject } from 'vue';
-import debounce from 'debounce';
-import EditorJS from '@editorjs/editorjs';
+  import { defineComponent, ref, onMounted, onUnmounted, watch, inject } from 'vue';
+  import debounce from 'debounce';
+  import EditorJS from '@editorjs/editorjs';
 
-// Plugins
-import SimpleImageTool from '@editorjs/simple-image';
-import ParagraphTool from '@editorjs/paragraph';
-import QuoteTool from '@editorjs/quote';
-import WarningTool from '@editorjs/warning';
-import ChecklistTool from '@editorjs/checklist';
-import DelimiterTool from '@editorjs/delimiter';
-import TableTool from '@editorjs/table';
-import CodeTool from '@editorjs/code';
-import HeaderTool from '@editorjs/header';
-import UnderlineTool from '@editorjs/underline';
-import EmbedTool from '@editorjs/embed';
-import MarkerTool from '@editorjs/marker';
-import RawToolTool from '@editorjs/raw';
-import InlineCodeTool from '@editorjs/inline-code';
-import TextAlignTool from '@canburaks/text-align-editorjs';
-import AlertTool from 'editorjs-alert';
-import StrikethroughTool from '@itech-indrustries/editorjs-strikethrough';
-import ListTool from './custom-plugins/plugin-list-patch';
-import ImageTool from './custom-plugins/plugin-image-patch';
-import AttachesTool from './custom-plugins/plugin-attaches-patch';
-import PersonalityTool from './custom-plugins/plugin-personality-patch';
-// import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
-import CollectionsTool from "./custom-plugins/plugin-collections";
-import LinksTool from "./custom-plugins/plugin-links";
-import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
-import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
+  // Plugins
+  import SimpleImageTool from '@editorjs/simple-image';
+  import ParagraphTool from '@editorjs/paragraph';
+  import QuoteTool from '@editorjs/quote';
+  import WarningTool from '@editorjs/warning';
+  import ChecklistTool from '@editorjs/checklist';
+  import DelimiterTool from '@editorjs/delimiter';
+  import TableTool from '@editorjs/table';
+  import CodeTool from '@editorjs/code';
+  import HeaderTool from '@editorjs/header';
+  import UnderlineTool from '@editorjs/underline';
+  import EmbedTool from '@editorjs/embed';
+  import MarkerTool from '@editorjs/marker';
+  import RawToolTool from '@editorjs/raw';
+  import InlineCodeTool from '@editorjs/inline-code';
+  import TextAlignTool from '@canburaks/text-align-editorjs';
+  import AlertTool from 'editorjs-alert';
+  import StrikethroughTool from '@itech-indrustries/editorjs-strikethrough';
+  import ListTool from './custom-plugins/plugin-list-patch';
+  import ImageTool from './custom-plugins/plugin-image-patch';
+  import AttachesTool from './custom-plugins/plugin-attaches-patch';
+  import PersonalityTool from './custom-plugins/plugin-personality-patch';
+  // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
+  import CollectionsTool from "./custom-plugins/plugin-collections";
+  import Links from "./custom-plugins/plugin-links";
+  import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
+  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
+  import LinksInline from "./custom-plugins/plugin-links-inline.js"
+    import LinksList from "./custom-plugins/plugin-links-list.js"
 
-export default defineComponent({
-	emits: ['input', 'error'],
-	props: {
-		value: {
-			type: Object,
-			default: null,
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		placeholder: {
-			type: String,
-			default: null,
-		},
-		tools: {
-			type: Array,
-			default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'links', 'horizontalrule', 'link'],
-		},
-		font: {
-			type: String,
-			default: 'sans-serif',
-		},
-		bordered: {
-			type: Boolean,
-			default: true,
-		},
-		folder: {
-			type: String,
-			default: undefined,
-		},
-	},
 
-	setup(props, { emit, attrs }) {
-		const api = inject('api');
+  export default defineComponent({
+    emits: ['input', 'error'],
+    props: {
+      value: {
+        type: Object,
+        default: null,
+      },
+      disabled: {
+        type: Boolean,
+        default: false,
+      },
+      placeholder: {
+        type: String,
+        default: null,
+      },
+      tools: {
+        type: Array,
+        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'links', 'horizontalrule', 'linkAutocomplete', 'linksInline','linksList'],
+      },
+      font: {
+        type: String,
+        default: 'sans-serif',
+      },
+      bordered: {
+        type: Boolean,
+        default: true,
+      },
+      folder: {
+        type: String,
+        default: undefined,
+      },
+    },
 
-		function addQueryToPath(path, query) {
-			const queryParams = [];
+    setup(props, { emit, attrs }) {
+      const api = inject('api');
 
-			for (const [key, value] of Object.entries(query)) {
-				queryParams.push(`${key}=${value}`);
-			}
+      function addQueryToPath(path, query) {
+        const queryParams = [];
 
-			return path.includes('?') ? `${path}&${queryParams.join('&')}` : `${path}?${queryParams.join('&')}`;
-		}
+        for (const [key, value] of Object.entries(query)) {
+          queryParams.push(`${key}=${value}`);
+        }
 
-		function getToken() {
-			return api.defaults.headers?.['Authorization']?.split(' ')[1] || null;
-		}
+        return path.includes('?') ? `${path}&${queryParams.join('&')}` : `${path}?${queryParams.join('&')}`;
+      }
 
-		function addTokenToURL(url, token) {
-			const accessToken = token || getToken();
-			if (!accessToken) return url;
-			return addQueryToPath(url, { access_token: accessToken });
-		}
+      function getToken() {
+        return api.defaults.headers?.['Authorization']?.split(' ')[1] || null;
+      }
 
-		const editorjsInstance = ref(null);
-		const uploaderComponentElement = ref(null);
-		const editorElement = ref(null);
-		const fileHandler = ref(null);
+      function addTokenToURL(url, token) {
+        const accessToken = token || getToken();
+        if (!accessToken) return url;
+        return addQueryToPath(url, { access_token: accessToken });
+      }
 
-		const editorValueEmitter = debounce(function saver(context) {
-			if (props.disabled || !context) return;
+      const editorjsInstance = ref(null);
+      const uploaderComponentElement = ref(null);
+      const editorElement = ref(null);
+      const fileHandler = ref(null);
 
-			context.saver
-				.save()
-				.then((result) => {
-					if (!result || result.blocks.length < 1) {
-						emit('input', null);
-					} else {
-						emit('input', result);
-					}
-				})
-				.catch(() => emit('error', 'Cannot get content'));
-		}, 250);
+      const editorValueEmitter = debounce(function saver(context) {
+        if (props.disabled || !context) return;
 
-		onMounted(() => {
-			editorjsInstance.value = new EditorJS({
-				// @ts-ignore
-				logLevel: 'ERROR',
-				holder: editorElement.value,
-				data: getPreparedValue(props.value),
-				// Readonly makes troubles in some cases, also requires all plugins to implement it.
-				// https://github.com/codex-team/editor.js/issues/1669
-				readOnly: false,
-				placeholder: props.placeholder,
-				tools: buildToolsOptions(),
-				minHeight: 24,
-				onChange: editorValueEmitter,
-			});
+        context.saver
+          .save()
+          .then((result) => {
+            if (!result || result.blocks.length < 1) {
+              emit('input', null);
+            } else {
+              emit('input', result);
+            }
+          })
+          .catch(() => emit('error', 'Cannot get content'));
+      }, 250);
 
-			if (attrs.autofocus) {
-				editorjsInstance.value.focus();
-			}
-		});
+      onMounted(() => {
+        editorjsInstance.value = new EditorJS({
+          // @ts-ignore
+          logLevel: 'ERROR',
+          holder: editorElement.value,
+          data: getPreparedValue(props.value),
+          // Readonly makes troubles in some cases, also requires all plugins to implement it.
+          // https://github.com/codex-team/editor.js/issues/1669
+          readOnly: false,
+          placeholder: props.placeholder,
+          tools: buildToolsOptions(),
+          minHeight: 24,
+          onChange: editorValueEmitter,
+        });
 
-		onUnmounted(() => {
-			if (!editorjsInstance.value) return;
-			editorjsInstance.value.destroy();
-		});
+        if (attrs.autofocus) {
+          editorjsInstance.value.focus();
+        }
+      });
 
-		watch(
-			() => props.value,
-			(newVal, oldVal) => {
-				if (
-					!editorjsInstance.value ||
-					// @TODO use better method for comparing.
-					JSON.stringify(newVal?.blocks) === JSON.stringify(oldVal?.blocks)
-				) {
-					return;
-				}
+      onUnmounted(() => {
+        if (!editorjsInstance.value) return;
+        editorjsInstance.value.destroy();
+      });
 
-				editorjsInstance.value.isReady.then(() => {
-					if (
-						editorjsInstance.value.configuration.holder.contains(document.activeElement) ||
-						fileHandler.value !== null
-					) {
-						return;
-					}
+      watch(
+        () => props.value,
+        (newVal, oldVal) => {
+          if (
+            !editorjsInstance.value ||
+              // @TODO use better method for comparing.
+            JSON.stringify(newVal?.blocks) === JSON.stringify(oldVal?.blocks)
+          ) {
+            return;
+          }
 
-					editorjsInstance.value.render(getPreparedValue(newVal));
-				});
-			}
-		);
+          editorjsInstance.value.isReady.then(() => {
+            if (
+              editorjsInstance.value.configuration.holder.contains(document.activeElement) ||
+                fileHandler.value !== null
+            ) {
+              return;
+            }
 
-		return {
-			editorjsInstance,
-			editorElement,
-			uploaderComponentElement,
-			fileHandler,
-			className: {
-				[props.font]: true,
-				bordered: props.bordered,
-			},
+            editorjsInstance.value.render(getPreparedValue(newVal));
+          });
+        }
+      );
 
-			// Methods
-			editorValueEmitter,
-			unsetFileHandler,
-			setFileHandler,
-			handleFile,
-			getUploadFieldElement,
-			addTokenToURL,
-			getPreparedValue,
-			buildToolsOptions,
-		};
+      return {
+        editorjsInstance,
+        editorElement,
+        uploaderComponentElement,
+        fileHandler,
+        className: {
+          [props.font]: true,
+          bordered: props.bordered,
+        },
 
-		function unsetFileHandler() {
-			fileHandler.value = null;
-		}
+        // Methods
+        editorValueEmitter,
+        unsetFileHandler,
+        setFileHandler,
+        handleFile,
+        getUploadFieldElement,
+        addTokenToURL,
+        getPreparedValue,
+        buildToolsOptions,
+      };
 
-		function setFileHandler(handler) {
-			fileHandler.value = handler;
-		}
+      function unsetFileHandler() {
+        fileHandler.value = null;
+      }
 
-		function handleFile(event) {
-			fileHandler.value(event);
-			unsetFileHandler();
-		}
+      function setFileHandler(handler) {
+        fileHandler.value = handler;
+      }
 
-		function getUploadFieldElement() {
-			return uploaderComponentElement;
-		}
+      function handleFile(event) {
+        fileHandler.value(event);
+        unsetFileHandler();
+      }
 
-		function getPreparedValue(value) {
-			if (typeof value !== 'object') {
-				return {
-					time: null,
-					version: 0,
-					blocks: [],
-				};
-			}
+      function getUploadFieldElement() {
+        return uploaderComponentElement;
+      }
 
-			return {
-				time: value?.time,
-				version: value?.version,
-				blocks: value?.blocks || [],
-			};
-		}
+      function getPreparedValue(value) {
+        if (typeof value !== 'object') {
+          return {
+            time: null,
+            version: 0,
+            blocks: [],
+          };
+        }
 
-		/**
-		 * @returns {{}}
-		 */
-		function buildToolsOptions() {
-			const uploaderConfig = {
-				addTokenToURL,
-				baseURL: api.defaults.baseURL,
-				picker: setFileHandler,
-				getUploadFieldElement,
-			};
+        return {
+          time: value?.time,
+          version: value?.version,
+          blocks: value?.blocks || [],
+        };
+      }
 
-			const defaults = {
-				header: {
-					class: HeaderTool,
-					shortcut: 'CMD+SHIFT+H',
-					inlineToolbar: true,
-				},
-				list: {
-					class: ListTool,
-					inlineToolbar: true,
-					shortcut: 'CMD+SHIFT+1',
-				},
-				embed: {
-					class: EmbedTool,
-					inlineToolbar: true,
-				},
-				paragraph: {
-					class: ParagraphTool,
-					inlineToolbar: true,
-				},
-				code: {
-					class: CodeTool,
-				},
-				warning: {
-					class: WarningTool,
-					inlineToolbar: true,
-					shortcut: 'CMD+SHIFT+W',
-				},
-				underline: {
-					class: UnderlineTool,
-					shortcut: 'CMD+SHIFT+U',
-				},
-				textalign: {
-					class: TextAlignTool,
-					inlineToolbar: true,
-					shortcut: 'CMD+SHIFT+A',
-				},
-				strikethrough: {
-					class: StrikethroughTool,
-				},
-				alert: {
-					class: AlertTool,
-				},
-				table: {
-					class: TableTool,
-					inlineToolbar: true,
-				},
-				quote: {
-					class: QuoteTool,
-					inlineToolbar: true,
-					shortcut: 'CMD+SHIFT+O',
-				},
-				marker: {
-					class: MarkerTool,
-					shortcut: 'CMD+SHIFT+M',
-				},
-				inlinecode: {
-					class: InlineCodeTool,
-					shortcut: 'CMD+SHIFT+I',
-				},
-				delimiter: {
-					class: DelimiterTool,
-				},
-				raw: {
-					class: RawToolTool,
-				},
-				checklist: {
-					class: ChecklistTool,
-					inlineToolbar: true,
-				},
-				simpleimage: {
-					class: SimpleImageTool,
-				},
-				image: {
-					class: ImageTool,
-					config: {
-						uploader: uploaderConfig,
-					},
-				},
-				attaches: {
-					class: AttachesTool,
-					config: {
-						uploader: uploaderConfig,
-					},
-				},
-				personality: {
-					class: PersonalityTool,
-					config: {
-						uploader: uploaderConfig,
-					},
-				},
-				collection: {
-					class: CollectionsTool,
-					config: {
-						collectionsEndpoint: '/collections',
-						fieldsEndpoint: '/fields'
-					}
-				},
-				links: {
-					class: LinksTool,
-					config: {
-						collectionsEndpoint: '/item/links',
-					}
-				},
-				horizontalrule: {
-					class: HorizontalRuleTool,
-					inlineToolbar: true,
-				},
-                                link: {
-                                        class: LinkAutocomplete,
-					inlineToolbar: true,
-                                        config: {
-                                          endpoint: '/items/links',
-                                          queryParam: 'search'
-                                        },
-                                },
-			};
+      /**
+        * @returns {{}}
+      */
+      function buildToolsOptions() {
+        const uploaderConfig = {
+          addTokenToURL,
+          baseURL: api.defaults.baseURL,
+          picker: setFileHandler,
+          getUploadFieldElement,
+        };
 
-			// Build current tools config.
-			const tools = {};
+        const defaults = {
+          header: {
+            class: HeaderTool,
+            shortcut: 'CMD+SHIFT+H',
+            inlineToolbar: true,
+          },
+          list: {
+            class: ListTool,
+            inlineToolbar: true,
+            shortcut: 'CMD+SHIFT+1',
+          },
+          embed: {
+            class: EmbedTool,
+            inlineToolbar: true,
+          },
+          paragraph: {
+            class: ParagraphTool,
+            inlineToolbar: true,
+          },
+          code: {
+            class: CodeTool,
+          },
+          warning: {
+            class: WarningTool,
+            inlineToolbar: true,
+            shortcut: 'CMD+SHIFT+W',
+          },
+          underline: {
+            class: UnderlineTool,
+            shortcut: 'CMD+SHIFT+U',
+          },
+          textalign: {
+            class: TextAlignTool,
+            inlineToolbar: true,
+            shortcut: 'CMD+SHIFT+A',
+          },
+          strikethrough: {
+            class: StrikethroughTool,
+          },
+          alert: {
+            class: AlertTool,
+          },
+          table: {
+            class: TableTool,
+            inlineToolbar: true,
+          },
+          quote: {
+            class: QuoteTool,
+            inlineToolbar: true,
+            shortcut: 'CMD+SHIFT+O',
+          },
+          marker: {
+            class: MarkerTool,
+            shortcut: 'CMD+SHIFT+M',
+          },
+          inlinecode: {
+            class: InlineCodeTool,
+            shortcut: 'CMD+SHIFT+I',
+          },
+          delimiter: {
+            class: DelimiterTool,
+          },
+          raw: {
+            class: RawToolTool,
+          },
+          checklist: {
+            class: ChecklistTool,
+            inlineToolbar: true,
+          },
+          simpleimage: {
+            class: SimpleImageTool,
+          },
+          image: {
+            class: ImageTool,
+            config: {
+              uploader: uploaderConfig,
+            },
+          },
+          attaches: {
+            class: AttachesTool,
+            config: {
+              uploader: uploaderConfig,
+            },
+          },
+          personality: {
+            class: PersonalityTool,
+            config: {
+              uploader: uploaderConfig,
+            },
+          },
+          collection: {
+            class: CollectionsTool,
+            config: {
+              collectionsEndpoint: '/collections',
+              fieldsEndpoint: '/fields'
+            }
+          },
+          links: {
+            class: Links,
+            config: {
+              linksEndpoint: 'http://localhost:8055/items/links',
+              fieldsEndpoint: 'http://localhost:8055/fields'
+            }
 
-			for (const toolName of props.tools) {
-				// @ts-ignore
-				console.debug(" inline editor defaults : ", defaults, " tool name: ", toolName);
-				const defaultsHasProperty = Object.prototype.hasOwnProperty.call(defaults, toolName);
-				if (defaultsHasProperty) {
-					tools[toolName.toString()] = defaults[toolName];
-				}
-			}
+          },
+          horizontalrule: {
+            class: HorizontalRuleTool,
+            inlineToolbar: true,
+          },
+          linkAutocomplete: {
+            class: LinkAutocomplete,
+            inlineToolbar: true,
+            config: {
+              endpoint: '/items/links',
+              queryParam: 'search'
+            },
+          },
+          linksInline: {
+            class: LinksInline,
+            inlineToolbar: true,
+            config: {
+              endpoint: '/items/links',
+              queryParam: 'search'
+            },
+          },
+          linksList: {
+            class: LinksList,
+            inlineToolbar: true,
+            config: {
+              endpoint: '/items/links',
+              queryParam: 'search'
+            },
+          },
+        };
 
-			return tools;
-		}
-	},
-});
+        // Build current tools config.
+        const tools = {};
+
+        for (const toolName of props.tools) {
+          // @ts-ignore
+          console.debug(" inline editor defaults : ", defaults, " tool name: ", toolName);
+          const defaultsHasProperty = Object.prototype.hasOwnProperty.call(defaults, toolName);
+          if (defaultsHasProperty) {
+            tools[toolName.toString()] = defaults[toolName];
+          }
+        }
+
+        return tools;
+      }
+    },
+  });
 </script>
 
 <style lang="css" scoped>
-.bordered {
-	padding: var(--input-padding);
-	background-color: var(--background-page);
-	border: var(--border-width) solid var(--border-normal);
-	border-radius: var(--border-radius);
-}
+  .bordered {
+    padding: var(--input-padding);
+    background-color: var(--background-page);
+    border: var(--border-width) solid var(--border-normal);
+    border-radius: var(--border-radius);
+  }
 
-.bordered:hover {
-	border-color: var(--border-normal-alt);
-}
+  .bordered:hover {
+    border-color: var(--border-normal-alt);
+  }
 
-.bordered:focus-within {
-	border-color: var(--primary);
-}
+  .bordered:focus-within {
+    border-color: var(--primary);
+  }
 
-.monospace {
-	font-family: var(--family-monospace);
-}
+  .monospace {
+    font-family: var(--family-monospace);
+  }
 
-.serif {
-	font-family: var(--family-serif);
-}
+  .serif {
+    font-family: var(--family-serif);
+  }
 
-.sans-serif {
-	font-family: var(--family-sans-serif);
-}
+  .sans-serif {
+    font-family: var(--family-sans-serif);
+  }
 </style>
 
 <style src="./editorjs-content-reset.css"></style>

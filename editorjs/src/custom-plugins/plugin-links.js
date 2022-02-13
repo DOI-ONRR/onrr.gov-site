@@ -4,13 +4,11 @@ import "gridjs/dist/theme/mermaid.css";
 export default class LinksTool {
 
   constructor({ data, config, api }) {
-
-    this.data = {
-      link: data.link || '',
-      fields: data.fields || [],
-      layout: data.layout || '',
-      status: data.status || '',
-    };
+      this.data = {
+          type: data.type || 'Inline',
+          links:  data.links || [],
+          innerHtml: data.innerHtml || '',
+      };
 
     this.api = api;
     this.config = config || {};
@@ -36,9 +34,7 @@ export default class LinksTool {
 
     this.nodes = {
       wrapper: null,
-      selectInput: null,
-      selectOptions: null,
-      linkItems: null,
+      linkBox: null,
     };
 
     // console.log('this.data yo ---------> ', this.data)
@@ -48,8 +44,17 @@ export default class LinksTool {
     // }, 3000);
     
   }
+    static get sanitize(){
+        return {
+            url: true, // disallow HTML
+            caption: {} // only tags from Inline Toolbar 
+        }
+  }   
+static get isInline() {
+    return false;
+  }
 
-  static get toolbox() {
+    static get toolbox() {
     return {
 	title: 'Links',
 	
@@ -65,14 +70,15 @@ const grid = new Grid({
     pagination: true,
     columns: ["url", "label", "category"],
 server: {
-    url: 'http://localhost:8055/items/links',
+    url: 'http://localhost:8055/items/links?limit=-1',
     then: data => data.data.map(item => [item.url, item.label, item.category])
   } 
 });
+        
 
 console.log('render this.data ----------> ', grid)
      
-const wrapper = this._make('div', [this.CSS.wrapper]);
+        const  wrapper = this._make('div', [this.CSS.wrapper, 'ce-paragraph'],{contenteditable:"true"});
 /*      selectInputLabel = this._make('label'),
       selectInput = this._make('select', [this.CSS.input]),
       selectLayoutInputLabel = this._make('label'),
@@ -90,27 +96,49 @@ const wrapper = this._make('div', [this.CSS.wrapper]);
     wrapper.style.justifyContent = 'flex-start';
     wrapper.style.flexBasis = '100%';
     wrapper.style.flexWrap = 'wrap';
-    wrapper.style.border = '1px solid black';
-    const gridBox = this._make('div');
-    gridBox.style.margin = '10px 0';
-    gridBox.style.display = 'flex';
+//    wrapper.style.border = '1px solid black';
+        const gridBox = this._make('div');
+        gridBox.style.margin = '10px 0';
+        gridBox.style.display = 'flex';
     gridBox.style.justifyContent = 'flex-start';
     gridBox.style.flexBasis = '100%';
     gridBox.style.flexWrap = 'wrap';
 gridBox.style.border = '1px solid grey';
 
-
-    const linkBox = this._make('div');
+        const saveBox = this._make('div');
+        
+        saveBox.style.display = 'flex';
+        saveBox.style.flexBasis = '100%';
+        saveBox.style.flexWrap = 'wrap';
+        saveBox.style.border = '1px solid grey';
+        const saveButton = this._make('button')
+        const cancelButton = this._make('button')
+        saveButton.innerText='Save';
+        cancelButton.innerText='Cancel';
+        saveBox.appendChild(saveButton);
+        saveBox.appendChild(cancelButton);
+        
+        const linkBox = this._make('div', ['cdx-block', 'ce-paragraph', 'foo'],{contentEditable:true});
 //    linkBox.style.margin = '10px 0';
- //   linkBox.style.display = 'flex';
-  //  linkBox.style.justifyContent = 'flex-start';
+        //   linkBox.style.display = 'flex';
+
+       // linkBox.contenteditable = true;
   //  linkBox.style.flexBasis = '100%';
   //  linkBox.style.flexWrap = 'wrap';
 //	linkBox.style.border = '1px solid ';
 	const linkList = this._make('ul')
 	linkBox.appendChild(linkList)
-    wrapper.appendChild(gridBox);
-    wrapper.appendChild(linkBox);
+        wrapper.appendChild(gridBox);
+        wrapper.appendChild(saveBox);
+        wrapper.appendChild(linkBox);
+        saveBox.addEventListener('click', function(saveMe){
+            console.debug("Save me ", saveMe, linkBox)
+            gridBox.remove()
+            saveBox.remove()
+//            wrapper.replaceChild(linkBox)
+        },linkBox, wrapper);
+
+        saveBox.appendChild(saveButton);
 	grid.render(gridBox);
     grid.on('rowClick', (...args) => {
         console.log('row: ' + JSON.stringify(args), args)
@@ -121,6 +149,10 @@ gridBox.style.border = '1px solid grey';
     }
        );
 
+        if(this.data && this.data.type==="Inline" && this.data.text) {
+            linkBox.innerHtml=this.data.innerHtml
+        }
+        
     return wrapper;
  //grid.render(wrapper);
 }
@@ -134,31 +166,34 @@ mydiv.appendChild(aTag);
 linkList.appendChild(mydiv);
     }
 
-    save(blockContent) {
-    const select = blockContent.querySelector('#linksSelector');
-    const selectLayout = blockContent.querySelector('#linksLayoutSelector');
-    const selectStatus = blockContent.querySelector('#linksStatusSelector');
 
-    // console.log('save select ------> ', select.value, selectLayout.value);
-
-    if (!select) {
-      return this.data;
+    save(blockContent){
+    const caption = blockContent.querySelectorAll('.foo');
+ /*  const sanitizerConfig = {
+       a: false,
+       ul: false,
+       li: false,
+     div: false
+   };
+*/
+        const sanitized=caption[0].innerHTML
+        const foo="asedf";//this.api.sanitizer.clean(caption.innerHTML || '', sanitizerConfig)
+        console.debug("caption------------------>", caption, "Santitize ----------->", sanitized,"-------", caption.innerHTML,"------->", foo)
+       const bar= Object.assign(this.data, {
+        innerHTML: `${ sanitized }`,
+        type: this.data.type,
+        links: []
+       });
+        console.debug("bar-================>", bar);
+        return bar
     }
-
-    return Object.assign(this.data, {
-      link: select.value,
-      layout: selectLayout.value,
-      status: selectStatus.value,
-    });
-  }
-
   /**
    * Notify core that read-only mode is suppoorted
    *
    * @returns {boolean}
    */
   static get isReadOnlySupported() {
-    return true;
+    return false;
   }
 
   /**
