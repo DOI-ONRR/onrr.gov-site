@@ -54,7 +54,7 @@ import PersonalityTool from './custom-plugins/plugin-personality-patch';
 // import SimpleTabs from './custom-plugins/simple-tabs/index.js';
 import CollectionsTool from './custom-plugins/plugin-collections';
 import HorizontalRuleTool from './custom-plugins/plugin-horizontal-rule';
-import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
+import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
 export default defineComponent({
 	emits: ['input', 'error'],
@@ -369,6 +369,10 @@ export default defineComponent({
 
 				if ('table' in tools) {
 					tools.table.tunes = ['alignmentTune']
+				}
+
+				if ('image' in tools) {
+					tools.image.tunes = ['alignmentTune']
 				}
 			}
 

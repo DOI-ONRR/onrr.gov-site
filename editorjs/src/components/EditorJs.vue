@@ -20,7 +20,8 @@ import EditorJS from "@editorjs/editorjs"
 import Header from "@editorjs/header"
 import Paragraph from "@editorjs/paragraph"
 import List from "@editorjs/list"
-import ImageTool from "@editorjs/image";
+// import ImageTool from "@editorjs/image";
+import ImageTool from '../custom-plugins/plugin-image-patch';
 // import SimpleTabs from '../custom-plugins/simple-tabs'
 import Collections from '../custom-plugins/plugin-collections'
 import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
@@ -80,6 +81,7 @@ export default {
           },
           alignmentTune: {
             class: AlignmentTuneTool,
+            tunes: ['alignmentTune']
             // config: {
             //   default: 'left',
             //   blocks: {
