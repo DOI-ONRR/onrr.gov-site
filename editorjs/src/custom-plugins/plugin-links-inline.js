@@ -41,7 +41,7 @@ export default class LinksInline {
       
       searchResults: null,
 
-      
+      linkWrapper: null,
       linkDataWrapper: null,
       linkDataTitleWrapper: null,
       linkDataName: null,
@@ -89,8 +89,19 @@ export default class LinksInline {
   }
 
   addLinks() {
-     console.debug('addLinks() ------------------------>')
-
+    console.debug('addLinks() ------------------------>')
+    const links=this.nodes.linkWrapper
+    //const nodes=links.querySelectorAll();
+    //for(let nn=0; nn < nodes.length; nn++) {
+    //  this.nodeText.appendChild(nodes[nn])
+    //}
+    if(this.getLabelType() === 'Append') {
+      this.textNode.appendChild(links);
+    } else {
+      this.textNode.innerHTML=links.innerHTML;
+    }
+    console.debug('addLinks: ', links)
+    this.api.inlineToolbar.close();
   }
   restoreSelection() {
      console.debug('restoreSelection() ------------------------>')
@@ -160,7 +171,7 @@ export default class LinksInline {
     this.nodes.searchItem = Dom.make('div', LinksInline.CSS.searchItem);
     grid.render(this.nodes.searchItem);
     this.nodes.inlineRadio = Dom.make('div', LinksInline.CSS.inlineRadio)
-    this.nodes.inlineRadio.style.display='block';
+    this.nodes.inlineRadio.style.display='flex';
 
     const spanLabel=document.createElement('span');
     spanLabel.innerText='Label: ';
@@ -262,8 +273,8 @@ this.nodes.inlineRadio.appendChild(labelAppend)
      *
      * @type {HTMLDivElement}
      */ 
-    this.nodes.linkWrapper = Dom.make('div', LinksInline.CSS.linkWrapper);
-
+    this.nodes.linkWrapper = Dom.make('span', LinksInline.CSS.linkWrapper);
+    this.nodes.linkWrapper.setAttribute('contenteditable', true);
 
     //Not working
     /*
@@ -293,15 +304,15 @@ this.nodes.inlineRadio.appendChild(labelAppend)
       
       const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : args[1]._cells[1].data;
       if(this.getLabelType() === 'Selected') {
-        this.textNode.innerText='';
+        //this.textNode.innerText='';
       }
       const selection=this.selection
       selection.restore();
       
       console.debug("Selection ----------->",  this.textNode, "label ", this.urlLabel);
       this.getLabel();
-      this.addUrl( this.textNode , url, label);
-      this.api.inlineToolbar.close();
+      this.addUrl( this.nodes.linkWrapper , url, label);
+//
     });
     this.nodes.actionsWrapper.appendChild(this.nodes.linkWrapper);
 
@@ -452,7 +463,8 @@ this.nodes.inlineRadio.appendChild(labelAppend)
         width:true
       },
       i: {class: true},
-      div: {class: true}
+      div: {class: true},
+      span: true
       
       
     };
@@ -514,7 +526,7 @@ this.nodes.inlineRadio.appendChild(labelAppend)
       linkList.appendChild(icon)
     }
     linkList.insertAdjacentHTML('afterend', "&nbsp;")
-    linkList.insertAdjacentHTML('beforebegin', "&nbsp;")
+
 
   }
   
