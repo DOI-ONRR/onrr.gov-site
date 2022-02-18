@@ -233,7 +233,6 @@
 }
 
 .codex-editor .input-wrapper {
-  width: 98%;
   text-align: "left";
   margin-top: 16px;
   text-align: left;
@@ -243,4 +242,13 @@
 .codex-editor .form-input-wrapper {
   display: flex;
   justify-content: flex-start;
+}
+
+.codex-editor .attr-wrapper .input-wrapper {
+  width: 100%;
+}
+
+.codex-editor .form-input-wrapper .input-wrapper {
+  width: 250px;
+  margin-right: 16px;
 }
