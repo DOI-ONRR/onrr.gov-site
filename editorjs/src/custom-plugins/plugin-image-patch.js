@@ -21,6 +21,22 @@ export default class extends ImageTool {
 			onUpload: (response) => this.onUpload(response),
 			onError: (error) => this.uploadingFailed(error),
 		});
+		
+	}
+
+	set image(file) {
+		this._data.file = file || {};
+		if (file && file.url) {
+			const imageUrl =
+				this.config.uploader.addTokenToURL(file.url) +
+				"&withoutEnlargement";
+			this.ui.fillImage(imageUrl);
+		}
+	}
+
+
+	render() {
+		const renderResult = super.render();
 
 		this.ui.nodes = {
 			...this.ui.nodes,
@@ -63,8 +79,8 @@ export default class extends ImageTool {
 		this.ui.nodes.wrapper.appendChild(this.ui.nodes.formInputWrapper);
 		
 
-		this.ui.nodes.imgWidthInput.value = this._data?.file?.width || '';
-		this.ui.nodes.imgHeightInput.value = this._data?.file?.height || '';
+		this.ui.nodes.imgWidthInput.value = this._data.imgWidth || this._data?.file?.width || '';
+		this.ui.nodes.imgHeightInput.value = this._data.imgHeight || this._data?.file?.height || '';
 		this.ui.nodes.altTagInput.value = this._data?.altTag || '';
 
 		this.ui.nodes.imgWidthInput.addEventListener('change', (e) => {
@@ -86,16 +102,7 @@ export default class extends ImageTool {
 			this.save();
 		})
 
-	}
-
-	set image(file) {
-		this._data.file = file || {};
-		if (file && file.url) {
-			const imageUrl =
-				this.config.uploader.addTokenToURL(file.url) +
-				"&withoutEnlargement";
-			this.ui.fillImage(imageUrl);
-		}
+		return renderResult;
 	}
 
 	save() {

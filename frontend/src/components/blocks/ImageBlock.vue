@@ -1,37 +1,32 @@
 <template>
-  <v-row>
-    <v-col>
-      <div
-        :class="alignmentClasses">
-        <figure>
-          <v-img
-            
-            :src="fileSrc"
-            :lazy-src="lazyImg"
-            :class="['img-block', classObj]"
-            :alt="altTag"
-            :width="width"
-            :height="height"
-            max-height="100%"
-            max-width="100%"
-            contain
-            >
-              <template v-slot:placeholder>
-                <v-row
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center">
-                  <v-progress-circular 
-                    indeterminate
-                    color="grey lighten-5"></v-progress-circular>  
-                </v-row>
-              </template>
-            </v-img>
-            <figcaption v-if="block.data.caption" :class="['font-italic', alignmentClasses]">{{ block.data.caption }}</figcaption>
-        </figure>
-      </div>
-    </v-col>
-  </v-row>
+  <div
+    :class="alignmentClasses">
+    <figure class="figure-block">
+      <v-img
+        :src="fileSrc"
+        :lazy-src="lazyImg"
+        :class="['img-block', classObj]"
+        :alt="altTag"
+        :width="width"
+        :height="height"
+        max-height="100%"
+        max-width="100%"
+        contain
+        >
+          <template v-slot:placeholder>
+            <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center">
+              <v-progress-circular 
+                indeterminate
+                color="grey lighten-5"></v-progress-circular>  
+            </v-row>
+          </template>
+        </v-img>
+        <figcaption v-if="block.data.caption" :class="['font-italic', alignmentClasses]">{{ block.data.caption }}</figcaption>
+    </figure>
+  </div>
 </template>
 
 <script>
@@ -100,6 +95,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.figure-block {
+  max-width: 100%;
+}
+
 .img-block img {
   width: 100%; 
   height: auto; 
