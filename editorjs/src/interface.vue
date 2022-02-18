@@ -44,7 +44,7 @@
   import MarkerTool from '@editorjs/marker';
   import RawToolTool from '@editorjs/raw';
   import InlineCodeTool from '@editorjs/inline-code';
-  import TextAlignTool from '@canburaks/text-align-editorjs';
+  // import TextAlignTool form '@canburaks/text/-align-editorjs';
   import AlertTool from 'editorjs-alert';
   import StrikethroughTool from '@itech-indrustries/editorjs-strikethrough';
   import ListTool from './custom-plugins/plugin-list-patch';
@@ -243,6 +243,8 @@
         * @returns {{}}
       */
       function buildToolsOptions() {
+        const tools = {};
+
         const uploaderConfig = {
           addTokenToURL,
           baseURL: api.defaults.baseURL,
@@ -281,11 +283,11 @@
             class: UnderlineTool,
             shortcut: 'CMD+SHIFT+U',
           },
-          textalign: {
-            class: TextAlignTool,
-            inlineToolbar: true,
-            shortcut: 'CMD+SHIFT+A',
-          },
+          // textalign: {
+          //   class: TextAlignTool,
+          //   inlineToolbar: true,
+          //   shortcut: 'CMD+SHIFT+A',
+          // },
           strikethrough: {
             class: StrikethroughTool,
           },
@@ -353,25 +355,24 @@
               linksEndpoint: '/items/links',
               fieldsEndpoint: '/fields'
             }
-
           },
           horizontalrule: {
             class: HorizontalRuleTool,
             inlineToolbar: true,
           },
- 	  alignmentTune: {
-	    class: AlignmentTuneTool
-	  },
+          alignmentTune: {
+            class: AlignmentTuneTool
+          },
           linkAutocomplete: {
             class: LinkAutocomplete,
             inlineToolbar: true,
             config: {
               endpoint: '/items/links',
               queryParam: 'search',
-	      icons: {
-	        pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
-	      },
-	      base: 'https://dev-onrr-cms.app.cloud.gov'	 
+              icons: {
+                pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
+              },
+	            base: 'https://dev-onrr-cms.app.cloud.gov'	 
             },
           },
           linksInline: {
@@ -380,7 +381,7 @@
             config: {
               endpoint: '/items/links?limit=-1',
               queryParam: 'search',
-	      base: 'https://dev-onrr-cms.app.cloud.gov'
+	            base: 'https://dev-onrr-cms.app.cloud.gov'
             },
           },
           linksList: {
@@ -389,16 +390,15 @@
             config: {
               endpoint: '/items/links?limit=-1',
               queryParam: 'search',
-    	      icons: {
-	         pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
-	      },
-	      base: 'https://dev-onrr-cms.app.cloud.gov'
+    	        icons: {
+	              pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
+	            },
+              base: 'https://dev-onrr-cms.app.cloud.gov'
             },
           },
         };
 
         // Build current tools config.
-        const tools = {};
 
         for (const toolName of props.tools) {
           // @ts-ignore
@@ -409,9 +409,21 @@
           }
         }
 
-        return tools;
-      }
-    },
+				if ('header' in tools) {
+					tools.header.tunes = ['alignmentTune'];
+				}
+
+				if ('table' in tools) {
+					tools.table.tunes = ['alignmentTune']
+				}
+
+				if ('image' in tools) {
+					tools.image.tunes = ['alignmentTune']
+				}
+
+			  return tools;
+		  }
+    }
   });
 </script>
 

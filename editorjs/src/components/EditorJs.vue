@@ -19,7 +19,6 @@
   import Header from "@editorjs/header"
   import Paragraph from "@editorjs/paragraph"
   import List from "@editorjs/list"
-  import ImageTool from "@editorjs/image";
   // import SimpleTabs from '../custom-plugins/simple-tabs'
   import Collections from '../custom-plugins/plugin-collections'
   import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
@@ -29,6 +28,8 @@
   import LinksInline from '../custom-plugins/plugin-links-inline';
   import LinksList from '../custom-plugins/plugin-links-list';
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
+import ImageTool from '../custom-plugins/plugin-image-patch';
+// import ImageTool from "@editorjs/image";
 
   export default {
     data() {
@@ -150,6 +151,17 @@
           onReady: function() {
             console.log("ready 123")
           },
+          alignmentTune: {
+            class: AlignmentTuneTool,
+            tunes: ['alignmentTune']
+            // config: {
+            //   default: 'left',
+            //   blocks: {
+            //     header: 'left',
+            //     list: 'left',
+            //     paragraph: 'left'
+            //   }
+            // }
           onChange: function(api, event) {
             console.log("change ", api, " event ", event) 
           }
