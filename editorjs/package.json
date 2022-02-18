@@ -21,7 +21,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dist": "directus-extension build && mv dist editorjs",
+    "dist": "rm -r editorjs dist && directus-extension build && mv dist editorjs && cp -r editorjs ../cms/extensions/interfaces",
     "prepack": "directus-extension build"
   },
   "dependencies": {
