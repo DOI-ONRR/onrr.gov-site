@@ -1,6 +1,12 @@
 import { Grid } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 /**
+ * Build Styles
+ */
+require('../styles/index.css').toString()
+
+
+/**
  * Import functions
  */
 import * as Dom from '../utils/dom';
@@ -42,6 +48,7 @@ export default class LinksInline {
       searchResults: null,
 
       linkWrapper: null,
+      linkUl: null,
       linkDataWrapper: null,
       linkDataTitleWrapper: null,
       linkDataName: null,
@@ -127,6 +134,17 @@ export default class LinksInline {
     }
   }
 
+    
+  getLinkType() {
+    console.debug('getLabel() ------------------------>')
+    const nodes=this.nodes.inlineRadio.querySelectorAll('[name=radioType]')
+    for(let ii=0; ii< nodes.length; ii++) {
+      if(nodes[ii].checked) {
+        return nodes[ii].value
+      }
+    }
+  }
+
   /**
    * Render actions element
    *
@@ -187,8 +205,8 @@ export default class LinksInline {
     const labelSelected=document.createElement('label');
     labelSelected.setAttribute('for','radioSelected');
     labelSelected.innerHTML ='Selected';
-    this.nodes.inlineRadio.appendChild(labelSelected)
     this.nodes.inlineRadio.appendChild(radioSelected)
+    this.nodes.inlineRadio.appendChild(labelSelected)
     //this.nodes.inlineRadio.appendChild(document.createElement('br'))    
 
 
@@ -204,8 +222,9 @@ export default class LinksInline {
     labelAppend.setAttribute('for','radioAppend');
     labelAppend.innerHTML ='Append';
 
-this.nodes.inlineRadio.appendChild(labelAppend)
+
     this.nodes.inlineRadio.appendChild(radioAppend)
+    this.nodes.inlineRadio.appendChild(labelAppend)
     //this.nodes.inlineRadio.appendChild(document.createElement('br'))
 
     const radioReplace = document.createElement('input');
@@ -217,8 +236,8 @@ this.nodes.inlineRadio.appendChild(labelAppend)
     const labelReplace=document.createElement('label');
     labelReplace.setAttribute('for','radioReplace');
     labelReplace.innerHTML ='Replace';
-    this.nodes.inlineRadio.appendChild(labelReplace)
     this.nodes.inlineRadio.appendChild(radioReplace)
+    this.nodes.inlineRadio.appendChild(labelReplace)
     //this.nodes.inlineRadio.appendChild(document.createElement('br'))
 
     const spanType=document.createElement('span');
@@ -228,35 +247,38 @@ this.nodes.inlineRadio.appendChild(labelAppend)
     const radioInline = document.createElement('input');
     radioInline.setAttribute('type', 'radio');
     radioInline.setAttribute('name','radioType');
+    radioInline.setAttribute('value','Inline');
     radioInline.setAttribute('checked',true);
     radioInline.setAttribute('id','radioInline');
     const labelInline=document.createElement('label');
     labelInline.setAttribute('for','radioInline');
     labelInline.innerHTML ='Inline';
     
-    this.nodes.inlineRadio.appendChild(labelInline)
     this.nodes.inlineRadio.appendChild(radioInline)
+    this.nodes.inlineRadio.appendChild(labelInline)
     //this.nodes.inlineRadio.appendChild(document.createElement('br'))
 
     
     const radioList = document.createElement('input');
     radioList.setAttribute('type', 'radio');
     radioList.setAttribute('name','radioType');
+    radioList.setAttribute('value','List');
     radioList.setAttribute('id','radioList');
     const labelList=document.createElement('label');
     labelList.setAttribute('for','radioList');
     labelList.innerHTML ='List';
-    this.nodes.inlineRadio.appendChild(labelList)
     this.nodes.inlineRadio.appendChild(radioList)
+    this.nodes.inlineRadio.appendChild(labelList)
     //this.nodes.inlineRadio.appendChild(document.createElement('br'))
 
     const addLinks= () => { this.addLinks() };
     const buttonAdd = document.createElement('button');
     buttonAdd.addEventListener('click',function () {console.debug("addLInks: ", addLinks);  addLinks(); });
 
+    const restoreSelection= () => { this.restoreSelection() };
     buttonAdd.innerHTML='Add'
-        const buttonCancel = document.createElement('button');
-    buttonCancel.onclick=this.restoreSelection()
+    const buttonCancel = document.createElement('button');
+    buttonCancel.addEventListener('click', function() {console.debug("restoreSelection: ", restoreSelection); restoreSelection()})
     buttonCancel.innerHTML='Cancel'
     
     this.nodes.inlineRadio.appendChild(buttonAdd)
@@ -303,16 +325,22 @@ this.nodes.inlineRadio.appendChild(labelAppend)
       const url=args[1]._cells[0].data
       
       const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : args[1]._cells[1].data;
-      if(this.getLabelType() === 'Selected') {
-        //this.textNode.innerText='';
-      }
-      const selection=this.selection
-      selection.restore();
-      
-      console.debug("Selection ----------->",  this.textNode, "label ", this.urlLabel);
+
+
       this.getLabel();
-      this.addUrl( this.nodes.linkWrapper , url, label);
-//
+      if(this.getLinkType() === 'Inline') {
+        this.addUrl( this.nodes.linkWrapper , url, label);
+      } else {
+        if(this.nodes.linkUl) {
+          this.addLi( this.nodes.linkUl , url, label);
+        } else {
+          const ul=Dom.make('ul');
+          this.nodes.linkUl=ul
+          this.addLi( this.nodes.linkUl , url, label);
+          this.nodes.linkWrapper.appendChild(this.nodes.linkUl)
+          //
+        }
+      }
     });
     this.nodes.actionsWrapper.appendChild(this.nodes.linkWrapper);
 
@@ -504,6 +532,27 @@ this.nodes.inlineRadio.appendChild(labelAppend)
 
 
 
+  addLi(linkList,url,filename) {
+    console.debug('addUrl(linkList,url,label) ------------------>')
+    const mydiv = Dom.make("li");
+    const fparts=filename.split(".")
+    const label=fparts[0]
+    const extension= fparts.length > 1 ? fparts.pop() : ''
+    const icon=this.addIcon(extension);
+    
+    var aTag = document.createElement('a');
+    aTag.setAttribute('href',this.config.base+url);
+    aTag.innerText = label;
+    mydiv.appendChild(aTag);
+    linkList.appendChild(mydiv);
+    if(icon) {
+      aTag.setAttribute('target','_blank');
+      linkList.appendChild(icon)
+    }
+    //    linkList.insertAdjacentHTML('afterend', "&nbsp;")
+
+    
+  }
 
 
 
@@ -555,11 +604,11 @@ this.nodes.inlineRadio.appendChild(labelAppend)
       searchItemName: 'ce-link-inline__search-item-name',
       searchItemDescription: 'ce-link-inline__search-item-description',
       
-      linkDataWrapper: 'ce-link-inline__link-data-wrapper',
-      linkDataTitleWrapper: 'ce-link-inline__link-data-title-wrapper',
-      linkDataName: 'ce-link-inline__link-data-name',
-      linkDataDescription: 'ce-link-inline__link-data-description',
-      linkDataURL: 'ce-link-inline__link-data-url',
+      linkWrapper: 'ce-link-inline__link-wrapper',
+      linkDataTitleWrapper: 'ce-link-inline__link-title-wrapper',
+      linkDataName: 'ce-link-inline__link-name',
+      linkDataDescription: 'ce-link-inline__link-description',
+      linkDataURL: 'ce-link-inline__link-url',
     };
   }
 }
