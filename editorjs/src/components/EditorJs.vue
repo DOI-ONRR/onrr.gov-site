@@ -14,170 +14,173 @@
     </div>
   </div>
 </template>
-
-
-
 <script>
-import EditorJS from "@editorjs/editorjs"
-import Header from "@editorjs/header"
-import Paragraph from "@editorjs/paragraph"
-import List from "@editorjs/list"
-import ImageTool from "@editorjs/image";
-// import SimpleTabs from '../custom-plugins/simple-tabs'
-import Collections from '../custom-plugins/plugin-collections'
-import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
-import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
-import LinkTool from '@editorjs/link';
-import Links from '../custom-plugins/plugin-links';
-import LinksInline from '../custom-plugins/plugin-links-inline';
-import LinksList from '../custom-plugins/plugin-links-list';
-import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
+  import EditorJS from "@editorjs/editorjs"
+  import Header from "@editorjs/header"
+  import Paragraph from "@editorjs/paragraph"
+  import List from "@editorjs/list"
+  import ImageTool from "@editorjs/image";
+  // import SimpleTabs from '../custom-plugins/simple-tabs'
+  import Collections from '../custom-plugins/plugin-collections'
+  import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
+  import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
+  import LinkTool from '@editorjs/link';
+  import Links from '../custom-plugins/plugin-links';
+  import LinksInline from '../custom-plugins/plugin-links-inline';
+  import LinksList from '../custom-plugins/plugin-links-list';
+  import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
 
   export default {
-  data() {
-    return {
-      value: null
-    }
-  },
-  methods: {
-    save: function() {
-      window.editor.save().then(savedData => {
-        console.log(savedData)
-        this.value = savedData
-      })
+    data() {
+      return {
+        value: null
+      }
     },
-    myEditor: function() {
-      window.editor = new EditorJS({
-        holder: "codex-editor",
-        autofocus: true,
-        /**
-         * This Tool will be used as default
-         */
-        initialBlock: "paragraph",
-        tools: {
-          header: {
-            class: Header,
-            shortcut: "CMD+SHIFT+H",
-            tunes: ['alignmentTune']
-          },
-          list: {
-            class: List,
-          },
-          paragraph: {
-            class: Paragraph,
-            config: {
-              placeholder: "."
+    methods: {
+      save: function() {
+        window.editor.save().then(savedData => {
+          console.log(savedData)
+          this.value = savedData
+        })
+      },
+      myEditor: function() {
+        window.editor = new EditorJS({
+          holder: "codex-editor",
+          autofocus: true,
+          /**
+           * This Tool will be used as default
+           */
+          initialBlock: "paragraph",
+          tools: {
+            header: {
+              class: Header,
+              shortcut: "CMD+SHIFT+H",
+              tunes: ['alignmentTune']
             },
-            tunes: ['alignmentTune']
-          },
-          horizontalrule: {
-            class: HorizontalRuleTool,
-            inlineToolbar: true,
-          },
-          collection: {
-            class: Collections,
-            inlineToolbar: true,
-            config: {
-              collectionsEndpoint: 'http://localhost:8055/collections',
-              fieldsEndpoint: 'http://localhost:8055/fields'
-            }
-          },
-          links: {
-            class: Links,
-            inlineToolbar: true,    
-            config: {
-              linksEndpoint: 'http://localhost:8055/items/links',
-              fieldsEndpoint: 'http://localhost:8055/fields'
-            }
-          },
-          linksInline: {
-           class: LinksInline,
-            inlineToolbar: true,    
-            config: {
-              endpoint: 'http://localhost:8055/items/links?limits=-1',
-              fields: 'http://localhost:8055/fields'
-            }
-          },
-          linksList: {
-           class: LinksList,
-            inlineToolbar: true,    
-            config: {
-              endpoint: 'http://localhost:8055/items/links?limits=-1',
-              fields: 'http://localhost:8055/fields'
-            }
-          },
-
-horizontalrule2: {
-            class: HorizontalRuleTool,
-            inlineToolbar: true,
-          },
-         linkTool: {
-            class: LinkTool,
+            list: {
+              class: List,
+            },
+            paragraph: {
+              class: Paragraph,
               config: {
-               endpoint: 'http://localhost:8055/items/links', // Your backend endpoint for url data fetching,
-               headers: {
-                'Access-Control-Allow-Origin': "*"
-                }	       
+                placeholder: "."
+              },
+              tunes: ['alignmentTune']
+            },
+            horizontalrule: {
+              class: HorizontalRuleTool,
+              inlineToolbar: true,
+            },
+            collection: {
+              class: Collections,
+              inlineToolbar: true,
+              config: {
+                collectionsEndpoint: 'http://localhost:8055/collections',
+                fieldsEndpoint: 'http://localhost:8055/fields'
+              }
+            },
+            links: {
+              class: Links,
+              inlineToolbar: true,    
+              config: {
+                linksEndpoint: 'http://localhost:8055/items/links',
+                fieldsEndpoint: 'http://localhost:8055/fields'
+              }
+            },
+            linksInline: {
+              class: LinksInline,
+              inlineToolbar: true,    
+              config: {
+                endpoint: 'http://localhost:8055/items/links?limit=-1',
+                fields: 'http://localhost:8055/fields',
+                icons: {
+                  pdf: 'http://localhost:8055/assets/915d45f6-233d-4855-b0f9-736d2b61214a'
+                } 
+              }
+            },
+            linksList: {
+              class: LinksList,
+              inlineToolbar: true,    
+              config: {
+                endpoint: 'http://localhost:8055/items/links?limit=-1',
+                fields: 'http://localhost:8055/fields',
+                icons: {
+                  pdf: 'http://localhost:8055/assets/915d45f6-233d-4855-b0f9-736d2b61214a'
+                } 
+              }
+            },
+
+            horizontalrule2: {
+              class: HorizontalRuleTool,
+              inlineToolbar: true,
+            },
+            linkTool: {
+              class: LinkTool,
+              config: {
+                endpoint: 'http://localhost:8055/items/links', // Your backend endpoint for url data fetching,
+                headers: {
+                  'Access-Control-Allow-Origin': "*"
+                }       
               } 
-          }, 
-        link: {
-            class: LinkAutocomplete,
-            inlineToolbar: true,
-            config: {
-             endpoint: 'http://localhost:8055/items/links',
-             queryParam: 'search'
+            }, 
+            link: {
+              class: LinkAutocomplete,
+              inlineToolbar: true,
+              config: {
+                endpoint: 'http://localhost:8055/items/links',
+                queryParam: 'search'
+              }
+            },
+
+            image: {
+              class: ImageTool,
+            },
+            alignmentTune: {
+              class: AlignmentTuneTool,
+              // config: {
+              //   default: 'left',
+              //   blocks: {
+              //     header: 'left',
+              //     list: 'left',
+              //     paragraph: 'left'
+              //   }
+              // }
             }
           },
-
-          image: {
-            class: ImageTool,
+          onReady: function() {
+            console.log("ready 123")
           },
-          alignmentTune: {
-            class: AlignmentTuneTool,
-            // config: {
-            //   default: 'left',
-            //   blocks: {
-            //     header: 'left',
-            //     list: 'left',
-            //     paragraph: 'left'
-            //   }
-            // }
+          onChange: function(api, event) {
+            console.log("change ", api, " event ", event) 
           }
-        },
-        onReady: function() {
-          console.log("ready 123")
-        },
-        onChange: function() {
-          console.log("change")
-        }
-      })
+        })
+      }
+    },
+    mounted: function() {
+      console.debug("DWGH: ", this)
+      this.myEditor()
     }
-  },
-  mounted: function() {
-  console.debug("DWGH: ", this)
-    this.myEditor()
   }
-}
 </script>
 
 <style lang="css" scoped >
-.editorx_body {
-  /* width: 62%
-  margin-left: 15% */
-  width: 60%;
-  margin-left: 20%;
-  border: 2px solid #f1f3f5;
-  box-sizing: border-box;
-}
+  .editorx_body {
+    /* width: 62%
+       margin-left: 15% */
+    width: 60%;
+    margin-left: 20%;
+    border: 2px solid #f1f3f5;
+    box-sizing: border-box;
+  }
 
-.ce-block--focused {
-  background: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(9, 9, 121, 0.5438550420168067) 35%,
-    rgba(0, 212, 255, 1) 100%
-  )
-}
+  .ce-block--focused {
+    background: linear-gradient(
+      90deg,
+      rgba(2, 0, 36, 1) 0%,
+      rgba(9, 9, 121, 0.5438550420168067) 35%,
+      rgba(0, 212, 255, 1) 100%
+    )
+  }
 
 
 </style>

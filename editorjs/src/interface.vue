@@ -367,23 +367,32 @@
             inlineToolbar: true,
             config: {
               endpoint: '/items/links',
-              queryParam: 'search'
+              queryParam: 'search',
+	      icons: {
+	        pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
+	      },
+	      base: 'https://dev-onrr-cms.app.cloud.gov'	 
             },
           },
           linksInline: {
             class: LinksInline,
             inlineToolbar: true,
             config: {
-              endpoint: '/items/links?limits=-1',
-              queryParam: 'search'
+              endpoint: '/items/links?limit=-1',
+              queryParam: 'search',
+	      base: 'https://dev-onrr-cms.app.cloud.gov'
             },
           },
           linksList: {
             class: LinksList,
             inlineToolbar: true,
             config: {
-              endpoint: '/items/links?limits=-1',
-              queryParam: 'search'
+              endpoint: '/items/links?limit=-1',
+              queryParam: 'search',
+    	      icons: {
+	         pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
+	      },
+	      base: 'https://dev-onrr-cms.app.cloud.gov'
             },
           },
         };

@@ -26,6 +26,9 @@ export default class LinksInline {
     this.button = null;
     this.state = false;
     this.textNode = null;
+    this.urlLabel='Selected'
+    this.urlType='Inline'
+    
     this.nodes = {
       toolButtons: null,
       toolButtonLink: null,
@@ -33,9 +36,11 @@ export default class LinksInline {
       
       actionsWrapper: null,
       inputWrapper: null,
-      inputField: null,
+      inlineRadio: null,
+      replaceRadio: null,
       
       searchResults: null,
+
       
       linkDataWrapper: null,
       linkDataTitleWrapper: null,
@@ -82,6 +87,35 @@ export default class LinksInline {
     return this.nodes.toolButtons;
     
   }
+
+  addLinks() {
+     console.debug('addLinks() ------------------------>')
+
+  }
+  restoreSelection() {
+     console.debug('restoreSelection() ------------------------>')
+
+  }
+  getLabel() {
+    console.debug('getLabel() ------------------------>')
+    const nodes=this.nodes.inlineRadio.querySelectorAll('[name=radioLabel]')
+    for(let ii=0; ii< nodes.length; ii++) {
+      if(nodes[ii].checked) {
+        return nodes[ii].value
+      }
+    }
+  }
+  
+  getLabelType() {
+    console.debug('getLabel() ------------------------>')
+    const nodes=this.nodes.inlineRadio.querySelectorAll('[name=radioLabel]')
+    for(let ii=0; ii< nodes.length; ii++) {
+      if(nodes[ii].checked) {
+        return nodes[ii].value
+      }
+    }
+  }
+
   /**
    * Render actions element
    *
@@ -121,12 +155,108 @@ export default class LinksInline {
      * @type {HTMLDivElement}
      */ 
 
-    this.nodes.gridWrapper = Dom.make('div', LinksInline.CSS.gridWrapper);
+    this.nodes.gridWrapper = Dom.make('div');
+    this.nodes.gridWrapper.style.display='block'; 
     this.nodes.searchItem = Dom.make('div', LinksInline.CSS.searchItem);
     grid.render(this.nodes.searchItem);
+    this.nodes.inlineRadio = Dom.make('div', LinksInline.CSS.inlineRadio)
+    this.nodes.inlineRadio.style.display='block';
+
+    const spanLabel=document.createElement('span');
+    spanLabel.innerText='Label: ';
+    this.nodes.inlineRadio.appendChild(spanLabel);
+
+    const radioSelected = document.createElement('input');
+    radioSelected.setAttribute('type', 'radio');
+    radioSelected.setAttribute('name','radioLabel');
+    radioSelected.setAttribute('value','Selected');
+    radioSelected.setAttribute('checked',true);
+    radioSelected.setAttribute('id','radioSelected');
+
+    const labelSelected=document.createElement('label');
+    labelSelected.setAttribute('for','radioSelected');
+    labelSelected.innerHTML ='Selected';
+    this.nodes.inlineRadio.appendChild(labelSelected)
+    this.nodes.inlineRadio.appendChild(radioSelected)
+    //this.nodes.inlineRadio.appendChild(document.createElement('br'))    
+
+
+
+    
+    const radioAppend = document.createElement('input');
+    radioAppend.setAttribute('type', 'radio');
+    radioAppend.setAttribute('name','radioLabel');
+    radioAppend.setAttribute('id','radioAppend');
+    radioAppend.setAttribute('value','Append');
+
+    const labelAppend=document.createElement('label');
+    labelAppend.setAttribute('for','radioAppend');
+    labelAppend.innerHTML ='Append';
+
+this.nodes.inlineRadio.appendChild(labelAppend)
+    this.nodes.inlineRadio.appendChild(radioAppend)
+    //this.nodes.inlineRadio.appendChild(document.createElement('br'))
+
+    const radioReplace = document.createElement('input');
+    radioReplace.setAttribute('type', 'radio');
+    radioReplace.setAttribute('name','radioLabel');
+    radioReplace.setAttribute('value','Replace');
+    radioReplace.setAttribute('id','radioReplace');
+
+    const labelReplace=document.createElement('label');
+    labelReplace.setAttribute('for','radioReplace');
+    labelReplace.innerHTML ='Replace';
+    this.nodes.inlineRadio.appendChild(labelReplace)
+    this.nodes.inlineRadio.appendChild(radioReplace)
+    //this.nodes.inlineRadio.appendChild(document.createElement('br'))
+
+    const spanType=document.createElement('span');
+    spanType.innerText=' Type: ';
+    this.nodes.inlineRadio.appendChild(spanType);
+    
+    const radioInline = document.createElement('input');
+    radioInline.setAttribute('type', 'radio');
+    radioInline.setAttribute('name','radioType');
+    radioInline.setAttribute('checked',true);
+    radioInline.setAttribute('id','radioInline');
+    const labelInline=document.createElement('label');
+    labelInline.setAttribute('for','radioInline');
+    labelInline.innerHTML ='Inline';
+    
+    this.nodes.inlineRadio.appendChild(labelInline)
+    this.nodes.inlineRadio.appendChild(radioInline)
+    //this.nodes.inlineRadio.appendChild(document.createElement('br'))
+
+    
+    const radioList = document.createElement('input');
+    radioList.setAttribute('type', 'radio');
+    radioList.setAttribute('name','radioType');
+    radioList.setAttribute('id','radioList');
+    const labelList=document.createElement('label');
+    labelList.setAttribute('for','radioList');
+    labelList.innerHTML ='List';
+    this.nodes.inlineRadio.appendChild(labelList)
+    this.nodes.inlineRadio.appendChild(radioList)
+    //this.nodes.inlineRadio.appendChild(document.createElement('br'))
+
+    const addLinks= () => { this.addLinks() };
+    const buttonAdd = document.createElement('button');
+    buttonAdd.addEventListener('click',function () {console.debug("addLInks: ", addLinks);  addLinks(); });
+
+    buttonAdd.innerHTML='Add'
+        const buttonCancel = document.createElement('button');
+    buttonCancel.onclick=this.restoreSelection()
+    buttonCancel.innerHTML='Cancel'
+    
+    this.nodes.inlineRadio.appendChild(buttonAdd)
+    this.nodes.inlineRadio.appendChild(buttonCancel)
+    this.nodes.gridWrapper.appendChild(this.nodes.inlineRadio);
+    this.nodes.gridWrapper.appendChild(document.createElement('br'))
     this.nodes.gridWrapper.appendChild(this.nodes.searchItem);
     this.toggleVisibility(this.nodes.gridWrapper, false);
 
+
+    
     /**
      * Render  link wrapper
      *
@@ -160,15 +290,21 @@ export default class LinksInline {
     grid.on('rowClick', (...args) => {
       console.debug(" grid.on('rowClick', (...args) => ------------------>")
       const url=args[1]._cells[0].data
-      const label=args[1]._cells[1].data
+      
+      const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : args[1]._cells[1].data;
+      if(this.getLabelType() === 'Selected') {
+        this.textNode.innerText='';
+      }
       const selection=this.selection
       selection.restore();
       
-      console.debug("Selection ----------->",  this.textNode);
+      console.debug("Selection ----------->",  this.textNode, "label ", this.urlLabel);
+      this.getLabel();
       this.addUrl( this.textNode , url, label);
       this.api.inlineToolbar.close();
     });
     this.nodes.actionsWrapper.appendChild(this.nodes.linkWrapper);
+
     this.nodes.actionsWrapper.appendChild(this.nodes.gridWrapper);
     
     return this.nodes.actionsWrapper;
@@ -196,6 +332,15 @@ export default class LinksInline {
     
   }
 
+
+  shortcut() {
+    console.debug('This shortcut ----------------->: ', this.selection)
+    return 'ALT+L';
+  }
+  
+
+
+
   /**
    * Handle clicks on the Inline Toolbar icon
    *
@@ -205,6 +350,7 @@ export default class LinksInline {
   surround(range) {
     console.debug('  surround(range) ------------------>')
     if (!range) {
+      console.debug('No range ------------------------------->')
       return;
     }
     const selectedText = range.extractContents()
@@ -284,24 +430,91 @@ export default class LinksInline {
     */      
     console.debug("Toggle visibility: ", isVisible, " e: ", element)
     if(isVisible) {
-      element.style.display="flex"
+      element.style.display=""
     } else {
       element.style.display="none"
     }
     //        element.classList.toggle(LinksInline.CSS.hidden, !isVisible);
   }
 
+    static get sanitize() {
+    return {
+      ul: true,
+      li: true,
+      a:{
+        href:true,
+        target:true
+        
+      },
+      img: {
+        src:true,
+        height:true,
+        width:true
+      },
+      i: {class: true},
+      div: {class: true}
+      
+      
+    };
+    }
 
-  addUrl(linkList,url,label) {
-    console.debug('  addUrl(linkList,url,label) ------------------>')
+  addIcon(extension) {
+    var iconDiv = document.createElement('div');
+    iconDiv.classList.add("v-list-item__icon");
+    iconDiv.classList.add("ml-1");
+    var i = document.createElement('i');
+    i.setAttribute('aria-hidden',true);
+    i.classList.add('v-icon');
+    i.classList.add('notranslate');
+    i.classList.add('mdi');
+    switch(extension) {
+    case 'pdf':
+      i.classList.add('mdi-file-pdf-box')
+      break
+    case 'xls':
+      i.classList.add('mdi-file-domain-box')
+      break
+    case 'xlsx':
+      i.classList.add('mdi-file-domain-box')
+      break
+    default:
+      return
+    }
+    
+    iconDiv.appendChild(i)
+    return iconDiv
+    
+
+
+
+  }
+
+
+
+
+
+
+
+  
+  addUrl(linkList,url,filename) {
+    console.debug('addUrl(linkList,url,label) ------------------>')
     //const mydiv = Dom.make("li");
+    const fparts=filename.split(".")
+    const label=fparts[0]
+    const extension= fparts.length > 1 ? fparts.pop() : ''
+    const icon=this.addIcon(extension);
+    
     var aTag = document.createElement('a');
-    aTag.setAttribute('href',url);
+    aTag.setAttribute('href',this.config.base+url);
     aTag.innerText = label;
     // mydiv.appendChild(aTag);
     linkList.appendChild(aTag);
-    aTag.insertAdjacentHTML('afterend', "&nbsp;")
-    aTag.insertAdjacentHTML('beforebegin', "&nbsp;")
+    if(icon) {
+      aTag.setAttribute('target','_blank');
+      linkList.appendChild(icon)
+    }
+    linkList.insertAdjacentHTML('afterend', "&nbsp;")
+    linkList.insertAdjacentHTML('beforebegin', "&nbsp;")
 
   }
   
