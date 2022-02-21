@@ -3,7 +3,7 @@ import "gridjs/dist/theme/mermaid.css";
 /**
  * Build Styles
  */
-require('../styles/index.css').toString()
+//require('../styles/index.css').toString()
 
 
 /**

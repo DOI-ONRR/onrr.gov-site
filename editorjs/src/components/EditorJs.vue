@@ -161,7 +161,7 @@ import ImageTool from '../custom-plugins/plugin-image-patch';
             //     list: 'left',
             //     paragraph: 'left'
             //   }
-            // }
+          },
           onChange: function(api, event) {
             console.log("change ", api, " event ", event) 
           }
