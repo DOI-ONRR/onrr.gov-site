@@ -1,4 +1,5 @@
 import ImageTool from "@editorjs/image";
+import { make } from "../utils/dom"
 import Uploader from "../editorjs-uploader";
 
 /**
@@ -27,9 +28,7 @@ export default class extends ImageTool {
 	set image(file) {
 		this._data.file = file || {};
 		if (file && file.url) {
-			const imageUrl =
-				this.config.uploader.addTokenToURL(file.url) +
-				"&withoutEnlargement";
+			const imageUrl = this.config.uploader.addTokenToURL(file.url) + "&withoutEnlargement";
 			this.ui.fillImage(imageUrl);
 		}
 	}
@@ -57,7 +56,7 @@ export default class extends ImageTool {
 		this.ui.nodes.imgWidthLabel.innerText = 'Width';
 		this.ui.nodes.altTagLabel.innerText = 'Alt Text';
 
-		this.ui.nodes.altTagInput.value = this.data?.altTag || '';
+		this.ui.nodes.altTagInput.value = this._data?.altTag || '';
 		this.ui.nodes.imgHeightLabel.innerText = 'Height';
 		
 
@@ -81,7 +80,6 @@ export default class extends ImageTool {
 
 		this.ui.nodes.imgWidthInput.value = this._data.imgWidth || this._data?.file?.width || '';
 		this.ui.nodes.imgHeightInput.value = this._data.imgHeight || this._data?.file?.height || '';
-		this.ui.nodes.altTagInput.value = this._data?.altTag || '';
 
 		this.ui.nodes.imgWidthInput.addEventListener('change', (e) => {
 			if (e.target.value !== this._data?.file?.width) {
@@ -123,29 +121,6 @@ export default class extends ImageTool {
 
 }
 
-/**
- * Helper for making Elements with attributes
- *
- * @param  {string} tagName           - new Element tag name
- * @param  {Array|string} classNames  - list or name of CSS class
- * @param  {object} attributes        - any attributes
- * @returns {Element}
- */
-export const make = function make(tagName, classNames = null, attributes = {}) {
-  const el = document.createElement(tagName);
-
-  if (Array.isArray(classNames)) {
-    el.classList.add(...classNames);
-  } else if (classNames) {
-    el.classList.add(classNames);
-  }
-
-  for (const attrName in attributes) {
-    el[attrName] = attributes[attrName];
-  }
-
-  return el;
-};
 
 
 /**
@@ -157,48 +132,3 @@ export const make = function make(tagName, classNames = null, attributes = {}) {
 function getImageHeight(originalHeight, originalWidth, newWidth) {
 	return Math.round((originalHeight / originalWidth) * newWidth);
 }
-/**
- * Height based on their natural width and height to maintain the aspect ratio.
- * Works best for 1:1 aspect ratio but can be modified to accommodate other ratio.
- * 
- * @param Element|Resource img - An image element/resource from DOM
- * @param int expected - Expected width or height
- */
- 
-// function setAspectRatio(img, expected) {
-    
-// 		// No support for IE8 and lower
-// 		if ( img.naturalWidth === 'undefined' ) return;
-		
-// 		// Get natural dimensions of image
-// 		var width = img.naturalWidth;
-// 		var height = img.naturalHeight;
-		
-// 		// Examine if width is larger than height then reduce the width but fix the height
-// 		if ( width > height ) {
-// 			img.style.width = (width / height * expected) + 'px';
-// 			img.style.height = expected + 'px';
-			
-// 			// horizontally center the image
-// 			img.style.transform = 'translatex(-' + parseInt((width / height * expected) - expected) + 'px)';
-// 			img.style.webkitTransform = 'translateX(-' + parseInt((width / height * expected) - expected) + 'px)';
-// 			return img;
-// 		}
-		
-// 		// Examine if height is larger than width then reduce the height but fix the width
-// 		else if ( height > width ) {
-// 			img.style.width = expected + 'px';
-// 			img.style.height = (height / width * expected) + 'px';
-			
-// 			// vertically center the image
-// 			img.style.transform = 'translateY(-' + parseInt((height / width * expected) - expected) + 'px)';
-// 			img.style.webkitTransform = 'translateY(-' + parseInt((height / width * expected) - expected) + 'px)';
-// 			return img;
-// 		}
-		
-// 		// Or return fix width and height
-// 		else {
-// 			img.style.width = expected + 'px';
-// 			img.style.height = expected + 'px';
-// 		}
-// }
