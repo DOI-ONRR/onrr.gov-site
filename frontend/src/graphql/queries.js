@@ -217,7 +217,12 @@ export const EVENTS_QUERY = gql`
         primary_email
         primary_phone
       }
-      location
+      location{
+        street_address
+        city
+        state
+        zip_code
+      }
       }
   }
 `
