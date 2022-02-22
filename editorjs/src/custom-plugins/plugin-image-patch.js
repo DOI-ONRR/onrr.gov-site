@@ -56,7 +56,7 @@ export default class extends ImageTool {
 		this.ui.nodes.imgWidthLabel.innerText = 'Width';
 		this.ui.nodes.altTagLabel.innerText = 'Alt Text';
 
-		this.ui.nodes.altTagInput.value = this.data?.altTag || '';
+		this.ui.nodes.altTagInput.value = this._data?.altTag || '';
 		this.ui.nodes.imgHeightLabel.innerText = 'Height';
 		
 
@@ -80,7 +80,6 @@ export default class extends ImageTool {
 
 		this.ui.nodes.imgWidthInput.value = this._data.imgWidth || this._data?.file?.width || '';
 		this.ui.nodes.imgHeightInput.value = this._data.imgHeight || this._data?.file?.height || '';
-		this.ui.nodes.altTagInput.value = this._data?.altTag || '';
 
 		this.ui.nodes.imgWidthInput.addEventListener('change', (e) => {
 			if (e.target.value !== this._data?.file?.width) {
