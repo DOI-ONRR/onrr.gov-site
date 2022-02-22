@@ -200,3 +200,24 @@ export const REPORTER_LETTERS_QUERY = gql`
     }
   }
 `
+
+// Events Query
+export const EVENTS_QUERY = gql`
+  query {
+    events {
+      id
+      event_start_date_time
+      event_end_date_time
+      title
+      description
+      who_should_attend
+      other_information
+      contact {
+        primary_contact
+        primary_email
+        primary_phone
+      }
+      location
+      }
+  }
+`

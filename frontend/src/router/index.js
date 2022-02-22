@@ -80,6 +80,14 @@ const routes = [
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page") 
       },
       {
+        path: 'reporter-training',
+        component: () => import(/* webpackChunkName: "Event" */ "../views/Events"),
+        props: true,
+        meta: {
+          breadcrumb: 'Events'
+        },
+      },
+      {
         path: ':slug',
         name: 'TwoColumnLeft',
         component: () => import(/* webpackChunkName: "Page" */ "../views/Page"),
@@ -88,6 +96,7 @@ const routes = [
           breadcrumb: ''
         },
       },
+      
     ],
     meta: {
       breadcrumb: "References"
