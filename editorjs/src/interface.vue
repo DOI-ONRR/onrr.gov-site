@@ -53,11 +53,11 @@
   import PersonalityTool from './custom-plugins/plugin-personality-patch';
   // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
   import CollectionsTool from "./custom-plugins/plugin-collections";
-  import Links from "./custom-plugins/plugin-links";
+//  import Links from "./custom-plugins/plugin-links";
   import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
-  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
+//  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
-  import LinksList from "./custom-plugins/plugin-links-list.js";
+//  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
   export default defineComponent({
@@ -77,7 +77,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'links', 'horizontalrule', 'linkAutocomplete', 'linksInline','linksList'],
+        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline'],
       },
       font: {
         type: String,
@@ -349,13 +349,14 @@
               fieldsEndpoint: '/fields'
             }
           },
-          links: {
+       /*   links: {
             class: Links,
             config: {
               linksEndpoint: '/items/links',
               fieldsEndpoint: '/fields'
             }
           },
+	  */	
           horizontalrule: {
             class: HorizontalRuleTool,
             inlineToolbar: true,
@@ -363,7 +364,7 @@
           alignmentTune: {
             class: AlignmentTuneTool
           },
-          linkAutocomplete: {
+      /*    linkAutocomplete: {
             class: LinkAutocomplete,
             inlineToolbar: true,
             config: {
@@ -375,6 +376,7 @@
 	            base: 'https://dev-onrr-cms.app.cloud.gov'	 
             },
           },
+	  */
           linksInline: {
             class: LinksInline,
             inlineToolbar: true,
@@ -384,7 +386,7 @@
 	            base: 'https://dev-onrr-cms.app.cloud.gov'
             },
           },
-          linksList: {
+         /* linksList: {
             class: LinksList,
             inlineToolbar: true,
             config: {
@@ -396,6 +398,7 @@
               base: 'https://dev-onrr-cms.app.cloud.gov'
             },
           },
+	  */
         };
 
         // Build current tools config.

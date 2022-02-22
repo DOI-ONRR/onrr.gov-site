@@ -5,6 +5,7 @@ import "gridjs/dist/theme/mermaid.css";
  */
 //require('../styles/index.css').toString()
 
+import "../styles/index.css"
 
 /**
  * Import functions
@@ -238,7 +239,10 @@ export default class LinksInline {
     labelReplace.innerHTML ='Replace';
     this.nodes.inlineRadio.appendChild(radioReplace)
     this.nodes.inlineRadio.appendChild(labelReplace)
-    //this.nodes.inlineRadio.appendChild(document.createElement('br'))
+    this.nodes.inlineRadio.appendChild(document.createElement('br'))
+    const span1=document.createElement('span')
+    span1.innerHTML='&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;'
+    this.nodes.inlineRadio.appendChild(span1)
 
     const spanType=document.createElement('span');
     spanType.innerText=' Type: ';
@@ -269,19 +273,27 @@ export default class LinksInline {
     labelList.innerHTML ='List';
     this.nodes.inlineRadio.appendChild(radioList)
     this.nodes.inlineRadio.appendChild(labelList)
-    //this.nodes.inlineRadio.appendChild(document.createElement('br'))
+    const span2=document.createElement('span')
+    span2.innerHTML='&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;'
+    this.nodes.inlineRadio.appendChild(span2)
 
     const addLinks= () => { this.addLinks() };
     const buttonAdd = document.createElement('button');
     buttonAdd.addEventListener('click',function () {console.debug("addLInks: ", addLinks);  addLinks(); });
 
     const restoreSelection= () => { this.restoreSelection() };
-    buttonAdd.innerHTML='Add'
+    buttonAdd.innerHTML='  Add  '
+
+    const span3=document.createElement('span')
+    span3.innerHTML='&nbsp;&nbsp;::&nbsp;&nbsp;'
+
+
     const buttonCancel = document.createElement('button');
     buttonCancel.addEventListener('click', function() {console.debug("restoreSelection: ", restoreSelection); restoreSelection()})
-    buttonCancel.innerHTML='Cancel'
+    buttonCancel.innerHTML='  Cancel  '
     
     this.nodes.inlineRadio.appendChild(buttonAdd)
+        this.nodes.inlineRadio.appendChild(span3)
     this.nodes.inlineRadio.appendChild(buttonCancel)
     this.nodes.gridWrapper.appendChild(this.nodes.inlineRadio);
     this.nodes.gridWrapper.appendChild(document.createElement('br'))
@@ -324,7 +336,7 @@ export default class LinksInline {
       console.debug(" grid.on('rowClick', (...args) => ------------------>")
       const url=args[1]._cells[0].data
       
-      const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : args[1]._cells[1].data;
+      const label=args[1]._cells[1].data;
 
 
       this.getLabel();
@@ -536,7 +548,8 @@ export default class LinksInline {
     console.debug('addUrl(linkList,url,label) ------------------>')
     const mydiv = Dom.make("li");
     const fparts=filename.split(".")
-    const label=fparts[0]
+    const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : fparts[0]
+    // const label=fparts[0]
     const extension= fparts.length > 1 ? fparts.pop() : ''
     const icon=this.addIcon(extension);
     
@@ -547,7 +560,7 @@ export default class LinksInline {
     linkList.appendChild(mydiv);
     if(icon) {
       aTag.setAttribute('target','_blank');
-      linkList.appendChild(icon)
+      mydiv.appendChild(icon)
     }
     //    linkList.insertAdjacentHTML('afterend', "&nbsp;")
 
@@ -561,7 +574,8 @@ export default class LinksInline {
     console.debug('addUrl(linkList,url,label) ------------------>')
     //const mydiv = Dom.make("li");
     const fparts=filename.split(".")
-    const label=fparts[0]
+    const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : fparts[0]
+    //    const label=fparts[0]
     const extension= fparts.length > 1 ? fparts.pop() : ''
     const icon=this.addIcon(extension);
     
