@@ -47,12 +47,14 @@ export default {
       return `${ process.env.VUE_APP_API_URL }${ this.block.data.file.url }?fit=cover`
     },
     width() {
-      const w = this.block.data.imgWidth
+      const w = (this.block.data.imgWidth === this.block.data.file.width || this.block.data.stretched) 
+      ? '100%' : this.block.data.imgWidth
       // const w = '100%'
       return w
     },
     height() {
-      const h = this.block.data.imgHeight
+      const h = (this.block.data.imgWidth === this.block.data.file.width || this.block.data.stretched)
+      ? 'auto' : this.block.data.imgHeight
       // const h = 'auto'
       return h
     },
