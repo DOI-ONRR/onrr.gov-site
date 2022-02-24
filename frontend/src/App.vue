@@ -53,8 +53,8 @@ export default {
   color: var(--v-primary-base);
 }
 
-#app .page-wrap v-breadcrumbs a:visited {
-  color: inherit;
+#app .page-wrap .v-breadcrumbs a:visited {
+  color: var(--v-secondary-base);
 }
 
 .v-toolbar__extension {
