@@ -27,7 +27,7 @@ export default {
 }
 
 .block-container.card_blocks {
-  display: flex;
-  flex-wrap: wrap;
+  // display: flex;
+  // flex-wrap: wrap;
 }
 </style>
