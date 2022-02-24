@@ -50,7 +50,11 @@ export default {
 
 #app .home-content a:visited,
 #app .page-wrap a:visited {
-  color: var(--v-primary-base) !important;
+  color: var(--v-primary-base);
+}
+
+#app .page-wrap v-breadcrumbs a:visited {
+  color: inherit;
 }
 
 .v-toolbar__extension {
