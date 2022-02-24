@@ -14,7 +14,7 @@ const main = async () => {
 
 
     //    const el = await page.$x('/html/body/div[3]/div[24]/div/div[2]/ul/li[3]')
-    const years =['15','16', '17']
+  const years =['05','06','07','08','09','10']
     const months=[ '01','02','03','04', '05','06', '07', '08', '09', '10', '11', '12']
     for(let jj=0; jj< years.length; jj++ ) {
     for(let ii=0; ii< months.length; ii++ ) {
