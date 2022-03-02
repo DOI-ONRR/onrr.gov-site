@@ -137,7 +137,8 @@
       }, 250);
 
       onMounted(() => {
-        editorjsInstance.value = new EditorJS({
+
+editorjsInstance.value = new EditorJS({
           // @ts-ignore
           logLevel: 'ERROR',
           holder: editorElement.value,
@@ -382,9 +383,12 @@
             inlineToolbar: true,
             config: {
               endpoint: '/items/links?limit=-1',
+              page_id: document.URL.split('/').pop(), 
               queryParam: 'search',
 	            base: 'https://dev-onrr-cms.app.cloud.gov'
+		    
             },
+	
           },
          /* linksList: {
             class: LinksList,

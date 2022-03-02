@@ -10,4 +10,4 @@ select 'published', null, null, now(), null, null, url, 'internal', null, null, 
 
 
 insert into links ( status, sort, user_created, date_created, user_updated, date_updated,href,type,rel,target,url,label,category,title,page_id,page, keywords) 
- select 'published' as status, null as sort, null as user_created, now() as date_created, null as user_updated, now() as date_updated, url as href, 'internal' as type, null as rel, null as target, url, title as label, 'Pages' as category, title, id as page_id, title as page, title as keywords from pages
+ select 'published' as status, null as sort, null as user_created, now() as date_created, null as user_updated, now() as date_updated, url as href, 'applications/internal' as type, null as rel, null as target, url, title as label, 'Pages' as category, title, id as page_id, title as page, title as keywords from pages

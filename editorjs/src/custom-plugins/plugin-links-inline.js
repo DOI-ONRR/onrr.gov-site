@@ -167,7 +167,7 @@ export default class LinksInline {
      *
      * @type {HTMLDivElement}
      */
-    console.debug('endpoint iinline ---------------------->', this.endpoint);
+
     const sort_by_page= (page_id,a,b) => {
       if(Math.abs(a.page_id - page_id) < Math.abs(b.page_id - page_id)) {
         return -1
@@ -177,7 +177,7 @@ export default class LinksInline {
         return 0
       }
     }
-    const pageId=58
+    const pageId=this.config.page_id;
     const grid = new Grid({
       search: true,
       sort: true,
@@ -186,10 +186,7 @@ export default class LinksInline {
       server: {
         url: this.endpoint,
         then: data => {
-          console.debug("un Sorted data ----: ", data.data)
           const sorted=data.data.sort( (a,b) => sort_by_page(pageId, a, b));
-          console.debug("Sorted data ---- :", sorted)
-            
           return sorted.map(item => [ item.label,item.page, item.category, item.type, item.target, item.url])
         }
       } 
@@ -378,27 +375,6 @@ export default class LinksInline {
   }
 
   
-  surroundOLD(range) {
-    if (this.state) {
-      // If highlights is already applied, do nothing for now
-      return;
-    }
-
-    const selectedText = range.extractContents();
-
-    // Create MARK element
-    const mark = document.createElement('MARK');
-
-    // Append to the MARK element selected TextNode
-    mark.appendChild(selectedText);
-    this.selection=range;
-    // Insert new element
-    range.insertNode(mark);
-
-
-    
-  }
-
 
   shortcut() {
     console.debug('This shortcut ----------------->: ', this.selection)
