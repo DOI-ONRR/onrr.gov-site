@@ -6,7 +6,7 @@
         :key="block.id" 
         cols="12" 
         sm="12"
-        :md="block.item.block_v_col" 
+        :md="block.item.layoutCol" 
         :class="[
           'layout-block-container',
           block.item.__typename, 

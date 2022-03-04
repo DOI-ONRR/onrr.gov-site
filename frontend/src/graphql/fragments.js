@@ -18,7 +18,7 @@ export const contentBlockFields = gql`
 export const layoutColumnBlockFields = gql`
   fragment layoutColumnBlockFields on layout_column_blocks {
     id
-    block_v_col
+    layoutCol: block_v_col
   }
 `
 
