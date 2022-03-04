@@ -167,16 +167,28 @@ export default class LinksInline {
      *
      * @type {HTMLDivElement}
      */
-    console.debug('endpoint iinline ---------------------->', this.endpoint);
-    
+
+    const sort_by_page= (page_id,a,b) => {
+      if(Math.abs(a.page_id - page_id) < Math.abs(b.page_id - page_id)) {
+        return -1
+      } else if ( Math.abs(a.page_id - page_id) > Math.abs(b.page_id - page_id)) {
+        return 1
+      } else {
+        return 0
+      }
+    }
+    const pageId=this.config.page_id;
     const grid = new Grid({
       search: true,
       sort: true,
       pagination: true,
-      columns: ["url", "label", "category"],
+      columns: ["label", "page", "category", "type", "target", "url"],
       server: {
         url: this.endpoint,
-        then: data => data.data.map(item => [item.url, item.label, item.category])
+        then: data => {
+          const sorted=data.data.sort( (a,b) => sort_by_page(pageId, a, b));
+          return sorted.map(item => [ item.label,item.page, item.category, item.type, item.target, item.url])
+        }
       } 
     });
     /**
@@ -308,7 +320,7 @@ export default class LinksInline {
      * @type {HTMLDivElement}
      */ 
     this.nodes.linkWrapper = Dom.make('span', LinksInline.CSS.linkWrapper);
-    this.nodes.linkWrapper.setAttribute('contenteditable', true);
+    //this.nodes.linkWrapper.setAttribute('contenteditable', true);
 
     //Not working
     /*
@@ -334,21 +346,22 @@ export default class LinksInline {
 
     grid.on('rowClick', (...args) => {
       console.debug(" grid.on('rowClick', (...args) => ------------------>")
-      const url=args[1]._cells[0].data
+      //item.label,item.page, item.category, item.type, item.target, item.url
+      const url=args[1]._cells[5].data
       
-      const label=args[1]._cells[1].data;
-
-
+      const label=args[1]._cells[0].data;
+      const type=args[1]._cells[3].data
+      
       this.getLabel();
       if(this.getLinkType() === 'Inline') {
-        this.addUrl( this.nodes.linkWrapper , url, label);
+        this.addUrl( this.nodes.linkWrapper , url, label, type);
       } else {
         if(this.nodes.linkUl) {
-          this.addLi( this.nodes.linkUl , url, label);
+          this.addLi( this.nodes.linkUl , url, label,type);
         } else {
           const ul=Dom.make('ul');
           this.nodes.linkUl=ul
-          this.addLi( this.nodes.linkUl , url, label);
+          this.addLi( this.nodes.linkUl , url, label,type);
           this.nodes.linkWrapper.appendChild(this.nodes.linkUl)
           //
         }
@@ -362,27 +375,6 @@ export default class LinksInline {
   }
 
   
-  surroundOLD(range) {
-    if (this.state) {
-      // If highlights is already applied, do nothing for now
-      return;
-    }
-
-    const selectedText = range.extractContents();
-
-    // Create MARK element
-    const mark = document.createElement('MARK');
-
-    // Append to the MARK element selected TextNode
-    mark.appendChild(selectedText);
-    this.selection=range;
-    // Insert new element
-    range.insertNode(mark);
-
-
-    
-  }
-
 
   shortcut() {
     console.debug('This shortcut ----------------->: ', this.selection)
@@ -544,17 +536,18 @@ export default class LinksInline {
 
 
 
-  addLi(linkList,url,filename) {
+  addLi(linkList,url,filename,type) {
     console.debug('addUrl(linkList,url,label) ------------------>')
     const mydiv = Dom.make("li");
-    const fparts=filename.split(".")
-    const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : fparts[0]
+    const fparts=type.split("/")
+    const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : filename
     // const label=fparts[0]
     const extension= fparts.length > 1 ? fparts.pop() : ''
     const icon=this.addIcon(extension);
     
     var aTag = document.createElement('a');
     aTag.setAttribute('href',this.config.base+url);
+    aTag.setAttribute('download',label+'.'+extension);
     aTag.innerText = label;
     mydiv.appendChild(aTag);
     linkList.appendChild(mydiv);
@@ -570,17 +563,18 @@ export default class LinksInline {
 
 
   
-  addUrl(linkList,url,filename) {
+  addUrl(linkList,url,filename,type) {
     console.debug('addUrl(linkList,url,label) ------------------>')
     //const mydiv = Dom.make("li");
-    const fparts=filename.split(".")
-    const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : fparts[0]
+    const fparts=type.split("/")
+    const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : filename
     //    const label=fparts[0]
     const extension= fparts.length > 1 ? fparts.pop() : ''
     const icon=this.addIcon(extension);
     
     var aTag = document.createElement('a');
     aTag.setAttribute('href',this.config.base+url);
+    aTag.setAttribute('download',label+'.'+extension);
     aTag.innerText = label;
     // mydiv.appendChild(aTag);
     linkList.appendChild(aTag);

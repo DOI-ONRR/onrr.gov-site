@@ -12,7 +12,6 @@ IF parent_url != '/' THEN
 ELSE
  NEW.url = concat('/', NEW.slug);
 END IF;
-select NEW.url;
 RETURN NEW;
 END;
 $$
