@@ -516,10 +516,19 @@ export default class LinksInline {
       i.classList.add('mdi-file-pdf-box')
       break
     case 'xls':
-      i.classList.add('mdi-file-domain-box')
+      i.classList.add('mdi-file-excel-box')
       break
     case 'xlsx':
-      i.classList.add('mdi-file-domain-box')
+      i.classList.add('mdi-file-excel-box')
+      break
+    case 'doc':
+      i.classList.add('mdi-file-word-box')
+      break
+    case 'ppt':
+      i.classList.add('mdi-powerpoint-box')
+      break
+    case 'txt':
+      i.classList.add('mdi-powerpoint-box')
       break
     default:
       return
