@@ -15,6 +15,13 @@ export const contentBlockFields = gql`
   }
 `
 
+export const layoutColumnBlockFields = gql`
+  fragment layoutColumnBlockFields on layout_column_blocks {
+    id
+    layoutCol: block_v_col
+  }
+`
+
 export const cardBlockFields = gql`
   fragment cardBlockFields on card_blocks {
     id
@@ -22,6 +29,7 @@ export const cardBlockFields = gql`
     block_label
     block_v_col
     block_content
+    equal_col_height
     card_content_blocks {
       id
       item {
@@ -44,7 +52,6 @@ export const sectionHeadingBlocks = gql`
     section_heading_type
   }
 `
-
 
 export const expansionPanelBlockLabel = gql`
   fragment expansionPanelBlockLabel on expansion_panel_block_label {
@@ -80,6 +87,7 @@ export const nestedNestedTabBlockFields = gql`
   ${contentBlockFields}
   ${cardBlockFields}
   ${expansionPanelBlockFields}
+  ${layoutColumnBlockFields}
   fragment nestedNestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -90,6 +98,7 @@ export const nestedNestedTabBlockFields = gql`
           ...contentBlockFields
           ...cardBlockFields
           ...expansionPanelBlockFields
+          ...layoutColumnBlockFields
         }
     }
   }
@@ -100,6 +109,7 @@ export const nestedTabBlockFields = gql`
   ${contentBlockFields}
   ${cardBlockFields}
   ${nestedNestedTabBlockFields}
+  ${layoutColumnBlockFields}
   fragment nestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -111,6 +121,7 @@ export const nestedTabBlockFields = gql`
           ...cardBlockFields
           ...nestedNestedTabBlockFields
           ...expansionPanelBlockFields
+          ...layoutColumnBlockFields
         }
     }
   }
@@ -122,6 +133,7 @@ export const tabBlockFields = gql`
   ${cardBlockFields}
   ${nestedTabBlockFields}
   ${expansionPanelBlockFields}
+  ${layoutColumnBlockFields}
   fragment tabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -133,6 +145,7 @@ export const tabBlockFields = gql`
         ...cardBlockFields
         ...nestedTabBlockFields
         ...expansionPanelBlockFields
+        ...layoutColumnBlockFields
       }
     }
   }
@@ -143,6 +156,7 @@ export const pageFields = gql`
  ${tabBlockFields}
  ${cardBlockFields}
  ${expansionPanelBlockFields}
+ ${layoutColumnBlockFields}
   fragment pageFields on pages {
     id
     title
@@ -159,9 +173,9 @@ export const pageFields = gql`
         ...tabBlockFields
         ...cardBlockFields
         ...expansionPanelBlockFields
+        ...layoutColumnBlockFields
       }
     }
-    # page_builder
     meta_title
     meta_description
   }

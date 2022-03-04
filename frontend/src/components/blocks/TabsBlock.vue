@@ -6,7 +6,6 @@
       color="white"
       background-color="white"
       show-arrows>
-
       <v-tab 
         v-for="(tab, index) in tabItems"
         :key="index"

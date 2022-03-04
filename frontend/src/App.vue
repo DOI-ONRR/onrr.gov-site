@@ -46,8 +46,6 @@ export default {
 
 
 <style>
-#app {}
-
 #app .home-content a:visited,
 #app .page-wrap a:visited {
   color: var(--v-primary-base);
