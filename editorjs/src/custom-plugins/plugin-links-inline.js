@@ -511,6 +511,8 @@ export default class LinksInline {
     i.classList.add('v-icon');
     i.classList.add('notranslate');
     i.classList.add('mdi');
+    console.debug('extension: -------------------------------------------> ', extension);
+    
     switch(extension) {
     case 'pdf':
       i.classList.add('mdi-file-pdf-box')
@@ -521,14 +523,17 @@ export default class LinksInline {
     case 'xlsx':
       i.classList.add('mdi-file-excel-box')
       break
-    case 'doc':
+    case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      i.classList.add('mdi-file-excel-box')
+      break
+    case 'vnd.openxmlformats-officedocument.wordprocessingml.document':
       i.classList.add('mdi-file-word-box')
       break
-    case 'ppt':
-      i.classList.add('mdi-powerpoint-box')
+    case 'vnd.openxmlformats-officedocument.presentationml.presentation':
+      i.classList.add('mdi-file-powerpoint-box')
       break
-    case 'txt':
-      i.classList.add('mdi-powerpoint-box')
+    case 'plain':
+      i.classList.add('mdi-text-box')
       break
     default:
       return

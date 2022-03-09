@@ -66,9 +66,9 @@ export default class extends ImageTool {
 		this.ui.nodes.imgWidthInput.value = this._data?.imgWidth || this._data?.file?.width || '';
 		this.ui.nodes.imgHeightInput.value = this._data?.imgHeight || this._data?.file?.height || '';
 		this.ui.nodes.altTagInput.value = this._data?.altTag || '';
-
 		this.ui.nodes.altTagInput.addEventListener('change', (e) => {
-			this.save();
+                  console.debug(e);
+                  this.save();
 		});
 
 		this.ui.nodes.imgWidthInput.addEventListener('change', (e) => {
