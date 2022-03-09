@@ -44,7 +44,7 @@
   import MarkerTool from '@editorjs/marker';
   import RawToolTool from '@editorjs/raw';
   import InlineCodeTool from '@editorjs/inline-code';
-  import TextAlignTool from '@canburaks/text-align-editorjs';
+  // import TextAlignTool form '@canburaks/text/-align-editorjs';
   import AlertTool from 'editorjs-alert';
   import StrikethroughTool from '@itech-indrustries/editorjs-strikethrough';
   import ListTool from './custom-plugins/plugin-list-patch';
@@ -53,11 +53,11 @@
   import PersonalityTool from './custom-plugins/plugin-personality-patch';
   // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
   import CollectionsTool from "./custom-plugins/plugin-collections";
-  import Links from "./custom-plugins/plugin-links";
+//  import Links from "./custom-plugins/plugin-links";
   import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
-  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
+//  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
-  import LinksList from "./custom-plugins/plugin-links-list.js";
+//  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
   export default defineComponent({
@@ -77,7 +77,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'links', 'horizontalrule', 'linkAutocomplete', 'linksInline','linksList'],
+        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline'],
       },
       font: {
         type: String,
@@ -137,7 +137,8 @@
       }, 250);
 
       onMounted(() => {
-        editorjsInstance.value = new EditorJS({
+
+editorjsInstance.value = new EditorJS({
           // @ts-ignore
           logLevel: 'ERROR',
           holder: editorElement.value,
@@ -243,6 +244,8 @@
         * @returns {{}}
       */
       function buildToolsOptions() {
+        const tools = {};
+
         const uploaderConfig = {
           addTokenToURL,
           baseURL: api.defaults.baseURL,
@@ -281,11 +284,11 @@
             class: UnderlineTool,
             shortcut: 'CMD+SHIFT+U',
           },
-          textalign: {
-            class: TextAlignTool,
-            inlineToolbar: true,
-            shortcut: 'CMD+SHIFT+A',
-          },
+          // textalign: {
+          //   class: TextAlignTool,
+          //   inlineToolbar: true,
+          //   shortcut: 'CMD+SHIFT+A',
+          // },
           strikethrough: {
             class: StrikethroughTool,
           },
@@ -347,49 +350,62 @@
               fieldsEndpoint: '/fields'
             }
           },
-          links: {
+       /*   links: {
             class: Links,
             config: {
               linksEndpoint: '/items/links',
               fieldsEndpoint: '/fields'
             }
-
           },
+	  */	
           horizontalrule: {
             class: HorizontalRuleTool,
             inlineToolbar: true,
           },
- 	  alignmentTune: {
-	    class: AlignmentTuneTool
-	  },
-          linkAutocomplete: {
+          alignmentTune: {
+            class: AlignmentTuneTool
+          },
+      /*    linkAutocomplete: {
             class: LinkAutocomplete,
             inlineToolbar: true,
             config: {
               endpoint: '/items/links',
-              queryParam: 'search'
+              queryParam: 'search',
+              icons: {
+                pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
+              },
+	            base: 'https://dev-onrr-cms.app.cloud.gov'	 
             },
           },
+	  */
           linksInline: {
             class: LinksInline,
             inlineToolbar: true,
             config: {
-              endpoint: '/items/links?limits=-1',
-              queryParam: 'search'
+              endpoint: '/items/links?limit=-1',
+              page_id: document.URL.split('/').pop(), 
+              queryParam: 'search',
+	            base: 'https://dev-onrr-cms.app.cloud.gov'
+		    
             },
+	
           },
-          linksList: {
+         /* linksList: {
             class: LinksList,
             inlineToolbar: true,
             config: {
-              endpoint: '/items/links?limits=-1',
-              queryParam: 'search'
+              endpoint: '/items/links?limit=-1',
+              queryParam: 'search',
+    	        icons: {
+	              pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
+	            },
+              base: 'https://dev-onrr-cms.app.cloud.gov'
             },
           },
+	  */
         };
 
         // Build current tools config.
-        const tools = {};
 
         for (const toolName of props.tools) {
           // @ts-ignore
@@ -400,9 +416,21 @@
           }
         }
 
-        return tools;
-      }
-    },
+				if ('header' in tools) {
+					tools.header.tunes = ['alignmentTune'];
+				}
+
+				if ('table' in tools) {
+					tools.table.tunes = ['alignmentTune']
+				}
+
+				if ('image' in tools) {
+					tools.image.tunes = ['alignmentTune']
+				}
+
+			  return tools;
+		  }
+    }
   });
 </script>
 

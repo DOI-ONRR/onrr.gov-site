@@ -46,7 +46,14 @@ export default {
 
 
 <style>
-#app {}
+#app .home-content a:visited,
+#app .page-wrap a:visited {
+  color: var(--v-primary-base);
+}
+
+#app .page-wrap .v-breadcrumbs a:visited {
+  color: var(--v-secondary-base);
+}
 
 .v-toolbar__extension {
   margin-left: 0;

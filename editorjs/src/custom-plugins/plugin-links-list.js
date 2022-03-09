@@ -198,10 +198,18 @@ export default class LinksList {
     return {
       ul: {},
       li: {},
-      a: {}
+      a: {
+        href:true,
+        target:true
+      },
+      img: {src:true,
+            height:true,
+            width:true
+           }
+      
     };
   }
-
+  
   /**
    * Handle clicks on the Inline Toolbar icon
    *
@@ -301,14 +309,29 @@ export default class LinksList {
   }
 
 
-  addUrl(linkList,url,label) {
+  addUrl(linkList,url,filename) {
     console.debug('  addUrl(linkList,url,label) ------------------>')
     //    let  myUl = document.create("ul")
+
     let  myLi= document.createElement("li");
     let  aTag = document.createElement('a');
-    aTag.setAttribute('href',url);
+    const fparts=filename.split(".")
+    const label=fparts[0]
+    const extension= fparts.length > 1 ? fparts.pop() : ''
+    const iconSrc= this.config.icons[extension] || '';
+    var icon = document.createElement("IMG");
+    icon.setAttribute("src", this.config.base+iconSrc);
+    icon.setAttribute("width", "20");
+    icon.setAttribute("height", "20");
+    
+    aTag.setAttribute('href',this.config.base+url);
     aTag.innerText = label;
     myLi.appendChild(aTag);
+    if(iconSrc.length > 0) {
+      linkList.appendChild(icon);
+      aTag.setAttribute('target','_blank');
+
+    }
     linkList.appendChild(myLi);
     aTag.insertAdjacentHTML('afterend', "&nbsp;")
         aTag.insertAdjacentHTML('beforebegin', "&nbsp;")
