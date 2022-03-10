@@ -12,6 +12,7 @@
           v-for="item in menuItemsTop"
           :key="item.id"
           :href="item.custom_url ? item.custom_url : item.link_to_page.url"
+          :target="`${ item.custom_url ? '_blank' : '_self' }`"
           plain
           color="white">
           {{ item.menu_label }}
@@ -28,6 +29,7 @@
           v-for="item in menuItemsBottom"
           :key="item.id"
           :href="item.custom_url ? item.custom_url : item.link_to_page.url"
+          :target="`${ item.custom_url ? '_blank' : '_self' }`"
           plain
           color="white">
           {{ item.menu_label }}
