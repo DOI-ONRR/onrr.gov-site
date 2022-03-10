@@ -8,11 +8,11 @@
             :key="i"
             class="mb-4"
             disable-icon-rotate
+            @click="addParamsToLocation({ panel: formattedLabel(block.item.block_label)  })"
             >
             <v-expansion-panel-header 
                 :ref="formattedLabel(block.item.block_label)"
-                color="expansionPanel"
-                @click="addParamsToLocation({ panel: formattedLabel(block.item.block_label)  })">
+                color="expansionPanel">
                 {{ block.item.block_label }}
                 <template v-slot:actions>
                     <v-icon color="secondary" class="v-icon-plus">
@@ -65,8 +65,11 @@ export default {
             return indexes
         },
         addParamsToLocation(params) {
-            const query = { path: this.$route.fullPath, ...this.$route.query, query: params }
-            this.$router.push(query).catch(() => {})
+            setTimeout(() => {
+                const query = { path: this.$route.fullPath, ...this.$route.query, query: params }
+                this.$router.push(query).catch(() => {})
+            }, 0);
+            
         },
         formattedLabel(label) {
             return formatToSlug(label)
@@ -96,10 +99,10 @@ export default {
         },
         openedPanel() {
             const defaultBlockId = this.block.item.open_by_default?.id
-            let openedId
             let formattedLabelArr = this.formattedLabelsArr()
+            let openedId
 
-            if (this.panelQueryParamExists) {
+            if (this.$route.query.panel) {
                 openedId = formattedLabelArr.findIndex(block => block === this.$route.query.panel)
             } else {
                 if (defaultBlockId) {
@@ -110,12 +113,7 @@ export default {
         }
     },
     created() {
-        if (this.$route.query.panel) {
-            // this.openedPanel()
-            this.panelQueryParamExists = true
-        } else {
-            this.panelQueryParamExists = false
-        }
+        // this.openedPanel()
     },
 }
 </script>

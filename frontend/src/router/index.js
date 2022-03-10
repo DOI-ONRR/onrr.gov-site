@@ -108,7 +108,7 @@ const router = new VueRouter({
   linkExactActiveClass: "nav-active-class",
   routes,
   scrollBehavior(to, from, savedPosition) {
-    console.log('scrollBehavior to, from, savedPosition: ', to, from, savedPosition)
+    // console.log('scrollBehavior to, from, savedPosition: ', to, from, savedPosition)
     if (to.hash) {
       return {
         selector: to.hash,
@@ -148,7 +148,7 @@ function hasQueryParams(route) {
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach((to, from, next) => {
-  console.log('beforeRouteEnter to.path ------------>', to, from, next)
+  // console.log('beforeRouteEnter to.path ------------>', to, from, next)
 
   // getRedirects()
 
@@ -159,7 +159,7 @@ router.beforeEach((to, from, next) => {
   .then((res) => {
     // console.log(res.data)
     if (res?.data) {
-      console.log('res.data--------->', res.data)
+      // console.log('res.data--------->', res.data)
       const pages = res.data.pages
 
       // redirects
