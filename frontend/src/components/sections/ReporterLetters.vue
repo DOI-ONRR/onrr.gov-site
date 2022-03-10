@@ -142,8 +142,8 @@ export default {
         return value.some(item => this.topicsInputField.selected.indexOf(item) >= 0)
     },
     addParamsToLocation(params) {
-      this.$router.replace({ path: this.$route.path, query: params })
-      this.forceRerender()
+      const query = { path: this.$route.fullPath, ...this.$route.query, query: params }
+      this.$router.push(query).catch(() => {})
     },
     formattedLabel(label) {
       return formatToSlug(label)

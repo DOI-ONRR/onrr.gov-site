@@ -67,14 +67,10 @@ export default {
   props: {
     slug: String,
   },
-  created () {
-    // this.$apollo.queries.pages_by_id.refetch()
-  },
   computed: {
     findPageByUrl () {
-      const routePath = this.$route.fullPath.split('?')[0]
-      console.log('routePath yo ------------> ', routePath)
-      return this.pages.find(page => page.url === routePath)
+      console.log('routePath yo ------------> ', this.$route.path)
+      return this.pages.find(page => page.url === this.$route.path)
     },
     page () {
       return this.pages_by_id
@@ -88,7 +84,9 @@ export default {
     pageTitle () {
       return this.pages_by_id.title
     }
-  }
+  },
+  created () {},
+  
 }
 </script>
 

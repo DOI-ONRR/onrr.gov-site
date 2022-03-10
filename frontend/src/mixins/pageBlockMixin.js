@@ -37,7 +37,7 @@ export const pageBlockMixin = {
   },
   methods: {
     pageBlock(type) {
-      console.log('pageBlockMixin pageBlock type: ', type)
+      // console.log('pageBlockMixin pageBlock type: ', type)
       let block
       switch (type) {
         case 'tab_blocks':

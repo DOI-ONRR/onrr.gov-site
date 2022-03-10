@@ -30,7 +30,8 @@ export default {
     },
     methods: {
         addParamsToLocation(params) {
-            this.$router.replace({ path: this.$route.path, query: params })
+            const query = { path: this.$route.fullPath, ...this.$route.query, query: params }
+            this.$router.push(query).catch(() => {})
             // this.forceRerender()
         },
     },
