@@ -53,13 +53,8 @@ export default {
       loadingKey: 'loading...',
       result ({ data }) {
         if (data) {
-          const str = this.$route.path
-          const routes = str.split('/')
-          // console.log('whats this -----------> ', this.slug)
-          const slug = (this.slug && this.slug.includes('?') !== undefined) ? this.slug.split('?')[0] : this.slug
-          const page = slug 
-            ? data.pages.find(page => page.slug === slug)
-            : this.pages.find(page => page.slug === routes[routes.length - 1])
+          const page = data.pages.find(page => page.url === this.$route.path)
+
           this.page = page
           this.pageId = page.id
         }
@@ -85,29 +80,18 @@ export default {
     }
   },
   created() {
-    this.findPageBySlug()
+    this.findPageByUrl()
   },
   methods: {
-    findPageBySlug: function () {
-      const str = this.$route.path
-      const routes = str.split('/')
-      // console.log('whats this -----------> ', this.slug.includes('?'))
-      const slug = (this.slug && this.slug.includes('?') !== undefined) ? this.slug.split('?')[0] : this.slug
+    findPageByUrl: function () {
+        let page
+        if (this.pages) {
+          page = this.pages.find(page => page.url === this.$route.path)
+        }
+        
 
-      let page
-      if(this.pages) {
-        page = (slug !== undefined) 
-          ? this.pages.find(page => page.slug === slug)
-          : this.pages.find(page => page.slug === routes[routes.length - 1]) || false
-      }
-      this.page = page
-      return page
-    },
-    getPageBySlug: function(slug) {
-      // console.log('whats this -----------> ', slug.includes('?'))
-      const formattedSlug = (slug && slug.includes('?') !== undefined) ? slug.split('?')[0] : slug
-      const page = this.pages.find(page => page.url === formattedSlug)
-      return page
+        this.page = page
+        return page
     }
   }
 }
