@@ -7,7 +7,7 @@ BEGIN
 IF NEW.status = 'published' and length(NEW.url) > 0 THEN
 
 
-insert into links ( status, sort, user_created, date_created, user_updated, date_updated,href,type,rel,target,url,label,category,title,page_id, keywords) values ('published', null, null, now(), null, now(), NEW.url, 'application/internal', null, null, NEW.url, NEW.title, 'Pages', NEW.title, NEW.id, NEW.title);
+insert into links ( status, sort, user_created, date_created, user_updated, date_updated,href,type,rel,target,url,label,category,title,page_id, page, keywords) values ('published', null, null, now(), null, now(), NEW.url, 'application/internal', null, null, NEW.url, NEW.title, 'Pages', NEW.title, NEW.id,NEW.title, NEW.title);
 
 -- insert into links(url, label, category,status, date_created) values (NEW.url, NEW.title, 'Pages', 'published',now() ); 
 END IF;
