@@ -11,13 +11,14 @@
 </template>
 
 <script>
-const FilesCollection = () => import(/* webpackChunkName: "FilesCollection" */ '@/components/collections/FilesCollection')
-const AnnouncementsCollection = () => import(/* webpackChunkName: "AnnouncementsCollection" */ '@/components/collections/AnnouncementsCollection')
-const EventsCollection = () => import(/* webpackChunkName: "EventsCollection" */ '@/components/collections/EventsCollection')
-const CompaniesCollection = () => import(/* webpackChunkName: "CompaniesCollection" */ '@/components/collections/CompaniesCollection')
-const ContactsCollection = () => import(/* webpackChunkName: "ContactsCollection" */ '@/components/collections/ContactsCollection')
+const FilesCollection = () => import(/* webpackChunkName: "FilesCollection" */ '@/components/collections/Files')
+const AnnouncementsCollection = () => import(/* webpackChunkName: "AnnouncementsCollection" */ '@/components/collections/Announcements')
+const EventsCollection = () => import(/* webpackChunkName: "EventsCollection" */ '@/components/collections/Events')
+const CompaniesCollection = () => import(/* webpackChunkName: "CompaniesCollection" */ '@/components/collections/Companies')
+const ContactsCollection = () => import(/* webpackChunkName: "ContactsCollection" */ '@/components/collections/Contacts')
 const NYMEXCollection = () => import(/* webpackChunkName: "NYMEXCollection" */ '@/components/collections/NYMEX')
 const RulemakingsCollection = () => import(/* webpackChunkName: "Rulemakings" */ '@/components/collections/Rulemakings')
+const IndexZonesCollection = () => import(/* webpackChunkName: "IndexZones" */ '@/components/collections/IndexZones')
 
 import { 
   REPORTER_LETTERS_QUERY,
@@ -25,7 +26,8 @@ import {
   ANNOUNCEMENTS_QUERY,
   CONTACTS_QUERY,
   NYMEX_QUERY,
-  RULEMAKINGS_QUERY
+  RULEMAKINGS_QUERY,
+  INDEX_ZONES_QUERY
 } from '@/graphql/queries'
 
 export default {
@@ -60,6 +62,9 @@ export default {
         else if (this.block.data.collection === 'rulemakings') {
           return RULEMAKINGS_QUERY
         }
+        else if (this.block.data.collection === 'index_zones') {
+          return INDEX_ZONES_QUERY
+        }
       },
       update: data => data
     }
@@ -89,6 +94,9 @@ export default {
           break
         case 'rulemakings':
           collectionBlock = RulemakingsCollection
+          break
+        case 'index_zones':
+          collectionBlock = IndexZonesCollection
           break
         default:
           console.warn('No collection block found.')
