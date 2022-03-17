@@ -64,7 +64,7 @@ export default (router, { services, exceptions }) => {
         //currently write file to /tmp  should be able to read stream from s3 and write directly?
         
         await getFile(filePath,'https://dev-onrr-cms.app.cloud.gov'+url);
-        return res.download(filePath)
+        return res.sendFile(filePath)
       }
       )
       .catch((error) => {
