@@ -44,7 +44,7 @@ import {
 } from '@/js/utils'
 
 export default {
-    name: 'Rulemakings',
+    name: 'RulemakingsCollection',
     data: () => ({
         titleInputField: {
             label: 'Search',

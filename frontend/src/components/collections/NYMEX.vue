@@ -51,7 +51,7 @@ import {
 } from '@/js/utils'
 
 export default {
-  name: 'NYMEXBlock',
+  name: 'NYMEXCollection',
   data() {
     return {
       items: ['2021', '2020', 'Fizz', 'Buzz'],         

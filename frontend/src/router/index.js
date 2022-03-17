@@ -97,7 +97,7 @@ const routes = [
     ]
   },
   {
-    path: ':catchAll(.*)',
+    path: '/:catchAll(.*)',
     redirect: '/404'
   }
 ]
@@ -106,7 +106,21 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   linkExactActiveClass: "nav-active-class",
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // console.log('scrollBehavior to, from, savedPosition: ', to, from, savedPosition)
+    if (to.hash) {
+      return {
+        selector: to.hash,
+        behavior: 'smooth',
+        // offset: { x: 0 }
+      }
+    } else if (savedPosition) {
+      return savedPosition
+    } else {
+      // return { x: 0, y: 0 }
+    }
+  }
 })
 
 
@@ -155,9 +169,11 @@ router.beforeEach((to, from, next) => {
 
       const path = location.pathname.toString()
       // console.log('path: ', path)
-      const fullPath = to.fullPath.includes('?') ? to.fullPath.split('?')[0] : to.fullPath
+      // const fullPath = to.fullPath.includes('?') ? to.fullPath.split('?')[0] : to.fullPath
       // console.log('fullPath: ', fullPath)
-      const pageFound = pages.find(page => page.url === fullPath)
+      // find page and remove hash if any
+      // const pageFound = pages.find(page => page.url === fullPath).split('#')[0]
+      const pageFound = pages.find(page => page.url === to.path)
       const redirectFound = redirects.find(redirect => redirect.from === path)
 
       // console.log('redirectFound------------->', redirectFound)
