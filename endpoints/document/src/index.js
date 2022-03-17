@@ -60,7 +60,7 @@ export default (router, { services, exceptions }) => {
       .readByQuery({ fields: ['*'],  filter: {target: {'_eq': file}}})
       .then( async (results) => {
         const filePath='/tmp/'+file
-        const url=results[0].url;
+        const url='/assets/'results[0].directus_files_id;
         //currently write file to /tmp  should be able to read stream from s3 and write directly?
         
         await getFile(filePath,'https://dev-onrr-cms.app.cloud.gov'+url);
