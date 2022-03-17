@@ -236,3 +236,17 @@ export const RULEMAKINGS_QUERY = gql`
     }
   }
 `
+
+export const INDEX_ZONES_QUERY = gql`
+  query {
+    index_zones(sort: ["sort", "-date"], limit: -1) {
+      id
+      status
+      date
+      spreadsheet {
+        id
+      }
+      index_zones
+    }
+  }
+`

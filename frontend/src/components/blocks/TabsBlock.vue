@@ -1,21 +1,24 @@
 <template>
   <div class="v-tabs__wrap">
     <v-tabs
-      v-model="model"
+      v-model="tab"
       dark
       color="white"
       background-color="white"
-      show-arrows>
+      show-arrows
+      @change="getSelectedTabs($event)"
+      @input="onTabUpdate()">
       <v-tab 
         v-for="(tab, index) in tabItems"
         :key="index"
         :href="`#${ formattedLabel(tab.item.tab_block_label) }`"
-        @click="addParamsToLocation({ tab: formattedLabel(tab.item.tab_block_label)  });">
+        :ref="`tab_label_${ formattedLabel(tab.item.tab_block_label) }`"
+        @click="handleClick()">
         <span v-html="tab.item.tab_block_label"></span>
       </v-tab>
     </v-tabs>
     <v-tabs-items
-      v-model="model"
+      v-model="tab"
       :key="componentKey">
       <v-tab-item
         v-for="(block, i) in tabItems"
@@ -35,6 +38,10 @@
 </template>
 
 <script>
+import { 
+  // store, 
+  // mutations 
+} from '@/store'
 import { formatToSlug } from '@/js/utils'
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 
@@ -49,6 +56,8 @@ export default {
   data () {
     return {
       model: '',
+      tab: '',
+      nestedTab: '',
       componentKey: 0,
     }
   },
@@ -59,10 +68,22 @@ export default {
     LayoutBlock
   },
   methods: {
-    // TODO: update params to handle levels of tabs
-    addParamsToLocation(params) {
-      this.$router.replace({ path: this.$route.path, query: params })
-      this.forceRerender()
+    getSelectedTabs() {
+      setTimeout(() => {
+        const selectedTabs = document.querySelectorAll('.v-tabs .v-tab--active')
+        const selectedNestedTabs = document.querySelectorAll('.v-tabs-items .v-window-item--active .v-tab--active')
+        const parentItem = Array.from(selectedTabs).map(item => this.formattedLabel(item.innerText))[0]
+        const childItem = Array.from(selectedNestedTabs).map(item => this.formattedLabel(item.innerText))[0]
+        const tabs = childItem ? [parentItem, childItem].toString() : parentItem
+
+        this.$router.replace({ path: this.$route.path, query: { tabs: tabs } }).catch(()=>{})
+        // console.log('getSelectedTabs e: ', e)
+        console.log('getSelectedTabs selectedTabs, selectedNestedTabs: ', selectedTabs, selectedNestedTabs)
+        
+      }, 0);
+    },
+    onTabUpdate(newVal) {
+      this.$emit('tab yo!', newVal)
     },
     formattedLabel(label) {
       return formatToSlug(label)
@@ -70,6 +91,9 @@ export default {
     forceRerender() {
       return this.componentKey += 1
     },
+    handleClick() {
+      // console.log('handleClick for ---------> ', label)
+    }
   },
   computed: {
     tabItems() {
@@ -77,7 +101,7 @@ export default {
       const tabItems = []
 
       tabBlocks && tabBlocks.forEach(obj => {
-        console.log('obj: ', obj)
+        // console.log('obj: ', obj)
         if(obj.item !== null) {
           if (obj.item.__typename === 'tab_block_label') {
             tabItems.push({ ...obj, tabBlocks: [] })
@@ -91,10 +115,29 @@ export default {
       return tabItems
     },
   },
-  created() {
-    // console.log('tab query params --------> ', this.$route.query.tab)
-    this.model = this.$route.query.tab || this.formattedLabel(this.tabItems[0].item.tab_block_label)
+  watch: {
+    tab() {
+      // console.log('watch this.$refs: ', this.$refs)
+      this.$emit('tab', this.tab)
+    }
   },
+  created() {
+    // console.log('create this.$refs: ', this.$refs)
+    const activeTab = this.$route.query.tabs.split(',')[0]
+    this.tab = activeTab || this.formattedLabel(this.tabItems[0].item.tab_block_label)
+  },
+  mounted() {
+    // set nested tab item
+    setTimeout(() => {
+      const activeTabs = this.$route.query.tabs.split(',')
+      
+      if (activeTabs.length > 1) {
+        const targetEl = `tab_label_${ activeTabs[1] }`
+        if (this.$refs[targetEl]) this.$refs[targetEl][0].$el.click()
+      }
+      
+    },0);
+  }
 }
 </script>
 

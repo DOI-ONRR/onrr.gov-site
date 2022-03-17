@@ -1,5 +1,5 @@
 <template>
-    <div class="pa-1">
+    <div class="pa-1" id="foo-bar">
         <v-expansion-panels
             accordion
             :value="openedPanel">
@@ -8,8 +8,11 @@
             :key="i"
             class="mb-4"
             disable-icon-rotate
+            @click="addParamsToLocation({ panel: formattedLabel(block.item.block_label)  })"
             >
-            <v-expansion-panel-header color="expansionPanel">
+            <v-expansion-panel-header 
+                :ref="formattedLabel(block.item.block_label)"
+                color="expansionPanel">
                 {{ block.item.block_label }}
                 <template v-slot:actions>
                     <v-icon color="secondary" class="v-icon-plus">
@@ -30,6 +33,7 @@
 </template>
 
 <script>
+import { formatToSlug } from '@/js/utils'
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 
 import { 
@@ -41,7 +45,8 @@ export default {
     name: 'ExpansionPanelBlock',
     data() {
         return {
-            panels: []
+            panels: [],
+            panelQueryParamExists: false
         }
     },
     props: {
@@ -58,7 +63,22 @@ export default {
                 indexes.push(i)
             }
             return indexes
+        },
+        addParamsToLocation(params) {
+            setTimeout(() => {
+                const query = { path: this.$route.fullPath, ...this.$route.query, query: params }
+                this.$router.push(query).catch(() => {})
+            }, 0);
+            
+        },
+        formattedLabel(label) {
+            return formatToSlug(label)
+        },
+        formattedLabelsArr() {
+            const panelsArr = this.panels
+            return panelsArr.map(block => this.formattedLabel(block.item.block_label))
         }
+        
     },
     computed: {
         blockItems() {
@@ -79,13 +99,22 @@ export default {
         },
         openedPanel() {
             const defaultBlockId = this.block.item.open_by_default?.id
-            let defaultId
-            if (defaultBlockId) {
-                defaultId = this.panels.findIndex(block => block.item.id === defaultBlockId)
+            let formattedLabelArr = this.formattedLabelsArr()
+            let openedId
+
+            if (this.$route.query.panel) {
+                openedId = formattedLabelArr.findIndex(block => block === this.$route.query.panel)
+            } else {
+                if (defaultBlockId) {
+                    openedId = this.panels.findIndex(block => block.item.id === defaultBlockId)
+                }
             }
-            return defaultId
+            return openedId
         }
-    }
+    },
+    created() {
+        // this.openedPanel()
+    },
 }
 </script>
 
