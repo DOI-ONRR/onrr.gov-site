@@ -420,6 +420,10 @@ editorjsInstance.value = new EditorJS({
 					tools.header.tunes = ['alignmentTune'];
 				}
 
+        if ('paragraph' in tools) {
+					tools.paragraph.tunes = ['alignmentTune'];
+				}
+
 				if ('table' in tools) {
 					tools.table.tunes = ['alignmentTune']
 				}

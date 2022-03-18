@@ -345,7 +345,8 @@ export default class CollectionsTool {
       'reporter_letters',
       'NYMEX',
       'rulemakings',
-      'index_zones'
+      'index_zones',
+      'ibmp'
     ];
     let nArr = []
     
