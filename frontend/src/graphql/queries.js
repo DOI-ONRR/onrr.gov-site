@@ -250,3 +250,17 @@ export const INDEX_ZONES_QUERY = gql`
     }
   }
 `
+
+export const IBMP_QUERY = gql`
+  query {
+    ibmp(sort: ["sort", "-date"], limit: -1) {
+      id
+      status
+      date
+      spreadsheet {
+          id
+      }
+      ibmp_line_items
+    }
+  }
+`

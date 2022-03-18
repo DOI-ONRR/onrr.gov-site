@@ -19,6 +19,7 @@ const ContactsCollection = () => import(/* webpackChunkName: "ContactsCollection
 const NYMEXCollection = () => import(/* webpackChunkName: "NYMEXCollection" */ '@/components/collections/NYMEX')
 const RulemakingsCollection = () => import(/* webpackChunkName: "Rulemakings" */ '@/components/collections/Rulemakings')
 const IndexZonesCollection = () => import(/* webpackChunkName: "IndexZones" */ '@/components/collections/IndexZones')
+const IBMPCollection = () => import(/* webpackChunkName: "IndexZones" */ '@/components/collections/IBMP')
 
 import { 
   REPORTER_LETTERS_QUERY,
@@ -27,7 +28,8 @@ import {
   CONTACTS_QUERY,
   NYMEX_QUERY,
   RULEMAKINGS_QUERY,
-  INDEX_ZONES_QUERY
+  INDEX_ZONES_QUERY,
+  IBMP_QUERY
 } from '@/graphql/queries'
 
 export default {
@@ -65,6 +67,9 @@ export default {
         else if (this.block.data.collection === 'index_zones') {
           return INDEX_ZONES_QUERY
         }
+        else if (this.block.data.collection === 'ibmp') {
+          return IBMP_QUERY
+        }
       },
       update: data => data
     }
@@ -97,6 +102,9 @@ export default {
           break
         case 'index_zones':
           collectionBlock = IndexZonesCollection
+          break
+        case 'ibmp':
+          collectionBlock = IBMPCollection
           break
         default:
           console.warn('No collection block found.')
