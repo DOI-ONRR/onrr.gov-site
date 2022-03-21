@@ -346,7 +346,8 @@ export default class CollectionsTool {
       'NYMEX',
       'rulemakings',
       'index_zones',
-      'ibmp'
+      'ibmp',
+      'indian_gas_major_portion'
     ];
     let nArr = []
     

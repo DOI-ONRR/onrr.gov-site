@@ -19,7 +19,8 @@ const ContactsCollection = () => import(/* webpackChunkName: "ContactsCollection
 const NYMEXCollection = () => import(/* webpackChunkName: "NYMEXCollection" */ '@/components/collections/NYMEX')
 const RulemakingsCollection = () => import(/* webpackChunkName: "Rulemakings" */ '@/components/collections/Rulemakings')
 const IndexZonesCollection = () => import(/* webpackChunkName: "IndexZones" */ '@/components/collections/IndexZones')
-const IBMPCollection = () => import(/* webpackChunkName: "IndexZones" */ '@/components/collections/IBMP')
+const IBMPCollection = () => import(/* webpackChunkName: "IBMPCollection" */ '@/components/collections/IBMP')
+const IndianGasMajorPortionCollection = () => import(/* webpackChunkName: "IndianGasMajorPortion" */ '@/components/collections/IndianGasMajorPortion')
 
 import { 
   REPORTER_LETTERS_QUERY,
@@ -29,7 +30,8 @@ import {
   NYMEX_QUERY,
   RULEMAKINGS_QUERY,
   INDEX_ZONES_QUERY,
-  IBMP_QUERY
+  IBMP_QUERY,
+  INDIAN_GAS_MAJOR_PORTION_QUERY
 } from '@/graphql/queries'
 
 export default {
@@ -70,6 +72,9 @@ export default {
         else if (this.block.data.collection === 'ibmp') {
           return IBMP_QUERY
         }
+         else if (this.block.data.collection === 'indian_gas_major_portion') {
+          return INDIAN_GAS_MAJOR_PORTION_QUERY
+        }
       },
       update: data => data
     }
@@ -105,6 +110,9 @@ export default {
           break
         case 'ibmp':
           collectionBlock = IBMPCollection
+          break
+        case 'indian_gas_major_portion':
+          collectionBlock = IndianGasMajorPortionCollection
           break
         default:
           console.warn('No collection block found.')
