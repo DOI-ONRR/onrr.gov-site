@@ -39,6 +39,10 @@ module.exports = function(env) {
     EMAIL_SENDMAIL_PATH: "/usr/sbin/sendmail",
     EMAIL_FROM: "no-reply@directus.io", 
     EMAIL_TRANSPORT: "sendmail",
-    GITHUB_TOKEN: env.GITHUB_TOKEN
+    GITHUB_TOKEN: env.GITHUB_TOKEN,
+
+    // https://github.com/directus/directus/releases
+    CORS_ENABLED: true,
+    CORS_ORIGIN: true
   }
 };
