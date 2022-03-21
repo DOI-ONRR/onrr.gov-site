@@ -264,3 +264,17 @@ export const IBMP_QUERY = gql`
     }
   }
 `
+
+export const INDIAN_GAS_MAJOR_PORTION_QUERY = gql`
+  query {
+    indian_gas_major_portion(sort: ["sort", "-date"], limit: -1) {
+      id
+      status
+      date
+      spreadsheet {
+        id
+      }
+      index_zones
+    }
+  }
+`
