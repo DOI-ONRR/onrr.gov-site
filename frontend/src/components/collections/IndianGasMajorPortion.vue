@@ -99,7 +99,7 @@ export default {
           }            
         })
 
-        this.designatedAreaInputField.items = ['All Areas', ...designatedAreaArr.sort()]
+        this.designatedAreaInputField.items = [...designatedAreaArr.sort()]
     },
     yearList() {
         let yearsArr = []
