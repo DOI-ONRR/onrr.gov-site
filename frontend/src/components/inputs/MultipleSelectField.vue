@@ -14,7 +14,7 @@
             :ref="field.ref"
             max-width="250px"
             @input="$emit('update', $event)"
-            @change="(field.selected.length > 0) && addParamsToLocation({ [field.params]: field.selected.join(',') })" >
+            @change="addParamsToLocation({ [field.params]: (field.selected.length > 0) ? field.selected.join(',') : undefined })" >
         </v-select>
     </div>
 </template>
@@ -32,7 +32,6 @@ export default {
         addParamsToLocation(params) {
             const query = { path: this.$route.fullPath, ...this.$route.query, query: params }
             this.$router.push(query).catch(() => {})
-            // this.forceRerender()
         },
     },
     created() {

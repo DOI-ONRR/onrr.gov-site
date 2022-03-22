@@ -48,7 +48,7 @@ export default {
   data: () => ({
     indexZonesInputField: {
       items: [],
-      label: 'All Index Zones',
+      label: 'Index Zone',
       ref: 'indexZoneSelectInput',
       selected: null,
       color: 'secondary',
@@ -62,7 +62,7 @@ export default {
       selected: null,
       color: 'secondary',
       icon: 'mdi-chevron-down',
-      params: 'index_zone'
+      params: 'years'
     }
   }),
   props: {
@@ -96,7 +96,7 @@ export default {
           }            
         })
 
-        this.indexZonesInputField.items = ['All Index Zones', ...indexZonesArr.sort()]
+        this.indexZonesInputField.items = [...indexZonesArr.sort()]
     },
     indexZonesYearList() {
         let yearsArr = []
@@ -109,11 +109,11 @@ export default {
           }            
         })
 
-        this.indexZonesYearsInputField.items = [...yearsArr.sort()].reverse()
+        this.indexZonesYearsInputField.items = [...yearsArr.sort().reverse()]
     },
     indexZonesFilter(value) {
       // console.log('indexZonesFilter: ', value)
-       if (!this.indexZonesInputField.selected || this.indexZonesInputField.selected === null || this.indexZonesInputField.selected.length === 0 || this.indexZonesInputField.selected === 'All Index Zones') {
+       if (!this.indexZonesInputField.selected || this.indexZonesInputField.selected === null || this.indexZonesInputField.selected.length === 0) {
           return true
        }
 
@@ -150,14 +150,12 @@ export default {
               align: 'start',
               sortable: false,
               value: 'month',
-              // filter: this.titleFilter,
           },
           {
               text: 'Price',
               align: 'start',
               sortable: false,
               value: 'price',
-              // filter: this.topicsFilter,
           }
       ]
     },
@@ -182,8 +180,14 @@ export default {
     setTimeout(() => {
       this.indexZonesList()
       this.indexZonesYearList()
-    }, 500);
-    
+    }, 300);
+
+  },
+  mounted() {
+    const index_zone = this.$route.query.index_zone
+    const years = this.$route.query.years && this.$route.query.years.split(',')
+    this.indexZonesInputField.selected = index_zone || null
+    this.indexZonesYearsInputField.selected = years || null
   }
 }
 </script>
