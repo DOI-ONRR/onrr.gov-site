@@ -20,6 +20,12 @@
             </v-list-item>
         </v-list-item-group>
       </v-list>
+      <div class="text-center">
+        <v-btn
+          color="secondary"
+          href="/about/public-affairs"
+          class="mx-auto">View All</v-btn>
+      </div>
     </div>
     <div v-if="collectionLayout === 'full'">
       <CollectionFilterToolbar
