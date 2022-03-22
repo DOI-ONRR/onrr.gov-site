@@ -23,7 +23,7 @@
       <v-tab-item
         v-for="(block, i) in tabItems"
         :key="i"
-        :value="formattedLabel(block.item.tab_block_label)">
+        :value="formattedLabel(block.item.tab_block_label)" transition="fade-transition">
         <v-card
           text
           elevation="0"
@@ -160,14 +160,29 @@ export default {
   color: rgba(0, 0, 0, 0.5) !important;
 }
 
+.v-tab {
+  border-left: 1.5px solid var(--v-secondary-base);
+  border-right: 1.5px solid var(--v-secondary-base);
+  border-top: 1.5px solid var(--v-secondary-base);
+  margin-right: 6px;
+}
+
 .v-tab--active {
   background-color: var(--v-secondary-base);
+  border: none;
 }
 
 .tab-content .v-tab--active {
   background-color: var(--v-secondary-lighten6);
   color: black !important;
 }
+
+// .tab-content .v-tab {
+//   border-left: 1px solid var(--v-secondary-lighten6);
+//   border-right: 1px solid var(--v-secondary-lighten6);
+//   border-top: 1px solid var(--v-secondary-lighten6);
+//   margin-right: 8px;
+// }
 
 .tab-content .v-tabs-slider {
   background-color: black !important;
