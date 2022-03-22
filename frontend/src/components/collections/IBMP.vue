@@ -96,7 +96,7 @@ export default {
           }            
         })
 
-        this.designatedAreaInputField.items = ['All Areas', ...designatedAreaArr.sort()]
+        this.designatedAreaInputField.items = [...designatedAreaArr.sort()]
     },
     yearList() {
         let yearsArr = []
@@ -109,7 +109,7 @@ export default {
           }            
         })
 
-        this.ibmpYearsInputField.items = [...yearsArr.sort().reverse()]
+        this.ibmpYearsInputField.items = [...yearsArr.sort()].reverse()
     },
     designatedAreaFilter(value) {
       console.log('designatedFilter: ', value)
