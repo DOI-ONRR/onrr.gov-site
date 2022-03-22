@@ -109,7 +109,7 @@ export default {
           }            
         })
 
-        this.ibmpYearsInputField.items = [...yearsArr.sort()].reverse()
+        this.ibmpYearsInputField.items = [...yearsArr.sort().reverse()]
     },
     designatedAreaFilter(value) {
       console.log('designatedFilter: ', value)
