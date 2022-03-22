@@ -59,7 +59,7 @@ export default {
       selected: null,
       color: 'secondary',
       icon: 'mdi-chevron-down',
-      params: 'index_zone'
+      params: 'designated_area'
     },
     yearInputField: {
       items: [],
@@ -68,7 +68,7 @@ export default {
       selected: null,
       color: 'secondary',
       icon: 'mdi-chevron-down',
-      params: 'index_zone'
+      params: 'years'
     }
   }),
   components: {
@@ -116,7 +116,7 @@ export default {
     },
     designatedAreaFilter(value) {
       // console.log('indexZonesFilter: ', value)
-       if (!this.designatedAreaInputField.selected || this.designatedAreaInputField.selected === null || this.designatedAreaInputField.selected.length === 0 || this.designatedAreaInputField.selected === 'All Areas') {
+       if (!this.designatedAreaInputField.selected || this.designatedAreaInputField.selected === null || this.designatedAreaInputField.selected.length === 0) {
           return true
        }
 
@@ -194,8 +194,13 @@ export default {
     setTimeout(() => {
       this.designatedAreaList()
       this.yearList()
-    }, 500);
-    
+    }, 300);
+  },
+  mounted() {
+    const designated_area = this.$route.query.designated_area
+    const years = this.$route.query.years && this.$route.query.years.split(',')
+    this.designatedAreaInputField.selected = designated_area || null
+    this.yearInputField.selected = years || null
   }
 }
 </script>

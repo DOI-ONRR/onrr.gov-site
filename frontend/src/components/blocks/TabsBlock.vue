@@ -76,9 +76,10 @@ export default {
         const childItem = Array.from(selectedNestedTabs).map(item => this.formattedLabel(item.innerText))[0]
         const tabs = childItem ? [parentItem, childItem].toString() : parentItem
 
-        this.$router.replace({ path: this.$route.path, query: { tabs: tabs } }).catch(()=>{})
-        // console.log('getSelectedTabs e: ', e)
         console.log('getSelectedTabs selectedTabs, selectedNestedTabs: ', selectedTabs, selectedNestedTabs)
+
+        const query = { path: this.$route.fullPath, ...this.$route.query, query: { tabs: tabs } }
+        this.$router.push(query).catch(() => {})
         
       }, 0);
     },
@@ -127,6 +128,7 @@ export default {
     this.tab = activeTab || this.formattedLabel(this.tabItems[0].item.tab_block_label)
   },
   mounted() {
+    console.log('TabsBlock mounted!')
     // set nested tab item
     setTimeout(() => {
       const activeTabs = this.$route.query.tabs.split(',')

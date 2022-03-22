@@ -4,6 +4,7 @@
             outlined
             dense
             v-model="field.selected"
+            clearable
             :items="field.items"
             :value="field.selected"
             :color="field.color"
@@ -11,7 +12,7 @@
             :label="field.label"
             :ref="field.ref"
             @input="$emit('update', $event)"
-            @change="addParamsToLocation({ [field.params]: field.selected })" ></v-select>
+            @change="addParamsToLocation({ [field.params]: field.selected || undefined })" ></v-select>
     </div>
 </template>
 
