@@ -13,7 +13,8 @@
         :key="index"
         :href="`#${ formattedLabel(tab.item.tab_block_label) }`"
         :ref="`tab_label_${ formattedLabel(tab.item.tab_block_label) }`"
-        @click="handleClick()">
+        @click="handleClick()"
+        :transition="false">
         <span v-html="tab.item.tab_block_label"></span>
       </v-tab>
     </v-tabs>
