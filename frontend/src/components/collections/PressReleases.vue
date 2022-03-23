@@ -71,25 +71,20 @@
 
 <script>
 import { store } from '@/store'
-import {
-  getDay,
-  getMonth,
-  getFullDate,
-  getYear
-} from '@/js/utils'
+import { 
+  fileCollectionMixin,
+  dateMixin
+} from '@/mixins'
 
 const CollectionFilterToolbar = () => import(/* webpackChunkName: "CollectionFilterToolbar" */ '@/components/toolbars/CollectionFilterToolbar')
 export default {
-  name: 'PressReleases',
+  name: 'PressReleasesCollection',
+  mixins: [fileCollectionMixin, dateMixin],
   data() {
     return {
-      API: process.env.VUE_APP_API_URL,
     }
   },
   props: {
-    collection: [Object, Array],
-    collectionName: String,
-    collectionLayout: String,
     showToolbar: Boolean,
   },
   components: {
@@ -100,26 +95,9 @@ export default {
       const sortedCollection = this.collection && [...this.collection].sort((a,b) => (a.date < b.date) ? 1 : -1)
       const filteredCollection = this.filterCollectionByYear(this.filterCollectionBySearch(sortedCollection))
       return (!filteredCollection || filteredCollection.length === 0) ? sortedCollection : filteredCollection
-    },
-    slicedCollection() {
-      const c = this.collection && this.collection.slice(0,5)
-      return c
     }
   },
   methods: {
-    getDay: getDay,
-    getMonth: getMonth,
-    getFullDate: getFullDate,
-    getYear: getYear,
-    fileLink(item) {
-      let link
-      if (item.file) {
-        link = `${ this.API }/assets/${ item.file.id }` || `${ item.link || '' }`
-      } else if (item.link ) {
-        link = item.link
-      }
-      return link
-    },
     filterCollectionBySearch(collection) {
       const search = store.collections.searchQuery || ''
       const filteredSearch = (search !== '') ? collection.filter(item => search.toLowerCase().split(' ').every(v => item.title.toLowerCase().includes(v))) : collection
@@ -129,6 +107,19 @@ export default {
       const year = store.collections.year
       const filteredYear = collection && collection.filter(item => this.getYear(item.date) === year)
       return filteredYear
+    },
+    fileLink(item) {
+      // console.log('fileLink item ----------> ', item)
+      let link
+      if (item.file) {
+        link = `/press-releases/${ item.file.filename_download }`
+      } else if (item.accessible) {
+        link = `${ this.API }/assets/${ item.accessible_file.id }`
+      } else if (item.link ) {
+        link = item.link
+      }
+      // console.log('fileLink ----------> ', link)
+      return link
     },
   }
 }

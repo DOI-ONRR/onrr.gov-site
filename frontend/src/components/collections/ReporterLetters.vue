@@ -71,20 +71,18 @@
 </template>
 
 <script>
+import { 
+  fileCollectionMixin,
+  dateMixin
+} from '@/mixins'
 import { formatToSlug } from '@/js/utils'
 const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectField" */ '@/components/inputs/MultipleSelectField')
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
-// const DataTable = () => import(/* webpackChunkName: "DataTable" */ '@/components/tables/DataTable')
 
-import {
-  getFullDate,
-  getYear,
-  getDay,
-  getMonth
-} from '@/js/utils'
 export default {
+  name: 'ReporterLettersCollection',
+  mixins: [fileCollectionMixin, dateMixin],
   data: () => ({
-    API: process.env.VUE_APP_API_URL,
     titleInputField: {
       label: 'Search',
       text: '',
@@ -103,36 +101,15 @@ export default {
     }
   }),
   props: {
-    collection: [Array, Object],
-    collectionName: String,
-    collectionLayout: String,
+    // collection: [Array, Object],
+    // collectionName: String,
+    // collectionLayout: String,
   },
   components: {
     MultipleSelectField,
     TextField,
-    // DataTable
   },
   methods: {
-    getFullDate: getFullDate,
-    getYear: getYear,
-    getMonth: getMonth,
-    getDay: getDay,
-    formatNiceDate(d) {
-      return `${ getMonth(d, 'numeric') }/${ getDay(d, 'numeric') }/${ getYear(d) }`
-    },
-    fileLink(item) {
-      // console.log('fileLink item ----------> ', item)
-      let link
-      if (item.file) {
-        link = `${ this.API }/assets/${ item.file.id }`
-      } else if (item.accessible) {
-        link = `${ this.API }/assets/${ item.accessible_file.id }`
-      } else if (item.link ) {
-        link = item.link
-      }
-      // console.log('fileLink ----------> ', link)
-      return link
-    },
     getTopics(topicsArr) {
       let topics
       if(topicsArr.length > 1) {
@@ -167,7 +144,7 @@ export default {
       return value.toLowerCase().includes(this.titleInputField.text.toLowerCase())
     },
     topicsFilter(value) {
-        console.log('topcis filter value --------> ', value)
+        // console.log('topcis filter value --------> ', value)
         if (!this.topicsInputField.selected || this.topicsInputField.selected === null || this.topicsInputField.selected.length === 0) {
             return true
         }
@@ -181,9 +158,6 @@ export default {
     formattedLabel(label) {
       return formatToSlug(label)
     },
-    topicQueryParams() {
-      return  this.$route.query.topic
-    }
   },
   computed: {
     headers()  {
@@ -210,16 +184,12 @@ export default {
         }
       ]
     },
-    slicedCollection() {
-      const c = this.collection && this.collection.slice(0,5)
-      return c
-    }
   },
   created() {
     setTimeout(function () { this.topicList() }.bind(this), 500)
   },
   mounted() {
-    const topics = this.$route.query.topic.split(',')
+    const topics = this.$route.query.topic && this.$route.query.topic.split(',')
     this.topicsInputField.selected = topics || null
   }
 }

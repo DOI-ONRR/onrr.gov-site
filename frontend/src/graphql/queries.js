@@ -195,6 +195,8 @@ export const PRESS_RELEASES_QUERY = gql`
       date
       file {
         id
+        filename_download
+        title
       }
       link
       excerpt
