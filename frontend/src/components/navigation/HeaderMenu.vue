@@ -63,9 +63,8 @@ export default {
 <style lang="scss" scoped>
 .header-menu {
   max-height: 80px;
-  display: flex !important;
   justify-content: flex-end;
-  margin-top: 32px;
+  margin-top: 30px;
 }
 
 .no-btn-hover {
