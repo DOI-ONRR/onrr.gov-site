@@ -1,5 +1,5 @@
 <template>
-  <div class="d-none d-lg-block">
+  <div class="d-none d-lg-block header-menu">
     <v-btn
       v-for="item in menuItems"
       :key="item.id"
@@ -10,7 +10,7 @@
       class="no-btn-hover"
     >
       <span class="v-btn__content">
-        <v-icon color="white" v-if="item.menu_icon">{{ item.menu_icon }}</v-icon>
+        <v-icon color="white" v-if="item.menu_icon" class="mr-1">{{ item.menu_icon }}</v-icon>
         <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
       </span>
       
@@ -61,8 +61,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-btn__content {
-  flex-direction: column;
+.header-menu {
+  max-height: 80px;
+  justify-content: flex-end;
+  margin-top: 30px;
 }
 
 .no-btn-hover {
