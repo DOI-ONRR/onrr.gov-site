@@ -68,4 +68,9 @@ export default {
   /* shouldn't have to do this, need to figure out correct method https://vuetifyjs.com/en/api/v-breadcrumbs/ */
 }
 
+
+.v-icon.mdi-file-pdf-box {
+  color: var(--v-secondary-base) !important;
+}
+
 </style>
