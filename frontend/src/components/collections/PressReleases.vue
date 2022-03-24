@@ -8,8 +8,9 @@
             <v-list-item
               v-for="(item, i) in slicedCollection"
               :key="i"
-              :href="fileLink(item)"
+              :href="fileLink('/press-releases/', item)"
               class="pa-0"
+              target="_blank"
             >
               <v-list-item-icon class="mr-1">
                 <v-icon color="secondary">mdi-file-pdf-box</v-icon>
@@ -60,7 +61,7 @@
                   <v-icon>mdi-calendar-month</v-icon> {{ getFullDate(item.date) }}
                 </v-list-item-subtitle>
                 <div class="mb-2 text-body-1" v-if="item.excerpt" v-html="item.excerpt"></div>
-                <div v-if="fileLink(item)"><a :href="fileLink(item)" target="_blank">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
+                <div v-if="fileLink('/press-releases/', item)"><a :href="fileLink('/press-releases/', item)" target="_blank">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
               </v-list-item-content>
             </v-list-item>
         </v-card>
@@ -108,19 +109,12 @@ export default {
       const filteredYear = collection && collection.filter(item => this.getYear(item.date) === year)
       return filteredYear
     },
-    fileLink(item) {
-      // console.log('fileLink item ----------> ', item)
-      let link
-      if (item.file) {
-        link = `/press-releases/${ item.file.filename_download }`
-      } else if (item.accessible) {
-        link = `${ this.API }/assets/${ item.accessible_file.id }`
-      } else if (item.link ) {
-        link = item.link
-      }
-      // console.log('fileLink ----------> ', link)
-      return link
-    },
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.v-list-item--active::before {
+  opacity: 0;
+}
+</style>

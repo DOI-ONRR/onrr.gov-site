@@ -11,17 +11,20 @@ export const fileCollectionMixin = {
     collectionLayout: String,
   },
   methods: {
-    fileLink(item) {
+    /**
+     * 
+     * @param {*} url | string
+     * @param {*} item | object
+     * @returns 
+     */
+    fileLink(url, item) {
       // console.log('fileLink item ----------> ', item)
       let link
       if (item.file) {
-        link = `/assets/${ item.file.id }`
-      } else if (item.accessible) {
-        link = `${ this.API }/assets/${ item.accessible_file.id }`
+        link = `${ url }${ item.file.filename_download }`
       } else if (item.link ) {
         link = item.link
       }
-      // console.log('fileLink ----------> ', link)
       return link
     },
   },

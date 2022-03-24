@@ -1,4 +1,4 @@
-const targetUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8055' : 'https://dev-onrr-cms.app.cloud.gov'
+const targetUrl = process.env.NODE_ENV === 'production' ? 'https://dev-onrr-cms.app.cloud.gov' : 'http://localhost:8055'
 
 module.exports = {
   transpileDependencies: [
@@ -17,6 +17,7 @@ module.exports = {
       .loader('vue-svg-loader');
   },
   devServer: {
+    // proxy: targetUrl
     proxy: {
       '^/document': {
         target: targetUrl,
@@ -25,6 +26,12 @@ module.exports = {
         logLevel: 'debug',
       },
       '^/press-releases': {
+        target: targetUrl,
+        changeOrigin: true,
+        secure: true,
+        logLevel: 'debug',
+      },
+      '^/reporter-letters': {
         target: targetUrl,
         changeOrigin: true,
         secure: true,

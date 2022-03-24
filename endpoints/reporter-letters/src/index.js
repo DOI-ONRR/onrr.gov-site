@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
 
+console.log('process.env.NODE_ENV: ', process.env.NODE_ENV)
 const targetUrl = process.env.NODE_ENV === 'production' ? 'https://dev-onrr-cms.app.cloud.gov' : 'http://localhost:8055'
 console.log('press-release targetUrl ----------------------> ', targetUrl);
 
@@ -39,7 +40,7 @@ export default (router, { services, exceptions }) => {
 		fileService
 			.readByQuery({ fields: ['*'], filter: {filename_download: {'_eq': file} } })
 			.then(async (results) => {
-        console.log('press-releases results: ', results)
+        console.log('reporter-letters results: ', results)
         // res.json(results)
 
         const filePath = `/tmp/${ file }`;
@@ -54,5 +55,3 @@ export default (router, { services, exceptions }) => {
 			});
 	});
 };
-
-
