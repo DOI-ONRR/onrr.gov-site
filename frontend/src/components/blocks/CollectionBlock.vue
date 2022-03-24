@@ -11,7 +11,9 @@
 </template>
 
 <script>
-const FilesCollection = () => import(/* webpackChunkName: "FilesCollection" */ '@/components/collections/Files')
+// const FilesCollection = () => import(/* webpackChunkName: "FilesCollection" */ '@/components/collections/Files')
+const ReporterLettersCollection = () => import(/* webpackChunkName: "ReporterLettersCollection" */ '@/components/collections/ReporterLetters')
+const PressReleasesCollection = () => import(/* webpackChunkName: "ReporterLettersCollection" */ '@/components/collections/PressReleases')
 const AnnouncementsCollection = () => import(/* webpackChunkName: "AnnouncementsCollection" */ '@/components/collections/Announcements')
 const EventsCollection = () => import(/* webpackChunkName: "EventsCollection" */ '@/components/collections/Events')
 const CompaniesCollection = () => import(/* webpackChunkName: "CompaniesCollection" */ '@/components/collections/Companies')
@@ -84,8 +86,10 @@ export default {
       let collectionBlock
       switch (type) {
         case 'reporter_letters':
+          collectionBlock = ReporterLettersCollection
+          break
         case 'press_releases':
-          collectionBlock = FilesCollection
+          collectionBlock = PressReleasesCollection
           break
         case 'announcements':
           collectionBlock = AnnouncementsCollection

@@ -108,7 +108,7 @@ const router = new VueRouter({
   linkExactActiveClass: "nav-active-class",
   routes,
   scrollBehavior(to, from, savedPosition) {
-    // console.log('scrollBehavior to, from, savedPosition: ', to, from, savedPosition)
+    console.log('scrollBehavior to, from, savedPosition: ', to, from, savedPosition)
     if (to.hash) {
       return {
         selector: to.hash,
