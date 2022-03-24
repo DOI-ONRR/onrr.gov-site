@@ -47,7 +47,7 @@ export default (router, { services, exceptions }) => {
         const url = `/assets/${ results[0].id }`;
         //currently write file to /tmp  should be able to read stream from s3 and write directly?
         
-        await getFile(filePath, `http://localhost:8055${ url }`);
+        await getFile(filePath, `${ targetUrl }${ url }`);
         return res.sendFile(filePath)
       })
 			.catch((error) => {
