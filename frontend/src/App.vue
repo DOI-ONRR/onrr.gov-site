@@ -68,10 +68,18 @@ export default {
   /* shouldn't have to do this, need to figure out correct method https://vuetifyjs.com/en/api/v-breadcrumbs/ */
 }
 
-
 .v-icon.mdi-file-pdf-box {
-  color: var(--v-secondary-base) !important;
   font-size: 28px;
+}
+
+/* editorjs tool icons */
+.v-icon.mdi-file-pdf-box,
+.v-icon.mdi-file-powerpoint-box,
+.v-icon.mdi-file-excel-box,
+.v-icon.mdi-file-word-box,
+.v-icon.mdi-file-powerpoint-box,
+.v-icon.mdi-text-box {
+  color: var(--v-secondary-base) !important;
 }
 
 </style>
