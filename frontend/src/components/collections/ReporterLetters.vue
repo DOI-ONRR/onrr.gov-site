@@ -56,8 +56,12 @@
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
             </template>
             <template v-slot:item.title="{ item }">
-                <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
-                <div v-if="item.accessible_file"><a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
+              <div>
+                <a :href="fileLink('/reporter-letters/' ,item)" target="_blank">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
+              </div>
+              <div v-if="item.accessible_file">
+                <a :href="accessibleFileLink('/reporter-letters/', item)" target="_blank">{{ item.accessible_file.title }}&nbsp;(Accessible.docx)</a><br>
+              </div>
             </template>
             <template v-slot:item.date="{ item }">
                 {{ formatNiceDate(item.date) }}
