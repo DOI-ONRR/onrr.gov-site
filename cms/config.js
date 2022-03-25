@@ -43,6 +43,6 @@ module.exports = function(env) {
 
     // https://github.com/directus/directus/releases
     CORS_ENABLED: true,
-    CORS_ORIGIN: `https://${ vcap_application.uris[0] }`
+    CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov'
   }
 };
