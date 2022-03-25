@@ -78,6 +78,10 @@ export default {
   width: 100%;
 }
 
+.none {
+  border: none;
+}
+
 .anchor--color {
   border-top-color: var(--v-secondary-base);
 }
