@@ -25,6 +25,14 @@ export const fileCollectionMixin = {
       } else if (item.link ) {
         link = item.link
       }
+
+      return link
+    },
+    accessibleFileLink(url, item) {
+      let link
+      if (item.accessible_file) {
+        link = `${ url }${ item.accessible_file.filename_download }`
+      } 
       return link
     },
   },
