@@ -465,6 +465,10 @@ editorjsInstance.value = new EditorJS({
   .sans-serif {
     font-family: var(--family-sans-serif);
   }
+
+  .inline-links {
+    border: 1px solid red;
+  }
 </style>
 
 <style src="./editorjs-content-reset.css"></style>
