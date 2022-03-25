@@ -1,5 +1,5 @@
 <template>
-  <div class="announcements__wrap mt-4">
+  <div class="announcements__wrap mt-3">
     <v-card 
       v-for="announcement in announcements"
       :key="announcement.id"

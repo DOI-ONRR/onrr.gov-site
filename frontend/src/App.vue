@@ -71,6 +71,7 @@ export default {
 
 .v-icon.mdi-file-pdf-box {
   color: var(--v-secondary-base) !important;
+  font-size: 28px;
 }
 
 </style>

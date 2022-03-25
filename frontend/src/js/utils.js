@@ -65,7 +65,6 @@ export const getDay = (date, type) => {
 }
 
 export const getMonth = (date, type) => {
-    console.log('date.length -------> ', date)
     if(date.length == 10) {
        date+='T00:00:00'
     }

@@ -125,14 +125,14 @@ export default {
   },
   created() {
     // console.log('create this.$refs: ', this.$refs)
-    const activeTab = this.$route.query.tabs.split(',')[0]
+    const activeTab = this.$route.query.tabs && this.$route.query.tabs.split(',')[0]
     this.tab = activeTab || this.formattedLabel(this.tabItems[0].item.tab_block_label)
   },
   mounted() {
     console.log('TabsBlock mounted!')
     // set nested tab item
     setTimeout(() => {
-      const activeTabs = this.$route.query.tabs.split(',')
+      const activeTabs = this.$route.query.tabs && this.$route.query.tabs.split(',')
       
       if (activeTabs.length > 1) {
         const targetEl = `tab_label_${ activeTabs[1] }`

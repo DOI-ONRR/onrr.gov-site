@@ -45,12 +45,12 @@ const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectFie
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 // const DataTable = () => import(/* webpackChunkName: "DataTable" */ '@/components/tables/DataTable')
 
-import {
-  getFullDate,
-  getYear,
-  getDay,
-  getMonth
-} from '@/js/utils'
+// import {
+//   getFullDate,
+//   getYear,
+//   getDay,
+//   getMonth
+// } from '@/js/utils'
 export default {
   data: () => ({
     API: process.env.VUE_APP_API_URL,
@@ -81,25 +81,25 @@ export default {
   },
   methods: {
     getFullDate: getFullDate,
-    getYear: getYear,
-    getMonth: getMonth,
-    getDay: getDay,
-    formatNiceDate(d) {
-      return `${ getMonth(d, 'numeric') }/${ getDay(d, 'numeric') }/${ getYear(d) }`
-    },
-    fileLink(item) {
-      // console.log('fileLink item ----------> ', item)
-      let link
-      if (item.file) {
-        link = `${ this.API }/assets/${ item.file.id }`
-      } else if (item.accessible) {
-        link = `${ this.API }/assets/${ item.accessible_file.id }`
-      } else if (item.link ) {
-        link = item.link
-      }
-      // console.log('fileLink ----------> ', link)
-      return link
-    },
+    // getYear: getYear,
+    // getMonth: getMonth,
+    // getDay: getDay,
+    // formatNiceDate(d) {
+    //   return `${ getMonth(d, 'numeric') }/${ getDay(d, 'numeric') }/${ getYear(d) }`
+    // },
+    // fileLink(item) {
+    //   // console.log('fileLink item ----------> ', item)
+    //   let link
+    //   if (item.file) {
+    //     link = `${ this.API }/assets/${ item.file.id }`
+    //   } else if (item.accessible) {
+    //     link = `${ this.API }/assets/${ item.accessible_file.id }`
+    //   } else if (item.link ) {
+    //     link = item.link
+    //   }
+    //   // console.log('fileLink ----------> ', link)
+    //   return link
+    // },
     getTopics(topicsArr) {
       let topics
       if(topicsArr.length > 1) {
@@ -134,7 +134,7 @@ export default {
       return value.toLowerCase().includes(this.titleInputField.text.toLowerCase())
     },
     topicsFilter(value) {
-        console.log('topcis filter value --------> ', value)
+        // console.log('topcis filter value --------> ', value)
         if (!this.topicsInputField.selected || this.topicsInputField.selected === null || this.topicsInputField.selected.length === 0) {
             return true
         }
