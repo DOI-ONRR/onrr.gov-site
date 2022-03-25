@@ -7,3 +7,6 @@ applications:
   random-route: false
   buildpacks:
     - nodejs_buildpack
+  services:
+    - dev-onrr-psql
+    - dev-onrr-s3

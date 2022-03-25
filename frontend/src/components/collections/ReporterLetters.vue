@@ -8,7 +8,7 @@
             <v-list-item
               v-for="(item, i) in slicedCollection"
               :key="i"
-              :href="fileLink('/reporter-letters/', item)"
+              :href="fileLink(`${ API }/reporter-letters/`, item)"
               class="pa-0"
               target="_blank"
             >
@@ -56,8 +56,8 @@
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
             </template>
             <template v-slot:item.title="{ item }">
-                <a :href="fileLink('/reporter-letters/',item)" target="_blank">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
-                <div v-if="item.accessible_file"><a :href="fileLink('/reporter-letters/',item)" target="_blank">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
+                <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
+                <div v-if="item.accessible_file"><a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank">{{ item.title }}</a>&nbsp;(Accessible.docx)</div>
             </template>
             <template v-slot:item.date="{ item }">
                 {{ formatNiceDate(item.date) }}
@@ -84,6 +84,7 @@ export default {
   name: 'ReporterLettersCollection',
   mixins: [fileCollectionMixin, dateMixin],
   data: () => ({
+    API: process.env.VUE_APP_API_URL,
     titleInputField: {
       label: 'Search',
       text: '',

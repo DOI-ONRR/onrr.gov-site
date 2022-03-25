@@ -8,7 +8,7 @@
             <v-list-item
               v-for="(item, i) in slicedCollection"
               :key="i"
-              :href="fileLink('/press-releases/', item)"
+              :href="fileLink(`${ API }/press-releases/`, item)"
               class="pa-0"
               target="_blank"
             >
@@ -61,7 +61,7 @@
                   <v-icon>mdi-calendar-month</v-icon> {{ getFullDate(item.date) }}
                 </v-list-item-subtitle>
                 <div class="mb-2 text-body-1" v-if="item.excerpt" v-html="item.excerpt"></div>
-                <div v-if="fileLink('/press-releases/', item)"><a :href="fileLink('/press-releases/', item)" target="_blank">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
+                <div v-if="fileLink(`${ API }/press-releases/`, item)"><a :href="fileLink(`${ API }/press-releases/`, item)" target="_blank">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
               </v-list-item-content>
             </v-list-item>
         </v-card>
@@ -83,6 +83,7 @@ export default {
   mixins: [fileCollectionMixin, dateMixin],
   data() {
     return {
+       API: process.env.VUE_APP_API_URL,
     }
   },
   props: {
