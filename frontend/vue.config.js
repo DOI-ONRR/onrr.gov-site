@@ -36,7 +36,7 @@ module.exports = {
         changeOrigin: true,
         secure: true,
         logLevel: 'debug',
-      }
+      },
     }
   }
 }
