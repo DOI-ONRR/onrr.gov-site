@@ -173,7 +173,7 @@ export const CONTACTS_QUERY = gql`
 // NYMEX query
 export const NYMEX_QUERY = gql`
   query {
-    NYMEX {
+    NYMEX(limit: -1) {
       id
       status
       date
