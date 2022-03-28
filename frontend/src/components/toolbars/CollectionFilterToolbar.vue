@@ -23,7 +23,7 @@
           sm="4"
           class="mt-1"
         >
-          <v-chip>{{ (searchResults && searchResults.length > 1) ? `${ searchResults.length } items` : `${ searchResults.length } item` }}</v-chip>
+          <v-chip>{{ (searchResults && searchResults.length > 1) ? `${ searchResults && searchResults.length } items` : `${ searchResults && searchResults.length } item` }}</v-chip>
         </v-col>
       </v-row>
     </v-container>
