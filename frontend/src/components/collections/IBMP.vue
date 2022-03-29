@@ -53,7 +53,8 @@ export default {
       selected: null,
       color: 'secondary',
       icon: 'mdi-chevron-down',
-      params: 'designated_area'
+      params: 'designated_area',
+      clearable: true
     },
     ibmpYearsInputField: {
       items: [],

@@ -53,7 +53,8 @@ export default {
       selected: null,
       color: 'secondary',
       icon: 'mdi-chevron-down',
-      params: 'index_zone'
+      params: 'index_zone',
+      clearable: true
     },
     indexZonesYearsInputField: {
       items: [],

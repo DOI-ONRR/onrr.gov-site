@@ -54,11 +54,12 @@ export default {
       },
       yearSelectField: {
         items: [],
-        label: 'All Years',
+        label: 'Year',
         ref: 'yearSelectInput',
         selected: null,
         color: 'secondary',
         icon: 'mdi-chevron-down',
+        clearable: false
       }
     }
   },
@@ -82,8 +83,8 @@ export default {
         mutations.updateCollections(key, value)
      },
      getYears() {
-      const years = this.collection.map(item => this.getYear(item.date)).sort((a, b) => b - a)
-      this.yearSelectField.items = [... new Set(years)]
+      const years = this.yearSelectField.selected !== 'All Years' && this.collection.map(item => this.getYear(item.date)).sort((a, b) => b - a)
+      this.yearSelectField.items = ['All Years', ... new Set(years)]
       this.yearSelectField.selected = this.yearSelectField.items[0]
       this.onUpdateStore('year', this.yearSelectField.items[0])
      },

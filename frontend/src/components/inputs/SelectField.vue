@@ -4,7 +4,7 @@
             outlined
             dense
             v-model="field.selected"
-            clearable
+            v-bind:clearable="field.clearable || undefined"
             :items="field.items"
             :value="field.selected"
             :color="field.color"
