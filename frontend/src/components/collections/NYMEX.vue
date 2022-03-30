@@ -31,8 +31,8 @@
           :key="item.id"
         >
           <td>{{ getMonth(item.date, 'long') }}</td>
-          <td>{{ item.average }}</td>
-          <td>{{ item.roll }}</td>
+          <td>${{ item.average.toFixed(2) }}</td>
+          <td>${{ item.roll.toFixed(2) }}</td>
           <td><div><a :href="fileLink(item.Spreadsheet.id)">Download</a><v-icon color="secondary">mdi-file-xlsx-box</v-icon></div></td>
         </tr>
       </tbody>
@@ -54,7 +54,7 @@ export default {
   name: 'NYMEXCollection',
   data() {
     return {
-      items: ['2021', '2020', 'Fizz', 'Buzz'],         
+      items: [],         
       API: process.env.VUE_APP_API_URL
     }
   },
@@ -78,7 +78,8 @@ export default {
     getFullDate: getFullDate,
     getYear: getYear,
     year() {
-      if(store.collections.year > this.maxYear ) {
+        console.debug('----------------------STORE COLLECTION--------------------------------------------------------->',store.collections.year)
+      if(store.collections.year > this.maxYear ||  ! store.collections.year ) {
       return this.maxYear
       } else {
        return	store.collections.year
@@ -95,27 +96,37 @@ export default {
       return store.collections.searchQuery
     },
     maxYear() {
-       const max = [...new Set(this.collection.map(item => this.getYear(item.date)))].sort((a,b)=>a-b).pop();
-       console.log("=====NYMEX max: ", max)
-       return max
+    if(this.collection) {
+      const max = [...new Set(this.collection.map(item => this.getYear(item.date)))].sort((a,b)=>a-b).pop();
+      console.log("=====NYMEX max: ", max)
+      return max
+    } else {
+      return 2022
+    }
+      
     },   
     years() {
     if(this.collection) {
       const years = [...new Set(this.collection.map(item => this.getYear(item.date)))].sort((a,b)=>b-a);
       return years;			       
-      } else {
-       return [2021,2020,2019]
+    } else {
+      return ['2022', '2021']
     }
     },   
     filteredCollection() {
-    
-    const year=this.year() 
+      if(this.collection) {
+      const year=this.year() 
+      console.debug('------------------------------------------------------', this.collection, '------------------------->', year)
+      const filtered= this.collection && this.collection.filter( item => this.getYear(item.date) === year).sort( (a, b) =>{
+        return new Date(a.date) - new Date(b.date)
+      });
 
-    const filtered= this.collection && this.collection.filter( item => this.getYear(item.date) === year).sort( (a, b) =>{
-    return new Date(a.date) - new Date(b.date)
-    })	;
-    return filtered
+        console.debug('------------------------------------------------------------------------------->', filtered)	
 
+        return filtered
+      } else {
+        return []
+      }
     },  
     searchResults() {
             // search input results

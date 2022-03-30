@@ -25,6 +25,12 @@ module.exports = {
         secure: true,
         logLevel: 'debug',
       },
+      '^/items/NYMEX': {
+        target: targetUrl,
+        changeOrigin: true,
+        secure: true,
+        logLevel: 'debug',
+      },
       '^/press-releases': {
         target: targetUrl,
         changeOrigin: true,
