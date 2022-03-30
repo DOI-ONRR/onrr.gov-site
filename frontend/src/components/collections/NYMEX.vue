@@ -116,10 +116,10 @@ export default {
     filteredCollection() {
       if(this.collection) {
       const year=this.year() 
-      console.debug('------------------------------------------------------', this.collection, '------------------------->', year)
-      const filtered= this.collection && this.collection.filter( item => this.getYear(item.date) === year).sort( (a, b) =>{
-        return new Date(a.date) - new Date(b.date)
-      });
+      //console.debug('------------------------------------------------------', this.collection, '------------------------->', year)
+        const filtered= this.collection && this.collection.filter( item => this.getYear(item.date) === year.toString() ).sort( (a, b) =>{
+          return new Date(a.date) - new Date(b.date)
+        });
 
         console.debug('------------------------------------------------------------------------------->', filtered)	
 
