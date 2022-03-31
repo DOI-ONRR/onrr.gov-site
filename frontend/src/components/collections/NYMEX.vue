@@ -78,7 +78,6 @@ export default {
     getFullDate: getFullDate,
     getYear: getYear,
     year() {
-        console.debug('----------------------STORE COLLECTION--------------------------------------------------------->',store.collections.year)
       if(store.collections.year > this.maxYear ||  ! store.collections.year ) {
       return this.maxYear
       } else {
@@ -86,7 +85,6 @@ export default {
        }      
     },
      onUpdateStore(key, value) {
-      console.log("NYMEX onUpdateStore: ", key, value,  store)
         mutations.updateCollections(key, value)
      },
 
@@ -98,7 +96,6 @@ export default {
     maxYear() {
     if(this.collection) {
       const max = [...new Set(this.collection.map(item => this.getYear(item.date)))].sort((a,b)=>a-b).pop();
-      console.log("=====NYMEX max: ", max)
       return max
     } else {
       return 2022
@@ -110,19 +107,16 @@ export default {
       const years = [...new Set(this.collection.map(item => this.getYear(item.date)))].sort((a,b)=>b-a);
       return years;			       
     } else {
-      return ['2022', '2021']
+      return []
     }
     },   
     filteredCollection() {
       if(this.collection) {
       const year=this.year() 
-      //console.debug('------------------------------------------------------', this.collection, '------------------------->', year)
+
         const filtered= this.collection && this.collection.filter( item => this.getYear(item.date) === year.toString() ).sort( (a, b) =>{
           return new Date(a.date) - new Date(b.date)
         });
-
-        console.debug('------------------------------------------------------------------------------->', filtered)	
-
         return filtered
       } else {
         return []
