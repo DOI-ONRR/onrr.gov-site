@@ -1,11 +1,11 @@
 import { Grid } from "gridjs";
+
 import "gridjs/dist/theme/mermaid.css";
 /**
  * Build Styles
  */
 //require('../styles/index.css').toString()
 
-import "../styles/index.css"
 
 /**
  * Import functions
@@ -91,7 +91,14 @@ export default class LinksInline {
             
             this.toggleVisibility(this.nodes.toolButtonUnlink, false);
     */
+
+    console.debug('=-----------------adding element')
+   var elemDiv = document.createElement('div');
+    elemDiv.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100;background:#000;';
+    var main=document.getElementsByClassName('main')
+    main[0].appendChild(elemDiv)
     
+    console.debug('=-----------------adding element', elemDiv)
     return this.nodes.toolButtons;
     
   }
@@ -159,7 +166,9 @@ export default class LinksInline {
      *
      * @type {HTMLDivElement}
      */
-    this.nodes.actionsWrapper = Dom.make('div', [ LinksInline.CSS.actionsWrapper ]);
+    this.nodes.actionsWrapper = Dom.make('div',  [ LinksInline.CSS.actionsWrapper ] );
+
+    // this.toggleVisibili
     // this.toggleVisibility(this.nodes.actionsWrapper, false);
 
     /**
@@ -178,6 +187,7 @@ export default class LinksInline {
       }
     }
     const pageId=this.config.page_id;
+    
     const grid = new Grid({
       search: true,
       sort: true,
@@ -198,7 +208,8 @@ export default class LinksInline {
      */ 
 
     this.nodes.gridWrapper = Dom.make('div');
-    this.nodes.gridWrapper.style.display='block'; 
+    this.nodes.gridWrapper.style.display='block';
+
     this.nodes.searchItem = Dom.make('div', LinksInline.CSS.searchItem);
     grid.render(this.nodes.searchItem);
     this.nodes.inlineRadio = Dom.make('div', LinksInline.CSS.inlineRadio)
@@ -367,6 +378,8 @@ export default class LinksInline {
         }
       }
     });
+
+    
     this.nodes.actionsWrapper.appendChild(this.nodes.linkWrapper);
 
     this.nodes.actionsWrapper.appendChild(this.nodes.gridWrapper);
@@ -391,7 +404,7 @@ export default class LinksInline {
    * @returns {void}
    */
   surround(range) {
-    console.debug('  surround(range) ------------------>')
+    console.debug('  surround(range) ------------------>', range)
     if (!range) {
       console.debug('No range ------------------------------->')
       return;
