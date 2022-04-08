@@ -2,7 +2,7 @@ export default class CollectionsTool {
 
   constructor({ data, config, api }) {
 
-    console.log('data -----> ', data)
+    console.info('data :: ', data)
 
     // this.data = {
     //   "collection": "contact_categories",
@@ -51,7 +51,7 @@ export default class CollectionsTool {
     //   ],
     //   "page": "Leases &amp; Agreements",
     //   "tab": "Offshore",
-    //   "accordion": "",
+    //   "accordion": "Albequerque, NM",
     //   "status": "published"
     // };
 
@@ -64,6 +64,9 @@ export default class CollectionsTool {
       accordion: data.accordion || '',
       status: data.status || '',
     };
+
+
+    // console.log('this.data --------> ', this.data)
 
     this.api = api;
     this.config = config || {};
@@ -334,14 +337,18 @@ export default class CollectionsTool {
 
     selectStatusInput.addEventListener("change", (e) => {
       this.data.status = e.target.value;
-    })
+    });
 
     selectPageInput.addEventListener("change", (e) => {
       this.data.page = e.target.value;
-    })
+    });
 
     selectTabInput.addEventListener("change", (e) => {
       this.data.tab = e.target.value;
+    });
+
+    selectAccordionInput.addEventListener("change", (e) => {
+      this.data.accordion = e.target.value;
     })
 
     if (this.data && this.data.collection) {
