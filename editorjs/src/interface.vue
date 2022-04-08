@@ -1,33 +1,37 @@
 <template>
-  <v-dialog :model-value="fileHandler !== null" @update:model-value="unsetFileHandler" @esc="unsetFileHandler">
-  <v-card>
-  <v-card-title>
-  <i18n-t keypath="upload_from_device" />
-</v-card-title>
-  <v-card-text>
-  <v-upload
-     :ref="uploaderComponentElement"
-     @input="handleFile"
-     :multiple="false"
-     :folder="folder"
-     from-library
-    from-url
-/>
-</v-card-text>
-  <v-card-actions>
-  <v-button secondary @click="unsetFileHandler">
-  <i18n-t keypath="cancel" />
-  </v-button>
-  </v-card-actions>
-  </v-card>
+  <div>
+  <v-dialog :model-value="fileHandler" @update:model-value="unsetFileHandler" @esc="unsetFileHandler">
+    <v-card>
+      <v-card-title>
+        <i18n-t keypath="upload_from_device" />
+      </v-card-title>
+      <v-card-text>
+        <v-upload
+          :ref="uploaderComponentElement"
+          @input="handleFile"
+          :multiple="false"
+          :folder="folder"
+          from-library
+          from-url
+        />
+      </v-card-text>
+      <v-card-actions>
+        <v-button secondary @click="unsetFileHandler">
+          <i18n-t keypath="cancel" />
+        </v-button>
+      </v-card-actions>
+    </v-card>
   </v-dialog>
+  <!-- <CollectionsModal ref="collectionsModal" :modelValue="collectionsHandler !== null" :escValue="unsetCollectionHandler" /> -->
   <div :class="className" ref="editorElement"></div>
+  </div>
 </template>
 
 <script>
   import { defineComponent, ref, onMounted, onUnmounted, watch, inject } from 'vue';
   import debounce from 'debounce';
   import EditorJS from '@editorjs/editorjs';
+  // import CollectionsModal from './components/CollectionsModal.vue';
 
   // Plugins
   import SimpleImageTool from '@editorjs/simple-image';
@@ -92,7 +96,9 @@
         default: undefined,
       },
     },
-
+    components: {
+      // CollectionsModal
+    },
     setup(props, { emit, attrs }) {
       const api = inject('api');
 
@@ -120,6 +126,7 @@
       const uploaderComponentElement = ref(null);
       const editorElement = ref(null);
       const fileHandler = ref(null);
+      const collectionsHandler = ref(null);
 
       const editorValueEmitter = debounce(function saver(context) {
         if (props.disabled || !context) return;
@@ -138,7 +145,7 @@
 
       onMounted(() => {
 
-editorjsInstance.value = new EditorJS({
+        editorjsInstance.value = new EditorJS({
           // @ts-ignore
           logLevel: 'ERROR',
           holder: editorElement.value,
@@ -195,7 +202,7 @@ editorjsInstance.value = new EditorJS({
           [props.font]: true,
           bordered: props.bordered,
         },
-
+        collectionsHandler,
         // Methods
         editorValueEmitter,
         unsetFileHandler,
@@ -205,6 +212,8 @@ editorjsInstance.value = new EditorJS({
         addTokenToURL,
         getPreparedValue,
         buildToolsOptions,
+        openCollectionsModal,
+        unsetCollectionHandler,
       };
 
       function unsetFileHandler() {
@@ -238,6 +247,20 @@ editorjsInstance.value = new EditorJS({
           version: value?.version,
           blocks: value?.blocks || [],
         };
+      }
+
+
+      function unsetCollectionHandler() {
+        collectionsHandler.value = null;
+      }
+
+      function openCollectionsModal() {
+        console.log('open collections modal yo!', this.$refs);
+        collectionsHandler.value = true;
+        return new Promise(resolve => {
+          console.log('openCollectionsModal resolve yo -----> ', resolve);
+          this.collectionSelected = resolve;
+        });
       }
 
       /**
@@ -347,7 +370,9 @@ editorjsInstance.value = new EditorJS({
             class: CollectionsTool,
             config: {
               collectionsEndpoint: '/collections',
-              fieldsEndpoint: '/fields'
+              fieldsEndpoint: '/fields',
+              contactsEndpoint: '/items/contacts?limit=-1',
+              // openCollectionsModal: openCollectionsModal,
             }
           },
        /*   links: {

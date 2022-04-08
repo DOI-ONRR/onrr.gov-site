@@ -159,17 +159,50 @@ export const TOTAL_REVENUE_QUERY = gql`
 `
 
 // Contacts query
+
 export const CONTACTS_QUERY = gql`
   query {
-    contacts {
+    contacts(limit: -1) {
       id
       status
+      page
+      tab
+      accordion
+      company_yn
+      letter
+      header
+      company_name
+      operator_number
+      agency
       primary_contact
-      primary_email
-      primary_phone
+      primary_role
+      email
+      phone
+      fax
+      contact_2
+      role_2
+      email_2
+      phone_2
+      contact_3
+      role_3
+      email_3
+      phone_3
+      contact_4
+      role_4
+      email_4
+      phone_4
+      contact_5
+      role_5
+      email_5
+      phone_5
+      contact_6
+      role_6
+      email_6
+      phone_6
     }
-  }
+  }   
 `
+
 // NYMEX query
 export const NYMEX_QUERY = gql`
   query {

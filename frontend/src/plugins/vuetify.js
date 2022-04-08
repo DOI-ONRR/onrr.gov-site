@@ -49,6 +49,7 @@ export default new Vuetify({
         purple: {
           base: '#650d79',
           lighten1: '#960d79',
+          lighten2: '#dfdcef',
           darken1: '#36004c',
         },
         yellow: {

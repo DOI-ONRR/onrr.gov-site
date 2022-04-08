@@ -252,3 +252,8 @@
   width: 250px;
   margin-right: 16px;
 }
+
+.codex-editor .ce-link-inline__actions-wrapper {
+  border: 1px solid red !important;
+  background-color: yellow !important;
+}

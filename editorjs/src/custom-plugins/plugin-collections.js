@@ -2,8 +2,10 @@ export default class CollectionsTool {
 
   constructor({ data, config, api }) {
 
+    console.log('data -----> ', data)
+
     // this.data = {
-    //   "collection": "announcements",
+    //   "collection": "contact_categories",
     //   "layout": "basic",
     //   "fields": [
     //       {
@@ -47,21 +49,28 @@ export default class CollectionsTool {
     //           "type": "timestamp"
     //       }
     //   ],
-    //   status: "archived",
+    //   "page": "Leases &amp; Agreements",
+    //   "tab": "Offshore",
+    //   "accordion": "",
+    //   "status": "published"
     // };
 
     this.data = {
       collection: data.collection || '',
-      fields: data.fields || [],
       layout: data.layout || '',
+      fields: data.fields || [],
+      page: data.page || '',
+      tab: data.tab || '',
+      accordion: data.accordion || '',
       status: data.status || '',
     };
 
     this.api = api;
     this.config = config || {};
 
-    this.collectionsEndpoint = this.config.collectionsEndpoint;
-    this.fieldsEndpoint = this.config.fieldsEndpoint;
+    this.collectionsEndpoint = config.collectionsEndpoint;
+    this.fieldsEndpoint = config.fieldsEndpoint;
+    this.contactsEndpoint = config.contactsEndpoint;
 
      /**
       * Styles
@@ -72,6 +81,7 @@ export default class CollectionsTool {
        input: this.api.styles.input,
        settingsButton: this.api.styles.settingsButton,
        settingsButtonActive: this.api.styles.settingsButtonActive,
+       button: this.api.styles.button,
  
        /**
         * Tool's classes
@@ -84,13 +94,12 @@ export default class CollectionsTool {
       selectInput: null,
       selectOptions: null,
       collectionItems: null,
+      button: null,
     };
 
-    // console.log('this.data yo ---------> ', this.data)
-
-    // setTimeout(() => {
-    //   console.log('this.data yo after 3 seconds ---------> ', this.data)
-    // }, 3000);
+    setTimeout(() => {
+      // console.log('data yo after 3 seconds ---------> ', data);
+    }, 5000);
     
   }
 
@@ -113,6 +122,16 @@ export default class CollectionsTool {
       selectFieldsCol1 = this._make('div', [this.CSS.baseClass]),
       selectFieldsCol2 = this._make('div', [this.CSS.baseClass]),
       selectFieldsCol3 = this._make('div', [this.CSS.baseClass]),
+      selectFieldsCol4 = this._make('div', [this.CSS.baseClass]),
+      selectFieldsCol5 = this._make('div', [this.CSS.baseClass]),
+      selectFieldsCol6 = this._make('div', [this.CSS.baseClass]),
+      selectPageInput = this._make('select', [this.CSS.input]),
+      selectPageInputLabel = this._make('label'),
+      selectTabInput = this._make('select', [this.CSS.input]),
+      selectTabInputLabel = this._make('label'),
+      selectAccordionInput = this._make('select', [this.CSS.input]),
+      selectAccordionInputLabel = this._make('label'),
+      addCollectionButton = this._make('button', [this.CSS.button]),
       collectionBox = this._make('div');
 
 
@@ -142,6 +161,9 @@ export default class CollectionsTool {
     let selectOption = this._make('option');
     let selectLayoutOption = this._make('option');
     let selectStatusOption = this._make('option');
+    let selectPageOption = this._make('option');
+    let selectTabOption = this._make('option');
+    let selectAccordionOption = this._make('option');
 
     selectInputLabel.innerHTML = 'Collection';
     selectInputLabel.setAttribute('for', 'collectionsSelector');
@@ -152,12 +174,31 @@ export default class CollectionsTool {
     selectStatusInputLabel.innerHTML = 'Status';
     selectStatusInputLabel.setAttribute('for', 'collectionsStatusSelector');
 
+    selectPageInputLabel.innerHTML = 'Page',
+    selectPageInputLabel.setAttribute('for', 'collectionsPageSelector');
+
+    selectTabInputLabel.innerHTML = 'Tab',
+    selectTabInputLabel.setAttribute('for', 'collectionsTabSelector');
+
+    selectAccordionInputLabel.innerHTML = 'Accordion',
+    selectAccordionInputLabel.setAttribute('for', 'collectionsAccordionSelector');
+
     selectInput.id = 'collectionsSelector';
     selectOption.value = '';
     selectOption.text = 'Choose one';
     selectInput.appendChild(selectOption);
 
+    addCollectionButton.innerHTML = 'Add Collection';
+
+    // addCollectionButton.addEventListener('click', () => {
+    //   this.config.openCollectionsModal().then(something => {
+    //     console.log('do something -----> ', something);
+    //   })
+    // });
+   
+
     this.fetchCollections().then(collections => {
+      console.log('fetchCollections collection: ', collections)
       collections.forEach((item, i) => {
         // console.log('item: ', item);
 
@@ -171,7 +212,73 @@ export default class CollectionsTool {
         const foundIndex = Array.from(selectInput.options).findIndex(item => item.value === this.data.collection)
         selectInput.options[foundIndex || 0].selected = true
       }
-    })
+    });
+
+     // Page, tab, accordion fields
+    selectPageInput.id = 'collectionsPageSelector';
+    selectPageOption.value = '';
+    selectPageOption.text = 'Choose one';
+    selectPageInput.appendChild(selectPageOption);
+
+    selectTabInput.id = 'collectionsTabSelector';
+    selectTabOption.value = '';
+    selectTabOption.text = 'Choose one';
+    selectTabInput.appendChild(selectTabOption);
+
+    selectAccordionInput.id = 'collectionsAccordionSelector';
+    selectAccordionOption.value = '';
+    selectAccordionOption.text = 'Choose one';
+    selectAccordionInput.appendChild(selectAccordionOption);
+
+    this.fetchContacts().then(categories => {
+      // console.log('fetchContacts categories -----> ', categories);
+      this.fetchFields(this.data);
+
+      categories[0].forEach(item => {
+        // console.log('pages.forEach item ---------> ', item);
+        selectPageOption = this._make('option')
+        selectPageOption.value = item;
+        selectPageOption.text = item;
+        selectPageInput.appendChild(selectPageOption);
+      });
+
+      categories[1].forEach(item => {
+        // console.log('pages.forEach item ---------> ', item);
+        selectTabOption = this._make('option')
+        selectTabOption.value = item;
+        selectTabOption.text = item;
+        selectTabInput.appendChild(selectTabOption);
+      });
+
+      categories[2].forEach(item => {
+        // console.log('pages.forEach item ---------> ', item);
+        selectAccordionOption = this._make('option')
+        selectAccordionOption.value = item;
+        selectAccordionOption.text = item;
+        selectAccordionInput.appendChild(selectAccordionOption);
+      });
+
+
+      if (this.data && this.data.collection) {
+        if (this.data.page) {
+          const page = this.data.page.replace('&amp;', '&');
+          const foundIndex = Array.from(selectPageInput.options).findIndex(item => item.value === page);
+          selectPageInput.options[foundIndex || 0].selected = true;
+        }
+
+        if (this.data.tab) {
+          const tab = this.data.tab.replace('&amp;', '&');
+          const foundIndex = Array.from(selectTabInput.options).findIndex(item => item.value === tab);
+          selectTabInput.options[foundIndex || 0].selected = true;
+        }
+
+        if (this.data.accordion) {
+          const accordion = this.data.accordion.replace('&amp;', '&');
+          const foundIndex = Array.from(selectAccordionInput.options).findIndex(item => item.value === accordion);
+          selectAccordionInput.options[foundIndex || 0].selected = true;
+        }
+      }
+    });
 
 
     selectLayoutInput.id = 'collectionsLayoutSelector';
@@ -202,31 +309,89 @@ export default class CollectionsTool {
       const foundIndex = Array.from(selectStatusInput.options).findIndex(item => item.value === this.data.status)
       selectStatusInput.options[foundIndex || 0].selected = true
     }
-    
-    if (this.data && this.data.collection && this.data.layout && this.data.status) {
+
+    selectInput.addEventListener("change", () => {
+      this.fetchFields(this.data);
+
+      if (selectInput.value === 'press_releases' || selectInput.value === 'reporter_letters') {
+        selectFieldsCol2.style.display = 'block';
+        selectFieldsCol4.style.display = 'none';
+      } else if (selectInput.value === 'contacts') {
+        selectFieldsCol4.style.display = 'block';
+        selectFieldsCol5.style.display = 'block';
+        selectFieldsCol6.style.display = 'block';
+      } else {
+        selectFieldsCol2.style.display = 'none';
+        selectFieldsCol4.style.display = 'none';
+        selectFieldsCol5.style.display = 'none';
+        selectFieldsCol6.style.display = 'none';
+      }
+    });
+
+    selectLayoutInput.addEventListener("change", (e) => {
+      this.data.layout = e.target.value;
+    });
+
+    selectStatusInput.addEventListener("change", (e) => {
+      this.data.status = e.target.value;
+    })
+
+    selectPageInput.addEventListener("change", (e) => {
+      this.data.page = e.target.value;
+    })
+
+    selectTabInput.addEventListener("change", (e) => {
+      this.data.tab = e.target.value;
+    })
+
+    if (this.data && this.data.collection) {
       collectionBox.style.padding = '10px';
       collectionBox.style.border = '5px dashed #00c897';
       collectionBox.style.textAlign = 'center';
       collectionBox.style.margin = '10px 0';
       collectionBox.style.width = '100%';
-      collectionBox.innerHTML = `${ this.data.collection } -- ${ this.data.layout } layout -- ${ this.data.status }`;
+
+      if (this.data.collection === 'contacts') {
+        collectionBox.innerHTML = `${ this.data.collection } 
+        -- ${ this.data.status } 
+        -- ${ this.data.page } 
+        -- ${ this.data.tab }
+        -- ${ this.data.accordion }
+        -- ${ this.data.layout }`;
+      }
+
+      if (this.data.collection === 'reporter_letters' || this.data.collection === 'press_releases') {
+        collectionBox.innerHTML = `${ this.data.collection } 
+        -- ${ this.data.status } 
+        -- ${ this.data.layout }`;
+      }
+
+      if (this.data.collection !== 'contacts' || this.data.collection !== 'reporter_letters' || this.data.collection !== 'press_releases') {
+        `${ this.data.collection } 
+        -- ${ this.data.status }`
+      }
+      
     }
 
-    selectInput.addEventListener("change", () => {
-      this.fetchFields(selectInput.value, selectLayoutInput.value, selectStatusInput.value);
-    });
-
-    selectLayoutInput.addEventListener("change", () => {
-      this.fetchFields(selectInput.value, selectLayoutInput.value, selectStatusInput.value);
-    });
-
-    selectStatusInput.addEventListener("change", () => {
-      this.fetchFields(selectInput.value, selectLayoutInput.value, selectStatusInput.value);
-    })
+    if (this.data && this.data.collection === 'contacts') {
+      selectFieldsCol4.style.display = 'block';
+      selectFieldsCol5.style.display = 'block';
+      selectFieldsCol6.style.display = 'block';
+    } else {
+      selectFieldsCol4.style.display = 'none';
+      selectFieldsCol5.style.display = 'none';
+      selectFieldsCol6.style.display = 'none';
+    }
+    
 
     selectFieldsCol1.style.marginRight = '8px';
     selectFieldsCol2.style.marginRight = '8px';
+    selectFieldsCol2.style.display = 'none';
     selectFieldsCol3.style.marginRight = '8px';
+    selectFieldsCol4.style.marginRight = '8px';
+    selectFieldsCol5.style.marginRight = '8px';
+    selectFieldsCol6.style.marginRight = '8px';
+    // selectFieldsCol4.style.display = 'none';
 
 
     selectFieldsCol1.appendChild(selectInputLabel);
@@ -235,12 +400,22 @@ export default class CollectionsTool {
     selectFieldsCol2.appendChild(selectLayoutInput);
     selectFieldsCol3.appendChild(selectStatusInputLabel);
     selectFieldsCol3.appendChild(selectStatusInput);
+    selectFieldsCol4.appendChild(selectPageInputLabel);
+    selectFieldsCol4.appendChild(selectPageInput);
+    selectFieldsCol5.appendChild(selectTabInputLabel);
+    selectFieldsCol5.appendChild(selectTabInput);
+    selectFieldsCol6.appendChild(selectAccordionInputLabel);
+    selectFieldsCol6.appendChild(selectAccordionInput);
 
+    // wrapper.appendChild(addCollectionButton);
     wrapper.appendChild(selectFieldsCol1);
     wrapper.appendChild(selectFieldsCol2);
+    wrapper.appendChild(selectFieldsCol4);
+    wrapper.appendChild(selectFieldsCol5);
+    wrapper.appendChild(selectFieldsCol6);
     wrapper.appendChild(selectFieldsCol3);
 
-    if (this.data && this.data.collection && this.data.layout && this.data.status) {
+    if (this.data && this.data.collection) {
       wrapper.appendChild(collectionBox);
     }
     wrapper.style.margin = '10px 0';
@@ -253,11 +428,13 @@ export default class CollectionsTool {
   }
 
   save(blockContent) {
+    // console.log('blockContent: ', blockContent);
     const select = blockContent.querySelector('#collectionsSelector');
     const selectLayout = blockContent.querySelector('#collectionsLayoutSelector');
     const selectStatus = blockContent.querySelector('#collectionsStatusSelector');
-
-    // console.log('save select ------> ', select.value, selectLayout.value);
+    const contactPage = blockContent.querySelector('#collectionsPageSelector');
+    const contactTab = blockContent.querySelector('#collectionsTabSelector');
+    const contactAccordion = blockContent.querySelector('#collectionsAccordionSelector');
 
     if (!select) {
       return this.data;
@@ -267,6 +444,9 @@ export default class CollectionsTool {
       collection: select.value,
       layout: selectLayout.value,
       status: selectStatus.value,
+      page: contactPage.value,
+      tab: contactTab.value,
+      accordion: contactAccordion.value,
     });
   }
 
@@ -307,7 +487,9 @@ export default class CollectionsTool {
    *
    * @collection {string}
    */
-  async fetchFields(collection, layout, status) {
+  async fetchFields(data) {
+
+    // console.log('fetchFields data: ', data)
     try {
       const response = await fetch(`${ this.fieldsEndpoint }`);
       const collectionItems = await response.json();
@@ -315,18 +497,21 @@ export default class CollectionsTool {
   
       const items = collectionItems.data
       items.filter(item => {
-        if(item.collection === collection) {
-          fields.push({ field: item.field, type: item.type })
+        if(item.collection === data.collection) {
+          fields.push({ field: item.field, type: item.type });
         }
-      })
+      });
 
-      this.data.collection = collection;
-      this.data.fields = fields;
-      this.data.layout = layout;
-      this.data.status = status;
+      this.data.collection = data.collection;
+      this.data.fields = data.fields;
+      this.data.page = data.page;
+      this.data.tab = data.tab;
+      this.data.accordion = data.accordion;
+      this.data.layout = data.layout;
+      this.data.status = data.status;
    
       // waits until the request completes...
-      console.log('response from api yo -----> ', collection, fields, items);
+      // ('response from api yo -----> ', collection, fields, items);
 
     } catch(err){
       console.error(err);
@@ -362,6 +547,42 @@ export default class CollectionsTool {
       })
 
       return nArr
+      
+    } catch(err){
+      console.error(err);
+    }
+    
+  }
+
+
+  async fetchContacts() {
+
+    let pages = [];
+    let tabs = [];
+    let accordions = [];
+    
+    try {
+      const collectionsResponse = await fetch(`${ this.contactsEndpoint }`);
+      const categories = await collectionsResponse.json();
+  
+      categories.data.map(item =>  {
+        // console.log('fetchContacts -----> ', item)
+        if (!pages.includes(item.page) && item.page !== null) {
+          pages.push(item.page);
+        }
+
+        if (!tabs.includes(item.tab) && item.tab !== null) {
+          tabs.push(item.tab);
+        }
+
+        if (!accordions.includes(item.accordion) && item.accordion !== null) {
+          accordions.push(item.accordion);
+        }
+      });
+
+      // console.log('pages ----> ', pages)
+
+      return [pages, tabs, accordions];
       
     } catch(err){
       console.error(err);
