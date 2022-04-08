@@ -86,6 +86,7 @@ export const getYear = (date) => {
        date+='T00:00:00'
     }
   const d = new Date(date)
+
   return d.toLocaleString('en-us', { year: 'numeric' })
 }
 
