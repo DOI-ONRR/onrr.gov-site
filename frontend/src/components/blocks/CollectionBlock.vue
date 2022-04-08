@@ -141,10 +141,10 @@ export default {
       return this.block.data.page
     },
     collectionTab() {
-      return this.block.data.tab
+      return this.block.data.tab || null
     },
     collectionAccordion() {
-      return this.block.data.accordion
+      return this.block.data.accordion || null
     },
     items() {
       const items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)

@@ -97,9 +97,9 @@ export default {
     collectionItems() {
       let collectionItems = []
       this.collection && this.collection.filter(item => {
-        // console.log('item ------> ', item)
+        console.log('this.collectionTab ------> ', this.collectionTab)
 
-        if (item.page === this.collectionPage && item.tab === this?.collectionTab) {
+        if (item.page === this.collectionPage && item.tab === this.collectionTab && item.accordion === this.collectionAccordion) {
           let nObj = {}
 
           // console.log('item yo ----> ', item)
