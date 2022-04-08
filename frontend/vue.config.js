@@ -1,4 +1,4 @@
-const targetUrl = process.env.NODE_ENV === 'production' ? 'https://dev-onrr-cms.app.cloud.gov' : 'http://localhost:8055'
+const targetUrl = process.env.NODE_ENV === 'production' ? 'https://dev-onrr-cms.app.cloud.gov' : 'http://192.168.1.5:8055'
 
 module.exports = {
   transpileDependencies: [

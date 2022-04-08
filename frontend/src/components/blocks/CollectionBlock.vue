@@ -5,7 +5,10 @@
         :is="collectionBlock(collection)" 
         :collection="items" 
         :collectionName="collection"
-        :collectionLayout="collectionLayout"></component>
+        :collectionLayout="collectionLayout"
+        :collectionPage="collectionPage"
+        :collectionTab="collectionTab"
+        :collectionAccordion="collectionAccordion"></component>
     </keep-alive>
   </div>
 </template>
@@ -133,6 +136,15 @@ export default {
     },
     collectionLayout() {
       return this.block.data.layout
+    },
+    collectionPage() {
+      return this.block.data.page
+    },
+    collectionTab() {
+      return this.block.data.tab
+    },
+    collectionAccordion() {
+      return this.block.data.accordion
     },
     items() {
       const items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)

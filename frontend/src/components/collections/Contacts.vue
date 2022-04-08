@@ -1,49 +1,212 @@
 <template>
   <div>
-    <v-card 
-      elevation="1"
-      v-for="(contact, i) in collection"
-      :key="i"
-      class="ml-1 mr-1 mt-1 mb-4 text-wrap">
-      <v-list>
-        <v-subheader class="text-wrap">
-          Category: Paying > Federal accounts receivable, billing, and finance > Company Contact
-        </v-subheader>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title v-text="contact.primary_contact">{{ contact.primary_contact }}</v-list-item-title>
-            <v-list-item-icon v-if="contact.primary_email">
-              <v-icon>
-                mdi-email
-              </v-icon>
-              <span>{{ contact.primary_email }}</span>
-            </v-list-item-icon>
-
-            <v-list-item-icon v-if="contact.primary_phone">
-              <v-icon>
-                mdi-phone
-              </v-icon>
-              <span>{{ contact.primary_phone }}</span>
-            </v-list-item-icon>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-card>
+    <v-container class="pa-0">
+        <v-row>
+          <v-col>
+            <div class="text-left mt-4">
+              Displaying {{ visibleItems.length }} of {{ collectionItems.length }} contacts
+            </div>
+          </v-col>
+          <v-col>
+            <div class="text-right mb-4">
+              <v-pagination
+              v-model="page"
+              color="secondary"
+              :length="Math.ceil(collectionItems.length/perPage)">
+              </v-pagination>
+            </div>
+          </v-col>
+        </v-row>
+    </v-container>
+    <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
+      <h2 class="collection-category pa-3 mb-3">{{ item.header }}</h2>
+      <v-container class="pa-0">
+        <v-row>
+          <v-col v-for="(contact, i) in item.contacts" :key="i" cols="12" sm="4">
+             <v-card
+              elevation="1"
+              class="text-wrap contact-card"
+              v-if="contact.contact">
+                <v-card-title
+                  :class="[formatToSlug(contact.role).toLowerCase(), 'contact-title']">{{ contact.role }}</v-card-title>
+                <v-card-text
+                  class="pa-4">
+                  <div class="contact contact-row" v-if="contact.contact">{{ contact.contact }}</div>
+                  <div class="contact-row" v-if="contact.email">
+                    <v-icon color="secondary" class="mr-1">mdi-email</v-icon>
+                    <a :href="`mailto:${ contact.email }`">{{ contact.email }}</a>
+                  </div>
+                  <div class="contact-row" v-if="contact.phone">
+                    <v-icon color="secondary" class="mr-1">mdi-phone</v-icon>
+                    <a :href="`tel:${ contact.phone }`">{{ contact.phone }}</a>
+                  </div>
+                  <div class="contact-row" v-if="contact.fax">
+                    <v-icon color="secondary" class="mr-1">mdi-fax</v-icon>
+                    <a :href="`tel:${ contact.fax }`">{{ contact.fax }}</a>
+                  </div>
+                </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <v-container class="pa-0">
+        <v-row>
+          <v-col>
+            <div class="text-left mt-4">
+              Displaying {{ visibleItems.length }} of {{ collectionItems.length }} contacts
+            </div>
+          </v-col>
+          <v-col>
+            <div class="text-right mb-4">
+              <v-pagination
+              v-model="page"
+              color="secondary"
+              :length="Math.ceil(collectionItems.length/perPage)">
+              </v-pagination>
+            </div>
+          </v-col>
+        </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
+import { formatToSlug } from '@/js/utils'
 export default {
   name: 'ContactsCollection',
+  data() {
+    return {
+      page: 1,
+      perPage: 5,
+    }
+  },
   props: {
     collection: [Object, Array],
     collectionName: String,
     collectionLayout: String,
+    collectionPage: String,
+    collectionTab: String,
+    collectionAccordion: String,
     showToolbar: Boolean,
   },
+  methods: {
+    formatToSlug: formatToSlug
+  },
+  computed: {
+    collectionItems() {
+      let collectionItems = []
+      this.collection && this.collection.filter(item => {
+        // console.log('item ------> ', item)
+
+        if (item.page === this.collectionPage && this.collectionTab !== null && this.collectionAccordion !== null) {
+          let nObj = {}
+
+          // console.log('item yo ----> ', item)
+
+          nObj.__typename = item.__typename
+          nObj.id = item.id
+          nObj.status = item.status
+          nObj.page = item.page
+          nObj.tab = item.tab
+          nObj.accordion = item.accordion
+          nObj.company = item.company_yn
+          nObj.letter = item.letter
+          nObj.header = item.header
+          nObj.companyName = item.company_name,
+          nObj.operatorNumber = item.operator_number
+          nObj.agency = item.agency,
+          nObj.contacts = [
+            {
+              contact: item.primary_contact,
+              role: item.primary_role,
+              email: item.email,
+              phone: item.phone,
+              fax: item.fax,
+            },
+            {
+              contact: item.contact_2,
+              role: item.role_2,
+              email: item.email_2,
+              phone: item.phone_2,
+            },
+            {
+              contact: item.contact_3,
+              role: item.role_3,
+              email: item.email_3,
+              phone: item.phone_3,
+            },
+            {
+              contact: item.contact_4,
+              role: item.role_4,
+              email: item.email_4,
+              phone: item.phone_4,
+            },
+            {
+              contact: item.contact_5,
+              role: item.role_5,
+              email: item.email_5,
+              phone: item.phone_5,
+            },
+            {
+              contact: item.contact_6,
+              role: item.role_6,
+              email: item.email_6,
+              phone: item.phone_6,
+            }
+          ]
+
+          collectionItems.push(nObj)
+        }
+      })
+      return collectionItems
+    },
+    visibleItems() {
+      return this.collectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+.collection-category {
+  border-top: 2px solid var(--v-purple-base);
+  background-color: var(--v-purple-lighten2);
+}
 
+.contact-card {
+  min-height: 165px;
+}
+
+.contact-title {
+  padding: 0px 8px;
+  min-height: 36px;
+  color: white !important;
+  font-size: 1rem !important;
+}
+
+.contact-row {
+  margin-bottom: 4px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.primary-contact {
+  background-color: var(--v-primary-base);
+}
+
+.back-up-contact {
+  background-color: var(--v-purple-lighten1);
+}
+
+.supervisor,
+.manager {
+  background-color: var(--v-yellow-lighten1);
+}
+
+.contact {
+  background-color: var(--v-neutrals-lighten2);
+  padding: 2px 4px;
+}
 </style>
