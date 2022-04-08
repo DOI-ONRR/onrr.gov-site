@@ -99,7 +99,7 @@ export default {
       this.collection && this.collection.filter(item => {
         // console.log('item ------> ', item)
 
-        if (item.page === this.collectionPage && this.collectionTab !== null && this.collectionAccordion !== null) {
+        if (item.page === this.collectionPage && item.tab === this?.collectionTab) {
           let nObj = {}
 
           // console.log('item yo ----> ', item)
