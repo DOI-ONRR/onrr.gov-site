@@ -1,4 +1,4 @@
-const targetUrl = process.env.NODE_ENV === 'production' ? 'https://dev-onrr-cms.app.cloud.gov' : 'http://192.168.1.5:8055'
+const targetUrl = process.env.NODE_ENV === 'production' ? 'https://dev-onrr-cms.app.cloud.gov' : 'http://localhost:8055'
 
 module.exports = {
   transpileDependencies: [
@@ -19,6 +19,12 @@ module.exports = {
   devServer: {
     // proxy: targetUrl
     proxy: {
+      '^/graphql': {
+        target: targetUrl,
+        changeOrigin: true,
+        secure: true,
+        logLevel: 'debug',
+      },
       '^/document': {
         target: targetUrl,
         changeOrigin: true,
