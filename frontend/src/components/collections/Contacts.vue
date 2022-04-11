@@ -19,7 +19,7 @@
         </v-row>
     </v-container>
     <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-      <h2 class="collection-category pa-3 mb-3">{{ item.header }}</h2>
+      <h2 class="collection-category pa-3 mb-3">{{ item.header }} <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span></h2>
       <v-container class="pa-0">
         <v-row>
           <v-col v-for="(contact, i) in item.contacts" :key="i" cols="12" sm="4">
@@ -203,6 +203,7 @@ export default {
 .supervisor,
 .manager {
   background-color: var(--v-yellow-lighten1);
+  color: var(--v-black) !important;
 }
 
 .contact {
