@@ -162,7 +162,7 @@ export const TOTAL_REVENUE_QUERY = gql`
 
 export const CONTACTS_QUERY = gql`
   query {
-    contacts(limit: -1) {
+    contacts(sort: ["header", "letter"], limit: -1) {
       id
       status
       page
