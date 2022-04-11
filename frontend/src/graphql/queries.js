@@ -248,11 +248,13 @@ export const REPORTER_LETTERS_QUERY = gql`
         id
         filename_download
         title
+        type
       }
       accessible_file {
         id
         filename_download
         title
+        type
       }
       link
       status

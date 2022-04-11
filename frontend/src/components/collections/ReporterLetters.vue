@@ -13,7 +13,7 @@
               target="_blank"
             >
               <v-list-item-icon class="mr-1">
-                <v-icon color="secondary">mdi-file-pdf-box</v-icon>
+                <v-icon color="secondary">{{ fileIcon(item.file.type) }}</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title v-text="item.title" class="secondary--text text-body-1 text-wrap text-decoration-underline"></v-list-item-title>
@@ -57,10 +57,11 @@
             </template>
             <template v-slot:item.title="{ item }">
               <div>
-                <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank">{{ item.title }}</a><v-icon right color="secondary">mdi-file-pdf-box</v-icon>
+                <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank" class="link-item">{{ item.title }}</a><v-icon color="secondary">{{ fileIcon(item.file.type) }}</v-icon>
               </div>
               <div v-if="item.accessible_file">
-                <a :href="accessibleFileLink(`${ API }/reporter-letters/`, item)" target="_blank">{{ item.accessible_file.title }}&nbsp;(Accessible.docx)</a><br>
+                <a :href="accessibleFileLink(`${ API }/reporter-letters/`, item)" target="_blank" class="link-item">{{ item.accessible_file.title }}</a>
+                <v-icon color="secondary">{{ fileIcon(item.accessible_file.type) }}</v-icon>
               </div>
             </template>
             <template v-slot:item.date="{ item }">
@@ -164,6 +165,22 @@ export default {
     formattedLabel(label) {
       return formatToSlug(label)
     },
+    fileIcon(fileType) {
+      let type 
+      switch (fileType) {
+        case 'application/pdf':
+          type = 'mdi-file-pdf-box'
+          break;
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+          type = 'mdi-file-excel-box'
+          break;
+        default:
+          type = undefined
+          break;
+      }
+
+      return type;
+    }
   },
   computed: {
     headers()  {
@@ -213,5 +230,9 @@ export default {
 
 .v-list-item--link:before {
   background-color: none;
+}
+
+.link-item {
+  word-break: break-all;
 }
 </style>
