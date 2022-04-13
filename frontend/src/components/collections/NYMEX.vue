@@ -33,7 +33,7 @@
           <td>{{ getMonth(item.date, 'long') }}</td>
           <td>${{ roundHalfUp(item.average, 2)}}</td>
           <td>${{ roundHalfUp(item.roll, 2)}}</td>
-          <td><div><a :href="fileLink(item.Spreadsheet.id)">Download</a><v-icon color="secondary">mdi-file-xlsx-box</v-icon></div></td>
+          <td><div><a :href="fileLink(item.Spreadsheet.filename_download)">Download</a><v-icon color="secondary">mdi-file-xlsx-box</v-icon></div></td>
         </tr>
       </tbody>
     </template>
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     fileLink(filename) {
-      let  link = `${ this.API }/assets/${ filename }`  
+      let  link = `${ this.API }/document/${ filename }`  
       return link
     },
     getDay: getDay,
