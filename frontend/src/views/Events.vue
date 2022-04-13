@@ -10,8 +10,9 @@
     <span class="event-date">
       <v-list>
         <v-list-item-content>
-          <!-- TODO: Format properly-->
-          <v-list-item-title class="event-date-content" v-text="event.event_start_date_time"> {{ event.event_start_date_time }}  </v-list-item-title> 
+          <!-- TODO: Clean up and format properly-->
+          <v-list-item-title class="event-date-content" v-text="event.start_date"> {{ event.start_date }}  </v-list-item-title> 
+          <v-list-item-title class="event-date-content" v-text="event.start_time"> {{ event.start_time }}  </v-list-item-title> 
         </v-list-item-content>
       </v-list>
     </span>
@@ -19,11 +20,15 @@
     <span class="event-info">
       <v-list>
         <v-header class="event_title event_item" v-text="event.title"> {{ event.title }} </v-header>
-        <!-- TODO: Remove paragraph element from text -->
         <v-subheader class="event_description event_item" v-html="event.description"></v-subheader>
           <v-list-item-content>
-            <!-- TODO: Remove placeholder. Fix only being able to query Location ID -->
-            <v-list-item-title class="event_item"> Location Placeholder </v-list-item-title>
+            <v-list-item-title class="event_item"> {{event.location.street_address}}, {{event.location.city}}, {{event.location.state}}, {{event.location.zip_code}} </v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-content>
+            <v-list-item-title class="event_item">Start time: {{event.start_time}} </v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-content>
+            <v-list-item-title class="event_item">End time: {{event.end_time}} </v-list-item-title>
           </v-list-item-content>
         <v-list-item>
           <v-list-item-content>
@@ -36,6 +41,12 @@
             <v-list-item-title class="event_contact event_item" v-text="event.contact.primary_phone"> {{event.contact.primary_phone}} </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item-content>
+            <v-list-item-title class="event_item"> {{event.other_information}} </v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-content>
+            <v-list-item-title class="event_item"> {{event.who_should_attend}} </v-list-item-title>
+        </v-list-item-content>
       </v-list>
     </span>
   </v-card>

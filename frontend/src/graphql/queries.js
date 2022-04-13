@@ -204,10 +204,11 @@ export const REPORTER_LETTERS_QUERY = gql`
 // Events Query
 export const EVENTS_QUERY = gql`
   query {
-    events {
+    events (sort: ["start_date", "start_time"]) {
       id
-      event_start_date_time
-      event_end_date_time
+      start_date
+      start_time
+      end_time
       title
       description
       who_should_attend
