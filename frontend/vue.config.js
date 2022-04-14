@@ -19,6 +19,13 @@ module.exports = {
   devServer: {
     // proxy: targetUrl
     proxy: {
+      
+      '^/graphql': {
+        target: targetUrl,
+        changeOrigin: true,
+        secure: true,
+        logLevel: 'debug',
+      },
       '^/document': {
         target: targetUrl,
         changeOrigin: true,

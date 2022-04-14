@@ -44,6 +44,8 @@ export default class LinksInline {
       actionsWrapper: null,
       inputWrapper: null,
       inlineRadio: null,
+            inlineButtonWrapper: null,
+      inlineButton: null,
       replaceRadio: null,
       
       searchResults: null,
@@ -110,6 +112,7 @@ export default class LinksInline {
     //for(let nn=0; nn < nodes.length; nn++) {
     //  this.nodeText.appendChild(nodes[nn])
     //}
+    
     if(this.getLabelType() === 'Append') {
       this.textNode.appendChild(links);
     } else {
@@ -205,7 +208,9 @@ export default class LinksInline {
      * Render grid wrapper
      *
      * @type {HTMLDivElement}
-     */ 
+     */
+
+    
 
     this.nodes.gridWrapper = Dom.make('div');
     this.nodes.gridWrapper.style.display='block';
@@ -214,7 +219,21 @@ export default class LinksInline {
     grid.render(this.nodes.searchItem);
     this.nodes.inlineRadio = Dom.make('div', LinksInline.CSS.inlineRadio)
     this.nodes.inlineRadio.style.display='flex';
+    
+    this.nodes.inlineButtonWrapper = Dom.make('div', LinksInline.CSS.inlineButton)
+    this.nodes.inlineButtonWrapper.style.display='flex';
 
+    const spanButtonLabel=document.createElement('span');
+    spanButtonLabel.innerText='Button: ';
+    this.nodes.inlineButtonWrapper.appendChild(spanButtonLabel);
+    const buttonCheckbox = document.createElement('input');
+    buttonCheckbox.setAttribute('type', 'checkbox');
+    buttonCheckbox.setAttribute('name','buttonCheckbox');
+
+    buttonCheckbox.setAttribute('id','buttonCheckbox');
+    this.nodes.inlineButton=buttonCheckbox;
+    this.nodes.inlineButtonWrapper.appendChild(buttonCheckbox);
+    
     const spanLabel=document.createElement('span');
     spanLabel.innerText='Label: ';
     this.nodes.inlineRadio.appendChild(spanLabel);
@@ -318,6 +337,7 @@ export default class LinksInline {
     this.nodes.inlineRadio.appendChild(buttonAdd)
         this.nodes.inlineRadio.appendChild(span3)
     this.nodes.inlineRadio.appendChild(buttonCancel)
+    this.nodes.gridWrapper.appendChild(this.nodes.inlineButtonWrapper);
     this.nodes.gridWrapper.appendChild(this.nodes.inlineRadio);
     this.nodes.gridWrapper.appendChild(document.createElement('br'))
     this.nodes.gridWrapper.appendChild(this.nodes.searchItem);
@@ -499,7 +519,8 @@ export default class LinksInline {
       li: true,
       a:{
         href:true,
-        target:true
+        target:true,
+        class:true
         
       },
       img: {
@@ -602,6 +623,11 @@ export default class LinksInline {
     var aTag = document.createElement('a');
     aTag.setAttribute('href',this.config.base+url);
     aTag.setAttribute('download',label+'.'+extension);
+    console.debug("----------------------------inlineButton> ", this.nodes.inlineButton)
+    if(this.nodes.inlineButton.checked) {
+      aTag.classList.add(LinksInline.CSS.linkButton)
+    }
+    
     aTag.innerText = label;
     // mydiv.appendChild(aTag);
     linkList.appendChild(aTag);
@@ -634,12 +660,14 @@ export default class LinksInline {
       gridWrapperLoading: 'ce-link-inline__grid--loading',
       gridWrapperInput: 'ce-link-inline__grid-input',
       
+      
       searchItem: 'ce-link-inline__search-item',
       searchItemSelected: 'ce-link-inline__search-item--selected',
       searchItemName: 'ce-link-inline__search-item-name',
       searchItemDescription: 'ce-link-inline__search-item-description',
       
       linkWrapper: 'ce-link-inline__link-wrapper',
+      linkButton: 'ce-link-inline__link-button',
       linkDataTitleWrapper: 'ce-link-inline__link-title-wrapper',
       linkDataName: 'ce-link-inline__link-name',
       linkDataDescription: 'ce-link-inline__link-description',
