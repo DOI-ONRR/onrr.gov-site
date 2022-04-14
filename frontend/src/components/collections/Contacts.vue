@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-container class="pa-0">
+    <v-container class="pa-0 mt-10">
+        <v-row>
+          <v-col cols="12" sm="6">
+            <TextField :fields="searchInputField"></TextField>
+          </v-col>
+        </v-row>
         <v-row>
           <v-col>
             <div class="text-left mt-4">
@@ -18,38 +23,47 @@
           </v-col>
         </v-row>
     </v-container>
-    <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-      <h2 class="collection-category pa-3 mb-3">{{ item.header }} <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span></h2>
-      <v-container class="pa-0">
-        <v-row>
-          <v-col v-for="(contact, i) in item.contacts" :key="i" cols="12" sm="4">
-             <v-card
-              elevation="1"
-              class="text-wrap contact-card"
-              v-if="contact.contact">
-                <v-card-title
-                  :class="[formatToSlug(contact.role).toLowerCase(), 'contact-title']">{{ contact.role }}</v-card-title>
-                <v-card-text
-                  class="pa-4">
-                  <div class="contact contact-row" v-if="contact.contact">{{ contact.contact }}</div>
-                  <div class="contact-row" v-if="contact.email">
-                    <v-icon color="secondary" class="mr-1">mdi-email</v-icon>
-                    <a :href="`mailto:${ contact.email }`">{{ contact.email }}</a>
-                  </div>
-                  <div class="contact-row" v-if="contact.phone">
-                    <v-icon color="secondary" class="mr-1">mdi-phone</v-icon>
-                    <a :href="`tel:${ contact.phone }`">{{ contact.phone }}</a>
-                  </div>
-                  <div class="contact-row" v-if="contact.fax">
-                    <v-icon color="secondary" class="mr-1">mdi-fax</v-icon>
-                    <a :href="`tel:${ contact.fax }`">{{ contact.fax }}</a>
-                  </div>
-                </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+    <div v-if="visibleItems.length > 0">
+      <v-fade-transition group hide-on-leave leave-absolute origin="top left">
+        <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
+          <h2 class="collection-category pa-3 mb-3">
+            {{ item.header }} 
+            <span v-if="item.agency !== null">({{ item.agency }})</span>
+            <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
+          </h2>
+          <v-container class="pa-0">
+            <v-row>
+              <v-col v-for="(contact, i) in item.contacts" :key="i" cols="12" sm="4">
+                <v-card
+                  elevation="1"
+                  class="text-wrap contact-card"
+                  v-if="contact.contact">
+                    <v-card-title
+                      :class="[formatToSlug(contact.role).toLowerCase(), 'contact-title']">{{ contact.role }}</v-card-title>
+                    <v-card-text
+                      class="pa-4">
+                      <div class="contact contact-row" v-if="contact.contact">{{ contact.contact }}</div>
+                      <div class="contact-row" v-if="contact.email">
+                        <v-icon color="secondary" class="mr-1">mdi-email</v-icon>
+                        <a :href="`mailto:${ contact.email }`">{{ contact.email }}</a>
+                      </div>
+                      <div class="contact-row" v-if="contact.phone">
+                        <v-icon color="secondary" class="mr-1">mdi-phone</v-icon>
+                        <a :href="`tel:${ contact.phone }`">{{ contact.phone }}</a>
+                      </div>
+                      <div class="contact-row" v-if="contact.fax">
+                        <v-icon color="secondary" class="mr-1">mdi-fax</v-icon>
+                        <a :href="`tel:${ contact.fax }`">{{ contact.fax }}</a>
+                      </div>
+                    </v-card-text>
+                </v-card>
+              </v-col>  
+            </v-row>
+          </v-container>
+        </div>
+      </v-fade-transition>
     </div>
+    <div else>No contacts found.</div>
     <v-container class="pa-0">
         <v-row>
           <v-col>
@@ -73,12 +87,21 @@
 
 <script>
 import { formatToSlug } from '@/js/utils'
+const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
+
 export default {
   name: 'ContactsCollection',
   data() {
     return {
       page: 1,
       perPage: 5,
+      searchInputField: {
+        label: 'Search contacts',
+        text: null,
+        ref: 'searchContactsInput',
+        color: 'secondary',
+        icon: 'mdi-magnify',
+      },
     }
   },
   props: {
@@ -91,19 +114,55 @@ export default {
     showToolbar: Boolean,
   },
   methods: {
-    formatToSlug: formatToSlug
+    formatToSlug: formatToSlug,
+    resetPagination() {
+      return this.page = 1
+    },
+    filterProperties(items) {
+      const filteredItems = items
+        .filter(({ letter, header, operatorNumber, companyName, agency }) => {        
+          return letter && letter.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
+            this.searchInputField.text
+            .toLowerCase()
+            .split(' ')
+            .every(v => header.toLowerCase().includes(v)) ||
+            operatorNumber && operatorNumber.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
+            companyName && companyName.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
+            agency && agency.toLowerCase().includes(this.searchInputField.text.toLowerCase())
+        })
+      return filteredItems || items
+    },
+    filterContacts(items) {
+      // console.log('filterContacts -------> ', items)
+      const filteredItems = items.map(item => {
+        return { ...item, contacts: item.contacts.filter(contact => {
+         
+          if (contact.contact !== null) {
+            // console.log('filter contact: ', contact)
+            // console.log('found match: ', contact.contact.toLowerCase().includes(this.searchInputField.text.toLowerCase()))
+            return contact.contact.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
+              contact.email.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
+              contact.role.toLowerCase().includes(this.searchInputField.text.toLowerCase())
+          }
+        })}
+      }).filter(item => item.contacts.length > 0)
+
+      // console.log('wtf filteredItems --------> ', filteredItems)
+
+      return filteredItems || items
+    },
+  },
+  components: {
+    TextField
   },
   computed: {
     collectionItems() {
       let collectionItems = []
       this.collection && this.collection.filter(item => {
-        console.log('this.collectionTab ------> ', this.collectionTab)
 
         if (item.page === this.collectionPage && item.tab === this.collectionTab && item.accordion === this.collectionAccordion) {
-          let nObj = {}
-
           // console.log('item yo ----> ', item)
-
+          let nObj = {}
           nObj.__typename = item.__typename
           nObj.id = item.id
           nObj.status = item.status
@@ -159,11 +218,27 @@ export default {
           collectionItems.push(nObj)
         }
       })
-      return collectionItems
+
+      if (this.searchInputField.text) {
+        // console.log('filterProperties func ----------> ', this.filterProperties(collectionItems))
+        // console.log('filterContacts func ----------> ', this.filterContacts(collectionItems))
+
+        if (this.filterProperties(collectionItems).length === 0) {
+          this.resetPagination()
+          return this.filterContacts(collectionItems) || collectionItems
+        } else {
+          this.resetPagination()
+          return this.filterProperties(collectionItems) || collectionItems
+        }
+        
+      } else {
+        return collectionItems
+      }
+      
     },
     visibleItems() {
       return this.collectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
-    }
+    } 
   }
 }
 </script>
@@ -173,7 +248,6 @@ export default {
   border-top: 2px solid var(--v-purple-base);
   background-color: var(--v-purple-lighten2);
 }
-
 .contact-card {
   min-height: 165px;
 }
