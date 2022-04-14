@@ -88,7 +88,6 @@ export default {
   methods: {
     collectionBlock(type) {
       let collectionBlock
-      console.log(type)
       switch (type) {
         case 'reporter_letters':
           collectionBlock = ReporterLettersCollection
@@ -149,7 +148,6 @@ export default {
       return this.block.data.accordion || null
     },
     items() {
-      console.log(this.collectionItems)
       const items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)
       return items
     }
