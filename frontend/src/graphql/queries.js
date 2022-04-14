@@ -323,36 +323,29 @@ export const INDIAN_GAS_MAJOR_PORTION_QUERY = gql`
 
 // Events query
 export const EVENTS_QUERY = gql`
-  query {
-    events(sort: ["event_start_date_time"] filter: {event_start_date_time: {_lte: "now"}}) {
+query {
+  events(
+      sort: ["event_start_date_time"] filter: {event_start_date_time: {_gte: "now"}}
+  ){
+      status
       title
-      event_start_date_time_func{
-        day
-        month
-        hour
-        minute
-      }
-      event_end_date_time_func{
-        day
-        month
-        hour
-        minute
-      }
+      event_start_date_time
+      event_end_date_time
       description
       who_should_attend
       other_information
       location{
-        location_name
-        street_address
-        city
-        state
-        zip_code
+          location_name
+          street_address
+          city
+          state
+          zip_code
       }
       contact{
-        primary_contact
-        email
-        phone
+          primary_contact
+          email
+          phone
       }
     }
-  }
+}
 `
