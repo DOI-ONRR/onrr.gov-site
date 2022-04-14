@@ -324,8 +324,7 @@ export const INDIAN_GAS_MAJOR_PORTION_QUERY = gql`
 // Events query
 export const EVENTS_QUERY = gql`
   query {
-    events(
-      sort: ["event_start_date_time"]) {
+    events(sort: ["event_start_date_time"] filter: {event_start_date_time: {_lte: "now"}}) {
       title
       event_start_date_time_func{
         day
@@ -354,5 +353,6 @@ export const EVENTS_QUERY = gql`
         email
         phone
       }
+    }
   }
 `
