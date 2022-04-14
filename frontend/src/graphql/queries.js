@@ -213,7 +213,8 @@ export const NYMEX_QUERY = gql`
       average
       roll
       Spreadsheet {
-        id
+        id,
+        filename_download
       }
     }
   }
