@@ -63,7 +63,7 @@
         </div>
       </v-fade-transition>
     </div>
-    <div else>No contacts found.</div>
+    <div v-else>No contacts found.</div>
     <v-container class="pa-0">
         <v-row>
           <v-col>
