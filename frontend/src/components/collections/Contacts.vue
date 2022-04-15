@@ -118,17 +118,20 @@ export default {
     resetPagination() {
       return this.page = 1
     },
+    findSearchValue(item) {
+      return this.searchInputField.text
+        .toLowerCase()
+        .split(' ')
+        .every(v => item && item.toLowerCase().includes(v))
+    },
     filterProperties(items) {
       const filteredItems = items
         .filter(({ letter, header, operatorNumber, companyName, agency }) => {        
-          return letter && letter.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
-            this.searchInputField.text
-            .toLowerCase()
-            .split(' ')
-            .every(v => header.toLowerCase().includes(v)) ||
-            operatorNumber && operatorNumber.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
-            companyName && companyName.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
-            agency && agency.toLowerCase().includes(this.searchInputField.text.toLowerCase())
+          return this.findSearchValue(letter) ||
+            this.findSearchValue(header) ||
+            this.findSearchValue(operatorNumber) ||
+            this.findSearchValue(companyName) ||
+            this.findSearchValue(agency)
         })
       return filteredItems || items
     },
@@ -140,9 +143,9 @@ export default {
           if (contact.contact !== null) {
             // console.log('filter contact: ', contact)
             // console.log('found match: ', contact.contact.toLowerCase().includes(this.searchInputField.text.toLowerCase()))
-            return contact.contact.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
-              contact.email.toLowerCase().includes(this.searchInputField.text.toLowerCase()) ||
-              contact.role.toLowerCase().includes(this.searchInputField.text.toLowerCase())
+            return this.findSearchValue(contact.contact) ||
+              this.findSearchValue(contact.email) ||
+              this.findSearchValue(contact.role)
           }
         })}
       }).filter(item => item.contacts.length > 0)
