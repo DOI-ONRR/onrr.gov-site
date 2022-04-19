@@ -25,6 +25,12 @@ module.exports = {
         secure: true,
         logLevel: 'debug',
       },
+      '^/assets': {
+        target: targetUrl,
+        changeOrigin: true,
+        secure: true,
+        logLevel: 'debug',
+      },
       '^/document': {
         target: targetUrl,
         changeOrigin: true,

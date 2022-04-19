@@ -1,11 +1,11 @@
 import { Grid } from "gridjs";
+
 import "gridjs/dist/theme/mermaid.css";
 /**
  * Build Styles
  */
 //require('../styles/index.css').toString()
 
-import "../styles/index.css"
 
 /**
  * Import functions
@@ -44,10 +44,15 @@ export default class LinksInline {
       actionsWrapper: null,
       inputWrapper: null,
       inlineRadio: null,
+      inlineButtonWrapper: null,
+      inlineButton: null,
       replaceRadio: null,
       
       searchResults: null,
 
+      externalLinkWrapper: null,
+      externalLinkInput: null,
+      externalLinkButton: null,
       linkWrapper: null,
       linkUl: null,
       linkDataWrapper: null,
@@ -91,7 +96,14 @@ export default class LinksInline {
             
             this.toggleVisibility(this.nodes.toolButtonUnlink, false);
     */
+
+    console.debug('=-----------------adding element')
+   var elemDiv = document.createElement('div');
+    elemDiv.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100;background:#000;';
+    var main=document.getElementsByClassName('main')
+    main[0].appendChild(elemDiv)
     
+    console.debug('=-----------------adding element', elemDiv)
     return this.nodes.toolButtons;
     
   }
@@ -103,6 +115,7 @@ export default class LinksInline {
     //for(let nn=0; nn < nodes.length; nn++) {
     //  this.nodeText.appendChild(nodes[nn])
     //}
+    
     if(this.getLabelType() === 'Append') {
       this.textNode.appendChild(links);
     } else {
@@ -159,7 +172,9 @@ export default class LinksInline {
      *
      * @type {HTMLDivElement}
      */
-    this.nodes.actionsWrapper = Dom.make('div', [ LinksInline.CSS.actionsWrapper ]);
+    this.nodes.actionsWrapper = Dom.make('div',  [ LinksInline.CSS.actionsWrapper ] );
+
+    // this.toggleVisibili
     // this.toggleVisibility(this.nodes.actionsWrapper, false);
 
     /**
@@ -178,6 +193,7 @@ export default class LinksInline {
       }
     }
     const pageId=this.config.page_id;
+    
     const grid = new Grid({
       search: true,
       sort: true,
@@ -195,15 +211,51 @@ export default class LinksInline {
      * Render grid wrapper
      *
      * @type {HTMLDivElement}
-     */ 
+     */
+
+    
 
     this.nodes.gridWrapper = Dom.make('div');
-    this.nodes.gridWrapper.style.display='block'; 
+    this.nodes.gridWrapper.style.display='block';
+
     this.nodes.searchItem = Dom.make('div', LinksInline.CSS.searchItem);
     grid.render(this.nodes.searchItem);
     this.nodes.inlineRadio = Dom.make('div', LinksInline.CSS.inlineRadio)
     this.nodes.inlineRadio.style.display='flex';
+    
+    this.nodes.inlineButtonWrapper = Dom.make('div', LinksInline.CSS.inlineButton)
+    this.nodes.inlineButtonWrapper.style.display='flex';
+        
+    this.nodes.externalLinkWrapper = Dom.make('div', LinksInline.CSS.externalLinkWrapper)
+    this.nodes.externalLinkWrapper.style.display='flex';
 
+    const externalLinkInput=document.createElement('input');
+    externalLinkInput.setAttribute('name','externalLinkInput');
+    externalLinkInput.setAttribute('id','externalLinkInput');
+
+    const externalLinkButton= document.createElement('button');
+
+    this.nodes.externalLinkInput=externalLinkInput
+    const createExternalLink= () => { this.createExternalLink() };
+    externalLinkButton.addEventListener('click',function () { console.debug("createExternalLinks: ");  createExternalLink()});
+    externalLinkButton.innerHTML='Create External Link'
+
+    this.nodes.externalLinkWrapper.appendChild(externalLinkInput)
+    this.nodes.externalLinkWrapper.appendChild(externalLinkButton)
+
+
+    
+    const spanButtonLabel=document.createElement('span');
+    spanButtonLabel.innerText='Button: ';
+    this.nodes.inlineButtonWrapper.appendChild(spanButtonLabel);
+    const buttonCheckbox = document.createElement('input');
+    buttonCheckbox.setAttribute('type', 'checkbox');
+    buttonCheckbox.setAttribute('name','buttonCheckbox');
+
+    buttonCheckbox.setAttribute('id','buttonCheckbox');
+    this.nodes.inlineButton=buttonCheckbox;
+    this.nodes.inlineButtonWrapper.appendChild(buttonCheckbox);
+    
     const spanLabel=document.createElement('span');
     spanLabel.innerText='Label: ';
     this.nodes.inlineRadio.appendChild(spanLabel);
@@ -307,8 +359,11 @@ export default class LinksInline {
     this.nodes.inlineRadio.appendChild(buttonAdd)
         this.nodes.inlineRadio.appendChild(span3)
     this.nodes.inlineRadio.appendChild(buttonCancel)
+    this.nodes.gridWrapper.appendChild(this.nodes.inlineButtonWrapper);
     this.nodes.gridWrapper.appendChild(this.nodes.inlineRadio);
     this.nodes.gridWrapper.appendChild(document.createElement('br'))
+    this.nodes.gridWrapper.appendChild(this.nodes.externalLinkWrapper);
+  
     this.nodes.gridWrapper.appendChild(this.nodes.searchItem);
     this.toggleVisibility(this.nodes.gridWrapper, false);
 
@@ -362,11 +417,13 @@ export default class LinksInline {
           const ul=Dom.make('ul');
           this.nodes.linkUl=ul
           this.addLi( this.nodes.linkUl , url, label,type);
-          this.nodes.linkWrapper.appendChild(this.nodes.linkUl)
+          this.nodes.linkWrapperappendChild(this.nodes.linkUl)
           //
         }
       }
     });
+
+    
     this.nodes.actionsWrapper.appendChild(this.nodes.linkWrapper);
 
     this.nodes.actionsWrapper.appendChild(this.nodes.gridWrapper);
@@ -374,7 +431,24 @@ export default class LinksInline {
     return this.nodes.actionsWrapper;
   }
 
-  
+  createExternalLink() {
+    console.debug('----- create external links -----------------------------')
+    const url = this.nodes.externalLinkInput.value
+    const type = 'application/external'
+    const label = 'Click me'
+    if(this.getLinkType() === 'Inline' ) {
+      this.addUrl( this.nodes.linkWrapper, url, label, type);
+    } else {
+      if(this.nodes.linkUl) {
+        this.addLi( this.nodes.linkUl, url, label,type);
+      } else {
+        const ul=Dom.make('ul');
+        this.nodes.linkUl=ul
+        this.addLi( this.nodes.linkUl , url, label,type);
+        this.nodes.linkWrapper.appendChild(this.nodes.linkUl)
+      }
+    }
+  }
 
   shortcut() {
     console.debug('This shortcut ----------------->: ', this.selection)
@@ -391,7 +465,7 @@ export default class LinksInline {
    * @returns {void}
    */
   surround(range) {
-    console.debug('  surround(range) ------------------>')
+    console.debug('  surround(range) ------------------>', range)
     if (!range) {
       console.debug('No range ------------------------------->')
       return;
@@ -486,7 +560,8 @@ export default class LinksInline {
       li: true,
       a:{
         href:true,
-        target:true
+        target:true,
+        class:true
         
       },
       img: {
@@ -534,6 +609,9 @@ export default class LinksInline {
       break
     case 'plain':
       i.classList.add('mdi-text-box')
+      break
+    case 'external':
+      i.classList.add('no-icon')
       break
     default:
       return
@@ -587,8 +665,13 @@ export default class LinksInline {
     const icon=this.addIcon(extension);
     
     var aTag = document.createElement('a');
-    aTag.setAttribute('href',this.config.base+url);
+    aTag.setAttribute('href',url);
     aTag.setAttribute('download',label+'.'+extension);
+    console.debug("----------------------------inlineButton> ", this.nodes.inlineButton)
+    if(this.nodes.inlineButton.checked) {
+      aTag.classList.add(LinksInline.CSS.linkButton)
+    }
+    
     aTag.innerText = label;
     // mydiv.appendChild(aTag);
     linkList.appendChild(aTag);
@@ -621,12 +704,19 @@ export default class LinksInline {
       gridWrapperLoading: 'ce-link-inline__grid--loading',
       gridWrapperInput: 'ce-link-inline__grid-input',
       
+      
       searchItem: 'ce-link-inline__search-item',
       searchItemSelected: 'ce-link-inline__search-item--selected',
       searchItemName: 'ce-link-inline__search-item-name',
       searchItemDescription: 'ce-link-inline__search-item-description',
+
+      externalLinkWrapper: 'ce-link-inline__external-link-wrapper',
+      externalLinkInput: 'ce-link-inline__external-link-input',
+      externalLinkButton: 'ce-link-inline__external-link-button',
       
       linkWrapper: 'ce-link-inline__link-wrapper',
+
+      linkButton: 'ce-link-inline__link-button',
       linkDataTitleWrapper: 'ce-link-inline__link-title-wrapper',
       linkDataName: 'ce-link-inline__link-name',
       linkDataDescription: 'ce-link-inline__link-description',

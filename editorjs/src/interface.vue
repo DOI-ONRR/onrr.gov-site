@@ -22,6 +22,27 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+
+
+  <v-dialog :model-value="linkHandler !== null" @update:model-value="unsetLinkHandler" @esc="unsetLinkHandler">
+  <v-card>
+  <v-card-title>
+  FOO
+</v-card-title>
+  <v-card-text>
+  FOO
+</v-card-text>
+  <v-card-actions>
+  <v-button secondary @click="unsetFileHandler">
+  <i18n-t keypath="cancel" />
+  </v-button>
+  </v-card-actions>
+  </v-card>
+  </v-dialog>
+  
+  <div :class="className" ref="editorElement"></div>
+  
   <!-- <CollectionsModal ref="collectionsModal" :modelValue="collectionsHandler !== null" :escValue="unsetCollectionHandler" /> -->
   <div :class="className" ref="editorElement"></div>
   </div>
@@ -126,6 +147,7 @@
       const uploaderComponentElement = ref(null);
       const editorElement = ref(null);
       const fileHandler = ref(null);
+      const linkHandler = ref(null);
       const collectionsHandler = ref(null);
 
       const editorValueEmitter = debounce(function saver(context) {
@@ -198,6 +220,7 @@
         editorElement,
         uploaderComponentElement,
         fileHandler,
+        linkHandler,
         className: {
           [props.font]: true,
           bordered: props.bordered,
@@ -208,6 +231,9 @@
         unsetFileHandler,
         setFileHandler,
         handleFile,
+        setLinkHandler,
+        unsetLinkHandler,
+        handleLink,
         getUploadFieldElement,
         addTokenToURL,
         getPreparedValue,
@@ -227,6 +253,19 @@
       function handleFile(event) {
         fileHandler.value(event);
         unsetFileHandler();
+      }
+      
+function unsetLinkHandler() {
+        fileHandler.value = null;
+      }
+
+      function setLinkHandler(handler) {
+        //fileHandler.value = handler;
+      }
+
+      function handleLink(event) {
+        //        fileHandler.value(event);
+        //        unsetLinkHandler();
       }
 
       function getUploadFieldElement() {
@@ -490,10 +529,7 @@
   .sans-serif {
     font-family: var(--family-sans-serif);
   }
-
-  .inline-links {
-    border: 1px solid red;
-  }
+  
 </style>
 
 <style src="./editorjs-content-reset.css"></style>
