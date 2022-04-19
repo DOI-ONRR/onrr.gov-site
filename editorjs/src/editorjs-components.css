@@ -267,3 +267,8 @@
   border-bottom: 1px solid #333333;
   border-left: 1px solid #CCCCCC;
 }
+
+.codex-editor .ce-link-inline__actions-wrapper {
+  border: 1px solid red !important;
+  background-color: yellow !important;
+}

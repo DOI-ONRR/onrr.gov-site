@@ -10,7 +10,7 @@ export default class extends ImageTool {
 	constructor(args) {
 		super(args);
 
-		console.log('ImageTool child class args -------> ', args)
+		// console.log('ImageTool child class args -------> ', args)
 
 		this._data = args.data;
 
