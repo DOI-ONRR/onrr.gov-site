@@ -44,12 +44,15 @@ export default class LinksInline {
       actionsWrapper: null,
       inputWrapper: null,
       inlineRadio: null,
-            inlineButtonWrapper: null,
+      inlineButtonWrapper: null,
       inlineButton: null,
       replaceRadio: null,
       
       searchResults: null,
 
+      externalLinkWrapper: null,
+      externalLinkInput: null,
+      externalLinkButton: null,
       linkWrapper: null,
       linkUl: null,
       linkDataWrapper: null,
@@ -222,7 +225,26 @@ export default class LinksInline {
     
     this.nodes.inlineButtonWrapper = Dom.make('div', LinksInline.CSS.inlineButton)
     this.nodes.inlineButtonWrapper.style.display='flex';
+        
+    this.nodes.externalLinkWrapper = Dom.make('div', LinksInline.CSS.externalLinkWrapper)
+    this.nodes.externalLinkWrapper.style.display='flex';
 
+    const externalLinkInput=document.createElement('input');
+    externalLinkInput.setAttribute('name','externalLinkInput');
+    externalLinkInput.setAttribute('id','externalLinkInput');
+
+    const externalLinkButton= document.createElement('button');
+
+    this.nodes.externalLinkInput=externalLinkInput
+    const createExternalLink= () => { this.createExternalLink() };
+    externalLinkButton.addEventListener('click',function () { console.debug("createExternalLinks: ");  createExternalLink()});
+    externalLinkButton.innerHTML='Create External Link'
+
+    this.nodes.externalLinkWrapper.appendChild(externalLinkInput)
+    this.nodes.externalLinkWrapper.appendChild(externalLinkButton)
+
+
+    
     const spanButtonLabel=document.createElement('span');
     spanButtonLabel.innerText='Button: ';
     this.nodes.inlineButtonWrapper.appendChild(spanButtonLabel);
@@ -340,6 +362,8 @@ export default class LinksInline {
     this.nodes.gridWrapper.appendChild(this.nodes.inlineButtonWrapper);
     this.nodes.gridWrapper.appendChild(this.nodes.inlineRadio);
     this.nodes.gridWrapper.appendChild(document.createElement('br'))
+    this.nodes.gridWrapper.appendChild(this.nodes.externalLinkWrapper);
+  
     this.nodes.gridWrapper.appendChild(this.nodes.searchItem);
     this.toggleVisibility(this.nodes.gridWrapper, false);
 
@@ -393,7 +417,7 @@ export default class LinksInline {
           const ul=Dom.make('ul');
           this.nodes.linkUl=ul
           this.addLi( this.nodes.linkUl , url, label,type);
-          this.nodes.linkWrapper.appendChild(this.nodes.linkUl)
+          this.nodes.linkWrapperappendChild(this.nodes.linkUl)
           //
         }
       }
@@ -407,7 +431,24 @@ export default class LinksInline {
     return this.nodes.actionsWrapper;
   }
 
-  
+  createExternalLink() {
+    console.debug('----- create external links -----------------------------')
+    const url = this.nodes.externalLinkInput.value
+    const type = 'application/external'
+    const label = 'Click me'
+    if(this.getLinkType() === 'Inline' ) {
+      this.addUrl( this.nodes.linkWrapper, url, label, type);
+    } else {
+      if(this.nodes.linkUl) {
+        this.addLi( this.nodes.linkUl, url, label,type);
+      } else {
+        const ul=Dom.make('ul');
+        this.nodes.linkUl=ul
+        this.addLi( this.nodes.linkUl , url, label,type);
+        this.nodes.linkWrapper.appendChild(this.nodes.linkUl)
+      }
+    }
+  }
 
   shortcut() {
     console.debug('This shortcut ----------------->: ', this.selection)
@@ -569,6 +610,9 @@ export default class LinksInline {
     case 'plain':
       i.classList.add('mdi-text-box')
       break
+    case 'external':
+      i.classList.add('no-icon')
+      break
     default:
       return
     }
@@ -621,7 +665,7 @@ export default class LinksInline {
     const icon=this.addIcon(extension);
     
     var aTag = document.createElement('a');
-    aTag.setAttribute('href',this.config.base+url);
+    aTag.setAttribute('href',url);
     aTag.setAttribute('download',label+'.'+extension);
     console.debug("----------------------------inlineButton> ", this.nodes.inlineButton)
     if(this.nodes.inlineButton.checked) {
@@ -665,8 +709,13 @@ export default class LinksInline {
       searchItemSelected: 'ce-link-inline__search-item--selected',
       searchItemName: 'ce-link-inline__search-item-name',
       searchItemDescription: 'ce-link-inline__search-item-description',
+
+      externalLinkWrapper: 'ce-link-inline__external-link-wrapper',
+      externalLinkInput: 'ce-link-inline__external-link-input',
+      externalLinkButton: 'ce-link-inline__external-link-button',
       
       linkWrapper: 'ce-link-inline__link-wrapper',
+
       linkButton: 'ce-link-inline__link-button',
       linkDataTitleWrapper: 'ce-link-inline__link-title-wrapper',
       linkDataName: 'ce-link-inline__link-name',
