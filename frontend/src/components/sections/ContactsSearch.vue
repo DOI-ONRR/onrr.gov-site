@@ -89,24 +89,24 @@ export default {
           itemsArr.push(item.primary_contact)
         }
 
-        if (item.item?.contact_2) {
-          itemsArr.push(item.item.contact_2)
+        if (item?.contact_2) {
+          itemsArr.push(item.contact_2)
         }
 
-        if (item.item?.contact_3) {
-          itemsArr.push(item.item.contact_3)
+        if (item?.contact_3) {
+          itemsArr.push(item.contact_3)
         }
 
-        if (item.item?.contact_4) {
-          itemsArr.push(item.item.contact_4)
+        if (item?.contact_4) {
+          itemsArr.push(item.contact_4)
         }
 
-        if (item.item?.contact_5) {
-          itemsArr.push(item.item.contact_5)
+        if (item.contact_5) {
+          itemsArr.push(item.contact_5)
         }
 
-        if (item.item?.contact_6) {
-          itemsArr.push(item.item.contact_6)
+        if (item?.contact_6) {
+          itemsArr.push(item.contact_6)
         }
 
         
