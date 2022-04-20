@@ -1,121 +1,159 @@
 <template>
-  <div>
-    <AutocompleteField
-      :fields="contactsSearchField">
-    </AutocompleteField>
-  </div>
+  <v-container class="pa-0">
+    <v-row no-gutters>
+      <v-col cols="12" sm="10" class="mr-1">
+        <v-autocomplete
+          v-model="contactsSearchField.select"
+          :items="contactsSearchField.items"
+          :label="contactsSearchField.label"
+          :color="contactsSearchField.color"
+          :append-icon="contactsSearchField.icon"
+          :search-input.sync="contactsSearchField.search"
+          :loading="loading"
+          hint="Suggested searches: Chevron, Offshore production reporting, Cody Eckstein"
+          outlined
+          clearable
+          hide-no-data>
+          <template v-slot:selection="{ item }">
+            <v-list-item-content>
+              <v-list-item-title v-html="item"></v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <template v-slot:item="{ item }">
+            <v-list-item-content>
+              <v-list-item-title v-html="item"></v-list-item-title>
+            </v-list-item-content>
+          </template>
+        </v-autocomplete>
+      </v-col>
+      <v-col cols="12" sm="1">
+        <v-btn 
+          large
+          color="secondary"
+          class="contacts-search-button"
+          @click="submitSearch($event, contactsSearchField.select)">
+          <v-icon>
+            mdi-magnify
+          </v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { groupBy } from '@/js/utils'
-const AutocompleteField = () => import(/* webpackChunkName: "Autocomplete" */ '@/components/inputs/Autocomplete')
-
 export default {
   name: 'ContactsSearch',
   data: () => ({
     contactsSearchField: {
       items: [],
-      model: null,
+      select: null,
+      search: null,
       label: 'Search by operator or payor company, contact name, or category',
       ref: 'contactsSearchInput',
       color: 'secondary',
       icon: 'mdi-chevron-down',
-      params: 'q'
-    }
+    },
+    loading: false
   }),
   props: {
     blockItems: [Object, Array],
   },
-  components: {
-    AutocompleteField
-  },
-  methods: {
-    groupBy: groupBy,
+  computed: {
     searchItems() {
       let itemsArr = []
 
       this.blockItems && this.blockItems.contacts.map(item => {
-      
-        let nObj = {}
-        let sObj = {}
-        // nObj.__typename = item.__typename
-        // nObj.id = item.id
-        // nObj.status = item.status
-        // nObj.page = item.page
-        // nObj.tab = item.tab
-        // nObj.accordion = item.accordion
-        nObj.header = item.header
-        nObj.company = item.company_yn
-        nObj.letter = item.letter
-        nObj.header = item.header
-        nObj.companyName = item.company_name,
-        nObj.operatorNumber = item.operator_number
-        nObj.agency = item.agency,
-        nObj.contacts = [
-          {
-            contact: item.primary_contact,
-            role: item.primary_role,
-            email: item.email,
-            phone: item.phone,
-            fax: item.fax,
-          },
-          {
-            contact: item.contact_2,
-            role: item.role_2,
-            email: item.email_2,
-            phone: item.phone_2,
-          },
-          {
-            contact: item.contact_3,
-            role: item.role_3,
-            email: item.email_3,
-            phone: item.phone_3,
-          },
-          {
-            contact: item.contact_4,
-            role: item.role_4,
-            email: item.email_4,
-            phone: item.phone_4,
-          },
-          {
-            contact: item.contact_5,
-            role: item.role_5,
-            email: item.email_5,
-            phone: item.phone_5,
-          },
-          {
-            contact: item.contact_6,
-            role: item.role_6,
-            email: item.email_6,
-            phone: item.phone_6,
-          }
-        ]
 
-        sObj.text = nObj
-        sObj.value = nObj.header
+        if (item?.header) {
+          itemsArr.push(item.header)
+        }
 
-        itemsArr.push(sObj)
+        if (item?.company_name) {
+          itemsArr.push(item.company_name)
+        }
+
+        if (item?.operator_number) {
+          itemsArr.push(item.operator_number)
+        }
+
+        if (item?.agency) {
+          itemsArr.push(item.agency)
+        }
+
+        if (item?.page) {
+          itemsArr.push(item.page)
+        }
+
+        if (item?.primary_contact) {
+          itemsArr.push(item.primary_contact)
+        }
+
+        if (item.item?.contact_2) {
+          itemsArr.push(item.item.contact_2)
+        }
+
+        if (item.item?.contact_3) {
+          itemsArr.push(item.item.contact_3)
+        }
+
+        if (item.item?.contact_4) {
+          itemsArr.push(item.item.contact_4)
+        }
+
+        if (item.item?.contact_5) {
+          itemsArr.push(item.item.contact_5)
+        }
+
+        if (item.item?.contact_6) {
+          itemsArr.push(item.item.contact_6)
+        }
+
+        
       })
-
-      this.contactsSearchField.items = itemsArr
+      
+      return itemsArr
     },
   },
-  computed: {
-    // fields() {
-    //   if(!this.contactsSearchField.model) return []
-
-    //   return Object.keys(this.contactsSearchField.model).map(key => {
-    //     return {
-    //       key,
-    //       value: this.model[key] || 'n/a',
-    //     }
-    //   })
-    // }
+  watch: {
+    'contactsSearchField.search': function(val) {
+      val && val !== this.contactsSearchField.select && this.querySelections(val)
+    },
+    searchItems: {
+      deep: true,
+      handler: function(newVal) {
+        this.contactsSearchField.search = newVal[0]
+        this.contactsSearchField.items = newVal
+      }
+    }
   },
-  created() {
-     setTimeout(function () {
-        this.searchItems()
-     }.bind(this), 500)
-  }
+  methods: {
+    querySelections(v) {
+      // console.log('querySelections val -------> ', v)
+      this.loading = true
+      // simulate ajax loading
+      setTimeout(() => {
+        this.contactsSearchField.items = this.searchItems.filter(e => {
+          // console.log('querySelections e ------> ', e)
+          return (e || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+        })
+         this.loading = false
+      }, 500);
+    },
+    submitSearch(e, v) {
+      console.log('submit search yo -------> ', e, v)
+      const query = { 
+        path: '/about/contact/search-results', 
+        ...this.$route.query, query:  { q: encodeURIComponent(v) || undefined } 
+      }
+      this.$router.push(query).catch(() => {})
+    }
+  },
 }
 </script>
+
+<style lang="scss" scoped>
+.contacts-search-button {
+  min-height: 55px;
+}
+</style>

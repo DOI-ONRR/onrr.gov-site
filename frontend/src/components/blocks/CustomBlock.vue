@@ -9,8 +9,8 @@
 </template>
 
 <script>
-const ContactsSearch = () => import(/* webpackChunkName: ContactsSearch" */ '@/components/sections/ContactsSearch')
-const ContactsSearchResults = () => import(/* webpackChunkName: ContactsSearch" */ '@/components/sections/ContactsSearchResults')
+const ContactsSearch = () => import(/* webpackChunkName: "ContactsSearch" */ '@/components/sections/ContactsSearch')
+const ContactsSearchResults = () => import(/* webpackChunkName: "ContactsSearchResults" */ '@/components/sections/ContactsSearchResults')
 
 import { 
   CONTACTS_QUERY,

@@ -5,6 +5,9 @@
           <v-col cols="12" sm="6">
             <TextField :fields="searchInputField"></TextField>
           </v-col>
+          <v-col cols="12" sm="6" v-if="filter">
+            <SelectField :fields="categoriesSelectField" @change="collectionItems"></SelectField>
+          </v-col>
         </v-row>
         <v-row>
           <v-col>
@@ -88,6 +91,7 @@
 <script>
 import { formatToSlug } from '@/js/utils'
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
+const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
 
 export default {
   name: 'ContactsCollection',
@@ -102,6 +106,17 @@ export default {
         color: 'secondary',
         icon: 'mdi-magnify',
       },
+      categoriesSelectField: {
+        items: [],
+        label: 'All Categories',
+        ref: 'categoriesSelectInput',
+        selected: null,
+        color: 'secondary',
+        icon: 'mdi-chevron-down',
+        params: 'category'
+      },
+      filterBy: this.filter,
+      searchResults: false,
     }
   },
   props: {
@@ -112,6 +127,11 @@ export default {
     collectionTab: String,
     collectionAccordion: String,
     showToolbar: Boolean,
+    filter: String,
+  },
+  components: {
+    TextField,
+    SelectField
   },
   methods: {
     formatToSlug: formatToSlug,
@@ -126,12 +146,13 @@ export default {
     },
     filterProperties(items) {
       const filteredItems = items
-        .filter(({ letter, header, operatorNumber, companyName, agency }) => {        
+        .filter(({ page, letter, header, operatorNumber, companyName, agency }) => {        
           return this.findSearchValue(letter) ||
             this.findSearchValue(header) ||
             this.findSearchValue(operatorNumber) ||
             this.findSearchValue(companyName) ||
-            this.findSearchValue(agency)
+            this.findSearchValue(agency) ||
+            this.findSearchValue(page)
         })
       return filteredItems || items
     },
@@ -154,69 +175,85 @@ export default {
 
       return filteredItems || items
     },
-  },
-  components: {
-    TextField
+    filterByCategory(items) {
+      const filteredItems = items.filter(item => item.page === this.categoriesSelectField.selected)
+      console.log('filterByCategory ----> ', filteredItems)
+      return filteredItems || items
+    },
+    searchCategoriesItems() {
+      const categories = Array.from(new Set(this.collection && this.collection.map(item => item.page))).reverse()
+      return this.categoriesSelectField.items = ['All Categories', ...categories]
+    },
+    createContactItem(item) {
+      let nObj = {}
+      nObj.__typename = item.__typename
+      nObj.id = item.id
+      nObj.status = item.status
+      nObj.page = item.page
+      nObj.tab = item.tab
+      nObj.accordion = item.accordion
+      nObj.company = item.company_yn
+      nObj.letter = item.letter
+      nObj.header = item.header
+      nObj.companyName = item.company_name,
+      nObj.operatorNumber = item.operator_number
+      nObj.agency = item.agency,
+      nObj.contacts = [
+        {
+          contact: item.primary_contact,
+          role: item.primary_role,
+          email: item.email,
+          phone: item.phone,
+          fax: item.fax,
+        },
+        {
+          contact: item.contact_2,
+          role: item.role_2,
+          email: item.email_2,
+          phone: item.phone_2,
+        },
+        {
+          contact: item.contact_3,
+          role: item.role_3,
+          email: item.email_3,
+          phone: item.phone_3,
+        },
+        {
+          contact: item.contact_4,
+          role: item.role_4,
+          email: item.email_4,
+          phone: item.phone_4,
+        },
+        {
+          contact: item.contact_5,
+          role: item.role_5,
+          email: item.email_5,
+          phone: item.phone_5,
+        },
+        {
+          contact: item.contact_6,
+          role: item.role_6,
+          email: item.email_6,
+          phone: item.phone_6,
+        }
+      ]
+      return nObj
+    }
   },
   computed: {
     collectionItems() {
       let collectionItems = []
       this.collection && this.collection.filter(item => {
 
+        // console.log('collectionItems item :: ' , item)
+
         if (item.page === this.collectionPage && item.tab === this.collectionTab && item.accordion === this.collectionAccordion) {
-          // console.log('item yo ----> ', item)
-          let nObj = {}
-          nObj.__typename = item.__typename
-          nObj.id = item.id
-          nObj.status = item.status
-          nObj.page = item.page
-          nObj.tab = item.tab
-          nObj.accordion = item.accordion
-          nObj.company = item.company_yn
-          nObj.letter = item.letter
-          nObj.header = item.header
-          nObj.companyName = item.company_name,
-          nObj.operatorNumber = item.operator_number
-          nObj.agency = item.agency,
-          nObj.contacts = [
-            {
-              contact: item.primary_contact,
-              role: item.primary_role,
-              email: item.email,
-              phone: item.phone,
-              fax: item.fax,
-            },
-            {
-              contact: item.contact_2,
-              role: item.role_2,
-              email: item.email_2,
-              phone: item.phone_2,
-            },
-            {
-              contact: item.contact_3,
-              role: item.role_3,
-              email: item.email_3,
-              phone: item.phone_3,
-            },
-            {
-              contact: item.contact_4,
-              role: item.role_4,
-              email: item.email_4,
-              phone: item.phone_4,
-            },
-            {
-              contact: item.contact_5,
-              role: item.role_5,
-              email: item.email_5,
-              phone: item.phone_5,
-            },
-            {
-              contact: item.contact_6,
-              role: item.role_6,
-              email: item.email_6,
-              phone: item.phone_6,
-            }
-          ]
+          console.log('item found yo ----> ', item)
+          let nObj = this.createContactItem(item)
+
+          collectionItems.push(nObj)
+        } else if (this.searchResults) {
+          let nObj = this.createContactItem(item)
 
           collectionItems.push(nObj)
         }
@@ -233,15 +270,49 @@ export default {
           this.resetPagination()
           return this.filterProperties(collectionItems) || collectionItems
         }
+
         
+      } else if (this.categoriesSelectField.selected !== 'All Categories' && this.searchResults) {
+        return this.filterByCategory(collectionItems)
       } else {
         return collectionItems
       }
-      
+
     },
     visibleItems() {
       return this.collectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
-    } 
+    },
+  },
+  created() {
+    setTimeout(() => {
+      this.searchCategoriesItems()
+    }, 500)
+  },
+  watch: {
+    'categoriesSelectField.selected': function(val) {
+      console.log('categoriesSelectField.selected val: ', val)
+      // set: function(newVal) {
+      //   this.collectionItems.filter(item => item.page === newVal)
+      // }
+    },
+    'this.searchInputField.text': function(val) {
+      if (!val) {
+        this.categoriesSelectField.selected = 'All Caetegories'
+      }
+    }
+  },
+  mounted() {
+    const category = this.$route.query.category && decodeURI(this.$route.query.category)
+    const query = this.$route.query.q && decodeURI(this.$route.query.q)
+
+    if (category) {
+      this.categoriesSelectField.selected = category
+    }
+    
+    if (query) {
+      this.searchResults = true
+      this.searchInputField.text = query
+    }
   }
 }
 </script>

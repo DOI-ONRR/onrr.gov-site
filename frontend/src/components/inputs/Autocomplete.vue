@@ -1,11 +1,12 @@
 <template>
   <div>
     <v-autocomplete
-      v-model="field.model"
+      v-model="field.selected"
       :items="field.items"
       :label="field.label"
       :color="field.color"
       :append-icon="field.icon"
+      :search-input.sync="field.search"
       outlined
       multiple>
       <template v-slot:selection="{ item }">
@@ -48,6 +49,12 @@
         </v-list-item-content>
       </template>
     </v-autocomplete>
+    <v-btn color="secondary">
+      Search
+      <v-icon right>
+        mdi-magnify
+      </v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -70,6 +77,34 @@ export default {
         const operatorNum = item.text.operatorNumber ? `(Operator #: ${ item.text.operatorNumber })` : ' '
         const header = `${ item.text.header } ${ agency } ${ operatorNum }`
         return header
+      },
+      findSearchValue(item) {
+        console.log('findSearchValue item ------> ', item)
+        return this.field.search
+          .toLowerCase()
+          .split(' ')
+          .every(v => item && item.toLowerCase().includes(v))
+      },
+      querySelections(val) {
+        console.log('querySelections val -------> ', val)
+        this.loading = true
+        setTimeout(() => {
+          const filteredItems = this.field.items.filter(e => {
+            console.log('querySelections e ------> ', e)
+            const header = JSON.stringify(e.value.header)
+            const company = JSON.stringify(e.value.company)
+            return this.findSearchValue(header) || 
+              this.findSearchValue(company)
+          })
+          this.loading = false
+          return filteredItems || this.field.items
+        }, 500);
+      }
+    },
+    watch: {
+      'field.search': function(val, oldVal) {
+        console.log('watch field val -----> ', val, oldVal)
+        val && val !== this.field.selected && this.querySelections(val)
       }
     },
     created() {

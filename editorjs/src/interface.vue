@@ -63,6 +63,7 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
+  import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
     emits: ['input', 'error'],
@@ -81,7 +82,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline'],
+        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -374,6 +375,9 @@
               contactsEndpoint: '/items/contacts?limit=-1',
               // openCollectionsModal: openCollectionsModal,
             }
+          },
+          customBlocks: {
+            class: CustomBlocksTool
           },
        /*   links: {
             class: Links,
