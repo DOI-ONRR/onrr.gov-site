@@ -83,15 +83,34 @@ export default {
 }
 
 .ce-link-inline__link-button {
-  font: bold 11px Arial;
+  background-color: var(--v-secondary-base) !important;
+  border-color: var(--v-secondary-base) !important;
+  align-items: center;
+  border-radius: 4px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-weight: 500;
+  letter-spacing: .0892857143em;
+  justify-content: center;
+  outline: 0;
+  position: relative;
   text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
+  text-indent: 0.0892857143em;
+  text-transform: "inherit";
+  transition-duration: .28s;
+  transition-property: box-shadow,transform,opacity;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  color: white !important;
+  height: 36px;
+  min-width: 64px;
+  padding: 0 16px;
+  font-size: .85rem;
 }
 
 </style>

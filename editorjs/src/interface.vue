@@ -22,27 +22,21 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-
-
-
-  <v-dialog :model-value="linkHandler !== null" @update:model-value="unsetLinkHandler" @esc="unsetLinkHandler">
-  <v-card>
-  <v-card-title>
-  FOO
-</v-card-title>
-  <v-card-text>
-  FOO
-</v-card-text>
-  <v-card-actions>
-  <v-button secondary @click="unsetFileHandler">
-  <i18n-t keypath="cancel" />
-  </v-button>
-  </v-card-actions>
-  </v-card>
-  </v-dialog>
-  
-  <div :class="className" ref="editorElement"></div>
-  
+  <!-- <v-dialog :model-value="linkHandler !== null" @update:model-value="unsetLinkHandler" @esc="unsetLinkHandler">
+    <v-card>
+      <v-card-title>
+        FOO
+      </v-card-title>
+      <v-card-text>
+        FOO
+      </v-card-text>
+      <v-card-actions>
+        <v-button secondary @click="unsetFileHandler">
+          <i18n-t keypath="cancel" />
+        </v-button>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>   -->
   <!-- <CollectionsModal ref="collectionsModal" :modelValue="collectionsHandler !== null" :escValue="unsetCollectionHandler" /> -->
   <div :class="className" ref="editorElement"></div>
   </div>
