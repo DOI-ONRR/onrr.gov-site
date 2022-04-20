@@ -22,27 +22,21 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-
-
-
-  <v-dialog :model-value="linkHandler !== null" @update:model-value="unsetLinkHandler" @esc="unsetLinkHandler">
-  <v-card>
-  <v-card-title>
-  FOO
-</v-card-title>
-  <v-card-text>
-  FOO
-</v-card-text>
-  <v-card-actions>
-  <v-button secondary @click="unsetFileHandler">
-  <i18n-t keypath="cancel" />
-  </v-button>
-  </v-card-actions>
-  </v-card>
-  </v-dialog>
-  
-  <div :class="className" ref="editorElement"></div>
-  
+  <!-- <v-dialog :model-value="linkHandler !== null" @update:model-value="unsetLinkHandler" @esc="unsetLinkHandler">
+    <v-card>
+      <v-card-title>
+        FOO
+      </v-card-title>
+      <v-card-text>
+        FOO
+      </v-card-text>
+      <v-card-actions>
+        <v-button secondary @click="unsetFileHandler">
+          <i18n-t keypath="cancel" />
+        </v-button>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>   -->
   <!-- <CollectionsModal ref="collectionsModal" :modelValue="collectionsHandler !== null" :escValue="unsetCollectionHandler" /> -->
   <div :class="className" ref="editorElement"></div>
   </div>
@@ -84,6 +78,7 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
+  import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
     emits: ['input', 'error'],
@@ -102,7 +97,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline'],
+        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -413,6 +408,9 @@ function unsetLinkHandler() {
               contactsEndpoint: '/items/contacts?limit=-1',
               // openCollectionsModal: openCollectionsModal,
             }
+          },
+          customBlocks: {
+            class: CustomBlocksTool
           },
        /*   links: {
             class: Links,

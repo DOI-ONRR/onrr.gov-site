@@ -234,10 +234,10 @@ export default class CollectionsTool {
     selectAccordionInput.appendChild(selectAccordionOption);
 
     this.fetchContacts().then(categories => {
-      // console.log('fetchContacts categories -----> ', categories);
+      console.log('fetchContacts categories -----> ', categories);
       this.fetchFields(this.data);
 
-      categories[0].forEach(item => {
+      categories[0].sort().forEach(item => {
         // console.log('pages.forEach item ---------> ', item);
         selectPageOption = this._make('option')
         selectPageOption.value = item;
@@ -245,7 +245,7 @@ export default class CollectionsTool {
         selectPageInput.appendChild(selectPageOption);
       });
 
-      categories[1].forEach(item => {
+      categories[1].sort().forEach(item => {
         // console.log('pages.forEach item ---------> ', item);
         selectTabOption = this._make('option')
         selectTabOption.value = item;
@@ -253,7 +253,7 @@ export default class CollectionsTool {
         selectTabInput.appendChild(selectTabOption);
       });
 
-      categories[2].forEach(item => {
+      categories[2].sort().forEach(item => {
         // console.log('pages.forEach item ---------> ', item);
         selectAccordionOption = this._make('option')
         selectAccordionOption.value = item;
@@ -313,10 +313,10 @@ export default class CollectionsTool {
       selectStatusInput.options[foundIndex || 0].selected = true
     }
 
-    selectInput.addEventListener("change", () => {
+    selectInput.addEventListener("change", (e) => {
       this.fetchFields(this.data);
 
-      if (selectInput.value === 'press_releases' || selectInput.value === 'reporter_letters') {
+      if (e.target.value === 'press_releases' || e.target.value === 'reporter_letters') {
         selectFieldsCol2.style.display = 'block';
         selectFieldsCol4.style.display = 'none';
       } else if (selectInput.value === 'contacts') {
@@ -553,7 +553,7 @@ export default class CollectionsTool {
         }
       })
 
-      return nArr
+      return nArr.sort((a, b) => b - a);
       
     } catch(err){
       console.error(err);
@@ -587,9 +587,13 @@ export default class CollectionsTool {
         }
       });
 
-      // console.log('pages ----> ', pages)
+      // console.log('pages ----> ', pages) 
 
-      return [pages, tabs, accordions];
+      return [
+        pages, 
+        tabs, 
+        accordions
+      ];
       
     } catch(err){
       console.error(err);
