@@ -10,10 +10,10 @@
           :append-icon="contactsSearchField.icon"
           :search-input.sync="contactsSearchField.search"
           :loading="loading"
-          hint="Suggested searches: Chevron, Offshore production reporting, Cody Eckstein"
           outlined
           clearable
-          hide-no-data>
+          hide-no-data
+          @change="submitSearch($event, contactsSearchField.select)">
           <template v-slot:selection="{ item }">
             <v-list-item-content>
               <v-list-item-title v-html="item"></v-list-item-title>
@@ -101,7 +101,7 @@ export default {
           itemsArr.push(item.contact_4)
         }
 
-        if (item.contact_5) {
+        if (item?.contact_5) {
           itemsArr.push(item.contact_5)
         }
 
