@@ -5,6 +5,7 @@
   "description": "Directus CMS",
   "scripts": {
     "update": "npx directus database migrate:latest",
+    "downgrade": "npx directus database migrate:down",
     "bootstrap": "CONFIG_PATH='../../.env' directus bootstrap",
     "start": "CONFIG_PATH='../../.env' npx directus start",
     "start:windows": "set CONFIG_PATH='../../.env' && npx directus start"
@@ -15,7 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
-    "directus": "^9.7.1",
+    "directus": "^9.8.0",
     "jszip": "^3.7.1",
     "node-fetch": "^2.6.7",
     "read-excel-file": "^5.2.28"

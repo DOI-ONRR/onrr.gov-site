@@ -49,7 +49,8 @@ const getFile = (async (filePath,url) => {
 
 export default (router, { services, exceptions }) => {
 	const { ItemsService } = services;
-	const { ServiceUnavailableException } = exceptions;
+  const { ServiceUnavailableException } = exceptions;
+
  /* 
   router.get('/:file', (req, res, next) => {
     const linkService = new ItemsService('links', { schema: req.schema, accountability: req.accountability });
@@ -73,19 +74,24 @@ export default (router, { services, exceptions }) => {
   });
  */
   router.get('/:file', (req, res, next) => {
-    const linkService = new ItemsService('links', { schema: req.schema, accountability: req.accountability });
+
+    const linkService = new ItemsService('directus_files', { schema: req.schema, accountability: req.accountability });
     const file=req.params.file
 
     
     
     linkService
-      .readByQuery({ fields: ['*'],  filter: {target: {'_eq': file}}})
+      .readByQuery({ fields: ['*'],  filter: {filename_download: {'_eq': file}}})
       .then( async (results) => {
         const filePath='/tmp/'+file
-        const url='/assets/'+results[index].directus_files_id;
+        const hostname = (req.hostname === 'localhost') ? 'localhost:8055' : req.hostname
+        const url=req.protocol+'://'+hostname+'/assets/'+results[0].id;
         //currently write file to /tmp  should be able to read stream from s3 and write directly?
+        console.debug('REQ ----->', req);
+        console.debug('URL ----->', url);
+
         
-        await getFile(filePath,'https://dev-onrr-cms.app.cloud.gov'+url);
+        await getFile(filePath,url);
         return res.sendFile(filePath)
       }
       )

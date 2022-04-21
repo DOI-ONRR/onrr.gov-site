@@ -31,9 +31,9 @@
           :key="item.id"
         >
           <td>{{ getMonth(item.date, 'long') }}</td>
-          <td>${{ item.average.toFixed(2) }}</td>
-          <td>${{ item.roll.toFixed(2) }}</td>
-          <td><div><a :href="fileLink(item.Spreadsheet.id)">Download</a><v-icon color="secondary">mdi-file-xlsx-box</v-icon></div></td>
+          <td>${{ roundHalfUp(item.average, 2)}}</td>
+          <td>${{ roundHalfUp(item.roll, 2)}}</td>
+          <td><div><a :href="fileLink(item.Spreadsheet.filename_download)">Download</a><v-icon color="secondary">mdi-file-xlsx-box</v-icon></div></td>
         </tr>
       </tbody>
     </template>
@@ -69,8 +69,8 @@ export default {
    // reference componets
   },
   methods: {
-    fileLink(id) {
-      let  link = `${ this.API }/assets/${ id }`  
+    fileLink(filename) {
+      let  link = `${ this.API }/document/${ filename }`  
       return link
     },
     getDay: getDay,
@@ -81,12 +81,18 @@ export default {
       if(store.collections.year > this.maxYear ||  ! store.collections.year ) {
       return this.maxYear
       } else {
-       return	store.collections.year
+       return   store.collections.year
        }      
     },
      onUpdateStore(key, value) {
         mutations.updateCollections(key, value)
      },
+     roundHalfUp(value, decimals) {
+       return Number(Math.round(value+'e'+decimals)+'e-'+decimals).toFixed(decimals);
+     },
+
+
+
 
 },
   computed: {
@@ -101,11 +107,11 @@ export default {
       return 2022
     }
       
-    },   
+    },
     years() {
     if(this.collection) {
       const years = [...new Set(this.collection.map(item => this.getYear(item.date)))].sort((a,b)=>b-a);
-      return years;			       
+      return years;                
     } else {
       return []
     }
