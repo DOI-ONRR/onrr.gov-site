@@ -37,8 +37,8 @@
             </span>
             <span v-if="searchResults">
               {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }} 
-              <!-- <span v-if="item.agency !== null">({{ item.agency }})</span>
-              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span> -->
+              <span v-if="item.agency !== null">({{ item.agency }})</span>
+              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
             </span>
           </h2>
           <v-container class="pa-0">
