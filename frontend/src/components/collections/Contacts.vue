@@ -5,7 +5,7 @@
           <v-col cols="12" sm="6">
             <TextField :fields="searchInputField"></TextField>
           </v-col>
-          <v-col cols="12" sm="6" v-if="filter">
+          <v-col cols="12" sm="6" v-if="searchResults">
             <SelectField :fields="categoriesSelectField" @change="collectionItems"></SelectField>
           </v-col>
         </v-row>
@@ -30,9 +30,16 @@
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <h2 class="collection-category pa-3 mb-3">
-            {{ item.header }} 
-            <span v-if="item.agency !== null">({{ item.agency }})</span>
-            <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
+            <span v-if="!searchResults">
+              {{ item.header }} 
+              <span v-if="item.agency !== null">({{ item.agency }})</span>
+              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
+            </span>
+            <span v-if="searchResults">
+              {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }} 
+              <!-- <span v-if="item.agency !== null">({{ item.agency }})</span>
+              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span> -->
+            </span>
           </h2>
           <v-container class="pa-0">
             <v-row>
@@ -117,6 +124,7 @@ export default {
       },
       filterBy: this.filter,
       searchResults: false,
+      contactsByCompanyPage: false,
     }
   },
   props: {
@@ -145,6 +153,7 @@ export default {
         .every(v => item && item.toLowerCase().includes(v))
     },
     filterProperties(items) {
+      console.log('filteredProperties items: ', items)
       const filteredItems = items
         .filter(({ page, letter, header, operatorNumber, companyName, agency }) => {        
           return this.findSearchValue(letter) ||
@@ -154,6 +163,7 @@ export default {
             this.findSearchValue(agency) ||
             this.findSearchValue(page)
         })
+      console.log('filterProperties filteredItems: ', filteredItems)
       return filteredItems || items
     },
     filterContacts(items) {
@@ -176,13 +186,33 @@ export default {
       return filteredItems || items
     },
     filterByCategory(items) {
-      const filteredItems = items.filter(item => item.page === this.categoriesSelectField.selected)
-      console.log('filterByCategory ----> ', filteredItems)
+      // console.log('filterByCategory items ----> ', items)
+      let filteredItems
+      if (this.categoriesSelectField.selected !== 'All Categories') {
+        filteredItems = items.filter(item => (
+          item.page === this.categoriesSelectField.selected ||
+          item.tab === this.categoriesSelectField.selected ||
+          item.accordion === this.categoriesSelectField.selected
+        ))
+      }
       return filteredItems || items
     },
     searchCategoriesItems() {
-      const categories = Array.from(new Set(this.collection && this.collection.map(item => item.page))).reverse()
-      return this.categoriesSelectField.items = ['All Categories', ...categories]
+      let categories = []
+      Array.from(new Set(this.collection && this.collection.map(item => {
+        if (item.page) {
+          categories.push(item.page)
+        }
+
+        if (item.tab) {
+          categories.push(item.tab)
+        }
+
+        if (item.accordion) {
+          categories.push(item.accordion)
+        }
+      })))
+      return ['All Categories', ...categories.sort((a, b) =>(a < b) ? -1 : 1)]
     },
     createContactItem(item) {
       let nObj = {}
@@ -238,44 +268,35 @@ export default {
         }
       ]
       return nObj
-    }
+    },
+    filterByPage(items) {
+      return items.filter(item => item.page === this.collectionPage)
+    },
+    filterByTab(items) {
+      return items.filter(item => item.tab === this.collectionTab)
+    },
+    filterByAccordion(items) {
+      return items.filter(item => item.accordion === this.collectionAccordion)
+    },
   },
   computed: {
     collectionItems() {
       let collectionItems = []
       this.collection && this.collection.filter(item => {
-
-        // console.log('collectionItems item :: ' , item)
-
-        if (item.page === this.collectionPage && item.tab === this.collectionTab && item.accordion === this.collectionAccordion) {
-          console.log('item found yo ----> ', item)
-          let nObj = this.createContactItem(item)
-
-          collectionItems.push(nObj)
-        } else if (this.searchResults) {
-          let nObj = this.createContactItem(item)
-
-          collectionItems.push(nObj)
-        }
+        let nObj = this.createContactItem(item)
+        collectionItems.push(nObj)        
       })
 
+      const filteredItems = this.collectionPage
+        ? this.filterByPage(this.filterByTab(this.filterByAccordion(collectionItems))) 
+        : this.filterByCategory(collectionItems)
+
       if (this.searchInputField.text) {
-        // console.log('filterProperties func ----------> ', this.filterProperties(collectionItems))
-        // console.log('filterContacts func ----------> ', this.filterContacts(collectionItems))
-
-        if (this.filterProperties(collectionItems).length === 0) {
-          this.resetPagination()
-          return this.filterContacts(collectionItems) || collectionItems
-        } else {
-          this.resetPagination()
-          return this.filterProperties(collectionItems) || collectionItems
-        }
-
-        
-      } else if (this.categoriesSelectField.selected !== 'All Categories' && this.searchResults) {
-        return this.filterByCategory(collectionItems)
+        this.resetPagination()
+        let filteredProperties = this.filterProperties(filteredItems)
+        return filteredProperties.length === 0 ? this.filterContacts(filteredItems) : this.filterProperties(filteredItems)
       } else {
-        return collectionItems
+        return filteredItems
       }
 
     },
@@ -283,35 +304,31 @@ export default {
       return this.collectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
     },
   },
+  watch: {},
   created() {
     setTimeout(() => {
-      this.searchCategoriesItems()
-    }, 500)
-  },
-  watch: {
-    'categoriesSelectField.selected': function(val) {
-      console.log('categoriesSelectField.selected val: ', val)
-      // set: function(newVal) {
-      //   this.collectionItems.filter(item => item.page === newVal)
-      // }
-    },
-    'this.searchInputField.text': function(val) {
-      if (!val) {
-        this.categoriesSelectField.selected = 'All Caetegories'
-      }
-    }
+      this.categoriesSelectField.items = this.searchCategoriesItems()
+      this.categoriesSelectField.selected = this.$route.query.category ? decodeURI(this.$route.query.category) : 'All Categories'
+    }, 500);
   },
   mounted() {
     const category = this.$route.query.category && decodeURI(this.$route.query.category)
     const query = this.$route.query.q && decodeURI(this.$route.query.q)
+    const searchResultsRoute = this.$route.params.slug2 === "search-results"
+    const contactsByCompanyPage = this.$route.params.slug2 === 'company-contacts'
+
 
     if (category) {
       this.categoriesSelectField.selected = category
     }
     
-    if (query) {
+    if (query || searchResultsRoute) {
       this.searchResults = true
       this.searchInputField.text = query
+    }
+
+    if (contactsByCompanyPage) {
+      this.contactsByCompanyPage = true
     }
   }
 }
