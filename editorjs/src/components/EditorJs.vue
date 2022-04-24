@@ -29,6 +29,7 @@
   import LinksList from '../custom-plugins/plugin-links-list';
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
   import ImageTool from '../custom-plugins/plugin-image-patch';
+  import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
 // import ImageTool from "@editorjs/image";
 
   export default {
@@ -147,6 +148,9 @@
               //     paragraph: 'left'
               //   }
               // }
+            },
+            customBlocks: {
+              class: CustomBlocksTool
             }
           },
           onReady: function() {
