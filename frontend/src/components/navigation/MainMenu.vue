@@ -26,7 +26,8 @@
               <v-list-item
                 v-for="(child, i) in item.menu_children"
                 :key="i"
-                :href="`${ child.pages_id.url  }`"
+                link
+                :to="`${ child.pages_id.url  }`"
                 class="menu-btn"
               >
                   {{ child.pages_id.title }}
