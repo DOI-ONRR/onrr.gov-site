@@ -117,4 +117,12 @@ export default {
 .menu-btn {
   text-transform: none;
 }
+
+.search-input .v-icon {
+  color: white !important;
+}
+
+.search-input.v-input--is-focused .v-icon {
+  color: var(--v-secondary-base) !important;
+}
 </style>
