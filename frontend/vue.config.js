@@ -1,4 +1,4 @@
-const targetUrl = process.env.NODE_ENV === 'production' ? '' : ''
+const targetUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8055'
 
 module.exports = {
   transpileDependencies: [
