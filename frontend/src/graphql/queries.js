@@ -329,7 +329,8 @@ export const SOLID_MINERALS_REPORTER_HANDBOOK_QUERY = gql`
       chapter
       section
       title
-      page
+      actual_page
+      toc_page
       url
     }
   }
