@@ -86,7 +86,7 @@
 <script>
 import { MENU_QUERY } from '@/graphql/queries'
 export default {
-  name: 'Footer',
+  name: 'FooterNav',
   data() {
     return {
       menus: []

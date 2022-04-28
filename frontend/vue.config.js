@@ -1,15 +1,13 @@
-const targetUrl = process.env.NODE_ENV === 'production' ? '' : ''
+const targetUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8055'
 
 module.exports = {
   transpileDependencies: [
     'vuetify'
   ],
   chainWebpack: (config) => {
-    const svgRule = config.module.rule('svg');
-
-    svgRule.uses.clear();
-
-    svgRule
+   config.module.rules.delete('svg')
+   config.module.rule('svg')
+      .test(/\.(svg)(\?.*)?$/)
       .use('babel-loader')
       .loader('babel-loader')
       .end()

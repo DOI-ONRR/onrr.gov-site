@@ -17,16 +17,16 @@
                         </v-row>
                     </v-container>
                 </template>
-                <template v-slot:item.designatedArea="{ item }">
+                <template v-slot:[`item.designatedArea`]="{ item }">
                     {{ item.designatedArea }}
                 </template>
-                <template v-slot:item.year="{ item }">
+                <template v-slot:[`item.year`]="{ item }">
                     {{ item.year }}
                 </template>
-                <template v-slot:item.month="{ item }">
+                <template v-slot:[`item.month`]="{ item }">
                     {{ formatMonth(item.month) }}
                 </template>
-                <template v-slot:item.price="{ item }">
+                <template v-slot:[`item.price`]="{ item }">
                     {{ formatToDollarInt(item.price) }}
                 </template>
             </v-data-table>
