@@ -331,6 +331,10 @@ export default class CollectionsTool {
       }
     });
 
+    selectInput.addEventListener("change", (e) => {
+      this.data.collection = e.target.value;
+    })
+
     selectLayoutInput.addEventListener("change", (e) => {
       this.data.layout = e.target.value;
     });
@@ -357,6 +361,7 @@ export default class CollectionsTool {
       collectionBox.style.textAlign = 'center';
       collectionBox.style.margin = '10px 0';
       collectionBox.style.width = '100%';
+      collectionBox.innerHTML = `${ this.data.collection } -- ${ this.data.status }`;
 
       if (this.data.collection === 'contacts') {
         collectionBox.innerHTML = `${ this.data.collection } 
@@ -539,7 +544,8 @@ export default class CollectionsTool {
       'rulemakings',
       'index_zones',
       'ibmp',
-      'indian_gas_major_portion'
+      'indian_gas_major_portion',
+      'solid_minerals_reporter_handbook'
     ];
     let nArr = []
     
