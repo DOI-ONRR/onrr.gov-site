@@ -320,3 +320,17 @@ export const INDIAN_GAS_MAJOR_PORTION_QUERY = gql`
     }
   }
 `
+
+export const SOLID_MINERALS_REPORTER_HANDBOOK_QUERY = gql`
+  query {
+    solid_minerals_reporter_handbook {
+      id
+      status
+      chapter
+      section
+      title
+      page
+      url
+    }
+  }
+`
