@@ -15,7 +15,7 @@
                 </v-container>
             </template>
             <template v-slot:[`item.toc_page`]="{ item }">
-                <div><a :href="item.url">{{ item.toc_page }}</a></div>
+                <div><a :href="handbookLink(item.url, item.actual_page)" target="_blank">{{ item.toc_page }}</a></div>
             </template>
         </v-data-table>
     </v-card>
@@ -25,7 +25,7 @@
 <script>
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 export default {
-  name: 'SolidMineralsReporterHandbookCollection',
+  name: 'HandbooksCollection',
   data: () => ({
     searchInputField: {
       label: 'Search table of contents',
@@ -49,6 +49,9 @@ export default {
 
       return value.toLowerCase().includes(this.searchInputField.text.toLowerCase())
     },
+    handbookLink(url, page) {
+      return page ? `${ url }?page=${ page }` : url
+    }
   },
   computed: {
     headers()  {
@@ -79,7 +82,7 @@ export default {
           value: 'toc_page',
         }
       ]
-    },
+    }
   },
 }
 </script>

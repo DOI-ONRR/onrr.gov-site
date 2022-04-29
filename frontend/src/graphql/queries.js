@@ -321,9 +321,69 @@ export const INDIAN_GAS_MAJOR_PORTION_QUERY = gql`
   }
 `
 
-export const SOLID_MINERALS_REPORTER_HANDBOOK_QUERY = gql`
+export const SOLID_MINERALS_HANDBOOK_QUERY = gql`
   query {
-    solid_minerals_reporter_handbook {
+    solid_minerals_handbook {
+      id
+      status
+      chapter
+      section
+      title
+      actual_page
+      toc_page
+      url
+    }
+  }
+`
+
+export const PRODUCTION_HANDBOOK_QUERY = gql`
+  query {
+    production_handbook {
+      id
+      status
+      chapter
+      section
+      title
+      actual_page
+      toc_page
+      url
+    }
+  }
+`
+
+export const REVENUE_HANDBOOK_QUERY = gql`
+  query {
+    revenue_handbook {
+      id
+      status
+      chapter
+      section
+      title
+      actual_page
+      toc_page
+      url
+    }
+  }
+`
+
+export const GEOTHERMAL_CLASS_1_QUERY = gql`
+  query {
+    geothermal_class_1 {
+      id
+      status
+      chapter
+      section
+      title
+      actual_page
+      toc_page
+      url
+    }
+  }
+`
+
+export const GEOTHERMAL_CLASS_2_3_QUERY = gql`
+  query {
+    geothermal_class_2_3 {
       id
       status
       chapter

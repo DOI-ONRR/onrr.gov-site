@@ -545,7 +545,11 @@ export default class CollectionsTool {
       'index_zones',
       'ibmp',
       'indian_gas_major_portion',
-      'solid_minerals_reporter_handbook'
+      'solid_minerals_handbook',
+      'production_handbook',
+      'revenue_handbook',
+      'geothermal_class_1',
+      'geothermal_class_2_3'
     ];
     let nArr = []
     
