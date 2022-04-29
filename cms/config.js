@@ -5,7 +5,7 @@ module.exports = function(env) {
   console.log('env ----------> ', env)
 
   return {
-    PORT: 8055,
+    PORT: process.env.PORT || 8055,
     PUBLIC_URL: `https://${ vcap_application.uris[0] }`,
     LOG_LEVEL: "info",
     LOG_STYLE: "pretty",
@@ -43,6 +43,6 @@ module.exports = function(env) {
 
     // https://github.com/directus/directus/releases
     CORS_ENABLED: true,
-    CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov'
+    CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055'
   }
 };
