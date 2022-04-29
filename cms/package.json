@@ -15,9 +15,9 @@
     "npm": "8.x"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "directus": "^9.8.0",
-    "jszip": "^3.7.1",
+    "axios": "^0.27.2",
+    "directus": "^9.9.1",
+    "jszip": "^3.9.1",
     "node-fetch": "^2.6.7",
     "read-excel-file": "^5.2.28"
   },
