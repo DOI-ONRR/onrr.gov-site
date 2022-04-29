@@ -50,7 +50,7 @@ export default {
       return value.toLowerCase().includes(this.searchInputField.text.toLowerCase())
     },
     handbookLink(url, page) {
-      return page ? `${ url }?page=${ page }` : url
+      return page ? `${ url }#page=${ page }` : url
     }
   },
   computed: {
