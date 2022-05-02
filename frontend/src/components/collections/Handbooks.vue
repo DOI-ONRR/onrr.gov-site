@@ -4,7 +4,9 @@
         <v-data-table
             :headers="headers"
             :items="collection"
-            :search="searchInputField.text">
+            :search="searchInputField.text"
+            class="handbooks-table"
+            hide-default-header>
             <template v-slot:top>
                 <v-container>
                     <v-row>
@@ -13,6 +15,15 @@
                         </v-col>
                     </v-row>
                 </v-container>
+            </template>
+            <template v-slot:[`header`]="{ props: { headers } }">
+              <thead class="table-header">
+                <tr>
+                    <th v-for="h in headers" :key="h.title">
+                      <span class="black--text text-h5">{{ h.text }}</span>
+                    </th>
+                </tr>
+              </thead>
             </template>
             <template v-slot:[`item.toc_page`]="{ item }">
                 <div><a :href="handbookLink(item.url, item.actual_page)" target="_blank">{{ item.toc_page }}</a></div>
@@ -86,3 +97,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.theme--light.v-data-table > .v-data-table__wrapper > table > thead > tr:last-child > th{
+  border-bottom: 2px solid var(--v-neutrals-lighten2) !important;
+}
+</style>
