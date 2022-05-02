@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'Code',
+  name: 'CodeBlock',
   data() {
     return {
       template: ''

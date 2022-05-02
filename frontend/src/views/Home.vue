@@ -54,7 +54,7 @@ const LayoutBlock = () => import('@/components/blocks/LayoutBlock')
 
 export default {
   mixins: [pageBlockMixin],
-  name: 'Home',
+  name: 'HomePage',
   metaInfo: {
     title: 'Home',
   },

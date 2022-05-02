@@ -15,7 +15,7 @@ import { PAGES_QUERY } from '@/graphql/queries'
 import { titleCase } from '@/js/utils'
 
 export default {
-  name: 'Breadcrumbs',
+  name: 'BreadcrumbsSection',
   data () {
     return {
       pages: []

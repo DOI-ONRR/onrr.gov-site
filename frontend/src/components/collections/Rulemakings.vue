@@ -17,14 +17,14 @@
                         </v-row>
                     </v-container>
                 </template>
-                <template v-slot:item.rule_title="{ item }">
+                <template v-slot:[`item.rule_title`]="{ item }">
                     <a :href="item.webpage_link">{{ item.rule_title }}</a><br>
                     <span v-if="item.informal_title">"{{ item.informal_title }}"</span>
                 </template>
-                <template v-slot:item.date="{ item }">
+                <template v-slot:[`item.date`]="{ item }">
                     {{ formatNiceDate(item.date) }}
                 </template>
-                <template v-slot:item.commodity_subject_matter="{ item }">
+                <template v-slot:[`item.commodity_subject_matter`]="{ item }">
                     {{ getTopics(item.commodity_subject_matter) }}
                 </template>
             </v-data-table>

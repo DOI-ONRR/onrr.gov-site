@@ -46,16 +46,16 @@
                     </v-row>
                 </v-container>
             </template>
-            <template v-slot:header.title="{ header }">
+            <template v-slot:[`header.title`]="{ header }">
                 <div class="text-h6 text-capitalize">{{ header.text}}</div>
             </template>
-            <template v-slot:header.date="{ header }">
+            <template v-slot:[`header.date`]="{ header }">
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
             </template>
-            <template v-slot:header.topics="{ header }">
+            <template v-slot:[`header.topics`]="{ header }">
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
             </template>
-            <template v-slot:item.title="{ item }">
+            <template v-slot:[`item.title`]="{ item }">
               <div>
                 <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank" class="link-item">{{ item.title }}</a><v-icon color="secondary">{{ fileIcon(item.file.type) }}</v-icon>
               </div>
@@ -64,10 +64,10 @@
                 <v-icon color="secondary">{{ fileIcon(item.accessible_file.type) }}</v-icon>
               </div>
             </template>
-            <template v-slot:item.date="{ item }">
+            <template v-slot:[`item.date`]="{ item }">
                 {{ formatNiceDate(item.date) }}
             </template>
-            <template v-slot:item.topics="{ item }">
+            <template v-slot:[`item.topics`]="{ item }">
                 {{ getTopics(item.topics) }}
             </template>
         </v-data-table>

@@ -23,7 +23,7 @@ const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/compon
 
 export default {
   mixins: [pageBlockMixin, editorBlockMixin],
-  name: 'Page',
+  name: 'PageView',
   metaInfo () {
     return {
       title: this.metaTitle || this.pageTitle,
