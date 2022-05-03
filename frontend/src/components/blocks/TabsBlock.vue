@@ -144,7 +144,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .theme--dark.v-icon.v-icon.v-icon--disabled {
   color: rgba(0, 0, 0, 0.5) !important;
 }

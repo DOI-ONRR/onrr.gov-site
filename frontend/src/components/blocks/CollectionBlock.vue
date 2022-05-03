@@ -98,7 +98,7 @@ export default {
         else if (this.block.data.collection === 'geothermal_class_1') {
           return GEOTHERMAL_CLASS_1_QUERY
         }
-        else if (this.block.data.collection === 'geothermal_class_2_#') {
+        else if (this.block.data.collection === 'geothermal_class_2_3') {
           return GEOTHERMAL_CLASS_2_3_QUERY
         }
       },

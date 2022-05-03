@@ -118,7 +118,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-expansion-panel-header {
     font-size: 1.2rem;
     font-weight: bold;
