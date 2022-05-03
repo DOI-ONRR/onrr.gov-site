@@ -25,7 +25,7 @@
     "prepack": "directus-extension build"
   },
   "dependencies": {
-    "@directus/extensions-sdk": "^9.8.0",
+    "@directus/extensions-sdk": "^9.10.0",
     "@editorjs/link-autocomplete": "0.0.0",
     "@editorjs/list": "^1.6.2",
     "core-js": "^3.19.1",

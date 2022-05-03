@@ -79,7 +79,8 @@
               config: {
                 collectionsEndpoint: 'http://localhost:8055/collections',
                 fieldsEndpoint: 'http://localhost:8055/fields',
-                contactsEndpoint: 'http://localhost:8055/items/contacts?limit=-1'
+                contactsEndpoint: 'http://localhost:8055/items/contacts?limit=-1',
+                reporterLettersTopicsEndpoint: 'http://localhost:8055/items/reporter_letters?fields[]=id,title,topics',
               }
             },
             links: {
