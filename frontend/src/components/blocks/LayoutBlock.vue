@@ -84,11 +84,19 @@ export default {
   flex-wrap: wrap;
 }
 
-.nested-block-container.card_blocks.flex {
+.nested-block-container.card_blocks.flex,
+.nested-block-container.content_blocks.flex {
   display: flex;
 }
 
-.nested-block-container.card_blocks.no-flex {
+.nested-block-container.card_blocks.no-flex,
+.nested-block-container.content_blocks.no-flex {
   display: block;
+}
+
+.nested-block-container.content_blocks.flex .block-component {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 </style>

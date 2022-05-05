@@ -406,7 +406,7 @@ function unsetLinkHandler() {
               collectionsEndpoint: '/collections',
               fieldsEndpoint: '/fields',
               contactsEndpoint: '/items/contacts?limit=-1',
-              // openCollectionsModal: openCollectionsModal,
+              reporterLettersTopicsEndpoint: '/items/reporter_letters?fields[]=id,title,topics',
             }
           },
           customBlocks: {

@@ -12,6 +12,7 @@ export const contentBlockFields = gql`
     block_label
     block_v_col
     block_content
+    equal_col_height
   }
 `
 

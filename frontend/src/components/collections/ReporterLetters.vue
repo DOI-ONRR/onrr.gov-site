@@ -6,7 +6,7 @@
             color="secondary"
           >
             <v-list-item
-              v-for="(item, i) in slicedCollection"
+              v-for="(item, i) in filteredCollection"
               :key="i"
               :href="fileLink(`${ API }/reporter-letters/`, item)"
               class="pa-0"
@@ -24,7 +24,7 @@
       <div class="text-center">
         <v-btn
           color="secondary"
-          href="/references/reporter-letters"
+          :href="viewAllLink"
           class="mx-auto">View All</v-btn>
       </div>
     </div>
@@ -105,12 +105,14 @@ export default {
       color: 'secondary',
       icon: 'mdi-chevron-down',
       params: 'topic'
-    }
+    },
+    filteredByTopicCollection: null,
   }),
   props: {
-    // collection: [Array, Object],
-    // collectionName: String,
-    // collectionLayout: String,
+    collection: [Array, Object],
+    collectionName: String,
+    collectionLayout: String,
+    collectionTopics: Array,
   },
   components: {
     MultipleSelectField,
@@ -151,8 +153,10 @@ export default {
       return value.toLowerCase().includes(this.titleInputField.text.toLowerCase())
     },
     topicsFilter(value) {
-        // console.log('topcis filter value --------> ', value)
-        if (!this.topicsInputField.selected || this.topicsInputField.selected === null || this.topicsInputField.selected.length === 0) {
+        console.log('topcis filter value --------> ', value)
+        if (!this.topicsInputField.selected || 
+          this.topicsInputField.selected === null || 
+          this.topicsInputField.selected.length === 0) {
             return true
         }
 
@@ -192,6 +196,9 @@ export default {
       }
 
       return type;
+    },
+    filterCollectionByTopic() {
+      return this.collectionTopics.map(topic => this.collection.filter(({ topics }) => topics.includes(topic)))
     }
   },
   computed: {
@@ -219,9 +226,20 @@ export default {
         }
       ]
     },
+    filteredCollection() {
+      const collection = (this.filteredByTopicCollection) ? this.filteredByTopicCollection[0].slice(0, 5) : this.collection && this.collection.slice(0, 5)
+      return collection
+    },
+    viewAllLink() {
+      const link = (this.filteredByTopicCollection) ? `/references/reporter-letters?topic=${  encodeURIComponent(this.collectionTopics.join(',')) }` : `/references/reporter-letters`
+      return link
+    }
   },
   created() {
-    setTimeout(function () { this.topicList() }.bind(this), 500)
+    setTimeout(function () { 
+      this.topicList()
+      this.filteredByTopicCollection = this.filterCollectionByTopic()
+    }.bind(this), 500)
   },
   mounted() {
     const topics = this.$route.query.topic && this.$route.query.topic.split(',')

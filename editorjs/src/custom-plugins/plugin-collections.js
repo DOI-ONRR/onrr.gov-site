@@ -5,55 +5,17 @@ export default class CollectionsTool {
     console.info('data :: ', data)
 
     // this.data = {
-    //   "collection": "contact_categories",
+    //   "collection": "reporter_letters",
     //   "layout": "basic",
-    //   "fields": [
-    //       {
-    //           "field": "id",
-    //           "type": "integer"
-    //       },
-    //       {
-    //           "field": "status",
-    //           "type": "string"
-    //       },
-    //       {
-    //           "field": "sort",
-    //           "type": "integer"
-    //       },
-    //       {
-    //           "field": "user_created",
-    //           "type": "uuid"
-    //       },
-    //       {
-    //           "field": "date_created",
-    //           "type": "timestamp"
-    //       },
-    //       {
-    //           "field": "user_updated",
-    //           "type": "uuid"
-    //       },
-    //       {
-    //           "field": "date_updated",
-    //           "type": "timestamp"
-    //       },
-    //       {
-    //           "field": "title",
-    //           "type": "string"
-    //       },
-    //       {
-    //           "field": "content",
-    //           "type": "text"
-    //       },
-    //       {
-    //           "field": "published_on",
-    //           "type": "timestamp"
-    //       }
-    //   ],
-    //   "page": "Leases &amp; Agreements",
-    //   "tab": "Offshore",
-    //   "accordion": "Albequerque, NM",
-    //   "status": "published"
-    // };
+    //   "fields": [],
+    //   "page": "",
+    //   "tab": "",
+    //   "accordion": "",
+    //   "status": "published",
+    //   "topics": [
+    //     "Oil &amp; Gas Production"
+    //   ]
+    // }
 
     this.data = {
       collection: data.collection || '',
@@ -63,6 +25,7 @@ export default class CollectionsTool {
       tab: data.tab || '',
       accordion: data.accordion || '',
       status: data.status || '',
+      topics: data.topics || [],
     };
 
 
@@ -74,6 +37,7 @@ export default class CollectionsTool {
     this.collectionsEndpoint = config.collectionsEndpoint;
     this.fieldsEndpoint = config.fieldsEndpoint;
     this.contactsEndpoint = config.contactsEndpoint;
+    this.reporterLettersTopicsEndpoint = config.reporterLettersTopicsEndpoint
 
      /**
       * Styles
@@ -128,12 +92,15 @@ export default class CollectionsTool {
       selectFieldsCol4 = this._make('div', [this.CSS.baseClass]),
       selectFieldsCol5 = this._make('div', [this.CSS.baseClass]),
       selectFieldsCol6 = this._make('div', [this.CSS.baseClass]),
+      selectFieldsCol7 = this._make('div', [this.CSS.baseClass]),
       selectPageInput = this._make('select', [this.CSS.input]),
       selectPageInputLabel = this._make('label'),
       selectTabInput = this._make('select', [this.CSS.input]),
       selectTabInputLabel = this._make('label'),
       selectAccordionInput = this._make('select', [this.CSS.input]),
       selectAccordionInputLabel = this._make('label'),
+      selectTopicInput = this._make('select',[this.CSS.input]),
+      selectTopicLabel = this._make('label'),
       addCollectionButton = this._make('button', [this.CSS.button]),
       collectionBox = this._make('div');
 
@@ -161,13 +128,16 @@ export default class CollectionsTool {
     ];
 
 
+    // set options
     let selectOption = this._make('option');
     let selectLayoutOption = this._make('option');
     let selectStatusOption = this._make('option');
     let selectPageOption = this._make('option');
     let selectTabOption = this._make('option');
     let selectAccordionOption = this._make('option');
+    let selectTopicOption = this._make('option');
 
+    // labels
     selectInputLabel.innerHTML = 'Collection';
     selectInputLabel.setAttribute('for', 'collectionsSelector');
 
@@ -177,14 +147,19 @@ export default class CollectionsTool {
     selectStatusInputLabel.innerHTML = 'Status';
     selectStatusInputLabel.setAttribute('for', 'collectionsStatusSelector');
 
-    selectPageInputLabel.innerHTML = 'Page',
+    selectPageInputLabel.innerHTML = 'Page';
     selectPageInputLabel.setAttribute('for', 'collectionsPageSelector');
 
-    selectTabInputLabel.innerHTML = 'Tab',
+    selectTabInputLabel.innerHTML = 'Tab';
     selectTabInputLabel.setAttribute('for', 'collectionsTabSelector');
 
-    selectAccordionInputLabel.innerHTML = 'Accordion',
+    selectAccordionInputLabel.innerHTML = 'Accordion';
     selectAccordionInputLabel.setAttribute('for', 'collectionsAccordionSelector');
+
+    selectTopicLabel.innerHTML = 'Topics';
+    selectTopicLabel.setAttribute('for', 'collectionsTopicSelector');
+
+    selectTopicInput.setAttribute('multiple', true);
 
     selectInput.id = 'collectionsSelector';
     selectOption.value = '';
@@ -205,16 +180,33 @@ export default class CollectionsTool {
       collections.forEach((item, i) => {
         // console.log('item: ', item);
 
-        selectOption = this._make('option')
+        selectOption = this._make('option');
         selectOption.value = collections[i];
         selectOption.text = collections[i].replace(/_/g, ' ');
-        selectInput.appendChild(selectOption)
+        selectInput.appendChild(selectOption);
       });
 
       if (this.data && this.data.collection) {
         const foundIndex = Array.from(selectInput.options).findIndex(item => item.value === this.data.collection)
         selectInput.options[foundIndex || 0].selected = true
       }
+
+    });
+
+    this.fetchReportersLetterTopcis().then(topics => {
+      topics.forEach(topic => {
+        // console.log('topic -----> ', topic);
+        selectTopicOption = this._make('option');
+        selectTopicOption.value = topic;
+        selectTopicOption.text = topic;
+        selectTopicInput.appendChild(selectTopicOption);
+      });
+
+      // if (this.data && this.data.topics.length > 0) {
+      //   this.data.topics.forEach(v => {
+      //     Array.from(selectTopicInput.options).find(o => o.value == v).selected = true;
+      //   });
+      // }
     });
 
      // Page, tab, accordion fields
@@ -232,6 +224,8 @@ export default class CollectionsTool {
     selectAccordionOption.value = '';
     selectAccordionOption.text = 'Choose one';
     selectAccordionInput.appendChild(selectAccordionOption);
+
+    selectTopicInput.id = 'collectionsTopicSelector';
 
     this.fetchContacts().then(categories => {
       console.log('fetchContacts categories -----> ', categories);
@@ -280,6 +274,13 @@ export default class CollectionsTool {
           const foundIndex = Array.from(selectAccordionInput.options).findIndex(item => item.value === accordion);
           selectAccordionInput.options[foundIndex || 0].selected = true;
         }
+
+        if (this.data.topics && this.data.topics.length > 0) {
+          this.data.topics.forEach(topic => {
+            let t = topic.replace('&amp;', '&');
+            Array.from(selectTopicInput.options).find(o => o.value == t).selected = true;
+          });
+        }
       }
     });
 
@@ -319,6 +320,13 @@ export default class CollectionsTool {
       if (e.target.value === 'press_releases' || e.target.value === 'reporter_letters') {
         selectFieldsCol2.style.display = 'block';
         selectFieldsCol4.style.display = 'none';
+        if (e.target.value === 'press_releases') {
+          selectFieldsCol7.style.display = 'none';
+        }
+        
+        if (e.target.value === 'reporter_letters') {
+          selectFieldsCol7.style.display = 'block';
+        }
       } else if (selectInput.value === 'contacts') {
         selectFieldsCol4.style.display = 'block';
         selectFieldsCol5.style.display = 'block';
@@ -328,6 +336,7 @@ export default class CollectionsTool {
         selectFieldsCol4.style.display = 'none';
         selectFieldsCol5.style.display = 'none';
         selectFieldsCol6.style.display = 'none';
+        selectFieldsCol7.style.display = 'none';
       }
     });
 
@@ -355,6 +364,18 @@ export default class CollectionsTool {
       this.data.accordion = e.target.value;
     })
 
+    selectTopicInput.addEventListener("change", (e) => {
+      // console.log('selectTopicInput change: ', e)
+      const selectedOptions = [];
+      Array.from(e.target).forEach(option => {
+        if (option.selected) {
+          selectedOptions.push(option.value);
+        }
+      })
+      // console.log('selectedOptions -------> ', selectedOptions);
+      this.data.topics = selectedOptions;
+    })
+
     if (this.data && this.data.collection) {
       collectionBox.style.padding = '10px';
       collectionBox.style.border = '5px dashed #00c897';
@@ -372,7 +393,14 @@ export default class CollectionsTool {
         -- ${ this.data.layout }`;
       }
 
-      if (this.data.collection === 'reporter_letters' || this.data.collection === 'press_releases') {
+      if (this.data.collection === 'reporter_letters') {
+        collectionBox.innerHTML = `${ this.data.collection } 
+        -- ${ this.data.status } 
+        -- ${ this.data.layout }
+        -- ${ this.data.topics.join(', ')}`;
+      }
+
+      if (this.data.collection === 'press_releases') {
         collectionBox.innerHTML = `${ this.data.collection } 
         -- ${ this.data.status } 
         -- ${ this.data.layout }`;
@@ -384,6 +412,7 @@ export default class CollectionsTool {
       }
       
     }
+
 
     if (this.data && this.data.collection === 'contacts') {
       selectFieldsCol4.style.display = 'block';
@@ -403,7 +432,8 @@ export default class CollectionsTool {
     selectFieldsCol4.style.marginRight = '8px';
     selectFieldsCol5.style.marginRight = '8px';
     selectFieldsCol6.style.marginRight = '8px';
-    // selectFieldsCol4.style.display = 'none';
+    selectFieldsCol7.style.marginRight = '8px';
+    selectFieldsCol7.style.display = (this.data && this.data.collection === 'reporter_letters') ? 'block' : 'none';
 
 
     selectFieldsCol1.appendChild(selectInputLabel);
@@ -418,6 +448,8 @@ export default class CollectionsTool {
     selectFieldsCol5.appendChild(selectTabInput);
     selectFieldsCol6.appendChild(selectAccordionInputLabel);
     selectFieldsCol6.appendChild(selectAccordionInput);
+    selectFieldsCol7.appendChild(selectTopicLabel);
+    selectFieldsCol7.appendChild(selectTopicInput);
 
     // wrapper.appendChild(addCollectionButton);
     wrapper.appendChild(selectFieldsCol1);
@@ -425,6 +457,7 @@ export default class CollectionsTool {
     wrapper.appendChild(selectFieldsCol4);
     wrapper.appendChild(selectFieldsCol5);
     wrapper.appendChild(selectFieldsCol6);
+    wrapper.appendChild(selectFieldsCol7);
     wrapper.appendChild(selectFieldsCol3);
 
     if (this.data && this.data.collection) {
@@ -447,6 +480,8 @@ export default class CollectionsTool {
     const contactPage = blockContent.querySelector('#collectionsPageSelector');
     const contactTab = blockContent.querySelector('#collectionsTabSelector');
     const contactAccordion = blockContent.querySelector('#collectionsAccordionSelector');
+    const selectedTopics = blockContent.querySelectorAll('#collectionsTopicSelector option:checked');
+    const topics = Array.from(selectedTopics).map(el => el.value);
 
     if (!select) {
       return this.data;
@@ -459,6 +494,7 @@ export default class CollectionsTool {
       page: contactPage.value,
       tab: contactTab.value,
       accordion: contactAccordion.value,
+      topics: topics,
     });
   }
 
@@ -609,6 +645,28 @@ export default class CollectionsTool {
       console.error(err);
     }
     
+  }
+
+  async fetchReportersLetterTopcis() {
+    let topcisArr = []
+    try {
+      const response = await fetch(`${ this.reporterLettersTopicsEndpoint }`);
+      const items = await response.json();
+
+      items.data.forEach(item => {
+        item.topics.forEach(topic => {
+          if (!topcisArr.includes(topic)) {
+            topcisArr.push(topic)
+          }
+        })
+        
+      })
+
+      return topcisArr.sort();
+
+    } catch(err) {
+      throw new Error(`Fetch error: ${ err }`);
+    }
   }
 
 

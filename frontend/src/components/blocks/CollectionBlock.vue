@@ -8,7 +8,8 @@
         :collectionLayout="collectionLayout"
         :collectionPage="collectionPage"
         :collectionTab="collectionTab"
-        :collectionAccordion="collectionAccordion"></component>
+        :collectionAccordion="collectionAccordion"
+        :collectionTopics="collectionTopics"></component>
     </keep-alive>
   </div>
 </template>
@@ -173,6 +174,9 @@ export default {
     },
     collectionAccordion() {
       return this.block.data.accordion || null
+    },
+    collectionTopics() {
+      return this.block.data.topics || null
     },
     items() {
       const items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)
