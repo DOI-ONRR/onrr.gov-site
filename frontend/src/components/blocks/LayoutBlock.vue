@@ -98,5 +98,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex: 0 1;
 }
 </style>
