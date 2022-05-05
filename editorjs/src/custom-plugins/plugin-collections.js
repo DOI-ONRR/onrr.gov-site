@@ -4,29 +4,29 @@ export default class CollectionsTool {
 
     console.info('data :: ', data)
 
-    this.data = {
-      "collection": "reporter_letters",
-      "layout": "basic",
-      "fields": [],
-      "page": "",
-      "tab": "",
-      "accordion": "",
-      "status": "published",
-      "topics": [
-        "Oil &amp; Gas Production"
-      ]
-    }
-
     // this.data = {
-    //   collection: data.collection || '',
-    //   layout: data.layout || '',
-    //   fields: data.fields || [],
-    //   page: data.page || '',
-    //   tab: data.tab || '',
-    //   accordion: data.accordion || '',
-    //   status: data.status || '',
-    //   topics: data.topics || [],
-    // };
+    //   "collection": "reporter_letters",
+    //   "layout": "basic",
+    //   "fields": [],
+    //   "page": "",
+    //   "tab": "",
+    //   "accordion": "",
+    //   "status": "published",
+    //   "topics": [
+    //     "Oil &amp; Gas Production"
+    //   ]
+    // }
+
+    this.data = {
+      collection: data.collection || '',
+      layout: data.layout || '',
+      fields: data.fields || [],
+      page: data.page || '',
+      tab: data.tab || '',
+      accordion: data.accordion || '',
+      status: data.status || '',
+      topics: data.topics || [],
+    };
 
 
     // console.log('this.data --------> ', this.data)
@@ -365,8 +365,15 @@ export default class CollectionsTool {
     })
 
     selectTopicInput.addEventListener("change", (e) => {
-      console.log('selectTopicInput change: ', e)
-      this.data.topics = e.target.value;
+      // console.log('selectTopicInput change: ', e)
+      const selectedOptions = [];
+      Array.from(e.target).forEach(option => {
+        if (option.selected) {
+          selectedOptions.push(option.value);
+        }
+      })
+      // console.log('selectedOptions -------> ', selectedOptions);
+      this.data.topics = selectedOptions;
     })
 
     if (this.data && this.data.collection) {

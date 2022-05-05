@@ -9,6 +9,7 @@ export const fileCollectionMixin = {
     collection: [Array, Object],
     collectionName: String,
     collectionLayout: String,
+    collectionTopics: Array,
   },
   methods: {
     /**
@@ -38,8 +39,9 @@ export const fileCollectionMixin = {
   },
   computed: {
     slicedCollection() {
-      const c = this.collection && this.collection.slice(0,5)
+      const c = this.collection && this.collection.slice(0, 5)
       return c
     }
   }
+
 }

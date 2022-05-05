@@ -134,7 +134,7 @@ export default {
     setTimeout(() => {
       const activeTabs = this.$route.query.tabs && this.$route.query.tabs.split(',')
       
-      if (activeTabs.length > 1) {
+      if (activeTabs && activeTabs.length > 1) {
         const targetEl = `tab_label_${ activeTabs[1] }`
         if (this.$refs[targetEl]) this.$refs[targetEl][0].$el.click()
       }
@@ -215,6 +215,10 @@ export default {
 
 .theme--light.v-card > .v-card__text, .theme--light.v-card > .v-card__subtitle {
   color: rgb(0, 0, 0, 1) !important;
+}
+
+.v-tabs {
+  border-bottom: 1px solid var(--v-neutrals-base) !important;
 }
 
 </style>
