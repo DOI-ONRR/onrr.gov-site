@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "directus": "^9.9.1",
+    "directus": "^9.10.0",
     "jszip": "^3.9.1",
     "node-fetch": "^2.6.7",
     "read-excel-file": "^5.2.28"
