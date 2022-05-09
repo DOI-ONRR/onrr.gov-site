@@ -98,6 +98,9 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  flex: 0 1;
+}
+
+.nested-block-container.content_blocks.flex .block-component > div {
+  flex: 1;
 }
 </style>
