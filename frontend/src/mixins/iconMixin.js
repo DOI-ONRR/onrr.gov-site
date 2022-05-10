@@ -13,6 +13,7 @@ export const iconMixin = {
         case 'xls':
         case 'xlsx':
         case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           type = 'mdi-file-excel-box'
           break
         case 'vnd.openxmlformats-officedocument.presentationml.presentation':
