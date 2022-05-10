@@ -585,7 +585,8 @@ export default class CollectionsTool {
       'production_handbook',
       'revenue_handbook',
       'geothermal_class_1',
-      'geothermal_class_2_3'
+      'geothermal_class_2_3',
+      'plant_specific_ucas',
     ];
     let nArr = []
     

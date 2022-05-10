@@ -53,6 +53,12 @@ module.exports = {
         secure: true,
         logLevel: 'debug',
       },
+      '^/unbundling': {
+        target: targetUrl,
+        changeOrigin: true,
+        secure: true,
+        logLevel: 'debug',
+      },
     }
   }
 }

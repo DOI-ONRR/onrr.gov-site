@@ -287,6 +287,9 @@ export const INDEX_ZONES_QUERY = gql`
       date
       spreadsheet {
         id
+        filename_download
+        type
+        title
       }
       index_zones
     }
@@ -392,6 +395,26 @@ export const GEOTHERMAL_CLASS_2_3_QUERY = gql`
       actual_page
       toc_page
       url
+    }
+  }
+`
+
+export const PLANT_SPECIFIC_UCAS_QUERY = gql`
+  query {
+    plant_specific_ucas {
+      id
+      status
+      transportation_system_or_gas_plant
+      file {
+        id
+        filename_download
+        type
+        title
+      }
+      type
+      operator
+      location 
+      doc_date
     }
   }
 `

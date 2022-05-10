@@ -28,6 +28,7 @@ const IndexZonesCollection = () => import(/* webpackChunkName: "IndexZones" */ '
 const IBMPCollection = () => import(/* webpackChunkName: "IBMPCollection" */ '@/components/collections/IBMP')
 const IndianGasMajorPortionCollection = () => import(/* webpackChunkName: "IndianGasMajorPortion" */ '@/components/collections/IndianGasMajorPortion')
 const HandbooksCollection = () => import(/* webpackChunkName: "SolidMineralsReporterHandbook" */ '@/components/collections/Handbooks')
+const PlantSpecificUCAsCollection = () => import(/* webpackChunkName: "PlantSpecificUCAsCollection" */ '@/components/collections/PlantSpecificUCAs')
 
 import { 
   REPORTER_LETTERS_QUERY,
@@ -43,7 +44,8 @@ import {
   PRODUCTION_HANDBOOK_QUERY,
   REVENUE_HANDBOOK_QUERY,
   GEOTHERMAL_CLASS_1_QUERY,
-  GEOTHERMAL_CLASS_2_3_QUERY
+  GEOTHERMAL_CLASS_2_3_QUERY,
+  PLANT_SPECIFIC_UCAS_QUERY
 } from '@/graphql/queries'
 
 export default {
@@ -102,6 +104,9 @@ export default {
         else if (this.block.data.collection === 'geothermal_class_2_3') {
           return GEOTHERMAL_CLASS_2_3_QUERY
         }
+        else if (this.block.data.collection === 'plant_specific_ucas') {
+          return PLANT_SPECIFIC_UCAS_QUERY
+        }
       },
       update: data => data
     }
@@ -149,6 +154,9 @@ export default {
         case 'geothermal_class_1':
         case 'geothermal_class_2_3':
           collectionBlock = HandbooksCollection
+          break
+        case 'plant_specific_ucas':
+          collectionBlock = PlantSpecificUCAsCollection
           break
         default:
           console.warn('No collection block found.')
