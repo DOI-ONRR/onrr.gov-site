@@ -33,7 +33,7 @@
                   <a :href="`/unbundling/${ item.file.filename_download }`" target="_blank">
                     {{ item.transportation_system_or_gas_plant }}
                   </a>
-                  <v-icon color="secondary" v-if="item.file">{{ fileIcon(item.file.type) }}</v-icon>
+                  <v-icon color="secondary">{{ fileIcon(item.file.type) }}</v-icon>
                 </div>
             </template>
             <template v-slot:[`item.doc_date`]="{ item }">
