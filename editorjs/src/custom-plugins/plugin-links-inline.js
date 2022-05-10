@@ -417,7 +417,7 @@ export default class LinksInline {
           const ul=Dom.make('ul');
           this.nodes.linkUl=ul
           this.addLi( this.nodes.linkUl , url, label,type);
-          this.nodes.linkWrapperappendChild(this.nodes.linkUl)
+          this.nodes.linkWrapper.appendChild(this.nodes.linkUl)
           //
         }
       }
@@ -640,6 +640,11 @@ export default class LinksInline {
     var aTag = document.createElement('a');
     aTag.setAttribute('href',this.config.base+url);
     aTag.setAttribute('download',label+'.'+extension);
+    if(this.nodes.inlineButton.checked) {
+      aTag.classList.add(LinksInline.CSS.linkButton)
+    }
+    
+    
     aTag.innerText = label;
     mydiv.appendChild(aTag);
     linkList.appendChild(mydiv);
