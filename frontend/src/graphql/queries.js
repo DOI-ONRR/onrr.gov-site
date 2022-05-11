@@ -326,7 +326,7 @@ export const INDIAN_GAS_MAJOR_PORTION_QUERY = gql`
 
 export const SOLID_MINERALS_HANDBOOK_QUERY = gql`
   query {
-    solid_minerals_handbook {
+    solid_minerals_handbook(limit: -1) {
       id
       status
       chapter
@@ -341,7 +341,7 @@ export const SOLID_MINERALS_HANDBOOK_QUERY = gql`
 
 export const PRODUCTION_HANDBOOK_QUERY = gql`
   query {
-    production_handbook {
+    production_handbook(limit: -1) {
       id
       status
       chapter
@@ -356,7 +356,7 @@ export const PRODUCTION_HANDBOOK_QUERY = gql`
 
 export const REVENUE_HANDBOOK_QUERY = gql`
   query {
-    revenue_handbook {
+    revenue_handbook(limit: -1) {
       id
       status
       chapter
@@ -371,7 +371,7 @@ export const REVENUE_HANDBOOK_QUERY = gql`
 
 export const GEOTHERMAL_CLASS_1_QUERY = gql`
   query {
-    geothermal_class_1 {
+    geothermal_class_1(limit: -1) {
       id
       status
       chapter
@@ -386,7 +386,7 @@ export const GEOTHERMAL_CLASS_1_QUERY = gql`
 
 export const GEOTHERMAL_CLASS_2_3_QUERY = gql`
   query {
-    geothermal_class_2_3 {
+    geothermal_class_2_3(limit: -1) {
       id
       status
       chapter
