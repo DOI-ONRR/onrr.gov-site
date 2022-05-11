@@ -124,78 +124,59 @@ const router = new VueRouter({
 })
 
 
-function addRedirectsToRoutes (data) {
-  setTimeout(() => {
-    data.forEach(item => { 
-      let nObj = {}
-      nObj.path = item.from 
-      nObj.redirect = item.to
-      nObj.children = [
-        { 
-          path: ':slug',
-          redirect: item.to
-        }
-      ]
-      router.addRoute(nObj)
-    })
-  }, 1000);
+function hasQueryParams(route) {
+  return !!Object.keys(route.query).length;
 }
 
-function hasQueryParams(route) {
-  return !!Object.keys(route.query).length
+function getApolloQuery() {
+  return apolloClient.query({ query: PAGES_REDIRECTS_QUERY});
 }
+
+// function createLinkEvent(url) {
+//   const link = document.createElement('a');
+//   link.href = url;
+//   link.target = '_blank';
+//   link.click();
+// }
 
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
-router.beforeEach((to, from, next) => {
-  // console.log('beforeRouteEnter to.path ------------>', to, from, next)
+router.beforeEach(async (to, from, next) => {
+  console.log('beforeRouteEnter to.path ------------>', to, from, next)
 
   // getRedirects()
 
-  // Pages query
-  apolloClient.query({
-    query: PAGES_REDIRECTS_QUERY
-  })
-  .then((res) => {
-    // console.log(res.data)
-    if (res?.data) {
-      // console.log('res.data--------->', res.data)
-      const pages = res.data.pages
+  // Apollo query
+  const query = await getApolloQuery();
+  const baseUrl = location.origin;
+  const path = location.pathname.toString();
 
-      // redirects
-      const redirects = res.data.redirects
-      // add redirects to routes
-      addRedirectsToRoutes(redirects)
+  let pages;
+  let redirects;
 
-      const path = location.pathname.toString()
-      // console.log('path: ', path)
-      // const fullPath = to.fullPath.includes('?') ? to.fullPath.split('?')[0] : to.fullPath
-      // console.log('fullPath: ', fullPath)
-      // find page and remove hash if any
-      // const pageFound = pages.find(page => page.url === fullPath).split('#')[0]
-      const pageFound = pages.find(page => page.url === to.path)
-      const redirectFound = redirects.find(redirect => redirect.from === path)
+  if (query) {
+    pages = query.data.pages;
+    redirects = query.data.redirects;
+  }
 
-      // console.log('redirectFound------------->', redirectFound)
-      // console.log('pageFound-------------->', pageFound)
+  // see if redirect exists
+  const redirectFound = redirects.find(redirect => redirect.old_url === path);
 
-      // if no page found lets redirect to 404 page
-      if (pageFound === undefined) {
-        next({ path: '/404' })
-      }
+  // console.log('query ------> ', query);
+  // console.log('redirectFound --------> ', redirectFound);
 
-
-      if (redirectFound) {
-        next({ path: redirectFound.to, replace: true })
-      }
-      else {
-        if (pageFound) next()
-      }
-
+  if (redirectFound) {
+    // check to see if page exists and if not open new tab for redirect
+    const pageFound = pages.find(page => page.url === redirectFound.new_url);
+    // console.log('pageFound ------> ', pageFound);
+    if (!pageFound) {
+      history.back();
+      window.open(`${ baseUrl }${ redirectFound.new_url }`, '_blank', 'noopener noreferrer').focus();
+    } else {
+      window.location.href = `${ baseUrl }${ redirectFound.new_url }`;
     }
+  }
 
-  })
-  .catch((err) => console.error(err))
 
   // check for query params
   if (!hasQueryParams(to) && hasQueryParams(from)) {
