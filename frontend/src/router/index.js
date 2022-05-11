@@ -158,14 +158,15 @@ router.beforeEach(async (to, from, next) => {
 
   let pages;
   let redirects;
+  let redirectFound
 
   if (query) {
     pages = query.data.pages;
     redirects = query.data.redirects;
+    // see if redirect exists
+    redirectFound = redirects.find(redirect => redirect.old_url === decodedPath);
   }
 
-  // see if redirect exists
-  const redirectFound = redirects.find(redirect => redirect.old_url === decodedPath);
 
   // console.log('query ------> ', query);
   // console.log('redirectFound --------> ', redirectFound);
@@ -208,11 +209,11 @@ router.beforeEach(async (to, from, next) => {
 
 
   // check for query params
-  // if (!hasQueryParams(to) && hasQueryParams(from)) {
-  //   next({ name: to.name, query: from.query })
-  // } else {
-  //   next()
-  // }
+  if (!hasQueryParams(to) && hasQueryParams(from)) {
+    next({ name: to.name, query: from.query })
+  } else {
+    next()
+  }
 
 })
 
