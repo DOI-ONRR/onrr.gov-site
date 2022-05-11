@@ -168,12 +168,13 @@ router.beforeEach(async (to, from, next) => {
   }
 
 
-  // console.log('query ------> ', query);
-  // console.log('redirectFound --------> ', redirectFound);
+  console.log('query ------> ', query);
+  console.log('redirectFound --------> ', redirectFound);
 
   if (redirectFound) {
     // check to see if page exists and if not open new tab for redirect
-    const redirectToUrl = redirectFound.new_url.split('?')[0];
+    //TODO: better way to find hashes and query params
+    const redirectToUrl = redirectFound.new_url.includes('?') ? redirectFound.new_url.split('?')[0] : redirectFound.new_url.split('#')[0];
     const pageFound = pages.find(page => page.url === redirectToUrl);
     
     // check if url has extension
