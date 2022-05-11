@@ -173,8 +173,8 @@ router.beforeEach(async (to, from, next) => {
 
   if (redirectFound) {
     // check to see if page exists and if not open new tab for redirect
-    const pageFound = pages.find(page => page.url === redirectToUrl);
     const redirectToUrl = redirectFound.new_url.split('?')[0];
+    const pageFound = pages.find(page => page.url === redirectToUrl);
     
     // check if url has extension
     const fileExtension = redirectToUrl.includes('.') ? redirectToUrl.split('.').pop() : undefined;
