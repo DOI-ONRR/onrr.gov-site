@@ -59,10 +59,10 @@ query {
 // Redirects query
 export const REDIRECTS_QUERY = gql`
 query {
-  redirects {
+  redirects(limit: -1) {
     id
-    from 
-    to
+    old_url
+    new_url
   }  
 }
 `
@@ -76,10 +76,10 @@ query {
     title
     url
   }
-  redirects {
+  redirects(limit: -1) {
     id
-    from 
-    to
+    old_url
+    new_url
   }  
 }
 `
