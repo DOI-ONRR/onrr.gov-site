@@ -613,6 +613,12 @@ export default class LinksInline {
     case 'external':
       i.classList.add('no-icon')
       break
+    case 'reporter-letters':
+      i.classList.add('no-icon')
+      break
+    case 'press-releases':
+      i.classList.add('no-icon')
+      break
     default:
       return
     }
