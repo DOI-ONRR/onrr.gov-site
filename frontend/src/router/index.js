@@ -142,7 +142,9 @@ function getApolloQuery() {
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
-  console.log('beforeRouteEnter to.path ------------>', to, from, next)
+  // console.log('beforeRouteEnter to ------------>', to);
+  // console.log('beforeRouteEnter from ------------>', from);
+  // console.log('beforeRouteEnter next ------------>', next);
 
   // getRedirects()
 
@@ -150,6 +152,9 @@ router.beforeEach(async (to, from, next) => {
   const query = await getApolloQuery();
   const baseUrl = location.origin;
   const path = location.pathname.toString();
+  const decodedPath = decodeURI(path);
+
+  // console.log('path ---------> ', path);
 
   let pages;
   let redirects;
@@ -160,30 +165,54 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // see if redirect exists
-  const redirectFound = redirects.find(redirect => redirect.old_url === path);
+  const redirectFound = redirects.find(redirect => redirect.old_url === decodedPath);
 
   // console.log('query ------> ', query);
   // console.log('redirectFound --------> ', redirectFound);
 
   if (redirectFound) {
     // check to see if page exists and if not open new tab for redirect
-    const pageFound = pages.find(page => page.url === redirectFound.new_url);
+    const pageFound = pages.find(page => page.url === redirectToUrl);
+    const redirectToUrl = redirectFound.new_url.split('?')[0];
+    
+    // check if url has extension
+    const fileExtension = redirectToUrl.includes('.') ? redirectToUrl.split('.').pop() : undefined;
+
+    // console.log('redirectToUrl --------> ', redirectToUrl);
     // console.log('pageFound ------> ', pageFound);
+    // console.log('fileExtension -------> ', fileExtension);
+
     if (!pageFound) {
-      history.back();
-      window.open(`${ baseUrl }${ redirectFound.new_url }`, '_blank', 'noopener noreferrer').focus();
+      if (fileExtension) {
+        window.open(`${ baseUrl }${ redirectFound.new_url }`, '_blank', 'noopener noreferrer');
+        history.back();
+      } else {
+        location.href = '/404';
+      }
     } else {
       window.location.href = `${ baseUrl }${ redirectFound.new_url }`;
+    }
+  } else {
+    const pageFound = pages.find(page => page.url === path);
+    if (pageFound) {
+      // check for query params
+      if (!hasQueryParams(to) && hasQueryParams(from)) {
+        next({ name: to.name, query: from.query })
+      } else {
+        next()
+      }
+    } else {
+      location.href = '/404';
     }
   }
 
 
   // check for query params
-  if (!hasQueryParams(to) && hasQueryParams(from)) {
-    next({ name: to.name, query: from.query })
-  } else {
-    next()
-  }
+  // if (!hasQueryParams(to) && hasQueryParams(from)) {
+  //   next({ name: to.name, query: from.query })
+  // } else {
+  //   next()
+  // }
 
 })
 
