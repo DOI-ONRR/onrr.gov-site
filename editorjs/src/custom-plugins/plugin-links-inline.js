@@ -613,6 +613,12 @@ export default class LinksInline {
     case 'external':
       i.classList.add('no-icon')
       break
+    case 'reporter-letters':
+      i.classList.add('no-icon')
+      break
+    case 'press-releases':
+      i.classList.add('no-icon')
+      break
     default:
       return
     }
@@ -638,7 +644,7 @@ export default class LinksInline {
     const icon=this.addIcon(extension);
     
     var aTag = document.createElement('a');
-    aTag.setAttribute('href',this.config.base+url);
+    aTag.setAttribute('href',url);
     aTag.setAttribute('download',label+'.'+extension);
     if(this.nodes.inlineButton.checked) {
       aTag.classList.add(LinksInline.CSS.linkButton)
