@@ -132,11 +132,13 @@ export default {
         },
         { 
           text: 'Calendar Month Avg.',
-          value: 'average'
+          value: 'average',
+          align: 'end',
         },
         { 
           text: 'NYMEX Roll',
-          value: 'roll' 
+          value: 'roll' ,
+          align: 'end',
         },
         { 
           text: 'Excel File',
