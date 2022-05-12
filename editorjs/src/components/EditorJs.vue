@@ -30,7 +30,7 @@
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
   import ImageTool from '../custom-plugins/plugin-image-patch';
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
-// import ImageTool from "@editorjs/image";
+  import TableTool from '@editorjs/table';
 
   export default {
     data() {
@@ -152,7 +152,12 @@
             },
             customBlocks: {
               class: CustomBlocksTool
-            }
+            },
+            table: {
+              class: TableTool,
+              inlineToolbar: true,
+              tunes: ['alignmentTune']
+            },
           },
           onReady: function() {
             console.log("ready 123")

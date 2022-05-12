@@ -6,7 +6,7 @@
           <th 
             v-for="(item, index) in tableHeaderItems"
             :key="index"
-            :class="[textClass, 'black--text']">
+            :class="[textClass, 'black--text','pa-2']">
             <span v-html="item"></span>
           </th>
         </tr>
@@ -19,7 +19,7 @@
           <td
             v-for="(item, index) in items"
             :key="index"
-            :class="[textClass, 'black--text']">
+            :class="[textClass, 'black--text', 'pa-2']">
             <span v-html="item"></span>
           </td>
         </tr>
@@ -57,3 +57,32 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.v-data-table > .v-data-table__wrapper > table > thead > tr:last-child > th {
+  border-bottom: 3px solid var(--v-accent-base) !important;
+  vertical-align: bottom;
+}
+
+.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+  font-size: 1rem;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody > tr:hover {
+  background-color: transparent !important;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody > tr:nth-child(even) {
+  background-color: var(--v-neutrals-lighten3) !important;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+  vertical-align: top;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.-data-table__mobile-row) {
+  border-bottom: 1px solid var(--v-accent-base) !important;
+}
+
+
+</style>
