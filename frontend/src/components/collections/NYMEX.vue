@@ -1,44 +1,41 @@
-<template>
-<div>
-<v-select
-          :items="years"
-          :value="maxYear"
-          label="Year"
-          outlined
-          @change="onUpdateStore('year', $event)" 
-        ></v-select>
-  <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left">
-            Month
-          </th>
-          <th class="text-left">
-            Calendar Month Avg.
-          </th>
-          <th class="text-left">
-            NYMEX Roll
-          </th>
-          <th class="text-left">
-            Excel File
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="item in filteredCollection"
-          :key="item.id"
-        >
-          <td>{{ getMonth(item.date, 'long') }}</td>
-          <td>${{ roundHalfUp(item.average, 2)}}</td>
-          <td>${{ roundHalfUp(item.roll, 2)}}</td>
-          <td><div><a :href="fileLink(item.Spreadsheet.filename_download)">Download</a><v-icon color="secondary">mdi-file-xlsx-box</v-icon></div></td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
-  </div>
+<template>  
+  <v-card>
+    <v-data-table
+      :headers="headers"
+      :items="filteredCollection"
+      item-key="month">
+      <template v-slot:top>
+        <v-container>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-select
+                :items="years"
+                :value="maxYear"
+                label="Year"
+                outlined
+                dense
+                color="secondary"
+                @change="onUpdateStore('year', $event)" 
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
+      <template v-slot:[`item.date`]="{ item }">
+        {{ getMonth(item.date, 'long') }}
+      </template>
+      <template v-slot:[`item.average`]="{ item }">
+        ${{ roundHalfUp(item.average, 2) }}
+      </template>
+      <template v-slot:[`item.roll`]="{ item }">
+        ${{ roundHalfUp(item.roll, 2) }}
+      </template>
+      <template v-slot:[`item.Spreadsheet`]="{ item }">
+        <a :href="fileLink(item.Spreadsheet.filename_download)">Download</a>
+        <v-icon color="secondary ml-2">mdi-file-excel-box</v-icon>
+      </template>
+    </v-data-table>
+  </v-card>
 </template>
 
 <script>
@@ -64,10 +61,7 @@ export default {
     collectionLayout: String,
     showToolbar: Boolean,
   },
-  components: {
- //            CollectionDropdown
-   // reference componets
-  },
+  components: {},
   methods: {
     fileLink(filename) {
       let  link = `${ this.API }/document/${ filename }`  
@@ -84,16 +78,12 @@ export default {
        return   store.collections.year
        }      
     },
-     onUpdateStore(key, value) {
-        mutations.updateCollections(key, value)
-     },
-     roundHalfUp(value, decimals) {
-       return Number(Math.round(value+'e'+decimals)+'e-'+decimals).toFixed(decimals);
-     },
-
-
-
-
+    onUpdateStore(key, value) {
+      mutations.updateCollections(key, value)
+    },
+    roundHalfUp(value, decimals) {
+      return Number(Math.round(value+'e'+decimals)+'e-'+decimals).toFixed(decimals);
+    },
 },
   computed: {
     search() {
@@ -129,12 +119,31 @@ export default {
       }
     },  
     searchResults() {
-            // search input results
+      // search input results
 
-            const results=this.collection.filter(item => parseInt(this.getYear(item.date)) === this.year).sort( (a, b) => b.date - a.date);
-            return results
-
+      const results=this.collection.filter(item => parseInt(this.getYear(item.date)) === this.year).sort( (a, b) => b.date - a.date);
+      return results
     },
+    headers() {
+      return [
+        { 
+          text: 'Month',
+          value: 'date' 
+        },
+        { 
+          text: 'Calendar Month Avg.',
+          value: 'average'
+        },
+        { 
+          text: 'NYMEX Roll',
+          value: 'roll' 
+        },
+        { 
+          text: 'Excel File',
+          value: 'Spreadsheet'
+        },
+      ]
+    }
   }
 }
 </script>

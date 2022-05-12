@@ -4,7 +4,8 @@
             <v-data-table
                 :headers="headers"
                 :items="collectionItems"
-                item-key="title">
+                item-key="title"
+                class="collection-data-table">
                 <template v-slot:top>
                     <v-container>
                         <v-row>
@@ -225,3 +226,6 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>

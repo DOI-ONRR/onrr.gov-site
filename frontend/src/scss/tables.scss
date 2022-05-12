@@ -1,0 +1,26 @@
+/*
+Standard table styles
+*/
+
+.v-data-table > .v-data-table__wrapper > table > thead > tr:last-child > th {
+  border-bottom: 3px solid var(--v-accent-base) !important;
+  vertical-align: bottom !important;
+  color: rgba(0, 0, 0, 1) !important;
+}
+
+.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+  font-size: 1rem !important;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody > tr:hover {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody > tr:nth-child(even) {
+  background-color: var(--v-neutrals-lighten3) !important;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.-data-table__mobile-row) {
+  border-bottom: 1px solid var(--v-accent-base) !important;
+}
