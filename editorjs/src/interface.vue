@@ -487,11 +487,11 @@ function unsetLinkHandler() {
 				}
 
 				if ('table' in tools) {
-					tools.table.tunes = ['alignmentTune']
+					tools.table.tunes = ['alignmentTune'];
 				}
 
 				if ('image' in tools) {
-					tools.image.tunes = ['alignmentTune']
+					tools.image.tunes = ['alignmentTune'];
 				}
 
 			  return tools;

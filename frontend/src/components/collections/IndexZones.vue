@@ -154,7 +154,7 @@ export default {
           },
           {
               text: 'Price',
-              align: 'start',
+              align: 'end',
               sortable: false,
               value: 'price',
           }

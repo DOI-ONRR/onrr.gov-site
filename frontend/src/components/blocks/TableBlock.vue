@@ -6,7 +6,7 @@
           <th 
             v-for="(item, index) in tableHeaderItems"
             :key="index"
-            :class="[textClass, 'black--text']">
+            :class="[textClass, 'black--text','pa-2']">
             <span v-html="item"></span>
           </th>
         </tr>
@@ -19,7 +19,7 @@
           <td
             v-for="(item, index) in items"
             :key="index"
-            :class="[textClass, 'black--text']">
+            :class="[textClass, 'black--text', 'pa-2']">
             <span v-html="item"></span>
           </td>
         </tr>
@@ -57,3 +57,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+    vertical-align: top;
+  }
+</style>
