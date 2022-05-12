@@ -155,37 +155,37 @@ export default {
           },
           {
               text: 'Condensate (02)',
-              align: 'start',
+              align: 'end',
               sortable: false,
               value: 'condensate02',
           },
           {
               text: 'Sweet (61)',
-              align: 'start',
+              align: 'end',
               sortable: false,
               value: 'sweet61',
           },
           {
               text: 'Sour (62)',
-              align: 'start',
+              align: 'end',
               sortable: false,
               value: 'sour62',
           },
           {
               text: 'Asphaltic (63)',
-              align: 'start',
+              align: 'end',
               sortable: false,
               value: 'asphaltic63',
           },
           {
               text: 'Black Wax (64)',
-              align: 'start',
+              align: 'end',
               sortable: false,
               value: 'blackWax64',
           },
           {
               text: 'Yellow Wax (65)',
-              align: 'start',
+              align: 'end',
               sortable: false,
               value: 'yellowWax65',
           }
