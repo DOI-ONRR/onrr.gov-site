@@ -24,3 +24,7 @@ Standard table styles
 .v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.-data-table__mobile-row) {
   border-bottom: 1px solid var(--v-accent-base) !important;
 }
+
+.v-data-footer .v-btn {
+  color: var(--v-secondary-base) !important;
+}

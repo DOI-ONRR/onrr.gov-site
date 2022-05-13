@@ -6,7 +6,7 @@
           <th 
             v-for="(item, index) in tableHeaderItems"
             :key="index"
-            :class="[textClass, 'black--text','pa-2']">
+            :class="[textClass(index), 'black--text','pa-2']">
             <span v-html="item"></span>
           </th>
         </tr>
@@ -19,8 +19,8 @@
           <td
             v-for="(item, index) in items"
             :key="index"
-            :class="[textClass, 'black--text', 'pa-2']">
-            <span v-html="item"></span>
+            :class="[textClass(index), 'black--text', 'pa-2']">
+            <span v-html="isCellNumeric(item, index)"></span>
           </td>
         </tr>
       </tbody>
@@ -32,7 +32,9 @@
 export default {
   name: 'TableBlock',
   data() {
-    return {}
+    return {
+      rightAlignedIndexes: []
+    }
   },
   props: {
     block: {
@@ -40,6 +42,21 @@ export default {
     },
   },
   methods: {
+    isCellNumeric(str, idx) {
+      // console.log('isCellNumeric str: ', str)
+      const isMonetary = str.includes('$')
+      // const numericStr = isMonetary ? str.replace('$', '') : str
+
+      if(isMonetary) {
+        console.log('found val that appears to be a num yo: ', str, idx)
+        if (!this.rightAlignedIndexes.includes(idx)) {
+          this.rightAlignedIndexes.push(idx)
+        }
+        
+      }
+
+      return str
+    },
   },
   computed: {
     tableHeaderItems() {
@@ -51,8 +68,13 @@ export default {
       return rItems
     },
     textClass() {
-      let alignmentClass = `text-${ this.block?.tunes?.alignmentTune?.alignment }` || 'text-left'
-      return alignmentClass
+      return (idx) => {
+        if (this.rightAlignedIndexes.includes(idx)) {
+          return 'text-right'
+        } else {
+          return (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
+        }
+      }
     }
   }
 }

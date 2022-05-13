@@ -121,5 +121,16 @@ export default {
 .ce-link-inline__link-button +  .v-list-item__icon {
   display: none;
 }
+
+.v-list-item__icon {
+  display: inline-block;
+  margin: 0;
+}
+
+.v-list-item__icon > .icon {
+  position: relative;
+  top: 4px;
+}
+
  
 </style>
