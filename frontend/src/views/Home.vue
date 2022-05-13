@@ -19,14 +19,6 @@
 
             <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
 
-            <!-- Revenue Data block content -->
-            <v-row class="revenue-row pt-4">
-              <v-col cols="12" xs="12" md="12">
-                <v-card outlined elevation="0" class="card">
-                  <RevenueBlock title="Revenue Statistics" />
-                </v-card>
-              </v-col>
-            </v-row>
           </v-col>
           <!-- Sidebar -->
           <v-col cols="12" xs="12" sm="4">
