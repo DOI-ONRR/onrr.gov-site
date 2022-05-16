@@ -44,7 +44,7 @@ export default {
   methods: {
     isCellNumeric(str, idx) {
       // console.log('isCellNumeric str: ', str)
-      const isMonetary = str.includes('$')
+      const isMonetary = (str.includes('$', 0) || str.includes('%')) && !str.includes('(')
       // const numericStr = isMonetary ? str.replace('$', '') : str
 
       if(isMonetary) {
