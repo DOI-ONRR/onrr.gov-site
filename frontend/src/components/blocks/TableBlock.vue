@@ -43,12 +43,13 @@ export default {
   },
   methods: {
     isCellNumeric(str, idx) {
-      // console.log('isCellNumeric str: ', str)
-      const isMonetary = str.includes('$')
-      // const numericStr = isMonetary ? str.replace('$', '') : str
+      
+      const isMonetary = (str.includes('$', 0) || str.includes('%')) && !str.includes('(')
+      const isValidNum = /^[0-9,.]*$/.test(str) && str.includes(',')
 
-      if(isMonetary) {
-        console.log('found val that appears to be a num yo: ', str, idx)
+      // console.log('isCellNumeric str: ', str, isMonetary)
+
+      if(isMonetary || isValidNum) {
         if (!this.rightAlignedIndexes.includes(idx)) {
           this.rightAlignedIndexes.push(idx)
         }
