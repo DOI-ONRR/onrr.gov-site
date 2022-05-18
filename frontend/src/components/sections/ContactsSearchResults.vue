@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Contacts :filter="query" :collection="collectionItems" :collectionTab="null" :collectionAccordion="null"></Contacts>
+    <Contacts 
+      :filter="query" 
+      :collection="collectionItems" 
+      :collectionTab="null" 
+      :collectionAccordion="null">
+    </Contacts>
   </div>
 </template>
 

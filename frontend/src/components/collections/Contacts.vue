@@ -5,14 +5,22 @@
           <v-col cols="12" sm="6">
             <TextField :fields="searchInputField"></TextField>
           </v-col>
-          <v-col cols="12" sm="6" v-if="searchResults">
-            <SelectField :fields="categoriesSelectField" @change="collectionItems"></SelectField>
+        </v-row>
+        <v-row v-if="searchResults">
+          <v-col cols="12" sm="4">
+            <SelectField :fields="categoriesSelectField"></SelectField>
+          </v-col>
+          <v-col cols="12" sm="4" v-if="tabCategoriesSelectField.items.length > 1">
+            <SelectField :fields="tabCategoriesSelectField"></SelectField>
+          </v-col>
+          <v-col cols="12" sm="4" v-if="accordionCategoriesSelectField.items.length > 1">
+            <SelectField :fields="accordionCategoriesSelectField"></SelectField>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
             <div class="text-left mt-4">
-              Displaying {{ visibleItems.length }} of {{ collectionItems.length }} contacts
+              Displaying {{ visibleItems.length }} of {{ filteredCollectionItems.length }} contacts
             </div>
           </v-col>
           <v-col>
@@ -20,7 +28,7 @@
               <v-pagination
               v-model="page"
               color="secondary"
-              :length="Math.ceil(collectionItems.length/perPage)">
+              :length="Math.ceil(filteredCollectionItems.length/perPage)">
               </v-pagination>
             </div>
           </v-col>
@@ -78,7 +86,7 @@
         <v-row>
           <v-col>
             <div class="text-left mt-4">
-              Displaying {{ visibleItems.length }} of {{ collectionItems.length }} contacts
+              Displaying {{ visibleItems.length }} of {{ filteredCollectionItems.length }} contacts
             </div>
           </v-col>
           <v-col>
@@ -86,7 +94,7 @@
               <v-pagination
               v-model="page"
               color="secondary"
-              :length="Math.ceil(collectionItems.length/perPage)">
+              :length="Math.ceil(filteredCollectionItems.length/perPage)">
               </v-pagination>
             </div>
           </v-col>
@@ -96,7 +104,7 @@
 </template>
 
 <script>
-import { formatToSlug } from '@/js/utils'
+import { formatToSlug, groupBy } from '@/js/utils'
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
 
@@ -120,11 +128,34 @@ export default {
         selected: null,
         color: 'secondary',
         icon: 'mdi-chevron-down',
-        params: 'category'
+        params: 'category',
+        clearable: true
+      },
+      tabCategoriesSelectField: {
+        items: [],
+        label: 'All Subcategories',
+        ref: 'tabCateegoriesSelectInput',
+        selected: null,
+        color: 'secondary',
+        icon: 'mdi-chevron-down',
+        params: 'topic',
+        clearable: true
+      },
+      accordionCategoriesSelectField: {
+        items: [],
+        label: 'All Subcategories',
+        ref: 'accordionCateegoriesSelectInput',
+        selected: null,
+        color: 'secondary',
+        icon: 'mdi-chevron-down',
+        params: 'subTopic',
+        clearable: true
       },
       filterBy: this.filter,
       searchResults: false,
       contactsByCompanyPage: false,
+      filteredResults: null,
+      contactsCollection: null
     }
   },
   props: {
@@ -143,17 +174,22 @@ export default {
   },
   methods: {
     formatToSlug: formatToSlug,
+    groupBy: groupBy,
     resetPagination() {
       return this.page = 1
     },
     findSearchValue(item) {
-      return this.searchInputField.text
+      console.log('findSearchValue item, searchfield: ', item, this.searchInputField.text)
+      if (item !== null && (this.searchInputField.text !== undefined && this.searchInputField.text !== null)) {
+        return this.searchInputField.text
         .toLowerCase()
         .split(' ')
         .every(v => item && item.toLowerCase().includes(v))
+      }
     },
     filterProperties(items) {
       console.log('filteredProperties items: ', items)
+
       const filteredItems = items
         .filter(({ page, letter, header, operatorNumber, companyName, agency }) => {        
           return this.findSearchValue(letter) ||
@@ -183,36 +219,19 @@ export default {
 
       // console.log('wtf filteredItems --------> ', filteredItems)
 
-      return filteredItems || items
+      return filteredItems
     },
     filterByCategory(items) {
       // console.log('filterByCategory items ----> ', items)
       let filteredItems
       if (this.categoriesSelectField.selected !== 'All Categories') {
         filteredItems = items.filter(item => (
-          item.page === this.categoriesSelectField.selected ||
-          item.tab === this.categoriesSelectField.selected ||
-          item.accordion === this.categoriesSelectField.selected
+          item.page === this.categoriesSelectField.selected
+          // item.tab === this.tabCategoriesSelectField.selected ||
+          // item.accordion === this.accordionCategoriesSelectField.selected
         ))
       }
       return filteredItems || items
-    },
-    searchCategoriesItems() {
-      let categories = []
-      Array.from(new Set(this.collection && this.collection.map(item => {
-        if (item.page) {
-          categories.push(item.page)
-        }
-
-        if (item.tab) {
-          categories.push(item.tab)
-        }
-
-        if (item.accordion) {
-          categories.push(item.accordion)
-        }
-      })))
-      return ['All Categories', ...categories.sort((a, b) =>(a < b) ? -1 : 1)]
     },
     createContactItem(item) {
       let nObj = {}
@@ -270,44 +289,108 @@ export default {
       return nObj
     },
     filterByPage(items) {
-      return items.filter(item => item.page === this.collectionPage)
+      const page = this.categoriesSelectField.selected
+      const results = (page !== null) ? items.filter(item => item.page === page) : items
+      // console.log('filterByPage results -----> ', results)
+      return results
     },
     filterByTab(items) {
-      return items.filter(item => item.tab === this.collectionTab)
+      // console.log('filterByTab items -----> ', items)
+      const tab = this.collectionTab 
+      || this.tabCategoriesSelectField.selected
+      const results = (tab !== null) ? items.filter(item => item.tab === tab) : items
+      // console.log('filterByTab results -----> ', results)
+      return results
     },
     filterByAccordion(items) {
-      return items.filter(item => item.accordion === this.collectionAccordion)
+      // console.log('filterByAccordion items -----> ', items)
+      const accordion = this.collectionAccordion 
+      || this.accordionCategoriesSelectField.selected
+      const results = (accordion !== null) ? items.filter(item => item.accordion === accordion) : items
+      // console.log('filterByAccordion results ------> ', results)
+      return results
     },
-  },
-  computed: {
-    collectionItems() {
-      let collectionItems = []
-      this.collection && this.collection.filter(item => {
-        let nObj = this.createContactItem(item)
-        collectionItems.push(nObj)        
+    categoryItems() {
+      let categoryArr = []
+      this.collection && this.collection.map(item => {
+        if (!categoryArr.includes(item.page)) {
+          categoryArr.push(item.page)
+        }
       })
 
-      const filteredItems = this.collectionPage
-        ? this.filterByPage(this.filterByTab(this.filterByAccordion(collectionItems))) 
-        : this.filterByCategory(collectionItems)
+      this.categoriesSelectField.items = categoryArr
+    }
+    
+  },
+  computed: {
+    formattedContactsCollection() {
+      let formattedItems = []
 
-      if (this.searchInputField.text) {
-        this.resetPagination()
-        let filteredProperties = this.filterProperties(filteredItems)
-        return filteredProperties.length === 0 ? this.filterContacts(filteredItems) : this.filterProperties(filteredItems)
-      } else {
-        return filteredItems
-      }
+      this.collection && this.collection.map(item => {
+        let nObj = this.createContactItem(item)
+         formattedItems.push(nObj)        
+      })
 
+      return formattedItems
     },
     visibleItems() {
-      return this.collectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
+      return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
+    },
+    filteredCollectionItems() {
+      this.resetPagination()
+      const filteredList = (this.collectionPage || this.searchResults) 
+        ? this.filterByPage(this.filterByTab(this.filterByAccordion(this.formattedContactsCollection)))
+        : this.filterByCategory(this.formattedContactsCollection)
+      
+      if (this.categoriesSelectField.selected === 'All Categories' && this.searchInputField.text === null) {
+        return this.formattedContactsCollection
+      } else {
+        console.log('filteredList yo ------> ', filteredList)
+        if (this.searchInputField.text !== null) {
+          const filteredProperties = this.filterProperties(filteredList)
+          return (filteredProperties.length === 0)
+            ? this.filterContacts(filteredList) 
+            : this.filterProperties(filteredList)
+        } else {
+          return filteredList || this.formattedContactsCollection
+        }
+        
+      }
+      
+    },
+
+  },
+  watch: {
+    'searchInputField.text': function() {
+      return this.categoryItems()
+    },
+    'categoriesSelectField.selected': function(newVal) {
+      let tabCategoriesArr = []
+      this.collection && this.collection.map(item => {
+        if (item.page === newVal) {
+          if(!tabCategoriesArr.includes(item.tab)) {
+            tabCategoriesArr.push(item.tab)
+          }
+        }
+      })
+      this.tabCategoriesSelectField.items = tabCategoriesArr
+    },
+    'tabCategoriesSelectField.selected': function(newVal) {
+      let accordionCategoriesArr = []
+      this.collection && this.collection.map(item => {
+        if (item.tab === newVal) {
+          if(!accordionCategoriesArr.includes(item.accordion)) {
+            accordionCategoriesArr.push(item.accordion)
+          }
+        }
+      })
+      this.accordionCategoriesSelectField.items = accordionCategoriesArr
     },
   },
-  watch: {},
   created() {
     setTimeout(() => {
-      this.categoriesSelectField.items = this.searchCategoriesItems()
+      this.categoryItems()
+      
       this.categoriesSelectField.selected = this.$route.query.category ? decodeURI(this.$route.query.category) : 'All Categories'
     }, 500);
   },
@@ -319,12 +402,12 @@ export default {
 
 
     if (category) {
-      this.categoriesSelectField.selected = category
+      // this.categoriesSelectField.selected = category
     }
     
     if (query || searchResultsRoute) {
       this.searchResults = true
-      this.searchInputField.text = query
+      // this.searchInputField.text = query
     }
 
     if (contactsByCompanyPage) {
