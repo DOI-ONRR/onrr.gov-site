@@ -289,8 +289,8 @@ export default {
       return nObj
     },
     filterByPage(items) {
-      const page = this.categoriesSelectField.selected
-      const results = (page !== null) ? items.filter(item => item.page === page) : items
+      const page = this.collectionPage || this.categoriesSelectField.selected
+      const results  = (page !== null) ? items.filter(item => item.page === page) : items
       // console.log('filterByPage results -----> ', results)
       return results
     },
