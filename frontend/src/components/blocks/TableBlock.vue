@@ -84,5 +84,6 @@ export default {
 <style lang="scss" scoped>
   .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
     vertical-align: top;
+    border-bottom: 1px solid var(--v-accent-base) !important;
   }
 </style>
