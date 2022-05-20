@@ -577,7 +577,7 @@ export default class LinksInline {
     };
     }
 
-  addIcon(extension) {
+  addIcon(url, extension) {
     var iconDiv = document.createElement('div');
     iconDiv.classList.add("v-list-item__icon");
     iconDiv.classList.add("ml-1");
@@ -587,7 +587,8 @@ export default class LinksInline {
     i.classList.add('notranslate');
     i.classList.add('mdi');
     console.debug('extension: -------------------------------------------> ', extension);
-    
+    const docType=url.split('.').pop();
+    extension= docType.length===3 || docType.length===4 ? docType : extension
     switch(extension) {
     case 'pdf':
       i.classList.add('mdi-file-pdf-box')
@@ -641,7 +642,7 @@ export default class LinksInline {
     const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : filename
     // const label=fparts[0]
     const extension= fparts.length > 1 ? fparts.pop() : ''
-    const icon=this.addIcon(extension);
+    const icon=this.addIcon(url, extension);
     
     var aTag = document.createElement('a');
     aTag.setAttribute('href',url);
@@ -664,16 +665,15 @@ export default class LinksInline {
   }
 
 
-
-  
+ 
   addUrl(linkList,url,filename,type) {
-    console.debug('addUrl(linkList,url,label) ------------------>')
+    console.debug('addUrl(linkList,url,filename, type) ------------------>')
     //const mydiv = Dom.make("li");
     const fparts=type.split("/")
     const label=this.getLabelType() === 'Selected' ? this.textNode.innerText : filename
     //    const label=fparts[0]
     const extension= fparts.length > 1 ? fparts.pop() : ''
-    const icon=this.addIcon(extension);
+    const icon=this.addIcon(url,extension);
     
     var aTag = document.createElement('a');
     aTag.setAttribute('href',url);
