@@ -338,7 +338,7 @@ export default {
     },
     filteredCollectionItems() {
       this.resetPagination()
-      const filteredList= (this.collectionPage || this.searchResults)
+      const filteredList= (this.collectionPage || this.searchResults || this.categoriesSelectField.selected)
       ? this.filterByPage(this.filterByTab(this.filterByAccordion(this.formattedContactsCollection)))
       : this.filterProperties(this.formattedContactsCollection)
       
@@ -363,6 +363,10 @@ export default {
       return this.categoryItems()
     },
     'categoriesSelectField.selected': function(newVal) {
+      // set other fields to null when category changes to reset
+      this.tabCategoriesSelectField.selected = null
+      this.accordionCategoriesSelectField.selected = null
+
       let tabCategoriesArr = []
       this.collection && this.collection.map(item => {
         if (item.page === newVal) {
