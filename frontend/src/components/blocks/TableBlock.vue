@@ -44,7 +44,8 @@ export default {
   methods: {
     isCellNumeric(str, idx) {
       
-      const isMonetary = (str.includes('$', 0) || str.includes('%')) && !str.includes('(')
+      const numPercentage = /^(?:[1-9]\d?%|0%)$/
+      const isMonetary = (str.includes('$', 0) || str.match(numPercentage)) && !str.includes('(')
       const isValidNum = /^[0-9,.]*$/.test(str) && str.includes(',')
 
       // console.log('isCellNumeric str: ', str, isMonetary)
