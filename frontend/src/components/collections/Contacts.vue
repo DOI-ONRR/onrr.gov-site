@@ -148,7 +148,7 @@ export default {
         selected: null,
         color: 'secondary',
         icon: 'mdi-chevron-down',
-        params: 'subTopic',
+        params: 'subtopic',
         clearable: true
       },
       filterBy: this.filter,
@@ -179,7 +179,7 @@ export default {
       return this.page = 1
     },
     findSearchValue(item) {
-      console.log('findSearchValue item, searchfield: ', item, this.searchInputField.text)
+      // console.log('findSearchValue item, searchfield: ', item, this.searchInputField.text)
       if (item !== null && (this.searchInputField.text !== undefined && this.searchInputField.text !== null)) {
         return this.searchInputField.text
         .toLowerCase()
@@ -188,18 +188,20 @@ export default {
       }
     },
     filterProperties(items) {
-      console.log('filteredProperties items: ', items)
+      // console.log('filteredProperties items: ', items)
 
       const filteredItems = items
-        .filter(({ page, letter, header, operatorNumber, companyName, agency }) => {        
+        .filter(({ page, tab, accordion, letter, header, operatorNumber, companyName, agency }) => {        
           return this.findSearchValue(letter) ||
             this.findSearchValue(header) ||
             this.findSearchValue(operatorNumber) ||
             this.findSearchValue(companyName) ||
             this.findSearchValue(agency) ||
-            this.findSearchValue(page)
+            this.findSearchValue(page) ||
+            this.findSearchValue(tab) ||
+            this.findSearchValue(accordion)
         })
-      console.log('filterProperties filteredItems: ', filteredItems)
+      // console.log('filterProperties filteredItems: ', filteredItems)
       return filteredItems || items
     },
     filterContacts(items) {
@@ -224,11 +226,9 @@ export default {
     filterByCategory(items) {
       // console.log('filterByCategory items ----> ', items)
       let filteredItems
-      if (this.categoriesSelectField.selected !== 'All Categories') {
+      if (this.categoriesSelectField.selected !== null) {
         filteredItems = items.filter(item => (
           item.page === this.categoriesSelectField.selected
-          // item.tab === this.tabCategoriesSelectField.selected ||
-          // item.accordion === this.accordionCategoriesSelectField.selected
         ))
       }
       return filteredItems || items
@@ -338,25 +338,23 @@ export default {
     },
     filteredCollectionItems() {
       this.resetPagination()
-      const filteredList = (this.collectionPage || this.searchResults) 
-        ? this.filterByPage(this.filterByTab(this.filterByAccordion(this.formattedContactsCollection)))
-        : this.filterByCategory(this.formattedContactsCollection)
+      const filteredList= (this.collectionPage || this.searchResults)
+      ? this.filterByPage(this.filterByTab(this.filterByAccordion(this.formattedContactsCollection)))
+      : this.filterProperties(this.formattedContactsCollection)
       
-      if (this.categoriesSelectField.selected === 'All Categories' && this.searchInputField.text === null) {
+      if (this.categoriesSelectField.selected === null && this.searchInputField.text === null) {
         return this.formattedContactsCollection
       } else {
         console.log('filteredList yo ------> ', filteredList)
-        if (this.searchInputField.text !== null) {
+        if (this.searchInputField.text) {
           const filteredProperties = this.filterProperties(filteredList)
           return (filteredProperties.length === 0)
             ? this.filterContacts(filteredList) 
             : this.filterProperties(filteredList)
         } else {
           return filteredList || this.formattedContactsCollection
-        }
-        
+        }  
       }
-      
     },
 
   },
@@ -390,29 +388,26 @@ export default {
   created() {
     setTimeout(() => {
       this.categoryItems()
-      
-      this.categoriesSelectField.selected = this.$route.query.category ? decodeURI(this.$route.query.category) : 'All Categories'
     }, 500);
-  },
-  mounted() {
-    const category = this.$route.query.category && decodeURI(this.$route.query.category)
-    const query = this.$route.query.q && decodeURI(this.$route.query.q)
+
     const searchResultsRoute = this.$route.params.slug2 === "search-results"
     const contactsByCompanyPage = this.$route.params.slug2 === 'company-contacts'
 
-
-    if (category) {
-      // this.categoriesSelectField.selected = category
-    }
-    
-    if (query || searchResultsRoute) {
+    if (searchResultsRoute) {
       this.searchResults = true
-      // this.searchInputField.text = query
     }
 
     if (contactsByCompanyPage) {
       this.contactsByCompanyPage = true
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.categoriesSelectField.selected = this.$route.query.category ? decodeURI(this.$route.query.category) : null
+      this.tabCategoriesSelectField.selected = this.$route.query.topic ? decodeURI(this.$route.query.topic) : null
+      this.accordionCategoriesSelectField.selected = this.$route.query.subtopic ? decodeURI(this.$route.query.subtopic) : null
+      this.searchInputField.text = this.$route.query.q ? decodeURI(this.$route.query.q) : ''
+    }, 500);
   }
 }
 </script>
