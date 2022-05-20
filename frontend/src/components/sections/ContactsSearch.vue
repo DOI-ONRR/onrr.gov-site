@@ -13,7 +13,7 @@
           outlined
           clearable
           hide-no-data
-          @change="submitSearch($event, contactsSearchField.select)">
+          @change="submitSearch($event, contactsSearchField.select || contactsSearchField.search)">
           <template v-slot:selection="{ item }">
             <v-list-item-content>
               <v-list-item-title v-html="item"></v-list-item-title>
@@ -31,7 +31,7 @@
           large
           color="secondary"
           class="contacts-search-button"
-          @click="submitSearch($event, contactsSearchField.select)">
+          @click="submitSearch($event, contactsSearchField.select || contactsSearchField.search)">
           <v-icon>
             mdi-magnify
           </v-icon>
