@@ -87,4 +87,6 @@ export default {
     vertical-align: top;
     border-bottom: 1px solid var(--v-accent-base) !important;
   }
+
+  
 </style>
