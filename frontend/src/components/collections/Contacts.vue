@@ -388,7 +388,7 @@ export default {
   created() {
     setTimeout(() => {
       this.categoryItems()
-    }, 500);
+    }, 250);
 
     const searchResultsRoute = this.$route.params.slug2 === "search-results"
     const contactsByCompanyPage = this.$route.params.slug2 === 'company-contacts'
@@ -407,7 +407,7 @@ export default {
       this.tabCategoriesSelectField.selected = this.$route.query.topic ? decodeURI(this.$route.query.topic) : null
       this.accordionCategoriesSelectField.selected = this.$route.query.subtopic ? decodeURI(this.$route.query.subtopic) : null
       this.searchInputField.text = this.$route.query.q ? decodeURI(this.$route.query.q) : ''
-    }, 500);
+    }, 250);
   }
 }
 </script>
