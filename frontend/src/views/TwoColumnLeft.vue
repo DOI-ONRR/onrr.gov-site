@@ -14,14 +14,17 @@
       <v-container>
         <v-row>
           <v-col
+            xs="12"
             sm="12"
-            md="3">
+            md="3"
+            cols="12">
             <SideMenu />
           </v-col>
           <v-col
+            xs="12"
             sm="12"
-            md="9">
-
+            md="9"
+            col="12">
               <router-view />
           </v-col>
         </v-row>

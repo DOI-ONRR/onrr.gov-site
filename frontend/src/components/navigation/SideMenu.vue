@@ -1,13 +1,13 @@
 <template>
   <div class="side-menu-wrap" ref="sideMenu">
-    <v-list class="pa-0">
+    <v-list class="pa-0" v-if="!isMobile">
       <v-list-item-group
         color="primary">
         <v-list-item 
           link
           exact
           :to="`${ parentUrl }`">
-               {{ `${ parentTitle } Home` }}
+          {{ `${ parentTitle } Home` }}
         </v-list-item>
         <div v-for="item in sideMenuItems" :key="item.id">
         <v-list-item 
@@ -15,26 +15,59 @@
           active-class="active"
           v-for="cItem in item.menu_children" 
           :key="cItem.id"
-          :to="`${ cItem.pages_id.url }` ">
+          :to="`${ cItem.pages_id.url }`">
               {{ cItem.pages_id.title }}
         </v-list-item>
         </div>
       </v-list-item-group>
     </v-list>
+    <div v-if="isMobile">
+      <v-list>
+        <v-list-group
+          v-for="item in sideMenuItems"
+          :key="item.id"
+          v-model="item.active"
+          no-action
+          :to="`${ parentUrl }`"
+        >
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title
+                
+                v-text="`${ parentTitle } Home`"></v-list-item-title>
+            </v-list-item-content>
+          </template>
+
+          <v-list-item
+            v-for="cItem in item.menu_children"
+            :key="cItem.id"
+            :to="`${ cItem.pages_id.url }`"
+          >
+            <v-list-item-content>
+              <v-list-item-title
+                v-text="cItem.pages_id.title"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
+    </div>
   </div>
 </template>
 
 <script>
 import { MENU_QUERY, PAGES_QUERY } from '@/graphql/queries'
+import { mobileMixin } from '@/mixins'
 
 export default {
   name: 'SideMenu',
+  mixins: [mobileMixin],
   data () {
     return {
       menus: [],
       pages: [],
       parentTitle: null,
       parentSlug: null,
+      isMobile: false
     }
   },
   apollo: {
@@ -113,6 +146,10 @@ a.router-link-active {
   color: black;
   background-color: white;
   font-weight: bold;
+}
+
+.v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
+  padding-left: 16px;
 }
 </style>
 
