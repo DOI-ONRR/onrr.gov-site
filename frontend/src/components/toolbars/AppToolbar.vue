@@ -66,9 +66,8 @@
     <v-navigation-drawer
     v-model="drawer"
     app
-    absolute
-    right
     temporary
+    right
     dark>
       <v-list dense>
         <v-subheader>Menu</v-subheader>
@@ -234,7 +233,7 @@ export default {
     transition: 0.1s all ease-out;
     align-items: center;
     position: relative;
-    left: -40px;
+    left: -60px;
   }
 }
 
@@ -244,7 +243,7 @@ export default {
     transition: 0.1s all ease-out;
     align-items: center;
     position: relative;
-    left: -60px;
+    left: -40px;
   }
 }
 

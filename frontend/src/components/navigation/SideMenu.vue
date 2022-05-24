@@ -141,7 +141,8 @@ a.router-link-active {
   padding-bottom: 4px;
 }
 
-.v-list-item-group .v-list-item--active {
+.v-list-item-group .v-list-item--active,
+.side-menu-mobile .v-list-item--active {
   border-left: 4px solid var(--v-yellow-lighten1);
   color: black;
   background-color: white;
@@ -154,6 +155,14 @@ a.router-link-active {
 
 .side-menu-mobile {
   margin-bottom: 32px;
+}
+
+.side-menu-mobile .v-list {
+  padding: 0;
+}
+
+.v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon {
+  min-width: inherit;
 }
 </style>
 

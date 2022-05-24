@@ -4,9 +4,17 @@
       <v-progress-circular :value="20"></v-progress-circular>
     </div>
     <div v-else class="page-wrap">
-      <Breadcrumbs />
-      <SideMenu v-if="isMobile" />
-      <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+      <div v-if="!isMobile">
+        <Breadcrumbs />
+        <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+      </div>
+
+      <div v-if="isMobile">
+        <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+        <SideMenu />
+        <Breadcrumbs />
+      </div>
+      
       <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
     </div>
   </div>
