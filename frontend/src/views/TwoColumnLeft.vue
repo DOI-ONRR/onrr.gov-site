@@ -18,7 +18,7 @@
             sm="12"
             md="3"
             cols="12">
-            <SideMenu />
+            <SideMenu v-if="!isMobile" />
           </v-col>
           <v-col
             xs="12"
@@ -35,6 +35,7 @@
 
 <script>
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
+import { mobileMixin } from '@/mixins'
 const SideMenu = () => import(/* webpackChunkName: "Sidemenu" */ '@/components/navigation/SideMenu')
 const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/components/sections/HeroImage')
 
@@ -42,6 +43,7 @@ const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/component
 
 export default {
   name: "TwoColumnLeft",
+  mixins: [mobileMixin],
   data() {
     return {
       page: null,

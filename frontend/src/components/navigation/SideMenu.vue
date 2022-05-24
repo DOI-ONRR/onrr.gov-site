@@ -21,7 +21,7 @@
         </div>
       </v-list-item-group>
     </v-list>
-    <div v-if="isMobile">
+    <div v-if="isMobile" class="side-menu-mobile">
       <v-list>
         <v-list-group
           v-for="item in sideMenuItems"
@@ -150,6 +150,10 @@ a.router-link-active {
 
 .v-application--is-ltr .v-list-group--no-action > .v-list-group__items > .v-list-item {
   padding-left: 16px;
+}
+
+.side-menu-mobile {
+  margin-bottom: 32px;
 }
 </style>
 
