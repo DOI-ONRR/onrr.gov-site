@@ -73,6 +73,10 @@
         <v-subheader>Menu</v-subheader>
         <v-list-item-group>
           <v-list-item
+            to="/">
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item>
+          <v-list-item
             v-for="item in menuItems"
             :key="item.id"
             :to="`${ item.custom_url || item.link_to_page.url }`"
