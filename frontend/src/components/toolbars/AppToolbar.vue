@@ -66,41 +66,45 @@
     <v-navigation-drawer
     v-model="drawer"
     app
-    absolute
+    temporary
     right
-    temporary>
-      <v-list>
-        <v-list-group
-          v-for="item in menuItems"
-          :key="item.id"
-          no-action
-        >
-          <template v-slot:activator>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.menu_label"></v-list-item-title>
-            </v-list-item-content>
-          </template>
-
-          <v-list>
-            <v-list-item 
-              :to="`/${ item.link_to_page.url }`"
-              class="child-item">
-              {{ `${ item.menu_label } Home` }}
-            </v-list-item>
-            <v-list-item
-              v-for="child in item.menu_children"
-              :key="child.id"
-              :to="child.pages_id.url"
-              class="child-item"
-            >
-              <v-list-item-content>
-                <v-list-item-title 
-                  v-text="child.menu_label">
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-list-group>
+    dark>
+      <v-list dense>
+        <v-subheader>Menu</v-subheader>
+        <v-list-item-group>
+          <v-list-item
+            v-for="item in menuItems"
+            :key="item.id"
+            :to="`${ item.custom_url || item.link_to_page.url }`"
+          >
+              <v-list-item-title 
+                v-text="item.menu_label"></v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+      <hr />
+      <v-list dense>
+        <v-list-item-group>
+          <v-list-item
+            to="/search-results"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-magnify</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Search</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-for="item in utilityItems"
+            :key="item.id"
+            :to="`${ item.custom_url || item.link_to_page.url }`"
+          >
+            <v-list-item-icon>
+              <v-icon v-text="item.menu_icon"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-title 
+              v-text="item.menu_label"></v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
     <v-btn
@@ -207,6 +211,9 @@ export default {
     menuItems() {
       return this.menus.filter(item => item.menu === 'main')
     },
+    utilityItems() {
+      return this.menus.filter(item => item.menu === 'header')
+    },
     height () {
       switch (this.$vuetify.breakpoint.name) {
         case 'lg': return 50
@@ -226,7 +233,7 @@ export default {
     transition: 0.1s all ease-out;
     align-items: center;
     position: relative;
-    left: -40px;
+    left: -60px;
   }
 }
 
@@ -236,7 +243,7 @@ export default {
     transition: 0.1s all ease-out;
     align-items: center;
     position: relative;
-    left: -80px;
+    left: -40px;
   }
 }
 
@@ -352,6 +359,16 @@ export default {
 
 .child-item {
   padding-left: 24px;
+}
+
+.v-list--dense .v-list-item .v-list-item__title {
+  font-size: 1rem;
+  line-height: 1.2rem;
+}
+
+.v-list--dense .v-list-item .v-list-item__icon {
+  margin-top: 6px;
+  margin-right: 16px;
 }
 
 </style>
