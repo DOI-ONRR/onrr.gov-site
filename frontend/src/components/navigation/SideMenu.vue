@@ -28,12 +28,12 @@
           :key="item.id"
           v-model="item.active"
           no-action
-          :to="`${ parentUrl }`"
+         
         >
           <template v-slot:activator>
             <v-list-item-content>
               <v-list-item-title
-                
+                :to="`${ parentUrl }`"
                 v-text="`${ parentTitle } Home`"></v-list-item-title>
             </v-list-item-content>
           </template>
