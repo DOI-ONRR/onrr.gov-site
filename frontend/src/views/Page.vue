@@ -4,8 +4,17 @@
       <v-progress-circular :value="20"></v-progress-circular>
     </div>
     <div v-else class="page-wrap">
-      <Breadcrumbs />
-      <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+      <div v-if="!isMobile">
+        <Breadcrumbs />
+        <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+      </div>
+
+      <div v-if="isMobile">
+        <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+        <SideMenu />
+        <Breadcrumbs />
+      </div>
+      
       <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
     </div>
   </div>
@@ -15,14 +24,20 @@
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import { 
   pageBlockMixin,
-  editorBlockMixin
+  editorBlockMixin,
+  mobileMixin
 } from '@/mixins'
 
 const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
+const SideMenu = () => import(/* webpackChunkName: "SideMenu" */ '@/components/navigation/SideMenu')
 
 export default {
-  mixins: [pageBlockMixin, editorBlockMixin],
+  mixins: [
+    pageBlockMixin, 
+    editorBlockMixin,
+    mobileMixin
+  ],
   name: 'PageView',
   metaInfo () {
     return {
@@ -38,7 +53,8 @@ export default {
   },
   components: {
     Breadcrumbs,
-    LayoutBlock
+    LayoutBlock,
+    SideMenu
   },
   data() {
     return {
