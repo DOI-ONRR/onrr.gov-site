@@ -323,6 +323,18 @@ export const INDIAN_GAS_MAJOR_PORTION_QUERY = gql`
     }
   }
 `
+export const INTEREST_OIL_AND_GAS_QUERY = gql`
+  query {
+    Interest_Oil_and_Gas(sort: ["sort", "-Period"], limit: -1) {
+      id
+      status
+      Period
+      Indian_Late_and_Underpayments
+      Federal_Late_and_Underpayments
+      Federal_Overpayments
+    }
+  }
+`
 
 export const SOLID_MINERALS_HANDBOOK_QUERY = gql`
   query {
