@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkonrr_frontend_app_vue"]=self["webpackChunkonrr_frontend_app_vue"]||[]).push([[345],{356:function(e,n,t){t.r(n),t.d(n,{default:function(){return p}});var r=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",{domProps:{innerHTML:e._s(e.html)}})},u=[],o={name:"CodeBlock",data:function(){return{template:""}},props:{block:{type:Object}},computed:{html:function(){return this.block.data.code}}},l=o,c=t(1001),a=(0,c.Z)(l,r,u,!1,null,null,null),p=a.exports}}]);
+//# sourceMappingURL=CodeBlock-legacy.3b407bbf.js.map
