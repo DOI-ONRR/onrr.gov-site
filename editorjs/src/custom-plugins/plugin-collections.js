@@ -588,6 +588,7 @@ export default class CollectionsTool {
       'geothermal_class_2_3',
       'plant_specific_ucas',
       'Interest_Oil_and_Gas',
+      'Interest_Solids',
     ];
     let nArr = []
     

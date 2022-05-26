@@ -28,6 +28,7 @@ const IndexZonesCollection = () => import(/* webpackChunkName: "IndexZones" */ '
 const IBMPCollection = () => import(/* webpackChunkName: "IBMPCollection" */ '@/components/collections/IBMP')
 const IndianGasMajorPortionCollection = () => import(/* webpackChunkName: "IndianGasMajorPortion" */ '@/components/collections/IndianGasMajorPortion')
 const InterestOilGas = () => import(/* webpackChunkName: "InterestOilGas" */ '@/components/collections/InterestOilGas')
+const InterestSolids = () => import(/* webpackChunkName: "InterestSolids" */ '@/components/collections/InterestSolids')
 const HandbooksCollection = () => import(/* webpackChunkName: "SolidMineralsReporterHandbook" */ '@/components/collections/Handbooks')
 const PlantSpecificUCAsCollection = () => import(/* webpackChunkName: "PlantSpecificUCAsCollection" */ '@/components/collections/PlantSpecificUCAs')
 
@@ -42,6 +43,7 @@ import {
   IBMP_QUERY,
   INDIAN_GAS_MAJOR_PORTION_QUERY,
   INTEREST_OIL_AND_GAS_QUERY,
+  INTEREST_SOLIDS_QUERY,
   SOLID_MINERALS_HANDBOOK_QUERY,
   PRODUCTION_HANDBOOK_QUERY,
   REVENUE_HANDBOOK_QUERY,
@@ -93,6 +95,9 @@ export default {
         }
 	else if (this.block.data.collection === 'Interest_Oil_and_Gas') {
           return INTEREST_OIL_AND_GAS_QUERY
+        }
+	else if (this.block.data.collection === 'Interest_Solids') {
+          return INTEREST_SOLIDS_QUERY
         }
         else if (this.block.data.collection === 'solid_minerals_handbook') {
           return SOLID_MINERALS_HANDBOOK_QUERY
@@ -155,6 +160,9 @@ export default {
           break
         case 'Interest_Oil_and_Gas':
           collectionBlock = InterestOilGas
+          break
+        case 'Interest_Solids':
+          collectionBlock = InterestSolids
           break
         case 'solid_minerals_handbook':
         case 'production_handbook':

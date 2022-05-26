@@ -336,6 +336,17 @@ export const INTEREST_OIL_AND_GAS_QUERY = gql`
     }
   }
 `
+export const INTEREST_SOLIDS_QUERY = gql`
+  query {
+    Interest_Solids(sort: ["sort", "-sort"], limit: -1) {
+      id
+      sort
+      status
+      Period
+      Federal_and_Indian_Late_and_Underpayments
+    }
+  }
+`
 
 export const SOLID_MINERALS_HANDBOOK_QUERY = gql`
   query {
