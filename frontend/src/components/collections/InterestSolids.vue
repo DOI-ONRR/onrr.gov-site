@@ -56,7 +56,7 @@ export default {
               value: 'Period',
           },
           {
-              text: 'Federal and Late & Underpayments',
+              text: 'Federal and Indian Late & Underpayments',
               align: 'start',
               sortable: false,
               value: 'Federal_and_Indian_Late_and_Underpayments',
