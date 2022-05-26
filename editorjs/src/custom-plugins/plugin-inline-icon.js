@@ -122,10 +122,8 @@ export default class InlineIconTool {
     this._state = !!anchorElement.closest('SPAN');
 
     if (this._state) {
-      console.log('showActions yo!');
-      this.showActions(text);
+      this.showActions();
     } else {
-      console.log('hideActions yo!');
       this.hideActions();
     }
   }
@@ -190,7 +188,8 @@ export default class InlineIconTool {
 
     if (this.selectedNode) {
       const iconTag = make('i');
-      iconTag.classList.add('v-icon', value);
+      iconTag.setAttribute('aria-hidden', true);
+      iconTag.classList.add('v-icon', 'notranslate', 'mdi', value);
 
       this.selectedNode.prepend(iconTag);
     }

@@ -132,7 +132,8 @@ export default {
   top: 4px;
 }
 
-.container .v-tabs i.v-icon.v-icon {
+.container .v-tabs i.v-icon.v-icon,
+.container .outer-span .v-icon {
   color: var(--v-secondary-base);
 } 
 </style>
