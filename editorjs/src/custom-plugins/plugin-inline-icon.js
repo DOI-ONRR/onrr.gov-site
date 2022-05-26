@@ -51,7 +51,7 @@ export default class InlineIconTool {
     this.selection = new SelectionUtils();
     this.selectedNode = null;
     this.toolbar = api.toolbarl;
-    this.inlineToolbar = api.inlineToolbar;
+    this._inlineToolbar = api.inlineToolbar;
   }
 
   render() {
@@ -78,6 +78,7 @@ export default class InlineIconTool {
     this.nodes.input.addEventListener('keydown', (e) => {
       if(e.keyCode === this.ENTER_KEY) {
         console.log(e);
+        this.insertIcon(e);
       }
     })
 
@@ -93,15 +94,11 @@ export default class InlineIconTool {
     this.wrap(range);
   }
 
-  showActions(span) {
+  showActions() {
+    this.selection.save();
     this.nodes.input.classList.add(this.CSS.inputShowed);
     this.inputOpened = true;
     this.nodes.input.focus();
-    
-
-    let value = this.nodes.input.value || '';
-
-    span.classList.add(value);
   }
 
   hideActions() {
@@ -110,7 +107,7 @@ export default class InlineIconTool {
 
    
   checkState(selection) {
-    const text = selection.anchorNode;
+    const text = this.selectedNode;
     console.log('selection, this.selectedNode: ', selection, this.selectedNode)
     const spanTag = this.selection.findParentTag('span', 'outer-span');
 
@@ -126,7 +123,7 @@ export default class InlineIconTool {
 
     if (this._state) {
       console.log('showActions yo!');
-      this.showActions(anchorElement);
+      this.showActions(text);
     } else {
       console.log('hideActions yo!');
       this.hideActions();
@@ -180,27 +177,26 @@ export default class InlineIconTool {
     this.inputOpened = false;
   }
 
-  insertIcon(icon) {
-    // icon: https://materialdesignicons.com/
-    console.log('icon this.selection ----> ', this.selection, icon);
-    const spanTag = this.selection.findParentTag('SPAN');
-    
+  insertIcon(event) {
+    // icon: https://materialdesignicons.com/ 
+    // prob good to check value to see if valid to throw error or message to user
+    let value = this.nodes.input.value || '';
 
-    if(spanTag) {
-      this.selection.expandToTag(spanTag)
+    console.log(this.selectedNode, value, event);
+
+    if (!value) {
+      this.closeInput();
     }
-    // const iconEl = make('i');
-    // iconEl.setAttribute('aria-hidden',true);
-    // iconEl.classList.add('v-icon', icon);
 
-    // const innerSpan = make('span');
-    // innerSpan.innerText = 'this needs to be selection yo!'
+    if (this.selectedNode) {
+      const iconTag = make('i');
+      iconTag.classList.add('v-icon', value);
 
-    // if (this.textNode) {
-    //   this.textNode.appendChild(iconEl);
-    //   this.textNode.appendChild(innerSpan);
-    // }
+      this.selectedNode.prepend(iconTag);
+    }
 
-    // this.selection.expandToTag(this.textNode);
+    this.closeInput();
+    this._inlineToolbar.close();
+
   }
 }
