@@ -25,12 +25,14 @@
   import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
   import LinkTool from '@editorjs/link';
   import Links from '../custom-plugins/plugin-links';
-  import LinksInline from '../custom-plugins/plugin-links-inline';
+  // import LinksInline from '../custom-plugins/plugin-links-inline';
   import LinksList from '../custom-plugins/plugin-links-list';
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
   import ImageTool from '../custom-plugins/plugin-image-patch';
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
   import TableTool from '@editorjs/table';
+  import InlineIconTool from '../custom-plugins/plugin-inline-icon';
+  // import MyLinkTool from '../custom-plugins/myLinkTool';
 
   export default {
     data() {
@@ -91,17 +93,17 @@
                 fieldsEndpoint: 'http://localhost:8055/fields'
               }
             },
-            linksInline: {
-              class: LinksInline,
-              inlineToolbar: true,    
-              config: {
-                endpoint: 'http://localhost:8055/items/links?limit=-1',
-                fields: 'http://localhost:8055/fields',
-                icons: {
-                  pdf: 'http://localhost:8055/assets/915d45f6-233d-4855-b0f9-736d2b61214a'
-                } 
-              }
-            },
+            // linksInline: {
+            //   class: LinksInline,
+            //   inlineToolbar: true,    
+            //   config: {
+            //     endpoint: 'http://localhost:8055/items/links?limit=-1',
+            //     fields: 'http://localhost:8055/fields',
+            //     icons: {
+            //       pdf: 'http://localhost:8055/assets/915d45f6-233d-4855-b0f9-736d2b61214a'
+            //     } 
+            //   }
+            // },
             linksList: {
               class: LinksList,
               inlineToolbar: true,    
@@ -158,6 +160,14 @@
               inlineToolbar: true,
               tunes: ['alignmentTune']
             },
+            inlineIcon: {
+              class: InlineIconTool,
+              inlineToolbar: true,
+            },
+            // myLinkTool: {
+            //   class: MyLinkTool,
+            //   inlineToolbar: true,
+            // }
           },
           onReady: function() {
             console.log("ready 123")
