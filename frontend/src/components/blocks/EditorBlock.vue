@@ -19,4 +19,10 @@ export default {
 .block-component {
   margin: 0 0 16px 0;
 }
+
+.block-component span a:after {
+  content: "\feff";
+  padding-left: 4px;
+  white-space: nowrap;
+}
 </style>

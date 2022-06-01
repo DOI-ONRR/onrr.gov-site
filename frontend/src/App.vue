@@ -124,7 +124,7 @@ export default {
 
 .v-list-item__icon {
   display: inline-block;
-  margin: 0;
+  margin: 0 !important;
 }
 
 .v-list-item__icon > .icon {
@@ -134,5 +134,5 @@ export default {
 
 .container .v-tabs i.v-icon.v-icon {
   color: var(--v-secondary-base);
-} 
+}
 </style>
