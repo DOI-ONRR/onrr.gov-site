@@ -162,7 +162,9 @@ a.router-link-active {
 }
 
 .v-list-group .v-list-group__header .v-list-item__icon.v-list-group__header__append-icon {
-  min-width: inherit;
+  min-width: inherit !important;
 }
+
+
 </style>
 

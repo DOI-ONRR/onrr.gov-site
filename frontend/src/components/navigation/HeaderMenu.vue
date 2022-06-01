@@ -8,8 +8,19 @@
       text
       dark
       class="no-btn-hover"
+      :target="item.custom_url && item.custom_url ? '_blank' : '_self'"
     >
-      <span class="v-btn__content">
+      <span class="v-btn__content-btn" v-if="item.menu_label === 'Revenue Data'">
+        <v-btn
+          class="mb-1"
+          color="primary"
+        >
+          <v-icon color="white" v-if="item.menu_icon" class="mr-1">{{ item.menu_icon }}</v-icon>
+          <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
+        </v-btn>
+      </span>
+
+      <span class="v-btn__content" v-else>
         <v-icon color="white" v-if="item.menu_icon" class="mr-1">{{ item.menu_icon }}</v-icon>
         <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
       </span>

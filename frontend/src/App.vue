@@ -124,7 +124,7 @@ export default {
 
 .v-list-item__icon {
   display: inline-block;
-  margin: 0 !important;
+  margin: 0;
 }
 
 .v-list-item__icon > .icon {
