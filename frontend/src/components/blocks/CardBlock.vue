@@ -6,9 +6,14 @@
     <v-card-subtitle v-if="cardSubtitle" class="v-card__subtitle black--text">
       {{ cardSubtitle }}
     </v-card-subtitle>
+      <v-icon v-if="blockIcon === 'alert'" class="mdi mdi-alert" :class="blockColor"></v-icon> 
+      <v-icon v-if="blockIcon === 'info'" class="mdi mdi-information" :class="blockColor"></v-icon> 
     <v-card-text class="text--primary body-1">
-      <div v-if="blockItems.length === 0">
-        <div v-for="block in block.item.block_content.blocks" :key="block.id">
+
+
+<div v-if="blockItems.length === 0">
+
+<div v-for="block in block.item.block_content.blocks" :key="block.id">
           <EditorBlock :blockContent="block"></EditorBlock>
         </div>
       </div>
@@ -57,6 +62,12 @@ export default {
     },
     blockColor() {
       return this.block.item.block_color
+    },
+   iconColor() {
+      return this.block.item.block_color + '-text'
+    },
+    blockIcon() {
+      return this.block.item.block_icon
     },
     blockItems() {
       const blocks = [...this.block.item.card_content_blocks.filter(block => block.item !== null)]

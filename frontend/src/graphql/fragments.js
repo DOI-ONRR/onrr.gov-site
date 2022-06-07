@@ -29,6 +29,7 @@ export const cardBlockFields = gql`
     block_color
     block_label
     block_v_col
+    block_icon
     block_content
     equal_col_height
     card_content_blocks {
