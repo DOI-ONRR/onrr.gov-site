@@ -6,7 +6,7 @@
     <v-card-subtitle v-if="cardSubtitle" class="v-card__subtitle black--text">
       {{ cardSubtitle }}
     </v-card-subtitle>
-      <v-icon v-if="blockIcon === 'alert'" class="mdi mdi-alert" :class="blockColor"></v-icon> 
+      <v-icon v-if="blockIcon === 'alert'" class="mdi mdi-alert" :class="blockColor" ></v-icon> 
       <v-icon v-if="blockIcon === 'info'" class="mdi mdi-information" :class="blockColor"></v-icon> 
     <v-card-text class="text--primary body-1">
 
@@ -116,4 +116,5 @@ export default {
 .yellow--color {
   border-top-color: var(--v-yellow-lighten1)
 }
+
 </style>

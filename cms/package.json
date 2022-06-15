@@ -4,7 +4,7 @@
   "author": "Mojo Nichols <mojo.nichols@onrr.gov>",
   "description": "Directus CMS",
   "scripts": {
-    "update": "npx directus database migrate:latest",
+    "update": "CONFIG_PATH='/../../.env' npx directus database migrate:latest",
     "downgrade": "npx directus database migrate:down",
     "bootstrap": "CONFIG_PATH='../../.env' directus bootstrap",
     "start": "CONFIG_PATH='../../.env' npx directus start",
