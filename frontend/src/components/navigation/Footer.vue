@@ -11,7 +11,8 @@
         <v-btn
           v-for="item in menuItemsTop"
           :key="item.id"
-          :to="item.custom_url ? item.custom_url : item.link_to_page.url"
+          :to="item.link_to_page && item.link_to_page.url"
+          :href="item.custom_url && item.custom_url"
           :target="`${ item.custom_url ? '_blank' : '_self' }`"
           plain
           color="white">
@@ -28,7 +29,8 @@
         <v-btn
           v-for="item in menuItemsBottom"
           :key="item.id"
-          :to="item.custom_url ? item.custom_url : item.link_to_page.url"
+          :to="item.link_to_page && item.link_to_page.url"
+          :href="item.custom_url && item.custom_url"
           :target="`${ item.custom_url ? '_blank' : '_self' }`"
           plain
           color="white">
@@ -68,7 +70,8 @@
         <v-btn
           v-for="item in socialMenuItems"
           :key="item.id"
-          :to="item.custom_url ? item.custom_url : item.link_to_page.url"
+          :to="item.link_to_page && item.link_to_page.url"	
+          :href="item.custom_url && item.custom_url"
           text
           dark
           :target="`${ item.custom_url ? '_blank' : '_self' }`"
