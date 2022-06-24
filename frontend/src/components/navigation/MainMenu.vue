@@ -16,7 +16,12 @@
                 v-on="on"
                 class="menu-btn"
               >
-                  {{ item.menu_label }}
+                    <v-list-item-content>
+          <v-list-item-title
+            :id="attrs['aria-labelledby']"
+            v-text="item.menu_label"
+          ></v-list-item-title> 
+                    </v-list-item-content>
               </v-btn>
             </template>
             <v-list>
