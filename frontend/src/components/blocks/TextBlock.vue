@@ -1,5 +1,7 @@
 <template>
   <div
+    :role="textRole"
+    :aria-level="textLevel"
     :class="[textClass, 'black--text']"
     :variant="textVariant"
     v-html="content">
@@ -36,6 +38,42 @@ export default {
 
       return textClass
     },
+    textRole() {
+      let role = ''
+
+      switch (this.block.type) {
+        case 'header':
+          role = `heading`
+          break
+        case 'paragraph':
+          role=''    
+          break
+        default:
+          role=''
+        break
+      }
+
+      return role
+    },
+    
+    textLevel() {
+      let level = ''
+
+      switch (this.block.type) {
+        case 'header':
+          level = this.block.data.level
+          break
+        case 'paragraph':
+          level=''    
+          break
+        default:
+          level=''
+        break
+      }
+
+      return level
+    },
+    
     textVariant() {
       let variant = ''
 
@@ -53,6 +91,7 @@ export default {
 
       return variant
     },
+        
     content() {
       return this.block.data.text
     }
