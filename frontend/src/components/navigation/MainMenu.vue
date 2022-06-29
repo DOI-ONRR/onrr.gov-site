@@ -2,7 +2,10 @@
   <div>
     <label v-if="$apollo.loading" text=""></label>
     <nav id="main-menu" class="primary" v-else>
-          <v-menu
+        <ul>
+        <li v-for="item in menuItems" :key="item.id">
+
+<v-menu
             open-on-hover
             offset-y>
             <template v-slot:activator="{ on, attrs }">
@@ -15,18 +18,15 @@
                 class="menu-btn"
              >
              <v-list-item-content>
-      <ul>
-        <li v-for="item in menuItems" :key="item.id">
-
-<v-list-item-title
+              <v-list-item-title
             :id="attrs['aria-labelledby']"
             v-text="item.menu_label"
           >
-	  </v-list-item-title> 
+             </v-list-item-title> 
             </v-list-item-content>
-     </v-btn>
+          </v-btn>
   </template>
-            <v-list>
+          <v-list>
               <v-list-item :to="item.link_to_page.url" class="menu-btn">
                 {{ `${ item.menu_label } Home` }}
               </v-list-item>
