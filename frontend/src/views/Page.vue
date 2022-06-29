@@ -6,11 +6,11 @@
     <div v-else class="page-wrap">
       <div v-if="!isMobile">
         <Breadcrumbs />
-        <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+        <div variant='h1' class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
       </div>
 
       <div v-if="isMobile">
-        <div class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+        <div variant='h1' class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
         <SideMenu />
         <Breadcrumbs />
       </div>

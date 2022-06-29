@@ -1,6 +1,7 @@
 <template>
   <div
     :class="[textClass, 'black--text']"
+    :variant="textVariant"
     v-html="content">
   </div>
 </template>
@@ -34,6 +35,23 @@ export default {
       }
 
       return textClass
+    },
+    textVariant() {
+      let variant = ''
+
+      switch (this.block.type) {
+        case 'header':
+          variant = `h${this.block.data.level}`
+          break
+        case 'paragraph':
+         variant = `body1`
+          break
+        default:
+          variant = `body1`
+          break
+      }
+
+      return variant
     },
     content() {
       return this.block.data.text
