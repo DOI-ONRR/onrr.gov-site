@@ -17,11 +17,14 @@
     "node-fetch": "^2.6.1",
     "puppeteer": "^13.0.1",
     "react": "^17.0.2",
+    "serve": "^13.0.2",
     "slugify": "^1.6.3",
     "vue": "^2.6.0",
+    "vue-analytics": "^5.22.1",
     "vue-apollo": "^3.1.0",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.5.3",
+    "vue-tag": "^1.0.0",
     "vuetify": "^2.6.4"
   },
   "devDependencies": {

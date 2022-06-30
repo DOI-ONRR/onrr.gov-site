@@ -7,6 +7,8 @@ import fetch from 'node-fetch'
 import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import possibleTypes from './json/possibleTypes.json'
+//import VueGtag from "vue-gtag";
+import VueAnalytics from 'vue-analytics'
 
 const cache = new InMemoryCache({
   possibleTypes
@@ -58,7 +60,9 @@ const apolloProvider = new VueApollo({
 Vue.config.productionTip = false
 Vue.use(VueApollo)
 Vue.use(VueMeta)
-
+Vue.use(VueAnalytics, {
+  id: 'GTM-NCRF98R'
+})
 new Vue({
   vuetify,
   apolloProvider,
