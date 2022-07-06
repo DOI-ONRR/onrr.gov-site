@@ -165,6 +165,7 @@ export const pageFields = gql`
     slug
     hero_image {
       id
+      description
     }
     hero_title
     page_blocks {

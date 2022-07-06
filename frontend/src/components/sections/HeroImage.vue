@@ -2,7 +2,7 @@
   <div :class="[isHome ? 'hero-container home' : 'hero-container']">
     <img 
     :src="image"
-    :alt="title" />
+    :alt="alt" />
 
     <h1 :class="[isHome ? 'hero__home-text' : 'hero__text']" v-if="title">
       {{ title }}
