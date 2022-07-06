@@ -2,7 +2,7 @@
   <div :class="[isHome ? 'hero-container home' : 'hero-container']">
     <img 
     :src="image"
-    :alt="alt" />
+    :alt="description" />
 
     <h1 :class="[isHome ? 'hero__home-text' : 'hero__text']" v-if="title">
       {{ title }}
@@ -18,6 +18,9 @@ export default {
   },
   props: {
     title: {
+      type: String
+    },
+    description: {
       type: String
     },
     image: {
