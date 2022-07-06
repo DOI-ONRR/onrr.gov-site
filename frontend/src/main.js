@@ -61,7 +61,8 @@ Vue.config.productionTip = false
 Vue.use(VueApollo)
 Vue.use(VueMeta)
 Vue.use(VueAnalytics, {
-  id: 'GTM-NCRF98R'
+  id: 'GTM-NCRF98R',
+  router
 })
 new Vue({
   vuetify,
