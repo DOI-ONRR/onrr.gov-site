@@ -1,635 +1,3194 @@
-<?xml version="1.0"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?xml version='1.0'?>
+<urlset>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/</loc>
+        <loc>https://onrr.gov/</loc>
         <lastmod>2022-07-01T15:44:40.899Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/404</loc>
+        <loc>https://onrr.gov/404</loc>
         <lastmod>2022-01-27T22:56:46.740Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about</loc>
+        <loc>https://onrr.gov/about</loc>
         <lastmod>2022-05-11T19:19:42.513Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/anti-harassment</loc>
+        <loc>https://onrr.gov/about/anti-harassment</loc>
         <lastmod>2022-03-21T16:43:24.250Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/components</loc>
+        <loc>https://onrr.gov/about/components</loc>
         <lastmod>2022-05-23T21:20:56.933Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact</loc>
+        <loc>https://onrr.gov/about/contact</loc>
         <lastmod>2022-05-23T21:24:14.092Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/4444-contacts</loc>
+        <loc>https://onrr.gov/about/contact/4444-contacts</loc>
         <lastmod>2022-04-11T13:06:24.490Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/company-contacts</loc>
+        <loc>https://onrr.gov/about/contact/company-contacts</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/compliance-contacts</loc>
+        <loc>https://onrr.gov/about/contact/compliance-contacts</loc>
         <lastmod>2022-04-11T13:02:36.455Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/geothermal-contacts</loc>
+        <loc>https://onrr.gov/about/contact/geothermal-contacts</loc>
         <lastmod>2022-04-12T14:41:15.642Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/getting-started-contacts</loc>
+        <loc>https://onrr.gov/about/contact/getting-started-contacts</loc>
         <lastmod>2022-04-08T20:46:17.683Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/indian-contacts</loc>
+        <loc>https://onrr.gov/about/contact/indian-contacts</loc>
         <lastmod>2022-05-17T20:43:24.791Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/information-request-contacts</loc>
+        <loc>https://onrr.gov/about/contact/information-request-contacts</loc>
         <lastmod>2022-05-23T21:15:18.492Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/lease-agreement-contacts</loc>
+        <loc>https://onrr.gov/about/contact/lease-agreement-contacts</loc>
         <lastmod>2022-04-08T20:48:30.881Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/paying-contacts</loc>
+        <loc>https://onrr.gov/about/contact/paying-contacts</loc>
         <lastmod>2022-05-18T13:30:10.133Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/production-contacts</loc>
+        <loc>https://onrr.gov/about/contact/production-contacts</loc>
         <lastmod>2022-05-11T13:52:17.252Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/rent-contacts</loc>
+        <loc>https://onrr.gov/about/contact/rent-contacts</loc>
         <lastmod>2022-04-20T15:46:29.994Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/royalty-contacts</loc>
+        <loc>https://onrr.gov/about/contact/royalty-contacts</loc>
         <lastmod>2022-05-02T17:11:44.695Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/search-results</loc>
+        <loc>https://onrr.gov/about/contact/search-results</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/solids-contacts</loc>
+        <loc>https://onrr.gov/about/contact/solids-contacts</loc>
         <lastmod>2022-06-15T13:44:39.674Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/system-access-contacts</loc>
+        <loc>https://onrr.gov/about/contact/system-access-contacts</loc>
         <lastmod>2022-04-11T12:39:14.213Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/contact/valuation-contacts</loc>
+        <loc>https://onrr.gov/about/contact/valuation-contacts</loc>
         <lastmod>2022-04-11T13:21:34.764Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/employment</loc>
+        <loc>https://onrr.gov/about/employment</loc>
         <lastmod>2022-07-05T15:49:09.414Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/engagement</loc>
+        <loc>https://onrr.gov/about/engagement</loc>
         <lastmod>2022-05-20T13:27:31.170Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/engagement/ionr</loc>
+        <loc>https://onrr.gov/about/engagement/ionr</loc>
         <lastmod>2022-01-21T21:09:26.719Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/foia</loc>
+        <loc>https://onrr.gov/about/foia</loc>
         <lastmod>2022-04-27T16:10:07.522Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/interagency</loc>
+        <loc>https://onrr.gov/about/interagency</loc>
         <lastmod>2022-05-12T20:48:05.096Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/office-locations</loc>
+        <loc>https://onrr.gov/about/office-locations</loc>
         <lastmod>2022-05-11T17:11:30.273Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/organization</loc>
+        <loc>https://onrr.gov/about/organization</loc>
         <lastmod>2022-05-20T20:06:44.825Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/page-builder-example</loc>
+        <loc>https://onrr.gov/about/page-builder-example</loc>
         <lastmod>2022-06-22T20:27:22.468Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/about/public-affairs</loc>
+        <loc>https://onrr.gov/about/public-affairs</loc>
         <lastmod>2022-06-08T18:32:26.796Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/compliance-enforcement</loc>
+        <loc>https://onrr.gov/compliance-enforcement</loc>
         <lastmod>2022-03-15T16:11:05.596Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/compliance-enforcement/appeals</loc>
+        <loc>https://onrr.gov/compliance-enforcement/appeals</loc>
         <lastmod>2022-04-11T12:45:01.996Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/compliance-enforcement/compliance</loc>
+        <loc>https://onrr.gov/compliance-enforcement/compliance</loc>
         <lastmod>2022-06-29T20:22:48.278Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/compliance-enforcement/cooperative</loc>
+        <loc>https://onrr.gov/compliance-enforcement/cooperative</loc>
         <lastmod>2022-05-11T16:56:12.066Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/compliance-enforcement/enforcement</loc>
+        <loc>https://onrr.gov/compliance-enforcement/enforcement</loc>
         <lastmod>2022-04-11T18:57:51.795Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/disclaimer</loc>
+        <loc>https://onrr.gov/disclaimer</loc>
         <lastmod>2022-03-15T17:48:43.207Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/events</loc>
+        <loc>https://onrr.gov/events</loc>
         <lastmod>2022-06-29T14:28:23.127Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/getting-started</loc>
+        <loc>https://onrr.gov/getting-started</loc>
         <lastmod>2022-04-20T13:32:46.374Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/getting-started/how-leasing-works</loc>
+        <loc>https://onrr.gov/getting-started/how-leasing-works</loc>
         <lastmod>2022-07-05T15:43:10.107Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/getting-started/new-reporter-checklist</loc>
+        <loc>https://onrr.gov/getting-started/new-reporter-checklist</loc>
         <lastmod>2022-05-11T16:41:45.701Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/getting-started/new-reporter-training</loc>
+        <loc>https://onrr.gov/getting-started/new-reporter-training</loc>
         <lastmod>2022-04-15T13:55:14.169Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/getting-started/system-access</loc>
+        <loc>https://onrr.gov/getting-started/system-access</loc>
         <lastmod>2022-06-08T19:42:05.707Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/glossary</loc>
+        <loc>https://onrr.gov/glossary</loc>
         <lastmod>2022-06-10T17:21:42.788Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/indian</loc>
+        <loc>https://onrr.gov/indian</loc>
         <lastmod>2022-05-06T16:39:10.866Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/indian/assistance</loc>
+        <loc>https://onrr.gov/indian/assistance</loc>
         <lastmod>2022-06-15T12:44:08.282Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/indian/contacts-indian 2022-03-24 17:11:00.835827+00</loc>
+        <loc>https://onrr.gov/indian/contacts-indian 2022-03-24 17:11:00.835827+00</loc>
         <lastmod>2021-07-20T16:57:47.927Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/indian/indian-pricing</loc>
+        <loc>https://onrr.gov/indian/indian-pricing</loc>
         <lastmod>2022-06-14T19:11:20.694Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/indian/indian-references</loc>
+        <loc>https://onrr.gov/indian/indian-references</loc>
         <lastmod>2022-05-04T18:29:56.349Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/indian/lockbox-payments</loc>
+        <loc>https://onrr.gov/indian/lockbox-payments</loc>
         <lastmod>2022-07-05T19:26:26.079Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/indian/tribal-consultation</loc>
+        <loc>https://onrr.gov/indian/tribal-consultation</loc>
         <lastmod>2022-05-09T22:53:36.235Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/paying</loc>
+        <loc>https://onrr.gov/paying</loc>
         <lastmod>2022-04-29T17:48:37.211Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/paying/contacts-paying</loc>
+        <loc>https://onrr.gov/paying/contacts-paying</loc>
         <lastmod>2022-05-04T13:28:27.803Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/paying/interest</loc>
+        <loc>https://onrr.gov/paying/interest</loc>
         <lastmod>2022-06-01T15:14:17.242Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/paying/joint-leases 2022-03-24 17:11:00.835827+00</loc>
+        <loc>https://onrr.gov/paying/joint-leases 2022-03-24 17:11:00.835827+00</loc>
         <lastmod>2021-07-21T14:23:57.783Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/paying/payment-options</loc>
+        <loc>https://onrr.gov/paying/payment-options</loc>
         <lastmod>2022-06-15T13:49:25.216Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/paying/unpaid-debt</loc>
+        <loc>https://onrr.gov/paying/unpaid-debt</loc>
         <lastmod>2022-05-20T19:47:08.956Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references</loc>
+        <loc>https://onrr.gov/references</loc>
         <lastmod>2022-04-11T18:49:34.815Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/forms</loc>
+        <loc>https://onrr.gov/references/forms</loc>
         <lastmod>2022-03-24T18:25:29.142Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/frns</loc>
+        <loc>https://onrr.gov/references/frns</loc>
         <lastmod>2022-04-11T18:52:43.589Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/handbooks</loc>
+        <loc>https://onrr.gov/references/handbooks</loc>
         <lastmod>2022-06-09T17:34:00.889Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/handbooks/geothermal-class-1</loc>
+        <loc>https://onrr.gov/references/handbooks/geothermal-class-1</loc>
         <lastmod>2022-05-18T19:48:02.606Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/handbooks/geothermal-class-2-and-3</loc>
+        <loc>https://onrr.gov/references/handbooks/geothermal-class-2-and-3</loc>
         <lastmod>2022-05-18T19:48:36.904Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/handbooks/indian-payor-handbook</loc>
+        <loc>https://onrr.gov/references/handbooks/indian-payor-handbook</loc>
         <lastmod>2022-06-09T18:35:44.258Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/handbooks/minerals-production-reporter-handbook</loc>
+        <loc>https://onrr.gov/references/handbooks/minerals-production-reporter-handbook</loc>
         <lastmod>2022-04-29T21:35:51.200Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/handbooks/minerals-revenue-reporter-handbook</loc>
+        <loc>https://onrr.gov/references/handbooks/minerals-revenue-reporter-handbook</loc>
         <lastmod>2022-05-18T19:05:55.281Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/handbooks/solid-minerals-reporter-handbook</loc>
+        <loc>https://onrr.gov/references/handbooks/solid-minerals-reporter-handbook</loc>
         <lastmod>2022-05-02T15:20:05.901Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs</loc>
+        <loc>https://onrr.gov/references/icrs</loc>
         <lastmod>2022-04-11T18:56:07.607Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0042</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0042</loc>
         <lastmod>2022-03-08T15:44:00.895Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0061</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0061</loc>
         <lastmod>2022-03-08T15:42:14.422Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0074</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0074</loc>
         <lastmod>2022-03-08T15:33:08.809Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0075</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0075</loc>
         <lastmod>2022-03-08T15:41:54.767Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0088</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0088</loc>
         <lastmod>2022-03-08T15:40:27.856Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0090</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0090</loc>
         <lastmod>2022-03-08T15:28:16.645Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0095</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0095</loc>
         <lastmod>2022-03-08T15:41:35.205Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0104</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0104</loc>
         <lastmod>2022-03-08T15:41:09.767Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0110</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0110</loc>
         <lastmod>2022-03-08T15:32:31.576Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0113</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0113</loc>
         <lastmod>2022-03-08T15:42:35.014Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0121</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0121</loc>
         <lastmod>2022-03-08T15:44:19.406Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0123</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0123</loc>
         <lastmod>2022-03-08T15:44:39.042Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0126</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0126</loc>
         <lastmod>2022-03-08T15:43:42.138Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0129</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0129</loc>
         <lastmod>2022-03-08T15:43:19.418Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0135</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0135</loc>
         <lastmod>2022-03-08T15:42:56.073Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0138</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0138</loc>
         <lastmod>2022-03-08T15:40:49.015Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0140</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0140</loc>
         <lastmod>2022-01-31T14:41:00.652Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1010-0169</loc>
+        <loc>https://onrr.gov/references/icrs/1010-0169</loc>
         <lastmod>2022-03-08T15:31:58.507Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0001</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0001</loc>
         <lastmod>2022-01-26T15:17:58.564Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0002</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0002</loc>
         <lastmod>2022-03-18T12:40:36.313Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0003</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0003</loc>
         <lastmod>2022-01-26T15:19:03.329Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0004</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0004</loc>
         <lastmod>2022-03-18T12:44:12.473Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0005</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0005</loc>
         <lastmod>2022-03-18T12:46:14.266Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0006</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0006</loc>
         <lastmod>2022-03-18T12:48:58.217Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0007</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0007</loc>
         <lastmod>2022-03-08T15:27:33.039Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0008</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0008</loc>
         <lastmod>2022-03-18T12:50:39.119Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0009</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0009</loc>
         <lastmod>2022-01-26T15:19:23.744Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0010</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0010</loc>
         <lastmod>2022-04-19T19:54:38.510Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/icrs/1012-0012</loc>
+        <loc>https://onrr.gov/references/icrs/1012-0012</loc>
         <lastmod>2022-03-08T15:27:09.969Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/reference-lists</loc>
+        <loc>https://onrr.gov/references/reference-lists</loc>
         <lastmod>2022-06-09T20:04:01.521Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/reporter-letters</loc>
+        <loc>https://onrr.gov/references/reporter-letters</loc>
         <lastmod>2022-04-11T15:01:36.391Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/reporter-training 2022-03-24 17:11:00.835827+00</loc>
+        <loc>https://onrr.gov/references/reporter-training 2022-03-24 17:11:00.835827+00</loc>
         <lastmod>2021-07-16T17:23:50.828Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings</loc>
+        <loc>https://onrr.gov/references/rulemakings</loc>
         <lastmod>2022-04-04T17:43:31.735Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/89coal</loc>
+        <loc>https://onrr.gov/references/rulemakings/89coal</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa02</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa02</loc>
         <lastmod>2022-01-27T19:43:25.458Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa03</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa03</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa04</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa04</loc>
         <lastmod>2022-01-27T15:43:06.386Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa05</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa05</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa08</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa08</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa11</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa11</loc>
         <lastmod>2022-01-27T15:27:55.070Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa13</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa13</loc>
         <lastmod>2022-01-28T14:23:56.094Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa14</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa14</loc>
         <lastmod>2022-01-28T14:23:06.397Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa15</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa15</loc>
         <lastmod>2022-05-31T18:30:43.939Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa17</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa17</loc>
         <lastmod>2022-01-27T15:25:11.340Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa20</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa20</loc>
         <lastmod>2022-01-28T14:19:56.963Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa21</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa21</loc>
         <lastmod>2022-05-31T18:23:50.300Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa22</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa22</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa23</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa23</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa24</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa24</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa25</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa25</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa26</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa26</loc>
         <lastmod>2022-01-27T14:17:39.695Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa27</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa27</loc>
         <lastmod>2022-01-27T14:08:37.457Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa28</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa28</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/aa29</loc>
+        <loc>https://onrr.gov/references/rulemakings/aa29</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ab17</loc>
+        <loc>https://onrr.gov/references/rulemakings/ab17</loc>
         <lastmod>2022-01-28T00:10:36.226Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ab57</loc>
+        <loc>https://onrr.gov/references/rulemakings/ab57</loc>
         <lastmod>2022-01-28T14:00:20.281Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac00</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac00</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac06</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac06</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac08</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac08</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac21</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac21</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac25</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac25</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac30</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac30</loc>
         <lastmod>2022-01-28T13:56:47.505Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac38</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac38</loc>
         <lastmod>2022-01-28T13:54:45.537Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac40</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac40</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac51</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac51</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac59</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac59</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac70</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac70</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac72</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac72</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ac86</loc>
+        <loc>https://onrr.gov/references/rulemakings/ac86</loc>
         <lastmod>2022-03-17T20:57:29.866Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad00</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad00</loc>
         <lastmod>2022-03-17T20:25:45.322Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad01</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad01</loc>
         <lastmod>2022-03-17T20:55:21.271Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad04</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad04</loc>
         <lastmod>2022-01-28T14:05:06.271Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad05</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad05</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad20</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad20</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad22</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad22</loc>
         <lastmod>2022-03-17T20:20:37.813Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad28</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad28</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad32</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad32</loc>
         <lastmod>null</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/rulemakings/ad70</loc>
+        <loc>https://onrr.gov/references/rulemakings/ad70</loc>
         <lastmod>2022-01-27T15:29:29.761Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/statutes</loc>
+        <loc>https://onrr.gov/references/statutes</loc>
         <lastmod>2022-04-11T18:47:17.294Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/statutes/fogrma-amendments</loc>
+        <loc>https://onrr.gov/references/statutes/fogrma-amendments</loc>
         <lastmod>2022-06-09T20:24:40.469Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/training</loc>
+        <loc>https://onrr.gov/references/training</loc>
         <lastmod>2022-06-16T12:39:07.959Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/valuation</loc>
+        <loc>https://onrr.gov/references/valuation</loc>
         <lastmod>2022-06-15T13:47:07.826Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/valuation/pop-example</loc>
+        <loc>https://onrr.gov/references/valuation/pop-example</loc>
         <lastmod>2022-06-15T12:53:35.767Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/references/valuation/processed-gas-example</loc>
+        <loc>https://onrr.gov/references/valuation/processed-gas-example</loc>
         <lastmod>2022-06-15T13:06:35.737Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/reporting</loc>
+        <loc>https://onrr.gov/reporting</loc>
         <lastmod>2022-05-13T20:12:26.494Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/reporting/geothermal</loc>
+        <loc>https://onrr.gov/reporting/geothermal</loc>
         <lastmod>2022-06-14T19:35:35.311Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/reporting/production</loc>
+        <loc>https://onrr.gov/reporting/production</loc>
         <lastmod>2022-06-27T16:41:16.184Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/reporting/revenue</loc>
+        <loc>https://onrr.gov/reporting/revenue</loc>
         <lastmod>2022-06-14T19:49:48.775Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/reporting/solids</loc>
+        <loc>https://onrr.gov/reporting/solids</loc>
         <lastmod>2022-06-15T13:45:35.074Z</lastmod>
     </url>
     <url>
-        <loc>https://dev-onrr-frontend.app.cloud.gov/site-map</loc>
+        <loc>https://onrr.gov/site-map</loc>
         <lastmod>2022-07-05T18:57:58.854Z</lastmod>
     </url>
+<url>
+        <loc>https://onrr.gov/document/fedagmts.xlsx</loc>
+        <lastmod>2022-03-15T19:23:37.883Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ERRORS.2014.Reporting.pptx</loc>
+        <lastmod>2022-03-16T15:36:28.154Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR WES Supplemental Statistical Report 2017-09-29.pdf</loc>
+        <lastmod>2022-03-03T17:27:23.365Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4110.pdf</loc>
+        <lastmod>2022-03-07T21:06:15.010Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4440.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.610Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/74156.pdf</loc>
+        <lastmod>2022-03-08T15:06:52.522Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Abbreviations.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.646Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Abbreviations.pdf</loc>
+        <lastmod>2022-03-09T12:21:38.732Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Abbreviations.pdf</loc>
+        <lastmod>2022-03-09T12:08:59.097Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Abbreviations-Class-1.pdf</loc>
+        <lastmod>2022-03-09T03:47:58.704Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Abbreviations.pdf</loc>
+        <lastmod>2022-03-09T03:56:24.625Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR_External_User_Acceptable_Use_Policy.pdf</loc>
+        <lastmod>2022-03-02T16:56:57.040Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Accounts.Receivable.FED.Basic.pptx</loc>
+        <lastmod>2022-03-16T15:36:44.198Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/CRLNumber.xlsx</loc>
+        <lastmod>2022-03-15T21:33:35.760Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Alaska-Metering-Systems.xlsx</loc>
+        <lastmod>2022-03-15T20:56:19.168Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ALwState.xlsx</loc>
+        <lastmod>2022-03-15T21:30:12.396Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Appendix-A-B-Class-1.pdf</loc>
+        <lastmod>2022-03-09T03:47:59.276Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Appendix-A-B-Class-2-3.pdf</loc>
+        <lastmod>2022-03-09T03:53:32.893Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Appendix.A.pdf</loc>
+        <lastmod>2022-03-09T12:21:40.999Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Appendix_A.pdf</loc>
+        <lastmod>2022-03-09T12:09:02.370Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-A.pdf</loc>
+        <lastmod>2022-03-09T19:56:12.674Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-B.pdf</loc>
+        <lastmod>2022-03-09T19:56:14.637Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Appendix.B.pdf</loc>
+        <lastmod>2022-03-09T12:21:41.560Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Appendix_B.pdf</loc>
+        <lastmod>2022-03-09T12:08:58.911Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Appendix_C.pdf</loc>
+        <lastmod>2022-03-09T12:08:59.156Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Appendix.C.pdf</loc>
+        <lastmod>2022-03-09T12:21:41.029Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-C.pdf</loc>
+        <lastmod>2022-03-09T19:56:10.764Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-D.pdf</loc>
+        <lastmod>2022-03-09T19:56:10.894Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Appendix_D.pdf</loc>
+        <lastmod>2022-03-09T12:09:00.934Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Appendix.D.pdf</loc>
+        <lastmod>2022-03-09T12:21:39.031Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-E.pdf</loc>
+        <lastmod>2022-03-09T19:56:13.111Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Appendix.E.pdf</loc>
+        <lastmod>2022-03-09T12:21:36.423Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Appendix_E.pdf</loc>
+        <lastmod>2022-03-09T12:08:59.200Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Appendix_F.pdf</loc>
+        <lastmod>2022-03-09T12:08:59.480Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Appendix.F.pdf</loc>
+        <lastmod>2022-03-09T12:21:37.272Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-F.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.010Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Appendix.G.pdf</loc>
+        <lastmod>2022-03-09T12:21:36.731Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-G.pdf</loc>
+        <lastmod>2022-03-09T19:56:15.439Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-H.pdf</loc>
+        <lastmod>2022-03-09T19:56:12.587Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-I.pdf</loc>
+        <lastmod>2022-03-09T19:56:14.118Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-J.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.274Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-K.pdf</loc>
+        <lastmod>2022-03-09T19:56:12.598Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-L.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.426Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-M.pdf</loc>
+        <lastmod>2022-03-09T19:56:12.515Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-N.pdf</loc>
+        <lastmod>2022-03-09T19:56:12.302Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Appendix-O.pdf</loc>
+        <lastmod>2022-03-09T19:56:10.922Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ACHInst.pdf</loc>
+        <lastmod>2022-03-08T21:07:49.565Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Basic.Lease.and.Agreements.pptx</loc>
+        <lastmod>2022-03-16T15:37:15.621Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Billing.pptx</loc>
+        <lastmod>2022-03-16T15:37:06.735Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-1-Class-1.pdf</loc>
+        <lastmod>2022-03-09T03:47:59.737Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-1-Class-2-3.pdf</loc>
+        <lastmod>2022-03-09T03:53:32.606Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Chapter-1.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.301Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.1.pdf</loc>
+        <lastmod>2022-03-09T12:21:37.580Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_1.pdf</loc>
+        <lastmod>2022-03-09T12:08:59.790Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.2.pdf</loc>
+        <lastmod>2022-03-09T12:21:46.097Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_2.pdf</loc>
+        <lastmod>2022-03-09T12:08:59.742Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Chapter-2.pdf</loc>
+        <lastmod>2022-03-09T19:56:12.328Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-2-Class-2-3.pdf</loc>
+        <lastmod>2022-03-09T03:53:33.348Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-2-Class-1.pdf</loc>
+        <lastmod>2022-03-09T03:48:00.352Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Chapter-3.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.805Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.3.pdf</loc>
+        <lastmod>2022-03-09T12:21:39.159Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_3.pdf</loc>
+        <lastmod>2022-03-09T12:09:10.025Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.3.Paper.pdf</loc>
+        <lastmod>2022-03-09T12:21:42.251Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-3-Class-2-3.pdf</loc>
+        <lastmod>2022-03-09T03:53:35.130Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-3-Class-1.pdf</loc>
+        <lastmod>2022-03-09T03:48:01.691Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-4-Class-1.pdf</loc>
+        <lastmod>2022-03-09T03:48:08.840Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Chapter-4.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.406Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_4.pdf</loc>
+        <lastmod>2022-03-09T12:09:00.209Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.4.pdf</loc>
+        <lastmod>2022-03-09T12:21:43.361Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-4-Class-2-3.pdf</loc>
+        <lastmod>2022-03-09T03:53:33.332Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-5-Class-2-3.pdf</loc>
+        <lastmod>2022-03-09T03:53:32.149Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Chapter-5.pdf</loc>
+        <lastmod>2022-03-09T19:56:29.326Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.5.pdf</loc>
+        <lastmod>2022-03-09T12:21:42.810Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_5.pdf</loc>
+        <lastmod>2022-03-09T12:09:03.663Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-5-Class-1.pdf</loc>
+        <lastmod>2022-03-09T03:48:02.720Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.6.pdf</loc>
+        <lastmod>2022-03-09T12:21:44.172Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Chapter-6-Class-1.pdf</loc>
+        <lastmod>2022-03-09T03:47:59.452Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Chapter-6.pdf</loc>
+        <lastmod>2022-03-09T19:56:13.088Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_6.pdf</loc>
+        <lastmod>2022-03-09T12:09:02.347Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Chapter-7.pdf</loc>
+        <lastmod>2022-03-09T19:56:15.370Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_7.pdf</loc>
+        <lastmod>2022-03-09T12:09:06.406Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.7.pdf</loc>
+        <lastmod>2022-03-09T12:21:44.208Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.8.pdf</loc>
+        <lastmod>2022-03-09T12:21:44.664Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_8.pdf</loc>
+        <lastmod>2022-03-09T12:09:04.600Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Chapter.9.pdf</loc>
+        <lastmod>2022-03-09T12:21:40.051Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Chapter_9.pdf</loc>
+        <lastmod>2022-03-09T12:09:07.410Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/173_CMP2014_Industry_View.pptx</loc>
+        <lastmod>2022-03-16T15:37:31.027Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MOU ONRR-BOEM-BSEE_March 2013.pdf</loc>
+        <lastmod>2022-03-10T23:11:02.867Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Royalty.Transaction.Codes.pptx</loc>
+        <lastmod>2022-03-16T15:36:57.712Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Concurrence Memo June 2013.pdf</loc>
+        <lastmod>2022-03-10T23:11:51.744Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Offshore-Standard-UCA-Cryo-Example.pdf</loc>
+        <lastmod>2022-03-11T17:16:35.225Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/csv_Rent_example.pdf</loc>
+        <lastmod>2022-03-08T21:15:51.114Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Curable Violations.pdf</loc>
+        <lastmod>2022-03-11T22:10:19.118Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Current-Pipeline-Condensate-Systems.pdf</loc>
+        <lastmod>2022-03-08T16:50:50.695Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/TranCodes.pdf</loc>
+        <lastmod>2022-03-08T17:06:20.436Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/dispAdj.pdf</loc>
+        <lastmod>2022-03-08T16:50:51.372Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Processed Gas Example Final 05262020.pdf</loc>
+        <lastmod>2022-03-11T17:25:18.694Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/POP-Example-Pre-2016-05212020-Final.pdf</loc>
+        <lastmod>2022-03-11T17:25:17.132Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Example-processed-gas-plant-statement-03102020.pdf</loc>
+        <lastmod>2022-03-11T17:25:14.476Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/eCommerce_2012.pdf</loc>
+        <lastmod>2022-03-08T20:40:46.482Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/eCommerce_Online_Rental_FAQ.pdf</loc>
+        <lastmod>2022-03-08T21:10:55.681Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/eCommerce_Reporting_Website_User_Guide.pdf</loc>
+        <lastmod>2022-03-08T20:40:45.105Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Edit.11030.Inventory.Error.pptx</loc>
+        <lastmod>2022-03-16T15:36:28.356Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RMMLF-OE-Presentation-2021.pptx</loc>
+        <lastmod>2022-03-11T22:10:29.236Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Example-processed-gas-plant-statement-03102020.pdf</loc>
+        <lastmod>2022-03-18T13:42:58.364Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Offshore.FMP-PASR.pptx</loc>
+        <lastmod>2022-03-16T15:37:06.325Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/FCIL.xlsx</loc>
+        <lastmod>2022-03-15T19:22:37.252Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2014.Federal.Adjustments.pptx</loc>
+        <lastmod>2022-03-16T15:36:47.412Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Federal.Processed.Gas.Reporting.pdf</loc>
+        <lastmod>2022-03-11T21:25:51.400Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/fedwire.pdf</loc>
+        <lastmod>2022-03-08T21:09:11.358Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/74157.pdf</loc>
+        <lastmod>2022-03-08T13:47:57.148Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2017.pdf</loc>
+        <lastmod>2022-03-11T22:10:18.695Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2018.pdf</loc>
+        <lastmod>2022-03-11T22:10:18.463Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2019.pdf</loc>
+        <lastmod>2022-03-11T22:10:18.625Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2020.pdf</loc>
+        <lastmod>2022-03-11T22:10:19.204Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2021.pdf</loc>
+        <lastmod>2022-03-11T22:10:18.718Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/FLTerm.xlsx</loc>
+        <lastmod>2022-03-15T19:21:21.965Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2014.Reporting.pptx</loc>
+        <lastmod>2022-03-16T15:36:48.349Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4293s1a.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.885Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Form_CMP2014_Industry_FAQ.pdf</loc>
+        <lastmod>2022-03-08T17:06:20.337Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2014.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.809Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ASC2014Rev.pdf</loc>
+        <lastmod>2022-03-07T21:06:12.895Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Codes_for_2014.pdf</loc>
+        <lastmod>2022-03-08T17:06:17.995Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2014CLEdits.pdf</loc>
+        <lastmod>2022-03-08T17:06:20.534Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/CSV2014Rev.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.562Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SamExcel2014csv.xlsx</loc>
+        <lastmod>2022-03-07T21:06:13.177Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Geothermal Codes for Form ONRR-2014.docx</loc>
+        <lastmod>2022-03-16T15:25:25.167Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Reporter Training FAQ- Production.docx</loc>
+        <lastmod>2022-04-06T14:25:46.962Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4054-a.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.689Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4054-b.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.644Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4054-c.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.682Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4058.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.695Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4109.pdf</loc>
+        <lastmod>2022-03-07T21:06:15.035Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4292.pdf</loc>
+        <lastmod>2022-03-07T21:06:11.510Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4292s1a.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.652Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4292s1.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.714Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4292s1b.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.840Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4292ss1a.pdf</loc>
+        <lastmod>2022-03-07T21:06:10.876Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4293.pdf</loc>
+        <lastmod>2022-03-07T21:06:12.240Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4293s1.pdf</loc>
+        <lastmod>2022-03-07T21:06:11.150Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4293s1b.pdf</loc>
+        <lastmod>2022-03-07T21:06:11.458Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4293ss1a.pdf</loc>
+        <lastmod>2022-03-07T21:06:11.436Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4295.pdf</loc>
+        <lastmod>2022-03-07T21:06:15.313Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4393.pdf</loc>
+        <lastmod>2022-03-07T21:06:12.729Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4410.pdf</loc>
+        <lastmod>2022-03-07T21:06:14.268Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4411.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.569Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Form.ONRR-4430.PR.pptx</loc>
+        <lastmod>2022-03-16T16:06:44.347Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4435.pdf</loc>
+        <lastmod>2022-03-07T21:06:12.048Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4436.pdf</loc>
+        <lastmod>2022-03-07T21:06:12.380Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4437.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.043Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4440Instr.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.579Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR4444.pdf</loc>
+        <lastmod>2022-03-02T16:56:57.016Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR4444_Instructions.pdf</loc>
+        <lastmod>2022-03-02T16:56:56.984Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/W-9_Instructions.pdf</loc>
+        <lastmod>2022-03-02T16:56:57.009Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Gas_Plant_Listing.xlsx</loc>
+        <lastmod>2022-03-15T19:13:53.209Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Class-1-Handbook.pdf</loc>
+        <lastmod>2022-03-09T03:46:29.678Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH_Glossary.pdf</loc>
+        <lastmod>2022-03-09T12:08:59.715Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-Glossary.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.730Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Glossary.pdf</loc>
+        <lastmod>2022-03-09T12:21:40.338Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Onshore Std UCA Example_Green River Basin_9.12.18 LS FINAL.pdf</loc>
+        <lastmod>2022-03-11T17:16:35.167Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/990520.pdf</loc>
+        <lastmod>2022-03-08T15:13:46.699Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/USGS-sodium-potassium-011877.pdf</loc>
+        <lastmod>2022-03-09T13:56:22.363Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Gulf-Buy-Back.xlsx</loc>
+        <lastmod>2022-03-15T19:09:21.038Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Gulf-Flash-Gas.xlsx</loc>
+        <lastmod>2022-03-15T19:09:20.758Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Gulf-Gas-Plants.xlsx</loc>
+        <lastmod>2022-03-15T19:09:20.912Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Gulf-Metering-Systems.xlsx</loc>
+        <lastmod>2022-03-15T19:09:20.860Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Gulf-Sales-Tanks.xlsx</loc>
+        <lastmod>2022-03-15T19:09:20.871Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Penalty.Collections.pdf</loc>
+        <lastmod>2022-03-11T22:10:20.297Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/How-to-calculate-a-Processing-UCA.pdf</loc>
+        <lastmod>2022-03-22T16:12:40.311Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/How-to-calculate-a-Transportation-UCA.pdf</loc>
+        <lastmod>2022-03-22T16:12:03.371Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Error_Msg_Production_HOW_TO.pdf</loc>
+        <lastmod>2022-03-08T20:40:44.088Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/How.to.Save.Your.OGOR.Reports.pptx</loc>
+        <lastmod>2022-03-16T15:37:28.837Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2014.Indian.Adjustments.pptx</loc>
+        <lastmod>2022-03-16T15:36:57.614Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/IndianDistributeeCodes.xlsx</loc>
+        <lastmod>2022-03-16T15:22:20.423Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Calendar-Year-2022-DistDates.pdf</loc>
+        <lastmod>2022-03-10T23:46:52.565Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Indian_Gas_Index_Zone_Map.pdf</loc>
+        <lastmod>2022-03-10T23:35:45.652Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Indian_Gas_Major_Portion_Map.pdf</loc>
+        <lastmod>2022-03-10T23:42:31.462Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Indian_Oil_Major_Portion_Map.pdf</loc>
+        <lastmod>2022-03-10T23:42:32.558Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Indian-Payor-Handbook-Chapter-2-Valuation-Basics-4.2019.pdf</loc>
+        <lastmod>2022-03-09T18:13:21.619Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Questions2014.PDF</loc>
+        <lastmod>2022-03-08T17:06:19.915Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Initial_Reporting_for_Unprocessed_Gas_in_Non-Index_Zone_MajorPortion_Areas.pdf</loc>
+        <lastmod>2022-05-19T12:57:08.280Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Interagency SOP Attachment A Addendum 1.pdf</loc>
+        <lastmod>2022-03-10T23:13:25.902Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/FINAL Interagency SOP - 09-23-13.pdf</loc>
+        <lastmod>2022-03-10T23:15:16.381Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Interest_Calculator_Master.xlsx</loc>
+        <lastmod>2022-03-15T21:49:41.028Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/IPA-5_USC_3371-3375.pdf</loc>
+        <lastmod>2022-03-11T22:14:03.629Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Indian-Payor-Handbook-Chapter-1-About-this-Handbook-9.2018.pdf</loc>
+        <lastmod>2022-03-09T18:13:16.878Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Indian-Payor-Handbook-Chapter-3-Oil-Valuation-2.2019.pdf</loc>
+        <lastmod>2022-03-09T18:13:17.231Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Knowing or Willful Violations.pdf</loc>
+        <lastmod>2022-03-11T22:10:19.197Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Class-2-3-Handbook.pdf</loc>
+        <lastmod>2022-03-09T03:53:38.149Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Liquid.Verification.System.and.Gas.Verification.Team.pptx</loc>
+        <lastmod>2022-03-16T15:37:51.286Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/UCA-calculations-accounting-and-contract-data-needs.pdf</loc>
+        <lastmod>2022-03-22T16:14:44.587Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/UCA-calculations-Engineering-Data-Needs.pdf</loc>
+        <lastmod>2022-03-22T16:14:16.822Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-List-of-Examples.pdf</loc>
+        <lastmod>2022-03-09T19:56:11.294Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/LVS-GVS.pptx</loc>
+        <lastmod>2022-03-16T15:37:42.762Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Title.page.pdf</loc>
+        <lastmod>2022-03-09T12:21:37.104Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Multi-Unit.Well.Agreements.pdf</loc>
+        <lastmod>2022-03-09T12:21:54.184Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR-Tribal-Consultation-Policy.pdf</loc>
+        <lastmod>2022-03-10T23:49:05.495Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Offshore-Standard-UCA-Lean-Oil-Example.xlsx</loc>
+        <lastmod>2022-03-18T13:19:10.314Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/OGOR-REPORTING-INSTRUCTIONS-ASCII-FORMAT.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.769Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/OGOR.CSV.REPORTING.pptx</loc>
+        <lastmod>2022-03-16T15:37:09.518Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/OGOR-REPORTING-INSTRUCTIONS-CSV-FORMAT.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.716Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SamExcelOGORcsv.xlsx</loc>
+        <lastmod>2022-03-07T21:06:13.585Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ERRORS.OGOR.Reporting.pptx</loc>
+        <lastmod>2022-03-16T15:37:08.654Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/OGORedits.pdf</loc>
+        <lastmod>2022-03-08T16:50:50.673Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ASCII_File_Rent_Instructions.pdf</loc>
+        <lastmod>2022-03-08T21:14:12.453Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Basic.OGOR.pptx</loc>
+        <lastmod>2022-03-16T15:36:59.715Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4425.pdf</loc>
+        <lastmod>2022-03-08T16:36:24.975Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Anti Harassment 8-2021.pdf</loc>
+        <lastmod>2022-03-03T17:27:20.221Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Audit.Module.pptx</loc>
+        <lastmod>2022-03-16T15:37:10.823Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR.Enforcement.pptx</loc>
+        <lastmod>2022-03-16T15:36:42.310Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/OE-STRAC-Presentation-2021.pptx</loc>
+        <lastmod>2022-03-11T22:10:31.058Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR_External_Org_Chart.pptx</loc>
+        <lastmod>2022-03-22T13:13:09.582Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR Harassing Conduct PB Plan - 5.8.18.pdf</loc>
+        <lastmod>2022-03-03T17:27:17.487Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR Proposed Workplace Environment Response Plan 04042018.pdf</loc>
+        <lastmod>2022-03-03T17:27:17.852Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Overlap.Training.pptx</loc>
+        <lastmod>2022-03-16T15:37:33.946Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Overlapping.Agreement.Training.2020.Handbook.pdf</loc>
+        <lastmod>2022-03-09T12:22:00.170Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Pacific-Gas-Plants.xlsx</loc>
+        <lastmod>2022-03-15T19:12:08.775Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Pacific-Metering-Systems.xlsx</loc>
+        <lastmod>2022-03-15T19:12:08.856Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Pacific-Sales-Tanks.xlsx</loc>
+        <lastmod>2022-03-15T19:12:08.783Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4430.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.613Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/4430Instr.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.088Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ASCpasr.PDF</loc>
+        <lastmod>2022-03-07T21:06:12.809Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/PASR_CSV_Record_Layout.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.604Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Paygov--ROW-RUE-Rent_Form.pdf</loc>
+        <lastmod>2022-03-08T21:05:31.190Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Paygov--Royalty-Invoice_Form.pdf</loc>
+        <lastmod>2022-03-08T19:48:47.352Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Ecommerce.and.Electronic.Tools.Production.pptx</loc>
+        <lastmod>2022-03-16T15:37:46.938Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/csv_File_Rent_Instructions.pdf</loc>
+        <lastmod>2022-03-08T21:15:53.834Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/JOA.pdf</loc>
+        <lastmod>2022-03-08T17:06:17.929Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/2014.Reporting.pptx</loc>
+        <lastmod>2022-03-16T15:37:28.317Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Revised_Reporting_Using_Alternative_Dual_Accounting_for_Unprocessed_Gas_in_Non-Index_Zone_MP_Areas.pdf</loc>
+        <lastmod>2022-05-19T12:58:14.976Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Roadmap Test.png</loc>
+        <lastmod>2022-03-22T13:16:28.946Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Roles-and-Responsibilities-Booklet.pdf</loc>
+        <lastmod>2022-03-10T23:46:49.104Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Ecommerce.and.Electronic.Tools.Royalty.pptx</loc>
+        <lastmod>2022-03-16T15:37:26.103Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/RRM-Printable.Minerals.Revenue.Handbook.pdf</loc>
+        <lastmod>2022-03-09T12:22:14.169Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/BLM.CA.pdf</loc>
+        <lastmod>2022-03-11T21:25:52.651Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/saaname.xlsx</loc>
+        <lastmod>2022-03-15T21:31:50.405Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SuretyInst.pdf</loc>
+        <lastmod>2022-03-07T21:06:13.939Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SalesTyp Codes--non-Solids.pdf</loc>
+        <lastmod>2022-03-08T17:06:19.339Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Onshore Std UCA Example_San Juan Basin_9.12.18 LS FINAL.pdf</loc>
+        <lastmod>2022-03-11T17:16:35.156Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Signed SOP Memo September 18 2013.pdf</loc>
+        <lastmod>2022-03-10T23:13:44.940Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Sodium.and.Potassium.Reporter.Training.pdf</loc>
+        <lastmod>2022-03-11T21:25:26.302Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Solids.Lease.Summary.Facility.and.Contracts.pptx</loc>
+        <lastmod>2022-03-16T16:06:40.699Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Solid.Minerals.Compliance.Processes.pptx</loc>
+        <lastmod>2022-03-16T16:06:40.683Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Solids_Opening.pptx</loc>
+        <lastmod>2022-03-16T16:06:40.436Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Solids_Opening.pptx</loc>
+        <lastmod>2022-03-16T16:05:44.571Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Solids.AR.Basics.pptx</loc>
+        <lastmod>2022-03-16T16:06:37.308Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Solids.Audit.pptx</loc>
+        <lastmod>2022-03-16T16:06:48.346Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Solids_Billing.pptx</loc>
+        <lastmod>2022-03-16T16:06:41.515Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Enforcement.pptx</loc>
+        <lastmod>2022-03-16T16:06:46.133Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Valuation.Sodium.and.Potassium.pptx</loc>
+        <lastmod>2022-03-16T16:06:46.467Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Greg-Gould-Final-Testimony.pdf</loc>
+        <lastmod>2022-03-10T22:22:43.558Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Final ONRR HNR Budget Testimony_3-17-15_Final.pdf</loc>
+        <lastmod>2022-03-10T22:24:11.268Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Director.Gould.Testimony.final.11072019.pdf</loc>
+        <lastmod>2022-03-10T22:23:53.276Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/BOEMRE_Reorg_testimony_7-15-11.pdf</loc>
+        <lastmod>2022-03-10T22:25:34.373Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/FINA-SENR-ONRR-Testimony-on-Federal-Mineral-Revenues-(FINAL-07212014).pdf</loc>
+        <lastmod>2022-03-10T22:24:49.390Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/ONRR-Testimony-3-17-11.pdf</loc>
+        <lastmod>2022-03-10T22:35:44.929Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/OMB.cleared.FAIR.Act.statement.pdf</loc>
+        <lastmod>2022-03-10T22:25:20.514Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Strategic Plan One Pager_Final_508.pptx</loc>
+        <lastmod>2022-03-31T18:00:26.465Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Understanding_Your_OST_Quarterly_Statement.pdf</loc>
+        <lastmod>2022-03-10T23:46:35.439Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/MPRH-AllDocs-Combined.pdf</loc>
+        <lastmod>2022-03-09T19:56:36.760Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/SMRH.Complete.Handbook.pdf</loc>
+        <lastmod>2022-03-09T12:09:39.602Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/WebCenter.Portal.pptx</loc>
+        <lastmod>2022-03-16T15:37:59.711Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/Industry.WebCenter.Portal.User.Guide.pptx</loc>
+        <lastmod>2022-03-16T16:16:21.377Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/WellStatusCodes.pdf</loc>
+        <lastmod>2022-03-08T16:50:50.350Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/XREF.xlsx</loc>
+        <lastmod>2022-04-06T19:19:56.063Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/document/XREF.txt</loc>
+        <lastmod>2022-02-16T18:17:39.965Z</lastmod>
+    </url>
+<url>
+        <loc>https://onrr.gov/press-releases/01-12-12BakkenIndianRevenuesrelease.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:53.077Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/11-13-DOI-SummaryDisbursementsData.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:30.336Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/11BillionMineralsrevenuesRevised_v2.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:30.386Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/12-11_Negotiated_Rulemaking_Committee_Established.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:30.251Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/12-11ShellSettlementPressRelease.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:31.064Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/12-14-FY-2014-SummaryDisbursements.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:31.020Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20101015.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:32.930Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20101104a.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:33.311Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20101104b.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:32.990Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110128.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:33.031Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110510.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:34.178Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110524.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:33.064Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110526.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:33.871Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110620.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:34.634Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110720.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:35.667Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110913.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:36.417Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110913a.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:36.387Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20110916.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:37.975Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120222.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:36.428Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120224.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:39.680Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120307.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:36.586Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120307a.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:37.478Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120312.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:35.411Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120313.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:35.501Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120316.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.833Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120326.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.768Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120329.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.064Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120405.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.081Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120416.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.105Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120420.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:37.415Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120430.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:39.073Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120509.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:39.866Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120703.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:55.516Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120711.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:35.374Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120718.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.408Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120726.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.725Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120822EITI.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:39.187Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20120823.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.607Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20121206.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:39.378Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20121206-disbursments.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.236Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130104.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.185Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130301.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.174Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130402.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:37.091Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130620.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.987Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130708.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:37.670Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130812.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.157Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130812a.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.142Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130819.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:37.725Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130829.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:37.749Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20130916.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.296Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20131013.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.316Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20131021.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.329Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20131022.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.765Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20131022a.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.704Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20131113.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.699Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20131119.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:46.220Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20131119a.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:43.420Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140108.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.946Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140122.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:38.226Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140226.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:39.472Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140318EITI.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.361Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140327.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.354Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140328.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:39.613Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140331.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:39.658Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140403.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.074Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140408.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.082Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140523.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.091Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140612.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.843Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140618.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.846Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140904.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:44.160Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140908.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.568Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20140918.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.605Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20141006.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:40.633Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20141106.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.321Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20141202.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.723Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20141202b.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.737Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20141209.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:43.916Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20141211.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.757Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20141219.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.772Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150205.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.994Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150211.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.990Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150218.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.541Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150325.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.284Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150401.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.291Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150410.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:43.205Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150430.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.679Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150504.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.973Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150506.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:41.985Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150513.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.018Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150618.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.299Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150706.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:43.100Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150812.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:43.107Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150915.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:48.028Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150921.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:43.128Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20150925.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:42.778Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20151019.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:43.477Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20151123.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:47.679Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20151125.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:47.693Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20151125a.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:47.703Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20151229.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:45.218Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20160225.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.585Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20160505A.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:55.100Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20160505B.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:55.083Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20160629.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:55.114Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20160630.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:47.852Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20160706.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:55.148Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20160729.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:55.448Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20161007.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.806Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20161118.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.161Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20161125a.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:47.687Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20161125b.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:46.495Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20171130.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:46.536Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20171130-CO.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:45.605Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20171130-LA.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:45.609Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20171130-MT.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:46.283Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20171130-ND.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:46.286Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20171130-NM.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:46.294Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20171130-UT.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:46.290Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20171130-WYO.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:47.300Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20181101.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:49.641Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/20191024.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:50.410Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/2020_GOMESA.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:31.989Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/2020_GOMESA_AL.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:32.294Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/2020_GOMESA_LA.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:36.542Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/2020_GOMESA_MS.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:32.326Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/2020_GOMESA_TX.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:33.205Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/2021_gomesa_Texas.pdf</loc>
+        <uploaded_on>2021-10-28T17:42:22.071Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/2-1_eCommerce_press_release.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:51.378Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/363_CIV.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:31.974Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/8-11EnergyResourcesCivilPenalty.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:52.665Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/Alabama.GOMESA.Release.3.30.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:48.888Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/DOI-Energy-Production-NR-02-11-2020-final.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:50.423Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/Enterprise Carlsbad Transportation System and Dew Point Plant.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:52.348Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/Fiscal_Year_2021_Disbursements_Press_Release.pdf</loc>
+        <uploaded_on>2022-01-13T17:30:36.011Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/FY2011StateDisbursements.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:52.130Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/FY2020_Disbursements_Louisiana_Press_Release.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.964Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/FY2020_Disbursements_National_Press_Release.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.984Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/FY2020_Disbursements_New_Mexico_Press_Release.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.955Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/FY2020_Disbursements_North_Dakota_Press_Release.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.413Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/FY2020_Disbursements_Texas_Press_Release.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.302Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/FY2020_Disbursements_Wyoming_Press_Release.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.650Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESA-Alabama-2019.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:52.632Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESAFY2011Final.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:50.052Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESA_FY2022_Disbursement_Press_Release.pdf</loc>
+        <uploaded_on>2022-05-03T20:20:48.268Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESA-Louisiana-2019.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:54.529Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESA-Mississippi-2019.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:53.371Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESA-National-2019.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:55.204Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESA.National.Release.pdf</loc>
+        <uploaded_on>2021-10-27T23:27:09.228Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESA-Press-Release-Binder-04-26-18.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:50.506Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/GOMESA-Texas-2019.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:55.178Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/Louisiana.GOMESA.Release.3.30.pdf</loc>
+        <uploaded_on>2021-10-28T17:41:16.413Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/Mississippi.GOMESA.Release.3.30.pdf</loc>
+        <uploaded_on>2022-05-03T20:22:21.329Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/ONRR_Dynamic_Offshore_Civil_Penalty.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:48.661Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/ONRR_Peer_Review_Successful_11-02-11.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:53.278Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/OXY_USA_Civil_Penalty.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:48.728Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/Press_Release2020_Proposed_Valuation_Reform_and_Civil_Penalty_Rule.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:53.913Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/Summary2015Disbursements.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:52.534Z</uploaded_on>
+    </url>
+    <url>
+        <loc>https://onrr.gov/press-releases/USEITI Advisory_04-26-16.pdf</loc>
+        <uploaded_on>2021-12-10T22:39:52.545Z</uploaded_on>
+    </url>
+<url>
+        <loc>https://onrr.gov/reporter-letters/1_15_16_Reporter_Letter_EFT.pdf</loc>
+        <lastmod>2021-12-22T20:35:47.285Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/reporter-letters/12_24_15_Reporter_Letter.pdf</loc>
+        <lastmod>2021-12-22T20:35:52.996Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20000405.pdf</loc>
+        <lastmod>2021-12-22T20:35:23.305Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20000602.pdf</loc>
+        <lastmod>2021-12-22T20:35:28.585Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20000803.pdf</loc>
+        <lastmod>2021-12-22T20:36:02.320Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20000919.pdf</loc>
+        <lastmod>2021-12-22T20:35:49.526Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20001006.pdf</loc>
+        <lastmod>2021-12-22T20:35:30.312Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20001122.pdf</loc>
+        <lastmod>2021-12-22T20:35:27.415Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20001207.pdf</loc>
+        <lastmod>2021-12-22T20:35:24.073Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20010313.pdf</loc>
+        <lastmod>2021-12-22T20:35:25.318Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20010921.pdf</loc>
+        <lastmod>2021-12-22T20:35:24.500Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20020320.pdf</loc>
+        <lastmod>2021-12-22T20:35:28.182Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20030117.pdf</loc>
+        <lastmod>2021-12-22T20:35:49.133Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20030219.pdf</loc>
+        <lastmod>2021-12-22T20:35:29.335Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20030416.pdf</loc>
+        <lastmod>2021-12-22T20:35:31.687Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20031201.pdf</loc>
+        <lastmod>2021-12-22T20:35:31.692Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20040220.pdf</loc>
+        <lastmod>2021-12-22T20:35:29.495Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20040922.pdf</loc>
+        <lastmod>2021-12-22T20:36:23.529Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20041116.pdf</loc>
+        <lastmod>2021-12-22T20:35:26.681Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20050817.pdf</loc>
+        <lastmod>2021-12-22T20:35:33.249Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20060523.pdf</loc>
+        <lastmod>2021-12-22T20:35:36.810Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20070420.pdf</loc>
+        <lastmod>2021-12-22T20:35:50.774Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20070511.pdf</loc>
+        <lastmod>2021-12-22T20:35:28.901Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20070723.pdf</loc>
+        <lastmod>2021-12-22T20:35:53.680Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20070911.pdf</loc>
+        <lastmod>2021-12-22T20:35:45.382Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20070927.pdf</loc>
+        <lastmod>2021-12-22T20:35:26.362Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20071213.pdf</loc>
+        <lastmod>2021-12-22T20:35:28.952Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20080314.pdf</loc>
+        <lastmod>2021-12-22T20:35:30.170Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20080421.pdf</loc>
+        <lastmod>2021-12-22T20:35:31.330Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20080820.pdf</loc>
+        <lastmod>2021-12-22T20:35:29.140Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20080829a.pdf</loc>
+        <lastmod>2021-12-22T20:35:28.129Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20080902.pdf</loc>
+        <lastmod>2021-12-22T20:35:31.072Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20081028.pdf</loc>
+        <lastmod>2021-12-22T20:35:49.581Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20090121.pdf</loc>
+        <lastmod>2021-12-22T20:35:29.913Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20090421.pdf</loc>
+        <lastmod>2021-12-22T20:35:40.776Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20091007.pdf</loc>
+        <lastmod>2021-12-22T20:35:43.313Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20091106.pdf</loc>
+        <lastmod>2021-12-22T20:35:43.942Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20100415.pdf</loc>
+        <lastmod>2021-12-22T20:36:04.645Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20100428.pdf</loc>
+        <lastmod>2021-12-22T20:35:32.353Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20100430.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.425Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20100507.pdf</loc>
+        <lastmod>2021-12-22T20:35:32.471Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20100607.pdf</loc>
+        <lastmod>2021-12-22T20:35:44.865Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20100804.pdf</loc>
+        <lastmod>2021-12-22T20:35:51.069Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20101215.pdf</loc>
+        <lastmod>2021-12-22T20:35:49.220Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20110120.pdf</loc>
+        <lastmod>2021-12-22T20:35:31.814Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20110310.pdf</loc>
+        <lastmod>2021-12-22T20:35:51.723Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20110706.pdf</loc>
+        <lastmod>2021-12-22T20:35:31.224Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20111014.pdf</loc>
+        <lastmod>2021-12-22T20:35:32.691Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20111122.pdf</loc>
+        <lastmod>2021-12-22T20:35:40.918Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20111205.pdf</loc>
+        <lastmod>2021-12-22T20:36:03.511Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20140331.pdf</loc>
+        <lastmod>2021-12-22T20:35:41.021Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20140630.pdf</loc>
+        <lastmod>2021-12-22T20:35:35.094Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20141106.pdf</loc>
+        <lastmod>2021-12-22T20:35:43.967Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20141218.pdf</loc>
+        <lastmod>2021-12-22T20:35:59.679Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20150515.pdf</loc>
+        <lastmod>2022-05-09T15:43:41.388Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20150821.pdf</loc>
+        <lastmod>2021-12-22T20:35:52.832Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20160510.pdf</loc>
+        <lastmod>2021-12-22T20:35:33.690Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20160913.pdf</loc>
+        <lastmod>2022-03-29T19:53:52.966Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20161005.pdf</loc>
+        <lastmod>2021-12-22T20:35:48.258Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20170222.pdf</loc>
+        <lastmod>2021-12-22T20:35:49.057Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/20191017.pdf</loc>
+        <lastmod>2021-12-22T20:35:48.298Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/2021-10-13.Withdrawal.Rule.DRL.Final.signed.pdf</loc>
+        <lastmod>2021-12-22T20:36:04.340Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/8-27-12--1.pdf</loc>
+        <lastmod>2021-12-22T20:36:01.522Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/8-27-12--2.pdf</loc>
+        <lastmod>2021-12-22T20:35:56.691Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/850710.pdf</loc>
+        <lastmod>2021-12-22T20:35:36.874Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/880111.pdf</loc>
+        <lastmod>2021-12-22T20:35:34.966Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/880204.pdf</loc>
+        <lastmod>2021-12-22T20:35:41.562Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/880311.pdf</loc>
+        <lastmod>2021-12-22T20:35:35.001Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/880314.pdf</loc>
+        <lastmod>2021-12-22T20:35:36.902Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/880316a.pdf</loc>
+        <lastmod>2021-12-22T20:35:35.794Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/880316b.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.567Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/880630.pdf</loc>
+        <lastmod>2021-12-22T20:35:35.798Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/880930.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.585Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/881003.pdf</loc>
+        <lastmod>2021-12-22T20:35:39.309Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/881108.pdf</loc>
+        <lastmod>2021-12-22T20:35:41.431Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/881114a.pdf</loc>
+        <lastmod>2021-12-22T20:35:36.686Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/881114b.pdf</loc>
+        <lastmod>2021-12-22T20:35:36.668Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/890119.pdf</loc>
+        <lastmod>2021-12-22T20:35:36.701Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/890421.pdf</loc>
+        <lastmod>2021-12-22T20:35:36.713Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/891127.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.122Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/900420.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.289Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/900615.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.304Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/900913.pdf</loc>
+        <lastmod>2021-12-22T20:35:59.119Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/910314.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.317Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/910612.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.679Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/910708.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.693Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/910723.pdf</loc>
+        <lastmod>2021-12-22T20:35:39.385Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/910903.pdf</loc>
+        <lastmod>2021-12-22T20:35:39.393Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/911030.pdf</loc>
+        <lastmod>2021-12-22T20:35:37.761Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/911216.pdf</loc>
+        <lastmod>2021-12-22T20:35:38.408Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/911218.pdf</loc>
+        <lastmod>2021-12-22T20:35:36.532Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/911220.pdf</loc>
+        <lastmod>2021-12-22T20:35:43.746Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920106.pdf</loc>
+        <lastmod>2021-12-22T20:35:38.413Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920122.pdf</loc>
+        <lastmod>2021-12-22T20:35:38.446Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920206a.pdf</loc>
+        <lastmod>2021-12-22T20:35:38.919Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920206b.pdf</loc>
+        <lastmod>2021-12-22T20:35:38.932Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920326.pdf</loc>
+        <lastmod>2021-12-22T20:35:40.475Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920330.pdf</loc>
+        <lastmod>2021-12-22T20:35:49.406Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920416.pdf</loc>
+        <lastmod>2021-12-22T20:35:43.033Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920423.pdf</loc>
+        <lastmod>2021-12-22T20:35:40.863Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920514.pdf</loc>
+        <lastmod>2021-12-22T20:35:39.424Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920618.pdf</loc>
+        <lastmod>2021-12-22T20:35:40.871Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920727.pdf</loc>
+        <lastmod>2021-12-22T20:35:40.897Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/920917.pdf</loc>
+        <lastmod>2021-12-22T20:35:40.892Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/921015a.pdf</loc>
+        <lastmod>2021-12-22T20:35:59.563Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/921015b.pdf</loc>
+        <lastmod>2021-12-22T20:36:00.735Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930115.pdf</loc>
+        <lastmod>2021-12-22T20:35:40.041Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930202.pdf</loc>
+        <lastmod>2022-03-29T19:51:39.400Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930414.pdf</loc>
+        <lastmod>2021-12-22T20:35:16.865Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930430.pdf</loc>
+        <lastmod>2021-12-22T20:35:16.922Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930503.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.427Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930512.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.937Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930513.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.460Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930628.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.746Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930712.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.871Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930818.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.808Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930900a.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.944Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930900b.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.906Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/930917.pdf</loc>
+        <lastmod>2021-12-22T20:35:17.989Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/931208.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.000Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/940103.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.051Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/940112.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.088Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/940120.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.132Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/940706.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.687Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/941017.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.392Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/941104.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.726Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/950209a.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.488Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/950209b.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.532Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/950210.pdf</loc>
+        <lastmod>2021-12-22T20:35:19.025Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/950717.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.816Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/950719.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.910Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/950824.pdf</loc>
+        <lastmod>2021-12-22T20:35:18.975Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/950925.pdf</loc>
+        <lastmod>2021-12-22T20:35:19.003Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/950929.pdf</loc>
+        <lastmod>2021-12-22T20:35:19.731Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/951004.pdf</loc>
+        <lastmod>2021-12-22T20:35:19.340Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/951012.pdf</loc>
+        <lastmod>2021-12-22T20:35:31.555Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/960311.pdf</loc>
+        <lastmod>2021-12-22T20:35:20.052Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/960422.pdf</loc>
+        <lastmod>2021-12-22T20:35:20.086Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/961007.pdf</loc>
+        <lastmod>2021-12-22T20:35:20.365Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/961022.pdf</loc>
+        <lastmod>2021-12-22T20:35:20.345Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/961104.pdf</loc>
+        <lastmod>2021-12-22T20:35:20.392Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/961125.pdf</loc>
+        <lastmod>2021-12-22T20:35:21.216Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/961223.pdf</loc>
+        <lastmod>2021-12-22T20:35:20.439Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970109.pdf</loc>
+        <lastmod>2021-12-22T20:35:21.304Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970117.pdf</loc>
+        <lastmod>2021-12-22T20:35:20.964Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970130.pdf</loc>
+        <lastmod>2021-12-22T20:35:21.821Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970220.pdf</loc>
+        <lastmod>2021-12-22T20:35:21.018Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970331.pdf</loc>
+        <lastmod>2021-12-22T20:35:21.724Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970512.pdf</loc>
+        <lastmod>2021-12-22T20:35:21.581Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970528.pdf</loc>
+        <lastmod>2021-12-22T20:35:23.262Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970701.pdf</loc>
+        <lastmod>2022-02-16T15:51:49.062Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970812.pdf</loc>
+        <lastmod>2021-12-22T20:35:21.895Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/970916.pdf</loc>
+        <lastmod>2021-12-22T20:35:22.921Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/971001.pdf</loc>
+        <lastmod>2021-12-22T20:35:28.389Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/971126b.pdf</loc>
+        <lastmod>2021-12-22T20:35:22.315Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/980323a.pdf</loc>
+        <lastmod>2021-12-22T20:35:57.927Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/980323b.pdf</loc>
+        <lastmod>2021-12-22T20:35:45.922Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/980602.pdf</loc>
+        <lastmod>2021-12-22T20:35:22.742Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/981124.pdf</loc>
+        <lastmod>2021-12-22T20:35:22.802Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/981124a.pdf</loc>
+        <lastmod>2021-12-22T20:35:22.784Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/981218.pdf</loc>
+        <lastmod>2021-12-22T20:35:22.758Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/990812.pdf</loc>
+        <lastmod>2021-12-22T20:35:24.136Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/991201.pdf</loc>
+        <lastmod>2021-12-22T20:35:32.029Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Dear-Reporter-Letter-2016-Rule.pdf</loc>
+        <lastmod>2021-12-22T20:35:43.187Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/dear-reporter-letter-20-Nov-19.pdf</loc>
+        <lastmod>2021-12-22T20:35:52.437Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/dear-reporter-letter-30-june-2020.pdf</loc>
+        <lastmod>2021-12-22T20:35:47.953Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Dear.Reporter.Letter.File.Structure.Change.pdf</loc>
+        <lastmod>2022-01-26T18:10:22.512Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Dear Reporter Letter - Keepwhole Gas Processing Contracts.pdf</loc>
+        <lastmod>2021-12-22T20:36:06.362Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Dear-Reporter-Letter_OGOR_4.9.2018.pdf</loc>
+        <lastmod>2021-12-22T20:35:51.974Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Dear Reporter Letter - OGOR B, Form MMS-4054-B, Change to Product Disposition for Certain Gas Sales.pdf</loc>
+        <lastmod>2021-12-22T20:35:46.207Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/DRL_Transportation_Systems_and_Processing_Plants_October_6_2010.pdf</loc>
+        <lastmod>2021-12-22T20:35:45.713Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/dear-reporter-letter-30-june-2020-accessible.docx</loc>
+        <lastmod>2022-04-05T15:05:10.120Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Field-Fuel-Valuation-and-Reporting.pdf</loc>
+        <lastmod>2021-12-22T20:35:46.601Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Dear.Reporter.Letter.File.Structure.Change.accessible.pdf</loc>
+        <lastmod>2022-04-05T15:01:13.000Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Geothermal-Report-06-18-2013.pdf</loc>
+        <lastmod>2021-12-22T20:35:51.035Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Geothermal-Report-06-19-2013.pdf</loc>
+        <lastmod>2021-12-22T20:35:54.580Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Navajo.Dear.Reporter.RIK.Program.signed.pdf</loc>
+        <lastmod>2022-04-20T15:31:34.493Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Reporter-Letter-3-21-13.pdf</loc>
+        <lastmod>2021-12-22T20:35:52.787Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Reporter Letter for Oil &amp; Gas re CRs.pdf</loc>
+        <lastmod>2021-12-22T20:35:42.886Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Reporter Letter for Oil &amp; Gas re CRs (1).pdf</loc>
+        <lastmod>2021-12-22T20:35:42.490Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Reporter Letter for Solids re CRs.pdf</loc>
+        <lastmod>2021-12-22T20:35:47.724Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/ReporterLetter_KeepwholeGasProcessingContracts.pdf</loc>
+        <lastmod>2021-12-22T20:36:01.611Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/ReporterLetter_Solid Minerals_june_2019.pdf</loc>
+        <lastmod>2021-12-22T20:36:05.054Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/reporter-letters/Termination of Navajo Nation Royalty In-Kind Program (accessible).pdf</loc>
+        <lastmod>2022-04-20T15:36:32.497Z</lastmod>
+    </url>
+
+    <url>
+        <loc>https://onrr.gov/unbundling/Black-Fork-Plant-UCA-Example.pdf</loc>
+        <lastmod>2022-05-10T17:33:04.969Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Buena_Suerte_Transportation_System.pdf</loc>
+        <lastmod>2022-05-10T17:33:02.069Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Calumet-Gas-Plant.xlsx</loc>
+        <lastmod>2022-05-10T17:32:51.450Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Chipeta-Plant-Example.pdf</loc>
+        <lastmod>2022-05-10T17:33:03.227Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/DCP-Super-System-UCA.xlsx</loc>
+        <lastmod>2022-05-10T17:32:52.328Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Echo_Springs_UCA_Table_w_Example_Correction_2018.2.1.pdf</loc>
+        <lastmod>2022-05-10T17:33:05.960Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Enterprise Carlsbad Transportation System and Dew Point Plant.pdf</loc>
+        <lastmod>2022-05-10T17:33:04.942Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Eunice-UCA-Tables-2008-2015-with-Example.pdf</loc>
+        <lastmod>2022-05-10T17:33:04.072Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Meeker-UCA-20170816.pdf</loc>
+        <lastmod>2022-05-10T17:33:08.067Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Mobile-Bay-UCA-Example-Updated-FINA-LS-7-8-16-with-table.xlsx</loc>
+        <lastmod>2022-05-10T17:32:56.752Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Neptune-UCA-Tables-2008-2015-with-Example.pdf</loc>
+        <lastmod>2022-05-10T17:33:09.468Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/North-Terrebonn-Gas-Plant.xlsx</loc>
+        <lastmod>2022-05-10T17:32:58.726Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Opal-UCA-20170816.pdf</loc>
+        <lastmod>2022-05-10T17:33:08.564Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Orla.UCA.example.pdf</loc>
+        <lastmod>2022-05-10T17:33:03.498Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Otero_and_Lybrook_Transportation_Systems_Huerfano_Mountain_Gas_Plant.xlsx</loc>
+        <lastmod>2022-05-10T17:33:00.444Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Pascagoula-UCAs.xlsx</loc>
+        <lastmod>2022-05-10T17:33:00.552Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Pioneer-UCA-20170816.xlsx</loc>
+        <lastmod>2022-05-10T17:33:00.474Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/San Juan Transportation System - Chaco Gas Plant.pdf</loc>
+        <lastmod>2022-05-10T17:33:11.032Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/San Juan Transportation System - San Juan Blanco Plant.pdf</loc>
+        <lastmod>2022-05-10T17:33:09.558Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Sea-Robin-UCA-Table-200-to-2016-with-example.xlsx</loc>
+        <lastmod>2022-05-10T17:33:00.691Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Stingray-Gas-Plant.xlsx</loc>
+        <lastmod>2022-05-10T17:33:00.484Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Toca-Plant-UCA.xlsx</loc>
+        <lastmod>2022-05-10T17:33:00.767Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Val_Verde.xlsx</loc>
+        <lastmod>2022-05-10T17:33:00.463Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Venice-UCA-Example.pdf</loc>
+        <lastmod>2022-05-10T17:33:09.578Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Versado.Saunders.Gas.Plant.UCA.pdf</loc>
+        <lastmod>2022-05-10T17:33:05.482Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Williams_Manzanares_Transportation_System.xlsx</loc>
+        <lastmod>2022-05-10T17:33:01.852Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Williams_San_Juan_Conventional_Trransportation_System_Ignacia_Plant.pdf</loc>
+        <lastmod>2022-05-10T17:33:10.819Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Williams_Torre_Alta_Transportation_System_Kutz_Plant.pdf</loc>
+        <lastmod>2022-05-10T17:33:10.530Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Williams_Torre_Alta_Transportation_System_Lybrook_Plant.xlsx</loc>
+        <lastmod>2022-05-10T17:33:01.750Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Willow-Creek-Gas-Plant.pdf</loc>
+        <lastmod>2022-05-10T17:33:11.042Z</lastmod>
+    </url>
+    <url>
+        <loc>https://onrr.gov/unbundling/Yscloskey-UCA-Table-with-example.pdf</loc>
+        <lastmod>2022-05-10T17:33:10.055Z</lastmod>
+    </url>
+
+
 </urlset>
