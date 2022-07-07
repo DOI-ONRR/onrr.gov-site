@@ -6,7 +6,8 @@
     <div v-else>
       <HeroImage 
         v-if="pages_by_id" 
-        :title="pages_by_id.hero_title" 
+        :title="pages_by_id.hero_title"
+	:description="pages_by_id.hero_image.description"
         :image="`${ API_URL }/assets/${ pages_by_id.hero_image.id }?fit=cover&quality=80`"
         :isHome="true" />
       <v-container class="home-content">
