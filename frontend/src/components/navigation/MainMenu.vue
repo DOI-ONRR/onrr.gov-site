@@ -44,11 +44,15 @@
         </li>
         <li>
   <form id="search_form" action="https://search.usa.gov/search" accept-charset="UTF-8" method="get">
-
     <input type="hidden" name="affiliate" id="affiliate" value="onrr.gov" autocomplete="off" />
-    <label for="query">Enter Search Term(s):</label>
-    <input type="text" name="query" id="query" autocomplete="off" class="usagov-search-autocomplete" />
-    <input type="submit" name="commit" value="Search" data-disable-with="Search" />
+          <v-text-field
+            solo-inverted
+            name="query"
+            dense
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            class="search-input">
+          </v-text-field>
   </form>
         </li>
       </ul>
