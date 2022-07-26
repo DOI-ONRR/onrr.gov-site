@@ -32,7 +32,7 @@ export const apolloClient = new ApolloClient({
   fetch: fetch,
   link: clientHttpLink,
   cache,
-  resolvers: {},
+  resolvers: {}
 })
 
 const clientA = new ApolloClient({
