@@ -6,6 +6,7 @@
             <TextField :fields="searchInputField"></TextField>
           </v-col>
         </v-row>
+ <div v-if="visibleItems.length > 0 && searchInputField.text  ">
         <v-row v-if="searchResults">
           <v-col cols="12" sm="4">
             <SelectField :fields="categoriesSelectField"></SelectField>
@@ -33,8 +34,10 @@
             </div>
           </v-col>
         </v-row>
+</div>
     </v-container>
-    <div v-if="visibleItems.length > 0">
+    
+    <div v-if="visibleItems.length > 0 && searchInputField.text  ">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <h2 class="collection-category pa-3 mb-3">
@@ -81,8 +84,8 @@
         </div>
       </v-fade-transition>
     </div>
-    <div v-else>No contacts found.</div>
-    <v-container class="pa-0">
+    <div v-else-if="searchInputField.text" >No contacts found.</div>
+    <v-container v-if="searchInputField.text" class="pa-0">
         <v-row>
           <v-col>
             <div class="text-left mt-4">
