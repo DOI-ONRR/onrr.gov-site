@@ -93,6 +93,7 @@ export default class CollectionsTool {
       selectFieldsCol5 = this._make('div', [this.CSS.baseClass]),
       selectFieldsCol6 = this._make('div', [this.CSS.baseClass]),
       selectFieldsCol7 = this._make('div', [this.CSS.baseClass]),
+      selectFieldsCol8 = this._make('div', [this.CSS.baseClass]),
       selectPageInput = this._make('select', [this.CSS.input]),
       selectPageInputLabel = this._make('label'),
       selectTabInput = this._make('select', [this.CSS.input]),
@@ -101,6 +102,8 @@ export default class CollectionsTool {
       selectAccordionInputLabel = this._make('label'),
       selectTopicInput = this._make('select',[this.CSS.input]),
       selectTopicLabel = this._make('label'),
+      selectResultsInput = this._make('select',[this.CSS.input]),
+      selectResultsLabel = this._make('label'),
       addCollectionButton = this._make('button', [this.CSS.button]),
       collectionBox = this._make('div');
 
@@ -115,6 +118,16 @@ export default class CollectionsTool {
         value: 'full',
       },
     ];
+   const resultsOptions = [
+      {
+        text: 'Always show',
+        value: 'always',
+      },
+      {
+        text: 'Only on search',
+        value: 'search',
+      },
+    ];
 
     const statusOptions = [
       {
@@ -126,7 +139,7 @@ export default class CollectionsTool {
         value: 'archived',
       },
     ];
-
+ 
 
     // set options
     let selectOption = this._make('option');
@@ -136,6 +149,7 @@ export default class CollectionsTool {
     let selectTabOption = this._make('option');
     let selectAccordionOption = this._make('option');
     let selectTopicOption = this._make('option');
+    let selectResultsOption = this._make('option');
 
     // labels
     selectInputLabel.innerHTML = 'Collection';
@@ -159,7 +173,11 @@ export default class CollectionsTool {
     selectTopicLabel.innerHTML = 'Topics';
     selectTopicLabel.setAttribute('for', 'collectionsTopicSelector');
 
-    selectTopicInput.setAttribute('multiple', true);
+
+    selectResultsLabel.innerHTML = 'Results';
+    selectResultsLabel.setAttribute('for', 'collectionsResultsSelector');
+
+selectTopicInput.setAttribute('multiple', true);
 
     selectInput.id = 'collectionsSelector';
     selectOption.value = '';
@@ -226,7 +244,8 @@ export default class CollectionsTool {
     selectAccordionInput.appendChild(selectAccordionOption);
 
     selectTopicInput.id = 'collectionsTopicSelector';
-
+    selectResultsInput.id='collectionsResultsSelector';
+      
     this.fetchContacts().then(categories => {
       console.log('fetchContacts categories -----> ', categories);
       this.fetchFields(this.data);
@@ -293,6 +312,14 @@ export default class CollectionsTool {
       selectLayoutInput.appendChild(selectLayoutOption);
     });
 
+    selectResultsInput.id = 'collectionsResultsSelector';
+    resultsOptions.forEach(item => {
+      selectResultsOption = this._make('option')
+      selectResultsOption.value = item.value;
+      selectResultsOption.text = item.text;
+      selectResultsInput.appendChild(selectResultsOption);
+    });
+
 
     selectStatusInput.id = 'collectionsStatusSelector';
     statusOptions.forEach(item => {
@@ -331,6 +358,7 @@ export default class CollectionsTool {
         selectFieldsCol4.style.display = 'block';
         selectFieldsCol5.style.display = 'block';
         selectFieldsCol6.style.display = 'block';
+        selectFieldsCol8.style.display = 'block';
       } else {
         selectFieldsCol2.style.display = 'none';
         selectFieldsCol4.style.display = 'none';
@@ -418,6 +446,7 @@ export default class CollectionsTool {
       selectFieldsCol4.style.display = 'block';
       selectFieldsCol5.style.display = 'block';
       selectFieldsCol6.style.display = 'block';
+      selectFieldsCol8.style.display = 'block';
     } else {
       selectFieldsCol4.style.display = 'none';
       selectFieldsCol5.style.display = 'none';
@@ -432,6 +461,7 @@ export default class CollectionsTool {
     selectFieldsCol4.style.marginRight = '8px';
     selectFieldsCol5.style.marginRight = '8px';
     selectFieldsCol6.style.marginRight = '8px';
+    selectFieldsCol8.style.marginRight = '8px';
     selectFieldsCol7.style.marginRight = '8px';
     selectFieldsCol7.style.display = (this.data && this.data.collection === 'reporter_letters') ? 'block' : 'none';
 
@@ -450,6 +480,8 @@ export default class CollectionsTool {
     selectFieldsCol6.appendChild(selectAccordionInput);
     selectFieldsCol7.appendChild(selectTopicLabel);
     selectFieldsCol7.appendChild(selectTopicInput);
+    selectFieldsCol8.appendChild(selectResultsLabel);
+    selectFieldsCol8.appendChild(selectResultsInput);
 
     // wrapper.appendChild(addCollectionButton);
     wrapper.appendChild(selectFieldsCol1);
@@ -458,6 +490,7 @@ export default class CollectionsTool {
     wrapper.appendChild(selectFieldsCol5);
     wrapper.appendChild(selectFieldsCol6);
     wrapper.appendChild(selectFieldsCol7);
+    wrapper.appendChild(selectFieldsCol8);
     wrapper.appendChild(selectFieldsCol3);
 
     if (this.data && this.data.collection) {
