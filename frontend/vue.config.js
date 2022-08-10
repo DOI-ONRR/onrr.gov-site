@@ -1,5 +1,6 @@
 
 const targetUrl = process.env.NODE_ENV === 'production' ? '' : 'http://127.0.0.1:8055'
+const SITE=process.env.SITE
 module.exports = {
   transpileDependencies: [
     'vuetify'

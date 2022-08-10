@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkonrr_frontend_app_vue"]=self["webpackChunkonrr_frontend_app_vue"]||[]).push([[345],{356:function(e,t,n){n.r(t),n.d(t,{default:function(){return p}});var r=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{domProps:{innerHTML:e._s(e.html)}})},u=[],l={name:"CodeBlock",data(){return{template:""}},props:{block:{type:Object}},computed:{html(){return this.block.data.code}}},o=l,a=n(1001),c=(0,a.Z)(o,r,u,!1,null,null,null),p=c.exports}}]);
-//# sourceMappingURL=CodeBlock.b4adbadc.js.map

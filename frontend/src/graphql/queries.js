@@ -48,6 +48,7 @@ query {
     id
     slug
     title
+    production
     url
     template
     parent {
@@ -70,7 +71,7 @@ query {
 // Pages and Redirects queries
 export const PAGES_REDIRECTS_QUERY = gql`
 query {
-  pages(limit: -1) {
+  pages(limit: -1 ) {
     id
     slug
     title

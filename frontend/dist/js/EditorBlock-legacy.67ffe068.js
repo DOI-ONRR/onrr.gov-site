@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkonrr_frontend_app_vue"]=self["webpackChunkonrr_frontend_app_vue"]||[]).push([[669],{6243:function(e,n,t){t.r(n),t.d(n,{default:function(){return s}});var o=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",[t("keep-alive",[t(e.pageBlock(e.blockContent.type),{tag:"component",staticClass:"block-component",attrs:{block:e.blockContent}})],1)],1)},r=[],c=t(9795),l={mixins:[c.j],name:"EditorBlock"},a=l,u=t(1001),p=(0,u.Z)(a,o,r,!1,null,"5b5ee060",null),s=p.exports}}]);
-//# sourceMappingURL=EditorBlock-legacy.67ffe068.js.map

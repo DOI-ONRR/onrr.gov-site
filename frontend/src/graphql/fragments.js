@@ -162,6 +162,7 @@ export const pageFields = gql`
   fragment pageFields on pages {
     id
     title
+    production
     slug
     hero_image {
       id

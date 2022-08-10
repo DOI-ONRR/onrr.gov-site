@@ -14,10 +14,46 @@
         <SideMenu />
         <Breadcrumbs />
       </div>
-      
+      d
+            <div v-if="page.production" >
+    </div>
+    <div v-else-if="isDev" >
+ 
+<v-overlay>
+
+      <v-card  style="opacity: 0.8; background-color: white; color: black; margin: 40px; padding: 40px"><strong style="color:red; font-weight: bold; font-size: xxx-large;">DRAFT</strong>
+<br>
+
+<br>
+
+<br>
+
+  <span style="color: black; padding: 40px; font-size: large;">This page has  not yet approved for release to prodution.  Please review and approve changes <a :href="this.pageCMSUrl" target="_blank" >here</a></span>
+<br>
+
+<br>
+
+<br>
+
+
+<strong style="color:red;font-weight: bold; font-size: xxx-large;">DRAFT</strong>
+</v-card>
+
+
+</v-overlay>
+
+
+
+</div>
+<div v-else-if="isProd" >
+ <div> ERROR </div>
+
+</div>
+      <div v-else> <div>ELSE</div> </div>  
+
       <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
     </div>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -31,7 +67,7 @@ import {
 const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 const SideMenu = () => import(/* webpackChunkName: "SideMenu" */ '@/components/navigation/SideMenu')
-
+const SITE="DEV"
 export default {
   mixins: [
     pageBlockMixin, 
@@ -99,7 +135,29 @@ export default {
     },
     pageTitle () {
       return this.pages_by_id.title
+    },
+    pageCMSUrl () {
+      return "https://dev-onrr-cms.app.cloud.gov/admin/content/pages/"+this.pages_by_id.id
+    },
+    isProd() {
+
+        if(SITE == "PROD") {
+         return true
+      }else {
+       return false
+      }
+
+      },
+    isDev() {
+      if(SITE == "DEV") {
+        return true
+      }else {
+       return false
+      }
     }
+  
+   
+    
   },
   created () {},
   

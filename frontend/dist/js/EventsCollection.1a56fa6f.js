@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["EventsCollection"],{"8f63":function(e,n,t){"use strict";t.r(n);var l=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("h2",[e._v("Hello, from the events collection!")])},o=[],c={name:"EventsCollection"},s=c,a=t("2877"),i=Object(a["a"])(s,l,o,!1,null,"f234a934",null);n["default"]=i.exports}}]);
-//# sourceMappingURL=EventsCollection.1a56fa6f.js.map

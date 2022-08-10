@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["CompaniesCollection"],{f521:function(e,n,o){"use strict";o.r(n);var l=function(){var e=this,n=e.$createElement,o=e._self._c||n;return o("h2",[e._v("Hello, from the companies collection!")])},t=[],c={name:"CompaniesCollection"},i=c,a=o("2877"),s=Object(a["a"])(i,l,t,!1,null,"09189230",null);n["default"]=s.exports}}]);
-//# sourceMappingURL=CompaniesCollection.b2941576.js.map

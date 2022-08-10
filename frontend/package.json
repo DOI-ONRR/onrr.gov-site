@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --no-clean",
+    "clean": "vue-cli-service build --clean",
     "build-fragment": "node src/js/possibleTypes.js",
     "lint": "vue-cli-service lint"
   },
