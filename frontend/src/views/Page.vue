@@ -49,7 +49,7 @@
  <div> ERROR </div>
 
 </div>
-      <div v-else> <div>ELSE</div> </div>  
+      <div v-else></div>  
 
       <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
     </div>
@@ -67,7 +67,7 @@ import {
 const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 const SideMenu = () => import(/* webpackChunkName: "SideMenu" */ '@/components/navigation/SideMenu')
-const SITE="DEV"
+const SITE=process.env.VUE_APP_SITE
 export default {
   mixins: [
     pageBlockMixin, 
