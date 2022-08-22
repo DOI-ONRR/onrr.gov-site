@@ -1,4 +1,4 @@
-+version: 2.1
+version: 2.1
 
 parameters:
   run_cms_updates:
@@ -84,6 +84,11 @@ workflows:
   build:
     jobs:
       - dev-onrr-frontend:
+          filters:
+            branches:
+              only:
+                - dev
+b      - preview-onrr-frontend:
           filters:
             branches:
               only:
