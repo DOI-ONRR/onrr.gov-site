@@ -20,7 +20,9 @@ jobs:
 
       - run: 
           name: Build app
-          command: npm run dev
+          command: |
+            cp nginx.conf.dev nginx.conf 
+            npm run dev
           
       - run: 
           name: Deploy to cloud.gov
@@ -45,7 +47,9 @@ jobs:
 
       - run: 
           name: Build app
-          command: npm run staging 
+          command: |
+            cp nginx.conf.preview nginx.conf
+            npm run staging 
           
       - run: 
           name: Deploy to cloud.gov
