@@ -35,7 +35,7 @@ jobs:
             cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
             cf push -f development.manifest.yml    
 
-preview-onrr-frontend:
+  preview-onrr-frontend:
     working_directory: ~/onrr.gov-site/frontend
     docker:
       - image: cimg/node:15.1
