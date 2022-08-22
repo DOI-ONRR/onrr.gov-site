@@ -1,5 +1,4 @@
 version: 2.1
-
 parameters:
   run_cms_updates:
     type: boolean
