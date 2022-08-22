@@ -85,12 +85,12 @@ workflows:
             branches:
               only:
                 - dev
-b      - preview-onrr-frontend:
+      - preview-onrr-frontend:
           filters:
             branches:
               only:
                 - dev
-  cms_updates:
+    cms_updates:
     when: << pipeline.parameters.run_cms_updates >>
     jobs:
       - update-cms
