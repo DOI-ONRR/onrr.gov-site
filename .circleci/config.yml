@@ -92,5 +92,5 @@ workflows:
                 - dev
   cms_updates:
     when: << pipeline.parameters.run_cms_updates >>
-      jobs:
-        - update-cms
+    jobs:
+      - update-cms
