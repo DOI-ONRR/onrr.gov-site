@@ -90,7 +90,7 @@ workflows:
             branches:
               only:
                 - dev
-cms_updates:
-  when: << pipeline.parameters.run_cms_updates >>
-    jobs:
-      - update-cms
+  cms_updates:
+    when: << pipeline.parameters.run_cms_updates >>
+      jobs:
+        - update-cms
