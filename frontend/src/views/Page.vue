@@ -14,8 +14,7 @@
         <SideMenu />
         <Breadcrumbs />
       </div>
-      d
-            <div v-if="page.production" >
+    <div v-if="page.production" >
     </div>
     <div v-else-if="isDev" >
  
