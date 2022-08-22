@@ -31,7 +31,7 @@ module.exports = function(env) {
     // CACHE_STORE: "redis",
     // CACHE_REDIS: "redis://cache:6379",
     CACHE_AUTO_PURGE: true,
-    
+a    
     ADMIN_EMAIL: `${ vcap_application.rganization_name }@onrr.gov`,
     ADMIN_PASSWORD: vcap_application.organization_id,
     
@@ -43,6 +43,6 @@ module.exports = function(env) {
 
     // https://github.com/directus/directus/releases
     CORS_ENABLED: true,
-    CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055'
+    CORS_ORIGIN: 'array:https://prod-onrr-cms.app.cloud.gov,https://prod-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055'
   }
 };
