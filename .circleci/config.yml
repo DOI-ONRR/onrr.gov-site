@@ -95,7 +95,7 @@ jobs:
             cd database
             echo "$CF_USERNAME"
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
-           cf target -o "$CF_ORG" -s prod
+            cf target -o "$CF_ORG" -s prod
             bash tunnel.sh onrr-psql prod-onrr-cms
             echo "restore dev databse to prod"
             source ../../.tunnelrc
