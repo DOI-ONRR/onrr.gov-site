@@ -42,7 +42,7 @@ export TUNNEL_PID=$PGID
 EOF
 
 echo $Host:$Port:$Name:$Username:$Password >> ~/.pgpass
-
+chmod 0600 ~/.pgpass
 cat ../../.tunnelrc
 echo "Tunnel and variables established to use on command line type"
 echo
