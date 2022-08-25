@@ -74,9 +74,6 @@ jobs:
           name: "Update OS"
           command: sudo apt-get update
       - run:
-          name: "Install posgres client"
-          command: sudo apt-get install  --fix-missing  postgresql-client postgres
-      - run:
           name: "cp dev to prod db "
           command: |
             cd database
