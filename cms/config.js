@@ -31,8 +31,7 @@ module.exports = function(env) {
     // CACHE_STORE: "redis",
     // CACHE_REDIS: "redis://cache:6379",
     CACHE_AUTO_PURGE: true,
-a    
-    ADMIN_EMAIL: `${ vcap_application.rganization_name }@onrr.gov`,
+    ADMIN_EMAIL: `${ vcap_application.organization_name }@onrr.gov`,
     ADMIN_PASSWORD: vcap_application.organization_id,
     
     EMAIL_SENDMAIL_NEW_LINE: "unix",
