@@ -38,12 +38,25 @@ export default {
   data: () => ({
     //
   }),
+  created() {
+    // console.log('this.$route.fullPath --------------------> ', this.$route.fullPath)
+  }
 };
 </script>
 
 
 <style>
-#app {}
+/* shared table styles */
+@import '@/scss/tables.scss';
+
+#app .home-content a:visited,
+#app .page-wrap a:visited {
+  color: var(--v-primary-base);
+}
+
+#app .page-wrap .v-breadcrumbs a:visited {
+  color: var(--v-secondary-base);
+}
 
 .v-toolbar__extension {
   margin-left: 0;
@@ -56,5 +69,70 @@ export default {
   font-weight: bold;
   color: black !important; 
   /* shouldn't have to do this, need to figure out correct method https://vuetifyjs.com/en/api/v-breadcrumbs/ */
+}
+
+.v-icon.mdi-file-pdf-box {
+  font-size: 28px;
+}
+
+/* editorjs tool icons */
+.v-icon.mdi-file-pdf-box,
+.v-icon.mdi-file-powerpoint-box,
+.v-icon.mdi-file-excel-box,
+.v-icon.mdi-file-word-box,
+.v-icon.mdi-file-powerpoint-box,
+.v-icon.mdi-text-box {
+  color: var(--v-secondary-base) !important;
+}
+
+.ce-link-inline__link-button {
+  background-color: var(--v-secondary-base) !important;
+  border-color: var(--v-secondary-base) !important;
+  align-items: center;
+  border-radius: 4px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-weight: 500;
+  letter-spacing: .0892857143em;
+  justify-content: center;
+  outline: 0;
+  position: relative;
+  text-decoration: none;
+  text-indent: 0.0892857143em;
+  text-transform: "inherit";
+  transition-duration: .28s;
+  transition-property: box-shadow,transform,opacity;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  color: white !important;
+  height: 36px;
+  min-width: 64px;
+  padding: 0 16px;
+  font-size: .85rem;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+
+/* dont display icon div next to button, creates weird flex alignment when targeting divs */
+.ce-link-inline__link-button +  .v-list-item__icon {
+  display: none;
+}
+
+.v-list-item__icon {
+  display: inline-block;
+  margin: 0;
+}
+
+.v-list-item__icon > .icon {
+  position: relative;
+  top: 4px;
+}
+
+.container .v-tabs i.v-icon.v-icon {
+  color: var(--v-secondary-base);
 }
 </style>

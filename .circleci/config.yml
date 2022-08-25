@@ -1,5 +1,4 @@
 version: 2.1
-
 parameters:
   run_cms_updates:
     type: boolean
@@ -21,7 +20,9 @@ jobs:
 
       - run: 
           name: Build app
-          command: npm run build
+          command: |
+            cp nginx.conf.dev nginx.conf 
+            npm run dev
           
       - run: 
           name: Deploy to cloud.gov
@@ -34,7 +35,85 @@ jobs:
             cf api https://api.fr.cloud.gov
             cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
             cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
-            cf push dev-onrr-frontend -f ./manifest.yml
+            cf push -f development.manifest.yml    
+  preview-onrr-frontend:
+    working_directory: ~/onrr.gov-site/frontend
+    docker:
+      - image: cimg/node:15.1
+    steps:
+      - checkout:
+          path: ~/onrr.gov-site
+      - node/install-packages
+
+      - run: 
+          name: Build app
+          command: |
+            cp nginx.conf.preview nginx.conf
+            npm run staging 
+          
+      - run: 
+          name: Deploy to cloud.gov
+          command: |
+            pwd && ls -l
+            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+            sudo dpkg -i cf-cli_amd64.deb  
+            # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
+            # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
+            cf api https://api.fr.cloud.gov
+            cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
+            cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
+            cf push -f preview.manifest.yml
+
+  onrr-database:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: "Begin database build"
+          command: |
+            cd database
+            ls -l
+      - run:
+          name: "Docker compose"
+          command: |
+            cd database
+            sudo docker-compose up -d
+
+      - run:
+          name: "Update OS"
+          command: sudo apt-get update
+      - run:
+          name: "Install posgres client"
+          command: sudo apt-get install  --fix-missing  postgresql-client && cp database/.pgpass $HOME/.pgpass && chmod 0600 $HOME/.pgpass
+      - run:
+          name: "cp dev to prod db "
+          command: |
+            cd database
+            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+            sudo dpkg -i cf-cli_amd64.deb 
+            cf api https://api.fr.cloud.gov
+            echo "$CF_USERNAME"
+            cf auth "$CF_USERNAME" "$CF_PASSWORD"
+            cf target -o "$CF_ORG" -s dev
+            cf apps
+            cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
+            bash tunnel.sh dev-onrr-cms
+            source ./.tunnelrc
+            cat ./.tunnelrc
+            pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $?
+            cf target -o "$CF_ORG" -s dev
+            cf apps
+            bash tunnel.sh prod-onrr-cms
+            source ./.tunnelrc
+            cat ./.tunnelrc
+            pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/database_backup.pg || echo $?
+            echo "Database copied to production"
+          
+      - store_artifacts:
+          path: /tmp/onrr_database_backup.pg
+          destination: onrr_database_backup.pg
+
 
   update-cms:
     docker:
@@ -62,6 +141,16 @@ workflows:
             branches:
               only:
                 - dev
+      - preview-onrr-frontend:
+          filters:
+            branches:
+              only:
+                - dev
+      - onrr-database:
+          filters:
+            branches:
+              only:
+                - main
   cms_updates:
     when: << pipeline.parameters.run_cms_updates >>
     jobs:

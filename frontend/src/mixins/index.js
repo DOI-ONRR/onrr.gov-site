@@ -1,2 +1,6 @@
 export { pageBlockMixin } from './pageBlockMixin.js'
 export { editorBlockMixin } from './editorBlockMixin.js'
+export { fileCollectionMixin } from './fileCollectionMixin'
+export { dateMixin } from './dateMixin'
+export { iconMixin } from './iconMixin'
+export { mobileMixin } from './mobileMixin'

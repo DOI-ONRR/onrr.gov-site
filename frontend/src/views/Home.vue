@@ -6,31 +6,20 @@
     <div v-else>
       <HeroImage 
         v-if="pages_by_id" 
-        :title="pages_by_id.hero_title" 
+        :title="pages_by_id.hero_title"
+	:description="pages_by_id.hero_image.description"
         :image="`${ API_URL }/assets/${ pages_by_id.hero_image.id }?fit=cover&quality=80`"
         :isHome="true" />
-      <v-container class="home__content">
+      <v-container class="home-content">
         <v-row>
           <v-col
             cols="12"
             xs="12"
-            sm="8">
+            sm="8"
+            class="pt-6">
 
-            <div v-for="block in page.page_blocks" :key="block.id">
-              <LayoutBlock :layout="block.item.block_layout" :block="block.item">
-                <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
-                <component :is="pageBlock(block.item.__typename)" :block="block.item" class="block-component"></component>
-              </LayoutBlock>
-            </div>
+            <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
 
-            <!-- Revenue Data block content -->
-            <v-row class="revenue-row">
-              <v-col cols="12" xs="12" md="12">
-                <v-card outlined elevation="0" class="card">
-                  <RevenueBlock title="Revenue Statistics" />
-                </v-card>
-              </v-col>
-            </v-row>
           </v-col>
           <!-- Sidebar -->
           <v-col cols="12" xs="12" sm="4">
@@ -58,7 +47,7 @@ const LayoutBlock = () => import('@/components/blocks/LayoutBlock')
 
 export default {
   mixins: [pageBlockMixin],
-  name: 'Home',
+  name: 'HomePage',
   metaInfo: {
     title: 'Home',
   },
@@ -76,19 +65,8 @@ export default {
           ID: 1
         }
       },
-      result ({ data }) {
-        if (data) {
-          console.log('contentBlocks data: ', data)
-        }
-        
-      },
       fetchPolicy: 'cache-and-network'
     },
-    collection: {
-      query() {
-      },
-      update: data => data
-    }
   }, 
   components: {
     RevenueBlock,
@@ -100,7 +78,7 @@ export default {
     console.log('view vuetify obj--------->', this.$vuetify)
   },
   mounted () {
-    console.log('breakpoint-------> ', this.$vuetify.breakpoint.width)
+    // console.log('breakpoint-------> ', this.$vuetify.breakpoint.width)
   },
   methods: {},
   computed: {
@@ -145,8 +123,4 @@ img {
   border-top-width: 6px;
 }
 
-.block-container {
-  display: flex;
-  flex-wrap: wrap;
-}
 </style>

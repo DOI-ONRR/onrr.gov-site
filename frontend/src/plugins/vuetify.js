@@ -40,6 +40,7 @@ export default new Vuetify({
         },
         anchor: '#0076a3',
         accent: '#534aae',
+        black: '#000000',
         green: {
           base: '#097d4d',
           lighten1: '#4aad79',
@@ -48,18 +49,22 @@ export default new Vuetify({
         purple: {
           base: '#650d79',
           lighten1: '#960d79',
+          lighten2: '#dfdcef',
           darken1: '#36004c',
         },
         yellow: {
           base: '#b6890f',
           lighten1: '#ecb947',
-          darken1: '#825c100',
+          darken1: '#825c10',
         },
+        white: '#ffffff',
         neutrals: {
           base: '#262431',
           lighten1: '#484554',
           lighten2: '#ebebed',
-        }
+          lighten3: '#fafafa',
+        },
+        expansionPanel: '#ebebed',
       }
     },
     options: {

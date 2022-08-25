@@ -1,6 +1,6 @@
 {
   "name": "editorjs",
-  "version": "1.0.0-rc.97",
+  "version": "1.0.0",
   "private": true,
   "license": "gpl-3.0",
   "keywords": [
@@ -14,24 +14,27 @@
     "type": "interface",
     "path": "dist/index.js",
     "source": "src/index.js",
-    "host": "^v9.0.0",
+    "host": "^v9.5.1",
     "hidden": false
   },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dist": "directus-extension build && mv dist editorjs && zip -r editorjs.zip editorjs",
+    "dist": "directus-extension build && cp dist/index.js ../cms/extensions/interfaces/editorjs/index.js",
     "prepack": "directus-extension build"
   },
   "dependencies": {
-    "@directus/extensions-sdk": "^9.0.1",
+    "@directus/extensions-sdk": "^9.10.0",
+    "@editorjs/link-autocomplete": "0.0.0",
     "@editorjs/list": "^1.6.2",
     "core-js": "^3.19.1",
+    "gridjs": "^5.0.2",
     "vue": "^3.2.22"
   },
   "devDependencies": {
     "@canburaks/text-align-editorjs": "^1.1.0",
+    "@directus/extensions-sdk": "^9.5.1",
     "@editorjs/attaches": "^1.2.0",
     "@editorjs/checklist": "^1.3.0",
     "@editorjs/code": "^2.7.0",
@@ -42,6 +45,7 @@
     "@editorjs/image": "^2.6.0",
     "@editorjs/inline-code": "^1.3.1",
     "@editorjs/link": "^2.3.1",
+    "@editorjs/list": "^1.6.2",
     "@editorjs/marker": "^1.2.2",
     "@editorjs/paragraph": "^2.8.0",
     "@editorjs/personality": "^2.0.2",
@@ -60,6 +64,7 @@
     "debounce": "^1.2.1",
     "editorjs-alert": "^1.0.3",
     "editorjs-list": "^2.1.4",
+    "editorjs-text-alignment-blocktune": "^1.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.20.0"
   },

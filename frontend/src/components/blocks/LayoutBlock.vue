@@ -1,19 +1,35 @@
 <template>
   <div>
-    <v-row v-if="layout === 'one_column'">
-      <v-col cols="12" sm="12">
-        <component :is="pageBlock(block.__typename)" :block="column(1)" :blockItem="block" class="block-component"></component>
+    <v-row>
+      <v-col 
+        v-for="block in layoutItems" 
+        :key="block.id" 
+        cols="12" 
+        sm="12"
+        :md="block.item.layoutCol" 
+        :class="[
+          'layout-block-container',
+          block.item.__typename, 
+          block.item.equal_col_height ? 'flex' : 'no-flex']">
+        <v-row>
+          <v-col 
+            v-for="nestedBlock in block.nestedBlocks" 
+            :key="nestedBlock.id" 
+            sm="12"
+            :md="nestedBlock.item.block_v_col" 
+            :class="[
+              'nested-block-container', 
+              nestedBlock.item.__typename, 
+              nestedBlock.item.equal_col_height ? 'flex' : 'no-flex']">
+            <component :is="pageBlock(nestedBlock.item.__typename)" :block="nestedBlock" class="block-component"></component>
+          </v-col>
+        </v-row>
       </v-col>
-    </v-row>
-    <v-row v-if="layout === 'two_column'">
-      <v-col cols="12" sm="6" v-for="i in 2" :key="i" class="block-container">
-        <component :is="pageBlock(block.__typename)" :block="column(i)" :blockItem="block" class="block-component"></component>
-      </v-col>
-    </v-row>
-    <v-row v-if="layout === 'three_column'">
-      <v-col cols="12" sm="4" v-for="i in 3" :key="i" class="block-container">
-        <component :is="pageBlock(block.__typename)" :block="column(i)" :blockItem="block" class="block-component"></component>
-      </v-col>
+      <!-- <v-row>
+        <v-col v-for="block in layoutBlocks" :key="block.id" sm="12" :md="block.item.block_v_col"  :class="['block-container', block.item.__typename, block.item.equal_col_height ? 'flex' : 'no-flex']">
+          <component :is="pageBlock(block.item.__typename)" :block="block" class="block-component"></component>
+        </v-col>
+      </v-row> -->
     </v-row>
   </div>
 </template>
@@ -24,41 +40,67 @@ export default {
   mixins: [editorBlockMixin, pageBlockMixin],
   name: 'LayoutBlock',
   data() {
-    return {}
+    return {
+      columnLayouBlockPresent: false
+    }
   },
   props: {
-    layout: String,
-    block: Object
+    layoutBlocks: Array,
+    // layoutBlocksRight: Array
   },
-  mounted() {},
-  methods: {
-    column(num) {
-      let n
-      let blocksArr = ['tab_blocks']
+  computed: {
+    layoutItems() {
+      const columnLayouBlockPresent = this.layoutBlocks && this.layoutBlocks.some(obj => obj.item.__typename === 'layout_column_blocks')
+      const layoutBlocks = this.layoutBlocks
+      const layoutItems = [{item: { block_v_col: "12" }, nestedBlocks: []}]
+      
+      if (columnLayouBlockPresent) {
+        layoutBlocks && layoutBlocks.forEach(obj => {
 
-      switch (num) {
-        case 1:
-          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_one.blocks
-          break
-        case 2:
-          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_two.blocks
-          break
-        case 3:
-          n = blocksArr.includes(this.block.__typename) ? this.block : this.block.column_three.blocks
-          break
-        default:
-          n = undefined
-          break
+          if(obj.item !== null) {
+            if (obj.item.__typename === 'layout_column_blocks') {
+              layoutItems.push({ ...obj, nestedBlocks: [] })
+            } else {
+              layoutItems[layoutItems.length - 1].nestedBlocks.push(obj)
+            }
+          }
+        })
+      } else {
+        layoutBlocks && layoutBlocks.forEach(obj => {
+          if(obj.item !== null) {
+            layoutItems[layoutItems.length - 1].nestedBlocks.push(obj)
+          }
+        })
       }
-      return n
-    },
+      return layoutItems
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.block-container {
+.home__wrap .block-container {
   display: flex;
   flex-wrap: wrap;
+}
+
+.nested-block-container.card_blocks.flex,
+.nested-block-container.content_blocks.flex {
+  display: flex;
+}
+
+.nested-block-container.card_blocks.no-flex,
+.nested-block-container.content_blocks.no-flex {
+  display: block;
+}
+
+.nested-block-container.content_blocks.flex .block-component {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.nested-block-container.content_blocks.flex .block-component > div {
+  flex: 1;
 }
 </style>

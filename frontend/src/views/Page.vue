@@ -4,33 +4,76 @@
       <v-progress-circular :value="20"></v-progress-circular>
     </div>
     <div v-else class="page-wrap">
-      <Breadcrumbs />
-      <div class="text-h1 page-title" v-if="page.title">{{ page.title }}</div>
-      <div v-if="page.page_blocks" class="fade-transition">
-        <div v-for="block in page.page_blocks" :key="block.id">
-          <LayoutBlock :layout="block.item.block_layout || 'one_column'" :block="block.item">
-            <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
-            <component :is="pageBlock(block.item.__typename)" :block="block.item" class="block-component"></component>
-          </LayoutBlock>
-        </div>
+      <div v-if="!isMobile">
+        <Breadcrumbs />
+        <div role='heading' aria-level=1 variant='h1' class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
       </div>
+
+      <div v-if="isMobile">
+        <div role='heading' aria-level=1 variant='h1' class="text-h1 page-title black--text text--lighten-2" v-if="page.title">{{ page.title }}</div>
+        <SideMenu />
+        <Breadcrumbs />
+      </div>
+    <div v-if="page.production" >
     </div>
-  </div>
+    <div v-else-if="isDev" >
+ 
+<v-overlay>
+
+      <v-card  style="opacity: 0.8; background-color: white; color: black; margin: 40px; padding: 40px"><strong style="color:red; font-weight: bold; font-size: xxx-large;">DRAFT</strong>
+<br>
+
+<br>
+
+<br>
+
+  <span style="color: black; padding: 40px; font-size: large;">This page has  not yet approved for release to prodution.  Please review and approve changes <a :href="this.pageCMSUrl" target="_blank" >here</a></span>
+<br>
+
+<br>
+
+<br>
+
+
+<strong style="color:red;font-weight: bold; font-size: xxx-large;">DRAFT</strong>
+</v-card>
+
+
+</v-overlay>
+
+
+
+</div>
+<div v-else-if="isProd" >
+ <div> ERROR </div>
+
+</div>
+      <div v-else></div>  
+
+      <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
+    </div>
+    </div>
 </template>
 
 <script>
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import { 
   pageBlockMixin,
-  editorBlockMixin
+  editorBlockMixin,
+  mobileMixin
 } from '@/mixins'
 
 const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
-
+const SideMenu = () => import(/* webpackChunkName: "SideMenu" */ '@/components/navigation/SideMenu')
+const SITE=process.env.VUE_APP_SITE
 export default {
-  mixins: [pageBlockMixin, editorBlockMixin],
-  name: 'Page',
+  mixins: [
+    pageBlockMixin, 
+    editorBlockMixin,
+    mobileMixin
+  ],
+  name: 'PageView',
   metaInfo () {
     return {
       title: this.metaTitle || this.pageTitle,
@@ -45,7 +88,8 @@ export default {
   },
   components: {
     Breadcrumbs,
-    LayoutBlock
+    LayoutBlock,
+    SideMenu
   },
   data() {
     return {
@@ -65,7 +109,7 @@ export default {
       loadingKey: 'loading...',
       variables () {
         return {
-          ID: this.findPageBySlug.id
+          ID: this.findPageByUrl.id
         }
       },
       // fetchPolicy: 'cache-and-network'
@@ -74,19 +118,10 @@ export default {
   props: {
     slug: String,
   },
-  created () {
-    this.$apollo.queries.pages_by_id.refetch()
-  },
   computed: {
-    findPageBySlug () {
-      const str = this.$route.path
-      const route = str.replace(/\//g, '')
-      let page
-      if(this.pages) {
-        page = this.slug ? this.pages.find(page => page.slug === this.slug) : this.pages.find(page => page.slug === route)
-      }
-
-      return page
+    findPageByUrl () {
+      // console.log('routePath yo ------------> ', this.$route.path)
+      return this.pages.find(page => page.url === this.$route.path)
     },
     page () {
       return this.pages_by_id
@@ -99,8 +134,32 @@ export default {
     },
     pageTitle () {
       return this.pages_by_id.title
+    },
+    pageCMSUrl () {
+      return "https://dev-onrr-cms.app.cloud.gov/admin/content/pages/"+this.pages_by_id.id
+    },
+    isProd() {
+
+        if(SITE == "PROD") {
+         return true
+      }else {
+       return false
+      }
+
+      },
+    isDev() {
+      if(SITE == "DEV") {
+        return true
+      }else {
+       return false
+      }
     }
-  }
+  
+   
+    
+  },
+  created () {},
+  
 }
 </script>
 
@@ -111,10 +170,9 @@ export default {
 
 .page-title {
   width: 100%;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   border-bottom: 4px solid var(--v-yellow-lighten1);
-  font-weight: 500;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 
 .block-component {

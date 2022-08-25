@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from 'apollo-boost'
 
 export const contentBlocks = gql`
   fragment contentBlocks on content_blocks {
@@ -6,49 +6,45 @@ export const contentBlocks = gql`
   }
 `
 
-// export const blockFields = gql`
-//   fragment blockFields on blocks {
-//     id
-//     block_label
-//     block_type
-//     block_layout
-//     column_one
-//     column_two
-//     column_three
-//     tab_items
-//   }
-// `
-
 export const contentBlockFields = gql`
   fragment contentBlockFields on content_blocks {
     id
     block_label
-    block_layout
-    column_one
-    column_two
-    column_three
+    block_v_col
+    block_content
+    equal_col_height
+  }
+`
+
+export const layoutColumnBlockFields = gql`
+  fragment layoutColumnBlockFields on layout_column_blocks {
+    id
+    layoutCol: block_v_col
   }
 `
 
 export const cardBlockFields = gql`
   fragment cardBlockFields on card_blocks {
     id
-    # block_collections
     block_color
     block_label
-    block_layout 
-    column_one
-    column_two
-    column_three
+    block_v_col
+    block_icon
+    block_content
+    equal_col_height
+    card_content_blocks {
+      id
+      item {
+        ...contentBlockFields
+      }
+    }
   }
 `
 
-
-export const tabBlockFields = gql`
-  fragment tabBlockFields on tab_blocks {
+export const tabBlockLabelFields = gql`
+  fragment tabBlockLabelFields on tab_block_label {
     id
     tab_block_label
-    tab_items
   }
 `
 
@@ -59,38 +55,99 @@ export const sectionHeadingBlocks = gql`
   }
 `
 
-export const tabBlocksContents = gql`
-  fragment tabBlocksContents on tab_blocks_contents {
-    tab_label
-    tab_blocks {
+export const expansionPanelBlockLabel = gql`
+  fragment expansionPanelBlockLabel on expansion_panel_block_label {
+    id
+    block_label
+  }
+`
+
+export const expansionPanelBlockFields = gql`
+  ${expansionPanelBlockLabel}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  fragment expansionPanelBlockFields on expansion_panels {
+    id
+    block_label
+    open_by_default {
+      id
+    }
+    expansion_panel_blocks {
+      id
       item {
-        ... on section_heading_blocks {
-          section_heading
-          section_heading_type
+        __typename
+        ...expansionPanelBlockLabel
+        ...contentBlockFields
+        ...cardBlockFields
+      }
+    }
+  }
+`
+
+export const nestedNestedTabBlockFields = gql`
+  ${tabBlockLabelFields}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  ${expansionPanelBlockFields}
+  ${layoutColumnBlockFields}
+  fragment nestedNestedTabBlockFields on tab_blocks {
+    id
+    tab_blocks {
+        id
+        item {
+          __typename
+          ...tabBlockLabelFields
+          ...contentBlockFields
+          ...cardBlockFields
+          ...expansionPanelBlockFields
+          ...layoutColumnBlockFields
         }
-        ... on content_blocks {
-          content
+    }
+  }
+`
+
+export const nestedTabBlockFields = gql`
+  ${tabBlockLabelFields}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  ${nestedNestedTabBlockFields}
+  ${layoutColumnBlockFields}
+  fragment nestedTabBlockFields on tab_blocks {
+    id
+    tab_blocks {
+        id
+        item {
+          __typename
+          ...tabBlockLabelFields
+          ...contentBlockFields
+          ...cardBlockFields
+          ...nestedNestedTabBlockFields
+          ...expansionPanelBlockFields
+          ...layoutColumnBlockFields
         }
-        ... on tab_blocks {
-          tab_block {
-            item {
-              ... on tab_blocks_contents {
-                tab_label
-                tab_blocks {
-                  item {
-                    ... on section_heading_blocks {
-                      section_heading
-                      section_heading_type
-                    }
-                    ... on content_blocks {
-                      content
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+    }
+  }
+`
+
+export const tabBlockFields = gql`
+  ${tabBlockLabelFields}
+  ${contentBlockFields}
+  ${cardBlockFields}
+  ${nestedTabBlockFields}
+  ${expansionPanelBlockFields}
+  ${layoutColumnBlockFields}
+  fragment tabBlockFields on tab_blocks {
+    id
+    tab_blocks {
+      id
+      item {
+        __typename
+        ...tabBlockLabelFields
+        ...contentBlockFields
+        ...cardBlockFields
+        ...nestedTabBlockFields
+        ...expansionPanelBlockFields
+        ...layoutColumnBlockFields
       }
     }
   }
@@ -100,12 +157,16 @@ export const pageFields = gql`
  ${contentBlockFields}
  ${tabBlockFields}
  ${cardBlockFields}
+ ${expansionPanelBlockFields}
+ ${layoutColumnBlockFields}
   fragment pageFields on pages {
     id
     title
+    production
     slug
     hero_image {
       id
+      description
     }
     hero_title
     page_blocks {
@@ -115,9 +176,10 @@ export const pageFields = gql`
         ...contentBlockFields
         ...tabBlockFields
         ...cardBlockFields
+        ...expansionPanelBlockFields
+        ...layoutColumnBlockFields
       }
     }
-    # page_builder
     meta_title
     meta_description
   }
@@ -132,21 +194,6 @@ export const cardBlocks = gql`
       item {
         __typename
         ...contentBlocks
-      }
-    }
-  }
-`
-
-export const tabBlocks = gql`
-  ${tabBlocksContents}
-  fragment tabBlocks on tab_blocks {
-    __typename
-    id
-    block_label
-    tab_block {
-      item {
-        __typename
-        ...tabBlocksContents
       }
     }
   }

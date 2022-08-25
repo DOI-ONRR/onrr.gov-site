@@ -21,4 +21,9 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.block-container .block-component {
+  display: flex;
+  flex-wrap: wrap;
+}
 </style>

@@ -11,7 +11,9 @@
         <v-btn
           v-for="item in menuItemsTop"
           :key="item.id"
-          :href="item.custom_url ? item.custom_url : item.link_to_page"
+          :to="item.link_to_page && item.link_to_page.url"
+          :href="item.custom_url && item.custom_url"
+          :target="`${ item.custom_url ? '_blank' : '_self' }`"
           plain
           color="white">
           {{ item.menu_label }}
@@ -27,7 +29,9 @@
         <v-btn
           v-for="item in menuItemsBottom"
           :key="item.id"
-          :href="item.custom_url ? item.custom_url : item.link_to_page"
+          :to="item.link_to_page && item.link_to_page.url"
+          :href="item.custom_url && item.custom_url"
+          :target="`${ item.custom_url ? '_blank' : '_self' }`"
           plain
           color="white">
           {{ item.menu_label }}
@@ -46,7 +50,7 @@
               alt="ONNR Logo"
               class="shrink mr-2"
               contain
-              src="../../assets/images/icons/onrr-logo-200x200.png"
+              src="../../assets/images/logos/ONRR-mark-200x200.png"
               transition="scale-transition"
               width="70"
             />
@@ -61,21 +65,21 @@
         </div>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items>
+      <v-toolbar-items
+      class="social-menu">
         <v-btn
           v-for="item in socialMenuItems"
           :key="item.id"
-          :to="item.slug"
-          text>
-          <!-- <span class="mr-2">{{ item.menu_label }}</span> -->
-          <v-icon color="white">{{ `mdi-${ item.menu_label.toLowerCase() }` }}</v-icon>
-        </v-btn>
-        <v-btn
+          :to="item.link_to_page && item.link_to_page.url"	
+          :href="item.custom_url && item.custom_url"
           text
-          to="/about-onrr/contact-us"
-        >
-          <v-icon color="white">mdi-phone</v-icon>
-          <span class="ml-2">Contact Us</span>
+          dark
+          :target="`${ item.custom_url ? '_blank' : '_self' }`"
+          class="no-btn-hover">
+          <span class="v-btn__content">
+            <v-icon color="white" v-if="item.menu_icon">{{ item.menu_icon }}</v-icon>
+            <span class="mr-2" v-if="item.menu_label === 'Contact Us'" style="color: white;">{{ item.menu_label }}</span>
+          </span>
         </v-btn> 
       </v-toolbar-items>
     </v-toolbar>
@@ -85,29 +89,29 @@
 <script>
 import { MENU_QUERY } from '@/graphql/queries'
 export default {
-  name: 'Footer',
+  name: 'FooterNav',
   data() {
     return {
-      menu_items: []
+      menus: []
     }
   },
   apollo: {
-    menu_items: {
+    menus: {
       query: MENU_QUERY,
       loadingKey: 'loading...'
     }
   },
   computed: {
     menuItemsTop: function () {
-      const fItems = this.menu_items.filter(item => item.menu === 'footer')
+      const fItems = this.menus.filter(item => item.menu === 'footer')
       return fItems.filter((item, index) => index < 5)
     },
     menuItemsBottom: function () {
-      const fItems = this.menu_items.filter(item => item.menu === 'footer')
+      const fItems = this.menus.filter(item => item.menu === 'footer')
       return fItems.filter((item, index) => index > 4)
     },
     socialMenuItems: function () {
-      return this.menu_items.filter(item => item.menu === 'social')
+      return this.menus.filter(item => item.menu === 'social')
     }
   }
 }
@@ -173,6 +177,39 @@ export default {
     top: -6px;
     position: relative;
   }
+}
+
+.social-menu {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  height: 50px;
+}
+
+.social-menu::after {
+  content: '';
+  flex: auto;
+}
+
+.social-menu .v-btn {
+  height: 50px !important;
+}
+
+.social-menu .v-btn:last-child {
+  margin-top: 6px;
+}
+
+.v-btn__content {
+  flex-direction: column;
+}
+
+.no-btn-hover {
+  text-transform: none;
+}
+
+.no-btn-hover::before {
+  background-color: transparent !important;
 }
 
 </style>
