@@ -67,7 +67,7 @@ jobs:
   onrr-database:
     docker:
       - image: cimg/go:1.17
-      - image: cimg/postgres:13.4.0
+      - image: cimg/postgres:13.7.0
     steps:
       - checkout
       - run:
