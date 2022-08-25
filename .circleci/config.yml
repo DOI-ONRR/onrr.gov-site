@@ -93,10 +93,8 @@ jobs:
           name: "restore prod db "
           command: |
             cd database
-            cf api https://api.fr.cloud.gov
-            cf auth "$PROD_CF_USERNAME" "$PROD_CF_PASSWORD"
-            cf target -o "$PROD_CF_ORG" -s "$PROD_CF_SPACE"
-            cf apps
+            cf target -o "$DEV_CF_ORG"  -s prod
+
             bash tunnel.sh onrr-psql prod-onrr-cms
             echo "restore dev databse to prod"
             source ../../.tunnelrc
