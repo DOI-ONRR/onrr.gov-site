@@ -101,14 +101,15 @@ jobs:
             bash tunnel.sh dev-onrr-cms
             source ./.tunnelrc
             cat ./.tunnelrc
-	    pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $?            cf target -o "$CF_ORG" -s dev
+            pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $?
+            cf target -o "$CF_ORG" -s dev
             cf apps
-	    bash tunnel.sh prod-onrr-cms
-	    source ./.tunnelrc
+            bash tunnel.sh prod-onrr-cms
+            source ./.tunnelrc
             cat ./.tunnelrc
             pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/database_backup.pg || echo $?
-	    echo "Database copied to production"
-	          
+    echo "Database copied to production"
+          
       - store_artifacts:
           path: /tmp/onrr_database_backup.pg
           destination: onrr_database_backup.pg
