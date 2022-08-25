@@ -88,7 +88,9 @@ jobs:
             echo "dump dev databse"
             source ../../.tunnelrc
             pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $s?
-            cf target -o "$DEV_CF_ORG" -s prod
+            cf api https://api.fr.cloud.gov
+            cf auth "$PROD_CF_USERNAME" "$PROD_CF_PASSWORD"
+            cf target -o "$PROD_CF_ORG" -s "$PROD_CF_SPACE"
             cf apps
             bash tunnel.sh onrr-psql prod-onrr-cms
             echo "restore dev databse to prod"
