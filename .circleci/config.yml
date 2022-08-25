@@ -115,7 +115,7 @@ jobs:
           destination: onrr_database_backup.pg
 
 
-update-cms:
+  update-cms:
     docker:
       - image: cimg/node:16.13
     steps:
