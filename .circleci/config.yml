@@ -87,13 +87,13 @@ jobs:
             cf target -o "$DEV_CF_ORG" -s dev
             cf apps
             cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
-            bash tunnel.sh dev-onrr-cms
+            bash tunnel.sh dev-onrr-psql dev-onrr-cms
             source ./.tunnelrc
             cat ./.tunnelrc
             pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $?
             cf target -o "$DEV_CF_ORG" -s prod
             cf apps
-            bash tunnel.sh prod-onrr-cms
+            bash tunnel.sh onrr-psql prod-onrr-cms
             source ./.tunnelrc
             cat ./.tunnelrc
             pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/database_backup.pg || echo $?
