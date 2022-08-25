@@ -65,8 +65,9 @@ jobs:
             cf push -f preview.manifest.yml
 
   onrr-database:
-    machine:
-      image: ubuntu-2004:202010-01
+    docker:
+      - image: cimg/go:1.17
+      - image: cimg/postgres:13.4.0
     steps:
       - checkout
       - run:
@@ -74,7 +75,7 @@ jobs:
           command: sudo apt-get update
       - run:
           name: "Install posgres client"
-          command: sudo apt-get install  --fix-missing  postgresql-client 
+          command: sudo apt-get install  --fix-missing  postgresql-client postgres
       - run:
           name: "cp dev to prod db "
           command: |
