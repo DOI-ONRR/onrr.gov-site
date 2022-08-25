@@ -93,7 +93,8 @@ jobs:
           name: "restore prod db "
           command: |
             cd database
-            cf target -o "$DEV_CF_ORG"  -s prod
+	    cf spaces
+            cf target -o "$PROD_CF_ORG"  -s prod
 
             bash tunnel.sh onrr-psql prod-onrr-cms
             echo "restore dev databse to prod"
