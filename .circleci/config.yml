@@ -142,6 +142,8 @@ workflows:
               only:
                 - dev
       - onrr-database:
+          context:
+            - PROD
           filters:
             branches:
               only:
