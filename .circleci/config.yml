@@ -65,46 +65,56 @@ jobs:
             cf push -f preview.manifest.yml
 
   onrr-database:
-    docker:
-      - image: cimg/postgres:13.7
+    machine:
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
+      - run:
+          name: "Begin database build"
+          command: |
+            cd database
+            ls -l
+      - run:
+          name: "Docker compose"
+          command: |
+            cd database
+            sudo docker-compose up -d
+
       - run:
           name: "Update OS"
           command: sudo apt-get update
       - run:
-          name: "dump dev db "
+          name: "Install posgres client"
+          command: sudo apt-get install  --fix-missing  postgresql-client && cp database/.pgpass $HOME/.pgpass && chmod 0600 $HOME/.pgpass
+      - run:
+          name: "cp dev to prod db "
           command: |
             cd database
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
             sudo dpkg -i cf-cli_amd64.deb 
             cf api https://api.fr.cloud.gov
-            echo "$DEV_CF_USERNAME"
-            cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s dev
-            cf apps
-            cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
-            bash tunnel.sh dev-onrr-psql dev-onrr-cms
-            echo "dump dev databse"
-            source ../../.tunnelrc
-            pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $s?
-
-      - run:
-          name: "restore prod db "
-          command: |
-            cd database
-            cf api https://api.fr.cloud.gov
-            printenv
-            echo "foo"
             echo "$CF_USERNAME"
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s prod
-            bash tunnel.sh onrr-psql prod-onrr-cms
-            echo "restore dev databse to prod"
-            source ../../.tunnelrc
-            pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/onrr_database_backup.pg || echo $?
+            cf target -o "$CF_ORG" -s dev
+            cf apps
+            cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
+            bash tunnel.sh dev-onrr-cms
+            source ./.tunnelrc
+            cat ./.tunnelrc
+            pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $?
+            cf target -o "$CF_ORG" -s dev
+            cf apps
+            bash tunnel.sh prod-onrr-cms
+            source ./.tunnelrc
+            cat ./.tunnelrc
+            pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/database_backup.pg || echo $? 
             echo "Database copied to production"
-          
+            echo "rebuilding site"
+            cd ../frontend
+            cp nginx.conf.preview nginx.conf
+            npm run production
+            cf push -f production.manifest.yml
+
       - store_artifacts:
           path: /tmp/onrr_database_backup.pg
           destination: onrr_database_backup.pg
@@ -142,8 +152,6 @@ workflows:
               only:
                 - dev
       - onrr-database:
-          context:
-            - PROD
           filters:
             branches:
               only:
