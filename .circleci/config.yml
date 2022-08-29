@@ -35,7 +35,25 @@ jobs:
             cf api https://api.fr.cloud.gov
             cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
             cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
-            cf push -f development.manifest.yml    
+            cf push -f development.manifest.yml
+      - run: 
+          name: Build app
+          command: |
+            cp nginx.conf.preview nginx.conf
+            npm run staging 
+          
+      - run: 
+          name: Deploy to cloud.gov
+          command: |
+            pwd && ls -l
+            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+            sudo dpkg -i cf-cli_amd64.deb  
+            # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
+            # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
+            cf api https://api.fr.cloud.gov
+            cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
+            cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
+            cf push -f preview.manifest.yml
   preview-onrr-frontend:
     working_directory: ~/onrr.gov-site/frontend
     docker:
@@ -105,7 +123,8 @@ jobs:
             pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/onrr_database_backup.pg || echo $?
             echo "Database copied to production"
             echo "rebuild production site"
-            cp nginx.conf.production nginx.conf
+	    cd ../frontend
+            cp nginx.conf.prod nginx.conf
             npm run production 
       - store_artifacts:
           path: /tmp/onrr_database_backup.pg
@@ -134,11 +153,6 @@ workflows:
   build:
     jobs:
       - dev-onrr-frontend:
-          filters:
-            branches:
-              only:
-                - dev
-      - preview-onrr-frontend:
           filters:
             branches:
               only:
