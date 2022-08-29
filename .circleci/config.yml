@@ -25,7 +25,7 @@ jobs:
             npm run dev
           
       - run: 
-          name: Deploy to cloud.gov
+          name: Build dev
           command: |
             pwd && ls -l
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
@@ -37,7 +37,7 @@ jobs:
             cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
             cf push -f development.manifest.yml
       - run: 
-          name: Build app
+          name: Build preview
           command: |
             cp nginx.conf.preview nginx.conf
             npm run staging 
@@ -123,7 +123,7 @@ jobs:
             pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/onrr_database_backup.pg || echo $?
             echo "Database copied to production"
             echo "rebuild production site"
-	    cd ../frontend
+            cd ../frontend
             cp nginx.conf.prod nginx.conf
             npm run production 
       - store_artifacts:
