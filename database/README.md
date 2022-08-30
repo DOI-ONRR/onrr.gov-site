@@ -39,7 +39,7 @@ Execute pg_dump from docker container
 `docker exec -it database bash -c 'pg_dump -Fc --verbose --username=directus --format=c > ./backup/database_dump.pg'`  
 
 Connect to psql instance in cloud.gov  
-`psql postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME}`
+`psql postgres://${DB_USER}:${DB_PASSWORD}@${HOST}:${PORT}/${DB_NAME}`
 
 Backup dev database to local machine  
 `pg_dump postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME} --verbose --no-acl --no-owner -Fc -f ./backup/dev_database_backup.pg`
@@ -49,3 +49,6 @@ Restore local docker container db from dev backup
 
 Restore dev db from local file  
 `pg_restore -d 'postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME}' --verbose --clean --no-password --no-owner --no-acl  ./backup/docker_database_dump.pg`
+
+Update table in dev
+`psql -U ${DB_USER} -d 'postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME}' -f ./path/to/file.sql`

@@ -2,11 +2,12 @@
   <div>
     <label v-if="$apollo.loading" text=""></label>
     <nav id="main-menu" class="primary" v-else>
-      <ul>
-        <li v-for="item in menuItems" :key="item.key.id">
-          <v-menu 
-            offset-y
-            open-on-hover>
+        <ul>
+        <li v-for="item in menuItems" :key="item.id">
+
+<v-menu
+            open-on-hover
+            offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="white"
@@ -14,37 +15,45 @@
                 dark
                 v-bind="attrs"
                 v-on="on"
-                v-on:hover="getChildItems(item.key.id)"
-                v-on:click="onClick($event.target.innerText); getChildItems(item.key.id)"
                 class="menu-btn"
-              >
-                  {{ item.key.menu_label }}
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item :to="item.key.link_to_page.url" class="menu-btn">
-                {{ `${ item.key.menu_label } Home` }}
+             >
+             <v-list-item-content>
+              <v-list-item-title
+            :id="attrs['aria-labelledby']"
+            v-text="item.menu_label"
+          >
+             </v-list-item-title> 
+            </v-list-item-content>
+          </v-btn>
+  </template>
+          <v-list>
+              <v-list-item :to="item.link_to_page.url" class="menu-btn">
+                {{ `${ item.menu_label } Home` }}
               </v-list-item>
               <v-list-item
-                v-for="child in item.data"
-                :key="child.id"
-                :to="`${ child.link_to_page.url  }`"
+                v-for="(child, i) in item.menu_children"
+                :key="i"
+                link
+                :to="`${ child.pages_id.url  }`"
                 class="menu-btn"
               >
-                  {{ child.menu_label }}
+                  {{ child.pages_id.title }}
               </v-list-item>
             </v-list>
           </v-menu>
         </li>
         <li>
+  <form id="search_form" action="https://search.usa.gov/search" accept-charset="UTF-8" method="get">
+    <input type="hidden" name="affiliate" id="affiliate" value="onrr.gov" autocomplete="off" />
           <v-text-field
             solo-inverted
+            name="query"
             dense
             label="Search"
             prepend-inner-icon="mdi-magnify"
-            color="white"
             class="search-input">
           </v-text-field>
+  </form>
         </li>
       </ul>
     </nav>
@@ -58,12 +67,12 @@ export default {
   name: 'MainMenu',
   data () {
     return {
-      menu_items: [],
-      items: [],
+      menus: [],
+      cItems: []
     }
   },
   apollo: {
-    menu_items: {
+    menus: {
       query: MENU_QUERY,
       loadingKey: 'loading...'
     }
@@ -74,27 +83,15 @@ export default {
         console.debug(`You clicked ${ event }`)
       }
     },
-    getChildItems: function (parentId) {
-      const i = []
-      const childItems = this.menu_items && this.menu_items.filter(item => item.menu === 'main' && item.parent !== null && item.parent.id === parentId)
-      childItems.forEach(item => i.push(item))
-      this.items = i
-    }
+    childItems(parentId) {
+      this.cItems = this.menus && this.menus.filter(item => item.id === parentId)[0].menu_children
+    },
   },
   computed: {
     menuItems() {
-      const mItems = []
-      if (this.menu_items) {
-        const childItems = this.menu_items.filter(item => item.menu === 'main' && item.parent !== null)
-        this.menu_items.filter(item => item.menu === 'main').map(item => {
-          if (item.parent === null) {
-            mItems.push({ key: item, data: [...childItems.filter(child => child.parent.id === item.id)] })
-          }
-        }) 
-      }
-      
-      return mItems
+      return this.menus.filter(item => item.menu === 'main')
     },
+    
   }
 }
 </script>
@@ -131,5 +128,13 @@ export default {
 
 .menu-btn {
   text-transform: none;
+}
+
+.search-input .v-icon {
+  color: white !important;
+}
+
+.search-input.v-input--is-focused .v-icon {
+  color: var(--v-secondary-base) !important;
 }
 </style>

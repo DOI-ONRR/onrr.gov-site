@@ -112,19 +112,7 @@
 	border-radius: 4px;
 }
 
-.codex-editor .ce-block hr {
-	margin-top: 52px;
-	margin-bottom: 56px;
-	text-align: center;
-	border: 0;
-}
-
-.codex-editor .ce-block hr::after {
-	font-size: 28px;
-	line-height: 0;
-	letter-spacing: 16px;
-	content: "...";
-}
+/* s */
 
 .codex-editor .ce-block table {
 	border-collapse: collapse;

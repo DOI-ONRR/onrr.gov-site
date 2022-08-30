@@ -3,4 +3,4 @@ static
 uploads
 docker-compose.yml
 node_modules
-extensions/hooks
+cms-package.json/*

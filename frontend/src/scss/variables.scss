@@ -4,24 +4,29 @@ $body-font-family: 'Lato', sans-serif;
 $heading-font-family: 'Lato', sans-serif;
 $headings: (
   'h1': (
-      'size': 36px,
-      'line-height': 36px,
+      'size': 2.813rem,
       'weight': 400,
+      'line-height': 2.813rem
   ),
   'h2': (
-      'size': 32px,
-      'line-height': 32px,
-      'weight': 400,
+      'size': 2.125rem,
+      'line-height': 2.125rem,
+      'weight': 400
   ),
   'h3': (
-    'size': 24px,
-    'line-height': 24px,
-    'weight': 400,
+    'size': 1.5rem,
+    'line-height': 1.5rem,
+    'weight': 400
   ),
   'h4': (
-    'size': 18px,
-    'line-height': 18px,
-    'weight': 400,
+    'size': 1.25rem,
+    'line-height': 1.25rem,
+    'weight': 700,
+  ),
+  'h5': (
+    'size': 1.125rem,
+    'line-height': 1.125rem,
+    'weight': 400
   )
 );
 

@@ -1,0 +1,11 @@
+---
+applications: 
+- name: onrr-psql-interface
+  instances: 1
+  disk_quota: 2G
+  memory: 2G
+  random-route: false
+  buildpacks:
+    - staticfile_buildpack
+  services:
+    - onrr-psql

@@ -8,20 +8,25 @@
     <div v-else>
       <HeroImage
         v-if="page && pages_by_id" 
-        :title="page.hero_title"
+        :title="pages_by_id.hero_title"
+        :description="pages_by_id.hero_image.description"
         :image="`${ API_URL }/assets/${ pages_by_id.hero_image ? pages_by_id.hero_image.id : '36cdee7e-e6e8-435f-850c-05636e551723' }?fit=cover&quality=80`"
         :isHome="false" />
       <v-container>
         <v-row>
           <v-col
+            xs="12"
             sm="12"
-            md="3">
-            <SideMenu />
+            md="3"
+            cols="12">
+            <SideMenu v-if="!isMobile" />
           </v-col>
           <v-col
+            xs="12"
             sm="12"
-            md="9">
-            <router-view />
+            md="9"
+            col="12">
+              <router-view />
           </v-col>
         </v-row>
       </v-container>
@@ -31,6 +36,7 @@
 
 <script>
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
+import { mobileMixin } from '@/mixins'
 const SideMenu = () => import(/* webpackChunkName: "Sidemenu" */ '@/components/navigation/SideMenu')
 const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/components/sections/HeroImage')
 
@@ -38,6 +44,7 @@ const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/component
 
 export default {
   name: "TwoColumnLeft",
+  mixins: [mobileMixin],
   data() {
     return {
       page: null,
@@ -52,11 +59,8 @@ export default {
       loadingKey: 'loading...',
       result ({ data }) {
         if (data) {
-          const str = this.$route.path
-          const routes = str.split('/')
-          const page = this.slug 
-            ? data.pages.find(page => page.slug === this.slug)
-            : this.pages.find(page => page.slug === routes[routes.length - 1])
+          const page = data.pages.find(page => page.url === this.$route.path)
+
           this.page = page
           this.pageId = page.id
         }
@@ -82,25 +86,18 @@ export default {
     }
   },
   created() {
-    this.findPageBySlug()
+    this.findPageByUrl()
   },
   methods: {
-    findPageBySlug: function () {
-      const str = this.$route.path
-      const routes = str.split('/')
+    findPageByUrl: function () {
+        let page
+        if (this.pages) {
+          page = this.pages.find(page => page.url === this.$route.path)
+        }
+        
 
-      let page
-      if(this.pages) {
-        page = (this.slug !== undefined) 
-          ? this.pages.find(page => page.slug === this.slug)
-          : this.pages.find(page => page.slug === routes[routes.length - 1]) || false
-      }
-      this.page = page
-      return page
-    },
-    getPageBySlug: function(slug) {
-      const page = this.pages.find(page => page.slug === slug)
-      return page
+        this.page = page
+        return page
     }
   }
 }

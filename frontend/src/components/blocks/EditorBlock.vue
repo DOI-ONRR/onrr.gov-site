@@ -1,7 +1,7 @@
 <template>
   <div>
     <keep-alive>
-      <component :is="pageBlock(blockContent.type)" :block="blockContent" :key="blockContent.id" class="block-component"></component>
+      <component :is="pageBlock(blockContent.type)" :block="blockContent" class="block-component"></component>
     </keep-alive>
   </div>
 </template>
@@ -17,6 +17,12 @@ export default {
 
 <style lang="scss" scoped>
 .block-component {
-  margin: 24px 0;
+  margin: 0 0 16px 0;
+}
+
+.block-component span a:after {
+  content: "\feff";
+  padding-left: 4px;
+  white-space: nowrap;
 }
 </style>
