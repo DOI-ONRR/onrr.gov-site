@@ -1,2 +1,6 @@
 Bold and Italcize About - 8/30/2022 GitHub #
+<<<<<<< HEAD
+test #2 in dev 
+=======
 TEST#2 8/30/2022
+>>>>>>> test-workflow
