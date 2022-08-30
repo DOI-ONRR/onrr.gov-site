@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkonrr_frontend_app_vue"]=self["webpackChunkonrr_frontend_app_vue"]||[]).push([[169],{7816:function(n,e,r){r.r(e),r.d(e,{default:function(){return _}});var t=function(){var n=this,e=n.$createElement;n._self._c;return n._m(0)},u=[function(){var n=this,e=n.$createElement,r=n._self._c||e;return r("div",[r("hr")])}],l={data:function(){return{}}},a=l,c=r(1001),f=(0,c.Z)(a,t,u,!1,null,null,null),_=f.exports}}]);
+//# sourceMappingURL=HorizontalRuleBlock-legacy.0b0939fe.js.map
