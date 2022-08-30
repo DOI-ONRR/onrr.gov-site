@@ -12,7 +12,7 @@ jobs:
   dev-onrr-frontend:
     working_directory: ~/onrr.gov-site/frontend
     docker:
-      - image: cimg/node:15.1
+      - image: cimg/node:16.16
     steps:
       - checkout:
           path: ~/onrr.gov-site
@@ -57,7 +57,7 @@ jobs:
   preview-onrr-frontend:
     working_directory: ~/onrr.gov-site/frontend
     docker:
-      - image: cimg/node:15.1
+      - image: cimg/node:16.16
     steps:
       - checkout:
           path: ~/onrr.gov-site
@@ -73,6 +73,7 @@ jobs:
           name: Deploy to cloud.gov
           command: |
             pwd && ls -l
+            printenv
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
             sudo dpkg -i cf-cli_amd64.deb  
             # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
