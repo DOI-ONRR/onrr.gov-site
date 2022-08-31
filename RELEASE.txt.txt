@@ -1,7 +1,2 @@
 Bold and Italcize About - 8/30/2022 GitHub #
-<<<<<<< Updated upstream
-test #2 in dev 
-=======
-Github# 
-
->>>>>>> Stashed changes
+test #2 in dev
