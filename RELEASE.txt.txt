@@ -2,8 +2,6 @@ Bold and Italcize About - 8/30/2022 GitHub #
 
 8/31/22 - Issue #2133 - CLT
 
-<<<<<<< HEAD
-test #2 in dev 
-=======
 TEST#2 8/30/2022
->>>>>>> test-workflow
+
+8/31/2022 Github#2135
