@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkonrr_frontend_app_vue"]=self["webpackChunkonrr_frontend_app_vue"]||[]).push([[167],{3985:function(e,n,r){r.r(n),r.d(n,{default:function(){return f}});var t=function(){var e=this,n=e.$createElement,r=e._self._c||n;return r("h2",[e._v("Hello, from the companies collection!")])},o=[],l={name:"CompaniesCollection"},u=l,c=r(1001),a=(0,c.Z)(u,t,o,!1,null,"2d100b6e",null),f=a.exports}}]);
-//# sourceMappingURL=CompaniesCollection.45a23e53.js.map
