@@ -18,7 +18,7 @@
    <div v-if="isDev" >
  <template>
  
-  <v-btn block  @click="triggerPipeline()">>
+  <v-btn block  @click="releaseToProd()">>
 Release to production
  </v-btn>
 </template>
@@ -71,8 +71,7 @@ import {
   editorBlockMixin,
   mobileMixin
 } from '@/mixins'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+
 const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 const SideMenu = () => import(/* webpackChunkName: "SideMenu" */ '@/components/navigation/SideMenu')
@@ -107,15 +106,8 @@ export default {
       pages: [],
       pages_by_id: [],
       code: '',
-
-      loadingProjects : false,
-      projects: [],
-      selectedProject : {},
-      loadingPipelines : false,
-      pipelines : [],
-     triggeringProjectPipeline : false,
-      colCount
-}
+      colCount: 1
+    }
   },
   apollo: {
     pages: {
@@ -149,45 +141,15 @@ export default {
         headers: { "Content-Type": "application/json",
                    "Circle-Token": CIRCLE_TOKEN,
                    "Access-Control-Allow-Origin": "*",
+                 }
 
-},
- 
-
-   };
-   fetch("https://circleci.com/api/v2/project/gh/ONRR/onrr.gov-site/pipeline", requestOptions)
-
-    },
-loadPipelines : async function (project) {
-                    this.selectedProject = onrr.gov-site;
-
-                    this.loadingPipelines = true;
-
-                    const project_slug =  "/gh/ONRR/onrr.gov-site" //`${project.vcs_type}/${project.username}/${project.reponame}`;
-                    let pipelines = await axios.get(`getpipelines?project_slug=${project_slug}`);
-                    console.log(pipelines);
-                    this.pipelines = pipelines.data.items;
-
-                    this.loadingPipelines = false;
-                },
-                triggerPipeline : async function () {
-                    
-                    this.triggeringProjectPipeline = true;
-
-                    let project = this.selectedProject;
-
-                    const project_slug = `${project.vcs_type}/${project.username}/${project.reponame}`;
-
-                    let trigger = await axios.post(`triggerpipeline`, {
-                        project_slug
-                    });
-                    console.log(trigger);
-
-                    this.loadPipelines(project);
-
-                    this.triggeringProjectPipeline = false;
-                }
-            
+      };
+        fetch("https://circleci.com/api/v2/project/gh/ONRR/onrr.gov-site/pipeline", requestOptions)
+     
+   }
   },
+
+   
 
   props: {
     slug: String,
@@ -231,16 +193,8 @@ loadPipelines : async function (project) {
    
     
   },
-
-  async created(){
-
-                this.loadingProjects = true;
-
-                let projects = await axios.get(`getprojects`);
-                this.projects = projects.data;
-
-                this.loadingProjects = false;
-            },
+  created () {},
+  
 }
 </script>
 
