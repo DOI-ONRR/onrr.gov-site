@@ -729,7 +729,7 @@ eval("module.exports = JSON.parse('{\"card_blocks_card_content_blocks_item_union
 /******/ 	
 /******/ 	/* webpack/runtime/publicPath */
 /******/ 	!function() {
-/******/ 		__webpack_require__.p = "/";
+/******/ 		__webpack_require__.p = "beta.onrr.gov/";
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */

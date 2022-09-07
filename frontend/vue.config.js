@@ -2,9 +2,11 @@
 const targetUrl = process.env.NODE_ENV === 'production' ? '' : 'http://127.0.0.1:8055' 
 const SITE=process.env.SITE
 module.exports = {
+  publicPath: 'beta.onrr.gov',
   transpileDependencies: [
     'vuetify'
   ],
+ 
   chainWebpack: (config) => {
    config.module.rules.delete('svg')
    config.module.rule('svg')
@@ -16,6 +18,8 @@ module.exports = {
       .loader('vue-svg-loader');
   },
   devServer: {
+
+  
     // proxy: targetUrl
     proxy: {
       '^/graphql': {

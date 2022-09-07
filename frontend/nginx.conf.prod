@@ -5,7 +5,6 @@ daemon off;
 
 error_log stderr;
 events { worker_connections 1024; }
-server_name  beta.onrr.gov;
 http {
   include       mime.types;
   charset utf-8;
