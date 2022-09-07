@@ -1,6 +1,6 @@
 ---
 applications: 
-- name: dev-onrr-frontend
+- name: prod-onrr-frontend 
   path: ./
   instances: 1
   disk_quota: 1G

@@ -42,6 +42,6 @@ module.exports = function(env) {
 
     // https://github.com/directus/directus/releases
     CORS_ENABLED: true,
-    CORS_ORIGIN: 'array:https://prod-onrr-cms.app.cloud.gov,https://prod-onrr-frontend.app.cloud.gov,https://beta.onrr.gov,http://0.0.0.0:8055'
+    CORS_ORIGIN: 'array:https://prod-onrr-cms.app.cloud.gov,https://beta.onrr.gov,http://0.0.0.0:8055'
   }
 };
