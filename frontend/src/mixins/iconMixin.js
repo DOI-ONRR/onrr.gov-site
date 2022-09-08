@@ -15,11 +15,12 @@ export const iconMixin = {
         case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           type = 'mdi-file-excel-box'
-          break
+          break;
         case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+          case 'pptx':
           type = 'mdi-file-powerpoint-box'
-          break
-        case 'pptx':
+           break;
+          case 'plain':
           type = 'mdi-text-box'
           break
         default:
