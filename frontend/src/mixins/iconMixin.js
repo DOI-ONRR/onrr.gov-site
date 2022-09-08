@@ -18,6 +18,8 @@ export const iconMixin = {
           break;
         case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
         case 'vnd.openxmlformats-officedocument.presentationml.presentation':
+        case 'pptx':
+        case '.pptx':
           type = 'mdi-file-powerpoint-box'
            break;
           case 'plain':
