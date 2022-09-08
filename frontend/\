@@ -1,0 +1,10 @@
+---
+applications: 
+- name: prod-onrr-frontend 
+  path: ./
+  instances: 1
+  disk_quota: 1G
+  memory: 100M
+  random-route: false
+  buildpacks:
+    - nginx_buildpack
