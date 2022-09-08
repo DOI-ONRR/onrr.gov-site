@@ -192,6 +192,13 @@ workflows:
             branches:
               only:
                 - main
+      - prod-onrr-frontend:
+          context:
+            - PROD
+          filters:
+            branches:
+              only:
+                - main
   cms_updates:
     when: << pipeline.parameters.run_cms_updates >>
     jobs:
