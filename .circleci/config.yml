@@ -82,6 +82,35 @@ jobs:
             cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
             cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
             #cf push -f preview.manifest.yml
+  prod-onrr-frontend:
+    working_directory: ~/onrr.gov-site/frontend
+    docker:
+      - image: cimg/node:16.16
+    steps:
+      - checkout:
+          path: ~/onrr.gov-site
+      - node/install-packages
+
+      - run: 
+          name: Build app
+          command: |
+            cp nginx.conf.prod nginx.conf
+            npm run production
+          
+      - run: 
+          name: Deploy to cloud.gov
+          command: |
+            pwd && ls -l
+            printenv
+            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+            sudo dpkg -i cf-cli_amd64.deb  
+            # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
+            # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
+            cf api https://api.fr.cloud.gov
+            cf auth "$PROD_CF_USERNAME" "$PROD_CF_PASSWORD"
+            cf target -o "$PROD_CF_ORG" -s "$PROD_CF_SPACE"
+            cf push -f ./prod.manifest.yml
+
 
   onrr-database:
     docker:
@@ -157,6 +186,13 @@ workflows:
               only:
                 - dev
       - onrr-database:
+          context:
+            - PROD
+          filters:
+            branches:
+              only:
+                - main
+      - prod-onrr-frontend:
           context:
             - PROD
           filters:
