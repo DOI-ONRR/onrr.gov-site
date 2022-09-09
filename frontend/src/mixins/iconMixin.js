@@ -17,10 +17,10 @@ export const iconMixin = {
           type = 'mdi-file-excel-box'
           break;
         case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-        case 'vnd.openxmlformats-officedocument.presentationml.presentation':
-        case 'pptx':
-        case '.pptx':
+       case 'application/vnd.ms-powerpoint':
+      case 'application/vnd.ms-powerpoint.presentation.macroEnabled.12':
           type = 'mdi-file-powerpoint-box'
+          return 'x-office-presentation';
            break;
           case 'plain':
           type = 'mdi-text-box'
