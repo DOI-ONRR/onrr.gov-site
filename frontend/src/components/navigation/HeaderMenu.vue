@@ -86,3 +86,4 @@ export default {
   background-color: transparent !important;
 }
 </style>
+<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
