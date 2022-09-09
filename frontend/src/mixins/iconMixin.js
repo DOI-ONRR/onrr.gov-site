@@ -1,7 +1,7 @@
 export const iconMixin = {
   methods: {
    fileIcon(fileType) {
-      let type 
+      let type
       switch (fileType) {
         case 'application/pdf':
         case 'pdf':
@@ -15,13 +15,11 @@ export const iconMixin = {
         case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           type = 'mdi-file-excel-box'
-          break;
+          break
         case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
           type = 'mdi-file-powerpoint-box'
-           break;
-          case 'plain':
-          type = 'mdi-text-box'
           break
+        
         default:
           type = undefined
           break;
