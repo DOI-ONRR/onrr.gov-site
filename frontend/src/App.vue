@@ -80,7 +80,6 @@ export default {
 .v-icon.mdi-file-powerpoint-box,
 .v-icon.mdi-file-excel-box,
 .v-icon.mdi-file-word-box,
-.v-icon.mdi-file-powerpoint-box,
 .v-icon.mdi-text-box {
   color: var(--v-secondary-base) !important;
 }
