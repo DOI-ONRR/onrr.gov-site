@@ -3,6 +3,10 @@ export const iconMixin = {
    fileIcon(fileType) {
       let type
       switch (fileType) {
+        case 'vnd.openxmlformats-officedocument.presentationml.presentation':
+        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+        case 'pptx':
+          type = 'mdi-file-powerpoint-box'
         case 'application/pdf':
         case 'pdf':
           type = 'mdi-file-pdf-box'
@@ -15,18 +19,15 @@ export const iconMixin = {
         case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           type = 'mdi-file-excel-box'
-          break
-        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-          type = 'mdi-file-powerpoint-box'
-          break
-        case 'pptx':
-          type = 'mdi-text-box'
-          break
-        default:
-          type = undefined
-          break;
-      }
-      return type;
-    },
+        break;
+          case 'plain':
+            type = 'mdi-text-box'
+            break
+          default:
+            type = undefined
+            break;
+        }
+        return type;
+      },
+    }
   }
-}
