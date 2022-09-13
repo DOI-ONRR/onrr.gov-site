@@ -24,7 +24,7 @@
         <v-icon color="white" v-if="item.menu_icon" class="mr-1">{{ item.menu_icon }}</v-icon>
         <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
       </span>
-      
+
     </v-btn>
     <v-btn
       v-if="hostname === 'localhost' || hostname === '192.168.0.22'"
@@ -86,4 +86,3 @@ export default {
   background-color: transparent !important;
 }
 </style>
-<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
