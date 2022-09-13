@@ -5,6 +5,13 @@ export const iconMixin = {
       switch (fileType) {
         case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
           type = 'mdi-file-powerpoint-box'
+          break;
+          case 'vnd.openxmlformats-officedocument.presentationml.presentation':
+            type = 'mdi-file-powerpoint-box'
+            break;
+            case 'pptx':
+              type = 'mdi-file-powerpoint-box'
+              break;
         case 'application/pdf':
         case 'pdf':
           type = 'mdi-file-pdf-box'
