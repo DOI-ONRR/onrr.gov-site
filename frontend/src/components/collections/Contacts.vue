@@ -6,7 +6,7 @@
             <TextField :fields="searchInputField"></TextField>
           </v-col>
         </v-row>
- <div v-if="visibleItems.length > 0 && searchInputField.text  ">
+ <div v-if="visibleItems.length > 0 && showResults">
         <v-row v-if="searchResults">
           <v-col cols="12" sm="4">
             <SelectField :fields="categoriesSelectField"></SelectField>
@@ -37,7 +37,7 @@
 </div>
     </v-container>
     
-    <div v-if="visibleItems.length > 0 && searchInputField.text  ">
+    <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <h2 class="collection-category pa-3 mb-3">
@@ -338,6 +338,15 @@ export default {
     },
     visibleItems() {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
+    },
+    showResults() {
+     if ( this.collectionPage.length > 0 ) {
+     return  true
+     }else if  ( this.searchInputField.text.length > 0) {
+     return true
+     } else {
+        return false
+     }
     },
     filteredCollectionItems() {
       this.resetPagination()

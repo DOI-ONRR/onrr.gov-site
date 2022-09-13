@@ -15,9 +15,18 @@
         <Breadcrumbs />
       </div>
     <div v-if="page.production" >
-    </div>
-    <div v-else-if="isDev" >
+   <div v-if="isDev" >
+ <template>
  
+  <v-btn block  @click="releaseToProd()">>
+Release to production
+ </v-btn>
+</template>
+￼</div>
+</div>
+    <div v-else-if="isDev" >
+ ￼
+
 <v-overlay>
 
       <v-card  style="opacity: 0.8; background-color: white; color: black; margin: 40px; padding: 40px"><strong style="color:red; font-weight: bold; font-size: xxx-large;">DRAFT</strong>
@@ -67,6 +76,7 @@ const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/compon
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 const SideMenu = () => import(/* webpackChunkName: "SideMenu" */ '@/components/navigation/SideMenu')
 const SITE=process.env.VUE_APP_SITE
+const CIRCLE_TOKEN=process.env.VUE_APP_CIRCLE_TOKEN
 export default {
   mixins: [
     pageBlockMixin, 
@@ -115,6 +125,32 @@ export default {
       // fetchPolicy: 'cache-and-network'
     }
   },
+
+  methods: {
+    async loadUsers () {
+      const response = await fetch("https://reqres.in/api/users")
+      const { data: users } = await response.json()
+      this.users = users
+    },
+
+   async releaseToProd() {
+
+      // Simple POST request with a JSON body using fetch
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json",
+                   "Circle-Token": CIRCLE_TOKEN,
+                   "Access-Control-Allow-Origin": "*",
+                 }
+
+      };
+        fetch("https://circleci.com/api/v2/project/gh/ONRR/onrr.gov-site/pipeline", requestOptions)
+     
+   }
+  },
+
+   
+
   props: {
     slug: String,
   },
@@ -153,8 +189,7 @@ export default {
       }else {
        return false
       }
-    }
-  
+    },
    
     
   },

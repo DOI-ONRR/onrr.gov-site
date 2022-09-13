@@ -21,7 +21,7 @@ export default {
       // if no subcompoents specify a metaInfo.title, this title will be used
       title: 'Office of Natural Resources Revenue',
       // all page titles will be injected into this template
-      titleTemplate: '%s | Office of Natual Resources Revenue',
+      titleTemplate: '%s | Office of Natural Resources Revenue',
       meta: [
         { property: 'og:site_name', content: 'Office of Natural Resources Revenue' },
         { property: 'og:type', content: 'website' },
@@ -80,7 +80,6 @@ export default {
 .v-icon.mdi-file-powerpoint-box,
 .v-icon.mdi-file-excel-box,
 .v-icon.mdi-file-word-box,
-.v-icon.mdi-file-powerpoint-box,
 .v-icon.mdi-text-box {
   color: var(--v-secondary-base) !important;
 }

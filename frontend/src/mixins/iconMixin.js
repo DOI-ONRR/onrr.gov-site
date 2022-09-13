@@ -26,7 +26,6 @@ export const iconMixin = {
           type = undefined
           break;
       }
-
       return type;
     },
   }

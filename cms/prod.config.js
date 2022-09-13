@@ -39,9 +39,9 @@ module.exports = function(env) {
     EMAIL_FROM: "no-reply@directus.io", 
     EMAIL_TRANSPORT: "sendmail",
     GITHUB_TOKEN: env.GITHUB_TOKEN,
-
+    MAX_RELATIONAL_DEPTH: 100,
     // https://github.com/directus/directus/releases
     CORS_ENABLED: true,
-    CORS_ORIGIN: 'array:https://prod-onrr-cms.app.cloud.gov,https://prod-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055'
+    CORS_ORIGIN: 'array:https://prod-onrr-cms.app.cloud.gov,https://prod-onrr-frontend.app.cloud.gov,https://beta.onrr.gov,http://0.0.0.0:8055'
   }
 };
