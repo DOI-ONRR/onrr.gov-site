@@ -20,7 +20,7 @@ jobs:
 
       - run: 
           name: Build app
-          command: }
+          command: |
             printenv
             cp nginx.conf.dev nginx.conf 
             npm run dev
