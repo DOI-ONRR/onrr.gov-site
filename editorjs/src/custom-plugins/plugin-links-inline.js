@@ -35,19 +35,19 @@ export default class LinksInline {
     this.textNode = null;
     this.urlLabel='Selected'
     this.urlType='Inline'
-    
+
     this.nodes = {
       toolButtons: null,
       toolButtonLink: null,
       toolButtonUnlink: null,
-      
+
       actionsWrapper: null,
       inputWrapper: null,
       inlineRadio: null,
       inlineButtonWrapper: null,
       inlineButton: null,
       replaceRadio: null,
-      
+
       searchResults: null,
 
       externalLinkWrapper: null,
@@ -64,7 +64,7 @@ export default class LinksInline {
 
     };
   }
-  
+
   render() {
     console.debug('  render() ------------->');
     /**
@@ -73,7 +73,7 @@ export default class LinksInline {
      * @type {HTMLButtonElement}
      */
     this.nodes.toolButtons = Dom.make('button', this.api.styles.inlineToolButton);
-    
+
     /**
      * Create Link button
      *
@@ -93,7 +93,7 @@ export default class LinksInline {
             innerHTML: 'inline <svg width="20" height="20" viewBox="0 0 22 22"><path d="M8.567 13.629c.728.464 1.581.65 2.41.558l-.873.873A3.722 3.722 0 1 1 4.84 9.794L6.694 7.94a3.722 3.722 0 0 1 5.256-.008L10.484 9.4a5.209 5.209 0 0 1-.017.016 1.625 1.625 0 0 0-2.29.009l-1.854 1.854a1.626 1.626 0 0 0 2.244 2.35zm2.766-7.358a3.722 3.722 0 0 0-2.41-.558l.873-.873a3.722 3.722 0 1 1 5.264 5.266l-1.854 1.854a3.722 3.722 0 0 1-5.256.008L9.416 10.5a5.2 5.2 0 0 1 .017-.016 1.625 1.625 0 0 0 2.29-.009l1.854-1.854a1.626 1.626 0 0 0-2.244-2.35z" transform="translate(-3.667 -2.7)"></path></svg>'
             });
             this.nodes.toolButtons.appendChild(this.nodes.toolButtonUnlink);
-            
+
             this.toggleVisibility(this.nodes.toolButtonUnlink, false);
     */
 
@@ -102,10 +102,10 @@ export default class LinksInline {
     elemDiv.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100;background:#000;';
     var main=document.getElementsByClassName('main')
     main[0].appendChild(elemDiv)
-    
+
     console.debug('=-----------------adding element', elemDiv)
     return this.nodes.toolButtons;
-    
+
   }
 
   addLinks() {
@@ -115,7 +115,7 @@ export default class LinksInline {
     //for(let nn=0; nn < nodes.length; nn++) {
     //  this.nodeText.appendChild(nodes[nn])
     //}
-    
+
     if(this.getLabelType() === 'Append') {
       this.textNode.appendChild(links);
     } else {
@@ -137,7 +137,7 @@ export default class LinksInline {
       }
     }
   }
-  
+
   getLabelType() {
     console.debug('getLabel() ------------------------>')
     const nodes=this.nodes.inlineRadio.querySelectorAll('[name=radioLabel]')
@@ -148,7 +148,7 @@ export default class LinksInline {
     }
   }
 
-    
+
   getLinkType() {
     console.debug('getLabel() ------------------------>')
     const nodes=this.nodes.inlineRadio.querySelectorAll('[name=radioType]')
@@ -193,7 +193,7 @@ export default class LinksInline {
       }
     }
     const pageId=this.config.page_id;
-    
+
     const grid = new Grid({
       search: true,
       sort: true,
@@ -205,7 +205,7 @@ export default class LinksInline {
           const sorted=data.data.sort( (a,b) => sort_by_page(pageId, a, b));
           return sorted.map(item => [ item.label,item.page, item.category, item.type, item.target, item.url])
         }
-      } 
+      }
     });
     /**
      * Render grid wrapper
@@ -213,7 +213,7 @@ export default class LinksInline {
      * @type {HTMLDivElement}
      */
 
-    
+
 
     this.nodes.gridWrapper = Dom.make('div');
     this.nodes.gridWrapper.style.display='block';
@@ -222,10 +222,10 @@ export default class LinksInline {
     grid.render(this.nodes.searchItem);
     this.nodes.inlineRadio = Dom.make('div', LinksInline.CSS.inlineRadio)
     this.nodes.inlineRadio.style.display='flex';
-    
+
     this.nodes.inlineButtonWrapper = Dom.make('div', LinksInline.CSS.inlineButton)
     this.nodes.inlineButtonWrapper.style.display='flex';
-        
+
     this.nodes.externalLinkWrapper = Dom.make('div', LinksInline.CSS.externalLinkWrapper)
     this.nodes.externalLinkWrapper.style.display='flex';
 
@@ -244,7 +244,7 @@ export default class LinksInline {
     this.nodes.externalLinkWrapper.appendChild(externalLinkButton)
 
 
-    
+
     const spanButtonLabel=document.createElement('span');
     spanButtonLabel.innerText='Button: ';
     this.nodes.inlineButtonWrapper.appendChild(spanButtonLabel);
@@ -255,7 +255,7 @@ export default class LinksInline {
     buttonCheckbox.setAttribute('id','buttonCheckbox');
     this.nodes.inlineButton=buttonCheckbox;
     this.nodes.inlineButtonWrapper.appendChild(buttonCheckbox);
-    
+
     const spanLabel=document.createElement('span');
     spanLabel.innerText='Label: ';
     this.nodes.inlineRadio.appendChild(spanLabel);
@@ -272,11 +272,11 @@ export default class LinksInline {
     labelSelected.innerHTML ='Selected';
     this.nodes.inlineRadio.appendChild(radioSelected)
     this.nodes.inlineRadio.appendChild(labelSelected)
-    //this.nodes.inlineRadio.appendChild(document.createElement('br'))    
+    //this.nodes.inlineRadio.appendChild(document.createElement('br'))
 
 
 
-    
+
     const radioAppend = document.createElement('input');
     radioAppend.setAttribute('type', 'radio');
     radioAppend.setAttribute('name','radioLabel');
@@ -311,7 +311,7 @@ export default class LinksInline {
     const spanType=document.createElement('span');
     spanType.innerText=' Type: ';
     this.nodes.inlineRadio.appendChild(spanType);
-    
+
     const radioInline = document.createElement('input');
     radioInline.setAttribute('type', 'radio');
     radioInline.setAttribute('name','radioType');
@@ -321,12 +321,12 @@ export default class LinksInline {
     const labelInline=document.createElement('label');
     labelInline.setAttribute('for','radioInline');
     labelInline.innerHTML ='Inline';
-    
+
     this.nodes.inlineRadio.appendChild(radioInline)
     this.nodes.inlineRadio.appendChild(labelInline)
     //this.nodes.inlineRadio.appendChild(document.createElement('br'))
 
-    
+
     const radioList = document.createElement('input');
     radioList.setAttribute('type', 'radio');
     radioList.setAttribute('name','radioType');
@@ -355,7 +355,7 @@ export default class LinksInline {
     const buttonCancel = document.createElement('button');
     buttonCancel.addEventListener('click', function() {console.debug("restoreSelection: ", restoreSelection); restoreSelection()})
     buttonCancel.innerHTML='  Cancel  '
-    
+
     this.nodes.inlineRadio.appendChild(buttonAdd)
         this.nodes.inlineRadio.appendChild(span3)
     this.nodes.inlineRadio.appendChild(buttonCancel)
@@ -363,17 +363,17 @@ export default class LinksInline {
     this.nodes.gridWrapper.appendChild(this.nodes.inlineRadio);
     this.nodes.gridWrapper.appendChild(document.createElement('br'))
     this.nodes.gridWrapper.appendChild(this.nodes.externalLinkWrapper);
-  
+
     this.nodes.gridWrapper.appendChild(this.nodes.searchItem);
     this.toggleVisibility(this.nodes.gridWrapper, false);
 
 
-    
+
     /**
      * Render  link wrapper
      *
      * @type {HTMLDivElement}
-     */ 
+     */
     this.nodes.linkWrapper = Dom.make('span', LinksInline.CSS.linkWrapper);
     //this.nodes.linkWrapper.setAttribute('contenteditable', true);
 
@@ -382,18 +382,18 @@ export default class LinksInline {
       grid.on('rowClick', (...args) => {
       const selection=this.selection.restore();
       selection.removeFakeBackground();
-      
+
       //document.execCommand('createLink', false, url);
 
       const newLink = selection.anchorElement;
-      
+
       console.log('row: ' + JSON.stringify(args), args)
       const url=args[1]._cells[0].data
       const label=args[1]._cells[1].data
       console.debug("-----------ae- ", newLink)
       this.addUrl(newLink , url, label);
-      
-      
+
+
       });
 
       }
@@ -403,10 +403,10 @@ export default class LinksInline {
       console.debug(" grid.on('rowClick', (...args) => ------------------>")
       //item.label,item.page, item.category, item.type, item.target, item.url
       const url=args[1]._cells[5].data
-      
+
       const label=args[1]._cells[0].data;
       const type=args[1]._cells[3].data
-      
+
       this.getLabel();
       if(this.getLinkType() === 'Inline') {
         this.addUrl( this.nodes.linkWrapper , url, label, type);
@@ -423,11 +423,11 @@ export default class LinksInline {
       }
     });
 
-    
+
     this.nodes.actionsWrapper.appendChild(this.nodes.linkWrapper);
 
     this.nodes.actionsWrapper.appendChild(this.nodes.gridWrapper);
-    
+
     return this.nodes.actionsWrapper;
   }
 
@@ -454,7 +454,7 @@ export default class LinksInline {
     console.debug('This shortcut ----------------->: ', this.selection)
     return 'ALT+L';
   }
-  
+
 
 
 
@@ -473,12 +473,12 @@ export default class LinksInline {
     const selectedText = range.extractContents()
     const span = document.createElement('SPAN')
     span.appendChild(selectedText)
-    this.textNode=span 
-    range.insertNode(span);  
+    this.textNode=span
+    range.insertNode(span);
 
 
 
-    
+
     /**
      * Show actions wrapper
      */
@@ -500,24 +500,24 @@ export default class LinksInline {
      * Expand selection
      */
     // this.selection.expandToTag(parentAnchor);
-    
+
     /**
      * Remove the link
      */
     // document.execCommand('unlink');
-    
+
     /**
      * Remove fake selection and close toolbar
      */
     //this.selection.removeFakeBackground();
     //this.api.inlineToolbar.close();
   }
-  
+
 
   checkState(selection) {
     console.debug('    checkState(selection) ------------------>')
     const text = selection.anchorNode;
-    
+
     if (!text) {
       return;
     }
@@ -526,7 +526,7 @@ export default class LinksInline {
     console.debug( "anchor E ", anchorElement)
     this.state = !!anchorElement.closest('SPAN');
   }
-  
+
   /**
    * Show or hide target element
    *
@@ -544,7 +544,7 @@ export default class LinksInline {
        } else {
        element.style.visibility="hidden"
        }
-    */      
+    */
     console.debug("Toggle visibility: ", isVisible, " e: ", element)
     if(isVisible) {
       element.style.display=""
@@ -562,7 +562,7 @@ export default class LinksInline {
         href:true,
         target:true,
         class:true
-        
+
       },
       img: {
         src:true,
@@ -572,8 +572,8 @@ export default class LinksInline {
       i: {class: true},
       div: {class: true},
       span: true
-      
-      
+
+
     };
     }
 
@@ -608,6 +608,15 @@ export default class LinksInline {
     case 'vnd.openxmlformats-officedocument.presentationml.presentation':
       i.classList.add('mdi-file-powerpoint-box')
       break
+      case 'application\vnd.openxmlformats-officedocument.presentationml.presentation':
+        i.classList.add('mdi-file-powerpoint-box')
+        break
+        case 'pptx':
+          i.classList.add('mdi-file-powerpoint-box')
+          break
+          case 'ppt':
+            i.classList.add('mdi-file-powerpoint-box')
+            break
     case 'plain':
       i.classList.add('mdi-text-box')
       break
@@ -623,10 +632,10 @@ export default class LinksInline {
     default:
       return
     }
-    
+
     iconDiv.appendChild(i)
     return iconDiv
-    
+
 
 
 
@@ -643,15 +652,15 @@ export default class LinksInline {
     // const label=fparts[0]
     const extension= fparts.length > 1 ? fparts.pop() : ''
     const icon=this.addIcon(url, extension);
-    
+
     var aTag = document.createElement('a');
     aTag.setAttribute('href',url);
     aTag.setAttribute('download',label+'.'+extension);
     if(this.nodes.inlineButton.checked) {
       aTag.classList.add(LinksInline.CSS.linkButton)
     }
-    
-    
+
+
     aTag.innerText = label;
     mydiv.appendChild(aTag);
     linkList.appendChild(mydiv);
@@ -661,11 +670,11 @@ export default class LinksInline {
     }
     //    linkList.insertAdjacentHTML('afterend', "&nbsp;")
 
-    
+
   }
 
 
- 
+
   addUrl(linkList,url,filename,type) {
     console.debug('addUrl(linkList,url,filename, type) ------------------>')
     //const mydiv = Dom.make("li");
@@ -674,7 +683,7 @@ export default class LinksInline {
     //    const label=fparts[0]
     const extension= fparts.length > 1 ? fparts.pop() : ''
     const icon=this.addIcon(url,extension);
-    
+
     var aTag = document.createElement('a');
     aTag.setAttribute('href',url);
     aTag.setAttribute('download',label+'.'+extension);
@@ -682,7 +691,7 @@ export default class LinksInline {
     if(this.nodes.inlineButton.checked) {
       aTag.classList.add(LinksInline.CSS.linkButton)
     }
-    
+
     aTag.innerText = label;
     // mydiv.appendChild(aTag);
     linkList.appendChild(aTag);
@@ -694,8 +703,8 @@ export default class LinksInline {
 
 
   }
-  
-  
+
+
   /**
    * @private
    *
@@ -704,18 +713,18 @@ export default class LinksInline {
   static get CSS() {
     return {
       iconWrapper: 'ce-link-inline__icon-wrapper',
-      
+
       hidden: 'ce-link-inline__hidden',
-      
+
       actionsWrapper: 'ce-link-inline__actions-wrapper',
 
 
-      
+
       gridWrapper: 'ce-link-inline__grid',
       gridWrapperLoading: 'ce-link-inline__grid--loading',
       gridWrapperInput: 'ce-link-inline__grid-input',
-      
-      
+
+
       searchItem: 'ce-link-inline__search-item',
       searchItemSelected: 'ce-link-inline__search-item--selected',
       searchItemName: 'ce-link-inline__search-item-name',
@@ -724,7 +733,7 @@ export default class LinksInline {
       externalLinkWrapper: 'ce-link-inline__external-link-wrapper',
       externalLinkInput: 'ce-link-inline__external-link-input',
       externalLinkButton: 'ce-link-inline__external-link-button',
-      
+
       linkWrapper: 'ce-link-inline__link-wrapper',
 
       linkButton: 'ce-link-inline__link-button',
@@ -735,5 +744,3 @@ export default class LinksInline {
     };
   }
 }
-
-
