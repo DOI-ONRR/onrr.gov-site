@@ -185,7 +185,7 @@ workflows:
           filters:
             branches:
               only:
-                - Deve
+                - dev
       - preview-onrr-frontend:
           filters:
             branches:
