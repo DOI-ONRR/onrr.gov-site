@@ -26,7 +26,7 @@ module.exports = function(env) {
     STORAGE_AWS_ENDPOINT: vcap_services['s3'][0].credentials.endpoint,
     STORAGE_AWS_BUCKET: vcap_services['s3'][0].credentials.bucket,
     STORAGE_AWS_REGION: vcap_services['s3'][0].credentials.region,
-    
+    NODE_ENV: evelopment    
     // CACHE_ENABLED: true,
     // CACHE_STORE: "redis",
     // CACHE_REDIS: "redis://cache:6379",

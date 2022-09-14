@@ -180,9 +180,9 @@ router.beforeEach(async (to, from, next) => {
     // check if url has extension
     const fileExtension = redirectToUrl.includes('.') ? redirectToUrl.split('.').pop() : undefined;
 
-    // console.log('redirectToUrl --------> ', redirectToUrl);
-    // console.log('pageFound ------> ', pageFound);
-    // console.log('fileExtension -------> ', fileExtension);
+    console.log('redirectToUrl --------> ', redirectToUrl);
+    console.log('pageFound ------> ', pageFound);
+    console.log('fileExtension -------> ', fileExtension);
 
     if (!pageFound) {
       if (fileExtension) {
