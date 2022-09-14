@@ -604,6 +604,8 @@ export default class LinksInline {
       break
     case 'vnd.openxmlformats-officedocument.wordprocessingml.document':
       i.classList.add('mdi-file-word-box')
+    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      i.classList.add('mdi-file-word-box')
       break
     case 'vnd.openxmlformats-officedocument.presentationml.presentation':
       i.classList.add('mdi-file-powerpoint-box')

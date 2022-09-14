@@ -34,7 +34,7 @@ module.exports = function(env) {
     
     ADMIN_EMAIL: `${ vcap_application.rganization_name }@onrr.gov`,
     ADMIN_PASSWORD: vcap_application.organization_id,
-    NODE_ENV: development,    
+
     EMAIL_SENDMAIL_NEW_LINE: "unix",
     EMAIL_SENDMAIL_PATH: "/usr/sbin/sendmail",
     EMAIL_FROM: "no-reply@directus.io", 
