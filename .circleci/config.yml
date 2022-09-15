@@ -68,7 +68,7 @@ jobs:
           name: Build app
           command: |
             printenv
-	    export NODE_ENV=production
+            export NODE_ENV=production
             cp nginx.conf.preview nginx.conf
             npm run staging 
           
