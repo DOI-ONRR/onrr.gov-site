@@ -34,13 +34,13 @@ module.exports = function(env) {
     
     ADMIN_EMAIL: `${ vcap_application.rganization_name }@onrr.gov`,
     ADMIN_PASSWORD: vcap_application.organization_id,
-    
+
     EMAIL_SENDMAIL_NEW_LINE: "unix",
     EMAIL_SENDMAIL_PATH: "/usr/sbin/sendmail",
     EMAIL_FROM: "no-reply@directus.io", 
     EMAIL_TRANSPORT: "sendmail",
     GITHUB_TOKEN: env.GITHUB_TOKEN,
-    MAX_RELATIONAL_DEPTH: 200,
+    MAX_RELATIONAL_DEPTH: 2000,
     // https://github.com/directus/directus/releases
     CORS_ENABLED: true,
     CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055'

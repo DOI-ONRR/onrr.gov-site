@@ -42,14 +42,14 @@ export default class LinksTool {
     // setTimeout(() => {
     //   console.log('this.data yo after 3 seconds ---------> ', this.data)
     // }, 3000);
-    
+
   }
     static get sanitize(){
         return {
             url: true, // disallow HTML
-            caption: {} // only tags from Inline Toolbar 
+            caption: {} // only tags from Inline Toolbar
         }
-  }   
+  }
 static get isInline() {
     return false;
   }
@@ -57,10 +57,10 @@ static get isInline() {
     static get toolbox() {
     return {
 	title: 'Links',
-	
+
       icon: '<svg width="20" height="20" viewBox="0 0 22 22"><path d="M8.567 13.629c.728.464 1.581.65 2.41.558l-.873.873A3.722 3.722 0 1 1 4.84 9.794L6.694 7.94a3.722 3.722 0 0 1 5.256-.008L10.484 9.4a5.209 5.209 0 0 1-.017.016 1.625 1.625 0 0 0-2.29.009l-1.854 1.854a1.626 1.626 0 0 0 2.244 2.35zm2.766-7.358a3.722 3.722 0 0 0-2.41-.558l.873-.873a3.722 3.722 0 1 1 5.264 5.266l-1.854 1.854a3.722 3.722 0 0 1-5.256.008L9.416 10.5a5.2 5.2 0 0 1 .017-.016 1.625 1.625 0 0 0 2.29-.009l1.854-1.854a1.626 1.626 0 0 0-2.244-2.35z" transform="translate(-3.667 -2.7)"></path></svg>'
     }
-      
+
   }
     render() {
 
@@ -72,12 +72,12 @@ const grid = new Grid({
 server: {
     url: 'http://localhost:8055/items/links?limit=-1',
     then: data => data.data.map(item => [item.url, item.label, item.category])
-  } 
+  }
 });
-        
+
 
 console.log('render this.data ----------> ', grid)
-     
+
         const  wrapper = this._make('div', [this.CSS.wrapper, 'ce-paragraph'],{contenteditable:"true"});
 /*      selectInputLabel = this._make('label'),
       selectInput = this._make('select', [this.CSS.input]),
@@ -89,7 +89,7 @@ console.log('render this.data ----------> ', grid)
       selectFieldsCol2 = this._make('div', [this.CSS.baseClass]),
       selectFieldsCol3 = this._make('div', [this.CSS.baseClass]),
        linkBox = this._make('div');
-*/     
+*/
 //document.createElement("wrapper");
     wrapper.style.margin = '10px 0';
     wrapper.style.display = 'flex';
@@ -106,7 +106,7 @@ console.log('render this.data ----------> ', grid)
 gridBox.style.border = '1px solid grey';
 
         const saveBox = this._make('div');
-        
+
         saveBox.style.display = 'flex';
         saveBox.style.flexBasis = '100%';
         saveBox.style.flexWrap = 'wrap';
@@ -117,7 +117,7 @@ gridBox.style.border = '1px solid grey';
         cancelButton.innerText='Cancel';
         saveBox.appendChild(saveButton);
         saveBox.appendChild(cancelButton);
-        
+
         const linkBox = this._make('div', ['cdx-block', 'ce-paragraph', 'foo'],{contentEditable:true});
 //    linkBox.style.margin = '10px 0';
         //   linkBox.style.display = 'flex';
@@ -145,14 +145,14 @@ gridBox.style.border = '1px solid grey';
 	const url=args[1]._cells[0].data
 	const label=args[1]._cells[1].data
         this.addUrl(linkBox, url, label);
-  
+
     }
        );
 
         if(this.data && this.data.type==="Inline" && this.data.text) {
             linkBox.innerHtml=this.data.innerHtml
         }
-        
+
     return wrapper;
  //grid.render(wrapper);
 }
@@ -206,17 +206,17 @@ linkList.appendChild(mydiv);
  */
   _make(tagName, classNames = null, attributes = {}) {
     const el = document.createElement(tagName);
-    
+
     if (Array.isArray(classNames)) {
       el.classList.add(...classNames);
     } else if (classNames) {
       el.classList.add(classNames);
     }
-    
+
     for (const attrName in attributes) {
       el[attrName] = attributes[attrName];
     }
-    
+
     return el;
   }
 
@@ -229,7 +229,7 @@ linkList.appendChild(mydiv);
       const response = await fetch(`${ this.fieldsEndpoint }`);
       const linkItems = await response.json();
       let fields = []
-  
+
       const items = linkItems.data
       items.filter(item => {
         if(item.link === link) {
@@ -241,35 +241,35 @@ linkList.appendChild(mydiv);
       this.data.fields = fields;
       this.data.layout = layout;
       this.data.status = status;
-   
+
       // waits until the request completes...
       console.log('response from api yo -----> ', link, fields, items);
 
     } catch(err){
       console.error(err);
     }
-    
+
   }
 
   async fetchLinks() {
 
 //    const cItems = ['url', 'label', 'category'];
     let nArr = []
-    
+
     try {
       const linksResponse = await fetch(`${ this.linksEndpoint }`);
       const links = await linksResponse.json();
-     console.debug("Links: ", links)     
+     console.debug("Links: ", links)
       links.data.map(item => {
           nArr.push(item.label)
       })
 
       return nArr
-      
+
     } catch(err){
       console.error(err);
     }
-    
+
   }
 
 
