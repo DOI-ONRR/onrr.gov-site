@@ -9,6 +9,7 @@
               v-for="(item, i) in slicedCollection"
               :key="i"
               :href="fileLink(`${ API }/press-releases/`, item)"
+          @click="trackDownloads(item)"
               class="pa-0"
               target="_blank"
             >
@@ -61,7 +62,12 @@
                   <v-icon>mdi-calendar-month</v-icon> {{ getFullDate(item.date) }}
                 </v-list-item-subtitle>
                 <div class="mb-2 text-body-1" v-if="item.excerpt" v-html="item.excerpt"></div>
-                <div v-if="fileLink(`${ API }/press-releases/`, item)"><a :href="fileLink(`${ API }/press-releases/`, item)" target="_blank">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
+                <div v-if="fileLink(`${ API }/press-releases/`, item)">
+        <a :href="fileLink(`${ API }/press-releases/`, item)"
+          target="_blank">View press release document
+                @click="trackDownloads(item)"
+
+        </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
               </v-list-item-content>
             </v-list-item>
         </v-card>
@@ -112,6 +118,19 @@ export default {
       const filteredYear = collection && collection.filter(item => this.getYear(item.date) === year)
       return filteredYear
     },
+    trackDownloads(item) {
+
+       console.debug("tracking ", item, {
+     page: "/press-releases/"+item.file.filename_download,
+          title: item.file.title,
+        location:  "/press-releases/"+item.file.filename_download
+    })
+    this.$ga.page({
+    page: "/press-releases/"+item.file.filename_download,
+        title: item.file.title,
+  location:  "/press-releases/"+item.file.filename_download,
+})        
+}, 
   }
 }
 </script>
