@@ -1,13 +1,13 @@
 ---
-name: onrr.gov issue template
-about: How issues for onrr.gov should be formatted
+name: Submit an onrr.gov request
+about: Instructions for how to submit your request. Add your request here.
 title: ''
 labels: ''
 assignees: ''
 
 ---
-___________________________________________________________________________________________________________________________________________
-**Please read the direction below before submitting your issue:**
+
+**Please read the directions below before submitting your issue:**
 
 Please reference the following wiki to make sure you format your issue correctly: https://github.com/ONRR/onrr.gov-site/wiki/Using-github
 
