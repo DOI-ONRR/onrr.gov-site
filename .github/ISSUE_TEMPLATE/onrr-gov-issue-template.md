@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-Please reference the following wiki to make sure you format your issue correctly: https://github.com/ONRR/onrr.gov-site/wiki/Using-github
+**Please reference the following wiki to make sure you format your issue correctly: https://github.com/ONRR/onrr.gov-site/wiki/Using-github**
 
 **If your request is to update existing document(s), PLEASE**
 
