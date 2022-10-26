@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-Please reference the following wiki to make your request as clear as possible for us: https://github.com/ONRR/onrr.gov-site/wiki/Using-github#best-practices-for-writing-your-github-requests
+Please reference the following wiki to make sure your request is easy for us to understand: https://github.com/ONRR/onrr.gov-site/wiki/Using-github#best-practices-for-writing-your-github-requests
 
 *  If you want to update existing document(s), please follow this example request format: https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-an-existing-document
 
@@ -18,4 +18,4 @@ Please reference the following wiki to make your request as clear as possible fo
 THANK YOU
 
 ______________________________________________________________________________________________________________________________________
-**ADD YOUR ISSUE INSTRUCTIONS HERE:**
+ADD YOUR ISSUE INSTRUCTIONS HERE:
