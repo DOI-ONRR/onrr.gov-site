@@ -16,6 +16,5 @@ Please reference the following wiki to make sure your request is easy for us to 
 * If you want to add new content to the site, please follow this example request format: https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-add-new-content
 
 THANK YOU
-
 ______________________________________________________________________________________________________________________________________
 ADD YOUR ISSUE INSTRUCTIONS HERE:
