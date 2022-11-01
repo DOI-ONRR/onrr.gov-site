@@ -1,6 +1,6 @@
 ---
-name: Submit an onrr.gov request_V2
-about: [Instructions for how to submit your request.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-add-new-content)
+name: I want to add new content to onrr.gov
+about: https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-add-new-content
 title: ''
 labels: ''
 assignees: ''
