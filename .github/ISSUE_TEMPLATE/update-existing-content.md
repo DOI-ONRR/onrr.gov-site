@@ -1,6 +1,6 @@
 ---
 name: I want to update existing content within onrr.gov
-about: [Instructions for how to submit your request.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-an-existing-document)
+about: https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-an-existing-document
 title: ''
 labels: ''
 assignees: ''
