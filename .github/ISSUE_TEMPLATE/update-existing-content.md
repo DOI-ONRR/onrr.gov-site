@@ -14,6 +14,7 @@ assignees: ''
 * Direct us to the exact file URL that needs updating
 * Specify that this is an update and not a new document that needs to be added
 * Make the new document file name match the old file name
+* [Link to our Wiki for an example](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-an-existing-document)
 
 THANK YOU
 ______________________________________________________________________________________________________________________________________
