@@ -1,20 +1,21 @@
 ---
 name: 2. I want to add new documents (or other content) to onrr.gov
-about: This includes instructions for how to format your request, and a link to an
-  example on our Wiki.
+about: Use this template if you want to add a new document (or other content) that does not already exist on onrr.gov
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**If your request is to add new content, PLEASE**
+If your request is to add new content, PLEASE [read through this example on our wiki.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-add-new-content)
+
+**Follow these directions**
 
 * Write a detailed issue title
 * Direct us to the exact URL web location for where the update should go
 * Give the exact language that needs to be added
-* Give us the hyperlink with the exact language that should go to that hyperlink url (if applicable) 
-* [Link to our Wiki for an example](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-add-new-content)
+* Give us the exact language that should go to that hyperlink url (if applicable) 
+* Attach the new content file (if applicable)
 
 THANK YOU
 ______________________________________________________________________________________________________________________________________
