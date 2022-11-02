@@ -1,25 +1,23 @@
 ---
 name: 1. I want to update existing documents (or other content) within onrr.gov
-about: This includes instructions for how to format your request, and a link to an
-  example on our Wiki.
+about: Uset this template if you want to update a document (or other content) that already exists on onrr.gov
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-If your request is to update existing document(s), PLEASE [read through this example in our Wiki.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-an-existing-document)
+If your request is to update existing document(s), PLEASE [read through this example in our Wiki.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-an-existing-document) 
 
-**Fill out the following information:**
+**Follow these directions:**
 
-* Provide the web location URL for where the update should go:
-
-* Provide the file URL that needs updating:
-
-* Please give us any text that needs to be updated:
-
-* Please provide any other information you think is necessary:
-
-* Attach the updated file:
+* Write a detailed issue title
+* Direct us to the exact URL web location for where the update should go
+* Direct us to the exact file URL that needs updating
+* Specify that this is an update and not a new document that needs to be added
+* Make the new document file name match the old file name
+* Attach the updated file
 
 THANK YOU
+______________________________________________________________________________________________________________________________________
+**ADD YOUR ISSUE INSTRUCTIONS HERE:**
