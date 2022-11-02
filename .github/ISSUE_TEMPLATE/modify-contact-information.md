@@ -1,5 +1,5 @@
 ---
-name: I want to add or update contact information
+name: I want to modify contact information on onrr.gov
 about: This includes instructions for how to format your request, and a link to an
   example on our Wiki.
 title: ''
