@@ -8,7 +8,7 @@ assignees: ''
 
 ---
 
-If your request is to update existing document(s), PLEASE [read through this example in our Wiki.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-contact-information)
+If your request is to add or update contact information, PLEASE [read through this example in our Wiki.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-contact-information)
 
 **Fill out the following information:**
 
