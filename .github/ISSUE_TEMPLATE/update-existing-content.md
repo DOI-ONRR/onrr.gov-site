@@ -11,9 +11,9 @@ If your request is to update existing document(s), PLEASE [read through this exa
 
 **Fill out the following information:**
 
-* What is the web location URL for where the update should go:
+* Provide the web location URL for where the update should go:
 
-* What is the file URL that needs updating:
+* Provide the file URL that needs updating:
 
 * Please give us any text that needs to be updated:
 
