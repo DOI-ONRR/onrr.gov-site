@@ -1,7 +1,6 @@
 ---
 name: 3. I want to modify contact information on onrr.gov
-about: This includes instructions for how to format your request, and a link to an
-  example on our Wiki.
+about: Use this template for any modifications (update and additions) to contacts lists on onrr.gov
 title: ''
 labels: ''
 assignees: ''
@@ -10,18 +9,15 @@ assignees: ''
 
 If your request is to add or update contact information, PLEASE [read through this example in our Wiki.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-contact-information)
 
-**Fill out the following information:**
+**Follow these directions**
 
-* Provide the web location URL for where the update should go:
-
-* Direct us to the exact location (header) within the webpage where the contact information is located:
-
-* Specify if this is an update or a new addition:
-
-* What (if any) contact information needs to be removed:
-
-* Give the exact contact information to be added:
-
-* Please provide any other information you think is necessary:
+* Write a detailed issue title
+* Direct us to the exact URL web location for where the update should go
+* Direct us to the exact location (header) within the webpage where the contact information is located
+* Specify if is an update of an existing contact, or a new contact entry
+* Specify what contact information (if any) needs to be removed
+* Give us the exact updated/new contact information to add
 
 THANK YOU
+______________________________________________________________________________________________________________________________________
+**ADD YOUR ISSUE INSTRUCTIONS HERE:**
