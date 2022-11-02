@@ -1,5 +1,5 @@
 ---
-name: 2. I want to add new content to onrr.gov
+name: 2. I want to add new documents (or other content) to onrr.gov
 about: This includes instructions for how to format your request, and a link to an
   example on our Wiki.
 title: ''
