@@ -1,6 +1,7 @@
 ---
 name: I want to add new content to onrr.gov
-about: This includes instructions for how to format your request, and a link to an example on our Wiki.
+about: This includes instructions for how to format your request, and a link to an
+  example on our Wiki.
 title: ''
 labels: ''
 assignees: ''
