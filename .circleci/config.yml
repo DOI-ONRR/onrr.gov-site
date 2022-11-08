@@ -31,11 +31,7 @@ jobs:
             pwd && ls -l
             curl -v -L -o cf-cli_amd64.deb 'https://packages.cloudfoundry.org/stable?release=debian64&source=github'
             sudo dpkg -i cf-cli_amd64.deb  
-            # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
-            # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
-            cf api https://api.fr.cloud.gov
-            cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE" -v
+            cf login -u "$DEV_CF_USERNAME" -p "$DEV_CF_PASSWORD" -a api.fr.cloud.gov -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE" -v
             cf push -f development.manifest.yml
       # - run: 
       #     name: Build preview
