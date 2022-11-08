@@ -31,7 +31,8 @@ jobs:
             pwd && ls -l
             curl -v -L -o cf-cli_amd64.deb 'https://packages.cloudfoundry.org/stable?release=debian64&source=github'
             sudo dpkg -i cf-cli_amd64.deb  
-            cf login -u "$DEV_CF_USERNAME" -p "$DEV_CF_PASSWORD" -a api.fr.cloud.gov -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE" -v
+            cf login -u "$DEV_CF_USERNAME" -p "$DEV_CF_PASSWORD" -a api.fr.cloud.gov -o doi-onrr -s dev -v
+            cf target -o doi-onrr -s dev -v
             cf push -f development.manifest.yml
       # - run: 
       #     name: Build preview
