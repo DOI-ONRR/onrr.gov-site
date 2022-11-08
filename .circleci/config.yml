@@ -26,7 +26,7 @@ jobs:
             npm run dev
           
       - run: 
-          name: Build dev
+          name: Deploy to cloud
           command: |
             pwd && ls -l
             curl -v -L -o cf-cli_amd64.deb 'https://packages.cloudfoundry.org/stable?release=debian64&source=github'
