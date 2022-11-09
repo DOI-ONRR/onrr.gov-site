@@ -60,8 +60,7 @@ jobs:
             # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
             # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
             cf api https://api.fr.cloud.gov
-            cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
+            cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o doi-onrr -s dev -v
             cf push -f preview.manifest.yml
   prod-onrr-frontend:
     working_directory: ~/onrr.gov-site/frontend
@@ -86,8 +85,7 @@ jobs:
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
             sudo dpkg -i cf-cli_amd64.deb
             cf api https://api.fr.cloud.gov
-            cf auth "$CF_USERNAMEMF" "$CF_PASSWORDMF" -v
-            cf target -o "$DEV_CF_ORG" -s prod -v
+            cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o doi-onrr -s prod
             cf push -f ./prod.manifest.yml
 
 
@@ -106,9 +104,9 @@ jobs:
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
             sudo dpkg -i cf-cli_amd64.deb
             cf api https://api.fr.cloud.gov
-            echo "$DEV_CF_USERNAME"
-            cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s dev
+            echo "$CF_USERNAME"
+            cf auth "$CF_USERNAME" "$CF_PASSWORD"
+            cf target -o "$DEV_CF_ORG" -s prod
             cf apps
             cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
             bash tunnel.sh dev-onrr-psql dev-onrr-cms
@@ -124,8 +122,7 @@ jobs:
             printenv
             echo "foo"
             echo "$CF_USERNAME"
-            cf auth "$CF_USERNAME" "$CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s prod
+            cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o doi-onrr -s prod
             bash tunnel.sh onrr-psql prod-onrr-cms
             echo "restore dev databse to prod"
             source ../../.tunnelrc
@@ -152,8 +149,7 @@ jobs:
             # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
             # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
             cf api https://api.fr.cloud.gov
-            cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
+            cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o doi-onrr -s dev-v
             cf push dev-onrr-cms
 
 workflows:
