@@ -106,7 +106,7 @@ jobs:
             cf api https://api.fr.cloud.gov
             echo "$DEV_CF_USERNAME"
             cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s dev
+            cf target -o doi-onrr -s dev -v
             cf apps
             cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
             bash tunnel.sh dev-onrr-psql dev-onrr-cms
@@ -122,7 +122,7 @@ jobs:
             echo "foo"
             echo "$CF_USERNAME"
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s prod
+            cf target -o doi-onrr -s dev -v
             bash tunnel.sh onrr-psql prod-onrr-cms
             echo "restore dev databse to prod"
             source ../../.tunnelrc
