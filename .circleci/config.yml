@@ -18,43 +18,21 @@ jobs:
           path: ~/onrr.gov-site
       - node/install-packages
 
-      - run: 
+      - run:
           name: Build app
           command: |
             printenv
-            cp nginx.conf.dev nginx.conf 
+            cp nginx.conf.dev nginx.conf
             npm run dev
-          
-      - run: 
-          name: Build dev
+
+      - run:
+          name: Deploy to cloud
           command: |
             pwd && ls -l
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-            sudo dpkg -i cf-cli_amd64.deb  
-            # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
-            # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
-            cf api https://api.fr.cloud.gov
-            cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
-            cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
+            sudo dpkg -i cf-cli_amd64.deb
+            cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o doi-onrr -s dev -v
             cf push -f development.manifest.yml
-      # - run: 
-      #     name: Build preview
-      #     command: |
-      #       cp nginx.conf.preview nginx.conf
-      #       npm run staging 
-          
-      # - run: 
-      #     name: Deploy to cloud.gov
-      #     command: |
-      #       pwd && ls -l
-      #       curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-      #       sudo dpkg -i cf-cli_amd64.deb  
-      #       # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
-      #       # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
-      #       cf api https://api.fr.cloud.gov
-      #       cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
-      #       cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
-      #       cf push -f preview.manifest.yml
   preview-onrr-frontend:
     working_directory: ~/onrr.gov-site/frontend
     docker:
@@ -64,21 +42,21 @@ jobs:
           path: ~/onrr.gov-site
       - node/install-packages
 
-      - run: 
+      - run:
           name: Build app
           command: |
             printenv
             export NODE_ENV=production
             cp nginx.conf.preview nginx.conf
-            npm run staging 
-          
-      - run: 
+            npm run staging
+
+      - run:
           name: Deploy to cloud.gov
           command: |
             pwd && ls -l
             printenv
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-            sudo dpkg -i cf-cli_amd64.deb  
+            sudo dpkg -i cf-cli_amd64.deb
             # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
             # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
             cf api https://api.fr.cloud.gov
@@ -94,21 +72,19 @@ jobs:
           path: ~/onrr.gov-site
       - node/install-packages
 
-      - run: 
+      - run:
           name: Build app
           command: |
             cp nginx.conf.prod nginx.conf
             npm run production
-          
-      - run: 
+
+      - run:
           name: Deploy to cloud.gov
           command: |
             pwd && ls -l
             printenv
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-            sudo dpkg -i cf-cli_amd64.deb  
-            # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
-            # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
+            sudo dpkg -i cf-cli_amd64.deb
             cf api https://api.fr.cloud.gov
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
             cf target -o "$DEV_CF_ORG" -s prod
@@ -128,7 +104,7 @@ jobs:
           command: |
             cd database
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-            sudo dpkg -i cf-cli_amd64.deb 
+            sudo dpkg -i cf-cli_amd64.deb
             cf api https://api.fr.cloud.gov
             echo "$DEV_CF_USERNAME"
             cf auth "$DEV_CF_USERNAME" "$DEV_CF_PASSWORD"
@@ -156,7 +132,7 @@ jobs:
             pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/onrr_database_backup.pg || echo $?
             echo "Database copied to production"
             echo "rebuild production site"
-    
+
       - store_artifacts:
           path: /tmp/onrr_database_backup.pg
           destination: onrr_database_backup.pg
@@ -172,7 +148,7 @@ jobs:
           command: |
             cd cms
             curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-            sudo dpkg -i cf-cli_amd64.deb  
+            sudo dpkg -i cf-cli_amd64.deb
             # Set $CF_USERNAME and $CF_PASSWORD in CircleCI settings.
             # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
             cf api https://api.fr.cloud.gov
@@ -184,6 +160,8 @@ workflows:
   build:
     jobs:
       - dev-onrr-frontend:
+          context:
+            - DEV
           filters:
             branches:
               only:
@@ -192,7 +170,7 @@ workflows:
           filters:
             branches:
               only:
-                - dev
+                - foo
       - onrr-database:
           context:
             - PROD
@@ -205,7 +183,7 @@ workflows:
             - PROD
           filters:
             branches:
-              only:      
+              only:
                 - main
   cms_updates:
     when: << pipeline.parameters.run_cms_updates >>
