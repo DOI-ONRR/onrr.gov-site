@@ -259,13 +259,6 @@ export default {
           fax: item.fax,
         },
         {
-          contact: item.primary_contact_federal,
-          role: item.primary_role,
-          email: item.email,
-          phone: item.phone,
-          fax: item.fax,
-        },
-        {
           contact: item.contact_2,
           role: item.role_2,
           email: item.email_2,
