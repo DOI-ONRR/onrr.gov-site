@@ -123,12 +123,12 @@ export default {
 
        console.debug("tracking ", item, {
      page: "/press-releases/"+item.file.filename_download,
-          title: item.file.title,
+          title: "/press-releases/"+item.file.title,
         location:  "/press-releases/"+item.file.filename_download
     })
     this.$ga.page({
     page: "/press-releases/"+item.file.filename_download,
-        title: item.file.title,
+        title: "/press-releases/"+item.file.title,
   location:  "/press-releases/"+item.file.filename_download,
 })        
 }, 
