@@ -126,7 +126,7 @@ export default {
           title: "/press-releases/"+item.file.title,
         location:  "/press-releases/"+item.file.filename_download
     })
-    $ga('send',{ hitType: 'pageview',
+    this.$ga('send','pageview',
     page: "/press-releases/"+item.file.filename_download,
         title: "/press-releases/"+item.file.title,
   location:  "/press-releases/"+item.file.filename_download,
