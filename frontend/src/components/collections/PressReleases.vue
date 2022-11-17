@@ -126,11 +126,12 @@ export default {
           title: "/press-releases/"+item.file.title,
         location:  "/press-releases/"+item.file.filename_download
     })
-    this.$ga('send','pageview',
-    page: "/press-releases/"+item.file.filename_download,
-        title: "/press-releases/"+item.file.title,
-  location:  "/press-releases/"+item.file.filename_download,
-})        
+    this.$ga('send',{
+      hitType:'pageview',
+      page: "/press-releases/"+item.file.filename_download,
+      title: "/press-releases/"+item.file.title,
+      location:  "/press-releases/"+item.file.filename_download,
+});       
 }, 
   }
 }
