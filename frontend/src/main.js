@@ -10,6 +10,10 @@ import possibleTypes from './json/possibleTypes.json'
 //import VueGtag from "vue-gtag";
 import VueAnalytics from 'vue-analytics'
 
+
+
+
+ 
 const cache = new InMemoryCache({
   possibleTypes
 })
@@ -58,11 +62,17 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.config.productionTip = false
+const isProd=process.env.NODE_ENV==='production'
+
 Vue.use(VueApollo)
 Vue.use(VueMeta)
 Vue.use(VueAnalytics, {
   id: 'UA-33523145-1',
-  router
+  router,
+  debug:
+  { enabled: !isProd,
+    sendHitTask: isProd
+  }
 })
 new Vue({
   vuetify,

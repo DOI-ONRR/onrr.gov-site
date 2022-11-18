@@ -36,18 +36,18 @@
         </v-row>
 </div>
     </v-container>
-    
+
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <h2 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
-              {{ item.header }} 
+              {{ item.header }}
               <span v-if="item.agency !== null">({{ item.agency }})</span>
               <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
             </span>
             <span v-if="searchResults">
-              {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }} 
+              {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }}
               <span v-if="item.agency !== null">({{ item.agency }})</span>
               <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
             </span>
@@ -78,7 +78,7 @@
                       </div>
                     </v-card-text>
                 </v-card>
-              </v-col>  
+              </v-col>
             </v-row>
           </v-container>
         </div>
@@ -194,7 +194,7 @@ export default {
       // console.log('filteredProperties items: ', items)
 
       const filteredItems = items
-        .filter(({ page, tab, accordion, letter, header, operatorNumber, companyName, agency }) => {        
+        .filter(({ page, tab, accordion, letter, header, operatorNumber, companyName, agency }) => {
           return this.findSearchValue(letter) ||
             this.findSearchValue(header) ||
             this.findSearchValue(operatorNumber) ||
@@ -211,7 +211,7 @@ export default {
       // console.log('filterContacts -------> ', items)
       const filteredItems = items.map(item => {
         return { ...item, contacts: item.contacts.filter(contact => {
-         
+
           if (contact.contact !== null) {
             // console.log('filter contact: ', contact)
             // console.log('found match: ', contact.contact.toLowerCase().includes(this.searchInputField.text.toLowerCase()))
@@ -299,7 +299,7 @@ export default {
     },
     filterByTab(items) {
       // console.log('filterByTab items -----> ', items)
-      const tab = this.collectionTab 
+      const tab = this.collectionTab
       || this.tabCategoriesSelectField.selected
       const results = (tab !== null) ? items.filter(item => item.tab === tab) : items
       // console.log('filterByTab results -----> ', results)
@@ -307,7 +307,7 @@ export default {
     },
     filterByAccordion(items) {
       // console.log('filterByAccordion items -----> ', items)
-      const accordion = this.collectionAccordion 
+      const accordion = this.collectionAccordion
       || this.accordionCategoriesSelectField.selected
       const results = (accordion !== null) ? items.filter(item => item.accordion === accordion) : items
       // console.log('filterByAccordion results ------> ', results)
@@ -323,7 +323,7 @@ export default {
 
       this.categoriesSelectField.items = categoryArr
     }
-    
+
   },
   computed: {
     formattedContactsCollection() {
@@ -331,7 +331,7 @@ export default {
 
       this.collection && this.collection.map(item => {
         let nObj = this.createContactItem(item)
-         formattedItems.push(nObj)        
+         formattedItems.push(nObj)
       })
 
       return formattedItems
@@ -353,7 +353,7 @@ export default {
       const filteredList= (this.collectionPage || this.searchResults)
       ? this.filterByPage(this.filterByTab(this.filterByAccordion(this.formattedContactsCollection)))
       : this.filterProperties(this.formattedContactsCollection)
-      
+
       if (this.categoriesSelectField.selected === null && this.searchInputField.text === null) {
         return this.formattedContactsCollection
       } else {
@@ -361,11 +361,11 @@ export default {
         if (this.searchInputField.text) {
           const filteredProperties = this.filterProperties(filteredList)
           return (filteredProperties.length === 0)
-            ? this.filterContacts(filteredList) 
+            ? this.filterContacts(filteredList)
             : this.filterProperties(filteredList)
         } else {
           return filteredList || this.formattedContactsCollection
-        }  
+        }
       }
     },
 
@@ -447,15 +447,21 @@ export default {
   white-space: nowrap;
 }
 
-.primary-contact {
+.primary-contact,
+.primary-contact-federal,
+.primary-contact-indian {
   background-color: var(--v-primary-base);
 }
 
-.back-up-contact {
+.back-up-contact,
+.back-up-contact-federal,
+.back-up-contact-indian {
   background-color: var(--v-purple-lighten1);
 }
 
 .supervisor,
+.supervisor-federal,
+.supervisor-indian,
 .manager {
   background-color: var(--v-yellow-lighten1);
   color: var(--v-black) !important;
