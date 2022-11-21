@@ -6,7 +6,7 @@ CREATE SEQUENCE redirects_sequence
 
 \echo 'Insert into redirects'
 INSERT INTO redirects
-  (status,user_created,date_created,user_updated,date_updated,old_url,new_url)
+  (id,status,user_created,date_created,user_updated,date_updated,old_url,new_url)
 VALUES
   (nextval('redirects_sequence'),status,user_created,date_created,user_updated,date_updated,old_url,new_url);
 
