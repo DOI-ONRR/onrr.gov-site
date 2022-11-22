@@ -6,8 +6,8 @@
     <v-card-subtitle v-if="cardSubtitle" class="v-card__subtitle black--text">
       {{ cardSubtitle }}
     </v-card-subtitle>
-      <v-icon v-if="blockIcon === 'alert'" class="mdi mdi-alert" :class="blockColor" ></v-icon> 
-      <v-icon v-if="blockIcon === 'info'" class="mdi mdi-information" :class="blockColor"></v-icon> 
+      <v-icon v-if="blockIcon === 'alert'" class="alert-color mdi mdi-alert " :class="blockColor" ></v-icon> 
+      <v-icon v-if="blockIcon === 'info'" class="info-color mdi mdi-information" :class="blockColor"></v-icon> 
     <v-card-text class="text--primary body-1">
 
 
@@ -111,6 +111,12 @@ export default {
 
 .purple--color {
   border-top-color: var(--v-purple-base);
+}
+.alert-color {
+  color: #ecb947;
+}
+.info-color {
+  color: #650d79;
 }
 
 .yellow--color {
