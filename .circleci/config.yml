@@ -105,7 +105,7 @@ jobs:
             sudo dpkg -i cf-cli_amd64.deb 
             cf api https://api.fr.cloud.gov
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
-            cf target -o "$CF_ORG" -s "$CF_SPACE"
+            cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
             cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
             bash tunnel.sh dev-onrr-psql dev-onrr-cms
             source ../../.tunnelrc
@@ -146,7 +146,7 @@ jobs:
             # $CF_ORG, $CF_SPACE, and $APP_NAME can also be set in CircleCI settings or hardcoded here.
             cf api https://api.fr.cloud.gov
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
-            cf target -o "$CF_ORG" -s "$CF_SPACE"
+            cf target -o "$DEV_CF_ORG" -s "$DEV_CF_SPACE"
             cf push dev-onrr-cms
 
 workflows:
