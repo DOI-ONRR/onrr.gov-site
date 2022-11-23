@@ -657,6 +657,8 @@ export default class LinksInline {
 
     var aTag = document.createElement('a');
     aTag.setAttribute('href',url);
+    aTag.setAttribute('aria-label',label);
+    aTag.setAttribute('title',url);
     aTag.setAttribute('download',label+'.'+extension);
     if(this.nodes.inlineButton.checked) {
       aTag.classList.add(LinksInline.CSS.linkButton)
