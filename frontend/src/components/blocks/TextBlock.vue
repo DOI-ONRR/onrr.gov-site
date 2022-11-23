@@ -2,7 +2,7 @@
   <div
     :role="textRole"
     :aria-level="textLevel"
-    :aria-label="2016 Valuation Rule Federal Processed Gas Reporting"
+    :aria-label="text"
     :class="[textClass, 'black--text']"
     :variant="textVariant"
     v-html="content">
