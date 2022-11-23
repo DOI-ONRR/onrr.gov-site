@@ -28,5 +28,6 @@ export default {
 }
 .text-h4 {
   margin-bottom: 24px;
+  color:#71500F;
 }
 </style>
