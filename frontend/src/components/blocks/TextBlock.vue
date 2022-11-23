@@ -2,7 +2,7 @@
   <div
     :role="textRole"
     :aria-level="textLevel"
-    :aria-label="text"
+    :aria-label="textLabel"
     :class="[textClass, 'black--text']"
     :variant="textVariant"
     v-html="content">
