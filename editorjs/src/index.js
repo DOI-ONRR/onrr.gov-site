@@ -90,7 +90,7 @@ export default {
             { value: "raw", text: "Raw HTML" },
             { value: 'links', text: "Links" },
             { value: 'linkAutocomplete', text: "Link Autocomplete" },
-            { value: 'linksInline', text: "Links Inline" },
+            { value: 'linksInline', text: "Links OUTline" },
             { value: 'linksList', text: "Links List" },
             { value: 'collection', text: 'Collections'},
             { value: 'customBlocks', text: 'Custom Blocks'},
