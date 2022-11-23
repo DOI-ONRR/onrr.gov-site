@@ -339,7 +339,7 @@ function unsetLinkHandler() {
           },
           underline: {
             class: UnderlineTool,
-            shortcut: 'CMD+SHIFT+U',
+            shortcut: 'CMD+F1+U',
           },
           // textalign: {
           //   class: TextAlignTool,
