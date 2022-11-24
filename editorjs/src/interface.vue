@@ -57,7 +57,7 @@
   import DelimiterTool from '@editorjs/delimiter';
   import TableTool from '@editorjs/table';
   import CodeTool from '@editorjs/code';
-  import header_mohanTool from '@editorjs/header_mohan';
+  import headerTool from '@editorjs/header';
   import UnderlineTool from '@editorjs/underline';
   import EmbedTool from '@editorjs/embed';
   import MarkerTool from '@editorjs/marker';
@@ -73,7 +73,7 @@
   // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
   import CollectionsTool from "./custom-plugins/plugin-collections";
 //  import Links from "./custom-plugins/plugin-links";
-  import horizontalrule_mohanTool from "./custom-plugins/plugin-horizontal-rule";
+  import horizontalruleTool from "./custom-plugins/plugin-horizontal-rule";
 //  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
@@ -97,7 +97,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header_mohan_mohan', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule_mohan', 'linksInline', 'customBlocks'],
+        default: () => ['header_mohan', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -129,7 +129,7 @@
       }
 
       function getToken() {
-        return api.defaults.header_mohans?.['Authorization']?.split(' ')[1] || null;
+        return api.defaults.headers?.['Authorization']?.split(' ')[1] || null;
       }
 
       function addTokenToURL(url, token) {
@@ -311,8 +311,8 @@ function unsetLinkHandler() {
         };
 
         const defaults = {
-          header_mohan: {
-            class: header_mohanTool,
+          header: {
+            class: headerTool,
             shortcut: 'CMD+SHIFT+H',
             inlineToolbar: true,
           },
@@ -420,8 +420,8 @@ function unsetLinkHandler() {
             }
           },
 	  */	
-          horizontalrule_mohan: {
-            class: horizontalrule_mohanTool,
+          horizontalrule: {
+            class: horizontalruleTool,
             inlineToolbar: true,
           },
           alignmentTune: {
@@ -478,8 +478,8 @@ function unsetLinkHandler() {
           }
         }
 
-				if ('header_mohan' in tools) {
-					tools.header_mohan.tunes = ['alignmentTune'];
+				if ('header' in tools) {
+					tools.header.tunes = ['alignmentTune'];
 				}
 
         if ('paragraph' in tools) {
