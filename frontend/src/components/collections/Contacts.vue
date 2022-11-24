@@ -40,7 +40,7 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-          <h2 class="collection-category pa-3 mb-3">
+          <h3 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
               <span v-if="item.agency !== null">({{ item.agency }})</span>
@@ -51,7 +51,7 @@
               <span v-if="item.agency !== null">({{ item.agency }})</span>
               <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
             </span>
-          </h2>
+          </h3>
           <v-container class="pa-0">
             <v-row>
               <v-col v-for="(contact, i) in item.contacts" :key="i" cols="12" sm="4">
