@@ -40,6 +40,7 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
+          {headerChange(item)}
           <h3 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
@@ -235,6 +236,15 @@ export default {
         ))
       }
       return filteredItems || items
+    },
+    headerChange(item){
+      const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
+      console.log('the value of tabsPresent:- '+tabsPresent);
+      if(tabsPresent && tabsPresent.length > 0){
+        console.log('the lenght greater value');
+        return true;
+      }
+      return false;
     },
     createContactItem(item) {
       let nObj = {}
