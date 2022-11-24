@@ -241,7 +241,7 @@ export default {
       const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
       console.log('the value of tabsPresent:- '+tabsPresent);
       if(tabsPresent && tabsPresent.length > 0){
-        console.log('the lenght greater value');
+        console.log('the lenght greater value '+item);
         return true;
       }
       return false;
