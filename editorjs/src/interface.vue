@@ -73,7 +73,7 @@
   // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
   import CollectionsTool from "./custom-plugins/plugin-collections";
 //  import Links from "./custom-plugins/plugin-links";
-  import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
+  import horizontalrule_mohanTool from "./custom-plugins/plugin-horizontal-rule";
 //  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
@@ -97,7 +97,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header_mohan_mohan', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header_mohan_mohan', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule_mohan', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -420,8 +420,8 @@ function unsetLinkHandler() {
             }
           },
 	  */	
-          horizontalrule: {
-            class: HorizontalRuleTool,
+          horizontalrule_mohan: {
+            class: horizontalrule_mohanTool,
             inlineToolbar: true,
           },
           alignmentTune: {
