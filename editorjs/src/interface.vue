@@ -57,7 +57,7 @@
   import DelimiterTool from '@editorjs/delimiter';
   import TableTool from '@editorjs/table';
   import CodeTool from '@editorjs/code';
-  import HeaderTool from '@editorjs/header';
+  import header_mohanTool from '@editorjs/header_mohan';
   import UnderlineTool from '@editorjs/underline';
   import EmbedTool from '@editorjs/embed';
   import MarkerTool from '@editorjs/marker';
@@ -97,7 +97,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header_mohan_mohan', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -129,7 +129,7 @@
       }
 
       function getToken() {
-        return api.defaults.headers?.['Authorization']?.split(' ')[1] || null;
+        return api.defaults.header_mohans?.['Authorization']?.split(' ')[1] || null;
       }
 
       function addTokenToURL(url, token) {
@@ -311,8 +311,8 @@ function unsetLinkHandler() {
         };
 
         const defaults = {
-          header: {
-            class: HeaderTool,
+          header_mohan: {
+            class: header_mohanTool,
             shortcut: 'CMD+SHIFT+H',
             inlineToolbar: true,
           },
@@ -478,8 +478,8 @@ function unsetLinkHandler() {
           }
         }
 
-				if ('header' in tools) {
-					tools.header.tunes = ['alignmentTune'];
+				if ('header_mohan' in tools) {
+					tools.header_mohan.tunes = ['alignmentTune'];
 				}
 
         if ('paragraph' in tools) {
