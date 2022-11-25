@@ -97,7 +97,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header_mohan', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
