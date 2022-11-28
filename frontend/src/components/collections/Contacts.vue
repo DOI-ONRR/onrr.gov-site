@@ -40,7 +40,7 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-          <div v-if="headerChange(item) == 3">
+          <div v-if="headerChange(item) > 2">
           <h5 class="collection-category pa-3 mb-3" style="font-size:large;">
             <span v-if="!searchResults">
               {{ item.header }}
