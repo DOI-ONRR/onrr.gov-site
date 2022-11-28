@@ -40,7 +40,7 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-          <div v-if="headerChange(item)">
+          <div v-if="headerChange(item) > 0">
           <h3 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
@@ -54,7 +54,7 @@
             </span>
           </h3>
         </div>
-        <div v-if="!headerChange(item)">
+        <div v-if="!headerChange(item) === 0">
         <h2 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
@@ -254,12 +254,13 @@ export default {
     },
     headerChange(item){
       const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
-      console.log('the value of tabsPresent:- '+tabsPresent);
+      console.log('the value of tabsPresent lenght :- '+JSON.stringify(tabsPresent.length));
+      console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
       if(tabsPresent && tabsPresent.length > 0){
-        console.log('the lenght greater value '+item);
-        return true;
+        console.log('the lenght greater value '+JSON.stringify(item));
+        return tabsPresent.length;
       }
-      return false;
+      return 0;
     },
     createContactItem(item) {
       let nObj = {}
