@@ -38,9 +38,11 @@
     </v-container>
 
     <div v-if="visibleItems.length > 0 && showResults">
+      <span>Change value</span>
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <div v-if="headerChange(item) > 1">
+            <span>Change value5</span>
           <h5 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
@@ -55,6 +57,7 @@
           </h5>
         </div>
           <div v-if="headerChange(item) === 1">
+            <span>Change value3</span>
           <h3 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
@@ -69,6 +72,7 @@
           </h3>
         </div>
         <div v-if="headerChange(item) === 0">
+          <span>Change value2</span>
         <h2 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
@@ -273,7 +277,7 @@ export default {
       console.log('the header value:- h'+tabsPresent.length);
       console.log('the header value:- h');
       if(tabsPresent && tabsPresent.length > 0){
-        console.log('the lenght greater value '+JSON.stringify(item));
+        console.log('the length greater value '+JSON.stringify(item));
         console.log('the header value:- h'+tabsPresent.length);
         return tabsPresent.length;
       }
