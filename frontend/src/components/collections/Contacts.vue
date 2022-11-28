@@ -55,7 +55,7 @@
           </h5>
         </div>
         <div v-if="headerChange(item) === 1">
-          <h3 class="collection-category pa-3 mb-3">
+          <h4 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
               <span v-if="item.agency !== null">({{ item.agency }})</span>
@@ -66,7 +66,7 @@
               <span v-if="item.agency !== null">({{ item.agency }})</span>
               <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
             </span>
-          </h3>
+          </h4>
         </div>
           <div v-if="headerChange(item) === 1">
           <h3 class="collection-category pa-3 mb-3">
