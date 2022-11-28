@@ -124,7 +124,6 @@
 
 <script>
 import { formatToSlug, groupBy } from '@/js/utils'
-import { component } from 'vue/types/umd'
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
 
