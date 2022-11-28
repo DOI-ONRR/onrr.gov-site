@@ -53,6 +53,20 @@
               <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
             </span>
           </h5>
+          <div v-if="headerChange(item) > 1">
+          <h4 class="collection-category pa-3 mb-3" style="font-size:large;">
+            <span v-if="!searchResults">
+              {{ item.header }}
+              <span v-if="item.agency !== null">({{ item.agency }})</span>
+              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
+            </span>
+            <span v-if="searchResults">
+              {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }}
+              <span v-if="item.agency !== null">({{ item.agency }})</span>
+              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
+            </span>
+          </h4>
+        </div>
         </div>
           <div v-if="headerChange(item) === 1">
           <h3 class="collection-category pa-3 mb-3">
