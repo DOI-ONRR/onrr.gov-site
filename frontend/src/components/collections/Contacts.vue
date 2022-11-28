@@ -41,7 +41,6 @@
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <div v-if="headerChange(item) > 0">
-            <component :is="'h'+headerChange(item)">Sample Header</component>
           <h3 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
