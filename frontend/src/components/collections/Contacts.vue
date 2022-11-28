@@ -54,7 +54,7 @@
             </span>
           </h5>
         </div>
-        <div v-if="headerChange(item) === 1">
+        <div v-if="headerChange(item) > 1">
           <h4 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
