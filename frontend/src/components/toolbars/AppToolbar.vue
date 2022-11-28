@@ -40,7 +40,7 @@
               <div class="logo-content">
                 <span>U.S. Department of the Interior</span>
                 <span>Office of Natural</span>
-                <span>Resources Revenue (ONRR) FACE</span>
+                <span>Resources Revenue (ONRR)</span>
               </div>
             </v-toolbar-title>
             </router-link>
