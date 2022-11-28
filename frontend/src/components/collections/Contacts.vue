@@ -189,8 +189,7 @@ export default {
   },
   components: {
     TextField,
-    SelectField,
-    component
+    SelectField
 },
   methods: {
     formatToSlug: formatToSlug,
