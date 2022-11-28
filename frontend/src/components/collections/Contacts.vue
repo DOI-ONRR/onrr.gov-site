@@ -40,7 +40,21 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-          <div v-if="headerChange(item) > 0">
+          <div v-if="headerChange(item) > 1">
+          <h5 class="collection-category pa-3 mb-3">
+            <span v-if="!searchResults">
+              {{ item.header }}
+              <span v-if="item.agency !== null">({{ item.agency }})</span>
+              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
+            </span>
+            <span v-if="searchResults">
+              {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }}
+              <span v-if="item.agency !== null">({{ item.agency }})</span>
+              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
+            </span>
+          </h5>
+        </div>
+          <div v-if="headerChange(item) === 1">
           <h3 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
@@ -54,7 +68,7 @@
             </span>
           </h3>
         </div>
-        <div v-if="!headerChange(item) === 0">
+        <div v-if="headerChange(item) === 0">
         <h2 class="collection-category pa-3 mb-3">
             <span v-if="!searchResults">
               {{ item.header }}
@@ -257,8 +271,10 @@ export default {
       console.log('the value of tabsPresent length :- '+JSON.stringify(tabsPresent.length));
       console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
       console.log('the header value:- h'+tabsPresent.length);
+      console.log('the header value:- h');
       if(tabsPresent && tabsPresent.length > 0){
         console.log('the lenght greater value '+JSON.stringify(item));
+        console.log('the header value:- h'+tabsPresent.length);
         return tabsPresent.length;
       }
       return 0;
