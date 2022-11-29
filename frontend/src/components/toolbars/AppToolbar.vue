@@ -54,7 +54,7 @@
 
         <!-- Mobile Menu -->
         <div class="d-lg-none">
-          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon aria-label = 'Mobile menu' op="drawer = !drawer"></v-app-bar-nav-icon>
         </div>
 
         <template v-slot:extension v-if="!isMobile">
