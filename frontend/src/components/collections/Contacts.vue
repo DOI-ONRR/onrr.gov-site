@@ -40,6 +40,7 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
+          <component :is="headerTagValue">checking Value</component>
           <div v-if="headerChange(item) > 2">
           <h5 class="collection-category pa-3 mb-3" style="font-size:large;">
             <span v-if="!searchResults">
@@ -152,6 +153,7 @@
 
 <script>
 import { formatToSlug, groupBy } from '@/js/utils'
+//import { component } from 'vue/types/umd'
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
 
@@ -233,6 +235,9 @@ export default {
         .split(' ')
         .every(v => item && item.toLowerCase().includes(v))
       }
+    },
+    headerTagValue(){
+      return 'h3';
     },
     filterProperties(items) {
       // console.log('filteredProperties items: ', items)
