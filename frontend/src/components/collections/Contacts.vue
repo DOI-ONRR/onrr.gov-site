@@ -42,6 +42,7 @@
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <span>Mohan checking</span>
           <component :is="headerTagValue">checking Value</component>
+          <h3>Testing Header</h3>
           <div v-if="headerChange(item) > 2">
           <h5 class="collection-category pa-3 mb-3" style="font-size:large;">
             <span v-if="!searchResults">
@@ -238,6 +239,7 @@ export default {
       }
     },
     headerTagValue(){
+      console.log('return h3');
       return 'h3';
     },
     filterProperties(items) {
