@@ -40,13 +40,7 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-          <span>Mohan checking</span>
-          <component :is="headerTagValue">checking Value:</component>
           <component :is="headerStyle">header style</component>
-          
-          <component v-bind:is="headerStyle">checking Value no colo</component>
-          <component v-bind:is="h3">checking Value no colo h3</component>
-          <h3>Testing Header</h3>
           <div v-if="headerChange(item) > 2">
           <h5 class="collection-category pa-3 mb-3" style="font-size:large;">
             <span v-if="!searchResults">
@@ -229,7 +223,8 @@ export default {
   },
   components: {
     TextField,
-    SelectField
+    SelectField,
+    TextBlock
 },
   methods: {
     formatToSlug: formatToSlug,
@@ -413,6 +408,7 @@ export default {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
     },
     headerStyle() {
+      console.log('the text block value:- '+this.TextBlock.type);
       return 'h3';
     },
     showResults() {
