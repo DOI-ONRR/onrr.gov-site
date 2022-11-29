@@ -42,7 +42,9 @@
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <span>Mohan checking</span>
           <component :is="headerTagValue">checking Value:</component>
+          
           <component is="headerTagValue">checking Value no colo</component>
+          <component is="h3">checking Value no colo h3</component>
           <h3>Testing Header</h3>
           <div v-if="headerChange(item) > 2">
           <h5 class="collection-category pa-3 mb-3" style="font-size:large;">
