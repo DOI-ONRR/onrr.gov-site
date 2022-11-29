@@ -42,8 +42,9 @@
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
           <span>Mohan checking</span>
           <component :is="headerTagValue">checking Value:</component>
+          <component :is="headerStyle">header style</component>
           
-          <component v-bind:is="headerTagValue">checking Value no colo</component>
+          <component v-bind:is="headerStyle">checking Value no colo</component>
           <component v-bind:is="h3">checking Value no colo h3</component>
           <h3>Testing Header</h3>
           <div v-if="headerChange(item) > 2">
@@ -159,6 +160,7 @@
 <script>
 import { formatToSlug, groupBy } from '@/js/utils'
 //import { component } from 'vue/types/umd'
+const TextBlock = () => import(/* webpackChunkName: "TextBlock" */ '@/components/blocks/TextBlock')
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
 
@@ -214,6 +216,9 @@ export default {
   },
   props: {
     collection: [Object, Array],
+    block: {
+      type: Object
+    },
     collectionName: String,
     collectionLayout: String,
     collectionPage: String,
@@ -296,7 +301,7 @@ export default {
       console.log('the value of tabsPresent length :- '+JSON.stringify(tabsPresent.length));
       console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
       console.log('the header value:- h'+tabsPresent.length);
-      console.log('the header value:- h');
+      console.log('the header text block value:- h '+JSON.stringify(TextBlock));
       if(tabsPresent && tabsPresent.length > 0){
         console.log('the lenght greater value '+JSON.stringify(item));
         console.log('the header value:- h'+tabsPresent.length);
@@ -406,6 +411,9 @@ export default {
     },
     visibleItems() {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
+    },
+    headerStyle() {
+      return h3
     },
     showResults() {
      if ( this.collectionPage.length > 0 ) {
