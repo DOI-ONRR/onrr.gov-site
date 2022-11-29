@@ -408,7 +408,7 @@ export default {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
     },
     headerStyle() {
-      console.log('the text block value:- '+this.TextBlock.type);
+      console.log('the text block value:- '+JSON.stringify(this.TextBlock));
       return 'h3';
     },
     showResults() {
