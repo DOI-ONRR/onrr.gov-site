@@ -413,7 +413,7 @@ export default {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
     },
     headerStyle() {
-      return h3
+      return 'h3';
     },
     showResults() {
      if ( this.collectionPage.length > 0 ) {
