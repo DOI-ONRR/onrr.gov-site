@@ -62,9 +62,7 @@ http {
             try_files $uri $uri/ /index.html;
     }
 
-    location ~* ^/reportpay/ {
-      return 301 https://$server_name/reportpay/$1 
-    }
+    rewrite "(?i)reportpay" https://$server_name/reportpay/$1 last;
   }
 } 
 
