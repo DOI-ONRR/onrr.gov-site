@@ -297,8 +297,14 @@ export default {
       console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
       console.log('the value of blockPresent:- '+blockPresent);
       blockPresent.forEach((e,i)=>{
-        console.log(blockPresent[i]);
-        if(blockPresent[i]?.attributes){
+        console.log('block array value:- '+blockPresent[i]);
+        if(blockPresent[i] && blockPresent[i].attributes){
+          console.log('attributes array value:- '+blockPresent[i].attributes);
+          let attValue = blockPresent[i].attributes;
+          if(attValue && attValue['variant']){
+                       console.log('attributes inside value:- '+attValue['variant']);
+          }
+          
         console.log(blockPresent[i].attributes);
         }
       });
