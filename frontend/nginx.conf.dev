@@ -62,7 +62,7 @@ http {
             try_files $uri $uri/ /index.html;
     }
 
-    rewrite "(?i)reportpay" https://$host_name/reportpay/$request_uri last;
+    rewrite "(?i)reportpay" https://$host/reportpay/$request_uri last;
   }
 } 
 
