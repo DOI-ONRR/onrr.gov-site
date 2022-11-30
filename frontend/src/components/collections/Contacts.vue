@@ -354,7 +354,7 @@ export default {
       console.log('the text block value:- '+JSON.stringify(this.block));
       return 'h3';
     },
-    headerChange(item){
+    headerChange(){
       const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
       const blockPresent = document.querySelectorAll('.block-component');
       let headerValue = '';
