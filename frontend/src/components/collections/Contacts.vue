@@ -293,7 +293,7 @@ export default {
     },
     headerChange(item){
       const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
-      const blockPresent = document.querySelectorAll('block-component text-h4');
+      const blockPresent = document.querySelectorAll('.block-component');
       console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
       console.log('the value of blockPresent:- '+JSON.stringify(blockPresent));
       console.log('the header text block value:- h '+JSON.stringify(TextBlock));
