@@ -63,7 +63,7 @@ http {
     }
 
     location ~* ^/reportpay/ {
-      
+      return 301 https://$server_name/reportpay/$1 
     }
   }
 } 
