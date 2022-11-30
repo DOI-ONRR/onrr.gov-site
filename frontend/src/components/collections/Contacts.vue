@@ -293,11 +293,9 @@ export default {
     },
     headerChange(item){
       const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
-      const headerVariant = document.getAttribute('variant');
-      const roleVariant = document.getAttribute('role');
-      console.log('the value of headerVariant length :- '+JSON.stringify(headerVariant));
+      const blockPresent = document.querySelectorAll('block-component text-h4');
       console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
-      console.log('the header role:- h'+roleVariant);
+      console.log('the value of blockPresent:- '+JSON.stringify(blockPresent));
       console.log('the header text block value:- h '+JSON.stringify(TextBlock));
       if(tabsPresent && tabsPresent.length > 0){
         console.log('the lenght greater value '+JSON.stringify(item));
