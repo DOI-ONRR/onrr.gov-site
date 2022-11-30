@@ -61,8 +61,6 @@ http {
     location / {
             try_files $uri $uri/ /index.html;
     }
-
-    rewrite "(?i)reportpay" https://$host/reportpay/$request_uri last;
   }
 } 
 
