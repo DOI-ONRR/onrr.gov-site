@@ -295,8 +295,10 @@ export default {
       const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
       const blockPresent = document.querySelectorAll('.block-component');
       console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
-      console.log('the value of blockPresent:- '+JSON.stringify(blockPresent));
+      console.log('the value of blockPresent:- '+blockPresent);
+      const blockPresentClass = document.getElementsByClassName('.block-component');
       console.log('the header text block value:- h '+JSON.stringify(TextBlock));
+      console.log('the blockPresentClass:- h '+blockPresentClass);
       if(tabsPresent && tabsPresent.length > 0){
         console.log('the lenght greater value '+JSON.stringify(item));
         console.log('the header value:- h'+tabsPresent.length);
