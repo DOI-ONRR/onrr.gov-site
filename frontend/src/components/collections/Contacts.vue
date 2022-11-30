@@ -302,7 +302,8 @@ export default {
           console.log('attributes array value:- '+blockPresent[i].attributes);
           let attValue = blockPresent[i].attributes;
           if(attValue && attValue['variant']){
-                       console.log('attributes inside value:- '+attValue['variant']);
+            console.log('attributes inside value:- '+attValue['variant']);
+            console.log('the variant value:- '+attValue['variant'].value);
           }
           
         console.log(blockPresent[i].attributes);
