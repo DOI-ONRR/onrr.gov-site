@@ -296,6 +296,12 @@ export default {
       const blockPresent = document.querySelectorAll('.block-component');
       console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
       console.log('the value of blockPresent:- '+blockPresent);
+      blockPresent.map((e,i)=>{
+        console.log(blockPresent[i]);
+        if(blockPresent[i]?.attributes){
+        console.log(blockPresent[i].attributes);
+        }
+      });
       const blockPresentClass = document.getElementsByClassName('.block-component');
       console.log('the header text block value:- h '+JSON.stringify(TextBlock));
       console.log('the blockPresentClass:- h '+blockPresentClass);
