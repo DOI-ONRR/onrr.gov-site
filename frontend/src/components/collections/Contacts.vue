@@ -293,6 +293,7 @@ export default {
     },
     headerChange(item){
       const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
+      const headerVariant = document.getAttribute('Variant')
       console.log('the value of tabsPresent length :- '+JSON.stringify(tabsPresent.length));
       console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
       console.log('the header value:- h'+tabsPresent.length);
@@ -408,7 +409,8 @@ export default {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
     },
     headerStyle() {
-      console.log('the text block value:- '+JSON.stringify(this.TextBlock));
+      console.log('the text block value:- '+JSON.stringify(TextBlock));
+      console.log('the text block value:- '+JSON.stringify(this.block));
       return 'h3';
     },
     showResults() {
