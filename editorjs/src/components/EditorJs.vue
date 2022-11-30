@@ -73,6 +73,15 @@
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
+            textColor:{
+            class:TextColorTool,
+            inlineToolbar: true,
+            config: {
+               colorCollections: ['#71500F','31A227E'],
+               defaultColor:'#000000',
+               type:'text',
+            },
+          },
             collection: {
               class: Collections,
               inlineToolbar: true,

@@ -65,6 +65,7 @@
     "editorjs-alert": "^1.0.3",
     "editorjs-list": "^2.1.4",
     "editorjs-text-alignment-blocktune": "^1.0.3",
+    "editorjs-text-color-plugin": "^1.13.1",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.20.0"
   },

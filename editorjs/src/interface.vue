@@ -78,6 +78,7 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
+  import TextColorTool from 'editorjs-text-color-plugin';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
@@ -97,7 +98,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'textColor','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -423,6 +424,15 @@ function unsetLinkHandler() {
           horizontalrule: {
             class: horizontalruleTool,
             inlineToolbar: true,
+          },
+          textColor:{
+            class:TextColorTool,
+            inlineToolbar: true,
+            config: {
+               colorCollections: ['#71500F','31A227E'],
+               defaultColor:'#000000',
+               type:'text',
+            },
           },
           alignmentTune: {
             class: AlignmentTuneTool
