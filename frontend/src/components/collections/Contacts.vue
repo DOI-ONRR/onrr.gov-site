@@ -40,9 +40,7 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-          <component :is="headerStyle"></component>
-          <div v-if="headerChange(item) > 2">
-          <h5 class="collection-category pa-3 mb-3" style="font-size:large;">
+            <component :is="headerChange" class="collection-category pa-3 mb-3" style="font-size:large;">
             <span v-if="!searchResults">
               {{ item.header }}
               <span v-if="item.agency !== null">({{ item.agency }})</span>
@@ -53,50 +51,7 @@
               <span v-if="item.agency !== null">({{ item.agency }})</span>
               <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
             </span>
-          </h5>
-        </div>
-        <div v-if="headerChange(item) === 2">
-          <h4 class="collection-category pa-3 mb-3">
-            <span v-if="!searchResults">
-              {{ item.header }}
-              <span v-if="item.agency !== null">({{ item.agency }})</span>
-              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
-            </span>
-            <span v-if="searchResults">
-              {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }}
-              <span v-if="item.agency !== null">({{ item.agency }})</span>
-              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
-            </span>
-          </h4>
-        </div>
-          <div v-if="headerChange(item) === 1">
-          <h3 class="collection-category pa-3 mb-3">
-            <span v-if="!searchResults">
-              {{ item.header }}
-              <span v-if="item.agency !== null">({{ item.agency }})</span>
-              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
-            </span>
-            <span v-if="searchResults">
-              {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }}
-              <span v-if="item.agency !== null">({{ item.agency }})</span>
-              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
-            </span>
-          </h3>
-        </div>
-        <div v-if="headerChange(item) === 0">
-        <h2 class="collection-category pa-3 mb-3">
-            <span v-if="!searchResults">
-              {{ item.header }}
-              <span v-if="item.agency !== null">({{ item.agency }})</span>
-              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
-            </span>
-            <span v-if="searchResults">
-              {{ item.page }} {{ item.tab && `> ${ item.tab }` }} {{ item.accordion && `> ${ item.accordion }` }} {{ item.header && `> ${ item.header }` }}
-              <span v-if="item.agency !== null">({{ item.agency }})</span>
-              <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
-            </span>
-          </h2>
-        </div>
+          </component>
           <v-container class="pa-0">
             <v-row>
               <v-col v-for="(contact, i) in item.contacts" :key="i" cols="12" sm="4">
@@ -291,34 +246,6 @@ export default {
       }
       return filteredItems || items
     },
-    headerChange(item){
-      const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
-      const blockPresent = document.querySelectorAll('.block-component');
-      console.log('the value of tabsPresent:- '+JSON.stringify(tabsPresent));
-      console.log('the value of blockPresent:- '+blockPresent);
-      blockPresent.forEach((e,i)=>{
-        console.log('block array value:- '+blockPresent[i]);
-        if(blockPresent[i] && blockPresent[i].attributes){
-          console.log('attributes array value:- '+blockPresent[i].attributes);
-          let attValue = blockPresent[i].attributes;
-          if(attValue && attValue['variant']){
-            console.log('attributes inside value:- '+attValue['variant']);
-            console.log('the variant value:- '+attValue['variant'].value);
-          }
-          
-        console.log(blockPresent[i].attributes);
-        }
-      });
-      const blockPresentClass = document.getElementsByClassName('.block-component');
-      console.log('the header text block value:- h '+JSON.stringify(TextBlock));
-      console.log('the blockPresentClass:- h '+blockPresentClass);
-      if(tabsPresent && tabsPresent.length > 0){
-        console.log('the lenght greater value '+JSON.stringify(item));
-        console.log('the header value:- h'+tabsPresent.length);
-        return tabsPresent.length;
-      }
-      return 0;
-    },
     createContactItem(item) {
       let nObj = {}
       nObj.__typename = item.__typename
@@ -426,6 +353,29 @@ export default {
       console.log('the text block value:- '+JSON.stringify(TextBlock));
       console.log('the text block value:- '+JSON.stringify(this.block));
       return 'h3';
+    },
+    headerChange(item){
+      const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
+      const blockPresent = document.querySelectorAll('.block-component');
+      let headerValue = '';
+      blockPresent.forEach((e,i)=>{
+        if(blockPresent[i] && blockPresent[i].attributes){
+          let attValue = blockPresent[i].attributes;
+          if(attValue && attValue['variant']
+           && attValue['variant'].value && 
+           attValue['variant'].value !== 'body1'){
+            headerValue = attValue['variant'].value;
+          }
+        }
+      });
+      const blockPresentClass = document.getElementsByClassName('.block-component');
+      console.log('the header text block value:- h '+JSON.stringify(TextBlock));
+      console.log('the blockPresentClass:- h '+blockPresentClass);
+      if(tabsPresent && tabsPresent.length > 0){
+        headerValue = 'h'+ (Number(headerValue[1]) + 1);
+        return headerValue;
+      }
+      return headerValue;
     },
     showResults() {
      if ( this.collectionPage.length > 0 ) {
