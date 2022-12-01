@@ -9,7 +9,6 @@
               v-for="(item, i) in slicedCollection"
               :key="i"
               :href="fileLink(`${ API }/press-releases/`, item)"
-          @click="trackDownloads(item)"
               class="pa-0"
               target="_blank"
             >
@@ -42,8 +41,8 @@
           :key="i"
           class="ml-1 mr-1 mt-1 mb-4"
           transition="fade-transition">
-            
-            <v-list-item 
+
+            <v-list-item
               three-line
               class="pa-2">
               <v-list-item-avatar
@@ -62,13 +61,7 @@
                   <v-icon>mdi-calendar-month</v-icon> {{ getFullDate(item.date) }}
                 </v-list-item-subtitle>
                 <div class="mb-2 text-body-1" v-if="item.excerpt" v-html="item.excerpt"></div>
-                <div v-if="fileLink(`${ API }/press-releases/`, item)">
-        <a :href="fileLink(`${ API }/press-releases/`, item)"
-        @click="trackDownloads(item)"  
-          target="_blank">View press release document
-
-
-        </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
+                <div v-if="fileLink(`${ API }/press-releases/`, item)"><a :href="fileLink(`${ API }/press-releases/`, item)" target="_blank">View press release document </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
               </v-list-item-content>
             </v-list-item>
         </v-card>
@@ -79,11 +72,10 @@
 
 <script>
 import { store } from '@/store'
-import { 
+import {
   fileCollectionMixin,
   dateMixin
 } from '@/mixins'
-
 const CollectionFilterToolbar = () => import(/* webpackChunkName: "CollectionFilterToolbar" */ '@/components/toolbars/CollectionFilterToolbar')
 export default {
   name: 'PressReleasesCollection',
@@ -103,7 +95,7 @@ export default {
     filterCollection() {     
       const sortedCollection = this.collection && [...this.collection].sort((a,b) => (a.date < b.date) ? 1 : -1)
       const filteredCollection = Number(store.collections.year)
-      ? this.filterCollectionByYear(this.filterCollectionBySearch(sortedCollection)) 
+      ? this.filterCollectionByYear(this.filterCollectionBySearch(sortedCollection))
       : this.filterCollectionBySearch(sortedCollection)
       return (!filteredCollection || filteredCollection.length === 0) ? sortedCollection : filteredCollection
     }
@@ -119,20 +111,6 @@ export default {
       const filteredYear = collection && collection.filter(item => this.getYear(item.date) === year)
       return filteredYear
     },
-    trackDownloads(item) {
-
-       console.debug("tracking ", item, {
-     page: "/press-releases/"+item.file.filename_download,
-          title: "/press-releases/"+item.file.title,
-        location:  "/press-releases/"+item.file.filename_download
-    })
-    this.$ga('send',{
-      hitType:'pageview',
-      page: "/press-releases/"+item.file.filename_download,
-      title: "/press-releases/"+item.file.title,
-      location:  "/press-releases/"+item.file.filename_download,
-});       
-}, 
   }
 }
 </script>

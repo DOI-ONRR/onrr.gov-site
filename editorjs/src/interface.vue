@@ -57,7 +57,7 @@
   import DelimiterTool from '@editorjs/delimiter';
   import TableTool from '@editorjs/table';
   import CodeTool from '@editorjs/code';
-  import HeaderTool from '@editorjs/header';
+  import headerTool from '@editorjs/header';
   import UnderlineTool from '@editorjs/underline';
   import EmbedTool from '@editorjs/embed';
   import MarkerTool from '@editorjs/marker';
@@ -73,11 +73,12 @@
   // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
   import CollectionsTool from "./custom-plugins/plugin-collections";
 //  import Links from "./custom-plugins/plugin-links";
-  import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
+  import horizontalruleTool from "./custom-plugins/plugin-horizontal-rule";
 //  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
+  import TextColorTool from 'editorjs-text-color-plugin';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
@@ -97,7 +98,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'textColor','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -312,7 +313,7 @@ function unsetLinkHandler() {
 
         const defaults = {
           header: {
-            class: HeaderTool,
+            class: headerTool,
             shortcut: 'CMD+SHIFT+H',
             inlineToolbar: true,
           },
@@ -421,8 +422,17 @@ function unsetLinkHandler() {
           },
 	  */	
           horizontalrule: {
-            class: HorizontalRuleTool,
+            class: horizontalruleTool,
             inlineToolbar: true,
+          },
+          textColor:{
+            class:TextColorTool,
+            inlineToolbar: true,
+            config: {
+               colorCollections: ['#71500F','31A227E'],
+               defaultColor:'#000000',
+               type:'text',
+            },
           },
           alignmentTune: {
             class: AlignmentTuneTool

@@ -40,7 +40,7 @@
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-          <h2 class="collection-category pa-3 mb-3">
+            <component :is="headerChange" class="collection-category pa-3 mb-3" style="font-size:large;">
             <span v-if="!searchResults">
               {{ item.header }}
               <span v-if="item.agency !== null">({{ item.agency }})</span>
@@ -51,7 +51,7 @@
               <span v-if="item.agency !== null">({{ item.agency }})</span>
               <span v-if="item.operatorNumber !== null">(Operator #: {{ item.operatorNumber }})</span>
             </span>
-          </h2>
+          </component>
           <v-container class="pa-0">
             <v-row>
               <v-col v-for="(contact, i) in item.contacts" :key="i" cols="12" sm="4">
@@ -108,6 +108,8 @@
 
 <script>
 import { formatToSlug, groupBy } from '@/js/utils'
+//import { component } from 'vue/types/umd'
+const TextBlock = () => import(/* webpackChunkName: "TextBlock" */ '@/components/blocks/TextBlock')
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
 
@@ -163,6 +165,9 @@ export default {
   },
   props: {
     collection: [Object, Array],
+    block: {
+      type: Object
+    },
     collectionName: String,
     collectionLayout: String,
     collectionPage: String,
@@ -173,8 +178,9 @@ export default {
   },
   components: {
     TextField,
-    SelectField
-  },
+    SelectField,
+    TextBlock
+},
   methods: {
     formatToSlug: formatToSlug,
     groupBy: groupBy,
@@ -189,6 +195,10 @@ export default {
         .split(' ')
         .every(v => item && item.toLowerCase().includes(v))
       }
+    },
+    headerTagValue(){
+      console.log('return h3');
+      return 'h3';
     },
     filterProperties(items) {
       // console.log('filteredProperties items: ', items)
@@ -338,6 +348,34 @@ export default {
     },
     visibleItems() {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
+    },
+    headerStyle() {
+      console.log('the text block value:- '+JSON.stringify(TextBlock));
+      console.log('the text block value:- '+JSON.stringify(this.block));
+      return 'h3';
+    },
+    headerChange(){
+      const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
+      const blockPresent = document.querySelectorAll('.block-component');
+      let headerValue = '';
+      blockPresent.forEach((e,i)=>{
+        if(blockPresent[i] && blockPresent[i].attributes){
+          let attValue = blockPresent[i].attributes;
+          if(attValue && attValue['variant']
+           && attValue['variant'].value && 
+           attValue['variant'].value !== 'body1'){
+            headerValue = attValue['variant'].value;
+          }
+        }
+      });
+      const blockPresentClass = document.getElementsByClassName('.block-component');
+      console.log('the header text block value:- h '+JSON.stringify(TextBlock));
+      console.log('the blockPresentClass:- h '+blockPresentClass);
+      if(tabsPresent && tabsPresent.length > 0){
+        headerValue = 'h'+ (Number(headerValue[1]) + 1);
+        return headerValue;
+      }
+      return headerValue;
     },
     showResults() {
      if ( this.collectionPage.length > 0 ) {
