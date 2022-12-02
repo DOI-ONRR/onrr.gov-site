@@ -356,6 +356,10 @@ function unsetLinkHandler() {
           table: {
             class: TableTool,
             inlineToolbar: true,
+            withHeadings: true,
+            config: {
+              rows: 1
+            }
           },
           quote: {
             class: QuoteTool,
