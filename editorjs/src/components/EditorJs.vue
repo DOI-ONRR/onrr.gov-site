@@ -162,7 +162,15 @@
               class: CustomBlocksTool
             },
             table: {
-              class: TableTool,
+              class: TableTool, 
+              config: {
+                header: {
+                class: headerTool
+              }
+              },
+              header: {
+                class: Header
+              },
               inlineToolbar: true,
               tunes: ['alignmentTune']
             },
