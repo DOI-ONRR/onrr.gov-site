@@ -357,16 +357,11 @@ function unsetLinkHandler() {
             class: TableTool,
             inlineToolbar: true,
             withHeadings: true,
-            tools:{ header: {
-              class: Header,
-              shortcut: "CMD+SHIFT+H",
-              tunes: ['alignmentTune']
-            }
-          },
             header: {
                 class: headerTool
               },
             config: {
+              rows: 1,
               header: {
                 class: headerTool
               }
