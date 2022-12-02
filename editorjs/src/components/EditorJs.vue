@@ -76,10 +76,8 @@
             },
             textColor:{
             class:TextColorTool,
-            inlineToolbar: true,
             config: {
-               colorCollections: ['#71500F','31A227E'],
-               defaultColor:'#000000',
+               colorCollections: ['#71500F','#00FF00'],
                type:'text',
             },
           },
