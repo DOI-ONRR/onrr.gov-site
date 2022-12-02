@@ -172,6 +172,12 @@
                 class: Header
               },
               inlineToolbar: true,
+             tools:{ header: {
+              class: Header,
+              shortcut: "CMD+SHIFT+H",
+              tunes: ['alignmentTune']
+            }
+          },
               tunes: ['alignmentTune']
             },
           },
