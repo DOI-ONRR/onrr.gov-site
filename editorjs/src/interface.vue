@@ -356,6 +356,16 @@ function unsetLinkHandler() {
           table: {
             class: TableTool,
             inlineToolbar: true,
+            withHeadings: true,
+            header: {
+                class: headerTool
+              },
+            config: {
+              rows: 1,
+              header: {
+                class: headerTool
+              }
+            }
           },
           quote: {
             class: QuoteTool,
@@ -427,10 +437,8 @@ function unsetLinkHandler() {
           },
           textColor:{
             class:TextColorTool,
-            inlineToolbar: true,
             config: {
-               colorCollections: ['#71500F','31A227E'],
-               defaultColor:'#000000',
+               colorCollections: ['#71500F','#00FF00'],
                type:'text',
             },
           },
