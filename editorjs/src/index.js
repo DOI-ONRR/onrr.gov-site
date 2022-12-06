@@ -49,7 +49,7 @@ export default {
           "image",
           "paragraph",
           // "delimiter",
-          // "checklist",
+          // "checklist ",
           "quote",
           "textColor",
           "underline",
