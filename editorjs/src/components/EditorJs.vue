@@ -74,12 +74,12 @@
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
-            textcolor:{
+            textColor:{
             class:ColorPlugin,
             config: {
-               colorCollections: ['#71500F','#1A227E'],
-               type: 'text'
-            }
+               colorCollections: ['#71500F','#00FF00'],
+               type: 'marker'
+            },
           },
             collection: {
               class: Collections,
@@ -163,7 +163,15 @@
             },
             table: {
               class: TableTool, 
-              inlineToolbar: ['Header'],
+              config: {
+                header: {
+                class: headerTool
+              }
+              },
+              header: {
+                class: Header
+              },
+              inlineToolbar: true,
               tunes: ['alignmentTune']
             },
           },

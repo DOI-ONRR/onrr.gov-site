@@ -78,7 +78,7 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
-  import ColorPlugin from 'editorjs-text-color-plugin';
+  import TextColorTool from 'editorjs-text-color-plugin';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
@@ -98,7 +98,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'textcolor','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'textColor','color','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -355,9 +355,16 @@ function unsetLinkHandler() {
           },
           table: {
             class: TableTool,
-            inlineToolbar: ['Header'],
+            inlineToolbar: true,
+            withHeadings: true,
+            header: {
+                class: headerTool
+              },
             config: {
-              rows: 1
+              rows: 1,
+              header: {
+                class: headerTool
+              }
             }
           },
           quote: {
@@ -428,12 +435,12 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
-          textcolor:{
-            class:ColorPlugin,
+          textColor:{
+            class:TextColorTool,
             config: {
-               colorCollections: ['#71500F','#1A227E'],
-               type: 'text',
-            }
+               colorCollections: ['#71500F','#00FF00'],
+               type: 'marker',
+            },
           },
           alignmentTune: {
             class: AlignmentTuneTool
