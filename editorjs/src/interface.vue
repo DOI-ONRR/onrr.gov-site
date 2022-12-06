@@ -431,7 +431,7 @@ function unsetLinkHandler() {
           color:{
             class:ColorPlugin,
             config: {
-               colorCollections: ['#71500F','#00FF00'],
+               colorCollections: ['#71500F','#1A227E'],
                type: 'text',
             },
           },
