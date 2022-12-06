@@ -494,9 +494,9 @@ function unsetLinkHandler() {
 					tools.header.tunes = ['alignmentTune'];
 				}
 
-        if ('color' in tools) {
-					tools.color.tunes = ['alignmentTune'];
-				}
+        // if ('color' in tools) {
+				// 	tools.color.tunes = ['alignmentTune'];
+				// }
 
         if ('paragraph' in tools) {
 					tools.paragraph.tunes = ['alignmentTune'];
