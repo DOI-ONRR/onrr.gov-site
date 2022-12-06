@@ -501,9 +501,9 @@ function unsetLinkHandler() {
 					tools.table.tunes = ['alignmentTune'];
 				}
 
-        if ('textColor' in tools) {
-					tools.table.tunes = ['alignmentTune'];
-				}
+        // if ('textColor' in tools) {
+				// 	tools.table.tunes = ['alignmentTune'];
+				// }
 
 				if ('image' in tools) {
 					tools.image.tunes = ['alignmentTune'];

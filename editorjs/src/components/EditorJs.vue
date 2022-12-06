@@ -79,8 +79,7 @@
             config: {
                colorCollections: ['#71500F','#1A227E'],
                type: 'text'
-            },
-            tunes: ['alignmentTune']
+            }
           },
             collection: {
               class: Collections,
