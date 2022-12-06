@@ -74,7 +74,7 @@
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
-            textColor:{
+            textcolor:{
             class:ColorPlugin,
             config: {
                colorCollections: ['#71500F','#1A227E'],
