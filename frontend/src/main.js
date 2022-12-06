@@ -62,17 +62,12 @@ const apolloProvider = new VueApollo({
 })
 
 Vue.config.productionTip = false
-const isProd=process.env.NODE_ENV==='production'
 
 Vue.use(VueApollo)
 Vue.use(VueMeta)
 Vue.use(VueAnalytics, {
   id: 'UA-33523145-1',
-  router,
-  debug:
-  { enabled: !isProd,
-    sendHitTask: isProd
-  }
+  router
 })
 new Vue({
   vuetify,
