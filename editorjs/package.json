@@ -29,7 +29,6 @@
     "@editorjs/link-autocomplete": "0.0.0",
     "@editorjs/list": "^1.6.2",
     "core-js": "^3.19.1",
-    "editorjs-inline-color": "^0.0.2",
     "gridjs": "^5.0.2",
     "vue": "^3.2.22"
   },
