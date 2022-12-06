@@ -355,7 +355,7 @@ function unsetLinkHandler() {
           },
           table: {
             class: TableTool,
-            inlineToolbar: true,
+            inlineToolbar: ['Header'],
             withHeadings: true,
             config: {
               rows: 1
