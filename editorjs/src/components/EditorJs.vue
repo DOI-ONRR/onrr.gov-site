@@ -168,6 +168,7 @@
             },
             table: {
               class: TableTool, 
+              inlineToolbar: ['Header'],
               tunes: ['alignmentTune']
             },
           },

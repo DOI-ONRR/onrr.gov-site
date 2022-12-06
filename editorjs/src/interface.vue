@@ -78,7 +78,7 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
-  import TextColorTool from 'editorjs-text-color-plugin';
+  import ColorPlugin from 'editorjs-text-color-plugin';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
@@ -355,7 +355,7 @@ function unsetLinkHandler() {
           },
           table: {
             class: TableTool,
-            inlineToolbar: true,
+            inlineToolbar: ['Header'],
             config: {
               rows: 1
             }
