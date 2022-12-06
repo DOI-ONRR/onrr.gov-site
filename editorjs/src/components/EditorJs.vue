@@ -30,7 +30,6 @@
   import LinksList from '../custom-plugins/plugin-links-list';
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
   import ImageTool from '../custom-plugins/plugin-image-patch';
-  import ColorTool from "editorjs-inline-color";
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
   import TableTool from '@editorjs/table';
 
@@ -73,10 +72,6 @@
             },
             horizontalrule: {
               class: HorizontalRuleTool,
-              inlineToolbar: true,
-            },
-            color:{
-              class:ColorTool,
               inlineToolbar: true,
             },
             textColor:{
