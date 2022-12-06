@@ -24,7 +24,6 @@
   import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
   import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
   import LinkTool from '@editorjs/link';
-  import TextColorTool from 'editorjs-text-color-plugin';
   import Links from '../custom-plugins/plugin-links';
   import LinksInline from '../custom-plugins/plugin-links-inline';
   import LinksList from '../custom-plugins/plugin-links-list';
@@ -74,12 +73,6 @@
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
-            textColor:{
-            class:TextColorTool,
-            config: {
-               colorCollections: ['#71500F','#00FF00'],
-            },
-          },
             collection: {
               class: Collections,
               inlineToolbar: true,
