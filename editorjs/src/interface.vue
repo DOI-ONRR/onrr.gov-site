@@ -433,7 +433,7 @@ function unsetLinkHandler() {
             class:ColorPlugin,
             config: {
                colorCollections: ['#71500F','#00FF00'],
-               type: 'marker',
+               type: 'text',
             },
           },
           alignmentTune: {
