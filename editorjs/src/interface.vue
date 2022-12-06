@@ -78,7 +78,7 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
-  import TextColorTool from 'editorjs-text-color-plugin';
+  import ColorPlugin from 'editorjs-text-color-plugin';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
@@ -98,7 +98,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'textColor','color','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'textColor','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -357,14 +357,8 @@ function unsetLinkHandler() {
             class: TableTool,
             inlineToolbar: true,
             withHeadings: true,
-            header: {
-                class: headerTool
-              },
             config: {
-              rows: 1,
-              header: {
-                class: headerTool
-              }
+              rows: 1
             }
           },
           quote: {
@@ -436,7 +430,7 @@ function unsetLinkHandler() {
             inlineToolbar: true,
           },
           textColor:{
-            class:TextColorTool,
+            class:ColorPlugin,
             config: {
                colorCollections: ['#71500F','#00FF00'],
                type: 'marker',
