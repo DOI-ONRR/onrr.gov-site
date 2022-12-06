@@ -168,15 +168,6 @@
             },
             table: {
               class: TableTool, 
-              config: {
-                header: {
-                class: headerTool
-              }
-              },
-              header: {
-                class: Header
-              },
-              inlineToolbar: ['Header'],
               tunes: ['alignmentTune']
             },
           },
