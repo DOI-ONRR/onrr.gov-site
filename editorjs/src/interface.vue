@@ -79,7 +79,6 @@
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
   import TextColorTool from 'editorjs-text-color-plugin';
-  import ColorTool from 'editorjs-inline-color';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
@@ -434,10 +433,6 @@ function unsetLinkHandler() {
 	  */	
           horizontalrule: {
             class: horizontalruleTool,
-            inlineToolbar: true,
-          },
-          color:{
-            class:ColorTool,
             inlineToolbar: true,
           },
           textColor:{
