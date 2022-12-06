@@ -119,18 +119,13 @@ export default {
       return filteredYear
     },
     trackDownloads(item) {
-       console.debug("tracking ", item, {
-     page: "/press-releases/"+item.file.filename_download,
-          title: "/press-releases/"+item.file.title,
-        location:  "/press-releases/"+item.file.filename_download
-    })
-    this.$ga('send',{
-      hitType:'pageview',
-      page: "/press-releases/"+item.file.filename_download,
-      title: "/press-releases/"+item.file.title,
-      location:  "/press-releases/"+item.file.filename_download,
-});
-},
+      this.$ga.event({
+        eventCategory: 'Download',
+        eventAction: 'pdf',
+        eventLabel: `/press-releases/${item.file.filename_download}`,
+        eventValue: 1
+      });
+    },
   }
 }
 </script>
