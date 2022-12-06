@@ -30,7 +30,6 @@
   import LinksList from '../custom-plugins/plugin-links-list';
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
   import ImageTool from '../custom-plugins/plugin-image-patch';
-  import ColorTool from "editorjs-inline-color";
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
   import TableTool from '@editorjs/table';
 
@@ -76,15 +75,12 @@
               inlineToolbar: true,
             },
             color:{
-              class:ColorTool,
-              inlineToolbar: true,
-            },
-            textColor:{
             class:ColorPlugin,
             config: {
                colorCollections: ['#71500F','#00FF00'],
                type: 'text'
             },
+            tunes: ['alignmentTune']
           },
             collection: {
               class: Collections,

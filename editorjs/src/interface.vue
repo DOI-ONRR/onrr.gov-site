@@ -98,7 +98,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'textColor','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'color','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -428,11 +428,11 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
-          textColor:{
+          color:{
             class:ColorPlugin,
             config: {
                colorCollections: ['#71500F','#00FF00'],
-               type: 'marker',
+               type: 'text',
             },
           },
           alignmentTune: {
@@ -498,6 +498,10 @@ function unsetLinkHandler() {
 				}
 
 				if ('table' in tools) {
+					tools.table.tunes = ['alignmentTune'];
+				}
+
+        if ('color' in tools) {
 					tools.table.tunes = ['alignmentTune'];
 				}
 
