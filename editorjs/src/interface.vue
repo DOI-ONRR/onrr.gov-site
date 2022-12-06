@@ -429,8 +429,8 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
-          textColor:{
-            class:ColorPlugin,
+          textColor: {
+            class: ColorPlugin,
             config: {
                colorCollections: ['#71500F','#00FF00'],
                type: 'text',
