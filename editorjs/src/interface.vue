@@ -357,14 +357,8 @@ function unsetLinkHandler() {
             class: TableTool,
             inlineToolbar: true,
             withHeadings: true,
-            header: {
-                class: headerTool
-              },
             config: {
-              rows: 1,
-              header: {
-                class: headerTool
-              }
+              rows: 1
             }
           },
           quote: {
