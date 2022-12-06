@@ -430,7 +430,7 @@ function unsetLinkHandler() {
             inlineToolbar: true,
           },
           textColor:{
-            class:TextColorTool,
+            class:ColorPlugin,
             config: {
                colorCollections: ['#71500F','#00FF00'],
                type: 'marker',
