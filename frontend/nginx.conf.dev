@@ -8,7 +8,6 @@ events { worker_connections 1024; }
 
 http {
   include       mime.types;
-  include nginx_google_analytics;
   charset utf-8;
   log_format cloudfoundry 'NginxLog "$http_x_forwarded_for" "$request" $status $body_bytes_sent';
   access_log /dev/stdout cloudfoundry;
@@ -51,7 +50,6 @@ http {
     }
     location /reporter-letters {	
       proxy_pass       https://dev-onrr-cms.app.cloud.gov/reporter-letters;
-      post_action @ga;
     }
     location /unbundling {	
       proxy_pass       https://dev-onrr-cms.app.cloud.gov/unbundling;
