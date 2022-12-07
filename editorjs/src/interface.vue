@@ -429,11 +429,11 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
-          color: {
+          Color: {
             class: ColorPlugin,
             config: {
-               colorCollections: ['#71500F','#00FF00'],
-               type: 'text',
+               colorCollections: ['#71500F','#1A22FE'],
+               type: 'text'
             }
           },
           alignmentTune: {
@@ -538,6 +538,13 @@ function unsetLinkHandler() {
 
   .serif {
     font-family: var(--family-serif);
+  }
+
+  .gold-text-color {
+    color: #71500F !important;
+  }
+  .blue-text-color {
+    color: #1A22FE !important;
   }
 
   .sans-serif {

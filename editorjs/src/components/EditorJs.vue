@@ -74,10 +74,10 @@
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
-            color: {
+            Color: {
             class: ColorPlugin,
             config: {
-               colorCollections: ['#71500F','#00FF00'],
+               colorCollections: ['#71500F','#1A22FE'],
                type: 'text'
             }
           },
@@ -163,15 +163,7 @@
             },
             table: {
               class: TableTool, 
-              config: {
-                header: {
-                class: headerTool
-              }
-              },
-              header: {
-                class: Header
-              },
-              inlineToolbar: ['Header'],
+              inlineToolbar: true,
               tunes: ['alignmentTune']
             },
           },
@@ -199,6 +191,12 @@
     margin-left: 20%;
     border: 2px solid #f1f3f5;
     box-sizing: border-box;
+  }
+  .gold-text-color {
+    color: #71500F !important;
+  }
+  .blue-text-color {
+    color: #1A22FE !important;
   }
 
   .ce-block--focused {
