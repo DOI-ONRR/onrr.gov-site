@@ -429,11 +429,11 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
-          color: {
+          Color: {
             class: ColorPlugin,
             config: {
-              colorCollections: ['.gold-text-color','.blue-text-color'],
-               type: 'text',
+               colorCollections: ['#71500F','#1A22FE'],
+               type: 'marker'
             }
           },
           alignmentTune: {
