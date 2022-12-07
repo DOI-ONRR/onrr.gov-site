@@ -432,7 +432,7 @@ function unsetLinkHandler() {
           color: {
             class: ColorPlugin,
             config: {
-               colorCollections: ['#71500F','#00FF00'],
+              colorCollections: [gold-text-color,blue-text-color],
                type: 'text',
             }
           },
@@ -538,6 +538,13 @@ function unsetLinkHandler() {
 
   .serif {
     font-family: var(--family-serif);
+  }
+
+  .gold-text-color {
+    color: #71500F !important;
+  }
+  .blue-text-color {
+    color: #1A22FE !important;
   }
 
   .sans-serif {
