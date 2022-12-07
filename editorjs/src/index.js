@@ -51,7 +51,7 @@ export default {
           // "delimiter",
           // "checklist ",
           "quote",
-          "Color",
+          "style",
           "underline",
           "collections",
           "customBlocks",
