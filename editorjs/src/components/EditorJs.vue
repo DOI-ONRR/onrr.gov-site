@@ -74,7 +74,7 @@
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
-            Color: {
+            style: {
             class: ColorPlugin,
             config: {
                colorCollections: ['#71500F','#1A22FE'],
@@ -191,12 +191,6 @@
     margin-left: 20%;
     border: 2px solid #f1f3f5;
     box-sizing: border-box;
-  }
-  .gold-text-color {
-    color: #71500F !important;
-  }
-  .blue-text-color {
-    color: #1A22FE !important;
   }
 
   .ce-block--focused {

@@ -78,7 +78,7 @@ export default {
             { value: "attaches", text: "Attaches" },
             { value: "table", text: "Table" },
             { value: "quote", text: "Quote" },
-            { value: "Color", text: "TextColor" },
+            { value: "style", text: "TextColor" },
             { value: "marker", text: "Marker" },
             { value: "simpleimage", text: "Simple Image" },
             { value: "underline", text: "Underline" },

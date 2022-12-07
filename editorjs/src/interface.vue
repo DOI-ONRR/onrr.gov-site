@@ -98,7 +98,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'color','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'style','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -429,7 +429,7 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
-          Color: {
+          style: {
             class: ColorPlugin,
             config: {
                colorCollections: ['#71500F','#1A22FE'],
