@@ -432,7 +432,7 @@ function unsetLinkHandler() {
           style: {
             class: ColorPlugin,
             config: {
-              colorCollections: ["var(--yellow) !important",'var(--red) !important','var(--primary) !important'],
+              colorCollections: ['var(--main-text-yellow)','var(--main-text-yellow)','var(--main-text-primary)'],
                type: 'text'
             }
           },
