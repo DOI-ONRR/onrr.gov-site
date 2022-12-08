@@ -57,6 +57,7 @@ class Color {
     const _this = this;
     this.button = document.createElement('button');
     this.button.type = 'button';
+    this.button.setAttribute('style')
     this.button.classList.add('colorPlugin');
     this.button.classList.add(this.iconClasses.base);
     const colorPicker = new Picker.ColorPlugin({
@@ -80,7 +81,10 @@ class Color {
   surround(range) {
     if (this.pluginType === 'marker') {
       document.execCommand('backColor', false, this.color);
-    } else {
+    }else if (this.pluginType=== 'style')
+    {
+      this.button.setAttribute('style','color:'+this.color)
+    }else{
       document.execCommand('foreColor', false, this.color);
     }
   }

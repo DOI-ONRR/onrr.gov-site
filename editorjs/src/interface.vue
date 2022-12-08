@@ -78,7 +78,7 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
-  import ColorPlugin from './custom-plugins/editorjs-text-color-plugin';
+  import ColorPlugin from './custom-plugins/editorjs-text-color-plugin/src/index';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
