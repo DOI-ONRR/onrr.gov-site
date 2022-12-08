@@ -52,6 +52,7 @@ http {
     }
     location /document {
       proxy_pass       https://dev-onrr-cms.app.cloud.gov/document;
+      post_action @ga;
     }
     location /press-releases {	
       proxy_pass       https://dev-onrr-cms.app.cloud.gov/press-releases;
