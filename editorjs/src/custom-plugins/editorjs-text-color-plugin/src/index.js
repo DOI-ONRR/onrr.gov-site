@@ -57,7 +57,6 @@ class Color {
     const _this = this;
     this.button = document.createElement('button');
     this.button.type = 'button';
-    this.button.setAttribute('style')
     this.button.classList.add('colorPlugin');
     this.button.classList.add(this.iconClasses.base);
     const colorPicker = new Picker.ColorPlugin({
