@@ -432,7 +432,7 @@ function unsetLinkHandler() {
           style: {
             class: ColorPlugin,
             config: {
-               colorCollections: ['#71500F','#1A22FE'],
+               colorCollections: ['.gold-text-color','.blue-text-color'],
                type: 'text'
             }
           },

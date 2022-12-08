@@ -77,7 +77,7 @@
             style: {
             class: ColorPlugin,
             config: {
-               colorCollections: ['#71500F','#1A22FE'],
+               colorCollections: ['.gold-text-color','.blue-text-color'],
                type: 'text'
             }
           },
@@ -191,6 +191,13 @@
     margin-left: 20%;
     border: 2px solid #f1f3f5;
     box-sizing: border-box;
+  }
+
+  .gold-text-color {
+    color: #71500F !important;
+  }
+  .blue-text-color {
+    color: #1A22FE !important;
   }
 
   .ce-block--focused {
