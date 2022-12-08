@@ -24,6 +24,12 @@ http {
   real_ip_recursive on;
 
   resolver {{nameservers}} ipv6=off valid=1s;
+
+  map $uri $ga_event_action {
+    ~*.+\.(.+)$ $1;
+    default "";
+  }
+
   server {
     set $google_analytics_id "UA-33523145-1";
     include nginx_google_analytics;

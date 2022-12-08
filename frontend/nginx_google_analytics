@@ -29,5 +29,5 @@ location @ga {
 
   proxy_set_header Host "www.google-analytics.com";
   
-  proxy_pass $ga_api/collect?v=1&dp=/$ga_host$ga_dp&dh=$ga_host&tid=$google_analytics_id&$cid&uip=$remote_addr&t=event&ec=Download&ea=pdf&el=$scheme://$host$uri;
+  proxy_pass $ga_api/collect?v=1&dp=/$ga_host$ga_dp&dh=$ga_host&tid=$google_analytics_id&$cid&uip=$remote_addr&t=event&ec=Download&ea=$ga_event_action&el=$scheme://$host$uri;
 }
