@@ -26,8 +26,8 @@ location @ga {
   proxy_connect_timeout 1s;
 
   set $ga_api "https://www.google-analytics.com";
-  #set $ga_api "https://www.google-analytics.com/debug"; #use for debugging
 
   proxy_set_header Host "www.google-analytics.com";
-  proxy_pass $ga_api/collect?v=1&dp=/$ga_host$ga_dp&dh=$ga_host&tid=$google_analytics_id&$cid&uip=$remote_addr&t=event&ec=Download&ea=pdf&el=$uri;
+  
+  proxy_pass $ga_api/collect?v=1&dp=/$ga_host$ga_dp&dh=$ga_host&tid=$google_analytics_id&$cid&uip=$remote_addr&t=event&ec=Download&ea=pdf&el=$scheme://$host$uri;
 }
