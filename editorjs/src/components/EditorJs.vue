@@ -77,7 +77,7 @@
             style: {
             class: ColorPlugin,
             config: {
-               colorCollections: ['.gold-text-color','.blue-text-color'],
+               colorCollections: ["var(--yellow) !important",'var(--red) !important','var(--primary) !important'],
                type: 'text'
             }
           },
