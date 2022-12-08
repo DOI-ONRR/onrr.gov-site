@@ -429,10 +429,10 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
-          style: {
+          Color: {
             class: ColorPlugin,
             config: {
-              colorCollections: ['var(--main-text-yellow)','var(--main-text-yellow)','var(--main-text-primary)'],
+              colorCollections: ['var(--main-text-color, "#71500F" )','var(--main-text-color, "#1A22FE")'],
                type: 'text'
             }
           },
