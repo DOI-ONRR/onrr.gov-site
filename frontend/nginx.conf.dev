@@ -25,6 +25,8 @@ http {
 
   resolver {{nameservers}} ipv6=off valid=1s;
   server {
+    set $google_analytics_id "UA-33523145-1";
+    include nginx_google_analytics;
 
     proxy_read_timeout 300;
     proxy_connect_timeout 300;
@@ -50,6 +52,7 @@ http {
     }
     location /reporter-letters {	
       proxy_pass       https://dev-onrr-cms.app.cloud.gov/reporter-letters;
+      post_action @ga;
     }
     location /unbundling {	
       proxy_pass       https://dev-onrr-cms.app.cloud.gov/unbundling;
