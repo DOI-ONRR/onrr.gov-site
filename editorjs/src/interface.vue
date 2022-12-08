@@ -78,7 +78,7 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
-  import ColorPlugin from 'editorjs-text-color-plugin';
+  import ColorPlugin from './custom-plugins/editorjs-text-color-plugin';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
 
   export default defineComponent({
@@ -432,7 +432,7 @@ function unsetLinkHandler() {
           Color: {
             class: ColorPlugin,
             config: {
-              colorCollections: ['var(--main-text-color, "#71500F" )','var(--main-text-color, "#1A22FE")'],
+              colorCollections: ["#71500F","#1A22FE"],
                type: 'text'
             }
           },

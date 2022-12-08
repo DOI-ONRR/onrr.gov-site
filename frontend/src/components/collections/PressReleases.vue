@@ -9,7 +9,6 @@
               v-for="(item, i) in slicedCollection"
               :key="i"
               :href="fileLink(`${ API }/press-releases/`, item)"
-          @click="trackDownloads(item)"
               class="pa-0"
               target="_blank"
             >
@@ -117,15 +116,7 @@ export default {
       const year = store.collections.year
       const filteredYear = collection && collection.filter(item => this.getYear(item.date) === year)
       return filteredYear
-    },
-    trackDownloads(item) {
-      this.$ga.event({
-        eventCategory: 'Download',
-        eventAction: 'pdf',
-        eventLabel: `/press-releases/${item.file.filename_download}`,
-        eventValue: 1
-      });
-    },
+    }
   }
 }
 </script>
