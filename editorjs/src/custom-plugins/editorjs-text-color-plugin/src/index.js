@@ -80,9 +80,10 @@ class Color {
   surround(range) {
     if (this.pluginType === 'marker') {
       document.execCommand('backColor', false, this.color);
-    }else if (this.pluginType=== 'style')
+    }else if (this.pluginType === 'style')
     {
-      this.button.setAttribute('style','color:'+this.color)
+      this.button.setAttribute('style','color:red');
+      console.log("sample color "+JSON.stringify(this.color));
     }else{
       document.execCommand('foreColor', false, this.color);
     }
