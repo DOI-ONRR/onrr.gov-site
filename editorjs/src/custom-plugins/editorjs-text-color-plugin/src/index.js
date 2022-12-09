@@ -80,9 +80,12 @@ class Color {
   surround(range) {
     if (this.pluginType === 'marker') {
       document.execCommand('backColor', false, this.color);
-    }else if (this.pluginType === 'style')
+    }else if (this.pluginType === 'text')
     {
-      this.button.setAttribute('style','color:red');
+      this.color = handleCSSVariables(
+        getDefaultColorCache(this.config.defaultColor, this.pluginType)
+    );
+      // this.button.setAttribute('style','color:red');
 
       console.log("sample color "+JSON.stringify(this.color));
       console.log("sample color "+window.getSelection());
