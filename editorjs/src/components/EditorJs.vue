@@ -32,6 +32,7 @@
   import ImageTool from '../custom-plugins/plugin-image-patch';
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
   import TableTool from '@editorjs/table';
+  import Tooltip from 'editorjs-tooltip';
 
   export default {
     data() {
@@ -73,6 +74,13 @@
             horizontalrule: {
               class: HorizontalRuleTool,
               inlineToolbar: true,
+            },
+            tooltip: {
+              class: Tooltip,
+              config: {
+                textColor: '#FDFEFE',
+                holder: 'editorId',
+              }
             },
             Color: {
             class: ColorPlugin,

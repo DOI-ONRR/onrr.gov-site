@@ -80,6 +80,7 @@
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
   import ColorPlugin from './custom-plugins/editorjs-text-color-plugin/src/index';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
+  import Tooltip from 'editorjs-tooltip';
 
   export default defineComponent({
     emits: ['input', 'error'],
@@ -98,7 +99,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'style','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'style','paragraph', 'table','tooltip', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -366,6 +367,13 @@ function unsetLinkHandler() {
             inlineToolbar: true,
             shortcut: 'CMD+SHIFT+O',
           },
+          tooltip: {
+              class: Tooltip,
+              config: {
+                textColor: '#FDFEFE',
+                holder: 'editorId',
+              }
+            },
           marker: {
             class: MarkerTool,
             shortcut: 'CMD+SHIFT+M',
