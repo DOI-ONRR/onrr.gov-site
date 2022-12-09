@@ -156,7 +156,7 @@ export default {
   },
   computed: {
     findPageByUrl () {
-      // console.log('routePath yo ------------> ', this.$route.path)
+      console.log('routePath yo ------------> ', this.$route.path)
       return this.pages.find(page => page.url === this.$route.path)
     },
     page () {
