@@ -56,6 +56,7 @@ class Color {
   render() {
     const _this = this;
     this.button = document.createElement('button');
+    this.font = document.createElement('font');
     this.button.type = 'button';
     this.button.classList.add('colorPlugin');
     this.button.classList.add(this.iconClasses.base);
@@ -82,16 +83,8 @@ class Color {
       document.execCommand('backColor', false, this.color);
     }else if (this.pluginType === 'text')
     {
-      this.color = handleCSSVariables(
-        getDefaultColorCache(this.config.defaultColor, this.pluginType)
-    );
-      // this.button.setAttribute('style','color:red');
-
-      console.log("sample color "+JSON.stringify(this.color));
-      console.log("sample color "+window.getSelection());
       let selectedText = window.getSelection().getRangeAt(0);
-      var font = document.createElement("font");
-      font.style.cssText = "color:"+this.color;
+      this.font.style.cssText = "color:"+this.color;
       selectedText.surroundContents(font);
     }else{
       document.execCommand('foreColor', false, this.color);
