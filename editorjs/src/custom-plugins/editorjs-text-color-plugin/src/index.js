@@ -86,7 +86,7 @@ class Color {
 
       console.log("sample color "+JSON.stringify(this.color));
       console.log("sample color "+window.getSelection());
-      let selectedText = window.getSelection();
+      let selectedText = window.getSelection().getRangeAt(0);
       var font = document.createElement("font");
       font.style.cssText = "color:green";
       selectedText.surroundContents(font);
