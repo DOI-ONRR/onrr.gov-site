@@ -85,7 +85,7 @@ class Color {
     {
       let selectedText = window.getSelection().getRangeAt(0);
       this.font.style.cssText = "color:"+this.color;
-      selectedText.surroundContents(font);
+      selectedText.surroundContents(this.font);
     }else{
       document.execCommand('foreColor', false, this.color);
     }
