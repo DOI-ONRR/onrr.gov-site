@@ -88,7 +88,7 @@ class Color {
       console.log("sample color "+window.getSelection());
       let selectedText = window.getSelection().getRangeAt(0);
       var font = document.createElement("font");
-      font.style.cssText = "color:green";
+      font.style.cssText = "color:"+this.color;
       selectedText.surroundContents(font);
     }else{
       document.execCommand('foreColor', false, this.color);
