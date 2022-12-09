@@ -83,7 +83,13 @@ class Color {
     }else if (this.pluginType === 'style')
     {
       this.button.setAttribute('style','color:red');
+
       console.log("sample color "+JSON.stringify(this.color));
+      console.log("sample color "+window.getSelection());
+      selectedText = window.getSelection();
+      var font = document.createElement("font");
+      font.style.cssText = "color:green";
+      selectedText.surroundContents(font);
     }else{
       document.execCommand('foreColor', false, this.color);
     }
