@@ -85,11 +85,11 @@ class Color {
       document.execCommand('backColor', false, this.color);
     }else if (this.pluginType === 'text')
     {
-      //let font = document.createElement('font');
-      this.selectedText = window.getSelection().getRangeAt(0);
+      let font = document.createElement('font');
+      let selectedText = window.getSelection().getRangeAt(0);
       console.log('the range:- '+range);
-      this.font.style.cssText = "color:"+this.color;
-      this.selectedText.surroundContents(this.font);
+      font.style.cssText = "color:"+this.color;
+      selectedText.surroundContents(font);
     }else{
       document.execCommand('foreColor', false, this.color);
     }
