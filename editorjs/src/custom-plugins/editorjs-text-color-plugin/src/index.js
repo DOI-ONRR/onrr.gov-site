@@ -29,6 +29,7 @@ class Color {
      */
     this.button = null;
     this.font = null;
+    this.selectedText = null;
 
     /**
      * CSS classes
@@ -85,9 +86,10 @@ class Color {
     }else if (this.pluginType === 'text')
     {
       //let font = document.createElement('font');
-      let selectedText = window.getSelection().getRangeAt(0);
+      this.selectedText = window.getSelection().getRangeAt(0);
+      console.log('the range:- '+range);
       this.font.style.cssText = "color:"+this.color;
-      selectedText.surroundContents(this.font);
+      this.selectedText.surroundContents(this.font);
     }else{
       document.execCommand('foreColor', false, this.color);
     }
