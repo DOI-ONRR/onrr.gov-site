@@ -28,6 +28,8 @@ class Color {
      * @type {HTMLElement|null}
      */
     this.button = null;
+    this.font = null;
+    this.selectedText = null;
 
     /**
      * CSS classes
@@ -56,6 +58,7 @@ class Color {
   render() {
     const _this = this;
     this.button = document.createElement('button');
+    this.font = document.createElement('font');
     this.button.type = 'button';
     this.button.classList.add('colorPlugin');
     this.button.classList.add(this.iconClasses.base);
@@ -80,9 +83,13 @@ class Color {
   surround(range) {
     if (this.pluginType === 'marker') {
       document.execCommand('backColor', false, this.color);
-    }else if (this.pluginType=== 'style')
+    }else if (this.pluginType === 'text')
     {
-      this.button.setAttribute('style','color:'+this.color)
+      //let font = document.createElement('font');
+      this.selectedText = window.getSelection().getRangeAt(0);
+      console.log('the range:- '+range);
+      this.font.style.cssText = "color:"+this.color;
+      this.selectedText.surroundContents(this.font);
     }else{
       document.execCommand('foreColor', false, this.color);
     }
