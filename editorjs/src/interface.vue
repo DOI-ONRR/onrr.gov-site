@@ -369,6 +369,7 @@ function unsetLinkHandler() {
           },
           tooltip: {
               class: Tooltip,
+              inlineToolbar: true,
               config: {
                 textColor: '#FDFEFE',
                 holder: 'editorId',
