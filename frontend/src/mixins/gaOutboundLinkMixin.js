@@ -5,7 +5,7 @@ export const gaOutboundLinkMixin = {
         if (links.length == 0)
             return;
 
-        const re = /^((http[s]?):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/;
+        const re = /^((http[s]?):\/)?\/?([^:/\s]+)((\/\w+)*\/)([\w\-.]+[^#?\s]+)(.*)?(#[\w-]+)?$/;
         const result = re.exec(window.location.href);
 
         if (result == null)
