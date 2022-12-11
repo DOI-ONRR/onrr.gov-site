@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import { editorBlockMixin, pageBlockMixin, gaOutboundLinkMixin } from '@/mixins'
+import { editorBlockMixin, pageBlockMixin } from '@/mixins'
 export default {
-  mixins: [editorBlockMixin, pageBlockMixin, gaOutboundLinkMixin],
+  mixins: [editorBlockMixin, pageBlockMixin],
   name: 'LayoutBlock',
   data() {
     return {
