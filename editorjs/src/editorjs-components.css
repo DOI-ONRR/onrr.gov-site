@@ -16,8 +16,7 @@
 
 .codex-editor .cdx-settings-button svg,
 .codex-editor .ce-inline-toolbar__dropdown svg,
-.codex-editor .ce-inline-toolbar .ce-inline-tool svg,
-.codex-editor .ce-settings .ce-settings__button svg {
+.codex-editor .ce-inline-toolbar .ce-inline-tool svg {
   fill: var(--v-list-color);
 }
 
