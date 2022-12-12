@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import { pageBlockMixin } from '@/mixins/pageBlockMixin.js'
+import { pageBlockMixin, gaOutboundLinkMixin } from '@/mixins/pageBlockMixin.js'
 
 export default {
-  mixins: [pageBlockMixin],
+  mixins: [pageBlockMixin, gaOutboundLinkMixin],
   name: 'EditorBlock'
 }
 </script>

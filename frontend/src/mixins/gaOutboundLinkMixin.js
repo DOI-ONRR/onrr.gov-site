@@ -3,8 +3,6 @@ export const gaOutboundLinkMixin = {
         this.$nextTick(function() {
             const links = this.$el.querySelectorAll('a');
 
-            console.log(links);
-
             if (links.length == 0)
                 return;
 
