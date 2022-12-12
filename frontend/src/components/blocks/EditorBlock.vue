@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { pageBlockMixin, gaOutboundLinkMixin } from '@/mixins/pageBlockMixin.js'
+import { pageBlockMixin, gaOutboundLinkMixin } from '@/mixins'
 
 export default {
   mixins: [pageBlockMixin, gaOutboundLinkMixin],
