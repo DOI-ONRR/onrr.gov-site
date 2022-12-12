@@ -371,8 +371,12 @@ function unsetLinkHandler() {
               class: Tooltip,
               inlineToolbar: true,
               config: {
-                textColor: '#FDFEFE',
-                holder: 'editorId',
+                location: 'left',
+        highlightColor: '#FFEFD5',
+        underline: true,
+        backgroundColor: '#154360',
+        textColor: '#FDFEFE',
+        holder: 'editorId'
               }
             },
           marker: {
