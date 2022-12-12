@@ -123,9 +123,6 @@ export default {
         return {
           ID: this.findPageByUrl.id
         }
-      },
-      result () {
-        this.bindOutboundLinkListeners();
       }
     }
   },
@@ -195,6 +192,11 @@ export default {
     
   },
   created () {},
+  updated: function() {
+    this.$nextTick(function() {
+      this.bindOutboundLinkListeners();
+    });
+  }
   
 }
 </script>
