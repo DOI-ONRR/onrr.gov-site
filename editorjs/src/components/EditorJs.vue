@@ -6,7 +6,7 @@
 
     <div class="editorx_body">
       <!--editorjs id-->
-      <div class id="codex-editor"/>
+      <div class="codex-editor" id="codex-editor"/>
     </div>
     <button style="margin-left: 30%" type="button" name="button" @click="save()">save</button>
     <div class="editorx_body">
@@ -218,6 +218,37 @@
       rgba(0, 212, 255, 1) 100%
     )
   }
+
+  .tooltip-tool__input{
+  border: 0;
+  border-radius: 0 0 4px 4px;
+  border-top: 1px solid rgba(201,201,204,.48);
+}
+
+.tooltip-tool__span{
+  padding: 3px;
+  border-radius: 6px;
+}
+
+.tooltip-tool__underline{
+  text-decoration: underline;
+}
+
+.tooltip-color::before {
+  background-color: transparent;
+}
+
+.tooltip-color::after {
+  background-color: transparent;
+}
+
+.tooltip-text-color {
+  color: transparent;
+}
+
+.cdx-tooltip {
+  display: inline-block;
+}
 
 
 </style>
