@@ -372,9 +372,9 @@ function unsetLinkHandler() {
               config: {
                 location: 'left',
         highlightColor: '#FFEFD5',
-        underline: true,
         backgroundColor: '#154360',
-        textColor: '#FDFEFE'
+        textColor: '#FDFEFE',
+        holder: 'editorjs-tooltip'
               }
             },
           marker: {

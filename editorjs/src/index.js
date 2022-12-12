@@ -81,7 +81,7 @@ export default {
             { value: "tooltip", text: "Tooltip" },
             { value: "quote", text: "Quote" },
             { value: "Color", text: "TextColor" },
-            { value: "marker", text: "Marker" },
+            { value: "tooltip", text: "Marker" },
             { value: "simpleimage", text: "Simple Image" },
             { value: "underline", text: "Underline" },
             { value: "inlinecode", text: "Inline Code" },
