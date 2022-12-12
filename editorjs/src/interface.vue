@@ -78,8 +78,9 @@
   import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
-  import ColorPlugin from 'editorjs-text-color-plugin';
+  import ColorPlugin from './custom-plugins/editorjs-text-color-plugin/src/index';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
+  import Tooltip from 'editorjs-tooltip';
 
   export default defineComponent({
     emits: ['input', 'error'],
@@ -98,7 +99,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'color','paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'style','paragraph', 'table','tooltip', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
       },
       font: {
         type: String,
@@ -366,6 +367,7 @@ function unsetLinkHandler() {
             inlineToolbar: true,
             shortcut: 'CMD+SHIFT+O',
           },
+
           marker: {
             class: MarkerTool,
             shortcut: 'CMD+SHIFT+M',
@@ -429,10 +431,19 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
+          tooltip: {
+              class: Tooltip,
+              inlineToolbar: true,
+              config: {
+                holder: "codex-editor"
+              }
+            },
           Color: {
             class: ColorPlugin,
+            inlineToolbar: true,
             config: {
-               colorCollections: ['#71500F','#1A22FE'],
+              defaultColor: "#4F5464",
+              colorCollections: ["#71500F","#1A22FE","#4F5464"],
                type: 'text'
             }
           },
@@ -546,6 +557,36 @@ function unsetLinkHandler() {
   .blue-text-color {
     color: #1A22FE !important;
   }
+  .tooltip-tool__input{
+  border: 0;
+  border-radius: 0 0 4px 4px;
+  border-top: 1px solid rgba(201,201,204,.48);
+}
+
+.tooltip-tool__span{
+  padding: 3px;
+  border-radius: 6px;
+}
+
+.tooltip-tool__underline{
+  text-decoration: underline;
+}
+
+.tooltip-color::before {
+  background-color: transparent;
+}
+
+.tooltip-color::after {
+  background-color: transparent;
+}
+
+.tooltip-text-color {
+  color: transparent;
+}
+
+.cdx-tooltip {
+  display: inline-block;
+}
 
   .sans-serif {
     font-family: var(--family-sans-serif);

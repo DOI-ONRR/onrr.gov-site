@@ -148,16 +148,13 @@ export default {
      
    }
   },
-
-   
-
   props: {
     slug: String,
   },
   computed: {
     findPageByUrl () {
-      // console.log('routePath yo ------------> ', this.$route.path)
-      return this.pages.find(page => page.url === this.$route.path)
+      console.debug('routePath yo ------------> ', this.$route.path)
+      return this.pages.find(page => page.url === this.$route.path) || 1
     },
     page () {
       return this.pages_by_id
