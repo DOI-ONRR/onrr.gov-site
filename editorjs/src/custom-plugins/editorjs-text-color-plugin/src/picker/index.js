@@ -136,7 +136,6 @@ class ColorPlugin extends HTMLElement {
         }
         .color-fire-btn {
             font-size: 17px;
-            font-weight: bold;
             height: 28px;
             padding-top: 8px;
             padding-right: 1px;

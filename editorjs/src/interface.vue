@@ -374,7 +374,7 @@ function unsetLinkHandler() {
         highlightColor: '#FFEFD5',
         backgroundColor: '#154360',
         textColor: '#FDFEFE',
-        holder: 'editorjs-tooltip'
+        holder: "codex-editor"
               }
             },
           marker: {
@@ -443,7 +443,8 @@ function unsetLinkHandler() {
           Color: {
             class: ColorPlugin,
             config: {
-              colorCollections: ["#71500F","#1A22FE"],
+              defaultColor: "#000000",
+              colorCollections: ["#71500F","#1A22FE","#000000"],
                type: 'text'
             }
           },
