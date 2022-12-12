@@ -77,19 +77,17 @@
             },
             tooltip: {
               class: Tooltip,
+              inlineToolbar: true,
               config: {
-                location: 'left',
-        highlightColor: '#FFEFD5',
-        backgroundColor: '#154360',
-        textColor: '#FDFEFE',
-        holder: "codex-editor"
+                holder: "codex-editor"
               }
             },
             Color: {
             class: ColorPlugin,
+            inlineToolbar: true,
             config: {
-              defaultColor: "#000000",
-              colorCollections: ["#71500F","#1A22FE","#000000"],
+              defaultColor: "#4F5464",
+              colorCollections: ["#71500F","#1A22FE","#4F5464"],
                type: 'text'
             }
           },
