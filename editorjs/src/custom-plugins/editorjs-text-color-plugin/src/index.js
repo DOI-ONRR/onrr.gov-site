@@ -85,11 +85,13 @@ class Color {
       document.execCommand('backColor', false, this.color);
     }else if (this.pluginType === 'text')
     {
-      let font = document.createElement('font');
-      let selectedText = window.getSelection().getRangeAt(0);
-      console.log('the range:- '+range);
-      font.style.cssText = "color:"+this.color;
-      selectedText.surroundContents(font);
+      // let font = document.createElement('font');
+      // let selectedText = window.getSelection().getRangeAt(0);
+      // console.log('the range:- '+range);
+      // font.style.cssText = "color:"+this.color;
+      // selectedText.surroundContents(font);
+      document.execCommand('styleWithCSS',true,null);
+      document.execCommand('foreColor', false, this.color);
     }else{
       document.execCommand('foreColor', false, this.color);
     }
