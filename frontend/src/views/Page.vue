@@ -148,7 +148,11 @@ export default {
      
    }
   },
-
+  mounted: function() {
+    this.$nextTick(function() {
+      console.log('PageView mounted...')
+    });
+  }
    
 
   props: {
