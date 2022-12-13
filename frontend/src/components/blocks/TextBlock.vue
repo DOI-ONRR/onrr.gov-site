@@ -24,7 +24,7 @@ export default {
   },
   mounted: function() {
     this.$nextTick(function () {
-      bindOutboundLinkListeners();
+      this.bindOutboundLinkListeners();
     });
   },
   computed: {
