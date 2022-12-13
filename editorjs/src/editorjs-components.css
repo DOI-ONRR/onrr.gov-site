@@ -18,7 +18,7 @@
 .codex-editor .ce-inline-toolbar__dropdown svg,
 .codex-editor .ce-inline-toolbar .ce-inline-tool svg,
 .codex-editor .ce-settings .ce-settings__button svg {
-  color: var(--primary);
+  color: var(--v-list-color);
 }
 
 .codex-editor .ce-inline-tool--align-text svg {
