@@ -69,8 +69,7 @@ import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import { 
   pageBlockMixin,
   editorBlockMixin,
-  mobileMixin,
-  gaOutboundLinkMixin
+  mobileMixin
 } from '@/mixins'
 
 const Breadcrumbs = () => import(/* webpackChunkName: "Breadcrumbs" */ '@/components/sections/Breadcrumbs')
@@ -82,8 +81,7 @@ export default {
   mixins: [
     pageBlockMixin, 
     editorBlockMixin,
-    mobileMixin,
-    gaOutboundLinkMixin
+    mobileMixin
   ],
   name: 'PageView',
   metaInfo () {
@@ -187,17 +185,8 @@ export default {
       }else {
        return false
       }
-    },
-   
-    
-  },
-  created () {},
-  updated: function() {
-    this.$nextTick(function() {
-      this.bindOutboundLinkListeners();
-    });
+    }, 
   }
-  
 }
 </script>
 

@@ -9,8 +9,11 @@
 </template>
 
 <script>
+import { gaOutboundLinkMixin } from '@/mixins'
+
 export default {
   name: 'TextBlock',
+  mixins: [ gaOutboundLinkMixin ],
   data () {
     return {}
   },
@@ -18,6 +21,11 @@ export default {
     block: {
       type: Object
     }
+  },
+  mounted: function() {
+    this.$nextTick(function () {
+      bindOutboundLinkListeners();
+    });
   },
   computed: {
     textClass() {
