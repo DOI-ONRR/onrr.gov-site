@@ -121,8 +121,7 @@ export default {
         return {
           ID: this.findPageByUrl.id
         }
-      },
-      // fetchPolicy: 'cache-and-network'
+      }
     }
   },
 
@@ -186,12 +185,8 @@ export default {
       }else {
        return false
       }
-    },
-   
-    
-  },
-  created () {},
-  
+    }, 
+  }
 }
 </script>
 

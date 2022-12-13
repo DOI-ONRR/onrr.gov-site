@@ -73,7 +73,7 @@ export default {
         return {
           ID: this.pageId
         }
-      },
+      }
     }
   },
   components: {
