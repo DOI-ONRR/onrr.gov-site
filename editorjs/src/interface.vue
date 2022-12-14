@@ -435,7 +435,7 @@ function unsetLinkHandler() {
               class: Tooltip,
               inlineToolbar: true,
               config: {
-                holder: "codex-editor"
+                holder: "editorjs-tooltip"
               }
             },
           Color: {
