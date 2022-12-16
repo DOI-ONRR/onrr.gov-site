@@ -164,11 +164,11 @@ workflows:
                 - foo
       - onrr-database:
           context:
-            - PROD
+            - DEV
           filters:
             branches:
               only:
-                - main
+                - dev
       - prod-onrr-frontend:
           context:
             - PROD
