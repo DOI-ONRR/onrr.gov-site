@@ -218,7 +218,7 @@
     )
   }
 
-  .tooltip-tool__input{
+  /* .tooltip-tool__input{
   border: 0;
   border-radius: 0 0 4px 4px;
   border-top: 1px solid rgba(201,201,204,.48);
@@ -247,7 +247,7 @@
 
 .cdx-tooltip {
   display: inline-block;
-}
+} */
 
 
 </style>

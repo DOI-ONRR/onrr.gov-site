@@ -557,7 +557,7 @@ function unsetLinkHandler() {
   .blue-text-color {
     color: #1A22FE !important;
   }
-  .tooltip-tool__input{
+  /* .tooltip-tool__input{
   border: 0;
   border-radius: 0 0 4px 4px;
   border-top: 1px solid rgba(201,201,204,.48);
@@ -586,7 +586,7 @@ function unsetLinkHandler() {
 
 .cdx-tooltip {
   display: inline-block;
-}
+} */
 
   .sans-serif {
     font-family: var(--family-sans-serif);
