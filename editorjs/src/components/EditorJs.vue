@@ -75,13 +75,6 @@
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
-            tooltip: {
-              class: Tooltip,
-              inlineToolbar: true,
-              config: {
-                holder: "codex-editor"
-              }
-            },
             Color: {
             class: ColorPlugin,
             inlineToolbar: true,
@@ -91,6 +84,12 @@
                type: 'text'
             }
           },
+          tooltip: {
+              class: Tooltip,
+              config: {
+                holder: "editorjs-tooltip"
+              }
+            },
             collection: {
               class: Collections,
               inlineToolbar: true,
@@ -219,7 +218,7 @@
     )
   }
 
-  .tooltip-tool__input{
+  /* .tooltip-tool__input{
   border: 0;
   border-radius: 0 0 4px 4px;
   border-top: 1px solid rgba(201,201,204,.48);
@@ -248,7 +247,7 @@
 
 .cdx-tooltip {
   display: inline-block;
-}
+} */
 
 
 </style>

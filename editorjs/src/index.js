@@ -79,7 +79,7 @@ export default {
             { value: "attaches", text: "Attaches" },
             { value: "table", text: "Table" },
             { value: "quote", text: "Quote" },
-            { value: "tooltip", text: "Tooltip" },
+            { value: "tooltip", text: "ToolTip" },
             { value: "Color", text: "TextColor" },
             { value: "marker", text: "Marker" },
             { value: "simpleimage", text: "Simple Image" },
