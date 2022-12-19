@@ -360,7 +360,8 @@ function unsetLinkHandler() {
             inlineToolbar: true,
             withHeadings: true,
             config: {
-              rows: 1
+              rows: 2,
+              cols: 3
             }
           },
           quote: {
