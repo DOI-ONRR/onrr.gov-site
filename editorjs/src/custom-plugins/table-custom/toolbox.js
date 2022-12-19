@@ -2,6 +2,9 @@ import Popover from './utils/popover';
 import * as $ from './utils/dom';
 //import ToolboxIcon from './img/link.svg'
 //import {IconGift} from '@codex'
+import {
+  IconGift
+} from '@codexteam/icons';
 
 /**
  * Toolbox is a menu for manipulation of rows/cols
@@ -78,7 +81,7 @@ export default class Toolbox {
    */
   createToggler() {
     const toggler = $.make('div', Toolbox.CSS.toggler, {
-      innerHTML: "A"
+      innerHTML: IconGift
     });
 
     toggler.addEventListener('click', () => {
