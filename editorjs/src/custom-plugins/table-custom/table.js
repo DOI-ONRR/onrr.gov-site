@@ -899,6 +899,7 @@ export default class Table {
     if (!this.isRowMenuShowing) {
       if (row > 0 && row <= this.numberOfRows) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxRow.show(() => {
+          if(!this.getRow(row)) return;
           const hoveredRowElement = this.getRow(row);
           const { fromTopBorder } = $.getRelativeCoordsOfTwoElems(this.table, hoveredRowElement);
           const { height } = hoveredRowElement && hoveredRowElement.getBoundingClientRect() || 0;
