@@ -81,7 +81,7 @@
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
   import ColorPlugin from './custom-plugins/editorjs-text-color-plugin/src/index';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
-  import Tooltip from 'editorjs-tooltip';
+  //import Tooltip from '';
 
   export default defineComponent({
     emits: ['input', 'error'],
@@ -433,13 +433,13 @@ function unsetLinkHandler() {
             class: horizontalruleTool,
             inlineToolbar: true,
           },
-          tooltip: {
-              class: Tooltip,
-              inlineToolbar: true,
-              config: {
-                holder: "editorjs-tooltip"
-              }
-            },
+          //tooltip: {
+           //   class: Tooltip,
+           //   inlineToolbar: true,
+            //  config: {
+             //   holder: "editorjs-tooltip"
+             // }
+            //},
           Color: {
             class: ColorPlugin,
             inlineToolbar: true,

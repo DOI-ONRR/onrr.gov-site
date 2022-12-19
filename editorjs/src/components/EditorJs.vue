@@ -33,7 +33,7 @@
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
   //import TableTool from '@editorjs/table';
   import TableTool from '../custom-plugins/table-custom/index';
-  import Tooltip from 'editorjs-tooltip';
+  //import Tooltip from '@editorjs-tooltip';
 
   export default {
     data() {
@@ -85,12 +85,12 @@
                type: 'text'
             }
           },
-          tooltip: {
-              class: Tooltip,
-              config: {
-                holder: "editorjs-tooltip"
-              }
-            },
+          //tooltip: {
+            //  class: Tooltip,
+            //  config: {
+             //   holder: "editorjs-tooltip"
+             // }
+           // },
             collection: {
               class: Collections,
               inlineToolbar: true,
