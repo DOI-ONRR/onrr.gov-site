@@ -55,7 +55,8 @@
   import WarningTool from '@editorjs/warning';
   import ChecklistTool from '@editorjs/checklist';
   import DelimiterTool from '@editorjs/delimiter';
-  import TableTool from '@editorjs/table';
+  // import TableTool from '@editorjs/table';
+  import TableTool from './custom-plugins/table-custom/index'
   import CodeTool from '@editorjs/code';
   import headerTool from '@editorjs/header';
   import UnderlineTool from '@editorjs/underline';

@@ -31,7 +31,8 @@
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
   import ImageTool from '../custom-plugins/plugin-image-patch';
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
-  import TableTool from '@editorjs/table';
+  //import TableTool from '@editorjs/table';
+  import TableTool from '../custom-plugins/table-custom/index';
   import Tooltip from 'editorjs-tooltip';
 
   export default {
