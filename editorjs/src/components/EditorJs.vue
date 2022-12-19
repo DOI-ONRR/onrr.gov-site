@@ -177,7 +177,7 @@
               config: {
                 rows: 2,
                 cols: 3
-              }
+              },
               tunes: ['alignmentTune']
             },
           },
