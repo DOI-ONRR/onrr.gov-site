@@ -701,6 +701,7 @@ export default class Table {
     return this.table.childElementCount;
   }
 
+
   get numberOfHeaders() {
     const headercount = document.querySelectorAll('.tc-heading').length;
     console.log('the heading count:- ' + headercount);
@@ -718,7 +719,7 @@ export default class Table {
     console.log('the headerEle:- '+headerEle);
     if (this.numberOfRows && rowEle) {
       return this.table.querySelector(`.${CSS.row}:first-child`).childElementCount;
-    } else if (this.numberOfRows && headerEle) {
+    } else if (this.numberOfHeaders && headerEle) {
       return this.table.querySelector(`.${CSS.header}:first-child`).childElementCount;
     }
 
