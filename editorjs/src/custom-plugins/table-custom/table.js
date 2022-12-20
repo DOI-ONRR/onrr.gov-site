@@ -872,8 +872,12 @@ export default class Table {
    */
   updateToolboxesPosition(row = this.hoveredRow || this.hoveredHeader, column = this.hoveredColumn) {
     console.log('the update tool box');
-    console.log('the update tool box '+row+" "+column);
-    console.log('the update tool box '+this.hoveredHeader+" "+this.hoveredRow);
+    console.log('the update tool box row , col'+row+" "+column);
+    console.log('the update tool box this.hoverhead, row'+this.hoveredHeader+" "+this.hoveredRow);
+    console.log('the update tool this.isColumnMenuShowing '+this.isColumnMenuShowing);
+    console.log('the update tool this.isrowMenuShowing '+this.isRowMenuShowing);
+    console.log('the update tool this.numberOfColumns '+this.numberOfColumns);
+    console.log('the update tool this.numberOfrow '+this.numberOfRows);
     if (!this.isColumnMenuShowing) {
       if (column > 0 && column <= this.numberOfColumns) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxColumn.show(() => {
