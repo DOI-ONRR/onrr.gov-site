@@ -1136,10 +1136,10 @@ export default class Table {
       console.log('the get data row:- ' + row);
       console.log('the get data headingData:- ' + headingData);
 
-      if(!!headingData) {
-        cells = Array.from(headingData.querySelectorAll(`.${CSS.headerCell}`));
-        console.log('the value heading cells:- '+cells);
-      }
+      // if(!!headingData) {
+      //   cells = Array.from(headingData.querySelectorAll(`.${CSS.headerCell}`));
+      //   console.log('the value heading cells:- '+cells);
+      // }
 
       if (!!row) {
         cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
