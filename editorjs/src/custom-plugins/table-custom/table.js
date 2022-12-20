@@ -1136,21 +1136,25 @@ export default class Table {
       console.log('the get data row:- ' + row);
       console.log('the get data headingData:- ' + headingData);
 
-      if (!!row) {
-        cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
-      }
       if(!!headingData) {
         cells = Array.from(headingData.querySelectorAll(`.${CSS.headerCell}`));
         console.log('the value heading cells:- '+cells);
       }
-      console.log('the get data row:- ' + cells);
+
+      if (!!row) {
+        cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
+        console.log('the get data row cells:- ' + cells);
+      } 
+      
+      
       const isEmptyRow = cells.every(cell => !cell.textContent.trim());
 
       if (isEmptyRow) {
         continue;
       }
 
-      data.push(cells.map(cell => cell.innerHTML));
+      data.push(cells.map(cell =>{ console.log('the cell value:- '+cell.innerHTML); return cell.innerHTML}));
+      console.log('the value of final data:- '+data);
     }
 
     return data;
