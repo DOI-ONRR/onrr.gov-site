@@ -58,7 +58,7 @@ export default class Table {
      */
     this.toolboxColumn = this.createColumnToolbox();
     this.toolboxRow = this.createRowToolbox();
-   // this.toolboxHeading = this.createHeaderbox();
+    // this.toolboxHeading = this.createHeaderbox();
 
     /**
      * Create table and wrapper elements
@@ -128,7 +128,7 @@ export default class Table {
       } else if (clickedOnAddColumnButton && clickedOnAddColumnButton.parentNode === this.wrapper) {
         this.addColumn(undefined, true);
         this.hideToolboxes();
-      } else if(clickedOnAddHeadingButton && clickedOnAddHeadingButton.parentNode === this.wrapper) {
+      } else if (clickedOnAddHeadingButton && clickedOnAddHeadingButton.parentNode === this.wrapper) {
         this.addHeading(undefined, true);
         this.hideHeaderToolbox();
       }
@@ -563,7 +563,7 @@ export default class Table {
   }
 
   deleteHeading(index) {
-    console.log('the remove index '+index);
+    console.log('the remove index ' + index);
     this.getHeader(index).remove();
     //this.addHeadingAttrToFirstRow();
   }
@@ -703,7 +703,7 @@ export default class Table {
 
   get numberOfHeaders() {
     const headercount = document.querySelectorAll('.tc-heading').length;
-    console.log('the heading count:- '+headercount);
+    console.log('the heading count:- ' + headercount);
     return headercount;
   }
 
@@ -711,7 +711,7 @@ export default class Table {
    * Get number of columns in the table
    */
   get numberOfColumns() {
-    console.log('the number of rows ',this.numberOfRows);
+    console.log('the number of rows ', this.numberOfRows);
     const rowEle = this.table.querySelector(`.${CSS.row}:first-child`) || undefined;
     const headerEle = this.table.querySelector(`.${CSS.header}:first-child`) || undefined;
     if (this.numberOfRows && rowEle) {
@@ -751,7 +751,7 @@ export default class Table {
    * @param {Event} event - mouse move event
    */
   onMouseMoveInTable(event) {
-    const { row, header ,column } = this.getHoveredCell(event);
+    const { row, header, column } = this.getHoveredCell(event);
 
     this.hoveredColumn = column;
     this.hoveredRow = row;
@@ -872,12 +872,12 @@ export default class Table {
    */
   updateToolboxesPosition(row = this.hoveredRow || this.hoveredHeader, column = this.hoveredColumn) {
     console.log('the update tool box');
-    console.log('the update tool box row , col'+row+" "+column);
-    console.log('the update tool box this.hoverhead, row'+this.hoveredHeader+" "+this.hoveredRow);
-    console.log('the update tool this.isColumnMenuShowing '+this.isColumnMenuShowing);
-    console.log('the update tool this.isrowMenuShowing '+this.isRowMenuShowing);
-    console.log('the update tool this.numberOfColumns '+this.numberOfColumns);
-    console.log('the update tool this.numberOfrow '+this.numberOfRows);
+    console.log('the update tool box row , col' + row + " " + column);
+    console.log('the update tool box this.hoverhead, row' + this.hoveredHeader + " " + this.hoveredRow);
+    console.log('the update tool this.isColumnMenuShowing ' + this.isColumnMenuShowing);
+    console.log('the update tool this.isrowMenuShowing ' + this.isRowMenuShowing);
+    console.log('the update tool this.numberOfColumns ' + this.numberOfColumns);
+    console.log('the update tool this.numberOfrow ' + this.numberOfRows);
     if (!this.isColumnMenuShowing) {
       if (column > 0 && column <= this.numberOfColumns) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxColumn.show(() => {
@@ -906,7 +906,7 @@ export default class Table {
     if (!this.isRowMenuShowing) {
       if (row > 0 && row <= this.numberOfRows) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxRow.show(() => {
-          if(!this.getRow(row)) return;
+          if (!this.getRow(row)) return;
           const hoveredRowElement = this.getRow(row);
           const { fromTopBorder } = $.getRelativeCoordsOfTwoElems(this.table, hoveredRowElement);
           const { height } = hoveredRowElement && hoveredRowElement.getBoundingClientRect() || 0;
@@ -1106,10 +1106,10 @@ export default class Table {
     let mid;
 
     while (leftBorder < rightBorder - 1 && totalIterations < 10) {
-      mid = Math.ceil((leftBorder + rightBorder) / 2) ||0;
+      mid = Math.ceil((leftBorder + rightBorder) / 2) || 0;
 
       const cell = getCell(mid);
-      console.log('the cell value:- '+cell);
+      console.log('the cell value:- ' + cell);
       const relativeCoords = $.getRelativeCoordsOfTwoElems(this.table, cell);
 
       if (beforeTheLeftBorder(relativeCoords)) {
@@ -1133,12 +1133,14 @@ export default class Table {
    */
   getData() {
     const data = [];
-
+    let cells = [];
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);
-      console.log('the get data row:- '+row);
-      const cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
-      console.log('the get data row:- '+cells);
+      console.log('the get data row:- ' + row);
+      if (!!row) {
+        cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
+      }
+      console.log('the get data row:- ' + cells);
       const isEmptyRow = cells.every(cell => !cell.textContent.trim());
 
       if (isEmptyRow) {
