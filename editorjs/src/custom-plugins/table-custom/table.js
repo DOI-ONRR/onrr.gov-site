@@ -1135,11 +1135,13 @@ export default class Table {
       const headingData = this.table.querySelector(`.${CSS.header}:nth-child(${i})`);
       console.log('the get data row:- ' + row);
       console.log('the get data headingData:- ' + headingData);
+
       if (!!row) {
         cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
       }
       if(!!headingData) {
-        cells = Array.from(headingData.querySelectorAll(`.${CSS.cell}`));
+        cells = Array.from(headingData.querySelectorAll(`.${CSS.headerCell}`));
+        console.log('the value heading cells:- '+cells);
       }
       console.log('the get data row:- ' + cells);
       const isEmptyRow = cells.every(cell => !cell.textContent.trim());
