@@ -714,6 +714,8 @@ export default class Table {
     console.log('the number of rows ', this.numberOfRows);
     const rowEle = this.table.querySelector(`.${CSS.row}:first-child`) || undefined;
     const headerEle = this.table.querySelector(`.${CSS.header}:first-child`) || undefined;
+    console.log('the rowEle:- '+rowEle);
+    console.log('the headerEle:- '+headerEle);
     if (this.numberOfRows && rowEle) {
       return this.table.querySelector(`.${CSS.row}:first-child`).childElementCount;
     } else if (this.numberOfRows && headerEle) {
@@ -871,13 +873,6 @@ export default class Table {
    * @param {number} column - hovered column
    */
   updateToolboxesPosition(row = this.hoveredRow || this.hoveredHeader, column = this.hoveredColumn) {
-    console.log('the update tool box');
-    console.log('the update tool box row , col' + row + " " + column);
-    console.log('the update tool box this.hoverhead, row' + this.hoveredHeader + " " + this.hoveredRow);
-    console.log('the update tool this.isColumnMenuShowing ' + this.isColumnMenuShowing);
-    console.log('the update tool this.isrowMenuShowing ' + this.isRowMenuShowing);
-    console.log('the update tool this.numberOfColumns ' + this.numberOfColumns);
-    console.log('the update tool this.numberOfrow ' + this.numberOfRows);
     if (!this.isColumnMenuShowing) {
       if (column > 0 && column <= this.numberOfColumns) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxColumn.show(() => {
@@ -1136,9 +1131,14 @@ export default class Table {
     let cells = [];
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);
+      const headingData = this.table.querySelector(`.${CSS.header}:nth-child(${i})`);
       console.log('the get data row:- ' + row);
+      console.log('the get data headingData:- ' + headingData);
       if (!!row) {
         cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
+      }
+      if(!!headingData) {
+        cells = Array.from(headingData.querySelectorAll(`.${CSS.cell}`));
       }
       console.log('the get data row:- ' + cells);
       const isEmptyRow = cells.every(cell => !cell.textContent.trim());
