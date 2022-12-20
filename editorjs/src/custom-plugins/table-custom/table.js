@@ -1136,7 +1136,9 @@ export default class Table {
 
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);
+      console.log('the get data row:- '+row);
       const cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
+      console.log('the get data row:- '+cells);
       const isEmptyRow = cells.every(cell => !cell.textContent.trim());
 
       if (isEmptyRow) {
