@@ -333,8 +333,6 @@ export default class Table {
   }
   setHeaderText(data) {
     const headerElement = document.querySelector('.heading-class');
-    console.log('teh value of set header:- ' + headerElement);
-    console.log('teh value of set header data:- ' + JSON.stringify(data));
     if (headerElement) {
       headerElement.innerHTML = data.tableHeadingText;
     }
@@ -532,7 +530,7 @@ export default class Table {
   createTableHeading() {
     this.textareaEle = $.make('h2', CSS.headingClass, { contentEditable: "true" });
     this.textareaEle.innerHTML = this.data.tableHeadingText || '';
-    this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
+    //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
 
   /**
@@ -589,11 +587,6 @@ export default class Table {
    */
   fill() {
     const data = this.data;
-    console.log('the fill data value:- ' + JSON.stringify(this.data));
-    // const headingElement = document.querySelector(`.heading-class`) || undefined;
-    // if(headingElement){
-    //   headingElement.innerHTML = this.data && this.data.tableHeadingText && this.data.tableHeadingText[0] ?  this.data.tableHeadingText[0] : "Narasimha";
-    // }
     this.setHeaderText(data);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
@@ -1009,19 +1002,14 @@ export default class Table {
       }
       data.push(cells.map(cell => cell.innerHTML));
     }
-
-   
-    console.log('the matrix value get data:- ' + JSON.stringify(data));
     return data;
   }
   getHeaderData() {
     const data = {};
     const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
-    console.log('the value of get data header:- ' + headingTextValue);
     if (headingTextValue) {
       data.headingObject = headingTextValue && headingTextValue.innerHTML ? headingTextValue.innerHTML : "Dummy"
     };
-    console.log('the header value get data:- ' + JSON.stringify(data));
     return data;
   }
 
