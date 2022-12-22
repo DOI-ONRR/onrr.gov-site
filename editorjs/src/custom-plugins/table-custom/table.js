@@ -77,7 +77,7 @@ export default class Table {
 
     // Additional settings for the table
     this.tunes = {
-      withHeadings: false
+      withHeadings: true
     };
 
     /**
@@ -331,6 +331,14 @@ export default class Table {
 
     cell.innerHTML = content;
   }
+  setHeaderText(data){
+    const headerElement = this.table.querySelector(`.heading-class`);
+    console.log('teh value of set header:- '+headerElement);
+    console.log('teh value of set header data:- '+JSON.stringify(data));
+    if(headerElement){
+      headerElement.innerHTML="Dummy title";
+    }
+  }
 
   /**
    * Add column in table on index place
@@ -581,11 +589,11 @@ export default class Table {
   fill() {
     const data = this.data;
     console.log('the fill data value:- '+JSON.stringify(this.data));
-    const headingElement = document.querySelector(`.heading-class`) || undefined;
-    if(headingElement){
-      headingElement.innerHTML = this.data && this.data.tableHeadingTextValue && this.data.tableHeadingText[0] ?  this.data.tableHeadingText[0] : "Narasimha";
-    }
-
+    // const headingElement = document.querySelector(`.heading-class`) || undefined;
+    // if(headingElement){
+    //   headingElement.innerHTML = this.data && this.data.tableHeadingText && this.data.tableHeadingText[0] ?  this.data.tableHeadingText[0] : "Narasimha";
+    // }
+    this.setHeaderText(data);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
         for (let j = 0; j < data.content[i].length; j++) {
@@ -990,11 +998,11 @@ export default class Table {
    */
   getData() {
     const data = [];
-    const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
-    if(headingTextValue){
-      const headingObject = {"tableHeadingTextValue":headingTextValue && headingTextValue.innerHTML ?headingTextValue.innerHTML : ""};
-      data.push(headingObject);
-    }
+    // const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
+    // if(headingTextValue){
+    //   const headingObject = {"tableHeadingTextValue":headingTextValue && headingTextValue.innerHTML ?headingTextValue.innerHTML : ""};
+    //   data.push(headingObject);
+    // }
 
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);

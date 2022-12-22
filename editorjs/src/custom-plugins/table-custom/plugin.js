@@ -58,7 +58,7 @@ export default class TableBlock {
     this.config = config;
     console.log('the constructor:- '+JSON.stringify(data));
     this.data = {
-      withHeadings: this.getConfig('withHeadings', false, data),
+      withHeadings: this.getConfig('withHeadings', true, data),
       content: data && data.content ? data.content : [],
       tableHeadingText: data && data.content ? data.content.map((e)=>{if(e.tableHeadingTextValue){console.log('the value get nar domg:- '+e.tableHeadingTextValue);return e.tableHeadingTextValue}}) : "Narasimha"
     };
