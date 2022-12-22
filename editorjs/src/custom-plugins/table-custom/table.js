@@ -16,7 +16,7 @@ const CSS = {
   wrapperReadOnly: 'tc-wrap--readonly',
   table: 'tc-table',
   row: 'tc-row',
-  headingClass : 'heading-class',
+  headingClass: 'heading-class',
   withHeadings: 'tc-table--heading',
   rowSelected: 'tc-row--selected',
   cell: 'tc-cell',
@@ -331,12 +331,12 @@ export default class Table {
 
     cell.innerHTML = content;
   }
-  setHeaderText(data){
+  setHeaderText(data) {
     const headerElement = document.querySelector('.heading-class');
-    console.log('teh value of set header:- '+headerElement);
-    console.log('teh value of set header data:- '+JSON.stringify(data));
-    if(headerElement){
-      headerElement.innerHTML="Dummy title";
+    console.log('teh value of set header:- ' + headerElement);
+    console.log('teh value of set header data:- ' + JSON.stringify(data));
+    if (headerElement) {
+      headerElement.innerHTML = "Dummy title";
     }
   }
 
@@ -531,7 +531,7 @@ export default class Table {
 
   createTableHeading() {
 
-    this.textareaEle = $.make('h2', CSS.headingClass,{contentEditable:"true"});
+    this.textareaEle = $.make('h2', CSS.headingClass, { contentEditable: "true" });
   }
 
   /**
@@ -588,7 +588,7 @@ export default class Table {
    */
   fill() {
     const data = this.data;
-    console.log('the fill data value:- '+JSON.stringify(this.data));
+    console.log('the fill data value:- ' + JSON.stringify(this.data));
     // const headingElement = document.querySelector(`.heading-class`) || undefined;
     // if(headingElement){
     //   headingElement.innerHTML = this.data && this.data.tableHeadingText && this.data.tableHeadingText[0] ?  this.data.tableHeadingText[0] : "Narasimha";
@@ -998,13 +998,6 @@ export default class Table {
    */
   getData() {
     const data = [];
-    const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
-    console.log('the value of get data header:- '+headingTextValue);
-    if(headingTextValue){
-      const headingObject = {"tableHeadingText":headingTextValue && headingTextValue.innerHTML ?headingTextValue.innerHTML : ""};
-      data.push(headingObject);
-    }
-
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);
       const cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
@@ -1013,10 +1006,20 @@ export default class Table {
       if (isEmptyRow) {
         continue;
       }
-
-      data.push(cells.map(cell => cell.innerHTML));
     }
-    console.log('the header value get data:- '+JSON.stringify(data));
+
+    data.push(cells.map(cell => cell.innerHTML));
+    console.log('the matrix value get data:- ' + JSON.stringify(data));
+    return data;
+  }
+  getHeaderData() {
+    const data = {};
+    const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
+    console.log('the value of get data header:- ' + headingTextValue);
+    if (headingTextValue) {
+      data.headingObject = headingTextValue && headingTextValue.innerHTML ? headingTextValue.innerHTML : "Dummy"
+    };
+    console.log('the header value get data:- ' + JSON.stringify(data));
     return data;
   }
 
