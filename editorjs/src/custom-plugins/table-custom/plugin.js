@@ -60,7 +60,7 @@ export default class TableBlock {
     this.data = {
       withHeadings: this.getConfig('withHeadings', true, data),
       content: data && data.content ? data.content : [],
-      tableHeadingText: data && data.tableHeadingText ? data.tableHeadingText : "Narasimha"
+      tableHeadingText: data && data.tableHeadingText ? data.tableHeadingText : ""
     };
     this.table = null;
   }
@@ -138,7 +138,7 @@ export default class TableBlock {
     const result = {
       withHeadings: this.data.withHeadings,
       content: tableContent,
-      tableHeadingText: tableHeadingText && tableHeadingText.headingObject ? tableHeadingText.headingObject : "Narasimha"
+      tableHeadingText: tableHeadingText && tableHeadingText.headingObject ? tableHeadingText.headingObject : ''
     };
     console.log('the result value in save:- '+JSON.stringify(result));
     return result;

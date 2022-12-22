@@ -336,7 +336,7 @@ export default class Table {
     console.log('teh value of set header:- ' + headerElement);
     console.log('teh value of set header data:- ' + JSON.stringify(data));
     if (headerElement) {
-      headerElement.innerHTML = "Dummy title";
+      headerElement.innerHTML = data.tableHeadingText;
     }
   }
 
@@ -530,12 +530,9 @@ export default class Table {
   }
 
   createTableHeading() {
-
     this.textareaEle = $.make('h2', CSS.headingClass, { contentEditable: "true" });
-    console.log('the value dummy text data:- '+JSON.stringify(this.data));
-    this.textareaEle.innerHTML = this.data.tableHeadingText || "placing dummytext";
+    this.textareaEle.innerHTML = this.data.tableHeadingText || '';
     this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
-    //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
 
   /**
