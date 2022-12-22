@@ -998,11 +998,11 @@ export default class Table {
    */
   getData() {
     const data = [];
-    // const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
-    // if(headingTextValue){
-    //   const headingObject = {"tableHeadingTextValue":headingTextValue && headingTextValue.innerHTML ?headingTextValue.innerHTML : ""};
-    //   data.push(headingObject);
-    // }
+    const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
+    if(headingTextValue){
+      const headingObject = {"tableHeadingText":headingTextValue && headingTextValue.innerHTML ?headingTextValue.innerHTML : ""};
+      data.push(headingObject);
+    }
 
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);

@@ -60,7 +60,7 @@ export default class TableBlock {
     this.data = {
       withHeadings: this.getConfig('withHeadings', true, data),
       content: data && data.content ? data.content : [],
-      tableHeadingText: data && data.content ? data.content.map((e)=>{if(e.tableHeadingTextValue){console.log('the value get nar domg:- '+e.tableHeadingTextValue);return e.tableHeadingTextValue}}) : "Narasimha"
+      tableHeadingText: data && data.content ? data.content.map((e)=>{if(e.tableHeadingText){console.log('the value get nar domg:- '+e.tableHeadingText);return e.tableHeadingText}}) : "Narasimha"
     };
     this.table = null;
   }
@@ -137,7 +137,7 @@ export default class TableBlock {
     const result = {
       withHeadings: this.data.withHeadings,
       content: tableContent,
-      tableHeadingText: tableContent ? tableContent.map((e)=>{if(e.tableHeadingTextValue){console.log('the value get nar save :- '+e.tableHeadingTextValue.toString());return e.tableHeadingTextValue.toString()}}) : "Narasimha"
+      tableHeadingText: tableContent ? tableContent.map((e)=>{if(e.tableHeadingText){console.log('the value get nar save :- '+e.tableHeadingText.toString());return e.tableHeadingText.toString()}}) : "Narasimha"
     };
     console.log('the result value in save:- '+JSON.stringify(result));
     return result;
