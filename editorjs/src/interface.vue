@@ -361,7 +361,8 @@ function unsetLinkHandler() {
             withHeadings: true,
             config: {
               rows: 2,
-              cols: 3
+              cols: 3,
+              withHeadings: true
             }
           },
           quote: {

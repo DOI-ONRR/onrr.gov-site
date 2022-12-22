@@ -174,9 +174,11 @@
             table: {
               class: TableTool, 
               inlineToolbar: true,
+              withHeadings: true,
               config: {
                 rows: 2,
-                cols: 3
+                cols: 3,
+                withHeadings: true,
               },
               tunes: ['alignmentTune']
             },
