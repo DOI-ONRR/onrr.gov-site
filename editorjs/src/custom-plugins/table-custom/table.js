@@ -990,9 +990,9 @@ export default class Table {
    */
   getData() {
     const data = [];
-    const headingTextValue = document.querySelector(`.${CSS.headingClass}`).innerHTML || undefined;
+    const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
     if(headingTextValue){
-      const headingObject = {"tableHeadingTextValue":headingTextValue};
+      const headingObject = {"tableHeadingTextValue":headingTextValue.innerHTML};
       data.push(headingObject);
     }
 
@@ -1007,7 +1007,7 @@ export default class Table {
 
       data.push(cells.map(cell => cell.innerHTML));
     }
-    console.log('the header value:- '+JSON.stringify(data));
+    console.log('the header value get data:- '+JSON.stringify(data));
     return data;
   }
 

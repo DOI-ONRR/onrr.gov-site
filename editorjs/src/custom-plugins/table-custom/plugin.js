@@ -137,7 +137,7 @@ export default class TableBlock {
     const result = {
       withHeadings: this.data.withHeadings,
       content: tableContent,
-      tableHeadingText: tableContent ? tableContent.map((e)=>{if(e.tableHeadingTextValue){console.log('the value get nar:- '+e.tableHeadingTextValue.toString());return e.tableHeadingTextValue.toString()}}) : "Narasimha"
+      tableHeadingText: tableContent ? tableContent.map((e)=>{if(e.tableHeadingTextValue){console.log('the value get nar save :- '+e.tableHeadingTextValue.toString());return e.tableHeadingTextValue.toString()}}) : "Narasimha"
     };
     return result;
   }
