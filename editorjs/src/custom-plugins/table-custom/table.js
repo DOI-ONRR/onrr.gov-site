@@ -332,7 +332,7 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data){
-    const headerElement = this.table.querySelector(`.heading-class`);
+    const headerElement = document.querySelector('.heading-class');
     console.log('teh value of set header:- '+headerElement);
     console.log('teh value of set header data:- '+JSON.stringify(data));
     if(headerElement){
@@ -501,7 +501,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    //this.textareaEle = $.make('textarea', CSS.headingClass);
+    this.textareaEle = $.make('textarea', CSS.headingClass);
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);
@@ -999,6 +999,7 @@ export default class Table {
   getData() {
     const data = [];
     const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
+    console.log('the value of get data header:- '+headingTextValue);
     if(headingTextValue){
       const headingObject = {"tableHeadingText":headingTextValue && headingTextValue.innerHTML ?headingTextValue.innerHTML : ""};
       data.push(headingObject);

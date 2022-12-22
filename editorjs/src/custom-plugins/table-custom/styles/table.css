@@ -19,6 +19,9 @@
 .heading-class{
 	width: 100%;
 }
+.heading-class[contentEditable=true][data-placeholder]::before{
+	content: attr(data-placeholder);
+}
  .tc-wrap--readonly {
 	 grid-template-columns: 100% var(--cell-size);
 }
