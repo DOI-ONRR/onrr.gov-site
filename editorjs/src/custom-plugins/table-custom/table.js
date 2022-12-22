@@ -992,7 +992,7 @@ export default class Table {
     const data = [];
     const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
     if(headingTextValue){
-      const headingObject = {"tableHeadingTextValue":headingTextValue.innerHTML};
+      const headingObject = {"tableHeadingTextValue":headingTextValue && headingTextValue.innerHTML ?headingTextValue.innerHTML : ""};
       data.push(headingObject);
     }
 

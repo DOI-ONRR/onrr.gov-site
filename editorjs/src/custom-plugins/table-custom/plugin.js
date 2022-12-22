@@ -139,6 +139,7 @@ export default class TableBlock {
       content: tableContent,
       tableHeadingText: tableContent ? tableContent.map((e)=>{if(e.tableHeadingTextValue){console.log('the value get nar save :- '+e.tableHeadingTextValue.toString());return e.tableHeadingTextValue.toString()}}) : "Narasimha"
     };
+    console.log('the result value in save:- '+JSON.stringify(result));
     return result;
   }
 
