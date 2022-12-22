@@ -581,7 +581,10 @@ export default class Table {
   fill() {
     const data = this.data;
     console.log('the fill data value:- '+JSON.stringify(this.data));
-    document.querySelector(`.heading-class`).innerHTML = this.data && this.data.tableHeadingTextValue && this.data.tableHeadingText[0] ?  this.data.tableHeadingText[0] : "Narasimha";
+    const headingElement = document.querySelector(`.heading-class`) || undefined;
+    if(headingElement){
+      headingElement.innerHTML = this.data && this.data.tableHeadingTextValue && this.data.tableHeadingText[0] ?  this.data.tableHeadingText[0] : "Narasimha";
+    }
 
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
