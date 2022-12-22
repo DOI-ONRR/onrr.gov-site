@@ -1006,9 +1006,10 @@ export default class Table {
       if (isEmptyRow) {
         continue;
       }
+      data.push(cells.map(cell => cell.innerHTML));
     }
 
-    data.push(cells.map(cell => cell.innerHTML));
+   
     console.log('the matrix value get data:- ' + JSON.stringify(data));
     return data;
   }
