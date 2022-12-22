@@ -56,9 +56,11 @@ export default class TableBlock {
     this.api = api;
     this.readOnly = readOnly;
     this.config = config;
+    console.log('the constructor:- '+JSON.stringify(data));
     this.data = {
       withHeadings: this.getConfig('withHeadings', false, data),
-      content: data && data.content ? data.content : []
+      content: data && data.content ? data.content : [],
+      tableHeadingText: data && data.content ? data.content.map((e)=>{if(e.tableHeadingTextValue){console.log('the value get nar domg:- '+e.tableHeadingTextValue);return e.tableHeadingTextValue}}) : "Narasimha"
     };
     this.table = null;
   }
@@ -88,10 +90,10 @@ export default class TableBlock {
 
     /** creating container around table */
     this.container = $.make('div', this.api.styles.block);
+    this.container.appendChild(this.table.getTextAreaEle());
     this.container.appendChild(this.table.getWrapper());
 
     this.table.setHeadingsSetting(this.data.withHeadings);
-
     return this.container;
   }
 
@@ -132,12 +134,11 @@ export default class TableBlock {
    */
   save() {
     const tableContent = this.table.getData();
-
     const result = {
       withHeadings: this.data.withHeadings,
-      content: tableContent
+      content: tableContent,
+      tableHeadingText: tableContent ? tableContent.map((e)=>{if(e.tableHeadingTextValue){console.log('the value get nar:- '+e.tableHeadingTextValue.toString());return e.tableHeadingTextValue.toString()}}) : "Narasimha"
     };
-
     return result;
   }
 

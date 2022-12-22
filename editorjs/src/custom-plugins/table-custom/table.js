@@ -16,15 +16,12 @@ const CSS = {
   wrapperReadOnly: 'tc-wrap--readonly',
   table: 'tc-table',
   row: 'tc-row',
-  header: 'tc-heading',
+  headingClass : 'heading-class',
   withHeadings: 'tc-table--heading',
   rowSelected: 'tc-row--selected',
-  headingSelected: 'tc-heading--selected',
   cell: 'tc-cell',
-  headerCell: 'tc-header--cell',
   cellSelected: 'tc-cell--selected',
   addRow: 'tc-add-row',
-  addHeading: 'tc-add-heading',
   addColumn: 'tc-add-column'
 };
 
@@ -52,36 +49,35 @@ export default class Table {
      */
     this.wrapper = null;
     this.table = null;
+    this.textareaEle = null;
 
     /**
      * Toolbox for managing of columns
      */
     this.toolboxColumn = this.createColumnToolbox();
     this.toolboxRow = this.createRowToolbox();
-    // this.toolboxHeading = this.createHeaderbox();
 
     /**
      * Create table and wrapper elements
      */
     this.createTableWrapper();
+    this.createTableHeading();
 
     // Current hovered row index
     this.hoveredRow = 0;
-    this.hoveredHeader = 0;
 
     // Current hovered column index
     this.hoveredColumn = 0;
 
     // Index of last selected row via toolbox
     this.selectedRow = 0;
-    this.selectedHeader = 0;
 
     // Index of last selected column via toolbox
     this.selectedColumn = 0;
 
     // Additional settings for the table
     this.tunes = {
-      withHeadings: true
+      withHeadings: false
     };
 
     /**
@@ -116,7 +112,6 @@ export default class Table {
       }
 
       const clickedOnAddRowButton = event.target.closest(`.${CSS.addRow}`);
-      const clickedOnAddHeadingButton = event.target.closest(`.${CSS.addHeading}`);
       const clickedOnAddColumnButton = event.target.closest(`.${CSS.addColumn}`);
 
       /**
@@ -128,9 +123,6 @@ export default class Table {
       } else if (clickedOnAddColumnButton && clickedOnAddColumnButton.parentNode === this.wrapper) {
         this.addColumn(undefined, true);
         this.hideToolboxes();
-      } else if (clickedOnAddHeadingButton && clickedOnAddHeadingButton.parentNode === this.wrapper) {
-        this.addHeading(undefined, true);
-        this.hideHeaderToolbox();
       }
     };
 
@@ -146,6 +138,10 @@ export default class Table {
    */
   getWrapper() {
     return this.wrapper;
+  }
+
+  getTextAreaEle() {
+    return this.textareaEle;
   }
 
   /**
@@ -228,14 +224,6 @@ export default class Table {
       cssModifier: 'row',
       items: [
         {
-          label: this.api.i18n.t('Add Heading above the row'),
-          icon: IconDirectionUpRight,
-          onClick: () => {
-            this.addHeading(this.selectedRow, true);
-            this.hideToolboxes();
-          }
-        },
-        {
           label: this.api.i18n.t('Add row above'),
           icon: IconDirectionUpRight,
           onClick: () => {
@@ -248,19 +236,6 @@ export default class Table {
           icon: IconDirectionDownRight,
           onClick: () => {
             this.addRow(this.selectedRow + 1, true);
-            this.hideToolboxes();
-          }
-        },
-        {
-          label: this.api.i18n.t('Delete heading'),
-          icon: IconCross,
-          hideIf: () => {
-            return this.numberOfHeaders === 1;
-          },
-          confirmationRequired: true,
-          onClick: () => {
-            //console.log('teh value selectedheader:- '+this.selectHeader);
-            this.deleteHeading(this.selectedHeader);
             this.hideToolboxes();
           }
         },
@@ -279,7 +254,6 @@ export default class Table {
       ],
       onOpen: () => {
         this.selectRow(this.hoveredRow);
-        this.selectHeader(this.hoveredHeader);
         this.hideColumnToolbox();
       },
       onClose: () => {
@@ -287,50 +261,6 @@ export default class Table {
       }
     });
   }
-
-  // createHeaderbox() {
-  //   return new Toolbox({
-  //     api: this.api,
-  //     cssModifier: 'header',
-  //     items: [
-  //       {
-  //         label: this.api.i18n.t('Add Header above'),
-  //         icon: IconDirectionUpRight,
-  //         onClick: () => {
-  //           this.addHeading(this.selectedHeader, true);
-  //           this.hideToolboxes();
-  //         }
-  //       },
-  //       {
-  //         label: this.api.i18n.t('Add Header below'),
-  //         icon: IconDirectionDownRight,
-  //         onClick: () => {
-  //           this.addHeading(this.selectedRow + 1, true);
-  //           this.hideToolboxes();
-  //         }
-  //       },
-  //       {
-  //         label: this.api.i18n.t('Delete row'),
-  //         icon: IconCross,
-  //         hideIf: () => {
-  //           return this.numberOfRows === 1;
-  //         },
-  //         confirmationRequired: true,
-  //         onClick: () => {
-  //           this.deleteRow(this.selectedHeader);
-  //           this.hideToolboxes();
-  //         }
-  //       }
-  //     ],
-  //     onOpen: () => {
-  //       this.selectHeader(this.hoveredHeader);
-  //       this.hideColumnToolbox();
-  //     },
-  //     onClose: () => {
-  //       this.unselectRow();
-  //     }
-  //   });
-  // }
 
   /**
    * When you press enter it moves the cursor down to the next row
@@ -369,10 +299,6 @@ export default class Table {
     return this.table.querySelector(`.${CSS.row}:nth-child(${row})`);
   }
 
-  getHeader(row) {
-    return this.table.querySelector(`.${CSS.header}:nth-child(${row})`);
-  }
-
   /**
    * The parent of the cell which is the row
    *
@@ -390,10 +316,6 @@ export default class Table {
    * @returns {Element}
    */
   getRowFirstCell(row) {
-    return row.querySelector(`.${CSS.cell}:first-child`);
-  }
-
-  getHeaderFirstCell(row) {
     return row.querySelector(`.${CSS.cell}:first-child`);
   }
 
@@ -457,7 +379,7 @@ export default class Table {
    * @param {boolean} [setFocus] - pass true to focus the inserted row
    * @returns {HTMLElement} row
    */
-  addRow(index = -1, setFocus = false) {
+  addRow(index = 0, setFocus = false) {
     let insertedRow;
     let rowElem = $.make('div', CSS.row);
 
@@ -495,42 +417,41 @@ export default class Table {
     return insertedRow;
   };
 
-  addHeading(index = -1, setFocus = false) {
-    let insertedRow;
-    let rowElem = $.make('div', CSS.header);
+  addHeading(index = -1, setFocus = true) {
+    let insertedHeading;
+    let rowElem = $.make('div', CSS.headingDiv);
+    insertedRow = this.table.appendChild(rowElem);
 
-    if (this.tunes.withHeadings) {
-      this.removeHeadingAttrFromFirstRow();
-    }
+    // if (this.tunes.withHeadings) {
+    //   this.removeHeadingAttrFromFirstRow();
+    // }
 
-    /**
-     * We remember the number of columns, because it is calculated
-     * by the number of cells in the first row
-     * It is necessary that the first line is filled in correctly
-     */
-    //let numberOfColumns = this.numberOfColumns;
+    // /**
+    //  * We remember the number of columns, because it is calculated
+    //  * by the number of cells in the first row
+    //  * It is necessary that the first line is filled in correctly
+    //  */
+    // let numberOfColumns = this.numberOfColumns;
 
-    if (index > 0 && index <= this.numberOfRows) {
-      let row = this.getRow(index);
+    // if (index > 0 && index <= this.numberOfRows) {
+    //   let row = this.getRow(index);
 
-      insertedRow = $.insertBefore(rowElem, row);
-    } else {
-      insertedRow = this.table.appendChild(rowElem);
-    }
+    //   insertedRow = $.insertBefore(rowElem, row);
+    // } else {
+    //   insertedRow = this.table.appendChild(rowElem);
+    // }
 
-    //this.fillRow(insertedRow, 1);
-    const newCell = this.createHeaderCell();
-    insertedRow.appendChild(newCell);
+    // this.fillRow(insertedRow, numberOfColumns);
 
-    if (this.tunes.withHeadings) {
-      this.addHeadingAttrToFirstRow();
-    }
+    // if (this.tunes.withHeadings) {
+    //   this.addHeadingAttrToFirstRow();
+    // }
 
-    const insertedRowFirstCell = this.getHeaderFirstCell(insertedRow);
+    // const insertedRowFirstCell = this.getRowFirstCell(insertedRow);
 
-    if (insertedRowFirstCell && setFocus) {
-      $.focus(insertedRowFirstCell);
-    }
+    // if (insertedRowFirstCell && setFocus) {
+    //   $.focus(insertedRowFirstCell);
+    // }
 
     return insertedRow;
   };
@@ -559,13 +480,8 @@ export default class Table {
    */
   deleteRow(index) {
     this.getRow(index).remove();
-    this.addHeadingAttrToFirstRow();
-  }
 
-  deleteHeading(index) {
-    console.log('the remove index ' + index);
-    this.getHeader(index).remove();
-    //this.addHeadingAttrToFirstRow();
+    this.addHeadingAttrToFirstRow();
   }
 
   /**
@@ -577,15 +493,20 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
+    //this.textareaEle = $.make('textarea', CSS.headingClass);
+
+    // const textareaEle = document.createElement('textarea');
+    // textareaEle.classList.add(CSS.headingClass);
+    //el.appendChild(textareaEle);
 
     if (this.readOnly) {
       this.wrapper.classList.add(CSS.wrapperReadOnly);
     }
-
+    //this.wrapper.insertBefore(textareaEle,this.table);
     this.wrapper.appendChild(this.toolboxRow.element);
     this.wrapper.appendChild(this.toolboxColumn.element);
-    //this.wrapper.appendChild(this.toolboxHeading.element);
     this.wrapper.appendChild(this.table);
+    //this.wrapper.insertBefore(this.textareaEle);
 
     if (!this.readOnly) {
       const addColumnButton = $.make('div', CSS.addColumn, {
@@ -594,10 +515,15 @@ export default class Table {
       const addRowButton = $.make('div', CSS.addRow, {
         innerHTML: IconPlus
       });
-
+      //this.wrapper.ins
       this.wrapper.appendChild(addColumnButton);
       this.wrapper.appendChild(addRowButton);
     }
+  }
+
+  createTableHeading() {
+
+    this.textareaEle = $.make('h2', CSS.headingClass,{contentEditable:"true"});
   }
 
   /**
@@ -654,6 +580,7 @@ export default class Table {
    */
   fill() {
     const data = this.data;
+    document.getElementsByClassName(CSS.headingClass).innerHTML = "Narasimha";
 
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
@@ -688,11 +615,6 @@ export default class Table {
       contentEditable: !this.readOnly
     });
   }
-  createHeaderCell() {
-    return $.make('div', CSS.headerCell, {
-      contentEditable: !this.readOnly
-    });
-  }
 
   /**
    * Get number of rows in the table
@@ -701,26 +623,12 @@ export default class Table {
     return this.table.childElementCount;
   }
 
-
-  get numberOfHeaders() {
-    const headercount = document.querySelectorAll('.tc-heading').length;
-    console.log('the heading count:- ' + headercount);
-    return headercount;
-  }
-
   /**
    * Get number of columns in the table
    */
   get numberOfColumns() {
-    console.log('the number of rows ', this.numberOfRows);
-    const rowEle = this.table.querySelector(`.${CSS.row}:first-child`) || undefined;
-    const headerEle = this.table.querySelector(`.${CSS.header}:first-child`) || undefined;
-    console.log('the rowEle:- '+rowEle);
-    console.log('the headerEle:- '+headerEle);
-    if (this.numberOfRows && rowEle) {
+    if (this.numberOfRows) {
       return this.table.querySelector(`.${CSS.row}:first-child`).childElementCount;
-    } else if (this.numberOfHeaders && headerEle) {
-      return this.table.querySelector(`.${CSS.header}:first-child`).childElementCount;
     }
 
     return 0;
@@ -744,21 +652,16 @@ export default class Table {
     return this.selectedRow !== 0;
   }
 
-  get isHeaderMenuShowing() {
-    return this.selectedRow !== 0;
-  }
-
   /**
    * Recalculate position of toolbox icons
    *
    * @param {Event} event - mouse move event
    */
   onMouseMoveInTable(event) {
-    const { row, header, column } = this.getHoveredCell(event);
+    const { row, column } = this.getHoveredCell(event);
 
     this.hoveredColumn = column;
     this.hoveredRow = row;
-    this.hoveredHeader = header;
 
     this.updateToolboxesPosition();
   }
@@ -818,7 +721,6 @@ export default class Table {
   hideToolboxes() {
     this.hideRowToolbox();
     this.hideColumnToolbox();
-    this.hideHeaderToolbox();
     this.updateToolboxesPosition();
   }
 
@@ -830,11 +732,6 @@ export default class Table {
   hideRowToolbox() {
     this.unselectRow();
     this.toolboxRow.hide();
-  }
-
-  hideHeaderToolbox() {
-    this.unselectRow();
-    //this.toolboxHeading.hide();
   }
   /**
    * Unselect column, close toolbox
@@ -873,7 +770,7 @@ export default class Table {
    * @param {number} row - hovered row
    * @param {number} column - hovered column
    */
-  updateToolboxesPosition(row = this.hoveredRow || this.hoveredHeader, column = this.hoveredColumn) {
+  updateToolboxesPosition(row = this.hoveredRow, column = this.hoveredColumn) {
     if (!this.isColumnMenuShowing) {
       if (column > 0 && column <= this.numberOfColumns) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxColumn.show(() => {
@@ -884,28 +781,12 @@ export default class Table {
       }
     }
 
-    // if (!this.isHeadingMenuShowing) {
-    //   if (row > 0 && row <= this.numberOfRows) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
-    //     this.toolboxHeading.show(() => {
-    //       const hoveredRowElement = this.getHeader(row);
-    //       console.log('hoveredRowElement '+hoveredRowElement);
-    //       const { fromTopBorder } = $.getRelativeCoordsOfTwoElems(this.table, hoveredRowElement);
-    //       //const { height } = hoveredRowElement.getBoundingClientRect();
-
-    //       return {
-    //         top: `${Math.ceil(fromTopBorder + 10)}px`
-    //       };
-    //     });
-    //   }
-    // }
-
     if (!this.isRowMenuShowing) {
       if (row > 0 && row <= this.numberOfRows) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
         this.toolboxRow.show(() => {
-          if (!this.getRow(row)) return;
           const hoveredRowElement = this.getRow(row);
           const { fromTopBorder } = $.getRelativeCoordsOfTwoElems(this.table, hoveredRowElement);
-          const { height } = hoveredRowElement && hoveredRowElement.getBoundingClientRect() || 0;
+          const { height } = hoveredRowElement.getBoundingClientRect();
 
           return {
             top: `${Math.ceil(fromTopBorder + height / 2)}px`
@@ -913,19 +794,6 @@ export default class Table {
         });
       }
     }
-    // if (!this.isHeaderMenuShowing) {
-    //   if (row > 0 && row <= this.numberOfRows) { // not sure this statement is needed. Maybe it should be fixed in getHoveredCell()
-    //     this.toolboxRow.show(() => {
-    //       const hoveredRowElement = this.getRow(row);
-    //       const { fromTopBorder } = $.getRelativeCoordsOfTwoElems(this.table, hoveredRowElement);
-    //       const { height } = hoveredRowElement.getBoundingClientRect();
-
-    //       return {
-    //         top: `${Math.ceil(fromTopBorder + height / 2)}px`
-    //       };
-    //     });
-    //   }
-    // }
   }
 
   /**
@@ -982,15 +850,6 @@ export default class Table {
     if (row) {
       this.selectedRow = index;
       row.classList.add(CSS.rowSelected);
-    }
-  }
-
-  selectHeader(index) {
-    const header = this.getHeader(index);
-
-    if (header) {
-      this.selectedHeader = index;
-      header.classList.add(CSS.headingSelected);
     }
   }
 
@@ -1079,7 +938,6 @@ export default class Table {
 
     return {
       row: hoveredRow || this.hoveredRow,
-      header: hoveredRow || this.hoveredRow,
       column: hoveredColumn || this.hoveredColumn
     };
   }
@@ -1102,10 +960,9 @@ export default class Table {
     let mid;
 
     while (leftBorder < rightBorder - 1 && totalIterations < 10) {
-      mid = Math.ceil((leftBorder + rightBorder) / 2) || 0;
+      mid = Math.ceil((leftBorder + rightBorder) / 2);
 
       const cell = getCell(mid);
-      console.log('the cell value:- ' + cell);
       const relativeCoords = $.getRelativeCoordsOfTwoElems(this.table, cell);
 
       if (beforeTheLeftBorder(relativeCoords)) {
@@ -1129,34 +986,24 @@ export default class Table {
    */
   getData() {
     const data = [];
-    let cells = [];
+    const headingTextValue = document.querySelector(`.${CSS.headingClass}`).innerHTML || undefined;
+    if(headingTextValue){
+      const headingObject = {"tableHeadingTextValue":headingTextValue};
+      data.push(headingObject);
+    }
+
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);
-      const headingData = this.table.querySelector(`.${CSS.header}:nth-child(${i})`);
-      console.log('the get data row:- ' + row);
-      console.log('the get data headingData:- ' + headingData);
-
-      // if(!!headingData) {
-      //   cells = Array.from(headingData.querySelectorAll(`.${CSS.headerCell}`));
-      //   console.log('the value heading cells:- '+cells);
-      // }
-
-      if (!!row) {
-        cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
-        console.log('the get data row cells:- ' + cells);
-      } 
-      
-      
+      const cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
       const isEmptyRow = cells.every(cell => !cell.textContent.trim());
 
       if (isEmptyRow) {
         continue;
       }
 
-      data.push(cells.map(cell =>{ console.log('the cell value:- '+cell.innerHTML); return cell.innerHTML}));
-      console.log('the value of final data:- '+data);
+      data.push(cells.map(cell => cell.innerHTML));
     }
-
+    console.log('the header value:- '+JSON.stringify(data));
     return data;
   }
 

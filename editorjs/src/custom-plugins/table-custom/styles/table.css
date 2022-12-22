@@ -16,6 +16,9 @@
 	 display: grid;
 	 grid-template-columns: calc(100% - var(--cell-size)) var(--cell-size);
 }
+.heading-class{
+	width: 100%;
+}
  .tc-wrap--readonly {
 	 grid-template-columns: 100% var(--cell-size);
 }
