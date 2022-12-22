@@ -532,6 +532,10 @@ export default class Table {
   createTableHeading() {
 
     this.textareaEle = $.make('h2', CSS.headingClass, { contentEditable: "true" });
+    console.log('the value dummy text data:- '+JSON.stringify(this.data));
+    this.textareaEle.innerHTML = this.data.tableHeadingText || "placing dummytext";
+    this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
+    //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
 
   /**
