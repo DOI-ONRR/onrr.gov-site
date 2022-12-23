@@ -528,7 +528,7 @@ export default class Table {
   }
 
   createTableHeading() {
-    this.textareaEle = $.make('span', CSS.headingClass, { contentEditable: "true" });
+    this.textareaEle = $.make('h2', CSS.headingClass, { contentEditable: "true" });
     this.textareaEle.innerHTML = this.data.tableHeadingText || '';
     //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }

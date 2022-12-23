@@ -1,7 +1,7 @@
 <template>
   <v-simple-table>
     <template v-slot:default>
-      <span>{{tableTitleValue}}</span>
+      <span v-html="tableTitle()"></span>
       <thead>
         <tr>
           <th 
@@ -35,7 +35,6 @@ export default {
   data() {
     return {
       rightAlignedIndexes: [],
-      tableTitleValue: '',
     }
   },
   props: {
@@ -61,15 +60,15 @@ export default {
 
       return str
     },
+    tableTitle() {
+      const tableTitleValue = this.block.data && this.block.data.tableHeadingText ? this.block.data.tableHeadingText : ''
+      return tableTitleValue;
+    }
   },
   computed: {
     tableHeaderItems() {
       const hItems = this.block.data.content[0]
       return hItems
-    },
-    tableTitle() {
-      this.tableTitleValue = this.block.data.tableHeadingText || ''
-      return this.tableTitleValue
     },
     tableRowItems() {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
