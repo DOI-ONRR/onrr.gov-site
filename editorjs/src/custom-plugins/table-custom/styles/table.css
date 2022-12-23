@@ -65,8 +65,9 @@
 	 left: 0;
 }
  .tc-table--heading {
-	 font-size: xx-large;
-	 /* border-bottom: 2px solid var(--color-border); */
+	 font-weight: 600;
+	 color: black;
+	 border-bottom: 2px solid var(--color-border);
 }
  .tc-table--heading .tc-heading:first-child [contenteditable]:empty::before {
 	 content: attr(heading);

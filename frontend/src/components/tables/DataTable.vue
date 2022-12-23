@@ -22,6 +22,7 @@ export default {
         }
     },
     created() {
+        console.log('the value of field:- '+JSON.stringify(this.field));
         this.$emit('fields', this.field)
     }
 }
