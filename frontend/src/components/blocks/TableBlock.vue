@@ -1,8 +1,8 @@
 <template>
   <v-simple-table>
     <template v-slot:default>
-      <span v-html="tableTitle()"></span>
       <thead>
+        <span class="heading-text-title" v-html="tableTitle()"></span>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -91,6 +91,10 @@ export default {
   .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
     vertical-align: top;
     border-bottom: 1px solid var(--v-accent-base) !important;
+  }
+  .heading-text-title {
+    font-size: xx-large;
+    font-weight: 900;
   }
 
   
