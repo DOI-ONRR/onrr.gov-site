@@ -64,9 +64,9 @@
 	 top: calc(-1 * var(--toolbox-aiming-field-size));
 	 left: 0;
 }
- .tc-table--heading .tc-heading:first-child {
-	 font-weight: 600;
-	 border-bottom: 2px solid var(--color-border);
+ .tc-table--heading {
+	 font-size: xx-large;
+	 /* border-bottom: 2px solid var(--color-border); */
 }
  .tc-table--heading .tc-heading:first-child [contenteditable]:empty::before {
 	 content: attr(heading);
