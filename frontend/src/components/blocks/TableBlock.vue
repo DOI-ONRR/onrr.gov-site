@@ -69,6 +69,7 @@ export default {
     },
     tableTitle() {
       this.tableTitleValue = this.block.data.tableHeadingText || ''
+      return this.tableTitleValue
     },
     tableRowItems() {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
