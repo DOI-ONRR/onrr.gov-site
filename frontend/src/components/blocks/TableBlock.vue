@@ -2,7 +2,7 @@
   <v-simple-table>
     <template v-slot:default>
       <thead>
-        <span class="heading-text-title" v-html="tableTitle()"></span>
+        <h5 class="heading-text-title" v-html="tableTitle()"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -35,7 +35,8 @@ export default {
   data() {
     return {
       rightAlignedIndexes: [],
-      headingCount: 0
+      headingCount: 0,
+      tableTitleValue: ''
     }
   },
   props: {
@@ -64,8 +65,9 @@ export default {
     tableTitle() {
       console.log('the heading text value:- '+JSON.stringify(this.block.data.tableHeadingText));
       console.log(this.headingCount+'  the heading count value:- '+JSON.stringify(this.block.data.tableHeadingText[this.headingCount]))
-      const tableTitleValue = this.block.data && this.block.data.tableHeadingText ? this.block.data.tableHeadingText[this.headingCount++] : ''
-      return tableTitleValue;
+      this.tableTitleValue = this.block.data && this.block.data.tableHeadingText ? this.block.data.tableHeadingText[this.headingCount] : ''
+      console.log('the header value:- '+this.tableTitleValue);
+      return this.tableTitleValue;
     }
   },
   computed: {
