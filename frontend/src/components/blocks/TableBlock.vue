@@ -2,7 +2,7 @@
   <v-simple-table>
     <template v-slot:default>
       <thead>
-        <h4 v-html="tableTitle()"></h4>
+        <h4 v-html="tableTitle"></h4>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
