@@ -1010,10 +1010,10 @@ export default class Table {
     const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
     console.log('the value of get header Data:-  '+JSON.stringify(headingTextValue));
     if (headingTextValue && headingTextValue.length > 0) {
-      headingTextValue.map((htext)=>{
-        console.log('the value ofhtext innerhtml:-  '+JSON.stringify(htext.innerHTML));
-        data.headingObject.push(htext.innerHTML);
-      });
+      for(let headerIndex=0;headerIndex < headingTextValue.length;headerIndex++){
+        console.log('the value ofhtext innerhtml:-  '+JSON.stringify(headingTextValue[headerIndex].innerHTML));
+        data.headingObject.push(headingTextValue[headerIndex].innerHTML);
+      }
     } else {
       data.headingObject = [""];
     }
