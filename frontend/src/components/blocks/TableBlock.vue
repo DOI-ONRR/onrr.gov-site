@@ -63,8 +63,11 @@ export default {
       return str
     },
     tableTitle() {
+      console.log('the title value:- '+JSON.stringify(this.block.data.tableHeadingText));
       this.tableTitleValue = this.block.data && this.block.data.tableHeadingText ? this.block.data.tableHeadingText[this.headingCount] : ''
-      if(this.headingCount <= this.block.data.tableHeadingText.length){this.headingCount++;}
+      if(this.headingCount <= this.block.data.tableHeadingText?.length){
+      this.headingCount++;
+      }
       return this.tableTitleValue;
     }
   },
