@@ -336,12 +336,13 @@ export default class Table {
     const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
     console.log('the value setHeaderText outside:-  '+JSON.stringify(data));
     console.log('the value setHeaderText length:-  '+headerElement.length);
-    console.log('the value setHeaderText table length:-  '+data.tableHeadingText.length);
     if (headerElement && headerElement.length > 0) {
-      for(let headerIndex=0;headerIndex < data.tableHeadingText.length;headerIndex++){
+      for(let headerIndex=0;headerIndex <= headerElement.length;headerIndex++){
+        if(headerElement[headerIndex]){
         console.log(headerIndex+' the value setHeaderText inside length:-  '+headerElement.length);
         console.log('the value setHeaderText innerhtml:-  '+JSON.stringify(data.tableHeadingText[headerIndex]));
         headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
+        }
       }
     }
   }
