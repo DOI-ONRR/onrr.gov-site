@@ -43,6 +43,7 @@ export default class Table {
     this.api = api;
     this.data = data;
     this.config = config;
+    console.log('the constructor data in table js:- '+JSON.stringify(data));
 
     /**
      * DOM nodes
@@ -333,6 +334,7 @@ export default class Table {
   }
   setHeaderText(data) {
     const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
+    console.log('the value setHeaderText outside:-  '+JSON.stringify(data));
     if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex < headingTextValue.length;headerIndex++){
         console.log('the value setHeaderText innerhtml:-  '+JSON.stringify(data.tableHeadingText[headerIndex]));
@@ -532,7 +534,7 @@ export default class Table {
 
   createTableHeading() {
     this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
-    this.textareaEle.innerHTML = this.data.tableHeadingText || '';
+    this.textareaEle.innerHTML = [''];
     //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
 
