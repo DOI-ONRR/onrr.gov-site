@@ -61,13 +61,7 @@ export default {
       }
 
       return str
-    },
-    tableTitle() {
-      this.tableTitleValue = this.block.data && this.block.data.tableHeadingText ? this.block.data.tableHeadingText[this.headingCount] : ''
-      this.headingCount++;
-      return this.tableTitleValue;
     }
-    
   },
   computed: {
     tableHeaderItems() {
