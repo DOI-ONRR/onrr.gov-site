@@ -337,8 +337,10 @@ export default class Table {
     const headerElement2 = document.querySelector(`.${CSS.headingClass}`);
     const headerElement3 = document.getElementsByClassName("heading-class");
     console.log('the value setHeaderText length:-  '+headerElement.length);
-    console.log('the value setHeaderText length2:-  '+headerElement2.length);
-    console.log('the value setHeaderText length3:-  '+headerElement3.length);
+    if(headerElement2 && headerElement2.length){
+    console.log('the value setHeaderText length2:-  '+headerElement2.length);}
+    if(headerElement3 && headerElement3.length){
+      console.log('the value setHeaderText length2:-  '+headerElement3.length);}
     console.log('the value setHeaderText length:-  '+headerElement);
     if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
@@ -1025,8 +1027,11 @@ export default class Table {
     const headerElement2 = document.querySelector(`.${CSS.headingClass}`);
     const headerElement3 = document.getElementsByClassName("heading-class");
     console.log('the length:- '+headingTextValue.length);
-    console.log('the length2:- '+headerElement2.length);
-    console.log('the length3:- '+headerElement3.length);
+    if(headerElement2 && headerElement2.length){
+      console.log('the value setHeaderText length2:-  '+headerElement2.length);}
+      if(headerElement3 && headerElement3.length){
+        console.log('the value setHeaderText length2:-  '+headerElement3.length);}
+    
     if (headingTextValue && headingTextValue.length > 0) {
       for(let headerIndex=0;headerIndex <= headingTextValue.length;headerIndex++){
         if(headingTextValue[headerIndex]){
