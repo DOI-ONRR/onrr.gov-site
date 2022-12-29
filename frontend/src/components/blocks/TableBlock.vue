@@ -67,6 +67,7 @@ export default {
       console.log(this.headingCount+'  the heading count value:- '+JSON.stringify(this.block.data.tableHeadingText[this.headingCount]))
       this.tableTitleValue = this.block.data && this.block.data.tableHeadingText ? this.block.data.tableHeadingText[this.headingCount] : ''
       console.log('the header value:- '+this.tableTitleValue);
+      this.headingCount++;
       return this.tableTitleValue;
     }
   },
