@@ -334,8 +334,12 @@ export default class Table {
   }
   setHeaderText(data) {
     const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
-    console.log('the value setHeaderText outside:-  '+JSON.stringify(data));
+    const headerElement2 = document.querySelector(`.${CSS.headingClass}`);
+    const headerElement3 = document.getElementsByClassName("heading-class");
     console.log('the value setHeaderText length:-  '+headerElement.length);
+    console.log('the value setHeaderText length2:-  '+headerElement2.length);
+    console.log('the value setHeaderText length3:-  '+headerElement3.length);
+    console.log('the value setHeaderText length:-  '+headerElement);
     if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
         if(headerElement[headerIndex]){
@@ -537,7 +541,7 @@ export default class Table {
   }
 
   createTableHeading() {
-    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
+    this.textareaEle = $.make('h2', CSS.headingClass, { contentEditable: "true" });
     //this.textareaEle.innerHTML = [''];
     //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
@@ -1018,8 +1022,11 @@ export default class Table {
     const data = {};
     data.headingObject = [];
     const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
-            
+    const headerElement2 = document.querySelector(`.${CSS.headingClass}`);
+    const headerElement3 = document.getElementsByClassName("heading-class");
     console.log('the length:- '+headingTextValue.length);
+    console.log('the length2:- '+headerElement2.length);
+    console.log('the length3:- '+headerElement3.length);
     if (headingTextValue && headingTextValue.length > 0) {
       for(let headerIndex=0;headerIndex <= headingTextValue.length;headerIndex++){
         if(headingTextValue[headerIndex]){
