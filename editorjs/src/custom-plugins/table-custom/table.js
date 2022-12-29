@@ -335,8 +335,10 @@ export default class Table {
   setHeaderText(data) {
     const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
     console.log('the value setHeaderText outside:-  '+JSON.stringify(data));
+    console.log('the value setHeaderText length:-  '+headerElement.length);
     if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex < headerElement.length;headerIndex++){
+        console.log(headerIndex+' the value setHeaderText inside length:-  '+headerElement.length);
         console.log('the value setHeaderText innerhtml:-  '+JSON.stringify(data.tableHeadingText[headerIndex]));
         headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
       }
@@ -1014,10 +1016,13 @@ export default class Table {
     const data = {};
     data.headingObject = [];
     const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
+            
+    console.log('the length:- '+headingTextValue.length);
     if (headingTextValue && headingTextValue.length > 0) {
       for(let headerIndex=0;headerIndex < headingTextValue.length;headerIndex++){
-        console.log('the value ofhtext innerhtml:-  '+JSON.stringify(headingTextValue[headerIndex].innerHTML));
         data.headingObject.push(headingTextValue[headerIndex].innerHTML);
+        console.log('the value ofhtext innerhtml:-  '+JSON.stringify(headingTextValue[headerIndex].innerHTML));
+        console.log(headerIndex+' the length inside:- '+headingTextValue.length);
       }
     } else {
       data.headingObject = [""];
