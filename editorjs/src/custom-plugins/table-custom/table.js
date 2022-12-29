@@ -1008,7 +1008,7 @@ export default class Table {
   getHeaderData() {
     const data = {};
     const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
-    if (headingTextValue.length > 0) {
+    if (headingTextValue && headingTextValue.length > 0) {
       headingTextValue.map((htext)=>{
         data.headingObject.push(htext.innerHTML);
       });
