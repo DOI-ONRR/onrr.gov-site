@@ -336,7 +336,7 @@ export default class Table {
     const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
     console.log('the value setHeaderText outside:-  '+JSON.stringify(data));
     if (headerElement && headerElement.length > 0) {
-      for(let headerIndex=0;headerIndex < headingTextValue.length;headerIndex++){
+      for(let headerIndex=0;headerIndex < headerElement.length;headerIndex++){
         console.log('the value setHeaderText innerhtml:-  '+JSON.stringify(data.tableHeadingText[headerIndex]));
         headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
       }
@@ -1014,7 +1014,6 @@ export default class Table {
     const data = {};
     data.headingObject = [];
     const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
-    console.log('the value of get header Data:-  '+JSON.stringify(headingTextValue));
     if (headingTextValue && headingTextValue.length > 0) {
       for(let headerIndex=0;headerIndex < headingTextValue.length;headerIndex++){
         console.log('the value ofhtext innerhtml:-  '+JSON.stringify(headingTextValue[headerIndex].innerHTML));
