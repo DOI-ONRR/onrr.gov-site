@@ -332,9 +332,12 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.querySelector('.heading-class');
-    if (headerElement) {
-      headerElement.innerHTML = data.tableHeadingText;
+    const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
+    if (headerElement && headerElement.length > 0) {
+      for(let headerIndex=0;headerIndex < headingTextValue.length;headerIndex++){
+        console.log('the value setHeaderText innerhtml:-  '+JSON.stringify(data.tableHeadingText[headerIndex]));
+        headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
+      }
     }
   }
 
