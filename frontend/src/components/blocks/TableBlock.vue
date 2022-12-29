@@ -2,7 +2,7 @@
   <v-simple-table>
     <template v-slot:default>
       <thead>
-        <h4 v-html="tableTitleItems()"></h4>
+        <h4 v-html="tableTitleItems"></h4>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -66,6 +66,7 @@ export default {
       if(this.block.data.tableHeadingText.length > this.headingCount ){
         this.headingCount++;
       }
+      console.log('the title :- '+tvalue);
       return tvalue;
     }
   },
