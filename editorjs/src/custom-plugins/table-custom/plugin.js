@@ -56,10 +56,11 @@ export default class TableBlock {
     this.api = api;
     this.readOnly = readOnly;
     this.config = config;
+    console.log('the constructor data:- '+JSON.stringify(data));
     this.data = {
       withHeadings: this.getConfig('withHeadings', true, data),
       content: data && data.content ? data.content : [],
-      tableHeadingText: data && data.tableHeadingText ? data.tableHeadingText : ""
+      tableHeadingText: data && data.tableHeadingText ? data.tableHeadingText : [""]
     };
     this.table = null;
   }
