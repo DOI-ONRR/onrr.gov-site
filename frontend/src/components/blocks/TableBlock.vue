@@ -35,13 +35,13 @@ export default {
   data() {
     return {
       rightAlignedIndexes: [],
+      headingCount:0
     }
   },
   props: {
     block: {
       type: [Object]
-    },
-    headingCount: 0
+    }
   },
   methods: {
     isCellNumeric(str, idx) {
@@ -62,12 +62,10 @@ export default {
       return str
     },
     tableTitleItems() {
-      let indexV;
+      let tvalue = this.block.data.tableHeadingText[this.headingCount];
       if(this.block.data.tableHeadingText.length > this.headingCount ){
         this.headingCount++;
-        
       }
-     let tvalue = this.block.data.tableHeadingText[this.headingCount];
       return tvalue;
     }
   },
