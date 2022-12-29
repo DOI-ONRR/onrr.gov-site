@@ -35,14 +35,13 @@ export default {
   data() {
     return {
       rightAlignedIndexes: [],
-      headingCount: 0,
-      tableTitleValue: ''
     }
   },
   props: {
     block: {
       type: [Object]
     },
+    headingCount: 0
   },
   methods: {
     isCellNumeric(str, idx) {
@@ -61,16 +60,21 @@ export default {
       }
 
       return str
+    },
+    tableTitleItems() {
+      let indexV;
+      if(this.block.data.tableHeadingText.length > this.headingCount ){
+        this.headingCount++;
+        
+      }
+     let tvalue = this.block.data.tableHeadingText[this.headingCount];
+      return tvalue;
     }
   },
   computed: {
     tableHeaderItems() {
       const hItems = this.block.data.content[0]
       return hItems
-    },
-    tableTitleItems() {
-      const tItems = this.block.data.tableHeadingText[this.headingCount++]
-      return tItems
     },
     tableRowItems() {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
