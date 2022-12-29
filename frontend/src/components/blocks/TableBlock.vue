@@ -68,6 +68,7 @@ export default {
       const hItems = this.block.data.content[0]
       return hItems
     },
+    /* eslint-disable */
     tableTitleItems() {
       let tvalue = this.block.data.tableHeadingText[this.headingCount];
       if(this.block.data.tableHeadingText.length > this.headingCount ){
