@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       rightAlignedIndexes: [],
+      headingCount: 0
     }
   },
   props: {
@@ -61,7 +62,9 @@ export default {
       return str
     },
     tableTitle() {
-      const tableTitleValue = this.block.data && this.block.data.tableHeadingText ? this.block.data.tableHeadingText : ''
+      console.log('the heading text value:- '+JSON.stringify(this.block.data.tableHeadingText));
+      console.log(this.headingCount+'  the heading count value:- '+JSON.stringify(this.block.data.tableHeadingText[this.headingCount]))
+      const tableTitleValue = this.block.data && this.block.data.tableHeadingText ? this.block.data.tableHeadingText[this.headingCount++] : ''
       return tableTitleValue;
     }
   },

@@ -528,7 +528,7 @@ export default class Table {
   }
 
   createTableHeading() {
-    this.textareaEle = $.make('h2', CSS.headingClass, { contentEditable: "true" });
+    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
     this.textareaEle.innerHTML = this.data.tableHeadingText || '';
     //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
@@ -1008,9 +1008,13 @@ export default class Table {
   getHeaderData() {
     const data = {};
     const headingTextValue = document.querySelector(`.${CSS.headingClass}`);
-    if (headingTextValue) {
-      data.headingObject = headingTextValue && headingTextValue.innerHTML ? headingTextValue.innerHTML : "Dummy"
-    };
+    if (headingTextValue.length > 0) {
+      headingTextValue.map((htext)=>{
+        data.headingObject.push(htext.innerHTML);
+      });
+    } else {
+      data.headingObject = [""];
+    }
     return data;
   }
 
