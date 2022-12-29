@@ -2,7 +2,7 @@
   <v-simple-table>
     <template v-slot:default>
       <thead>
-        <h4 v-html="tableTitleItems"></h4>
+        <span v-html="tableTitleItems"></span>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -61,6 +61,13 @@ export default {
 
       return str
     },
+   
+  },
+  computed: {
+    tableHeaderItems() {
+      const hItems = this.block.data.content[0]
+      return hItems
+    },
     tableTitleItems() {
       let tvalue = this.block.data.tableHeadingText[this.headingCount];
       if(this.block.data.tableHeadingText.length > this.headingCount ){
@@ -68,12 +75,6 @@ export default {
       }
       console.log('the title :- '+tvalue);
       return tvalue;
-    }
-  },
-  computed: {
-    tableHeaderItems() {
-      const hItems = this.block.data.content[0]
-      return hItems
     },
     tableRowItems() {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
