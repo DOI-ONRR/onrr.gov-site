@@ -2,7 +2,7 @@
   <v-simple-table>
     <template v-slot:default>
       <thead>
-        <h4 v-html="tableTitle()"></h4>
+        <h4>{{tableTitleItems}}</h4>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -73,6 +73,10 @@ export default {
     tableHeaderItems() {
       const hItems = this.block.data.content[0]
       return hItems
+    },
+    tableTitleItems() {
+      const tItems = this.block.data.tableHeadingText[this.headingCount++]
+      return tItems
     },
     tableRowItems() {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
