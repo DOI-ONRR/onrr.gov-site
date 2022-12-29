@@ -337,7 +337,7 @@ export default class Table {
     console.log('the value setHeaderText outside:-  '+JSON.stringify(data));
     console.log('the value setHeaderText length:-  '+headerElement.length);
     if (headerElement && headerElement.length > 0) {
-      for(let headerIndex=0;headerIndex <= headerElement.length;headerIndex++){
+      for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
         if(headerElement[headerIndex]){
         console.log(headerIndex+' the value setHeaderText inside length:-  '+headerElement.length);
         console.log('the value setHeaderText innerhtml:-  '+JSON.stringify(data.tableHeadingText[headerIndex]));
@@ -1021,10 +1021,12 @@ export default class Table {
             
     console.log('the length:- '+headingTextValue.length);
     if (headingTextValue && headingTextValue.length > 0) {
-      for(let headerIndex=0;headerIndex < headingTextValue.length;headerIndex++){
+      for(let headerIndex=0;headerIndex <= headingTextValue.length;headerIndex++){
+        if(headingTextValue[headerIndex]){
         data.headingObject.push(headingTextValue[headerIndex].innerHTML);
         console.log('the value ofhtext innerhtml:-  '+JSON.stringify(headingTextValue[headerIndex].innerHTML));
         console.log(headerIndex+' the length inside:- '+headingTextValue.length);
+        }
       }
     }
     return data;
