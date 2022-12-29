@@ -1007,6 +1007,7 @@ export default class Table {
   }
   getHeaderData() {
     const data = {};
+    data.headingObject = [];
     const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
     console.log('the value of get header Data:-  '+JSON.stringify(headingTextValue));
     if (headingTextValue && headingTextValue.length > 0) {
