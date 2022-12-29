@@ -538,7 +538,7 @@ export default class Table {
 
   createTableHeading() {
     this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
-    this.textareaEle.innerHTML = [''];
+    //this.textareaEle.innerHTML = [''];
     //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
 
@@ -1026,8 +1026,6 @@ export default class Table {
         console.log('the value ofhtext innerhtml:-  '+JSON.stringify(headingTextValue[headerIndex].innerHTML));
         console.log(headerIndex+' the length inside:- '+headingTextValue.length);
       }
-    } else {
-      data.headingObject = [""];
     }
     return data;
   }
