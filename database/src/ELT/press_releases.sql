@@ -10,4 +10,4 @@ INSERT INTO press_releases
 VALUES 
   (nextval('press_releases_sequence')status,sort,user_created,date_created,user_updated,date_updated,title,date,file,link,excerpt);
 
-select * from press_releases;
+select * from press_releases RETURNING id;
