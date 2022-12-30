@@ -31,8 +31,9 @@
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
   import ImageTool from '../custom-plugins/plugin-image-patch';
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
-  import TableTool from '@editorjs/table';
-  import Tooltip from 'editorjs-tooltip';
+  //import TableTool from '@editorjs/table';
+  import TableTool from '../custom-plugins/table-custom/index';
+  //import Tooltip from '@editorjs-tooltip';
 
   export default {
     data() {
@@ -84,12 +85,12 @@
                type: 'text'
             }
           },
-          tooltip: {
-              class: Tooltip,
-              config: {
-                holder: "editorjs-tooltip"
-              }
-            },
+          //tooltip: {
+            //  class: Tooltip,
+            //  config: {
+             //   holder: "editorjs-tooltip"
+             // }
+           // },
             collection: {
               class: Collections,
               inlineToolbar: true,
@@ -173,6 +174,12 @@
             table: {
               class: TableTool, 
               inlineToolbar: true,
+              withHeadings: true,
+              config: {
+                rows: 2,
+                cols: 3,
+                withHeadings: true,
+              },
               tunes: ['alignmentTune']
             },
           },

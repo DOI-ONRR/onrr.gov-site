@@ -8,6 +8,6 @@ CREATE SEQUENCE press_releases_sequence
 INSERT INTO press_releases 
   (id,status,sort,user_created,date_created,user_updated,date_updated,title,date,file,link,excerpt)
 VALUES 
-  (nextval('press_releases_sequence'),status,sort,user_created,date_created,user_updated,date_updated,title,date,file,link,excerpt);
+  (nextval('press_releases_sequence')status,sort,user_created,date_created,user_updated,date_updated,title,date,file,link,excerpt);
 
-select * from press_releases;
+select * from press_releases RETURNING id;
