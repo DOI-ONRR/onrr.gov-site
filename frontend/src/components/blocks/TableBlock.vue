@@ -5,6 +5,7 @@
       v-for="(item, index) in tableTitleItems"
             :key="index">
             <h5 v-html="item"></h5>
+            <h5 class="heading-text-title" v-html="countUpdate()"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -63,6 +64,12 @@ export default {
       }
 
       return str
+    },
+    countUpdate(){
+      let headerClassCount = document.getElementsByClassName('heading-text-title').length || 0;
+      console.log('the heading count:- '+headerClassCount);
+      this.headingCount = headerClassCount;
+      return this.headingCount;
     }
   },
   computed: {
@@ -114,4 +121,4 @@ export default {
   }
 
   
-</style>
+</style> 
