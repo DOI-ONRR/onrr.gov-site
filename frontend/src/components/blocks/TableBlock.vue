@@ -77,7 +77,7 @@ export default {
     tableTitleItems() {
       //const hItems = this.block.data.tableHeadingText.filter((item, index) => index > -1)
       let hstring = this.block.data.tableHeadingText[this.headingCount];
-      let hItems=[];
+      const hItems=[];
       hItems.push(hstring);
       console.log(this.headingCount+' the hItems:- '+JSON.stringify(hItems));
       this.headingCount++;
