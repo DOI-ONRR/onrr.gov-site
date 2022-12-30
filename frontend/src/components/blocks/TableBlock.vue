@@ -1,8 +1,11 @@
 <template>
   <v-simple-table>
     <template v-slot:default>
-      <thead>
-        <h5 v-html="tableTitleItems()"></h5>
+      <thead 
+      v-for="(item, index) in tableTitleItems"
+            :key="index">
+            <h5 v-html="item"></h5>
+        <h5 v-html="tableTitleItemsMethod()"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -62,7 +65,7 @@ export default {
 
       return str
     },
-    tableTitleItems() {
+    tableTitleItemsMethod() {
       if(this.block.data && 
          this.block.data.tableHeadingText &&
          this.block.data.tableHeadingText[this.headingCount]){
@@ -87,6 +90,11 @@ export default {
     tableRowItems() {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
       return rItems
+    },
+    tableTitleItems() {
+      const hItems = this.block.data.content.tableHeadingText.filter((item, index) => index > 0)
+      console.log('the hItems:- '+JSON.stringify(hItems));
+      return hItems
     },
     textClass() {
       return (idx) => {
