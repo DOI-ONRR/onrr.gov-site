@@ -64,7 +64,10 @@ export default {
     },
     countUpdate(){
       let headerClassCount = document.getElementsByClassName('heading-text-title').length || 0;
+      if(document.getElementsByClassName('heading-text-title')[this.headingCount]){
+        console.log('the heading tags:- '+document.getElementsByClassName('heading-text-title')[this.headingCount]);
       document.getElementsByClassName('heading-text-title')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
+      }
       console.log('the heading count:- '+headerClassCount);
       if(this.headingCount <= this.block.data.tableHeadingText.length){
       this.headingCount = headerClassCount;
