@@ -5,7 +5,6 @@
       v-for="(item, index) in tableTitleItems"
             :key="index">
             <h5 v-html="item"></h5>
-        <h5 v-html="tableTitleItemsMethod()"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -64,22 +63,6 @@ export default {
       }
 
       return str
-    },
-    tableTitleItemsMethod() {
-      if(this.block.data && 
-         this.block.data.tableHeadingText &&
-         this.block.data.tableHeadingText[this.headingCount]){
-          this.titleValue = this.block.data.tableHeadingText[this.headingCount];
-         }
-         if(this.block.data && 
-         this.block.data.tableHeadingText &&
-         this.block.data.tableHeadingText[this.headingCount]){
-          if(this.headingCount <= this.block.data.tableHeadingText.length){
-            this.headingCount++;
-          }
-         }
-         console.log(this.headingCount+' the text value:- '+JSON.stringify(this.block.data))
-      return this.titleValue;
     }
   },
   computed: {
@@ -92,9 +75,12 @@ export default {
       return rItems
     },
     tableTitleItems() {
-      const hItems = this.block.data.tableHeadingText.filter((item, index) => index > -1)
+      //const hItems = this.block.data.tableHeadingText.filter((item, index) => index > -1)
+      let hstring = this.block.data.tableHeadingText[this.headingCount];
+      let hItems=[];
+      hItems.push(hstring);
       console.log(this.headingCount+' the hItems:- '+JSON.stringify(hItems));
-
+      this.headingCount++;
       return hItems
     },
     textClass() {
