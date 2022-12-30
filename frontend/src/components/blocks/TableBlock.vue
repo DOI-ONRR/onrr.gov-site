@@ -64,10 +64,12 @@ export default {
     },
     countUpdate(){
       let headerClassCount = document.getElementsByClassName('heading-text-title').length || 0;
+      document.getElementsByClassName('heading-text-title')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
       console.log('the heading count:- '+headerClassCount);
       if(this.headingCount <= this.block.data.tableHeadingText.length){
       this.headingCount = headerClassCount;
       }
+
       return this.block.data.tableHeadingText[this.headingCount];
     }
   },
