@@ -2,7 +2,7 @@
   <v-simple-table>
     <template v-slot:default>
       <thead>
-        <span v-html="tableTitleItems"></span>
+        <h5 v-html="tableTitleItems()"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -35,7 +35,8 @@ export default {
   data() {
     return {
       rightAlignedIndexes: [],
-      headingCount:0
+      headingCount:0,
+      titleValue:''
     }
   },
   props: {
@@ -61,21 +62,28 @@ export default {
 
       return str
     },
+    tableTitleItems() {
+      if(this.block.data && 
+         this.block.data.tableHeadingText &&
+         this.block.data.tableHeadingText[this.headingCount]){
+          this.titleValue = this.block.data.tableHeadingText[this.headingCount];
+         }
+         if(this.block.data && 
+         this.block.data.tableHeadingText &&
+         this.block.data.tableHeadingText[this.headingCount]){
+          if(this.headingCount <= this.block.data.tableHeadingText.length){
+            this.headingCount++;
+          }
+         }
+
+      return this.titleValue;
+    }
    
   },
   computed: {
     tableHeaderItems() {
       const hItems = this.block.data.content[0]
       return hItems
-    },
-    /* eslint-disable */
-    tableTitleItems() {
-      let tvalue = this.block.data.tableHeadingText[this.headingCount];
-      if(this.block.data.tableHeadingText.length > this.headingCount ){
-        this.headingCount++;
-      }
-      console.log('the title :- '+tvalue);
-      return tvalue;
     },
     tableRowItems() {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
