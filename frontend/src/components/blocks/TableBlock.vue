@@ -92,8 +92,9 @@ export default {
       return rItems
     },
     tableTitleItems() {
-      const hItems = this.block.data.content.tableHeadingText.filter((item, index) => index > 0)
-      console.log('the hItems:- '+JSON.stringify(hItems));
+      const hItems = this.block.data.tableHeadingText.filter((item, index) => index > -1)
+      console.log(this.headingCount+' the hItems:- '+JSON.stringify(hItems));
+
       return hItems
     },
     textClass() {
