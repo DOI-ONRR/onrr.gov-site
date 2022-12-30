@@ -76,7 +76,7 @@ export default {
     },
     tableTitleItems() {
       //const hItems = this.block.data.tableHeadingText.filter((item, index) => index > -1)
-      let hstring = this.block.data.tableHeadingText[this.headingCount++];
+      let hstring = this.block.data.tableHeadingText[this.headingCount];
       const hItems=[];
       hItems.push(hstring);
       console.log(this.headingCount+' the hItems:- '+JSON.stringify(hItems));
@@ -89,6 +89,14 @@ export default {
         } else {
           return (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
         }
+      }
+    }
+  },
+  watch: {
+    tableTitleItems: {
+      deep:true,
+      handler(){
+        this.headingCount++;
       }
     }
   }
