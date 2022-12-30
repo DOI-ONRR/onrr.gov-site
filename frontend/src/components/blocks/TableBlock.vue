@@ -75,7 +75,7 @@ export default {
             this.headingCount++;
           }
          }
-
+         console.log(this.headingCount+' the text value:- '+JSON.stringify(this.block.data))
       return this.titleValue;
     }
    
