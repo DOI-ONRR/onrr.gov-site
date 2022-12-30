@@ -1,10 +1,7 @@
 <template>
   <v-simple-table>
     <template v-slot:default>
-      <thead 
-      v-for="(item, index) in tableTitleItems"
-            :key="index">
-            <h5 v-html="item"></h5>
+      <thead>
             <h5 class="heading-text-title" v-html="countUpdate()"></h5>
         <tr>
           <th 
@@ -68,8 +65,10 @@ export default {
     countUpdate(){
       let headerClassCount = document.getElementsByClassName('heading-text-title').length || 0;
       console.log('the heading count:- '+headerClassCount);
+      if(this.headingCount <= this.block.data.tableHeadingText.length){
       this.headingCount = headerClassCount;
-      return this.headingCount;
+      }
+      return this.block.data.tableHeadingText[this.headingCount];
     }
   },
   computed: {
@@ -81,14 +80,6 @@ export default {
       const rItems = this.block.data.content.filter((item, index) => index > 0)
       return rItems
     },
-    tableTitleItems() {
-      //const hItems = this.block.data.tableHeadingText.filter((item, index) => index > -1)
-      let hstring = this.block.data.tableHeadingText[this.headingCount];
-      const hItems=[];
-      hItems.push(hstring);
-      console.log(this.headingCount+' the hItems:- '+JSON.stringify(hItems));
-      return hItems
-    },
     textClass() {
       return (idx) => {
         if (this.rightAlignedIndexes.includes(idx)) {
@@ -96,14 +87,6 @@ export default {
         } else {
           return (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
         }
-      }
-    }
-  },
-  watch: {
-    tableTitleItems: {
-      deep:true,
-      handler(){
-        this.headingCount++;
       }
     }
   }
