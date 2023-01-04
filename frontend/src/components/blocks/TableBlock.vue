@@ -1,10 +1,10 @@
 <template>
   <div>
-  <h5 class="heading-text-title" v-html="countUpdate()"></h5>
+  <h5 class="heading-final" v-html="countUpdate()"></h5>
   <v-simple-table>
     <template v-slot:default>
       <thead>
-            <h5 class="heading-final"></h5>
+            <h5 class="heading-text-title"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -110,7 +110,8 @@ export default {
     width: 100%;
   }
   .heading-final{
-    font-size: xx-large;
+    width: 100%;
+    font-weight: bold;
   }
 
   
