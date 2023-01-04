@@ -543,7 +543,7 @@ export default class Table {
   }
 
   createTableHeading() {
-    this.textareaEle = $.make('h2', CSS.headingClass, { contentEditable: "true" });
+    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
     //this.textareaEle.innerHTML = [''];
     //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
@@ -1026,18 +1026,15 @@ export default class Table {
     const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
     const headerElement2 = document.querySelector(`.${CSS.headingClass}`);
     const headerElement3 = document.getElementsByClassName("heading-class");
-    console.log('the length:- '+headingTextValue.length);
-    if(headerElement2 && headerElement2.length){
-      console.log('the value setHeaderText length2:-  '+headerElement2.length);}
-      if(headerElement3 && headerElement3.length){
-        console.log('the value setHeaderText length2:-  '+headerElement3.length);}
+    // if(headerElement2 && headerElement2.length){
+    //   console.log('the value setHeaderText length2:-  '+headerElement2.length);}
+      // if(headerElement3 && headerElement3.length){
+      //   console.log('the value setHeaderText length2:-  '+headerElement3.length);}
     
     if (headingTextValue && headingTextValue.length > 0) {
       for(let headerIndex=0;headerIndex <= headingTextValue.length;headerIndex++){
         if(headingTextValue[headerIndex]){
         data.headingObject.push(headingTextValue[headerIndex].innerHTML);
-        console.log('the value ofhtext innerhtml:-  '+JSON.stringify(headingTextValue[headerIndex].innerHTML));
-        console.log(headerIndex+' the length inside:- '+headingTextValue.length);
         }
       }
     }

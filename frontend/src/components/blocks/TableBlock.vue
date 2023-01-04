@@ -3,7 +3,7 @@
     <template v-slot:default>
       <thead>
             <h5 class="heading-text-title" v-html="countUpdate()"></h5>
-            <h5 class="heading-final"></h5>
+            <h5  :class="[textClass, 'heading-final']"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -68,6 +68,12 @@ export default {
       if(document.getElementsByClassName('heading-final')[this.headingCount]){
         console.log('the heading tags:- '+document.getElementsByClassName('heading-final')[this.headingCount]);
       document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
+     if(this.rightAlignedIndexes){
+      console.log('the this.rightAlignedIndexes:- '+this.textClass(this.headingCount));
+     }
+      document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign="center";
+      let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
+      console.log('the tune value:- '+alignValue);
       }
       console.log('the heading count:- '+headerClassCount);
       if(this.headingCount <= this.block.data.tableHeadingText.length){
@@ -88,6 +94,7 @@ export default {
     },
     textClass() {
       return (idx) => {
+        console.log('the block value:- '+JSON.stringify(this.block));
         if (this.rightAlignedIndexes.includes(idx)) {
           return 'text-right'
         } else {
@@ -109,8 +116,7 @@ export default {
     font-weight: 900;
   }
   .heading-final{
-    font-size: xx-large;
+    width: 500%;
+    font-size: 16px;
   }
-
-  
 </style> 
