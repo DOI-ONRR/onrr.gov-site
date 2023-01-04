@@ -1,4 +1,5 @@
 <template>
+  <div>
   <h5 class="heading-text-title" v-html="countUpdate()"></h5>
   <v-simple-table>
     <template v-slot:default>
@@ -28,6 +29,7 @@
       </tbody>
     </template>
   </v-simple-table>
+</div>
 </template>
 
 <script>
