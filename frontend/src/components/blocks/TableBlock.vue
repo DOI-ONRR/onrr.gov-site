@@ -3,7 +3,7 @@
     <template v-slot:default>
       <thead>
             <h5 class="heading-text-title" v-html="countUpdate()"></h5>
-            <h5 class="heading-final"></h5>
+            <h5  :class="[textClass, 'heading-final']"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -68,6 +68,7 @@ export default {
       if(document.getElementsByClassName('heading-final')[this.headingCount]){
         console.log('the heading tags:- '+document.getElementsByClassName('heading-final')[this.headingCount]);
       document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
+      // document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
       }
       console.log('the heading count:- '+headerClassCount);
       if(this.headingCount <= this.block.data.tableHeadingText.length){
