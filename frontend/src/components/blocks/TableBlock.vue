@@ -1,8 +1,8 @@
 <template>
+  <h5 class="heading-text-title" v-html="countUpdate()"></h5>
   <v-simple-table>
     <template v-slot:default>
       <thead>
-            <h5 class="heading-text-title" v-html="countUpdate()"></h5>
             <h5 class="heading-final"></h5>
         <tr>
           <th 
@@ -105,8 +105,7 @@ export default {
     border-bottom: 1px solid var(--v-accent-base) !important;
   }
   .heading-text-title {
-    font-size: xx-large;
-    font-weight: 900;
+    width: 100%;
   }
   .heading-final{
     font-size: xx-large;
