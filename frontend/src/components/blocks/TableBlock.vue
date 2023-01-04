@@ -69,7 +69,7 @@ export default {
         console.log('the heading tags:- '+document.getElementsByClassName('heading-final')[this.headingCount]);
       document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
      if(this.rightAlignedIndexes){
-      console.log('the this.rightAlignedIndexes:- '+JSON.stringify(this.rightAlignedIndexes));
+      console.log('the this.rightAlignedIndexes:- '+this.textClass(this.headingCount));
      }
       document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign="center";
       let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
