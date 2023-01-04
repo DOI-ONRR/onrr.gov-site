@@ -94,6 +94,7 @@ export default {
     },
     textClass() {
       return (idx) => {
+        console.log('the block value:- '+JSON.stringify(this.block));
         if (this.rightAlignedIndexes.includes(idx)) {
           return 'text-right'
         } else {
