@@ -117,6 +117,5 @@ export default {
   }
   .heading-final{
     width: 500%;
-    font-size: 16px;
   }
 </style> 
