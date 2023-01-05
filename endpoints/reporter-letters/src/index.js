@@ -14,7 +14,7 @@ const streamToFile = (inputStream, filePath) => {
       .on('finish', resolve)
       .on('error', reject)
   })
-} 
+}
 
 const getFile = (async (filePath,url) => {
   console.log("------------------------------------------------------------------------------------")
@@ -37,21 +37,20 @@ export default (router, { services, exceptions }) => {
 		const fileService = new ItemsService('directus_files', { schema: req.schema, accountability: req.accountability });
     const file = req.params.file;
 
-		fileService
-			.readByQuery({ fields: ['*'], filter: {filename_download: {'_eq': file} } })
-			.then(async (results) => {
-        console.log('reporter-letters results: ', results)
-        // res.json(results)
+    linkService
+   .readByQuery({ fields: ['*'],  filter: {date: {'_eq': date}}})
+   .then( async (results) => {
+     const filePath='/tmp/reporter_letter.'+date
+     const url='/assets/'+results[0].file
+     //currently write file to /tmp  should be able to read stream from s3 and write directly?
 
-        const filePath = `/tmp/${ file }`;
-        const url = `/assets/${ results[0].id }`;
-        //currently write file to /tmp  should be able to read stream from s3 and write directly?
-        
-        await getFile(filePath, `${ targetUrl }${ url }`);
-        return res.sendFile(filePath)
-      })
-			.catch((error) => {
-				return next(new ServiceUnavailableException(error.message));
-			});
-	});
+     await getFile(filePath, `${ targetUrl }${ url }`);
+     return res.sendFile(filePath)
+   }
+   )
+   .catch((error) => {
+return next(new ServiceUnavailableException(error.message));;
+      });
+  });
+
 };
