@@ -56,13 +56,11 @@ export default {
     },
     countUpdate() {
       let headerClassCount = document.getElementsByClassName('heading-final').length || 0;
-      if (document.getElementsByClassName('heading-final')[this.headingCount]) {
-        if (document.getElementsByClassName('heading-final')[this.headingCount].innerHTML) {
+      if (document.getElementsByClassName('heading-final') && document.getElementsByClassName('heading-final')[this.headingCount]) {
           document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
-        }
-        //document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign="center";
-        let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
-        console.log('the tune value:- '+alignValue);
+          let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
+          document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign=alignValue;
+          console.log('the tune value:- '+alignValue);
       }
       if (this.headingCount <= (this.block.data && this.block.data.tableHeadingText && this.block.data.tableHeadingText.length)) {
         this.headingCount = headerClassCount;
