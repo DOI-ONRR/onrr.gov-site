@@ -2,8 +2,6 @@
   <v-simple-table>
     <template v-slot:default>
       <thead>
-            <h5 class="heading-text-title" v-html="countUpdate()"></h5>
-            <h5  :class="[textClass, 'heading-final']"></h5>
         <tr>
           <th 
             v-for="(item, index) in tableHeaderItems"
@@ -63,25 +61,6 @@ export default {
 
       return str
     },
-    countUpdate(){
-      let headerClassCount = document.getElementsByClassName('heading-final').length || 0;
-      if(document.getElementsByClassName('heading-final')[this.headingCount]){
-        console.log('the heading tags:- '+document.getElementsByClassName('heading-final')[this.headingCount]);
-      document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
-     if(this.rightAlignedIndexes){
-      console.log('the this.rightAlignedIndexes:- '+this.textClass(this.headingCount));
-     }
-      document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign="center";
-      let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
-      console.log('the tune value:- '+alignValue);
-      }
-      console.log('the heading count:- '+headerClassCount);
-      if(this.headingCount <= this.block.data.tableHeadingText.length){
-      this.headingCount = headerClassCount;
-      }
-
-      return "";
-    }
   },
   computed: {
     tableHeaderItems() {
