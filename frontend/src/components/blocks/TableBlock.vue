@@ -64,7 +64,7 @@ export default {
         // let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
         // console.log('the tune value:- '+alignValue);
       }
-      if (this.headingCount <= this.block.data.tableHeadingText.length) {
+      if (this.headingCount <= (this.block.data && this.block.data.tableHeadingText && this.block.data.tableHeadingText.length)) {
         this.headingCount = headerClassCount;
       }
 
