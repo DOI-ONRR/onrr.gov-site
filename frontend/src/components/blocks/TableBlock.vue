@@ -60,9 +60,9 @@ export default {
         if (document.getElementsByClassName('heading-final')[this.headingCount].innerHTML) {
           document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
         }
-        // document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign="center";
-        // let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
-        // console.log('the tune value:- '+alignValue);
+        //document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign="center";
+        let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
+        console.log('the tune value:- '+alignValue);
       }
       if (this.headingCount <= (this.block.data && this.block.data.tableHeadingText && this.block.data.tableHeadingText.length)) {
         this.headingCount = headerClassCount;
