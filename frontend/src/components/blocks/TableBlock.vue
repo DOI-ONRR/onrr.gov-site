@@ -59,15 +59,11 @@ export default {
       if (document.getElementsByClassName('heading-final') && document.getElementsByClassName('heading-final')[this.headingCount] &&
         (this.block.data && this.block.data.tableHeadingText && this.block.data.tableHeadingText[this.headingCount])) {
         document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
-        console.log('the value tunes:- ' + JSON.stringify(this.block));
-        let alignValue = this.block?.tunes?.alignmentTune?.alignment ? this.block.tunes.alignmentTune.alignment : 'left'
+        let alignValue = this.block?.data?.headingAlign ? this.block.data.tableHeadingAlignTune : 'left'
         document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign = alignValue;
         console.log('the tune value:- ' + alignValue);
       }
       let tableHeadingTextcount = this.block.data?.tableHeadingText?.length ? this.block.data?.tableHeadingText?.length : 0;
-      console.log(this.headingCount + " the count of both:- " + tableHeadingTextcount);
-      console.log(this.headingCount + " the headerClassCount of both:- " + headerClassCount);
-
       if (this.headingCount <= tableHeadingTextcount) {
         this.headingCount = headerClassCount;
       }

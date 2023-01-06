@@ -138,7 +138,8 @@ export default class TableBlock {
     const result = {
       withHeadings: this.data.withHeadings,
       content: tableContent,
-      tableHeadingText: tableHeadingText && tableHeadingText.headingObject ? tableHeadingText.headingObject : [""]
+      tableHeadingText: tableHeadingText && tableHeadingText.headingObject ? tableHeadingText.headingObject : [""],
+      tableHeadingAlignTune: tableHeadingText && tableHeadingText.headingAlign ? tableHeadingText.headingAlign : [""]
     };
     console.log('the final result:- '+JSON.stringify(result));
     return result;
