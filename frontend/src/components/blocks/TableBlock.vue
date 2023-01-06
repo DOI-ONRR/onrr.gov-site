@@ -62,7 +62,9 @@ export default {
           document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign=alignValue;
           console.log('the tune value:- '+alignValue);
       }
-      if (this.headingCount <= (this.block.data && this.block.data.tableHeadingText && this.block.data.tableHeadingText.length)) {
+      let tableHeadingTextcount = this.block.data?.tableHeadingText?.length ? this.block.data?.tableHeadingText?.length : 0;
+      console.log(this.headingCount+" the count of both:- "+tableHeadingTextcount);
+      if (this.headingCount <= tableHeadingTextcount) {
         this.headingCount = headerClassCount;
       }
 
