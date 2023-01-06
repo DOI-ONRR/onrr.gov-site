@@ -58,7 +58,8 @@ export default {
       let headerClassCount = document.getElementsByClassName('heading-final').length || 0;
       if (document.getElementsByClassName('heading-final') && document.getElementsByClassName('heading-final')[this.headingCount]) {
           document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
-          let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? this.block.tunes.alignmentTune.alignment : 'left'
+          console.log('the value tunes:- '+JSON.stringify(this.block));
+          let alignValue = this.block?.tunes?.alignmentTune?.alignment ? this.block.tunes.alignmentTune.alignment : 'left'
           document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign=alignValue;
           console.log('the tune value:- '+alignValue);
       }
