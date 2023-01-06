@@ -28,7 +28,6 @@ export default {
     return {
       rightAlignedIndexes: [],
       headingCount: 0,
-      tuneal:[],
       titleValue: ''
     }
   },
@@ -89,9 +88,6 @@ export default {
         if (this.rightAlignedIndexes.includes(idx)) {
           return 'text-right'
         } else {
-          let ab = (this.block?.tunes?.alignmentTune?.alignment) ? `text-${this.block?.tunes?.alignmentTune?.alignment}` : 'text-left';
-          this.tuneal.push(ab);
-          console.log('the tune value:- '+JSON.stringify(this.tuneal));
           return (this.block?.tunes?.alignmentTune?.alignment) ? `text-${this.block?.tunes?.alignmentTune?.alignment}` : 'text-left'
         }
       }
