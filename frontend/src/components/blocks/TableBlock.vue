@@ -3,7 +3,7 @@
     <template v-slot:default>
       <thead>
         <h5 class="heading-text-title" v-html="countUpdate()"></h5>
-        <h5 :class="[textClass, 'heading-final']"></h5>
+        <h5 class="heading-final"></h5>
         <tr>
           <th v-for="(item, index) in tableHeaderItems" :key="index" :class="[textClass(index), 'black--text', 'pa-2']">
             <span v-html="item"></span>
@@ -58,12 +58,14 @@ export default {
       let headerClassCount = document.getElementsByClassName('heading-final').length || 0;
       if (document.getElementsByClassName('heading-final') && document.getElementsByClassName('heading-final')[this.headingCount]) {
           document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
-          let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? `${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
+          let alignValue = (this.block?.tunes?.alignmentTune?.alignment) ? this.block.tunes.alignmentTune.alignment : 'left'
           document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign=alignValue;
           console.log('the tune value:- '+alignValue);
       }
       let tableHeadingTextcount = this.block.data?.tableHeadingText?.length ? this.block.data?.tableHeadingText?.length : 0;
       console.log(this.headingCount+" the count of both:- "+tableHeadingTextcount);
+      console.log(this.headingCount+" the headerClassCount of both:- "+headerClassCount);
+      
       if (this.headingCount <= tableHeadingTextcount) {
         this.headingCount = headerClassCount;
       }
@@ -82,7 +84,6 @@ export default {
     },
     textClass() {
       return (idx) => {
-        console.log('the block value:- ' + JSON.stringify(this.block));
         if (this.rightAlignedIndexes.includes(idx)) {
           return 'text-right'
         } else {
