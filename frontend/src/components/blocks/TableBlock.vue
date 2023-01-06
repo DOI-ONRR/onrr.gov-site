@@ -1,9 +1,10 @@
 <template>
+  <div>
+    <h5 class="heading-text-title" v-html="countUpdate()"></h5>
+    <h5 class="heading-final"></h5>
   <v-simple-table>
     <template v-slot:default>
       <thead>
-        <h5 class="heading-text-title" v-html="countUpdate()"></h5>
-        <h5 class="heading-final"></h5>
         <tr>
           <th v-for="(item, index) in tableHeaderItems" :key="index" :class="[textClass(index), 'black--text', 'pa-2']">
             <span v-html="item"></span>
@@ -19,6 +20,7 @@
       </tbody>
     </template>
   </v-simple-table>
+  </div>
 </template>
 
 <script>
@@ -61,7 +63,6 @@ export default {
         document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
         let alignValue = (this.block.data && this.block.data.tableHeadingAlignTune && this.block.data.tableHeadingAlignTune[this.headingCount])  ? this.block.data.tableHeadingAlignTune[this.headingCount] : 'left';
         document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign = alignValue;
-        console.log('the tune value:- ' + alignValue);
       }
       let tableHeadingTextcount = this.block.data?.tableHeadingText?.length ? this.block.data?.tableHeadingText?.length : 0;
       if (this.headingCount <= tableHeadingTextcount) {
@@ -105,6 +106,6 @@ export default {
 }
 
 .heading-final {
-  width: 500%;
+font-size: 16px;
 }
 </style> 
