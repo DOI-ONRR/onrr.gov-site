@@ -59,7 +59,7 @@ export default {
       if (document.getElementsByClassName('heading-final') && document.getElementsByClassName('heading-final')[this.headingCount] &&
         (this.block.data && this.block.data.tableHeadingText && this.block.data.tableHeadingText[this.headingCount])) {
         document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
-        let alignValue = this.block?.data?.headingAlign ? this.block.data.tableHeadingAlignTune : 'left'
+        let alignValue = this.block?.data?.tableHeadingAlignTune ? this.block.data.tableHeadingAlignTune : 'left'
         document.getElementsByClassName('heading-final')[this.headingCount].style.textAlign = alignValue;
         console.log('the tune value:- ' + alignValue);
       }

@@ -1025,7 +1025,6 @@ export default class Table {
     data.headingObject = [];
     data.headingAlign = [];
     const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
-    const headingAlignClosest = document.getElementsByClassName("heading-class");
     // if(headerElement2 && headerElement2.length){
     //   console.log('the value setHeaderText length2:-  '+headerElement2.length);}
       // if(headerElement3 && headerElement3.length){
@@ -1034,9 +1033,9 @@ export default class Table {
     if (headingTextValue && headingTextValue.length > 0) {
       for(let headerIndex=0;headerIndex <= headingTextValue.length;headerIndex++){
         if(headingTextValue[headerIndex]){
-        if(headingAlignClosest[headerIndex].closest('.ce-tune-alignment--center')){
+        if(headingTextValue[headerIndex].closest('.ce-tune-alignment--center')){
           data.headingAlign.push("center");
-        } else if (headingAlignClosest[headerIndex].closest('.ce-tune-alignment--left')){
+        } else if (headingTextValue[headerIndex].closest('.ce-tune-alignment--left')){
           data.headingAlign.push("left");
         } else {
           data.headingAlign.push("right");
