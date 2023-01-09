@@ -334,7 +334,7 @@ export default class Table {
   setHeaderText(data) {
     const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
     console.log('the set header fill headelement len :-'+headerElement.length);
-    console.log('the set header fill text :-'+JSON.stringify(data.tableHeadingText));
+    console.log('the set header fill text :-'+JSON.stringify(this.data.tableHeadingText));
     if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
         if(headerElement[headerIndex]){
@@ -594,6 +594,11 @@ export default class Table {
   fill() {
     const data = this.data;
     console.log('the fill data:- '+JSON.stringify(data));
+    if(data && data.tableHeadingText){
+      const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
+      console.log('the fill funciton header len:- '+headerElement);
+      this.setHeaderText(data);
+    }
     this.setHeaderText(data);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {

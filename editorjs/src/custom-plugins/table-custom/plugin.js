@@ -60,7 +60,7 @@ export default class TableBlock {
     this.data = {
       withHeadings: this.getConfig('withHeadings', true, data),
       content: data && data.content ? data.content : [],
-      tableHeadingText: data && data.tableHeadingText ? data.tableHeadingText : [""]
+      tableHeadingText: data && data.tableHeadingText ? data.tableHeadingText : []
     };
     this.table = null;
   }
