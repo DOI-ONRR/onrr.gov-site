@@ -332,9 +332,10 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    if (data.tableHeadingText.length > 0) {
-      const headerElement = document.getElementsByClassName('heading-class');
-      console.log('the set header fill headelement len :-'+headerElement.length);
+    const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
+    console.log('the set header fill headelement len :-'+headerElement.length);
+    console.log('the set header fill text :-'+JSON.stringify(data.tableHeadingText));
+    if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
         if(headerElement[headerIndex]){
         headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
@@ -428,44 +429,44 @@ export default class Table {
     return insertedRow;
   };
 
-  // addHeading(index = 0, setFocus = true) {
-  //   let insertedHeading;
-  //   let rowElem = $.make('div', CSS.headingDiv);
-  //   insertedRow = this.table.appendChild(rowElem);
+  addHeading(index = -1, setFocus = true) {
+    let insertedHeading;
+    let rowElem = $.make('div', CSS.headingDiv);
+    insertedRow = this.table.appendChild(rowElem);
 
-  //   // if (this.tunes.withHeadings) {
-  //   //   this.removeHeadingAttrFromFirstRow();
-  //   // }
+    // if (this.tunes.withHeadings) {
+    //   this.removeHeadingAttrFromFirstRow();
+    // }
 
-  //   // /**
-  //   //  * We remember the number of columns, because it is calculated
-  //   //  * by the number of cells in the first row
-  //   //  * It is necessary that the first line is filled in correctly
-  //   //  */
-  //   // let numberOfColumns = this.numberOfColumns;
+    // /**
+    //  * We remember the number of columns, because it is calculated
+    //  * by the number of cells in the first row
+    //  * It is necessary that the first line is filled in correctly
+    //  */
+    // let numberOfColumns = this.numberOfColumns;
 
-  //   // if (index > 0 && index <= this.numberOfRows) {
-  //   //   let row = this.getRow(index);
+    // if (index > 0 && index <= this.numberOfRows) {
+    //   let row = this.getRow(index);
 
-  //   //   insertedRow = $.insertBefore(rowElem, row);
-  //   // } else {
-  //   //   insertedRow = this.table.appendChild(rowElem);
-  //   // }
+    //   insertedRow = $.insertBefore(rowElem, row);
+    // } else {
+    //   insertedRow = this.table.appendChild(rowElem);
+    // }
 
-  //   // this.fillRow(insertedRow, numberOfColumns);
+    // this.fillRow(insertedRow, numberOfColumns);
 
-  //   // if (this.tunes.withHeadings) {
-  //   //   this.addHeadingAttrToFirstRow();
-  //   // }
+    // if (this.tunes.withHeadings) {
+    //   this.addHeadingAttrToFirstRow();
+    // }
 
-  //   // const insertedRowFirstCell = this.getRowFirstCell(insertedRow);
+    // const insertedRowFirstCell = this.getRowFirstCell(insertedRow);
 
-  //   // if (insertedRowFirstCell && setFocus) {
-  //   //   $.focus(insertedRowFirstCell);
-  //   // }
+    // if (insertedRowFirstCell && setFocus) {
+    //   $.focus(insertedRowFirstCell);
+    // }
 
-  //   return insertedRow;
-  // };
+    return insertedRow;
+  };
 
   /**
    * Delete a column by index
@@ -504,7 +505,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    //this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
+    this.textareaEle = $.make('textarea', CSS.headingClass);
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);
@@ -517,7 +518,6 @@ export default class Table {
     this.wrapper.appendChild(this.toolboxRow.element);
     this.wrapper.appendChild(this.toolboxColumn.element);
     this.wrapper.appendChild(this.table);
-
     //this.wrapper.insertBefore(this.textareaEle);
 
     if (!this.readOnly) {
@@ -594,6 +594,7 @@ export default class Table {
   fill() {
     const data = this.data;
     console.log('the fill data:- '+JSON.stringify(data));
+    this.setHeaderText(data);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
         for (let j = 0; j < data.content[i].length; j++) {
@@ -601,7 +602,6 @@ export default class Table {
         }
       }
     }
-    this.setHeaderText(data);
   }
 
   /**

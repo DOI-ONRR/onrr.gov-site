@@ -92,7 +92,6 @@ export default class TableBlock {
     this.container = $.make('div', this.api.styles.block);
     this.container.appendChild(this.table.getTextAreaEle());
     this.container.appendChild(this.table.getWrapper());
-
     this.table.setHeadingsSetting(this.data.withHeadings);
     return this.container;
   }
