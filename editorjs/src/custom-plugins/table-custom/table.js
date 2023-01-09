@@ -43,7 +43,6 @@ export default class Table {
     this.api = api;
     this.data = data;
     this.config = config;
-    console.log('the constructor data in table js:- '+JSON.stringify(data));
 
     /**
      * DOM nodes
@@ -333,10 +332,9 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.getElementsByClassName('heading-class');
-    console.log('the set header fill headelement len :-'+headerElement.length);
-    console.log('the set header fill text :-'+JSON.stringify(data.tableHeadingText));
-    if (headerElement && headerElement.length > 0) {
+    if (data.tableHeadingText.length > 0) {
+      const headerElement = document.getElementsByClassName('heading-class');
+      console.log('the set header fill headelement len :-'+headerElement.length);
       for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
         if(headerElement[headerIndex]){
         headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
@@ -506,7 +504,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    this.textareaEle = $.make('textarea', CSS.headingClass);
+    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);
@@ -516,9 +514,11 @@ export default class Table {
       this.wrapper.classList.add(CSS.wrapperReadOnly);
     }
     //this.wrapper.insertBefore(textareaEle,this.table);
+    this.wrapper.appendChild(this.textareaEle);
     this.wrapper.appendChild(this.toolboxRow.element);
     this.wrapper.appendChild(this.toolboxColumn.element);
     this.wrapper.appendChild(this.table);
+
     //this.wrapper.insertBefore(this.textareaEle);
 
     if (!this.readOnly) {
