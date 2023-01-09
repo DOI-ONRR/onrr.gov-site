@@ -334,19 +334,11 @@ export default class Table {
   }
   setHeaderText(data) {
     const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
-    const headerElement2 = document.querySelector(`.${CSS.headingClass}`);
-    const headerElement3 = document.getElementsByClassName("heading-class");
-    console.log('the value setHeaderText length:-  '+headerElement.length);
-    if(headerElement2 && headerElement2.length){
-    console.log('the value setHeaderText length2:-  '+headerElement2.length);}
-    if(headerElement3 && headerElement3.length){
-      console.log('the value setHeaderText length2:-  '+headerElement3.length);}
-    console.log('the value setHeaderText length:-  '+headerElement);
+    console.log('the set header fill headelement len :-'+headerElement.length);
+    console.log('the set header fill text :-'+JSON.stringify(data.tableHeadingText));
     if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
         if(headerElement[headerIndex]){
-        console.log(headerIndex+' the value setHeaderText inside length:-  '+headerElement.length);
-        console.log('the value setHeaderText innerhtml:-  '+JSON.stringify(data.tableHeadingText[headerIndex]));
         headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
         }
       }
@@ -438,44 +430,44 @@ export default class Table {
     return insertedRow;
   };
 
-  addHeading(index = -1, setFocus = true) {
-    let insertedHeading;
-    let rowElem = $.make('div', CSS.headingDiv);
-    insertedRow = this.table.appendChild(rowElem);
+  // addHeading(index = 0, setFocus = true) {
+  //   let insertedHeading;
+  //   let rowElem = $.make('div', CSS.headingDiv);
+  //   insertedRow = this.table.appendChild(rowElem);
 
-    // if (this.tunes.withHeadings) {
-    //   this.removeHeadingAttrFromFirstRow();
-    // }
+  //   // if (this.tunes.withHeadings) {
+  //   //   this.removeHeadingAttrFromFirstRow();
+  //   // }
 
-    // /**
-    //  * We remember the number of columns, because it is calculated
-    //  * by the number of cells in the first row
-    //  * It is necessary that the first line is filled in correctly
-    //  */
-    // let numberOfColumns = this.numberOfColumns;
+  //   // /**
+  //   //  * We remember the number of columns, because it is calculated
+  //   //  * by the number of cells in the first row
+  //   //  * It is necessary that the first line is filled in correctly
+  //   //  */
+  //   // let numberOfColumns = this.numberOfColumns;
 
-    // if (index > 0 && index <= this.numberOfRows) {
-    //   let row = this.getRow(index);
+  //   // if (index > 0 && index <= this.numberOfRows) {
+  //   //   let row = this.getRow(index);
 
-    //   insertedRow = $.insertBefore(rowElem, row);
-    // } else {
-    //   insertedRow = this.table.appendChild(rowElem);
-    // }
+  //   //   insertedRow = $.insertBefore(rowElem, row);
+  //   // } else {
+  //   //   insertedRow = this.table.appendChild(rowElem);
+  //   // }
 
-    // this.fillRow(insertedRow, numberOfColumns);
+  //   // this.fillRow(insertedRow, numberOfColumns);
 
-    // if (this.tunes.withHeadings) {
-    //   this.addHeadingAttrToFirstRow();
-    // }
+  //   // if (this.tunes.withHeadings) {
+  //   //   this.addHeadingAttrToFirstRow();
+  //   // }
 
-    // const insertedRowFirstCell = this.getRowFirstCell(insertedRow);
+  //   // const insertedRowFirstCell = this.getRowFirstCell(insertedRow);
 
-    // if (insertedRowFirstCell && setFocus) {
-    //   $.focus(insertedRowFirstCell);
-    // }
+  //   // if (insertedRowFirstCell && setFocus) {
+  //   //   $.focus(insertedRowFirstCell);
+  //   // }
 
-    return insertedRow;
-  };
+  //   return insertedRow;
+  // };
 
   /**
    * Delete a column by index
@@ -602,6 +594,7 @@ export default class Table {
    */
   fill() {
     const data = this.data;
+    console.log('the fill data:- '+JSON.stringify(data));
     this.setHeaderText(data);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
