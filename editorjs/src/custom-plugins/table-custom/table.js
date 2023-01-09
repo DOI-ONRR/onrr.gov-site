@@ -60,8 +60,9 @@ export default class Table {
     /**
      * Create table and wrapper elements
      */
-    this.createTableWrapper();
     this.createTableHeading();
+    this.createTableWrapper();
+    
 
     // Current hovered row index
     this.hoveredRow = 0;
@@ -504,7 +505,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
+    //this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);
