@@ -49,7 +49,7 @@ export default class Table {
      */
     this.wrapper = null;
     this.table = null;
-    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
+    this.textareaEle = null;
 
     /**
      * Toolbox for managing of columns
@@ -514,7 +514,6 @@ export default class Table {
       this.wrapper.classList.add(CSS.wrapperReadOnly);
     }
     //this.wrapper.insertBefore(textareaEle,this.table);
-    //this.wrapper.appendChild(this.textareaEle);
     this.wrapper.appendChild(this.toolboxRow.element);
     this.wrapper.appendChild(this.toolboxColumn.element);
     this.wrapper.appendChild(this.table);
@@ -594,6 +593,7 @@ export default class Table {
    */
   fill() {
     const data = this.data;
+    console.log('the fill data:- '+JSON.stringify(data));
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
         for (let j = 0; j < data.content[i].length; j++) {
