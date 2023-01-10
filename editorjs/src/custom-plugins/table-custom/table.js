@@ -49,7 +49,7 @@ export default class Table {
      */
     this.wrapper = null;
     this.table = null;
-    this.textareaEle = null;
+    this.textareaEle = $.make('h5', CSS.headingClass);
 
     /**
      * Toolbox for managing of columns
@@ -142,6 +142,7 @@ export default class Table {
   }
 
   getTextAreaEle() {
+    console.log('the value of textare:- '+this.textareaEle);
     return this.textareaEle;
   }
 
@@ -333,9 +334,14 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = this.table.querySelectorAll(".heading-class");
-    console.log('the set table fill this tableheaderGetClass element :-' + JSON.stringify(headerElement.length));
+    const headerElement = document.querySelectorAll('.heading-class');
+    const tableheader = this.table.querySelectorAll('.heading-class')
+    console.log('the set header fill text :-' + JSON.stringify(data));
+    console.log('the set header fill this text :-' + JSON.stringify(this.data));
+    console.log('the set header fill this header element :-' + JSON.stringify(headerElement.length));
+    console.log('the set header fill this tableheader :-' + JSON.stringify(tableheader.length));
       for (let headerIndex = 0; headerIndex <= data.tableHeadingText.length; headerIndex++) {
+        console.log('the set header fill this header index :-' + JSON.stringify(headerElement[headerIndex]));
         if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
           headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
@@ -503,7 +509,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    //this.textareaEle = $.make('h5', CSS.headingClass);
+    this.textareaEle = $.make('h5', CSS.headingClass);
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);
@@ -515,7 +521,6 @@ export default class Table {
     //this.wrapper.insertBefore(textareaEle,this.table);
     this.wrapper.appendChild(this.toolboxRow.element);
     this.wrapper.appendChild(this.toolboxColumn.element);
-    this.wrapper.appendChild(this.textareaEle);
     this.wrapper.appendChild(this.table);
     //this.wrapper.insertBefore(this.textareaEle);
 
@@ -1016,8 +1021,8 @@ export default class Table {
     data.headingObject = [];
     data.headingAlign = [];
     const headingTextValue = document.getElementsByClassName('heading-class');
-    const headingTextValueQurey = this.table.querySelectorAll('.heading-class');
-    console.log('the table qre text value:- ' + headingTextValueQurey.length);
+    const headingTextValueQurey = document.querySelectorAll('.heading-class');
+    console.log('the qurey text value:- ' + headingTextValueQurey.length);
     console.log('the headingTextValue text value:- ' + headingTextValue.length);
     // if(headerElement2 && headerElement2.length){
     //   console.log('the value setHeaderText length2:-  '+headerElement2.length);}

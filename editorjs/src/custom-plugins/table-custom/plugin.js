@@ -86,7 +86,10 @@ export default class TableBlock {
   render() {
     /** creating table */
     this.table = new Table(this.readOnly, this.api, this.data, this.config);
-
+    console.log('the value of getTextaread in render:- '+this.table.getTextAreaEle());
+    console.log('the value of data in render:- '+this.data);
+    console.log('the value of config in render:- '+this.config);
+    console.log('the value of table in render:- '+this.table);
     /** creating container around table */
     this.container = $.make('div', this.api.styles.block);
     this.container.appendChild(this.table.getTextAreaEle());
