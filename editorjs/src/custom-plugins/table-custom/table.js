@@ -332,7 +332,7 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.querySelectorAll('.heading-class');
+    const headerElement = document.getElementsByClassName('heading-class');
     console.log('the lenght of headerElement:- '+headerElement.length);
     
     if (headerElement && headerElement.length > 0) {
@@ -1042,7 +1042,7 @@ export default class Table {
           console.log('the header value with getclass:- ' + headingTextValue[headerIndex].innerHTML)
           console.log('the header value with query:- ' + headingTextValueQurey[headerIndex].innerHTML)
           if(headingTextValue[headerIndex]){
-          data.headingObject.push(headingTextValue[headerIndex].innerHTML || 'Narasimhaget');
+          data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
           }
         }
       }
