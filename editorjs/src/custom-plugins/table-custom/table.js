@@ -332,7 +332,7 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = setTimeOut(document.querySelectorAll('.heading-class'),3000);
+    const headerElement = document.querySelectorAll('.heading-class');
     console.log('the lenght of headerElement:- '+headerElement.length);
     
     if (headerElement && headerElement.length > 0) {
