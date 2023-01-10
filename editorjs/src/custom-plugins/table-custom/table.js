@@ -340,9 +340,9 @@ export default class Table {
       for (let headerIndex = 0; headerIndex <= data.tableHeadingText.length; headerIndex++) {
         console.log('the lenght of headerElement element:- '+headerElement[headerIndex]);
         console.log('the lenght of headerElement inner html :- '+headerElement[headerIndex].innerHTML);
-        if (headerElement[headerIndex] && data.tableHeadingText[headerIndex] && data.tableHeadingText[headerIndex].length > 0) {
+        if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
           console.log('the if set heaer:- '+JSON.stringify(data.tableHeadingText[headerIndex]));
-          headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
+          headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || 'NarasimhaSetHead';
         }
       }
     }
@@ -598,7 +598,7 @@ export default class Table {
   fill() {
     const data = this.data;
     console.log('the fill data:- ' + JSON.stringify(data));
-    setTimeout(this.setHeaderText(data),3000);
+    this.setHeaderText(data);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
         for (let j = 0; j < data.content[i].length; j++) {
@@ -1041,8 +1041,8 @@ export default class Table {
           }
           console.log('the header value with getclass:- ' + headingTextValue[headerIndex].innerHTML)
           console.log('the header value with query:- ' + headingTextValueQurey[headerIndex].innerHTML)
-          if(headingTextValue[headerIndex].innerHTML.length > 0){
-          data.headingObject.push(headingTextValue[headerIndex].innerHTML || 'Narasimha');
+          if(headingTextValue[headerIndex]){
+          data.headingObject.push(headingTextValue[headerIndex].innerHTML || 'Narasimhaget');
           }
         }
       }
