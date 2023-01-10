@@ -335,9 +335,9 @@ export default class Table {
     const headerElement = document.querySelectorAll('.heading-class');
     console.log('the set header fill text :-' + JSON.stringify(data));
     console.log('the set header fill this text :-' + JSON.stringify(this.data));
+
     if (headerElement && headerElement.length > 0) {
-      console.log('data.tableHeadingText.length '+data.tableHeadingText.length);
-      let value=data.tableHeadingText.length-1;
+      debugger;
       for (let headerIndex = 0; headerIndex <= value; headerIndex++) {
         if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
           headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
@@ -1039,7 +1039,9 @@ export default class Table {
           }
           console.log('the header value with getclass:- ' + headingTextValue[headerIndex].innerHTML)
           console.log('the header value with query:- ' + headingTextValueQurey[headerIndex].innerHTML)
+          if(headingTextValue[headerIndex].innerHTML.length > 0){
           data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
+          }
         }
       }
     }
