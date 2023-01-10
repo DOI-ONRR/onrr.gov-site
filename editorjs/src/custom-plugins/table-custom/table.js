@@ -49,7 +49,7 @@ export default class Table {
      */
     this.wrapper = null;
     this.table = null;
-    this.textareaEle = null;
+    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
 
     /**
      * Toolbox for managing of columns
