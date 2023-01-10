@@ -49,7 +49,7 @@ export default class Table {
      */
     this.wrapper = null;
     this.table = null;
-    this.textareaEle = $.make('h5', CSS.headingClass);
+    this.textareaEle = null;
 
     /**
      * Toolbox for managing of columns
@@ -509,7 +509,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    this.textareaEle = $.make('h5', CSS.headingClass);
+    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);

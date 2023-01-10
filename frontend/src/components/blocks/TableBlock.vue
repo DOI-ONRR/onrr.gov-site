@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h5 class="heading-final"  v-html="countUpdate()"></h5>
+    <h5 class="heading-final"></h5>
+    <h5 class="heading-text-title" v-html="countUpdate()"></h5>
   <v-simple-table>
     <template v-slot:default>
       <thead>
@@ -58,7 +59,7 @@ export default {
     countUpdate() {
       let headerClassCount = document.getElementsByClassName('heading-final').length || 0;
       console.log('the value this.block.data:- '+JSON.stringify(this.block.data));
-      console.log('the value headerClassCount:- '+JSON.stringify(headerClassCount));
+      console.log('the value headerClassCount:- '+JSON.stringify( document.getElementsByClassName('heading-final').length ));
       if (document.getElementsByClassName('heading-final') && document.getElementsByClassName('heading-final')[this.headingCount] &&
         (this.block.data && this.block.data.tableHeadingText && this.block.data.tableHeadingText[this.headingCount])) {
         document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
@@ -70,7 +71,7 @@ export default {
         this.headingCount = headerClassCount;
       }
 
-      return this.block.tableHeadingText[this.headingCount];
+      return "";
     }
   },
   computed: {
