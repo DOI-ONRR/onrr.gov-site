@@ -594,7 +594,7 @@ export default class Table {
   fill() {
     const data = this.data;
     console.log('the fill data:- ' + JSON.stringify(data));
-    this.setHeaderText(data);
+    setTimeout(this.setHeaderText(data),3000);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
         for (let j = 0; j < data.content[i].length; j++) {
