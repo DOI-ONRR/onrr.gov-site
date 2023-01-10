@@ -56,7 +56,6 @@ export default class TableBlock {
     this.api = api;
     this.readOnly = readOnly;
     this.config = config;
-    console.log('the constructor data:- '+JSON.stringify(data));
     this.data = {
       withHeadings: this.getConfig('withHeadings', true, data),
       content: data && data.content ? data.content : [],
@@ -137,8 +136,8 @@ export default class TableBlock {
     const result = {
       withHeadings: this.data.withHeadings,
       content: tableContent,
-      tableHeadingText: tableHeadingText && tableHeadingText.headingObject ? tableHeadingText.headingObject : [""],
-      tableHeadingAlignTune: tableHeadingText && tableHeadingText.headingAlign ? tableHeadingText.headingAlign : [""]
+      tableHeadingText: tableHeadingText && tableHeadingText.headingObject ? tableHeadingText.headingObject : [],
+      tableHeadingAlignTune: tableHeadingText && tableHeadingText.headingAlign ? tableHeadingText.headingAlign : []
     };
     console.log('the final result:- '+JSON.stringify(result));
     return result;
