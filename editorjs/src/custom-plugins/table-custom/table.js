@@ -505,7 +505,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    this.textareaEle = $.make('textarea', CSS.headingClass);
+    this.textareaEle = $.make('caption', CSS.headingClass);
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);
@@ -534,7 +534,7 @@ export default class Table {
   }
 
   createTableHeading() {
-    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
+    this.textareaEle = $.make('caption', CSS.headingClass, { contentEditable: "true" });
     //this.textareaEle.innerHTML = [''];
     //this.textareaEle.dataset.placeholder = this.api.i18n.t(this.data.tableHeadingText || '');
   }
@@ -1037,7 +1037,9 @@ export default class Table {
           }
           console.log('the header value with getclass:- ' + headingTextValue[headerIndex].innerHTML)
           console.log('the header value with query:- ' + headingTextValueQurey[headerIndex].innerHTML)
+          if(headingTextValue[headerIndex]){
           data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
+          }
         }
       }
     }
