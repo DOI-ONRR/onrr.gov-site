@@ -333,12 +333,14 @@ export default class Table {
   }
   setHeaderText(data) {
     const headerElement = document.querySelectorAll('.heading-class');
-    console.log('the set header fill text :-'+JSON.stringify(data));
-    console.log('the set header fill this text :-'+JSON.stringify(this.data));
+    console.log('the set header fill text :-' + JSON.stringify(data));
+    console.log('the set header fill this text :-' + JSON.stringify(this.data));
     if (headerElement && headerElement.length > 0) {
-      for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
-        if(headerElement[headerIndex] && data.tableHeadingText[headerIndex]){
-        headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
+      console.log('data.tableHeadingText.length '+data.tableHeadingText.length);
+      let value=data.tableHeadingText.length-1;
+      for (let headerIndex = 0; headerIndex <= value; headerIndex++) {
+        if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
+          headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
     }
@@ -593,12 +595,7 @@ export default class Table {
    */
   fill() {
     const data = this.data;
-    console.log('the fill data:- '+JSON.stringify(data));
-    if(data && data.tableHeadingText){
-      const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
-      console.log('the fill funciton header len:- '+headerElement);
-      this.setHeaderText(data);
-    }
+    console.log('the fill data:- ' + JSON.stringify(data));
     this.setHeaderText(data);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
@@ -1023,30 +1020,30 @@ export default class Table {
     data.headingAlign = [];
     const headingTextValue = document.getElementsByClassName('heading-class');
     const headingTextValueQurey = document.querySelectorAll('.heading-class');
-    console.log('the qurey text value:- '+headingTextValueQurey.length);
-    console.log('the headingTextValue text value:- '+headingTextValue.length);
+    console.log('the qurey text value:- ' + headingTextValueQurey.length);
+    console.log('the headingTextValue text value:- ' + headingTextValue.length);
     // if(headerElement2 && headerElement2.length){
     //   console.log('the value setHeaderText length2:-  '+headerElement2.length);}
-      // if(headerElement3 && headerElement3.length){
-      //   console.log('the value setHeaderText length2:-  '+headerElement3.length);}
-    
+    // if(headerElement3 && headerElement3.length){
+    //   console.log('the value setHeaderText length2:-  '+headerElement3.length);}
+
     if (headingTextValue && headingTextValue.length > 0) {
-      for(let headerIndex=0;headerIndex <= headingTextValue.length;headerIndex++){
-        if(headingTextValue[headerIndex]){
-        if(headingTextValue[headerIndex].closest('.ce-tune-alignment--center')){
-          data.headingAlign.push("center");
-        } else if (headingTextValue[headerIndex].closest('.ce-tune-alignment--left')){
-          data.headingAlign.push("left");
-        } else {
-          data.headingAlign.push("right");
-        }
-        console.log('the header value with getclass:- '+headingTextValue[headerIndex].innerHTML)
-        console.log('the header value with query:- '+headingTextValueQurey[headerIndex].innerHTML)
-        data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
+      for (let headerIndex = 0; headerIndex <= headingTextValue.length; headerIndex++) {
+        if (headingTextValue[headerIndex]) {
+          if (headingTextValue[headerIndex].closest('.ce-tune-alignment--center')) {
+            data.headingAlign.push("center");
+          } else if (headingTextValue[headerIndex].closest('.ce-tune-alignment--left')) {
+            data.headingAlign.push("left");
+          } else {
+            data.headingAlign.push("right");
+          }
+          console.log('the header value with getclass:- ' + headingTextValue[headerIndex].innerHTML)
+          console.log('the header value with query:- ' + headingTextValueQurey[headerIndex].innerHTML)
+          data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
         }
       }
     }
-    console.log('the heading data:- '+JSON.stringify(data));
+    console.log('the heading data:- ' + JSON.stringify(data));
     return data;
   }
 
