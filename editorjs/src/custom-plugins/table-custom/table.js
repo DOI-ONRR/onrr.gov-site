@@ -49,7 +49,7 @@ export default class Table {
      */
     this.wrapper = null;
     this.table = null;
-    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
+    this.textareaEle = null;
 
     /**
      * Toolbox for managing of columns
@@ -332,17 +332,13 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.getElementsByClassName('heading-class');
-    console.log('the lenght of headerElement:- '+headerElement.length);
-    
+    const headerElement = document.querySelectorAll('.heading-class');
+    console.log('the set header fill text :-' + JSON.stringify(data));
+    console.log('the set header fill this text :-' + JSON.stringify(this.data));
     if (headerElement && headerElement.length > 0) {
-      debugger;
       for (let headerIndex = 0; headerIndex <= data.tableHeadingText.length; headerIndex++) {
-        console.log('the lenght of headerElement element:- '+headerElement[headerIndex]);
-        console.log('the lenght of headerElement inner html :- '+headerElement[headerIndex].innerHTML);
         if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
-          console.log('the if set heaer:- '+JSON.stringify(data.tableHeadingText[headerIndex]));
-          headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || 'NarasimhaSetHead';
+          headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
     }
@@ -1041,9 +1037,7 @@ export default class Table {
           }
           console.log('the header value with getclass:- ' + headingTextValue[headerIndex].innerHTML)
           console.log('the header value with query:- ' + headingTextValueQurey[headerIndex].innerHTML)
-          if(headingTextValue[headerIndex]){
           data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
-          }
         }
       }
     }
