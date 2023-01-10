@@ -58,6 +58,8 @@ export default {
     },
     countUpdate() {
       let headerClassCount = document.getElementsByClassName('heading-final').length || 0;
+      console.log('the value this.block.data:- '+JSON.stringify(this.block.data));
+      console.log('the value headerClassCount:- '+JSON.stringify(headerClassCount));
       if (document.getElementsByClassName('heading-final') && document.getElementsByClassName('heading-final')[this.headingCount] &&
         (this.block.data && this.block.data.tableHeadingText && this.block.data.tableHeadingText[this.headingCount])) {
         document.getElementsByClassName('heading-final')[this.headingCount].innerHTML = this.block.data.tableHeadingText[this.headingCount];
