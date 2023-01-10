@@ -49,7 +49,7 @@ export default class Table {
      */
     this.wrapper = null;
     this.table = null;
-    this.textareaEle = $.make('h5', CSS.headingClass);
+    this.textareaEle = null;
 
     /**
      * Toolbox for managing of columns
@@ -60,8 +60,9 @@ export default class Table {
     /**
      * Create table and wrapper elements
      */
-    this.createTableWrapper();
     this.createTableHeading();
+    this.createTableWrapper();
+    
 
     // Current hovered row index
     this.hoveredRow = 0;
@@ -334,14 +335,13 @@ export default class Table {
   setHeaderText(data) {
     const headerElement = document.querySelectorAll(".heading-class");
     const tableheader = this.table.querySelectorAll(".heading-class");
-    const tableheaderWALL = this.table.querySelector(".heading-class");
-    const headingclass = this.table.querySelector(`.${CSS.headingClass}`);
+    const tableheaderGetClass = this.table.getElementsByClassName(".heading-class");
+    const headingclass = this.table.querySelectorALL(`.${CSS.headingClass}`);
     console.log('the set header fill text :-' + JSON.stringify(data));
     console.log('the set header fill this text :-' + JSON.stringify(this.data));
     console.log('the set header fill this header element :-' + JSON.stringify(headerElement.length));
     console.log('the set table fill this header element :-' + JSON.stringify(tableheader.length));
-    console.log('the set table fill this header element :-' + JSON.stringify(tableheaderWALL.length));
-    console.log('the set table fill this headingclass element :-' + JSON.stringify(headingclass.length));
+    console.log('the set table fill this tableheaderGetClass element :-' + JSON.stringify(tableheaderGetClass.length));
       for (let headerIndex = 0; headerIndex <= data.tableHeadingText.length; headerIndex++) {
         console.log('the set header fill this header index :-' + JSON.stringify(headerElement[headerIndex]));
         if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
@@ -511,7 +511,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    this.textareaEle = $.make('h5', CSS.headingClass);
+    //this.textareaEle = $.make('h5', CSS.headingClass);
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);
@@ -523,6 +523,7 @@ export default class Table {
     //this.wrapper.insertBefore(textareaEle,this.table);
     this.wrapper.appendChild(this.toolboxRow.element);
     this.wrapper.appendChild(this.toolboxColumn.element);
+    this.wrapper.appendChild(this.textareaEle);
     this.wrapper.appendChild(this.table);
     //this.wrapper.insertBefore(this.textareaEle);
 
