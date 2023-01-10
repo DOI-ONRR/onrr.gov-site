@@ -133,6 +133,7 @@ export default class TableBlock {
   save() {
     const tableContent = this.table.getData();
     const tableHeadingText = this.table.getHeaderData();
+    console.log('the tableHeadingText in save:- '+JSON.stringify(tableHeadingText));
     const result = {
       withHeadings: this.data.withHeadings,
       content: tableContent,

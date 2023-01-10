@@ -1021,7 +1021,10 @@ export default class Table {
     const data = {};
     data.headingObject = [];
     data.headingAlign = [];
-    const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
+    const headingTextValue = document.getElementsByClassName('heading-class');
+    const headingTextValueQurey = document.querySelector(`.heading-class`);
+    console.log('the qurey text value:- '+headingTextValueQurey.length);
+    console.log('the headingTextValue text value:- '+headingTextValue.length);
     // if(headerElement2 && headerElement2.length){
     //   console.log('the value setHeaderText length2:-  '+headerElement2.length);}
       // if(headerElement3 && headerElement3.length){
