@@ -333,13 +333,10 @@ export default class Table {
   }
   setHeaderText(data) {
     const headerElement = document.querySelectorAll('.heading-class');
-    console.log('the set header fill text :-' + JSON.stringify(data));
-    console.log('the set header fill this text :-' + JSON.stringify(this.data));
-
     if (headerElement && headerElement.length > 0) {
       debugger;
-      for (let headerIndex = 0; headerIndex <= value; headerIndex++) {
-        if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
+      for (let headerIndex = 0; headerIndex <= data.tableHeadingText.length; headerIndex++) {
+        if (headerElement[headerIndex] && data.tableHeadingText[headerIndex] && data.tableHeadingText[headerIndex].length > 0) {
           headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
