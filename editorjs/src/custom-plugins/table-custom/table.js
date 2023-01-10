@@ -337,7 +337,7 @@ export default class Table {
     console.log('the set header fill this text :-'+JSON.stringify(this.data));
     if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
-        if(headerElement[headerIndex]){
+        if(headerElement[headerIndex] && data.tableHeadingText[headerIndex]){
         headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
