@@ -1022,7 +1022,7 @@ export default class Table {
     data.headingObject = [];
     data.headingAlign = [];
     const headingTextValue = document.getElementsByClassName('heading-class');
-    const headingTextValueQurey = document.querySelector(`.heading-class`);
+    const headingTextValueQurey = document.querySelectorAll('.heading-class');
     console.log('the qurey text value:- '+headingTextValueQurey.length);
     console.log('the headingTextValue text value:- '+headingTextValue.length);
     // if(headerElement2 && headerElement2.length){
@@ -1040,7 +1040,9 @@ export default class Table {
         } else {
           data.headingAlign.push("right");
         }
-        data.headingObject.push(headingTextValue[headerIndex].innerHTML);
+        console.log('the header value with getclass:- '+headingTextValue[headerIndex].innerHTML)
+        console.log('the header value with query:- '+headingTextValueQurey[headerIndex].innerHTML)
+        data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
         }
       }
     }
