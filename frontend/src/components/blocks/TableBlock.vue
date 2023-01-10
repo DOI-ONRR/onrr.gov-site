@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h5 class="heading-final"></h5>
-    <h5 class="heading-text-title" v-html="countUpdate()"></h5>
+    <h5 class="heading-final"  v-html="countUpdate()"></h5>
   <v-simple-table>
     <template v-slot:default>
       <thead>
@@ -71,7 +70,7 @@ export default {
         this.headingCount = headerClassCount;
       }
 
-      return "";
+      return this.block.tableHeadingText[this.headingCount];
     }
   },
   computed: {
