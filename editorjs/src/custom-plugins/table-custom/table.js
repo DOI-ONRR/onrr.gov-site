@@ -341,6 +341,7 @@ export default class Table {
         console.log('the lenght of headerElement element:- '+headerElement[headerIndex]);
         console.log('the lenght of headerElement inner html :- '+headerElement[headerIndex].innerHTML);
         if (headerElement[headerIndex] && data.tableHeadingText[headerIndex] && data.tableHeadingText[headerIndex].length > 0) {
+          console.log('the if set heaer:- '+JSON.stringify(data.tableHeadingText[headerIndex]));
           headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
@@ -597,7 +598,7 @@ export default class Table {
   fill() {
     const data = this.data;
     console.log('the fill data:- ' + JSON.stringify(data));
-    this.setHeaderText(data);
+    setTimeout(this.setHeaderText(data),3000);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
         for (let j = 0; j < data.content[i].length; j++) {
@@ -1041,7 +1042,7 @@ export default class Table {
           console.log('the header value with getclass:- ' + headingTextValue[headerIndex].innerHTML)
           console.log('the header value with query:- ' + headingTextValueQurey[headerIndex].innerHTML)
           if(headingTextValue[headerIndex].innerHTML.length > 0){
-          data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
+          data.headingObject.push(headingTextValue[headerIndex].innerHTML || 'Narasimha');
           }
         }
       }
