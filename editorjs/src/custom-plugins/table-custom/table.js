@@ -332,13 +332,13 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
-    console.log('the set header fill headelement len :-'+headerElement.length);
-    console.log('the set header fill text :-'+JSON.stringify(this.data.tableHeadingText));
+    const headerElement = document.querySelectorAll('.heading-class');
+    console.log('the set header fill text :-'+JSON.stringify(data));
+    console.log('the set header fill this text :-'+JSON.stringify(this.data));
     if (headerElement && headerElement.length > 0) {
       for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
         if(headerElement[headerIndex]){
-        headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
+        headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
     }
