@@ -332,10 +332,14 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.querySelectorAll('.heading-class');
+    const headerElement = setTimeOut(document.querySelectorAll('.heading-class'),3000);
+    console.log('the lenght of headerElement:- '+headerElement.length);
+    
     if (headerElement && headerElement.length > 0) {
       debugger;
       for (let headerIndex = 0; headerIndex <= data.tableHeadingText.length; headerIndex++) {
+        console.log('the lenght of headerElement element:- '+headerElement[headerIndex]);
+        console.log('the lenght of headerElement inner html :- '+headerElement[headerIndex].innerHTML);
         if (headerElement[headerIndex] && data.tableHeadingText[headerIndex] && data.tableHeadingText[headerIndex].length > 0) {
           headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
