@@ -333,17 +333,9 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.querySelectorAll(".heading-class");
-    const tableheader = this.table.querySelectorAll(".heading-class");
-    const tableheaderGetClass = this.table.getElementsByClassName(".heading-class");
-    const headingclass = this.table.querySelectorALL(`.${CSS.headingClass}`);
-    console.log('the set header fill text :-' + JSON.stringify(data));
-    console.log('the set header fill this text :-' + JSON.stringify(this.data));
-    console.log('the set header fill this header element :-' + JSON.stringify(headerElement.length));
-    console.log('the set table fill this header element :-' + JSON.stringify(tableheader.length));
-    console.log('the set table fill this tableheaderGetClass element :-' + JSON.stringify(tableheaderGetClass.length));
+    const headerElement = this.table.querySelectorAll(".heading-class");
+    console.log('the set table fill this tableheaderGetClass element :-' + JSON.stringify(headerElement.length));
       for (let headerIndex = 0; headerIndex <= data.tableHeadingText.length; headerIndex++) {
-        console.log('the set header fill this header index :-' + JSON.stringify(headerElement[headerIndex]));
         if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
           headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
