@@ -43,7 +43,6 @@ export default class Table {
     this.api = api;
     this.data = data;
     this.config = config;
-    console.log('the constructor data in table js:- '+JSON.stringify(data));
 
     /**
      * DOM nodes
@@ -61,8 +60,9 @@ export default class Table {
     /**
      * Create table and wrapper elements
      */
-    this.createTableWrapper();
     this.createTableHeading();
+    this.createTableWrapper();
+    
 
     // Current hovered row index
     this.hoveredRow = 0;
@@ -142,6 +142,7 @@ export default class Table {
   }
 
   getTextAreaEle() {
+    console.log('the value of textare:- '+this.textareaEle);
     return this.textareaEle;
   }
 
@@ -333,24 +334,18 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.getElementsByClassName(`${CSS.headingClass}`);
-    const headerElement2 = document.querySelector(`.${CSS.headingClass}`);
-    const headerElement3 = document.getElementsByClassName("heading-class");
-    console.log('the value setHeaderText length:-  '+headerElement.length);
-    if(headerElement2 && headerElement2.length){
-    console.log('the value setHeaderText length2:-  '+headerElement2.length);}
-    if(headerElement3 && headerElement3.length){
-      console.log('the value setHeaderText length2:-  '+headerElement3.length);}
-    console.log('the value setHeaderText length:-  '+headerElement);
-    if (headerElement && headerElement.length > 0) {
-      for(let headerIndex=0;headerIndex <= data.tableHeadingText.length;headerIndex++){
-        if(headerElement[headerIndex]){
-        console.log(headerIndex+' the value setHeaderText inside length:-  '+headerElement.length);
-        console.log('the value setHeaderText innerhtml:-  '+JSON.stringify(data.tableHeadingText[headerIndex]));
-        headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex];
+    let headerElement = document.querySelectorAll('.heading-class');
+    const tableheader = this.table.querySelectorAll('.heading-class')
+    console.log('the set header fill text :-' + JSON.stringify(data));
+    console.log('the set header fill this text :-' + JSON.stringify(this.data));
+    console.log('the set header fill this header element :-' + JSON.stringify(headerElement.length));
+    console.log('the set header fill this tableheader :-' + JSON.stringify(tableheader.length));
+      for (let headerIndex = 0; headerIndex < data.tableHeadingText.length; headerIndex++) {
+        console.log('the set header fill this header index :-' + JSON.stringify(headerElement[headerIndex]));
+        if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
+          headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
-    }
   }
 
   /**
@@ -514,7 +509,7 @@ export default class Table {
   createTableWrapper() {
     this.wrapper = $.make('div', CSS.wrapper);
     this.table = $.make('div', CSS.table);
-    this.textareaEle = $.make('textarea', CSS.headingClass);
+    this.textareaEle = $.make('h5', CSS.headingClass, { contentEditable: "true" });
 
     // const textareaEle = document.createElement('textarea');
     // textareaEle.classList.add(CSS.headingClass);
@@ -602,6 +597,7 @@ export default class Table {
    */
   fill() {
     const data = this.data;
+    console.log('the fill data:- ' + JSON.stringify(data));
     this.setHeaderText(data);
     if (data && data.content) {
       for (let i = 0; i < data.content.length; i++) {
@@ -623,6 +619,7 @@ export default class Table {
       const newCell = this.createCell();
 
       row.appendChild(newCell);
+
     }
   }
 
@@ -1023,21 +1020,35 @@ export default class Table {
   getHeaderData() {
     const data = {};
     data.headingObject = [];
-    const headingTextValue = document.getElementsByClassName(`${CSS.headingClass}`);
-    const headerElement2 = document.querySelector(`.${CSS.headingClass}`);
-    const headerElement3 = document.getElementsByClassName("heading-class");
+    data.headingAlign = [];
+    const headingTextValue = document.getElementsByClassName('heading-class');
+    const headingTextValueQurey = document.querySelectorAll('.heading-class');
+    console.log('the qurey text value:- ' + headingTextValueQurey.length);
+    console.log('the headingTextValue text value:- ' + headingTextValue.length);
     // if(headerElement2 && headerElement2.length){
     //   console.log('the value setHeaderText length2:-  '+headerElement2.length);}
-      // if(headerElement3 && headerElement3.length){
-      //   console.log('the value setHeaderText length2:-  '+headerElement3.length);}
-    
+    // if(headerElement3 && headerElement3.length){
+    //   console.log('the value setHeaderText length2:-  '+headerElement3.length);}
+
     if (headingTextValue && headingTextValue.length > 0) {
-      for(let headerIndex=0;headerIndex <= headingTextValue.length;headerIndex++){
-        if(headingTextValue[headerIndex]){
-        data.headingObject.push(headingTextValue[headerIndex].innerHTML);
+      for (let headerIndex = 0; headerIndex <= headingTextValue.length; headerIndex++) {
+        if (headingTextValue[headerIndex]) {
+          if (headingTextValue[headerIndex].closest('.ce-tune-alignment--center')) {
+            data.headingAlign.push("center");
+          } else if (headingTextValue[headerIndex].closest('.ce-tune-alignment--left')) {
+            data.headingAlign.push("left");
+          } else {
+            data.headingAlign.push("right");
+          }
+          console.log('the header value with getclass:- ' + headingTextValue[headerIndex].innerHTML)
+          console.log('the header value with query:- ' + headingTextValueQurey[headerIndex].innerHTML)
+          if(headingTextValue[headerIndex]){
+          data.headingObject.push(headingTextValue[headerIndex].innerHTML || '');
+          }
         }
       }
     }
+    console.log('the heading data:- ' + JSON.stringify(data));
     return data;
   }
 

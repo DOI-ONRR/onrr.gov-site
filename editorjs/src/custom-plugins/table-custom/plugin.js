@@ -56,11 +56,10 @@ export default class TableBlock {
     this.api = api;
     this.readOnly = readOnly;
     this.config = config;
-    console.log('the constructor data:- '+JSON.stringify(data));
     this.data = {
       withHeadings: this.getConfig('withHeadings', true, data),
       content: data && data.content ? data.content : [],
-      tableHeadingText: data && data.tableHeadingText ? data.tableHeadingText : [""]
+      tableHeadingText: data && data.tableHeadingText ? data.tableHeadingText : []
     };
     this.table = null;
   }
@@ -87,12 +86,14 @@ export default class TableBlock {
   render() {
     /** creating table */
     this.table = new Table(this.readOnly, this.api, this.data, this.config);
-
+    console.log('the value of getTextaread in render:- '+this.table.getTextAreaEle());
+    console.log('the value of data in render:- '+this.data);
+    console.log('the value of config in render:- '+this.config);
+    console.log('the value of table in render:- '+this.table);
     /** creating container around table */
     this.container = $.make('div', this.api.styles.block);
     this.container.appendChild(this.table.getTextAreaEle());
     this.container.appendChild(this.table.getWrapper());
-
     this.table.setHeadingsSetting(this.data.withHeadings);
     return this.container;
   }
@@ -135,10 +136,12 @@ export default class TableBlock {
   save() {
     const tableContent = this.table.getData();
     const tableHeadingText = this.table.getHeaderData();
+    console.log('the tableHeadingText in save:- '+JSON.stringify(tableHeadingText));
     const result = {
       withHeadings: this.data.withHeadings,
       content: tableContent,
-      tableHeadingText: tableHeadingText && tableHeadingText.headingObject ? tableHeadingText.headingObject : [""]
+      tableHeadingText: tableHeadingText && tableHeadingText.headingObject ? tableHeadingText.headingObject : [],
+      tableHeadingAlignTune: tableHeadingText && tableHeadingText.headingAlign ? tableHeadingText.headingAlign : []
     };
     console.log('the final result:- '+JSON.stringify(result));
     return result;

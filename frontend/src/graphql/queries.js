@@ -226,6 +226,7 @@ export const PRESS_RELEASES_QUERY = gql`
   query {
     press_releases(limit: -1) {
       id
+      status
       title
       date
       file {
