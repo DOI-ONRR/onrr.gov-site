@@ -334,7 +334,8 @@ export default class Table {
     cell.innerHTML = content;
   }
   setHeaderText(data) {
-    const headerElement = document.querySelectorAll('.heading-class');
+    let headerElement = document.querySelectorAll('.heading-class');
+    console.log("type of header Element: ", typeof headerElement);
     const tableheader = this.table.querySelectorAll('.heading-class')
     console.log('the set header fill text :-' + JSON.stringify(data));
     console.log('the set header fill this text :-' + JSON.stringify(this.data));
@@ -342,8 +343,8 @@ export default class Table {
     console.log('the set header fill this tableheader :-' + JSON.stringify(tableheader.length));
       for (let headerIndex = 0; headerIndex < data.tableHeadingText.length; headerIndex++) {
         console.log('the set header fill this header index :-' + JSON.stringify(headerElement[headerIndex]));
-        if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
-          headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
+        if (data.tableHeadingText[headerIndex]) {
+          headerElement.innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
   }
