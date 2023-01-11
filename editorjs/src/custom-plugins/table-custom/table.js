@@ -340,15 +340,12 @@ export default class Table {
     console.log('the set header fill this text :-' + JSON.stringify(this.data));
     console.log('the set header fill this header element :-' + JSON.stringify(headerElement.length));
     console.log('the set header fill this tableheader :-' + JSON.stringify(tableheader.length));
-    console.log('the set header fill this tableheader :-' + JSON.stringify(data.tableHeadingText));
       for (let headerIndex = 0; headerIndex < data.tableHeadingText.length; headerIndex++) {
         console.log('the set header fill this header index :-' + JSON.stringify(headerElement[headerIndex]));
-        if (data.tableHeadingText[headerIndex]) {
+        if (headerElement[headerIndex] && data.tableHeadingText[headerIndex]) {
           headerElement[headerIndex].innerHTML = data.tableHeadingText[headerIndex] || '';
         }
       }
-    console.log('header element log :-' + headerElement);
-      
   }
 
   /**
