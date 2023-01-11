@@ -335,18 +335,20 @@ export default class Table {
   }
   setHeaderText(data) {
     let headerElement = document.querySelectorAll('.heading-class');
-    console.log("type of header Element: ", typeof headerElement);
     const tableheader = this.table.querySelectorAll('.heading-class')
     console.log('the set header fill text :-' + JSON.stringify(data));
     console.log('the set header fill this text :-' + JSON.stringify(this.data));
     console.log('the set header fill this header element :-' + JSON.stringify(headerElement.length));
     console.log('the set header fill this tableheader :-' + JSON.stringify(tableheader.length));
-      for (let headerIndex = 0; headerIndex < data.tableHeadingText.length; headerIndex++) {
+    for (let headerIndex = 0; headerIndex < data.tableHeadingText.length; headerIndex++) {
+        console.log('value on tableHeadingText :-' + JSON.stringify(data.tableHeadingText[headerIndex]));
         console.log('the set header fill this header index :-' + JSON.stringify(headerElement[headerIndex]));
         if (data.tableHeadingText[headerIndex]) {
-          headerElement.innerHTML = data.tableHeadingText[headerIndex] || '';
+          headerElement.push(data.tableHeadingText[headerIndex] || '').innerHTML;
         }
       }
+    console.log('header element log :-' + headerElement);
+      
   }
 
   /**
