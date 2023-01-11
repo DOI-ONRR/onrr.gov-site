@@ -1,4 +1,4 @@
-    USer-agent: *
+    User-agent: *
     Disallow: /beta.onrr.gov
     Sitemap: https://onrr.gov/sitemap.xml
     Sitemap: https://www.onrr.gov/sitemap.xml
