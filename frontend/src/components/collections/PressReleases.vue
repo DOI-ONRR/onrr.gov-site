@@ -81,10 +81,7 @@ import {
   fileCollectionMixin,
   dateMixin
 } from '@/mixins'
-import { formatToSlug } from '@/js/utils'
-const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectField" */ '@/components/inputs/MultipleSelectField')
-const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
-
+const CollectionFilterToolbar = () => import(/* webpackChunkName: "CollectionFilterToolbar" */ '@/components/toolbars/CollectionFilterToolbar')
 export default {
   name: 'PressReleasesCollection',
   mixins: [fileCollectionMixin, dateMixin],

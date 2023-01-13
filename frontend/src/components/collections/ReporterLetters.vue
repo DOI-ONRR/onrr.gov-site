@@ -50,7 +50,7 @@
               <div class="text-h6 text-capitalize">{{ header.text}}</div>
           </template>
           <template v-slot:[`header.date`]="{ header }">
-              <div class="text-h6 text-capitalize">{{ header.text }}></div>
+              <span class="text-h6 text-capitalize">{{ header.text }}></span>
             </template>
             <template v-slot:[`header.topics`]="{ header }">
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
