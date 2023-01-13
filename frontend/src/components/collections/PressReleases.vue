@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import { store } from '@/store'
 import {
   fileCollectionMixin,
   dateMixin
