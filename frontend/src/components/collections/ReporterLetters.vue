@@ -47,11 +47,12 @@
                 </v-container>
             </template>
             <template v-slot:[`header.title`]="{ header }">
-                <div class="text-h6 text-capitalize">{{ header.text}}</div>
-
-            </template>
-            <template v-slot:[`header.date`]="{ header }">
-            <span class="text-h6 text-capitalize">{{ header.text }}</span>
+              <div class="text-h6 text-capitalize">{{ header.text}}</div>
+          </template>
+          <template v-slot:[`header.date`]="{ header }">
+              <div class="text-h6 text-capitalize">{{ header.text }}>
+                <span>header.date</span>
+            </div>
             </template>
             <template v-slot:[`header.topics`]="{ header }">
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
