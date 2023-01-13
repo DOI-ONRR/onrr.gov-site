@@ -48,6 +48,7 @@
             </template>
             <template v-slot:[`header.title`]="{ header }">
                 <div class="text-h6 text-capitalize">{{ header.text}}</div>
+                <span v-if="header.text">"{{ header.text }}"</span>
             </template>
             <template v-slot:[`header.date`]="{ header }">
             <div class="text-h6 text-capitalize">{{ header.text }}</div>
