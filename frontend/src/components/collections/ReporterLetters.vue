@@ -50,8 +50,7 @@
                 <div class="text-h6 text-capitalize">{{ header.text}}</div>
             </template>
             <template v-slot:[`header.date`]="{ header }">
-            <div class="text-h6 text-capitalize">{{ header.text }}
-            </div>
+            <div class="text-h6 text-capitalize">{{ header.text }}</div>
             </template>
             <template v-slot:[`header.topics`]="{ header }">
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
@@ -66,7 +65,8 @@
               </div>
             </template>
             <template v-slot:[`item.date`]="{ item }">
-            <span v-if="formatNiceDate(item.date)">"{{formatNiceDate(item.date)}}"</span>
+            {{formatNiceDate(item.date)}}
+            <span v-if="item.date">"{{ item.date }}"</span>
             </template>
             <template v-slot:[`item.topics`]="{ item }">
                 {{ getTopics(item.topics) }}
