@@ -121,7 +121,7 @@ export default {
         } else if (!topicArr.includes(item)) {
             topicArr.push(item)
         }
-        
+
       })
 
       this.topicsInputField.items = [...topicArr.sort()]

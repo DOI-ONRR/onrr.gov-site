@@ -67,7 +67,8 @@ export default {
     }
   }),
   props: {
-    collection: [Array, Object]
+    collection: [Array, Object],
+    apolloLoading: Number
   },
   components: {
     SelectField,
@@ -177,18 +178,19 @@ export default {
       return items
     }
   },
-  created() {
-    setTimeout(() => {
-      this.indexZonesList()
-      this.indexZonesYearList()
-    }, 300);
-
-  },
   mounted() {
-    const index_zone = this.$route.query.index_zone
-    const years = this.$route.query.years && this.$route.query.years.split(',')
-    this.indexZonesInputField.selected = index_zone || null
-    this.indexZonesYearsInputField.selected = years || null
+    const index_zone = this.$route.query.index_zone;
+    const years = this.$route.query.years && this.$route.query.years.split(',');
+    this.indexZonesInputField.selected = index_zone || null;
+    this.indexZonesYearsInputField.selected = years || null;
+  },
+  watch: {
+    apolloLoading: function (newVal, oldVal) {
+      if (newVal === 0 && oldVal === 1) {
+        this.indexZonesList();
+        this.indexZonesYearList();
+      }
+    }
   }
 }
 </script>

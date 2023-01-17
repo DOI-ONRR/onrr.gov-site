@@ -47,10 +47,10 @@
                 </v-container>
             </template>
             <template v-slot:[`header.title`]="{ header }">
-                <div class="text-h6 text-capitalize">{{ header.text}}</div>
-            </template>
-            <template v-slot:[`header.date`]="{ header }">
-                <div class="text-h6 text-capitalize">{{ header.text }}</div>
+              <div class="text-h6 text-capitalize">{{ header.text}}</div>
+          </template>
+          <template v-slot:[`header.date`]="{ header }">
+              <span class="text-h6 text-capitalize">{{ header.text }}</span>
             </template>
             <template v-slot:[`header.topics`]="{ header }">
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
@@ -65,7 +65,7 @@
               </div>
             </template>
             <template v-slot:[`item.date`]="{ item }">
-                {{ formatNiceDate(item.date) }}
+            {{formatNiceDate(item.date)}}
             </template>
             <template v-slot:[`item.topics`]="{ item }">
                 {{ getTopics(item.topics) }}
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { 
+import {
   fileCollectionMixin,
   dateMixin
 } from '@/mixins'
@@ -140,7 +140,7 @@ export default {
         } else if (!topicArr.includes(item)) {
             topicArr.push(item)
         }
-        
+
       })
 
       this.topicsInputField.items = [...topicArr.sort()]
@@ -154,8 +154,8 @@ export default {
     },
     topicsFilter(value) {
         console.log('topcis filter value --------> ', value)
-        if (!this.topicsInputField.selected || 
-          this.topicsInputField.selected === null || 
+        if (!this.topicsInputField.selected ||
+          this.topicsInputField.selected === null ||
           this.topicsInputField.selected.length === 0) {
             return true
         }
@@ -170,7 +170,7 @@ export default {
       return formatToSlug(label)
     },
     fileIcon(fileType) {
-      let type 
+      let type
       switch (fileType) {
         case 'application/pdf':
         case 'pdf':
@@ -236,7 +236,7 @@ export default {
     }
   },
   created() {
-    setTimeout(function () { 
+    setTimeout(function () {
       this.topicList()
       this.filteredByTopicCollection = this.filterCollectionByTopic()
     }.bind(this), 500)
