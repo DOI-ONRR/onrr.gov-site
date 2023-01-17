@@ -45,7 +45,7 @@ const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/compon
 const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectField" */ '@/components/inputs/MultipleSelectField')
 
 export default {
-  name: 'IndexZonesCollection',
+  name: 'IBMPCollection',
   data: () => ({
     designatedAreaInputField: {
       items: [],
@@ -68,7 +68,8 @@ export default {
     }
   }),
   props: {
-    collection: [Array, Object]
+    collection: [Array, Object],
+    apolloLoading: Number
   },
   components: {
     SelectField,
@@ -212,17 +213,19 @@ export default {
       return items
     }
   },
-  created() {
-    setTimeout(() => {
-      this.designatedAreaList()
-      this.yearList()
-    }, 300);
-  },
   mounted() {
     const designated_area = this.$route.query.designated_area
     const years = this.$route.query.years && this.$route.query.years.split(',')
     this.designatedAreaInputField.selected = designated_area || null
     this.ibmpYearsInputField.selected = years || null
+  },
+  watch: {
+    apolloLoading: function (newVal, oldVal) {
+      if (newVal === 0 && oldVal === 1) {
+        this.designatedAreaList();
+        this.yearList();
+      }
+    }
   }
 }
 </script>
