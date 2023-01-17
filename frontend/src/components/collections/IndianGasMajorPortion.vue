@@ -49,7 +49,8 @@ const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectFie
 export default {
   name: 'IndianGasMajorPortionCollection',
   props: {
-    collection: [Array, Object]
+    collection: [Array, Object],
+    apolloLoading: Number
   },
   data: () => ({
     designatedAreaInputField: {
@@ -191,17 +192,19 @@ export default {
       return items
     }
   },
-  created() {
-    setTimeout(() => {
-      this.designatedAreaList()
-      this.yearList()
-    }, 300);
-  },
   mounted() {
     const designated_area = this.$route.query.designated_area
     const years = this.$route.query.years && this.$route.query.years.split(',')
     this.designatedAreaInputField.selected = designated_area || null
     this.yearInputField.selected = years || null
+  },
+  watch: {
+    apolloLoading: function (newVal, oldVal) {
+      if (newVal === 0 && oldVal === 1) {
+        this.designatedAreaList();
+        this.yearList();
+      }
+    }
   }
 }
 </script>

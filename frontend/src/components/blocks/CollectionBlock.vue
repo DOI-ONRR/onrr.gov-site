@@ -9,7 +9,8 @@
         :collectionPage="collectionPage"
         :collectionTab="collectionTab"
         :collectionAccordion="collectionAccordion"
-        :collectionTopics="collectionTopics"></component>
+        :collectionTopics="collectionTopics"
+        :apolloLoading="$apolloData.loading"></component>
     </keep-alive>
   </div>
 </template>
