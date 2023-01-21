@@ -65,11 +65,12 @@ export const getDay = (date, type) => {
 }
 
 export const getMonth = (date, type) => {
-    if(date.length == 10) {
-       date+='T00:00:00'
-    }
-  const d = new Date(date)
-    return d.toLocaleString('en-us', { month: type , timeZone: 'America/New_York'})
+  if(date.length == 10) {
+      date+='T00:00:00'
+  }
+  const d = new Date(date);
+
+  return new Date(null, d.getUTCMonth() + 1, null).toLocaleDateString("en", {month: type});
 }
 
 export const getFullDate = (date) => {
