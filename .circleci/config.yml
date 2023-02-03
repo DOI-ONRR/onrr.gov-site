@@ -94,12 +94,9 @@ jobs:
       - image: cimg/postgres:13.7
     steps:
       - checkout
-      - run:
-          name: "Apt cache"
-          command: sudo rm -rf /var/lib/apt/lists/*
-      - run:
-          name: "Update OS"
-          command: sudo apt-get update
+      - run: |
+          sudo rm -rf /var/lib/apt/lists/*
+          sudo apt-get update
       - run:
           name: "dump dev db "
           command: |
