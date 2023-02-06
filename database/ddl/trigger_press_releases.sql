@@ -1,6 +1,6 @@
 drop function function_press_releases_insert() CASCADE;
 
-create function function_press_releases_insert()
+create or replace function function_press_releases_insert()
 RETURNS TRIGGER
 LANGUAGE PLPGSQL
 AS $$ 

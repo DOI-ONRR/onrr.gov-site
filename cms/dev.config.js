@@ -43,6 +43,10 @@ module.exports = function(env) {
     MAX_RELATIONAL_DEPTH: 2000,
     // https://github.com/directus/directus/releases
     CORS_ENABLED: true,
-    CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055'
+    CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055',
+
+    UPSTREAM_URL: "https://prod-onr-cms.app.cloud.gov",
+    FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL",
+    FLOWS_EXEC_ALLOWED_MODULES: "lodash"
   }
 };
