@@ -153,6 +153,7 @@ workflows:
       - dev-onrr-frontend:
           context:
             - DEV
+            - org-global
           filters:
             branches:
               only:
@@ -165,6 +166,7 @@ workflows:
       - onrr-database:
           context:
             - PROD
+            - org-global
           filters:
             branches:
               only:
