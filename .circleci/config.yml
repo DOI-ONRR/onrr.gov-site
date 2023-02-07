@@ -94,6 +94,10 @@ jobs:
       - image: cimg/postgres:13.7
     steps:
       - checkout
+      #  Wait for Postgres to be ready before proceeding
+      - run:
+          name: Waiting for Postgres to be ready
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: "Update OS"
           command: sudo apt-get update
