@@ -100,7 +100,7 @@ jobs:
           command: sudo apt-get update
       - run:
           name: Waiting for Postgres to be ready
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+          command: dockerize -wait tcp://HOST:PORT -timeout 1m
       - run:
           name: "dump dev db "
           command: |
