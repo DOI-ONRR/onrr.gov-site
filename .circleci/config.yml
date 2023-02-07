@@ -92,15 +92,11 @@ jobs:
   onrr-database:
     docker:
       - image: cimg/postgres:13.7
-        #  Wait for Postgres to be ready before proceeding
     steps:
       - checkout
       - run:
           name: "Update OS"
           command: sudo apt-get update
-      - run:
-          name: Waiting for Postgres to be ready
-          command: dockerize -wait tcp://HOST:PORT -timeout 1m
       - run:
           name: "dump dev db "
           command: |
