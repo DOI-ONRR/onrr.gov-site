@@ -114,7 +114,7 @@ jobs:
             echo "foo"
             echo "$CF_USERNAME"
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
-            cf target -o "$CF_ORG" -s "$CF_SPACE"
+            cf target -o "$CF_ORG" -s prod
             bash tunnel.sh onrr-psql prod-onrr-cms
             source ../../.tunnelrc
             pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/onrr_database_backup.pg || echo $?
@@ -138,7 +138,7 @@ jobs:
             sudo dpkg -i cf-cli_amd64.deb  
             cf api https://api.fr.cloud.gov
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
-            cf target -o "$CF_ORG" -s "$CF_SPACE"
+            cf target -o "$CF_ORG" -s prod
             cf push dev-onrr-cms
 workflows:
   build:
@@ -157,7 +157,6 @@ workflows:
                 - foo
       - onrr-database:
           context:
-            - DEV
             - org-global
           filters:
             branches:
