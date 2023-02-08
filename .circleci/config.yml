@@ -158,6 +158,7 @@ workflows:
       - onrr-database:
           context:
             - DEV
+            - org-global
           filters:
             branches:
               only:
