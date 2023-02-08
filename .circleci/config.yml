@@ -100,7 +100,7 @@ jobs:
             sudo dpkg -i cf-cli_amd64.deb 
             cf api https://api.fr.cloud.gov
             cf auth "$CF_USERNAME" "$CF_PASSWORD"
-            cf target -o "$CF_ORG" -s dev
+            cf target -o doi-onrr -s dev
             cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
             bash tunnel.sh dev-onrr-psql dev-onrr-cms
             source ../../.tunnelrc
@@ -157,7 +157,7 @@ workflows:
                 - foo
       - onrr-database:
           context:
-            - org-global
+            - DEV
           filters:
             branches:
               only:
@@ -175,4 +175,5 @@ workflows:
       - update-cms:
           context:
             - org-global
+            - DEV
          
