@@ -145,7 +145,7 @@ workflows:
     jobs:
       - dev-onrr-frontend:
           context:
-            - DEV
+            - org-global
           filters:
             branches:
               only:
@@ -175,4 +175,4 @@ workflows:
       - update-cms:
           context:
             - org-global
-            - DEV
+            
