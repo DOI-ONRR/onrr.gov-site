@@ -13,18 +13,14 @@ echo "cf connect-to-service -no-client $INTERFACE $DB_ENV"
 cf connect-to-service -no-client $INTERFACE $DB_ENV > ../../.creds &
 PID=$!
 
-
-cat ../../.creds
 while ! grep "Leave" ../../.creds > /dev/null;
 do
     echo "waiting for tunnel....."
     sleep 2
 
 done
-cat ../../.creds
 
 PGID=$()
-
 
 Port=`cat ../../.creds | grep Port: | cut -d ' ' -f2 |  tr -d '\n'`
 Host=`cat ../../.creds | grep Host: | cut -d ' ' -f2 |  tr -d '\n'`
@@ -43,7 +39,7 @@ EOF
 
 echo $Host:$Port:$Name:$Username:$Password >> ~/.pgpass
 chmod 0600 ~/.pgpass
-cat ../../.tunnelrc
+
 echo "Tunnel and variables established to use on command line type"
 echo
 echo "to use variables:"
