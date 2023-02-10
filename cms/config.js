@@ -2,8 +2,6 @@ module.exports = function(env) {
   const vcap_services = JSON.parse(env.VCAP_SERVICES)
   const vcap_application = JSON.parse(env.VCAP_APPLICATION)
 
-  console.log('env ----------> ', env)
-
   return {
     PORT: process.env.PORT || 8055,
     PUBLIC_URL: `https://${ vcap_application.uris[0] }`,
@@ -46,6 +44,6 @@ module.exports = function(env) {
     CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055',
     UPSTREAM_URL: "https://prod-onr-cms.app.cloud.gov",
     FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL",
-    FLOWS_EXEC_ALLOWED_MODULES: "lodash"
+    FLOWS_EXEC_ALLOWED_MODULES: "lodash,axios,form-data"
   }
 };
