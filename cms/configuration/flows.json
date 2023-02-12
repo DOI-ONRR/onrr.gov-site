@@ -48,20 +48,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "0e69c224-f61b-4027-b3ba-8b402fd9477b",
-            "name": "_export_operations",
-            "icon": "bolt",
-            "color": null,
-            "description": null,
-            "status": "active",
-            "trigger": "operation",
-            "accountability": "all",
-            "options": {},
-            "operation": "3682caf4-612d-40e0-9da4-df76f39251b8",
-            "date_created": "2023-02-11T17:56:10.531Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "0f05e26e-607c-4920-8b09-e51feef399f4",
             "name": "Publish",
             "icon": "published_with_changes",
@@ -127,7 +113,7 @@
             "trigger": "operation",
             "accountability": "all",
             "options": {},
-            "operation": "4b8249a4-cd93-43b8-bd9a-ed6a4345ab73",
+            "operation": "1eb7aad0-7874-4238-a95b-44c4967fd598",
             "date_created": "2023-02-06T15:31:12.088Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
@@ -252,20 +238,6 @@
             "options": {},
             "operation": "3473d089-6355-4484-a6a9-763e66029cb7",
             "date_created": "2023-02-07T21:37:28.651Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
-            "name": "_api_logout",
-            "icon": "bolt",
-            "color": null,
-            "description": "Embedded flow for invalidating API refresh token",
-            "status": "active",
-            "trigger": "operation",
-            "accountability": "all",
-            "options": {},
-            "operation": "8b45a2b7-dc7f-471d-84f1-46b5f2477c74",
-            "date_created": "2023-02-06T15:26:39.937Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -395,22 +367,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "777a6fd4-c7c9-48fc-b74f-550ddbad3dec",
-            "name": "Export operations",
-            "icon": "bolt",
-            "color": null,
-            "description": null,
-            "status": "active",
-            "trigger": "webhook",
-            "accountability": "all",
-            "options": {
-                "return": ""
-            },
-            "operation": "8c5b4e17-8001-4caf-bd57-cca82c90f141",
-            "date_created": "2023-02-11T17:11:09.022Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "78a78830-eadb-4e95-8791-b21094cf56bb",
             "name": "Publish",
             "icon": "published_with_changes",
@@ -455,22 +411,6 @@
             "options": {},
             "operation": "8649c33f-e8d8-4203-8061-545031c51f92",
             "date_created": "2023-02-06T18:29:08.683Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531",
-            "name": "_api_auth",
-            "icon": null,
-            "color": null,
-            "description": "Embedded flow for authenticating API user",
-            "status": "active",
-            "trigger": "operation",
-            "accountability": "all",
-            "options": {
-                "return": "$last"
-            },
-            "operation": "5b012856-ba41-4181-9437-532d1e330e1a",
-            "date_created": "2023-02-06T15:23:41.986Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {

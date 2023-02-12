@@ -43,7 +43,8 @@ module.exports = function(env) {
     CORS_ENABLED: true,
     CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055',
     UPSTREAM_URL: "https://prod-onr-cms.app.cloud.gov",
-    FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL",
+    CMS_TOKEN: env.CMS_TOKEN,
+    FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL,CMS_TOKEN",
     FLOWS_EXEC_ALLOWED_MODULES: "lodash,axios,form-data,uuid"
   }
 };

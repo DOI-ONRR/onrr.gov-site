@@ -106,7 +106,7 @@
             "name": "Update item",
             "key": "update_item",
             "type": "request",
-            "position_x": 73,
+            "position_x": 55,
             "position_y": 1,
             "options": {
                 "method": "PATCH",
@@ -115,11 +115,11 @@
                 "headers": [
                     {
                         "header": "Authorization",
-                        "value": "Bearer {{api_auth.data.data.access_token}}"
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
                     }
                 ]
             },
-            "resolve": "ed13df40-6aa8-4c9e-812e-bf1f0995c9fb",
+            "resolve": null,
             "reject": null,
             "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
             "date_created": "2023-02-02T19:44:39.725Z",
@@ -199,20 +199,20 @@
             "name": "Create item",
             "key": "create_item",
             "type": "request",
-            "position_x": 73,
-            "position_y": 17,
+            "position_x": 55,
+            "position_y": 18,
             "options": {
                 "headers": [
                     {
                         "header": "Authorization",
-                        "value": "Bearer {{api_auth.data.data.access_token}}"
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
                     }
                 ],
                 "method": "POST",
                 "url": "https://prod-onr-cms.app.cloud.gov/items/{{$trigger.body.collection}}",
                 "body": "{{read_item}}"
             },
-            "resolve": "a97ad98a-1cb5-4eaa-8f18-40ee59629b95",
+            "resolve": null,
             "reject": null,
             "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
             "date_created": "2023-02-02T19:45:29.587Z",
@@ -299,7 +299,7 @@
             "name": "Create collection item",
             "key": "create_collection_item",
             "type": "request",
-            "position_x": 37,
+            "position_x": 19,
             "position_y": 1,
             "options": {
                 "method": "POST",
@@ -307,12 +307,12 @@
                 "headers": [
                     {
                         "header": "Authorization",
-                        "value": "Bearer {{api_auth.accessToken}}"
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
                     }
                 ],
                 "body": "{{$trigger.item}}"
             },
-            "resolve": "9c552444-f511-4ffb-bf6d-182363674cfc",
+            "resolve": null,
             "reject": null,
             "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
             "date_created": "2023-02-06T15:36:30.880Z",
@@ -332,7 +332,7 @@
                     }
                 }
             },
-            "resolve": "d8b45ef1-d128-414a-98aa-f126a9d83d71",
+            "resolve": "fede66e9-3c3c-4056-93b9-c7bced2d4012",
             "reject": null,
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-08T01:40:34.996Z",
@@ -395,23 +395,6 @@
             "reject": null,
             "flow": "aa9d1bd2-85a8-41ee-ba34-4b66537d7e07",
             "date_created": "2023-02-06T19:57:46.515Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "292c8cc4-4b1f-4fd8-9178-3bf5a68f1b9b",
-            "name": "Trigger export operation",
-            "key": "trigger_export_operation",
-            "type": "trigger",
-            "position_x": 37,
-            "position_y": 1,
-            "options": {
-                "flow": "0e69c224-f61b-4027-b3ba-8b402fd9477b",
-                "payload": "{{get_operations.data.data}}"
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "777a6fd4-c7c9-48fc-b74f-550ddbad3dec",
-            "date_created": "2023-02-11T20:40:06.229Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -598,22 +581,6 @@
             "reject": null,
             "flow": "e0be0b1c-23f6-4e15-89ad-f77acc45a0d5",
             "date_created": "2023-02-07T17:07:43.163Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "3682caf4-612d-40e0-9da4-df76f39251b8",
-            "name": "Get flow",
-            "key": "get_flow",
-            "type": "request",
-            "position_x": 19,
-            "position_y": 1,
-            "options": {
-                "url": "{{$env.PUBLIC_URL}}/flows/{{$trigger.flow}}"
-            },
-            "resolve": "b99f2161-7b77-44b1-beec-2b418ed3ae09",
-            "reject": null,
-            "flow": "0e69c224-f61b-4027-b3ba-8b402fd9477b",
-            "date_created": "2023-02-11T18:11:11.746Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -865,22 +832,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "4b8249a4-cd93-43b8-bd9a-ed6a4345ab73",
-            "name": "API auth",
-            "key": "api_auth",
-            "type": "trigger",
-            "position_x": 19,
-            "position_y": 1,
-            "options": {
-                "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531"
-            },
-            "resolve": "1eb7aad0-7874-4238-a95b-44c4967fd598",
-            "reject": null,
-            "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
-            "date_created": "2023-02-06T15:36:30.912Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "4e02f555-562c-4176-81f7-ceb87992a4fe",
             "name": "Get contact from prod",
             "key": "get_contact_from_prod",
@@ -974,25 +925,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "56e589db-9b5c-4db5-805c-cd5ffe8b4425",
-            "name": "API logout",
-            "key": "api_logout_update",
-            "type": "trigger",
-            "position_x": 127,
-            "position_y": 1,
-            "options": {
-                "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
-                "payload": {
-                    "refreshToken": "{{api_auth_update.refreshToken}}"
-                }
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-08T01:41:54.080Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "57792fcb-d561-4bab-8618-dc18dc8e984e",
             "name": "Get index zone from prod",
             "key": "get_index_zone_from_prod",
@@ -1064,24 +996,6 @@
             "reject": null,
             "flow": "3b01d511-b2ae-4f04-a14f-38eaec857485",
             "date_created": "2023-02-06T19:39:14.978Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "5b012856-ba41-4181-9437-532d1e330e1a",
-            "name": "API auth",
-            "key": "api_auth",
-            "type": "request",
-            "position_x": 19,
-            "position_y": 1,
-            "options": {
-                "method": "POST",
-                "url": "{{$env['UPSTREAM_URL']}}/auth/login",
-                "body": "{\n  \"email\": \"agent.oprah@onrr.gov\",\n  \"password\": \"CorgiParade\"\n}"
-            },
-            "resolve": "c4716a7b-1cff-419e-8ab3-66ab82b88c7c",
-            "reject": null,
-            "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531",
-            "date_created": "2023-02-06T15:25:45.487Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1240,24 +1154,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "64ad68fd-023a-4c9d-a53d-976793d65907",
-            "name": "API auth",
-            "key": "api_auth",
-            "type": "request",
-            "position_x": 37,
-            "position_y": 1,
-            "options": {
-                "method": "POST",
-                "url": "https://prod-onr-cms.app.cloud.gov/auth/login",
-                "body": "{\n  \"email\": \"agent.oprah@onrr.gov\",\n  \"password\": \"CorgiParade\"\n}"
-            },
-            "resolve": "c12d8ac6-640f-4289-9536-930f18c0aa8f",
-            "reject": null,
-            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
-            "date_created": "2023-02-02T19:43:41.928Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "65b2e5c5-73c9-4b0d-b752-794a21b42789",
             "name": "Get flows",
             "key": "get_flows",
@@ -1314,7 +1210,7 @@
             "name": "Get folder",
             "key": "get_folder",
             "type": "request",
-            "position_x": 73,
+            "position_x": 55,
             "position_y": 18,
             "options": {
                 "url": "{{$env['PUBLIC_URL']}}/folders",
@@ -1704,7 +1600,7 @@
             "name": "Get file title",
             "key": "get_file_title",
             "type": "exec",
-            "position_x": 91,
+            "position_x": 73,
             "position_y": 18,
             "options": {
                 "code": "import { v4 as uuidv4 } from 'uuid';\n\nmodule.exports = async function(data) {\n\treturn { \"title\": `publish-file-${uidv4()}`};\n}"
@@ -1713,25 +1609,6 @@
             "reject": null,
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-10T20:54:21.991Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "8744eac2-1b09-4907-9355-307b8ba87277",
-            "name": "API logout",
-            "key": "api_logout",
-            "type": "trigger",
-            "position_x": 91,
-            "position_y": 1,
-            "options": {
-                "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
-                "payload": {
-                    "refreshToken": "{{api_auth.refreshToken}}"
-                }
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
-            "date_created": "2023-02-06T15:46:31.863Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1796,24 +1673,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "8b45a2b7-dc7f-471d-84f1-46b5f2477c74",
-            "name": "API logout",
-            "key": "api_logout",
-            "type": "request",
-            "position_x": 19,
-            "position_y": 1,
-            "options": {
-                "method": "POST",
-                "url": "{{$env['UPSTREAM_URL']}}/auth/logout",
-                "body": "{\n  \"refresh_token\": \"{{$trigger.refreshToken}}\"\n}"
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
-            "date_created": "2023-02-06T15:27:24.676Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "8b55fecc-5622-48b6-a8cf-7e982fec1832",
             "name": "Update expansion panel block label in prod",
             "key": "update_expansion_panel_block_label_in_prod",
@@ -1833,28 +1692,6 @@
             "reject": null,
             "flow": "af676dff-ccfe-4b80-8e79-e3daaae9c445",
             "date_created": "2023-02-06T20:07:29.517Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "8c5b4e17-8001-4caf-bd57-cca82c90f141",
-            "name": "Get operations",
-            "key": "get_operations",
-            "type": "request",
-            "position_x": 19,
-            "position_y": 1,
-            "options": {
-                "url": "{{$env.PUBLIC_URL}}/operations?limit=500",
-                "headers": [
-                    {
-                        "header": "Authorization",
-                        "value": "Bearer emhmi1kuhPnw81llIZ4FpnV3L0ECXJQP"
-                    }
-                ]
-            },
-            "resolve": "292c8cc4-4b1f-4fd8-9178-3bf5a68f1b9b",
-            "reject": null,
-            "flow": "777a6fd4-c7c9-48fc-b74f-550ddbad3dec",
-            "date_created": "2023-02-11T17:45:42.417Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1897,7 +1734,7 @@
             "name": "Export file",
             "key": "export_file",
             "type": "request",
-            "position_x": 109,
+            "position_x": 91,
             "position_y": 18,
             "options": {
                 "method": "POST",
@@ -1993,41 +1830,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "9c3cac8c-84df-4d74-b89c-52033e837e5e",
-            "name": "API auth",
-            "key": "api_auth_create",
-            "type": "trigger",
-            "position_x": 55,
-            "position_y": 18,
-            "options": {
-                "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531"
-            },
-            "resolve": "6a1a7639-310e-462e-b044-bc116e461054",
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-08T01:48:24.798Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "9c552444-f511-4ffb-bf6d-182363674cfc",
-            "name": "API logout",
-            "key": "api_logout",
-            "type": "trigger",
-            "position_x": 55,
-            "position_y": 1,
-            "options": {
-                "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
-                "payload": {
-                    "refreshToken": "{{api_auth.refreshToken}}"
-                }
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
-            "date_created": "2023-02-06T15:36:30.863Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "a0521d96-103c-4e7e-a28d-abc5007f5e7d",
             "name": "Trigger report letters flow",
             "key": "trigger_report_letters_flow",
@@ -2077,28 +1879,9 @@
                 "url": "{{$env['UPSTREAM_URL']}}/files/{{$trigger.fileUuid}}"
             },
             "resolve": "6f669ed4-aba9-4a8f-a4ff-f7f344061290",
-            "reject": "9c3cac8c-84df-4d74-b89c-52033e837e5e",
+            "reject": "6a1a7639-310e-462e-b044-bc116e461054",
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-08T01:40:35.074Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "a6938ef8-c3de-4dd3-a422-12ea85d4d395",
-            "name": "API logout",
-            "key": "api_logout_create",
-            "type": "trigger",
-            "position_x": 181,
-            "position_y": 18,
-            "options": {
-                "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
-                "payload": {
-                    "refreshToken": "{{api_auth_create.refreshToken}}"
-                }
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-08T01:48:24.753Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2147,24 +1930,6 @@
             "reject": "0f9cfbe3-8557-489c-94d0-df03c2b218a1",
             "flow": "5589fe68-0d60-4881-95f9-a8ac85242707",
             "date_created": "2023-02-07T21:38:02.294Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "a97ad98a-1cb5-4eaa-8f18-40ee59629b95",
-            "name": "API logout",
-            "key": "api_logout_twdwk",
-            "type": "request",
-            "position_x": 91,
-            "position_y": 17,
-            "options": {
-                "method": "POST",
-                "url": "https://prod-onr-cms.app.cloud.gov/auth/logout",
-                "body": "{\n  \"refresh_token\": \"{{api_auth.data.data.refresh_token}}\"\n}"
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
-            "date_created": "2023-02-02T19:46:21.752Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2404,30 +2169,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "b99f2161-7b77-44b1-beec-2b418ed3ae09",
-            "name": "Export operation",
-            "key": "export_operation",
-            "type": "request",
-            "position_x": 37,
-            "position_y": 1,
-            "options": {
-                "url": "{{$env['PUBLIC_URL']}}/utils/export/directus_operations",
-                "method": "POST",
-                "body": "{\n  \"format\": \"json\",\n  \"query\": {\n    \"filter\": {\n      \"id\": {\n        \"_eq\": \"{{$trigger.id}}\"\n      }\n    }\n  },\n  \"file\": {\n    \"folder\": \"2728f97e-1631-47bf-b228-3562359ace36\",\n    \"title\": \"{{get_flow.data.data.name}}.{{$trigger.key}}\"\n  }\n}",
-                "headers": [
-                    {
-                        "header": "Authorization",
-                        "value": "Bearer emhmi1kuhPnw81llIZ4FpnV3L0ECXJQP"
-                    }
-                ]
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "0e69c224-f61b-4027-b3ba-8b402fd9477b",
-            "date_created": "2023-02-11T18:11:11.733Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "bc043938-b32b-4c94-80d9-152e95a04349",
             "name": "Read file",
             "key": "read_file",
@@ -2448,7 +2189,7 @@
             "name": "Get export file meta",
             "key": "get_export_file_meta",
             "type": "request",
-            "position_x": 145,
+            "position_x": 127,
             "position_y": 18,
             "options": {
                 "url": "{{$env['PUBLIC_URL']}}/files",
@@ -2491,7 +2232,7 @@
             "name": "Get item from prod",
             "key": "get_item_from_prod",
             "type": "request",
-            "position_x": 55,
+            "position_x": 37,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}"
@@ -2519,41 +2260,6 @@
             "reject": null,
             "flow": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
             "date_created": "2023-02-07T21:27:03.740Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "c266ee68-08e8-43f2-b04d-daba8adaa90c",
-            "name": "API auth",
-            "key": "api_auth",
-            "type": "trigger",
-            "position_x": 55,
-            "position_y": 1,
-            "options": {
-                "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531"
-            },
-            "resolve": "ca24efcc-ca5d-4e4b-baba-04888cbeb91b",
-            "reject": null,
-            "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
-            "date_created": "2023-02-06T15:45:06.174Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "c4716a7b-1cff-419e-8ab3-66ab82b88c7c",
-            "name": "Add tokens to data chain",
-            "key": "add_tokens_to_data_chain",
-            "type": "transform",
-            "position_x": 37,
-            "position_y": 1,
-            "options": {
-                "json": {
-                    "refreshToken": "{{api_auth.data.data.refresh_token}}",
-                    "accessToken": "{{api_auth.data.data.access_token}}"
-                }
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531",
-            "date_created": "2023-02-06T15:25:45.475Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2597,7 +2303,7 @@
             "name": "Update in prod",
             "key": "update_in_prod",
             "type": "request",
-            "position_x": 73,
+            "position_x": 55,
             "position_y": 1,
             "options": {
                 "method": "PATCH",
@@ -2605,12 +2311,12 @@
                 "headers": [
                     {
                         "header": "Authorization",
-                        "value": "Bearer {{api_auth.accessToken}}"
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
                     }
                 ],
                 "body": "{{compare_objects}}"
             },
-            "resolve": "8744eac2-1b09-4907-9355-307b8ba87277",
+            "resolve": null,
             "reject": null,
             "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
             "date_created": "2023-02-06T15:46:31.875Z",
@@ -2638,7 +2344,7 @@
             "name": "Wait for upload",
             "key": "wait_for_upload",
             "type": "sleep",
-            "position_x": 127,
+            "position_x": 109,
             "position_y": 18,
             "options": {
                 "milliseconds": 2000
@@ -2647,22 +2353,6 @@
             "reject": null,
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-10T01:52:13.616Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "d8b45ef1-d128-414a-98aa-f126a9d83d71",
-            "name": "API auth",
-            "key": "api_auth_update",
-            "type": "trigger",
-            "position_x": 91,
-            "position_y": 1,
-            "options": {
-                "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531"
-            },
-            "resolve": "fede66e9-3c3c-4056-93b9-c7bced2d4012",
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-08T01:41:43.536Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2854,24 +2544,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "ed13df40-6aa8-4c9e-812e-bf1f0995c9fb",
-            "name": "API logout",
-            "key": "api_logout",
-            "type": "request",
-            "position_x": 91,
-            "position_y": 1,
-            "options": {
-                "method": "POST",
-                "url": "https://prod-onr-cms.app.cloud.gov/auth/logout",
-                "body": "{\n  \"refresh_token\": \"{{api_auth.data.data.refresh_token}}\"\n}"
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
-            "date_created": "2023-02-02T19:46:21.794Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "ef98e4b7-e7a4-406a-8c4c-2335905b87b5",
             "name": "Get handbook from prod",
             "key": "get_handbook_from_prod",
@@ -2957,7 +2629,7 @@
                     }
                 }
             },
-            "resolve": "c266ee68-08e8-43f2-b04d-daba8adaa90c",
+            "resolve": "ca24efcc-ca5d-4e4b-baba-04888cbeb91b",
             "reject": null,
             "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
             "date_created": "2023-02-06T15:45:06.190Z",
@@ -3039,12 +2711,12 @@
             "name": "Run import in prod",
             "key": "exec_gxz8m",
             "type": "exec",
-            "position_x": 163,
+            "position_x": 145,
             "position_y": 18,
             "options": {
-                "code": "var FormData = require('form-data');\nconst axios = require('axios');\n\nmodule.exports = async function(data) {\n    try {\n        const fileUrl = `${data.$env.PUBLIC_URL}/assets/${data.get_export_file_meta.data.data[0].filename_disk}`;\n    \n    \tvar fileResponse = await axios.get(fileUrl, { responseType: 'stream' });\n\n        const form = new FormData();\n        form.append('file', fileResponse.data, 'import.json');\n        \n        const response = await axios.post(`${data.$env.UPSTREAM_URL}/utils/import/directus_files`, form, {\n            headers: {\n                ...form.getHeaders(),\n                Authorization: `Bearer ${data.api_auth_create.accessToken}`\n            },\n        });\n\n        return {};\n    }\n    catch (e) {\n        return { \"error\": e.message }\n    }\n}"
+                "code": "var FormData = require('form-data');\nconst axios = require('axios');\n\nmodule.exports = async function(data) {\n    try {\n        const fileUrl = `${data.$env.PUBLIC_URL}/assets/${data.get_export_file_meta.data.data[0].filename_disk}`;\n    \n    \tvar fileResponse = await axios.get(fileUrl, { responseType: 'stream' });\n\n        const form = new FormData();\n        form.append('file', fileResponse.data, 'import.json');\n        \n        const response = await axios.post(`${data.$env.UPSTREAM_URL}/utils/import/directus_files`, form, {\n            headers: {\n                ...form.getHeaders(),\n                Authorization: `Bearer ${data.$env.CMS_TOKEN}`\n            },\n        });\n\n        return {};\n    }\n    catch (e) {\n        return { \"error\": e.message }\n    }\n}"
             },
-            "resolve": "a6938ef8-c3de-4dd3-a422-12ea85d4d395",
+            "resolve": null,
             "reject": null,
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-09T23:58:30.980Z",
@@ -3063,7 +2735,7 @@
                     "{{$trigger.body.keys[0]}}"
                 ]
             },
-            "resolve": "64ad68fd-023a-4c9d-a53d-976793d65907",
+            "resolve": "c12d8ac6-640f-4289-9536-930f18c0aa8f",
             "reject": null,
             "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
             "date_created": "2023-02-02T19:41:47.929Z",
@@ -3074,7 +2746,7 @@
             "name": "Update in prod",
             "key": "update_in_prod",
             "type": "request",
-            "position_x": 109,
+            "position_x": 91,
             "position_y": 1,
             "options": {
                 "method": "PATCH",
@@ -3082,7 +2754,7 @@
                 "headers": [
                     {
                         "header": "Authorization",
-                        "value": "Bearer {{api_auth_update.accessToken}}"
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
                     },
                     {
                         "header": "Accept",
@@ -3091,7 +2763,7 @@
                 ],
                 "body": "{{compare_files}}"
             },
-            "resolve": "56e589db-9b5c-4db5-805c-cd5ffe8b4425",
+            "resolve": null,
             "reject": null,
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-08T01:41:49.186Z",
