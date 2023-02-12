@@ -1,0 +1,3101 @@
+{
+    "data": [
+        {
+            "id": "01927652-6d96-4a8d-8f9d-5e5834a3e63e",
+            "name": "Read tab block",
+            "key": "read_tab_block",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "tab_blocks",
+                "key": [
+                    "{{$trigger.item}}"
+                ]
+            },
+            "resolve": "81fc0fbe-7fa3-444e-b909-858fdbcdc3c4",
+            "reject": null,
+            "flow": "ced5d50b-054b-41a1-92f3-913bf9664548",
+            "date_created": "2023-02-06T19:48:24.183Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "06dca7bd-8deb-466a-ba69-16e5fa51f86d",
+            "name": "Update handbook in prod",
+            "key": "update_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "production_handbook",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_handbook}}",
+                    "old": "{{get_handbook_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
+            "date_created": "2023-02-07T21:27:14.153Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "08c77a08-1eb6-4a0e-b245-9b9ba30ee2af",
+            "name": "Update handbook in prod",
+            "key": "update_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "geothermal_class_2_3",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_handbook}}",
+                    "old": "{{get_handbook_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "5589fe68-0d60-4881-95f9-a8ac85242707",
+            "date_created": "2023-02-07T21:38:07.458Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "0940dbcf-afaa-4da6-96db-934b57fa62c4",
+            "name": "Get press release from prod",
+            "key": "get_press_release_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/press_releases/{{$trigger}}"
+            },
+            "resolve": "aad9165e-88bc-402a-8bdb-5c5813947623",
+            "reject": "7138bba8-8052-4e44-8893-1ddaab9f3b8f",
+            "flow": "de496a02-cb91-4e8e-80a9-7c9904b62ad3",
+            "date_created": "2023-02-08T17:58:10.360Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "0ae43201-1c79-4039-847c-0a7a65bfea97",
+            "name": "Update content block in prod",
+            "key": "update_content_block_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{$trigger.item}}",
+                    "old": "{{get_content_block_from_prod.data.data}}",
+                    "new": "{{read_content_block}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "127f0a0e-5fa8-4acc-9fd1-db004a57f38a",
+            "date_created": "2023-02-06T20:13:12.554Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "0ce076cc-8747-4f76-8002-d59fffd944cf",
+            "name": "Update item",
+            "key": "update_item",
+            "type": "request",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "method": "PATCH",
+                "url": "https://prod-onr-cms.app.cloud.gov/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}",
+                "body": "{{read_item}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{api_auth.data.data.access_token}}"
+                    }
+                ]
+            },
+            "resolve": "ed13df40-6aa8-4c9e-812e-bf1f0995c9fb",
+            "reject": null,
+            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
+            "date_created": "2023-02-02T19:44:39.725Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "0d0ae940-9ea9-4739-876e-683e4a2023b6",
+            "name": "Call pricing collection flow",
+            "key": "call_pricing_collection_flow",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "{{filter_flows_by_name.flowId}}",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "626877e2-cbbc-4c3f-a67b-304ca721e02b",
+            "date_created": "2023-02-07T16:09:07.589Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "0ef52ea1-4651-4bb5-b1b4-da69ecb163cd",
+            "name": "Get item from prod",
+            "key": "get_item_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/Interest_Solids/{{$trigger}}"
+            },
+            "resolve": "4607de1f-e957-4492-9a00-21b4fd85ee88",
+            "reject": "f0b882e0-01f7-49c0-b5e8-a8ceb0cad52c",
+            "flow": "652d461e-2f82-4abd-ab1e-be6ea0bf84f2",
+            "date_created": "2023-02-07T21:56:48.687Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "0f9cfbe3-8557-489c-94d0-df03c2b218a1",
+            "name": "Create handbook in prod",
+            "key": "create_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "geothermal_class_2_3",
+                    "item": "{{read_handbook}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "5589fe68-0d60-4881-95f9-a8ac85242707",
+            "date_created": "2023-02-07T21:38:11.210Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "101d0a44-e245-4443-a56f-c6f339b5d13c",
+            "name": "Get tab blocks tab block from prod",
+            "key": "get_tab_blocks_tab_block_from_prod",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/tab_blocks_tab_blocks/{{$trigger}}"
+            },
+            "resolve": "5d74011d-8d7f-407d-ab71-2632d6d19af8",
+            "reject": "3afbcd1a-4199-48bf-a3f6-a933f94c497c",
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-02-07T19:35:48.051Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "13ddea30-a7c6-443b-8f92-e3e4d520cf2d",
+            "name": "Create item",
+            "key": "create_item",
+            "type": "request",
+            "position_x": 73,
+            "position_y": 17,
+            "options": {
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{api_auth.data.data.access_token}}"
+                    }
+                ],
+                "method": "POST",
+                "url": "https://prod-onr-cms.app.cloud.gov/items/{{$trigger.body.collection}}",
+                "body": "{{read_item}}"
+            },
+            "resolve": "a97ad98a-1cb5-4eaa-8f18-40ee59629b95",
+            "reject": null,
+            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
+            "date_created": "2023-02-02T19:45:29.587Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "15f2bd16-dae5-4efa-8fdb-91ee893b7d93",
+            "name": "Read handbook",
+            "key": "read_handbook",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "revenue_handbook",
+                "key": [
+                    "{$trigger}}"
+                ]
+            },
+            "resolve": "868ff943-b5c0-49f0-b40f-a8504d5b0ca5",
+            "reject": null,
+            "flow": "b9506c8e-3364-4ae6-b494-4e1b3bd27337",
+            "date_created": "2023-02-07T21:24:26.276Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "1c5213d9-2ac6-48a6-98fe-ab5dd0fff6e6",
+            "name": "Update item in prod",
+            "key": "update_item_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "plant_specific_ucas",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_item}}",
+                    "old": "{{get_item_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "318ceaef-75e1-4a34-b29d-22d84b85b5d7",
+            "date_created": "2023-02-07T21:45:39.424Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "1cf89cb9-11d2-43ff-99b5-f9b3487a787b",
+            "name": "Read reporter letter",
+            "key": "read_reporter_letter",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "reporter_letters",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "39dfb758-98aa-481d-a331-ea8cb5b9efab",
+            "reject": null,
+            "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
+            "date_created": "2023-02-07T19:51:09.108Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "1e4c9f1e-91d5-460e-b9dd-227ab1e94170",
+            "name": "Filter flows by name",
+            "key": "filter_flows_by_name",
+            "type": "exec",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\tvar flow = _.find(data.get_flows.data.data, (f) => {\n        return f.name === data.get_flow_name.flowName;\n    });\n\n    return {\n    \t\"flowId\": flow.id\n    };\n}"
+            },
+            "resolve": "2edb39d3-581f-43b3-a893-7909ba564c68",
+            "reject": null,
+            "flow": "0664e1b2-b978-4bb6-b3a1-124e764e1b56",
+            "date_created": "2023-02-06T19:23:32.602Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "1eb7aad0-7874-4238-a95b-44c4967fd598",
+            "name": "Create collection item",
+            "key": "create_collection_item",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "method": "POST",
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.collection}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{api_auth.accessToken}}"
+                    }
+                ],
+                "body": "{{$trigger.item}}"
+            },
+            "resolve": "9c552444-f511-4ffb-bf6d-182363674cfc",
+            "reject": null,
+            "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+            "date_created": "2023-02-06T15:36:30.880Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "20596328-9209-485e-8ca7-1705e8545ef7",
+            "name": "If file has changed",
+            "key": "if_file_has_changed",
+            "type": "condition",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "filter": {
+                    "compare_files": {
+                        "_neq": {}
+                    }
+                }
+            },
+            "resolve": "d8b45ef1-d128-414a-98aa-f126a9d83d71",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:40:34.996Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "2143ca48-48c3-4cb6-9d09-b435fe19d527",
+            "name": "Create handbook in prod",
+            "key": "create_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "production_handbook",
+                    "item": "{{read_handbook}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
+            "date_created": "2023-02-07T21:27:17.457Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "24d7c829-b934-42ae-827d-f4bb9d8061df",
+            "name": "Create item in prod",
+            "key": "create_item_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "plant_specific_ucas",
+                    "item": "{{read_item}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "318ceaef-75e1-4a34-b29d-22d84b85b5d7",
+            "date_created": "2023-02-07T21:45:42.844Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "26b936fb-d23a-4f86-9493-b7b26284e0bc",
+            "name": "Read expansion panel block",
+            "key": "read_expansion_panel_block",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "expansion_panels_expansion_panel_blocks",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "7ed567a2-f210-4335-9ea1-db2a23786b8b",
+            "reject": null,
+            "flow": "aa9d1bd2-85a8-41ee-ba34-4b66537d7e07",
+            "date_created": "2023-02-06T19:57:46.515Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "292c8cc4-4b1f-4fd8-9178-3bf5a68f1b9b",
+            "name": "Trigger export operation",
+            "key": "trigger_export_operation",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "0e69c224-f61b-4027-b3ba-8b402fd9477b",
+                "payload": "{{get_operations.data.data}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "777a6fd4-c7c9-48fc-b74f-550ddbad3dec",
+            "date_created": "2023-02-11T20:40:06.229Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "2a8f67ed-454c-4f3b-ae15-121e962bb3c2",
+            "name": "Update handbook in prod",
+            "key": "update_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "solid_minerals_handbook",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_handbook}}",
+                    "old": "{{get_handbook_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "535d8428-e9d5-4811-9972-f3aa5959d906",
+            "date_created": "2023-02-07T21:30:55.348Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "2c2e6662-9d85-46cb-bfd8-ecdbbe8177ce",
+            "name": "Get NYMEX item from prod",
+            "key": "get_nymex_item_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/NYMEX/{{$trigger}}"
+            },
+            "resolve": "338c963d-fa05-41d2-8f74-e12f4c8b38f8",
+            "reject": "5d63cea5-0179-499d-bc30-06229b793a22",
+            "flow": "5f5960fb-fcb9-441b-883b-3672d4a2eb14",
+            "date_created": "2023-02-07T19:25:43.068Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "2dad7cce-c00c-4dc9-91a0-cc3e1115ff8f",
+            "name": "Create IBMP in prod",
+            "key": "create_ibmp_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "ibmp",
+                    "item": "{{read_ibmp_item}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "9cb14ffa-c7aa-46ea-9bd4-3deb87c2ca98",
+            "date_created": "2023-02-07T16:15:08.208Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "2edb39d3-581f-43b3-a893-7909ba564c68",
+            "name": "Call collection flow",
+            "key": "call_collection_flow",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "flow": "{{filter_flows_by_name.flowId}}",
+                "payload": {
+                    "item": "{{$trigger.item}}",
+                    "collection": "{{$trigger.collection}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "0664e1b2-b978-4bb6-b3a1-124e764e1b56",
+            "date_created": "2023-02-06T19:24:06.959Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3146d544-9588-4be6-94b4-3dbd72619c88",
+            "name": "Trigger _expansion_panel_block flow",
+            "key": "trigger_expansion_panel_block_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {},
+            "resolve": null,
+            "reject": null,
+            "flow": "67182ac8-0c80-46ae-b3f5-2041c3bb3aaf",
+            "date_created": "2023-02-06T19:55:35.348Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "338c963d-fa05-41d2-8f74-e12f4c8b38f8",
+            "name": "Update NYMEX in prod",
+            "key": "update_nymex_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "NYMEX",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_nymex_item}}",
+                    "old": "{{get_nymex_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "5f5960fb-fcb9-441b-883b-3672d4a2eb14",
+            "date_created": "2023-02-07T16:27:56.086Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "33903d83-d756-42d1-8366-63565f2ea61c",
+            "name": "Get flows",
+            "key": "get_flows",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/flows"
+            },
+            "resolve": "1e4c9f1e-91d5-460e-b9dd-227ab1e94170",
+            "reject": null,
+            "flow": "0664e1b2-b978-4bb6-b3a1-124e764e1b56",
+            "date_created": "2023-02-06T19:22:30.544Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3473d089-6355-4484-a6a9-763e66029cb7",
+            "name": "Read handbook",
+            "key": "read_handbook",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "geothermal_class_2_3",
+                "key": [
+                    "{$trigger}}"
+                ]
+            },
+            "resolve": "a958346f-91ab-4274-9879-f8492abd25ac",
+            "reject": null,
+            "flow": "5589fe68-0d60-4881-95f9-a8ac85242707",
+            "date_created": "2023-02-07T21:37:56.454Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "360a9536-88d8-4085-918e-1ccbf5c407a0",
+            "name": "Create content block in prod",
+            "key": "create_content_block_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{read_content_block}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "127f0a0e-5fa8-4acc-9fd1-db004a57f38a",
+            "date_created": "2023-02-06T20:14:06.182Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "362c2aea-a393-41ed-8567-ace8adec92f2",
+            "name": "Call redirects flow",
+            "key": "call_redirects_flow",
+            "type": "trigger",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "flow": "6e3a1dbf-4eca-4cde-8cfb-a43faf5dc828",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "e0be0b1c-23f6-4e15-89ad-f77acc45a0d5",
+            "date_created": "2023-02-07T17:07:43.163Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3682caf4-612d-40e0-9da4-df76f39251b8",
+            "name": "Get flow",
+            "key": "get_flow",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env.PUBLIC_URL}}/flows/{{$trigger.flow}}"
+            },
+            "resolve": "b99f2161-7b77-44b1-beec-2b418ed3ae09",
+            "reject": null,
+            "flow": "0e69c224-f61b-4027-b3ba-8b402fd9477b",
+            "date_created": "2023-02-11T18:11:11.746Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3704a765-4a70-4be5-9973-4e30c96a0226",
+            "name": "Create handbook in prod",
+            "key": "create_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "revenue_handbook",
+                    "item": "{{read_handbook}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "b9506c8e-3364-4ae6-b494-4e1b3bd27337",
+            "date_created": "2023-02-07T21:24:26.233Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "375feb8e-c8c5-4aa9-abfc-c6122a5d6236",
+            "name": "Create item in prod",
+            "key": "create_item_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "Interest_Oil_and_Gas",
+                    "item": "{{read_item}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "74f5cfd2-adb8-44f4-910d-3e5048c3e86e",
+            "date_created": "2023-02-07T21:57:21.566Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "37fef12c-a197-491e-9991-b616e6acbd73",
+            "name": "Get tab block from prod",
+            "key": "get_tab_block_from_prod",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.collection}}/{{$trigger.item}}"
+            },
+            "resolve": "94e18266-9154-4dc8-a845-67afa54562ff",
+            "reject": "88f621a3-1834-4687-815a-556369c4c944",
+            "flow": "ced5d50b-054b-41a1-92f3-913bf9664548",
+            "date_created": "2023-02-07T19:07:59.777Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "39dfb758-98aa-481d-a331-ea8cb5b9efab",
+            "name": "Get reporter letter from prod",
+            "key": "get_reporter_letter_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/reporter_letters/{{$trigger}}"
+            },
+            "resolve": "737c4b23-a2bf-476d-8fa1-a40ed0801688",
+            "reject": "db86f127-4425-40ed-af21-822da5cffe37",
+            "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
+            "date_created": "2023-02-07T19:51:09.096Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3afbcd1a-4199-48bf-a3f6-a933f94c497c",
+            "name": "Create tab blocks tab block in prod",
+            "key": "create_tab_blocks_tab_block_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "tab_blocks_tab_block",
+                    "item": "{{read_tab_blocks_tab_block}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-02-06T19:45:07.928Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3cc7c989-edfc-48e5-ab41-9130c0ab91d3",
+            "name": "Create expansion panel block label in prod",
+            "key": "create_expansion_panel_block_label_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{read_expansion_panel_block_label}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "af676dff-ccfe-4b80-8e79-e3daaae9c445",
+            "date_created": "2023-02-06T20:08:20.313Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3e0e89b3-ef22-499d-b31b-31de8197c333",
+            "name": "Filter flows by name",
+            "key": "filter_flows_by_name",
+            "type": "exec",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\tvar flow = _.find(data.get_flows.data.data, (f) => {\n        return f.name === data.get_flow_name.flowName;\n    });\n\n    return {\n    \t\"flowId\": flow.id\n    };\n}"
+            },
+            "resolve": "607928f8-a6d2-4328-8170-5eab3628ff7a",
+            "reject": null,
+            "flow": "827e779c-b4c9-4629-97cd-ece575f7a0ce",
+            "date_created": "2023-02-06T18:34:55.432Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3e5287e1-984e-417d-bf62-3c28eb0b415d",
+            "name": "Read handbook",
+            "key": "read_handbook",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "solid_minerals_handbook",
+                "key": [
+                    "{$trigger}}"
+                ]
+            },
+            "resolve": "b7c6f31f-5dc6-4963-9e9e-e81e4361a24a",
+            "reject": null,
+            "flow": "535d8428-e9d5-4811-9972-f3aa5959d906",
+            "date_created": "2023-02-07T21:30:44.797Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3eb70e29-30cc-412e-8635-9daa6f38a2fa",
+            "name": "Update page block in prod",
+            "key": "update_page_block_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "payload": {
+                    "collection": "pages_page_blocks",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_pages_page_block}}",
+                    "old": "{{get_page_block_from_prod.data.data}}"
+                },
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "be8dfd73-ee17-4767-83d5-9fc82c2ee3bc",
+            "date_created": "2023-02-06T20:21:35.764Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "40e72ecd-69d8-4327-a8b8-8121dea39b5c",
+            "name": "Get handbook from prod",
+            "key": "get_handbook_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/production_handbook/{{$trigger}}"
+            },
+            "resolve": "06dca7bd-8deb-466a-ba69-16e5fa51f86d",
+            "reject": "2143ca48-48c3-4cb6-9d09-b435fe19d527",
+            "flow": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
+            "date_created": "2023-02-07T21:27:09.179Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "4253a322-1afa-48c6-989c-0f3328005f2f",
+            "name": "Read item",
+            "key": "read_item",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "Interest_Solids",
+                "key": [
+                    "{$trigger}}"
+                ]
+            },
+            "resolve": "0ef52ea1-4651-4bb5-b1b4-da69ecb163cd",
+            "reject": null,
+            "flow": "652d461e-2f82-4abd-ab1e-be6ea0bf84f2",
+            "date_created": "2023-02-07T21:56:44.238Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "44a814a8-e1f1-4c13-93dd-7d5ca428c44b",
+            "name": "Update redirect in prod",
+            "key": "update_redirect_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "redirects",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_redirect}}",
+                    "old": "{{get_redirect_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "6e3a1dbf-4eca-4cde-8cfb-a43faf5dc828",
+            "date_created": "2023-02-07T17:05:16.144Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "4607de1f-e957-4492-9a00-21b4fd85ee88",
+            "name": "Update item in prod",
+            "key": "update_item_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "Interest_Solids",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_item}}",
+                    "old": "{{get_item_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "652d461e-2f82-4abd-ab1e-be6ea0bf84f2",
+            "date_created": "2023-02-07T21:56:55.668Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "4b8249a4-cd93-43b8-bd9a-ed6a4345ab73",
+            "name": "API auth",
+            "key": "api_auth",
+            "type": "trigger",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531"
+            },
+            "resolve": "1eb7aad0-7874-4238-a95b-44c4967fd598",
+            "reject": null,
+            "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+            "date_created": "2023-02-06T15:36:30.912Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "4e02f555-562c-4176-81f7-ceb87992a4fe",
+            "name": "Get contact from prod",
+            "key": "get_contact_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/contacts/{{$trigger}}"
+            },
+            "resolve": "5997f7b8-0e71-4273-8d3f-65efaaf3f707",
+            "reject": "dc5f64c1-c73d-4df6-82c8-14c51680e90a",
+            "flow": "a5d5125d-bf35-4776-a37e-e0c95bac9430",
+            "date_created": "2023-02-07T19:42:55.130Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "4e16bbf6-78b2-4021-873d-ca500479b3ba",
+            "name": "Create handbook in prod",
+            "key": "create_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "geothermal_class_1",
+                    "item": "{{read_handbook}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "d119ba33-15c0-4ecb-979e-b4290d88c4a7",
+            "date_created": "2023-02-07T21:35:03.900Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "4e59d0fa-e5ea-477c-af96-9bc0368d924c",
+            "name": "Filter flows by name",
+            "key": "filter_flows_by_name",
+            "type": "exec",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\tvar flow = _.find(data.get_flows.data.data, (f) => {\n        return f.name === `_pricing_${data.$trigger.body.collection}`;\n    });\n\n    return {\n    \t\"flowId\": flow.id\n    };\n}"
+            },
+            "resolve": "0d0ae940-9ea9-4739-876e-683e4a2023b6",
+            "reject": null,
+            "flow": "626877e2-cbbc-4c3f-a67b-304ca721e02b",
+            "date_created": "2023-02-07T16:09:07.612Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5327a6c4-cc82-424f-96dd-27344385ecdd",
+            "name": "Read tab blocks tab block",
+            "key": "read_tab_blocks_tab_block",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "tab_blocks_tab_blocks",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "b2236baf-0adc-4351-8e6c-f6adf632efdc",
+            "reject": null,
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-02-06T19:43:21.896Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "54c24e50-a838-467e-957f-5b7da2e07928",
+            "name": "Update handbook in prod",
+            "key": "update_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "revenue_handbook",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_handbook}}",
+                    "old": "{{get_handbook_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "b9506c8e-3364-4ae6-b494-4e1b3bd27337",
+            "date_created": "2023-02-07T21:24:26.249Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "56e589db-9b5c-4db5-805c-cd5ffe8b4425",
+            "name": "API logout",
+            "key": "api_logout_update",
+            "type": "trigger",
+            "position_x": 127,
+            "position_y": 1,
+            "options": {
+                "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
+                "payload": {
+                    "refreshToken": "{{api_auth_update.refreshToken}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:41:54.080Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "57792fcb-d561-4bab-8618-dc18dc8e984e",
+            "name": "Get index zone from prod",
+            "key": "get_index_zone_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/index_zones/{{$trigger}}"
+            },
+            "resolve": "93a0131b-8d96-4b3a-9ee6-0d5863c323d5",
+            "reject": "60365b4e-fac8-4652-9f49-7040d8f360d8",
+            "flow": "63d570ba-d06e-4139-9374-bd54f7684654",
+            "date_created": "2023-02-07T19:26:51.379Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5997f7b8-0e71-4273-8d3f-65efaaf3f707",
+            "name": "Update contact in prod",
+            "key": "update_contact_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "contacts",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_contact}}",
+                    "old": "{{get_contact_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "a5d5125d-bf35-4776-a37e-e0c95bac9430",
+            "date_created": "2023-02-07T19:42:55.106Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5a589cbd-19c1-419a-bf6b-2f999a2a9a6a",
+            "name": "Get flow name",
+            "key": "get_flow_name",
+            "type": "exec",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "code": "module.exports = async function(data) {\n\tvar name = '';\n    \n    switch (data.$trigger.collection) {\n        case 'content_blocks':\n            name = '_content_block';\n            break;\n        case 'card_blocks':\n            name = '_card_block';\n            break;\n        case 'expansion_panel_block_label':\n            name = '_expansion_panel_block_label'\n            break;\n    }\n    \n\treturn {\n        \"flowName\": name\n    };\n}"
+            },
+            "resolve": "33903d83-d756-42d1-8366-63565f2ea61c",
+            "reject": null,
+            "flow": "0664e1b2-b978-4bb6-b3a1-124e764e1b56",
+            "date_created": "2023-02-06T19:21:37.706Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5ab10f49-b3f0-4729-b751-3bcc14d9ec75",
+            "name": "Create card block in prod",
+            "key": "create_card_block_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{read_card_block}}"
+                },
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "3b01d511-b2ae-4f04-a14f-38eaec857485",
+            "date_created": "2023-02-06T19:39:14.978Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5b012856-ba41-4181-9437-532d1e330e1a",
+            "name": "API auth",
+            "key": "api_auth",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "method": "POST",
+                "url": "{{$env['UPSTREAM_URL']}}/auth/login",
+                "body": "{\n  \"email\": \"agent.oprah@onrr.gov\",\n  \"password\": \"CorgiParade\"\n}"
+            },
+            "resolve": "c4716a7b-1cff-419e-8ab3-66ab82b88c7c",
+            "reject": null,
+            "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531",
+            "date_created": "2023-02-06T15:25:45.487Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5d63cea5-0179-499d-bc30-06229b793a22",
+            "name": "Create NYMEX in prod",
+            "key": "create_nymex_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "NYMEX",
+                    "item": "{{read_nymex_item}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "5f5960fb-fcb9-441b-883b-3672d4a2eb14",
+            "date_created": "2023-02-07T16:28:00.109Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5d74011d-8d7f-407d-ab71-2632d6d19af8",
+            "name": "Update tab blocks tab block in prod",
+            "key": "update_tab_blocks_tab_block_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "tab_blocks_tab_block",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_tab_blocks_tab_block}}",
+                    "old": "{{get_tab_blocks_tab_block_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-02-06T19:45:07.943Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5dab927f-1293-4fab-accf-259e7a705af8",
+            "name": "Read expansion panel block label",
+            "key": "read_expansion_panel_block_label",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "expansion_panel_block_label",
+                "key": [
+                    "{{$trigger.item}}"
+                ]
+            },
+            "resolve": "dad42786-5b58-4c3d-b3fb-74e1056403d5",
+            "reject": null,
+            "flow": "af676dff-ccfe-4b80-8e79-e3daaae9c445",
+            "date_created": "2023-02-06T20:07:29.546Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5e74bdcf-a9d2-4555-836c-debce5895c83",
+            "name": "Read NYMEX item",
+            "key": "read_nymex_item",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "NYMEX",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "2c2e6662-9d85-46cb-bfd8-ecdbbe8177ce",
+            "reject": null,
+            "flow": "5f5960fb-fcb9-441b-883b-3672d4a2eb14",
+            "date_created": "2023-02-07T16:27:41.873Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "60365b4e-fac8-4652-9f49-7040d8f360d8",
+            "name": "Create index zone in prod",
+            "key": "create_index_zone_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "index_zones",
+                    "item": "{{read_index_zone_item}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "63d570ba-d06e-4139-9374-bd54f7684654",
+            "date_created": "2023-02-07T16:20:03.100Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "607928f8-a6d2-4328-8170-5eab3628ff7a",
+            "name": "Call collection flow",
+            "key": "call_collection_flow",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "flow": "{{filter_flows_by_name.flowId}}",
+                "payload": {
+                    "item": "{{$trigger.item}}",
+                    "collection": "{{$trigger.collection}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "827e779c-b4c9-4629-97cd-ece575f7a0ce",
+            "date_created": "2023-02-06T19:19:32.872Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "61db66f5-0ba9-42b8-b328-7027f0d05529",
+            "name": "Read item",
+            "key": "read_item",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "Interest_Oil_and_Gas",
+                "key": [
+                    "{$trigger}}"
+                ]
+            },
+            "resolve": "910afc71-5a43-42f5-b464-f3423f4b3722",
+            "reject": null,
+            "flow": "74f5cfd2-adb8-44f4-910d-3e5048c3e86e",
+            "date_created": "2023-02-07T21:57:09.695Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "6358f491-ee02-44a2-8841-3e0000002ddb",
+            "name": "Compare objects",
+            "key": "compare_objects",
+            "type": "exec",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\treturn _.transform(data.$trigger.new, function (result, value, key) {\n      if (!_.isEqual(value, data.$trigger.old[key])) {\n        result[key] = value;\n      }\n    });\n}"
+            },
+            "resolve": "f1de6dbb-0d17-4b08-a7dd-5defaec06269",
+            "reject": null,
+            "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+            "date_created": "2023-02-06T15:45:06.205Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "64ad68fd-023a-4c9d-a53d-976793d65907",
+            "name": "API auth",
+            "key": "api_auth",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "method": "POST",
+                "url": "https://prod-onr-cms.app.cloud.gov/auth/login",
+                "body": "{\n  \"email\": \"agent.oprah@onrr.gov\",\n  \"password\": \"CorgiParade\"\n}"
+            },
+            "resolve": "c12d8ac6-640f-4289-9536-930f18c0aa8f",
+            "reject": null,
+            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
+            "date_created": "2023-02-02T19:43:41.928Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "65b2e5c5-73c9-4b0d-b752-794a21b42789",
+            "name": "Get flows",
+            "key": "get_flows",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/flows"
+            },
+            "resolve": "7a8b4993-f1c4-4096-973f-348bb0076b38",
+            "reject": null,
+            "flow": "5e3c9591-d7b7-42ea-b11f-80cc3cb7ea25",
+            "date_created": "2023-02-07T22:23:25.229Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "675b2a0a-0a82-439b-84ad-f4f93ed035ba",
+            "name": "Get item from prod",
+            "key": "get_item_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/plant_specific_ucas/{{$trigger}}"
+            },
+            "resolve": "1c5213d9-2ac6-48a6-98fe-ab5dd0fff6e6",
+            "reject": "24d7c829-b934-42ae-827d-f4bb9d8061df",
+            "flow": "318ceaef-75e1-4a34-b29d-22d84b85b5d7",
+            "date_created": "2023-02-07T21:45:35.309Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "68b1d917-24be-49a6-a848-ef0839e8bbe4",
+            "name": "Create expansion panel block in prod",
+            "key": "create_expansion_panel_block_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "expansion_panels_expansion_panel_blocks",
+                    "item": "{{read_expansion_panel_block}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "aa9d1bd2-85a8-41ee-ba34-4b66537d7e07",
+            "date_created": "2023-02-06T20:00:12.212Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "6a1a7639-310e-462e-b044-bc116e461054",
+            "name": "Get folder",
+            "key": "get_folder",
+            "type": "request",
+            "position_x": 73,
+            "position_y": 18,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/folders",
+                "method": "SEARCH",
+                "body": "{\n\t\"query\": {\n\t\t\"filter\": {\n\t\t\t\"name\": {\n\t\t\t\t\"_eq\": \"publish\"\n\t\t\t}\n\t\t}\n\t}\n}"
+            },
+            "resolve": "86f345df-c729-4844-babe-289c8d5778cf",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-10T00:11:21.697Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "6a34c99d-421e-4895-aa83-b547a2f13a7a",
+            "name": "Trigger page block collection flow",
+            "key": "trigger_page_block_collection_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "827e779c-b4c9-4629-97cd-ece575f7a0ce",
+                "payload": {
+                    "item": "{{read_pages_page_block.item}}",
+                    "collection": "{{read_pages_page_block.collection}}"
+                }
+            },
+            "resolve": "dd13b615-39f2-436f-940a-a78a4a313fcc",
+            "reject": null,
+            "flow": "be8dfd73-ee17-4767-83d5-9fc82c2ee3bc",
+            "date_created": "2023-02-06T20:21:35.790Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "6e820dea-d3ad-4e5a-a354-547470cd7a0f",
+            "name": "Call handbook flow",
+            "key": "call_handbook_flow",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "{{filter_flows_by_name.flowId}}",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "0f05e26e-607c-4920-8b09-e51feef399f4",
+            "date_created": "2023-02-07T21:42:01.455Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "6f30e64f-ca57-4f65-95ad-90fcf005c9e2",
+            "name": "Get page from prod",
+            "key": "get_page_from_prod",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}"
+            },
+            "resolve": "8664db51-6e75-409d-8684-206c23d64eaa",
+            "reject": "718fece8-8b71-4c18-b0f7-74571575993f",
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-07T19:29:00.754Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "6f669ed4-aba9-4a8f-a4ff-f7f344061290",
+            "name": "Compare files",
+            "key": "compare_files",
+            "type": "exec",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\treturn _.transform(data.read_file.data.data, function (result, value, key) {\n      if (!_.isEqual(value, data.get_file_from_prod.data.data[key])) {\n        result[key] = value;\n      }\n    });\n}"
+            },
+            "resolve": "20596328-9209-485e-8ca7-1705e8545ef7",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:40:35.034Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "7138bba8-8052-4e44-8893-1ddaab9f3b8f",
+            "name": "Call file flow",
+            "key": "call_file_flow",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_press_release.file}}"
+                }
+            },
+            "resolve": "e21cd1f7-53f2-4d40-89cb-5422bc373a35",
+            "reject": null,
+            "flow": "de496a02-cb91-4e8e-80a9-7c9904b62ad3",
+            "date_created": "2023-02-08T17:58:10.312Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "718fece8-8b71-4c18-b0f7-74571575993f",
+            "name": "Create page in prod",
+            "key": "create_page_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "{{$trigger.body.collection}}",
+                    "item": "{{read_page}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-06T20:37:39.239Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "72e068db-21ae-453e-a6c2-ffde1d630197",
+            "name": "Read expansion panel",
+            "key": "read_expansion_panel",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "expansion_panels",
+                "key": [
+                    "{{$trigger.item}}"
+                ]
+            },
+            "resolve": "3146d544-9588-4be6-94b4-3dbd72619c88",
+            "reject": null,
+            "flow": "67182ac8-0c80-46ae-b3f5-2041c3bb3aaf",
+            "date_created": "2023-02-06T19:55:35.361Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "737c4b23-a2bf-476d-8fa1-a40ed0801688",
+            "name": "Update reporter letter in prod",
+            "key": "update_reporter_letter_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "payload": {
+                    "collection": "reporter_letters",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_reporter_letter}}",
+                    "old": "{{get_reporter_letter_from_prod}}"
+                },
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
+            "date_created": "2023-02-07T19:51:09.085Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "7756ad5c-5472-4d2d-bedb-6ceffa471014",
+            "name": "Call press releases flow",
+            "key": "call_press_releases_flow",
+            "type": "trigger",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "flow": "de496a02-cb91-4e8e-80a9-7c9904b62ad3",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "cb2432cc-dffa-47a6-af94-1659137f8920",
+            "date_created": "2023-02-08T18:17:08.924Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "77c8a77b-d412-4f5a-a769-a0d51b6bb969",
+            "name": "Get card block from prod",
+            "key": "get_card_block_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.collection}}/{{$trigger.item}}"
+            },
+            "resolve": "8354d1a8-daf1-4458-9603-27cde29a9046",
+            "reject": "5ab10f49-b3f0-4729-b751-3bcc14d9ec75",
+            "flow": "3b01d511-b2ae-4f04-a14f-38eaec857485",
+            "date_created": "2023-02-07T19:20:18.891Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "7a8b4993-f1c4-4096-973f-348bb0076b38",
+            "name": "Filter flows by name",
+            "key": "filter_flows_by_name",
+            "type": "exec",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\tvar flow = _.find(data.get_flows.data.data, (f) => {\n        return f.name === `_${data.$trigger.body.collection}`;\n    });\n\n    return {\n    \t\"flowId\": flow.id\n    };\n}"
+            },
+            "resolve": "b3107ffb-f738-4e5b-9df5-a2ef22ddaf8b",
+            "reject": null,
+            "flow": "5e3c9591-d7b7-42ea-b11f-80cc3cb7ea25",
+            "date_created": "2023-02-07T22:23:30.551Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "7b67a105-eebc-4fda-8280-a876eda826ab",
+            "name": "Trigger tab block flow",
+            "key": "trigger_tab_block_flow",
+            "type": "trigger",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "flow": "ced5d50b-054b-41a1-92f3-913bf9664548",
+                "payload": {
+                    "collection": "tab_blocks",
+                    "item": "{{$trigger}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "49182a53-6edc-4e8d-b189-27cd33c65ae4",
+            "date_created": "2023-02-07T17:14:15.387Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "7bb05fbf-79fd-4e30-aeeb-e6f511f33a11",
+            "name": "Update expansion panel block in prod",
+            "key": "update_expansion_panel_block_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "expansion_panels_expansion_panel_blocks",
+                    "item": "{{$trigger}}",
+                    "old": "{{get_expansion_item_block_from_prod}}",
+                    "new": "{{read_expansion_item_block}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "aa9d1bd2-85a8-41ee-ba34-4b66537d7e07",
+            "date_created": "2023-02-06T20:00:12.229Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "7cdf1ff9-7686-4e0d-a740-ba840f5775d8",
+            "name": "Create redirect in prod",
+            "key": "create_redirect_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "payload": {
+                    "collection": "redirects",
+                    "item": "{{read_redirect}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "6e3a1dbf-4eca-4cde-8cfb-a43faf5dc828",
+            "date_created": "2023-02-07T17:06:13.660Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "7ed567a2-f210-4335-9ea1-db2a23786b8b",
+            "name": "Call expansion panel block collection flow",
+            "key": "call_expansion_panel_block_collection_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "0664e1b2-b978-4bb6-b3a1-124e764e1b56",
+                "payload": {
+                    "item": "{{read_expansion_panel_block.item}}",
+                    "collection": "{{read_expansion_panel_block.collection}}"
+                }
+            },
+            "resolve": "ae7dd587-3d42-4916-a055-1d683b51a5b8",
+            "reject": null,
+            "flow": "aa9d1bd2-85a8-41ee-ba34-4b66537d7e07",
+            "date_created": "2023-02-06T19:57:46.504Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "81fc0fbe-7fa3-444e-b909-858fdbcdc3c4",
+            "name": "Trigger _tab_blocks_tab_block",
+            "key": "trigger_tab_blocks_tab_block",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+                "payload": "{{read_tab_block.tab_blocks}}"
+            },
+            "resolve": "37fef12c-a197-491e-9991-b616e6acbd73",
+            "reject": null,
+            "flow": "ced5d50b-054b-41a1-92f3-913bf9664548",
+            "date_created": "2023-02-06T19:48:24.170Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8354d1a8-daf1-4458-9603-27cde29a9046",
+            "name": "Update card block in prod",
+            "key": "update_card_block_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{$trigger.item}}",
+                    "new": "{{read_card_block}}",
+                    "old": "{{get_card_block_from_prod.data.data}}"
+                },
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "3b01d511-b2ae-4f04-a14f-38eaec857485",
+            "date_created": "2023-02-06T19:39:14.996Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8649c33f-e8d8-4203-8061-545031c51f92",
+            "name": "Get flow name",
+            "key": "get_flow_name",
+            "type": "exec",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "code": "module.exports = async function(data) {\n\tvar name = '';\n    \n    switch (data.$trigger.collection) {\n        case 'content_blocks':\n            name = '_content_block';\n            break;\n        case 'card_blocks':\n            name = '_card_block';\n            break;\n        case 'tab_blocks':\n            name = '_tab_block'\n            break;\n        case 'expansion_panels':\n            name = '_expansion_panel';\n            break;\n        case 'layout_column_blocks':\n            name ='_layout_column_block';\n            break;\n    }\n    \n\treturn {\n        \"flowName\": name\n    };\n}"
+            },
+            "resolve": "efa86511-0496-470a-9651-8114211ade96",
+            "reject": null,
+            "flow": "827e779c-b4c9-4629-97cd-ece575f7a0ce",
+            "date_created": "2023-02-06T18:31:56.934Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8664db51-6e75-409d-8684-206c23d64eaa",
+            "name": "Update page in prod",
+            "key": "update_page_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "{{$trigger.body.collection}}",
+                    "item": "{{$trigger.body.keys[0]}}",
+                    "new": "{{read_page}}",
+                    "old": "{{get_page_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-06T20:36:33.300Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "868ff943-b5c0-49f0-b40f-a8504d5b0ca5",
+            "name": "Get handbook from prod",
+            "key": "get_handbook_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/revenue_handbook/{{$trigger}}"
+            },
+            "resolve": "54c24e50-a838-467e-957f-5b7da2e07928",
+            "reject": "3704a765-4a70-4be5-9973-4e30c96a0226",
+            "flow": "b9506c8e-3364-4ae6-b494-4e1b3bd27337",
+            "date_created": "2023-02-07T21:24:26.260Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "86f345df-c729-4844-babe-289c8d5778cf",
+            "name": "Get file title",
+            "key": "get_file_title",
+            "type": "exec",
+            "position_x": 91,
+            "position_y": 18,
+            "options": {
+                "code": "import { v4 as uuidv4 } from 'uuid';\n\nmodule.exports = async function(data) {\n\treturn { \"title\": `publish-file-${uidv4()}`};\n}"
+            },
+            "resolve": "90d77f0c-fd2c-492e-8112-88e774d3deef",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-10T20:54:21.991Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8744eac2-1b09-4907-9355-307b8ba87277",
+            "name": "API logout",
+            "key": "api_logout",
+            "type": "trigger",
+            "position_x": 91,
+            "position_y": 1,
+            "options": {
+                "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
+                "payload": {
+                    "refreshToken": "{{api_auth.refreshToken}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+            "date_created": "2023-02-06T15:46:31.863Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "878571be-fc27-4a80-a17f-b7c86b7bc112",
+            "name": "Update item in prod",
+            "key": "update_item_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "Interest_Oil_and_Gas",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_item}}",
+                    "old": "{{get_item_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "74f5cfd2-adb8-44f4-910d-3e5048c3e86e",
+            "date_created": "2023-02-07T21:57:18.416Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "88f621a3-1834-4687-815a-556369c4c944",
+            "name": "Create tab block in prod",
+            "key": "create_tab_block_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{read_tab_block}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "ced5d50b-054b-41a1-92f3-913bf9664548",
+            "date_created": "2023-02-06T19:51:02.441Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8ab3ea8b-76cb-42c3-9b9d-2b537eaacf66",
+            "name": "Read redirect",
+            "key": "read_redirect",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "redirects",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "c7b6950a-1015-4f72-b7af-adb17aed5685",
+            "reject": null,
+            "flow": "6e3a1dbf-4eca-4cde-8cfb-a43faf5dc828",
+            "date_created": "2023-02-07T17:05:16.170Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8b45a2b7-dc7f-471d-84f1-46b5f2477c74",
+            "name": "API logout",
+            "key": "api_logout",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "method": "POST",
+                "url": "{{$env['UPSTREAM_URL']}}/auth/logout",
+                "body": "{\n  \"refresh_token\": \"{{$trigger.refreshToken}}\"\n}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
+            "date_created": "2023-02-06T15:27:24.676Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8b55fecc-5622-48b6-a8cf-7e982fec1832",
+            "name": "Update expansion panel block label in prod",
+            "key": "update_expansion_panel_block_label_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{$trigger.item}}",
+                    "new": "{{read_expansion_panel_block_label}}",
+                    "old": "{{get_expansion_panel_block_label_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "af676dff-ccfe-4b80-8e79-e3daaae9c445",
+            "date_created": "2023-02-06T20:07:29.517Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8c5b4e17-8001-4caf-bd57-cca82c90f141",
+            "name": "Get operations",
+            "key": "get_operations",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env.PUBLIC_URL}}/operations?limit=500",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer emhmi1kuhPnw81llIZ4FpnV3L0ECXJQP"
+                    }
+                ]
+            },
+            "resolve": "292c8cc4-4b1f-4fd8-9178-3bf5a68f1b9b",
+            "reject": null,
+            "flow": "777a6fd4-c7c9-48fc-b74f-550ddbad3dec",
+            "date_created": "2023-02-11T17:45:42.417Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8cc6df7b-0e47-4a5c-9c85-b2b6a73925f1",
+            "name": "Filter flows by name",
+            "key": "filter_flows_by_name",
+            "type": "exec",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\tvar flow = _.find(data.get_flows.data.data, (f) => {\n        return f.name === `_handbook_${data.$trigger.body.collection}`;\n    });\n\n    return {\n    \t\"flowId\": flow.id\n    };\n}"
+            },
+            "resolve": "6e820dea-d3ad-4e5a-a354-547470cd7a0f",
+            "reject": null,
+            "flow": "0f05e26e-607c-4920-8b09-e51feef399f4",
+            "date_created": "2023-02-07T21:41:57.519Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "908b750c-f4b0-4229-91d8-ee96359f8a56",
+            "name": "Read press release",
+            "key": "read_press_release",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "press_releases",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "0940dbcf-afaa-4da6-96db-934b57fa62c4",
+            "reject": null,
+            "flow": "de496a02-cb91-4e8e-80a9-7c9904b62ad3",
+            "date_created": "2023-02-08T17:58:10.382Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "90d77f0c-fd2c-492e-8112-88e774d3deef",
+            "name": "Export file",
+            "key": "export_file",
+            "type": "request",
+            "position_x": 109,
+            "position_y": 18,
+            "options": {
+                "method": "POST",
+                "url": "{{$env['PUBLIC_URL']}}/utils/export/directus_files",
+                "body": "{\n  \"format\": \"json\",\n  \"query\": {\n    \"filter\": {\n      \"id\": {\n        \"_eq\": \"{{$trigger.fileUuid}}\"\n      }\n    }\n  },\n  \"file\": {\n    \"folder\": \"{{get_folder.data.data[0].id}}\",\n    \"title\": \"{{get_file_title.title}}\"\n  }\n}"
+            },
+            "resolve": "d626acce-1771-490c-b0fe-7825da761ac7",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-10T00:05:12.910Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "910afc71-5a43-42f5-b464-f3423f4b3722",
+            "name": "Get item from prod",
+            "key": "get_item_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/Interest_Oil_and_Gas/{{$trigger}}"
+            },
+            "resolve": "878571be-fc27-4a80-a17f-b7c86b7bc112",
+            "reject": "375feb8e-c8c5-4aa9-abfc-c6122a5d6236",
+            "flow": "74f5cfd2-adb8-44f4-910d-3e5048c3e86e",
+            "date_created": "2023-02-07T21:57:14.099Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "93a0131b-8d96-4b3a-9ee6-0d5863c323d5",
+            "name": "Update index zone in prod",
+            "key": "update_index_zone_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "index_zones",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_index_zone_item}}",
+                    "old": "{{get_index_zone_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "63d570ba-d06e-4139-9374-bd54f7684654",
+            "date_created": "2023-02-07T16:20:03.115Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "94e18266-9154-4dc8-a845-67afa54562ff",
+            "name": "Update tab block in prod",
+            "key": "update_tab_block_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{$trigger.item}}",
+                    "new": "{{read_tab_block}}",
+                    "old": "{{get_tab_block_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "ced5d50b-054b-41a1-92f3-913bf9664548",
+            "date_created": "2023-02-06T19:51:02.456Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "99d2df6c-904f-4e42-bebe-ceaf7a1a803d",
+            "name": "Update handbook in prod",
+            "key": "update_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "geothermal_class_1",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_handbook}}",
+                    "old": "{{get_handbook_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "d119ba33-15c0-4ecb-979e-b4290d88c4a7",
+            "date_created": "2023-02-07T21:35:00.451Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "9c3cac8c-84df-4d74-b89c-52033e837e5e",
+            "name": "API auth",
+            "key": "api_auth_create",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 18,
+            "options": {
+                "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531"
+            },
+            "resolve": "6a1a7639-310e-462e-b044-bc116e461054",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:48:24.798Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "9c552444-f511-4ffb-bf6d-182363674cfc",
+            "name": "API logout",
+            "key": "api_logout",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
+                "payload": {
+                    "refreshToken": "{{api_auth.refreshToken}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+            "date_created": "2023-02-06T15:36:30.863Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a0521d96-103c-4e7e-a28d-abc5007f5e7d",
+            "name": "Trigger report letters flow",
+            "key": "trigger_report_letters_flow",
+            "type": "trigger",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "16f853f0-70c3-411a-8e05-b5db06a8088a",
+            "date_created": "2023-02-07T19:52:28.909Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a29179a6-125b-4697-baa8-4bf960e25b58",
+            "name": "Update Indian Gas Major Portion in prod",
+            "key": "update_indian_gas_major_portion_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "indian_gas_major_portion",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_indian_gas_major_portion_item}}",
+                    "old": "{{get_indian_gas_major_portion_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "45331b92-9015-4f9a-a3e2-95d3521c013a",
+            "date_created": "2023-02-07T16:24:54.196Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a41142ba-e8b2-43b7-8029-a299a2a2b430",
+            "name": "Get file from prod",
+            "key": "get_file_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/files/{{$trigger.fileUuid}}"
+            },
+            "resolve": "6f669ed4-aba9-4a8f-a4ff-f7f344061290",
+            "reject": "9c3cac8c-84df-4d74-b89c-52033e837e5e",
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:40:35.074Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a6938ef8-c3de-4dd3-a422-12ea85d4d395",
+            "name": "API logout",
+            "key": "api_logout_create",
+            "type": "trigger",
+            "position_x": 181,
+            "position_y": 18,
+            "options": {
+                "flow": "5cf31a55-ea84-4ba2-9577-6e1f5abae2c2",
+                "payload": {
+                    "refreshToken": "{{api_auth_create.refreshToken}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:48:24.753Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a6a93140-76b2-46f2-bc76-34fb538af8c3",
+            "name": "Get flows",
+            "key": "get_flows",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/flows"
+            },
+            "resolve": "4e59d0fa-e5ea-477c-af96-9bc0368d924c",
+            "reject": null,
+            "flow": "626877e2-cbbc-4c3f-a67b-304ca721e02b",
+            "date_created": "2023-02-07T16:09:07.631Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a7af5c63-b47b-44e0-b339-7e008523cf80",
+            "name": "Get Indian Gas Major Portion from prod",
+            "key": "get_indian_gas_major_portion_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/indian_gas_major_portion/{{$trigger.item}}"
+            },
+            "resolve": "a29179a6-125b-4697-baa8-4bf960e25b58",
+            "reject": "c7c6357d-14d8-441f-a920-c67fc67e422a",
+            "flow": "45331b92-9015-4f9a-a3e2-95d3521c013a",
+            "date_created": "2023-02-07T19:23:10.371Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a958346f-91ab-4274-9879-f8492abd25ac",
+            "name": "Get handbook from prod",
+            "key": "get_handbook_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/geothermal_class_2_3/{{$trigger}}"
+            },
+            "resolve": "08c77a08-1eb6-4a0e-b245-9b9ba30ee2af",
+            "reject": "0f9cfbe3-8557-489c-94d0-df03c2b218a1",
+            "flow": "5589fe68-0d60-4881-95f9-a8ac85242707",
+            "date_created": "2023-02-07T21:38:02.294Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a97ad98a-1cb5-4eaa-8f18-40ee59629b95",
+            "name": "API logout",
+            "key": "api_logout_twdwk",
+            "type": "request",
+            "position_x": 91,
+            "position_y": 17,
+            "options": {
+                "method": "POST",
+                "url": "https://prod-onr-cms.app.cloud.gov/auth/logout",
+                "body": "{\n  \"refresh_token\": \"{{api_auth.data.data.refresh_token}}\"\n}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
+            "date_created": "2023-02-02T19:46:21.752Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a9c773aa-3a19-4b95-bc4e-327b07bd839c",
+            "name": "Read content block",
+            "key": "read_content_block",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "content_blocks",
+                "key": [
+                    "{{$trigger.item}}"
+                ]
+            },
+            "resolve": "b4f5f020-3fe6-4091-adea-6967dc73a662",
+            "reject": null,
+            "flow": "127f0a0e-5fa8-4acc-9fd1-db004a57f38a",
+            "date_created": "2023-02-06T20:13:12.582Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "aad9165e-88bc-402a-8bdb-5c5813947623",
+            "name": "Update free release in prod",
+            "key": "update_free_release_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "press_releases",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_press_release}}",
+                    "old": "{{get_press_release_from_prod}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "de496a02-cb91-4e8e-80a9-7c9904b62ad3",
+            "date_created": "2023-02-08T18:03:28.215Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "abbdf236-b664-47a4-b6d6-5eb1039e5f9e",
+            "name": "Call flow",
+            "key": "call_flow",
+            "type": "trigger",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "flow": "318ceaef-75e1-4a34-b29d-22d84b85b5d7",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "07444c35-0e91-4b15-967f-d4a7f755d6fe",
+            "date_created": "2023-02-07T21:51:48.685Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ac5b74a5-a71e-42c8-99f3-f287e4622b36",
+            "name": "Get flows",
+            "key": "get_flows",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/flows"
+            },
+            "resolve": "8cc6df7b-0e47-4a5c-9c85-b2b6a73925f1",
+            "reject": null,
+            "flow": "0f05e26e-607c-4920-8b09-e51feef399f4",
+            "date_created": "2023-02-07T21:41:52.835Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ace4a168-5e33-4638-9fda-5987543dcce7",
+            "name": "Read item",
+            "key": "read_item",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "plant_specific_ucas",
+                "key": [
+                    "{$trigger}}"
+                ]
+            },
+            "resolve": "675b2a0a-0a82-439b-84ad-f4f93ed035ba",
+            "reject": null,
+            "flow": "318ceaef-75e1-4a34-b29d-22d84b85b5d7",
+            "date_created": "2023-02-07T21:45:30.090Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ad1d6a1e-2afd-4840-982d-835784d88102",
+            "name": "Trigger page block",
+            "key": "trigger_page_block",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "be8dfd73-ee17-4767-83d5-9fc82c2ee3bc",
+                "payload": "{{read_page.page_blocks}}"
+            },
+            "resolve": "6f30e64f-ca57-4f65-95ad-90fcf005c9e2",
+            "reject": null,
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-06T20:36:33.325Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ae7dd587-3d42-4916-a055-1d683b51a5b8",
+            "name": "Get expansion panel block from prod",
+            "key": "get_expansion_panel_block_from_prod",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/expansion_panels_expansion_panel_blocks/{{$trigger}}"
+            },
+            "resolve": "7bb05fbf-79fd-4e30-aeeb-e6f511f33a11",
+            "reject": "68b1d917-24be-49a6-a848-ef0839e8bbe4",
+            "flow": "aa9d1bd2-85a8-41ee-ba34-4b66537d7e07",
+            "date_created": "2023-02-07T19:31:58.598Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b0c6e51a-0b48-41c4-97f3-ed1bedc3c557",
+            "name": "Read page",
+            "key": "read_page",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "pages",
+                "key": [
+                    "{{$trigger.body.keys[0]}}"
+                ]
+            },
+            "resolve": "ad1d6a1e-2afd-4840-982d-835784d88102",
+            "reject": null,
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-06T20:36:33.346Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b2236baf-0adc-4351-8e6c-f6adf632efdc",
+            "name": "Trigger _card_block flow",
+            "key": "trigger_card_block_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "payload": {
+                    "collection": "card_blocks",
+                    "item": "{{ read_tab_blocks_tab_block.item }}"
+                },
+                "flow": "3b01d511-b2ae-4f04-a14f-38eaec857485"
+            },
+            "resolve": "101d0a44-e245-4443-a56f-c6f339b5d13c",
+            "reject": null,
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-02-06T19:43:21.881Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b3107ffb-f738-4e5b-9df5-a2ef22ddaf8b",
+            "name": "Call interest flow",
+            "key": "call_interest_flow",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "{{filter_flows_by_name.flowId}}",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "5e3c9591-d7b7-42ea-b11f-80cc3cb7ea25",
+            "date_created": "2023-02-07T22:23:34.789Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b4f5f020-3fe6-4091-adea-6967dc73a662",
+            "name": "Get content block from prod",
+            "key": "get_content_block_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.collection}}/{{$trigger.item}}"
+            },
+            "resolve": "0ae43201-1c79-4039-847c-0a7a65bfea97",
+            "reject": "360a9536-88d8-4085-918e-1ccbf5c407a0",
+            "flow": "127f0a0e-5fa8-4acc-9fd1-db004a57f38a",
+            "date_created": "2023-02-07T19:18:52.007Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b7c6f31f-5dc6-4963-9e9e-e81e4361a24a",
+            "name": "Get handbook from prod",
+            "key": "get_handbook_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/solid_minerals_handbook/{{$trigger}}"
+            },
+            "resolve": "2a8f67ed-454c-4f3b-ae15-121e962bb3c2",
+            "reject": "da297a9d-4fd0-48d9-9a51-8fc833f35bf2",
+            "flow": "535d8428-e9d5-4811-9972-f3aa5959d906",
+            "date_created": "2023-02-07T21:30:50.395Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b96fe82b-7c90-43cc-ab32-e0ad2b540bea",
+            "name": "Update IBMP in prod",
+            "key": "update_ibmp_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "ibmp",
+                    "item": "{{$trigger}}",
+                    "new": "{{read_ibmp_item}}",
+                    "old": "{{get_ibmp_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "9cb14ffa-c7aa-46ea-9bd4-3deb87c2ca98",
+            "date_created": "2023-02-07T16:15:08.223Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b99f2161-7b77-44b1-beec-2b418ed3ae09",
+            "name": "Export operation",
+            "key": "export_operation",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/utils/export/directus_operations",
+                "method": "POST",
+                "body": "{\n  \"format\": \"json\",\n  \"query\": {\n    \"filter\": {\n      \"id\": {\n        \"_eq\": \"{{$trigger.id}}\"\n      }\n    }\n  },\n  \"file\": {\n    \"folder\": \"2728f97e-1631-47bf-b228-3562359ace36\",\n    \"title\": \"{{get_flow.data.data.name}}.{{$trigger.key}}\"\n  }\n}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer emhmi1kuhPnw81llIZ4FpnV3L0ECXJQP"
+                    }
+                ]
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "0e69c224-f61b-4027-b3ba-8b402fd9477b",
+            "date_created": "2023-02-11T18:11:11.733Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "bc043938-b32b-4c94-80d9-152e95a04349",
+            "name": "Read file",
+            "key": "read_file",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/files/{{$trigger.fileUuid}}"
+            },
+            "resolve": "a41142ba-e8b2-43b7-8029-a299a2a2b430",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:40:35.107Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "bd6d9a57-fc04-4f79-8f46-eb6995c225af",
+            "name": "Get export file meta",
+            "key": "get_export_file_meta",
+            "type": "request",
+            "position_x": 145,
+            "position_y": 18,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/files",
+                "method": "SEARCH",
+                "body": "{\n\t\"query\": {\n\t\t\"filter\": {\n\t\t\t\"title\": {\n\t\t\t\t\"_eq\": \"export_{{$trigger.fileUuid}}\"\n\t\t\t}\n\t\t}\n\t}\n}",
+                "headers": [
+                    {
+                        "header": "Content-Type",
+                        "value": "application/json"
+                    }
+                ]
+            },
+            "resolve": "fd1fe304-1145-4c21-ae97-7e2013d27391",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-10T01:28:38.240Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c077a1fb-94be-4c9c-b09e-66707c226a64",
+            "name": "Read card block",
+            "key": "read_card_block",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "card_blocks",
+                "key": [
+                    "{{$trigger.item}}"
+                ]
+            },
+            "resolve": "77c8a77b-d412-4f5a-a769-a0d51b6bb969",
+            "reject": null,
+            "flow": "3b01d511-b2ae-4f04-a14f-38eaec857485",
+            "date_created": "2023-02-06T19:39:15.029Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c12d8ac6-640f-4289-9536-930f18c0aa8f",
+            "name": "Get item from prod",
+            "key": "get_item_from_prod",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}"
+            },
+            "resolve": "0ce076cc-8747-4f76-8002-d59fffd944cf",
+            "reject": "13ddea30-a7c6-443b-8f92-e3e4d520cf2d",
+            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
+            "date_created": "2023-02-02T19:43:41.915Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c21bbdac-5008-490f-81d4-e5f4793c4d1c",
+            "name": "Read handbook",
+            "key": "read_handbook",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "production_handbook",
+                "key": [
+                    "{$trigger}}"
+                ]
+            },
+            "resolve": "40e72ecd-69d8-4327-a8b8-8121dea39b5c",
+            "reject": null,
+            "flow": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
+            "date_created": "2023-02-07T21:27:03.740Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c266ee68-08e8-43f2-b04d-daba8adaa90c",
+            "name": "API auth",
+            "key": "api_auth",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531"
+            },
+            "resolve": "ca24efcc-ca5d-4e4b-baba-04888cbeb91b",
+            "reject": null,
+            "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+            "date_created": "2023-02-06T15:45:06.174Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c4716a7b-1cff-419e-8ab3-66ab82b88c7c",
+            "name": "Add tokens to data chain",
+            "key": "add_tokens_to_data_chain",
+            "type": "transform",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "json": {
+                    "refreshToken": "{{api_auth.data.data.refresh_token}}",
+                    "accessToken": "{{api_auth.data.data.access_token}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531",
+            "date_created": "2023-02-06T15:25:45.475Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c7b6950a-1015-4f72-b7af-adb17aed5685",
+            "name": "Get redirect from prod",
+            "key": "get_redirect_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/redirects/{{$trigger}}"
+            },
+            "resolve": "44a814a8-e1f1-4c13-93dd-7d5ca428c44b",
+            "reject": "7cdf1ff9-7686-4e0d-a740-ba840f5775d8",
+            "flow": "6e3a1dbf-4eca-4cde-8cfb-a43faf5dc828",
+            "date_created": "2023-02-07T19:27:49.920Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c7c6357d-14d8-441f-a920-c67fc67e422a",
+            "name": "Create Indian Gas Major Portion in prod",
+            "key": "create_indian_gas_major_portion_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "indian_gas_major_portion",
+                    "item": "{{read_indian_gas_major_portion_item}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "45331b92-9015-4f9a-a3e2-95d3521c013a",
+            "date_created": "2023-02-07T16:24:54.182Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ca24efcc-ca5d-4e4b-baba-04888cbeb91b",
+            "name": "Update in prod",
+            "key": "update_in_prod",
+            "type": "request",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "method": "PATCH",
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.collection}}/{{$trigger.item}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{api_auth.accessToken}}"
+                    }
+                ],
+                "body": "{{compare_objects}}"
+            },
+            "resolve": "8744eac2-1b09-4907-9355-307b8ba87277",
+            "reject": null,
+            "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+            "date_created": "2023-02-06T15:46:31.875Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ca7d6f83-9965-4d15-951a-9cd0eefc4fbd",
+            "name": "Trigger tab blocks flow",
+            "key": "trigger_tab_blocks_flow",
+            "type": "trigger",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "flow": "49182a53-6edc-4e8d-b189-27cd33c65ae4",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "4057920b-5817-4e69-8456-bffcbe048cc1",
+            "date_created": "2023-02-07T17:15:31.807Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "d626acce-1771-490c-b0fe-7825da761ac7",
+            "name": "Wait for upload",
+            "key": "wait_for_upload",
+            "type": "sleep",
+            "position_x": 127,
+            "position_y": 18,
+            "options": {
+                "milliseconds": 2000
+            },
+            "resolve": "bd6d9a57-fc04-4f79-8f46-eb6995c225af",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-10T01:52:13.616Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "d8b45ef1-d128-414a-98aa-f126a9d83d71",
+            "name": "API auth",
+            "key": "api_auth_update",
+            "type": "trigger",
+            "position_x": 91,
+            "position_y": 1,
+            "options": {
+                "flow": "8a3a0e53-bc15-4c03-b1b7-c6ffcd539531"
+            },
+            "resolve": "fede66e9-3c3c-4056-93b9-c7bced2d4012",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:41:43.536Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "da297a9d-4fd0-48d9-9a51-8fc833f35bf2",
+            "name": "Create handbook in prod",
+            "key": "create_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "solid_minerals_handbook",
+                    "item": "{{read_handbook}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "535d8428-e9d5-4811-9972-f3aa5959d906",
+            "date_created": "2023-02-07T21:30:59.849Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "dad42786-5b58-4c3d-b3fb-74e1056403d5",
+            "name": "Get expansion panel block label from prod",
+            "key": "get_expansion_panel_block_label_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.collection}}/{{$trigger.item}}"
+            },
+            "resolve": "8b55fecc-5622-48b6-a8cf-7e982fec1832",
+            "reject": "3cc7c989-edfc-48e5-ab41-9130c0ab91d3",
+            "flow": "af676dff-ccfe-4b80-8e79-e3daaae9c445",
+            "date_created": "2023-02-07T19:33:01.121Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "db13fee8-e70a-4129-97f5-c012c9d28ff7",
+            "name": "Read index zone item",
+            "key": "read_index_zone_item",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "index_zones",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "57792fcb-d561-4bab-8618-dc18dc8e984e",
+            "reject": null,
+            "flow": "63d570ba-d06e-4139-9374-bd54f7684654",
+            "date_created": "2023-02-07T16:18:20.449Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "db86f127-4425-40ed-af21-822da5cffe37",
+            "name": "Create reporter letter in prod",
+            "key": "create_reporter_letter_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "reporter_letters",
+                    "item": "{{read_reporter_letter}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
+            "date_created": "2023-02-07T19:51:09.070Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "dc5f64c1-c73d-4df6-82c8-14c51680e90a",
+            "name": "Create contact in prod",
+            "key": "create_contact_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "contacts",
+                    "item": "{{read_contact}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "a5d5125d-bf35-4776-a37e-e0c95bac9430",
+            "date_created": "2023-02-07T19:42:55.075Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "dd13b615-39f2-436f-940a-a78a4a313fcc",
+            "name": "Get page block from prod",
+            "key": "get_page_block_from_prod",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/pages_page_blocks/{{$trigger}}"
+            },
+            "resolve": "3eb70e29-30cc-412e-8635-9daa6f38a2fa",
+            "reject": "f06e5dd0-1064-431a-89b1-6d30d4b6475a",
+            "flow": "be8dfd73-ee17-4767-83d5-9fc82c2ee3bc",
+            "date_created": "2023-02-07T19:34:29.104Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "e184d780-a6ee-4022-bb94-2bc72d1102ff",
+            "name": "Read contact",
+            "key": "read_contact",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "contacts",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "4e02f555-562c-4176-81f7-ceb87992a4fe",
+            "reject": null,
+            "flow": "a5d5125d-bf35-4776-a37e-e0c95bac9430",
+            "date_created": "2023-02-07T19:42:55.171Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "e20e5737-3011-4107-b4ed-6dfeea7a3c43",
+            "name": "Read pages page block",
+            "key": "read_pages_page_block",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "pages_page_blocks",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "6a34c99d-421e-4895-aa83-b547a2f13a7a",
+            "reject": null,
+            "flow": "be8dfd73-ee17-4767-83d5-9fc82c2ee3bc",
+            "date_created": "2023-02-06T20:21:35.805Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "e21cd1f7-53f2-4d40-89cb-5422bc373a35",
+            "name": "Create press release in prod",
+            "key": "create_press_release_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "press_releases",
+                    "item": "{{read_press_release}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "de496a02-cb91-4e8e-80a9-7c9904b62ad3",
+            "date_created": "2023-02-08T18:15:29.400Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "eaa0b6ea-84d2-499a-9269-2c8ceda48e97",
+            "name": "Read Indian Gas Major Portion item",
+            "key": "read_indian_gas_major_portion_item",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "indian_gas_major_portion",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "a7af5c63-b47b-44e0-b339-7e008523cf80",
+            "reject": null,
+            "flow": "45331b92-9015-4f9a-a3e2-95d3521c013a",
+            "date_created": "2023-02-07T16:24:54.226Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ed13df40-6aa8-4c9e-812e-bf1f0995c9fb",
+            "name": "API logout",
+            "key": "api_logout",
+            "type": "request",
+            "position_x": 91,
+            "position_y": 1,
+            "options": {
+                "method": "POST",
+                "url": "https://prod-onr-cms.app.cloud.gov/auth/logout",
+                "body": "{\n  \"refresh_token\": \"{{api_auth.data.data.refresh_token}}\"\n}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
+            "date_created": "2023-02-02T19:46:21.794Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ef98e4b7-e7a4-406a-8c4c-2335905b87b5",
+            "name": "Get handbook from prod",
+            "key": "get_handbook_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/geothermal_class_1/{{$trigger}}"
+            },
+            "resolve": "99d2df6c-904f-4e42-bebe-ceaf7a1a803d",
+            "reject": "4e16bbf6-78b2-4021-873d-ca500479b3ba",
+            "flow": "d119ba33-15c0-4ecb-979e-b4290d88c4a7",
+            "date_created": "2023-02-07T21:34:54.794Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "efa86511-0496-470a-9651-8114211ade96",
+            "name": "Get flows",
+            "key": "get_flows",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/flows"
+            },
+            "resolve": "3e0e89b3-ef22-499d-b31b-31de8197c333",
+            "reject": null,
+            "flow": "827e779c-b4c9-4629-97cd-ece575f7a0ce",
+            "date_created": "2023-02-06T18:31:56.914Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "f06e5dd0-1064-431a-89b1-6d30d4b6475a",
+            "name": "Create page block in prod",
+            "key": "create_page_block_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "pages_page_blocks",
+                    "item": "{{read_pages_page_block}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "be8dfd73-ee17-4767-83d5-9fc82c2ee3bc",
+            "date_created": "2023-02-06T20:21:35.748Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "f0b882e0-01f7-49c0-b5e8-a8ceb0cad52c",
+            "name": "Create handbook in prod",
+            "key": "create_handbook_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "Interest_Solids",
+                    "item": "{{read_item}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "652d461e-2f82-4abd-ab1e-be6ea0bf84f2",
+            "date_created": "2023-02-07T21:56:59.022Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "f1de6dbb-0d17-4b08-a7dd-5defaec06269",
+            "name": "If data has changed",
+            "key": "if_data_has_changed",
+            "type": "condition",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "filter": {
+                    "compare_objects": {
+                        "_neq": {}
+                    }
+                }
+            },
+            "resolve": "c266ee68-08e8-43f2-b04d-daba8adaa90c",
+            "reject": null,
+            "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+            "date_created": "2023-02-06T15:45:06.190Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "f36ee6b0-2001-4de4-bd87-7b4774d88392",
+            "name": "Read IBMP item",
+            "key": "read_ibmp_item",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "ibmp",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "fbe5d405-1fdc-493b-8ff8-f2519a27af37",
+            "reject": null,
+            "flow": "9cb14ffa-c7aa-46ea-9bd4-3deb87c2ca98",
+            "date_created": "2023-02-07T16:12:18.717Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "f822e1ee-f4bf-4484-93fc-47463e019fba",
+            "name": "Trigger Flow",
+            "key": "trigger_ag8ep",
+            "type": "trigger",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "flow": "a5d5125d-bf35-4776-a37e-e0c95bac9430",
+                "payload": "{{$trigger.body.keys}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "a3aaf7fe-35fa-435b-80ea-631b5d2f7018",
+            "date_created": "2023-02-07T19:44:11.996Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "fb71a6a5-759b-446c-9c6b-56d04f147976",
+            "name": "Read handbook",
+            "key": "read_handbook",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "geothermal_class_1",
+                "key": [
+                    "{$trigger}}"
+                ]
+            },
+            "resolve": "ef98e4b7-e7a4-406a-8c4c-2335905b87b5",
+            "reject": null,
+            "flow": "d119ba33-15c0-4ecb-979e-b4290d88c4a7",
+            "date_created": "2023-02-07T21:34:49.054Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "fbe5d405-1fdc-493b-8ff8-f2519a27af37",
+            "name": "Get IBMP from prod",
+            "key": "get_ibmp_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['UPSTREAM_URL']}}/items/ibmp/{{$trigger}}"
+            },
+            "resolve": "b96fe82b-7c90-43cc-ab32-e0ad2b540bea",
+            "reject": "2dad7cce-c00c-4dc9-91a0-cc3e1115ff8f",
+            "flow": "9cb14ffa-c7aa-46ea-9bd4-3deb87c2ca98",
+            "date_created": "2023-02-07T19:30:07.476Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "fd1fe304-1145-4c21-ae97-7e2013d27391",
+            "name": "Run import in prod",
+            "key": "exec_gxz8m",
+            "type": "exec",
+            "position_x": 163,
+            "position_y": 18,
+            "options": {
+                "code": "var FormData = require('form-data');\nconst axios = require('axios');\n\nmodule.exports = async function(data) {\n    try {\n        const fileUrl = `${data.$env.PUBLIC_URL}/assets/${data.get_export_file_meta.data.data[0].filename_disk}`;\n    \n    \tvar fileResponse = await axios.get(fileUrl, { responseType: 'stream' });\n\n        const form = new FormData();\n        form.append('file', fileResponse.data, 'import.json');\n        \n        const response = await axios.post(`${data.$env.UPSTREAM_URL}/utils/import/directus_files`, form, {\n            headers: {\n                ...form.getHeaders(),\n                Authorization: `Bearer ${data.api_auth_create.accessToken}`\n            },\n        });\n\n        return {};\n    }\n    catch (e) {\n        return { \"error\": e.message }\n    }\n}"
+            },
+            "resolve": "a6938ef8-c3de-4dd3-a422-12ea85d4d395",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-09T23:58:30.980Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "fe78387a-a502-430f-a87d-a3c7ac80ea6f",
+            "name": "Read item",
+            "key": "read_item",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "{{$trigger.body.collection}}",
+                "key": [
+                    "{{$trigger.body.keys[0]}}"
+                ]
+            },
+            "resolve": "64ad68fd-023a-4c9d-a53d-976793d65907",
+            "reject": null,
+            "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
+            "date_created": "2023-02-02T19:41:47.929Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "fede66e9-3c3c-4056-93b9-c7bced2d4012",
+            "name": "Update in prod",
+            "key": "update_in_prod",
+            "type": "request",
+            "position_x": 109,
+            "position_y": 1,
+            "options": {
+                "method": "PATCH",
+                "url": "{{$env['UPSTREAM_URL']}}/files/{{$trigger}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{api_auth_update.accessToken}}"
+                    },
+                    {
+                        "header": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "body": "{{compare_files}}"
+            },
+            "resolve": "56e589db-9b5c-4db5-805c-cd5ffe8b4425",
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-08T01:41:49.186Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        }
+    ]
+}
