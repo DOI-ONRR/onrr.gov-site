@@ -332,7 +332,7 @@
                     }
                 }
             },
-            "resolve": "fede66e9-3c3c-4056-93b9-c7bced2d4012",
+            "resolve": "357ab1f4-38b5-4a88-ab74-4e6acc7f0e1a",
             "reject": null,
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-08T01:40:34.996Z",
@@ -544,6 +544,25 @@
             "reject": null,
             "flow": "5589fe68-0d60-4881-95f9-a8ac85242707",
             "date_created": "2023-02-07T21:37:56.454Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "357ab1f4-38b5-4a88-ab74-4e6acc7f0e1a",
+            "name": "Update file meta data in prod",
+            "key": "update_file_meta_data_in_prod",
+            "type": "trigger",
+            "position_x": 91,
+            "position_y": 1,
+            "options": {
+                "flow": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+                "payload": {
+                    "file": "{{$trigger.fileUuid}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-13T15:48:32.779Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -829,6 +848,22 @@
             "reject": null,
             "flow": "652d461e-2f82-4abd-ab1e-be6ea0bf84f2",
             "date_created": "2023-02-07T21:56:55.668Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "48577cd6-7202-40b5-8090-d94c702e4c36",
+            "name": "Wait for upload",
+            "key": "wait_for_upload",
+            "type": "sleep",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "milliseconds": 2000
+            },
+            "resolve": "863b09fe-6b5b-4340-ab60-3dc5a072f82e",
+            "reject": null,
+            "flow": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+            "date_created": "2023-02-13T15:43:06.577Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1154,6 +1189,24 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "64ea27eb-e467-4b7c-a97f-ed72c25a15ff",
+            "name": "Get folder",
+            "key": "get_folder",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/folders",
+                "method": "SEARCH",
+                "body": "{\n\t\"query\": {\n\t\t\"filter\": {\n\t\t\t\"name\": {\n\t\t\t\t\"_eq\": \"publish\"\n\t\t\t}\n\t\t}\n\t}\n}"
+            },
+            "resolve": "c798386f-c618-449d-9111-be6538964b5e",
+            "reject": null,
+            "flow": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+            "date_created": "2023-02-13T15:42:55.214Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "65b2e5c5-73c9-4b0d-b752-794a21b42789",
             "name": "Get flows",
             "key": "get_flows",
@@ -1203,24 +1256,6 @@
             "reject": null,
             "flow": "aa9d1bd2-85a8-41ee-ba34-4b66537d7e07",
             "date_created": "2023-02-06T20:00:12.212Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "6a1a7639-310e-462e-b044-bc116e461054",
-            "name": "Get folder",
-            "key": "get_folder",
-            "type": "request",
-            "position_x": 55,
-            "position_y": 18,
-            "options": {
-                "url": "{{$env['PUBLIC_URL']}}/folders",
-                "method": "SEARCH",
-                "body": "{\n\t\"query\": {\n\t\t\"filter\": {\n\t\t\t\"name\": {\n\t\t\t\t\"_eq\": \"publish\"\n\t\t\t}\n\t\t}\n\t}\n}"
-            },
-            "resolve": "86f345df-c729-4844-babe-289c8d5778cf",
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-10T00:11:21.697Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1542,6 +1577,30 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "863b09fe-6b5b-4340-ab60-3dc5a072f82e",
+            "name": "Get export file meta",
+            "key": "get_export_file_meta",
+            "type": "request",
+            "position_x": 91,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/files",
+                "method": "SEARCH",
+                "body": "{\n\t\"query\": {\n\t\t\"filter\": {\n\t\t\t\"title\": {\n\t\t\t\t\"_eq\": \"{{get_file_title.title}}\"\n\t\t\t}\n\t\t}\n\t}\n}",
+                "headers": [
+                    {
+                        "header": "Content-Type",
+                        "value": "application/json"
+                    }
+                ]
+            },
+            "resolve": "948e109e-a264-49dd-bda8-d1c1611a05d0",
+            "reject": null,
+            "flow": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+            "date_created": "2023-02-13T15:43:10.027Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "8649c33f-e8d8-4203-8061-545031c51f92",
             "name": "Get flow name",
             "key": "get_flow_name",
@@ -1593,22 +1652,6 @@
             "reject": "3704a765-4a70-4be5-9973-4e30c96a0226",
             "flow": "b9506c8e-3364-4ae6-b494-4e1b3bd27337",
             "date_created": "2023-02-07T21:24:26.260Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "86f345df-c729-4844-babe-289c8d5778cf",
-            "name": "Get file title",
-            "key": "get_file_title",
-            "type": "exec",
-            "position_x": 73,
-            "position_y": 18,
-            "options": {
-                "code": "import { v4 as uuidv4 } from 'uuid';\n\nmodule.exports = async function(data) {\n\treturn { \"title\": `publish-file-${uidv4()}`};\n}"
-            },
-            "resolve": "90d77f0c-fd2c-492e-8112-88e774d3deef",
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-10T20:54:21.991Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1730,24 +1773,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "90d77f0c-fd2c-492e-8112-88e774d3deef",
-            "name": "Export file",
-            "key": "export_file",
-            "type": "request",
-            "position_x": 91,
-            "position_y": 18,
-            "options": {
-                "method": "POST",
-                "url": "{{$env['PUBLIC_URL']}}/utils/export/directus_files",
-                "body": "{\n  \"format\": \"json\",\n  \"query\": {\n    \"filter\": {\n      \"id\": {\n        \"_eq\": \"{{$trigger.fileUuid}}\"\n      }\n    }\n  },\n  \"file\": {\n    \"folder\": \"{{get_folder.data.data[0].id}}\",\n    \"title\": \"{{get_file_title.title}}\"\n  }\n}"
-            },
-            "resolve": "d626acce-1771-490c-b0fe-7825da761ac7",
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-10T00:05:12.910Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "910afc71-5a43-42f5-b464-f3423f4b3722",
             "name": "Get item from prod",
             "key": "get_item_from_prod",
@@ -1783,6 +1808,22 @@
             "reject": null,
             "flow": "63d570ba-d06e-4139-9374-bd54f7684654",
             "date_created": "2023-02-07T16:20:03.115Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "948e109e-a264-49dd-bda8-d1c1611a05d0",
+            "name": "Run import in prod",
+            "key": "exec_gxz8m",
+            "type": "exec",
+            "position_x": 109,
+            "position_y": 1,
+            "options": {
+                "code": "var FormData = require('form-data');\nconst axios = require('axios');\n\nmodule.exports = async function(data) {\n    try {\n        const fileUrl = `${data.$env.PUBLIC_URL}/assets/${data.get_export_file_meta.data.data[0].filename_disk}`;\n    \n    \tvar fileResponse = await axios.get(fileUrl, { responseType: 'stream' });\n\n        const form = new FormData();\n        form.append('file', fileResponse.data, 'import.json');\n        \n        const response = await axios.post(`${data.$env.UPSTREAM_URL}/utils/import/directus_files`, form, {\n            headers: {\n                ...form.getHeaders(),\n                Authorization: `Bearer ${data.$env.CMS_TOKEN}`\n            },\n        });\n\n        return {};\n    }\n    catch (e) {\n        return { \"error\": e.message }\n    }\n}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+            "date_created": "2023-02-13T15:43:14.352Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1879,7 +1920,7 @@
                 "url": "{{$env['UPSTREAM_URL']}}/files/{{$trigger.fileUuid}}"
             },
             "resolve": "6f669ed4-aba9-4a8f-a4ff-f7f344061290",
-            "reject": "6a1a7639-310e-462e-b044-bc116e461054",
+            "reject": "c531e6e6-c9b6-4806-9064-9bc75060932f",
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-08T01:40:35.074Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
@@ -2185,30 +2226,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "bd6d9a57-fc04-4f79-8f46-eb6995c225af",
-            "name": "Get export file meta",
-            "key": "get_export_file_meta",
-            "type": "request",
-            "position_x": 127,
-            "position_y": 18,
-            "options": {
-                "url": "{{$env['PUBLIC_URL']}}/files",
-                "method": "SEARCH",
-                "body": "{\n\t\"query\": {\n\t\t\"filter\": {\n\t\t\t\"title\": {\n\t\t\t\t\"_eq\": \"export_{{$trigger.fileUuid}}\"\n\t\t\t}\n\t\t}\n\t}\n}",
-                "headers": [
-                    {
-                        "header": "Content-Type",
-                        "value": "application/json"
-                    }
-                ]
-            },
-            "resolve": "fd1fe304-1145-4c21-ae97-7e2013d27391",
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-10T01:28:38.240Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "c077a1fb-94be-4c9c-b09e-66707c226a64",
             "name": "Read card block",
             "key": "read_card_block",
@@ -2260,6 +2277,41 @@
             "reject": null,
             "flow": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
             "date_created": "2023-02-07T21:27:03.740Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c531e6e6-c9b6-4806-9064-9bc75060932f",
+            "name": "Create file meta data in prod",
+            "key": "create_file_meta_data_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+                "payload": {
+                    "file": "{{$trigger.fileUuid}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "date_created": "2023-02-13T15:48:32.753Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c798386f-c618-449d-9111-be6538964b5e",
+            "name": "Get file title",
+            "key": "get_file_title",
+            "type": "exec",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "code": "const { v4: uuidv4 } = require('uuid');\n\nmodule.exports = async function(data) {\n\treturn { \"title\": `publish-file-${uuidv4()}`};\n}"
+            },
+            "resolve": "dae1ceb3-20ac-41d8-98d5-398d84e93f93",
+            "reject": null,
+            "flow": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+            "date_created": "2023-02-13T15:42:58.893Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2340,22 +2392,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "d626acce-1771-490c-b0fe-7825da761ac7",
-            "name": "Wait for upload",
-            "key": "wait_for_upload",
-            "type": "sleep",
-            "position_x": 109,
-            "position_y": 18,
-            "options": {
-                "milliseconds": 2000
-            },
-            "resolve": "bd6d9a57-fc04-4f79-8f46-eb6995c225af",
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-10T01:52:13.616Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "da297a9d-4fd0-48d9-9a51-8fc833f35bf2",
             "name": "Create handbook in prod",
             "key": "create_handbook_in_prod",
@@ -2389,6 +2425,24 @@
             "reject": "3cc7c989-edfc-48e5-ab41-9130c0ab91d3",
             "flow": "af676dff-ccfe-4b80-8e79-e3daaae9c445",
             "date_created": "2023-02-07T19:33:01.121Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "dae1ceb3-20ac-41d8-98d5-398d84e93f93",
+            "name": "Export file",
+            "key": "export_file",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "method": "POST",
+                "url": "{{$env['PUBLIC_URL']}}/utils/export/directus_files",
+                "body": "{\n  \"format\": \"json\",\n  \"query\": {\n    \"filter\": {\n      \"id\": {\n        \"_eq\": \"{{$trigger.file}}\"\n      }\n    }\n  },\n  \"file\": {\n    \"folder\": \"{{get_folder.data.data[0].id}}\",\n    \"title\": \"{{get_file_title.title}}\"\n  }\n}"
+            },
+            "resolve": "48577cd6-7202-40b5-8090-d94c702e4c36",
+            "reject": null,
+            "flow": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+            "date_created": "2023-02-13T15:43:02.826Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2707,22 +2761,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "fd1fe304-1145-4c21-ae97-7e2013d27391",
-            "name": "Run import in prod",
-            "key": "exec_gxz8m",
-            "type": "exec",
-            "position_x": 145,
-            "position_y": 18,
-            "options": {
-                "code": "var FormData = require('form-data');\nconst axios = require('axios');\n\nmodule.exports = async function(data) {\n    try {\n        const fileUrl = `${data.$env.PUBLIC_URL}/assets/${data.get_export_file_meta.data.data[0].filename_disk}`;\n    \n    \tvar fileResponse = await axios.get(fileUrl, { responseType: 'stream' });\n\n        const form = new FormData();\n        form.append('file', fileResponse.data, 'import.json');\n        \n        const response = await axios.post(`${data.$env.UPSTREAM_URL}/utils/import/directus_files`, form, {\n            headers: {\n                ...form.getHeaders(),\n                Authorization: `Bearer ${data.$env.CMS_TOKEN}`\n            },\n        });\n\n        return {};\n    }\n    catch (e) {\n        return { \"error\": e.message }\n    }\n}"
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-09T23:58:30.980Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "fe78387a-a502-430f-a87d-a3c7ac80ea6f",
             "name": "Read item",
             "key": "read_item",
@@ -2739,34 +2777,6 @@
             "reject": null,
             "flow": "3eb4c563-035c-4945-89f4-f942cc1ef337",
             "date_created": "2023-02-02T19:41:47.929Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
-            "id": "fede66e9-3c3c-4056-93b9-c7bced2d4012",
-            "name": "Update in prod",
-            "key": "update_in_prod",
-            "type": "request",
-            "position_x": 91,
-            "position_y": 1,
-            "options": {
-                "method": "PATCH",
-                "url": "{{$env['UPSTREAM_URL']}}/files/{{$trigger}}",
-                "headers": [
-                    {
-                        "header": "Authorization",
-                        "value": "Bearer {{$env.CMS_TOKEN}}"
-                    },
-                    {
-                        "header": "Accept",
-                        "value": "application/json"
-                    }
-                ],
-                "body": "{{compare_files}}"
-            },
-            "resolve": null,
-            "reject": null,
-            "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
-            "date_created": "2023-02-08T01:41:49.186Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         }
     ]
