@@ -1509,7 +1509,8 @@
                 "payload": {
                     "collection": "redirects",
                     "item": "{{read_redirect}}"
-                }
+                },
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5"
             },
             "resolve": null,
             "reject": null,
