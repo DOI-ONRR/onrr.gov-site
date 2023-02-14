@@ -782,7 +782,7 @@
             "name": "Get reporter letter from prod",
             "key": "get_reporter_letter_from_prod",
             "type": "request",
-            "position_x": 55,
+            "position_x": 73,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/reporter_letters/{{$trigger}}"
@@ -1550,7 +1550,7 @@
             "name": "Update reporter letter in prod",
             "key": "update_reporter_letter_in_prod",
             "type": "trigger",
-            "position_x": 73,
+            "position_x": 91,
             "position_y": 1,
             "options": {
                 "payload": {
@@ -2339,8 +2339,8 @@
         },
         {
             "id": "ad7fddbe-f389-48e8-b854-8a127e0823e4",
-            "name": "Call file flow",
-            "key": "call_file_flow",
+            "name": "Call file flow (file)",
+            "key": "call_file_flow_file",
             "type": "trigger",
             "position_x": 37,
             "position_y": 1,
@@ -2350,7 +2350,7 @@
                     "fileUuid": "{{read_reporter_letter.file}}"
                 }
             },
-            "resolve": "39dfb758-98aa-481d-a331-ea8cb5b9efab",
+            "resolve": "f52afef9-0db3-49fa-829b-a6be194c7bd6",
             "reject": null,
             "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
             "date_created": "2023-02-14T17:46:15.387Z",
@@ -2742,7 +2742,7 @@
             "name": "Create reporter letter in prod",
             "key": "create_reporter_letter_in_prod",
             "type": "trigger",
-            "position_x": 73,
+            "position_x": 91,
             "position_y": 18,
             "options": {
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
@@ -2979,6 +2979,25 @@
             "reject": null,
             "flow": "9cb14ffa-c7aa-46ea-9bd4-3deb87c2ca98",
             "date_created": "2023-02-07T16:12:18.717Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "f52afef9-0db3-49fa-829b-a6be194c7bd6",
+            "name": "Call file flow (accessible file)",
+            "key": "call_file_flow_accessible_file",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_reporter_letter.accessible_file}}"
+                }
+            },
+            "resolve": "39dfb758-98aa-481d-a331-ea8cb5b9efab",
+            "reject": null,
+            "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
+            "date_created": "2023-02-14T17:52:36.450Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
