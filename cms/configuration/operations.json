@@ -238,6 +238,25 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "18d344f5-16d4-4b72-b56f-477f065a3701",
+            "name": "Call file flow",
+            "key": "call_file_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_nymex_item.spreadsheet}}"
+                }
+            },
+            "resolve": "57792fcb-d561-4bab-8618-dc18dc8e984e",
+            "reject": null,
+            "flow": "63d570ba-d06e-4139-9374-bd54f7684654",
+            "date_created": "2023-02-14T01:36:29.397Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "1c5213d9-2ac6-48a6-98fe-ab5dd0fff6e6",
             "name": "Update item in prod",
             "key": "update_item_in_prod",
@@ -983,7 +1002,7 @@
             "name": "Get index zone from prod",
             "key": "get_index_zone_from_prod",
             "type": "request",
-            "position_x": 37,
+            "position_x": 55,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/index_zones/{{$trigger}}"
@@ -1137,8 +1156,8 @@
             "name": "Create index zone in prod",
             "key": "create_index_zone_in_prod",
             "type": "trigger",
-            "position_x": 55,
-            "position_y": 17,
+            "position_x": 73,
+            "position_y": 18,
             "options": {
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
@@ -1851,7 +1870,7 @@
             "name": "Update index zone in prod",
             "key": "update_index_zone_in_prod",
             "type": "trigger",
-            "position_x": 55,
+            "position_x": 73,
             "position_y": 1,
             "options": {
                 "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
@@ -2516,7 +2535,7 @@
                     "{{$trigger}}"
                 ]
             },
-            "resolve": "57792fcb-d561-4bab-8618-dc18dc8e984e",
+            "resolve": "18d344f5-16d4-4b72-b56f-477f065a3701",
             "reject": null,
             "flow": "63d570ba-d06e-4139-9374-bd54f7684654",
             "date_created": "2023-02-07T16:18:20.449Z",
