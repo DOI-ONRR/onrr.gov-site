@@ -336,7 +336,7 @@
                     "{{$trigger}}"
                 ]
             },
-            "resolve": "39dfb758-98aa-481d-a331-ea8cb5b9efab",
+            "resolve": "ad7fddbe-f389-48e8-b854-8a127e0823e4",
             "reject": null,
             "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
             "date_created": "2023-02-07T19:51:09.108Z",
@@ -782,7 +782,7 @@
             "name": "Get reporter letter from prod",
             "key": "get_reporter_letter_from_prod",
             "type": "request",
-            "position_x": 37,
+            "position_x": 55,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/reporter_letters/{{$trigger}}"
@@ -1550,7 +1550,7 @@
             "name": "Update reporter letter in prod",
             "key": "update_reporter_letter_in_prod",
             "type": "trigger",
-            "position_x": 55,
+            "position_x": 73,
             "position_y": 1,
             "options": {
                 "payload": {
@@ -2338,6 +2338,25 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "ad7fddbe-f389-48e8-b854-8a127e0823e4",
+            "name": "Call file flow",
+            "key": "call_file_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_reporter_letter.file}}"
+                }
+            },
+            "resolve": "39dfb758-98aa-481d-a331-ea8cb5b9efab",
+            "reject": null,
+            "flow": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
+            "date_created": "2023-02-14T17:46:15.387Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "ae7dd587-3d42-4916-a055-1d683b51a5b8",
             "name": "Get expansion panel block from prod",
             "key": "get_expansion_panel_block_from_prod",
@@ -2723,8 +2742,8 @@
             "name": "Create reporter letter in prod",
             "key": "create_reporter_letter_in_prod",
             "type": "trigger",
-            "position_x": 55,
-            "position_y": 17,
+            "position_x": 73,
+            "position_y": 18,
             "options": {
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
