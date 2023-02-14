@@ -20,6 +20,28 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "01d099f0-13a7-4229-aeb9-c963861d9b04",
+            "name": "Update pages_files in prod",
+            "key": "update_pages_files_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "payload": {
+                    "collection": "pages_files",
+                    "item": "{{$trigger}}",
+                    "old": "{{get_pages_files_from_prod.data.data}}",
+                    "new": "{{read_pages_files}}"
+                },
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "3189556b-074b-4a1a-afa7-8f511d1dacea",
+            "date_created": "2023-02-14T16:21:05.243Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "06dca7bd-8deb-466a-ba69-16e5fa51f86d",
             "name": "Update handbook in prod",
             "key": "update_handbook_in_prod",
@@ -257,6 +279,29 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "1c14c34b-3bcc-4837-9f94-87a3d3846d15",
+            "name": "Query pages_files",
+            "key": "query_pages_files",
+            "type": "item-read",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "collection": "pages_files",
+                "query": {
+                    "filter": {
+                        "pages_id": {
+                            "_eq": "{{$trigger.body.keys[0]}}"
+                        }
+                    }
+                }
+            },
+            "resolve": "87369090-66fb-4d50-bc63-4a2eafb82100",
+            "reject": null,
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-14T16:43:32.068Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "1c5213d9-2ac6-48a6-98fe-ab5dd0fff6e6",
             "name": "Update item in prod",
             "key": "update_item_in_prod",
@@ -455,6 +500,25 @@
             "reject": null,
             "flow": "535d8428-e9d5-4811-9972-f3aa5959d906",
             "date_created": "2023-02-07T21:30:55.348Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "2b4ae82b-7a31-4763-b48a-103141e2d6c4",
+            "name": "Read pages files",
+            "key": "read_pages_files",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "pages_files",
+                "key": [
+                    "{{$trigger}}"
+                ]
+            },
+            "resolve": "99b5d96b-d210-462f-85da-2dfd663485d7",
+            "reject": null,
+            "flow": "3189556b-074b-4a1a-afa7-8f511d1dacea",
+            "date_created": "2023-02-14T16:14:35.302Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -678,6 +742,23 @@
             "reject": null,
             "flow": "74f5cfd2-adb8-44f4-910d-3e5048c3e86e",
             "date_created": "2023-02-07T21:57:21.566Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "37cfae26-4ffd-4459-a7b2-980278ab6fdd",
+            "name": "Trigger pages files",
+            "key": "trigger_pages_files",
+            "type": "trigger",
+            "position_x": 109,
+            "position_y": 1,
+            "options": {
+                "flow": "3189556b-074b-4a1a-afa7-8f511d1dacea",
+                "payload": "\"{{$last}}\""
+            },
+            "resolve": "6f30e64f-ca57-4f65-95ad-90fcf005c9e2",
+            "reject": null,
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-14T16:27:29.022Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1296,6 +1377,28 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "688624c0-a9bc-44ad-9958-65bed84718a0",
+            "name": "Get pages files from prod",
+            "key": "get_pages_files_from_prod",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
+                    }
+                ],
+                "url": "{{$env.UPSTREAM_URL}}/items/pages_files/{{$trigger}}"
+            },
+            "resolve": "01d099f0-13a7-4229-aeb9-c963861d9b04",
+            "reject": "865522fb-5ff5-476c-bcf3-bbd0841c4d6a",
+            "flow": "3189556b-074b-4a1a-afa7-8f511d1dacea",
+            "date_created": "2023-02-14T16:21:05.258Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "68b1d917-24be-49a6-a848-ef0839e8bbe4",
             "name": "Create expansion panel block in prod",
             "key": "create_expansion_panel_block_in_prod",
@@ -1357,7 +1460,7 @@
             "name": "Get page from prod",
             "key": "get_page_from_prod",
             "type": "request",
-            "position_x": 55,
+            "position_x": 127,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}"
@@ -1408,8 +1511,8 @@
             "name": "Create page in prod",
             "key": "create_page_in_prod",
             "type": "trigger",
-            "position_x": 73,
-            "position_y": 17,
+            "position_x": 145,
+            "position_y": 18,
             "options": {
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
@@ -1675,11 +1778,31 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "865522fb-5ff5-476c-bcf3-bbd0841c4d6a",
+            "name": "Create pages_files in prod",
+            "key": "create_pages_files_in_prod",
+            "type": "trigger",
+            "position_x": 73,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "pages_files",
+                    "item": "{{read_pages_files}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "3189556b-074b-4a1a-afa7-8f511d1dacea",
+            "date_created": "2023-02-14T16:21:05.215Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "8664db51-6e75-409d-8684-206c23d64eaa",
             "name": "Update page in prod",
             "key": "update_page_in_prod",
             "type": "trigger",
-            "position_x": 73,
+            "position_x": 145,
             "position_y": 1,
             "options": {
                 "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
@@ -1710,6 +1833,22 @@
             "reject": "3704a765-4a70-4be5-9973-4e30c96a0226",
             "flow": "b9506c8e-3364-4ae6-b494-4e1b3bd27337",
             "date_created": "2023-02-07T21:24:26.260Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "87369090-66fb-4d50-bc63-4a2eafb82100",
+            "name": "Map pages_files id",
+            "key": "map_pages_files_id",
+            "type": "exec",
+            "position_x": 91,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\treturn _.map(data.query_pages_files, 'id');\n}"
+            },
+            "resolve": "37cfae26-4ffd-4459-a7b2-980278ab6fdd",
+            "reject": null,
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-14T16:53:47.048Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1926,6 +2065,25 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "99b5d96b-d210-462f-85da-2dfd663485d7",
+            "name": "Call file flow",
+            "key": "call_file_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_pages_files.directus_files_id}}"
+                }
+            },
+            "resolve": "688624c0-a9bc-44ad-9958-65bed84718a0",
+            "reject": null,
+            "flow": "3189556b-074b-4a1a-afa7-8f511d1dacea",
+            "date_created": "2023-02-14T16:21:05.279Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "99d2df6c-904f-4e42-bebe-ceaf7a1a803d",
             "name": "Update handbook in prod",
             "key": "update_handbook_in_prod",
@@ -1984,6 +2142,25 @@
             "reject": null,
             "flow": "45331b92-9015-4f9a-a3e2-95d3521c013a",
             "date_created": "2023-02-07T16:24:54.196Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a3fd16fe-1eb9-4a9e-8ac8-560848b0cce3",
+            "name": "Call _file for hero image",
+            "key": "call_file_for_hero_image",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_page.hero_image}}"
+                }
+            },
+            "resolve": "1c14c34b-3bcc-4837-9f94-87a3d3846d15",
+            "reject": null,
+            "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "date_created": "2023-02-14T16:53:46.918Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2154,7 +2331,7 @@
                 "flow": "be8dfd73-ee17-4767-83d5-9fc82c2ee3bc",
                 "payload": "{{read_page.page_blocks}}"
             },
-            "resolve": "6f30e64f-ca57-4f65-95ad-90fcf005c9e2",
+            "resolve": "a3fd16fe-1eb9-4a9e-8ac8-560848b0cce3",
             "reject": null,
             "flow": "78a78830-eadb-4e95-8791-b21094cf56bb",
             "date_created": "2023-02-06T20:36:33.325Z",
