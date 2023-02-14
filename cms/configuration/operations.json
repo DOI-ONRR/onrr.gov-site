@@ -443,7 +443,7 @@
             "name": "Get NYMEX item from prod",
             "key": "get_nymex_item_from_prod",
             "type": "request",
-            "position_x": 37,
+            "position_x": 55,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/NYMEX/{{$trigger}}"
@@ -513,7 +513,7 @@
             "name": "Update NYMEX in prod",
             "key": "update_nymex_in_prod",
             "type": "trigger",
-            "position_x": 55,
+            "position_x": 73,
             "position_y": 1,
             "options": {
                 "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
@@ -1057,8 +1057,8 @@
             "name": "Create NYMEX in prod",
             "key": "create_nymex_in_prod",
             "type": "trigger",
-            "position_x": 55,
-            "position_y": 17,
+            "position_x": 73,
+            "position_y": 18,
             "options": {
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
@@ -1126,7 +1126,7 @@
                     "{{$trigger}}"
                 ]
             },
-            "resolve": "2c2e6662-9d85-46cb-bfd8-ecdbbe8177ce",
+            "resolve": "8cd6c5ab-01a9-44d9-b7d3-e4a578da8ba1",
             "reject": null,
             "flow": "5f5960fb-fcb9-441b-883b-3672d4a2eb14",
             "date_created": "2023-02-07T16:27:41.873Z",
@@ -1790,6 +1790,25 @@
             "reject": null,
             "flow": "0f05e26e-607c-4920-8b09-e51feef399f4",
             "date_created": "2023-02-07T21:41:57.519Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8cd6c5ab-01a9-44d9-b7d3-e4a578da8ba1",
+            "name": "Call file flow",
+            "key": "call_file_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_nymex_item.spreadsheet}}"
+                }
+            },
+            "resolve": "2c2e6662-9d85-46cb-bfd8-ecdbbe8177ce",
+            "reject": null,
+            "flow": "5f5960fb-fcb9-441b-883b-3672d4a2eb14",
+            "date_created": "2023-02-14T01:33:57.054Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
