@@ -306,7 +306,7 @@
             "name": "Update item in prod",
             "key": "update_item_in_prod",
             "type": "trigger",
-            "position_x": 55,
+            "position_x": 73,
             "position_y": 1,
             "options": {
                 "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
@@ -427,8 +427,8 @@
             "name": "Create item in prod",
             "key": "create_item_in_prod",
             "type": "trigger",
-            "position_x": 55,
-            "position_y": 17,
+            "position_x": 73,
+            "position_y": 18,
             "options": {
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
@@ -1365,7 +1365,7 @@
             "name": "Get item from prod",
             "key": "get_item_from_prod",
             "type": "request",
-            "position_x": 37,
+            "position_x": 55,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/plant_specific_ucas/{{$trigger}}"
@@ -2314,7 +2314,7 @@
                     "{$trigger}}"
                 ]
             },
-            "resolve": "675b2a0a-0a82-439b-84ad-f4f93ed035ba",
+            "resolve": "c446d12d-66d9-43d9-8049-2b9c0a98820d",
             "reject": null,
             "flow": "318ceaef-75e1-4a34-b29d-22d84b85b5d7",
             "date_created": "2023-02-07T21:45:30.090Z",
@@ -2550,6 +2550,25 @@
             "reject": null,
             "flow": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
             "date_created": "2023-02-07T21:27:03.740Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "c446d12d-66d9-43d9-8049-2b9c0a98820d",
+            "name": "Call file flow",
+            "key": "call_file_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_item.file}}"
+                }
+            },
+            "resolve": "675b2a0a-0a82-439b-84ad-f4f93ed035ba",
+            "reject": null,
+            "flow": "318ceaef-75e1-4a34-b29d-22d84b85b5d7",
+            "date_created": "2023-02-14T17:59:26.689Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
