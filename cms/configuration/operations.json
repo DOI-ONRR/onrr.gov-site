@@ -398,6 +398,25 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "2837e582-3f0e-42a1-ac5c-46fe42ad7443",
+            "name": "Call file flow",
+            "key": "call_file_flow",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+                "payload": {
+                    "fileUuid": "{{read_indian_gas_major_portion_item.spreadsheet}}"
+                }
+            },
+            "resolve": "a7af5c63-b47b-44e0-b339-7e008523cf80",
+            "reject": null,
+            "flow": "45331b92-9015-4f9a-a3e2-95d3521c013a",
+            "date_created": "2023-02-14T01:29:59.122Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "2a8f67ed-454c-4f3b-ae15-121e962bb3c2",
             "name": "Update handbook in prod",
             "key": "update_handbook_in_prod",
@@ -1912,7 +1931,7 @@
             "name": "Update Indian Gas Major Portion in prod",
             "key": "update_indian_gas_major_portion_in_prod",
             "type": "trigger",
-            "position_x": 55,
+            "position_x": 73,
             "position_y": 1,
             "options": {
                 "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
@@ -1966,7 +1985,7 @@
             "name": "Get Indian Gas Major Portion from prod",
             "key": "get_indian_gas_major_portion_from_prod",
             "type": "request",
-            "position_x": 37,
+            "position_x": 55,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/indian_gas_major_portion/{{$trigger.item}}"
@@ -2355,8 +2374,8 @@
             "name": "Create Indian Gas Major Portion in prod",
             "key": "create_indian_gas_major_portion_in_prod",
             "type": "trigger",
-            "position_x": 55,
-            "position_y": 17,
+            "position_x": 73,
+            "position_y": 18,
             "options": {
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
@@ -2611,7 +2630,7 @@
                     "{{$trigger}}"
                 ]
             },
-            "resolve": "a7af5c63-b47b-44e0-b339-7e008523cf80",
+            "resolve": "2837e582-3f0e-42a1-ac5c-46fe42ad7443",
             "reject": null,
             "flow": "45331b92-9015-4f9a-a3e2-95d3521c013a",
             "date_created": "2023-02-07T16:24:54.226Z",
