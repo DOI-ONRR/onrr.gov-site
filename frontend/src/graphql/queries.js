@@ -48,7 +48,6 @@ query {
     id
     slug
     title
-    production
     url
     template
     parent {
