@@ -3,7 +3,7 @@ applications:
 - name: dev-onrr-cms
   instances: 1
   disk_quota: 2G
-  memory: 2G
+  memory: 1G
   random-route: false
   buildpacks:
     - nodejs_buildpack

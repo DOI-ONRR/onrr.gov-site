@@ -1,0 +1,670 @@
+{
+    "data": [
+        {
+            "id": "0664e1b2-b978-4bb6-b3a1-124e764e1b56",
+            "name": "_expansion_panel_block_collection",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for calling another flow based on collection type of expansion panel",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "5a589cbd-19c1-419a-bf6b-2f999a2a9a6a",
+            "date_created": "2023-02-06T19:21:07.703Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "07444c35-0e91-4b15-967f-d4a7f755d6fe",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish plant specific Ucas",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "plant_specific_ucas"
+                ],
+                "location": "collection"
+            },
+            "operation": "abbdf236-b664-47a4-b6d6-5eb1039e5f9e",
+            "date_created": "2023-02-07T21:48:59.891Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
+            "name": "_handbook_production_handbook",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing production handbook",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "c21bbdac-5008-490f-81d4-e5f4793c4d1c",
+            "date_created": "2023-02-07T21:25:58.877Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "0f05e26e-607c-4920-8b09-e51feef399f4",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish handbooks",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "geothermal_class_1",
+                    "geothermal_class_2_3",
+                    "production_handbook",
+                    "revenue_handbook",
+                    "solid_minerals_handbook"
+                ],
+                "location": "collection"
+            },
+            "operation": "ac5b74a5-a71e-42c8-99f3-f287e4622b36",
+            "date_created": "2023-02-07T21:40:36.340Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "127f0a0e-5fa8-4acc-9fd1-db004a57f38a",
+            "name": "_content_block",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for content_blocks",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "a9c773aa-3a19-4b95-bc4e-327b07bd839c",
+            "date_created": "2023-02-06T20:10:46.492Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "16f853f0-70c3-411a-8e05-b5db06a8088a",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish reporter letters",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "reporter_letters"
+                ],
+                "location": "collection"
+            },
+            "operation": "a0521d96-103c-4e7e-a28d-abc5007f5e7d",
+            "date_created": "2023-02-07T19:51:48.428Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "2f1b33dd-7e89-4812-822c-9fd8b2c8535e",
+            "name": "_file_export_and_import",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for exporting data to a file then importing",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "64ea27eb-e467-4b7c-a97f-ed72c25a15ff",
+            "date_created": "2023-02-13T15:42:03.609Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "317b72c0-057f-443f-9847-e11ff943a9f5",
+            "name": "_create_collection_item_in_prod",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for updating collection item in prod",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "1eb7aad0-7874-4238-a95b-44c4967fd598",
+            "date_created": "2023-02-06T15:31:12.088Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3189556b-074b-4a1a-afa7-8f511d1dacea",
+            "name": "_pages_files",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for pages files",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "2b4ae82b-7a31-4763-b48a-103141e2d6c4",
+            "date_created": "2023-02-14T15:40:07.563Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "318ceaef-75e1-4a34-b29d-22d84b85b5d7",
+            "name": "_plant_specific_uca",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing multiple plant specific UCA",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "ace4a168-5e33-4638-9fda-5987543dcce7",
+            "date_created": "2023-02-07T21:44:21.277Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3b01d511-b2ae-4f04-a14f-38eaec857485",
+            "name": "_card_block",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for card blocks",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "c077a1fb-94be-4c9c-b09e-66707c226a64",
+            "date_created": "2023-02-06T19:27:24.570Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3eb4c563-035c-4945-89f4-f942cc1ef337",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish announcements and rulemakings.",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "announcements",
+                    "rulemakings"
+                ],
+                "location": "collection"
+            },
+            "operation": "fe78387a-a502-430f-a87d-a3c7ac80ea6f",
+            "date_created": "2023-02-02T19:40:53.480Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "4057920b-5817-4e69-8456-bffcbe048cc1",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish tab blocks",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "tab_blocks"
+                ],
+                "location": "collection"
+            },
+            "operation": "ca7d6f83-9965-4d15-951a-9cd0eefc4fbd",
+            "date_created": "2023-02-07T17:14:56.241Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "45331b92-9015-4f9a-a3e2-95d3521c013a",
+            "name": "_pricing_indian_gas_major_portion",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow to publish multiple Indian Gas Major Portion items",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "eaa0b6ea-84d2-499a-9269-2c8ceda48e97",
+            "date_created": "2023-02-07T16:21:16.410Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "49182a53-6edc-4e8d-b189-27cd33c65ae4",
+            "name": "_tab_blocks",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing multiple tab blocks",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "7b67a105-eebc-4fda-8280-a876eda826ab",
+            "date_created": "2023-02-07T17:12:41.645Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "535d8428-e9d5-4811-9972-f3aa5959d906",
+            "name": "_handbook_solid_materials_handbook",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing solid materials handbook",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "3e5287e1-984e-417d-bf62-3c28eb0b415d",
+            "date_created": "2023-02-07T21:30:14.056Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5589fe68-0d60-4881-95f9-a8ac85242707",
+            "name": "_handbook_geothermal_class_2_3",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing geothermal class 2 3",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "3473d089-6355-4484-a6a9-763e66029cb7",
+            "date_created": "2023-02-07T21:37:28.651Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5e3c9591-d7b7-42ea-b11f-80cc3cb7ea25",
+            "name": "Publish interest",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish Interest Oil and Gas and Interest Solids",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "Interest_Oil_and_Gas",
+                    "Interest_Solids"
+                ],
+                "location": "collection"
+            },
+            "operation": "65b2e5c5-73c9-4b0d-b752-794a21b42789",
+            "date_created": "2023-02-07T22:22:35.953Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "5f5960fb-fcb9-441b-883b-3672d4a2eb14",
+            "name": "_pricing_NYMEX",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow to publish multiple NYMEX pricing items",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "5e74bdcf-a9d2-4555-836c-debce5895c83",
+            "date_created": "2023-02-07T16:25:34.491Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "626877e2-cbbc-4c3f-a67b-304ca721e02b",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish pricing data",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "ibmp",
+                    "index_zones",
+                    "indian_gas_major_portion",
+                    "NYMEX"
+                ],
+                "location": "collection"
+            },
+            "operation": "a6a93140-76b2-46f2-bc76-34fb538af8c3",
+            "date_created": "2023-02-07T16:00:26.846Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "63d570ba-d06e-4139-9374-bd54f7684654",
+            "name": "_pricing_index_zones",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow to publish multiple index zones pricing items",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "db13fee8-e70a-4129-97f5-c012c9d28ff7",
+            "date_created": "2023-02-07T16:16:46.758Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "652d461e-2f82-4abd-ab1e-be6ea0bf84f2",
+            "name": "_Interest_Solids",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing multiple Interest Solids",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "4253a322-1afa-48c6-989c-0f3328005f2f",
+            "date_created": "2023-02-07T21:54:44.203Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "67182ac8-0c80-46ae-b3f5-2041c3bb3aaf",
+            "name": "_expansion_panel",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for expansion panels",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "72e068db-21ae-453e-a6c2-ffde1d630197",
+            "date_created": "2023-02-06T19:52:47.193Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "6e3a1dbf-4eca-4cde-8cfb-a43faf5dc828",
+            "name": "_redirects",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing multiple redirects",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "8ab3ea8b-76cb-42c3-9b9d-2b537eaacf66",
+            "date_created": "2023-02-07T17:03:09.056Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "74f5cfd2-adb8-44f4-910d-3e5048c3e86e",
+            "name": "_Interest_Oil_and_Gas",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing multiple Interest Oil and Gas",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "61db66f5-0ba9-42b8-b328-7027f0d05529",
+            "date_created": "2023-02-07T21:53:20.903Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "78a78830-eadb-4e95-8791-b21094cf56bb",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish page content updates",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "pages"
+                ],
+                "location": "collection"
+            },
+            "operation": "b0c6e51a-0b48-41c4-97f3-ed1bedc3c557",
+            "date_created": "2023-02-06T20:25:56.429Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8252eb6b-fada-42f3-ba1b-4af8f57be511",
+            "name": "_reporter_letters",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing multiple reporter letters",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "1cf89cb9-11d2-43ff-99b5-f9b3487a787b",
+            "date_created": "2023-02-07T19:47:59.719Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "827e779c-b4c9-4629-97cd-ece575f7a0ce",
+            "name": "_page_block_collection",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for calling another flow based on collection type of page block",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "8649c33f-e8d8-4203-8061-545031c51f92",
+            "date_created": "2023-02-06T18:29:08.683Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "9cb14ffa-c7aa-46ea-9bd4-3deb87c2ca98",
+            "name": "_pricing_ibmp",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow to publish multiple IBMP pricing items",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "f36ee6b0-2001-4de4-bd87-7b4774d88392",
+            "date_created": "2023-02-07T16:11:08.722Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a3aaf7fe-35fa-435b-80ea-631b5d2f7018",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish contacts",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "contacts"
+                ],
+                "location": "collection"
+            },
+            "operation": "f822e1ee-f4bf-4484-93fc-47463e019fba",
+            "date_created": "2023-02-07T19:43:27.511Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "a5d5125d-bf35-4776-a37e-e0c95bac9430",
+            "name": "_contacts",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing multiple contacts",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "e184d780-a6ee-4022-bb94-2bc72d1102ff",
+            "date_created": "2023-02-07T19:39:56.727Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "aa9d1bd2-85a8-41ee-ba34-4b66537d7e07",
+            "name": "_expansion_panel_block",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for expansion panel blocks",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "26b936fb-d23a-4f86-9493-b7b26284e0bc",
+            "date_created": "2023-02-06T19:56:34.235Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "af676dff-ccfe-4b80-8e79-e3daaae9c445",
+            "name": "_expansion_panel_block_label",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for expansion panel block labels",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "5dab927f-1293-4fab-accf-259e7a705af8",
+            "date_created": "2023-02-06T20:04:04.237Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+            "name": "_update_collection_item_in_prod",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for updating collection item in prod",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "6358f491-ee02-44a2-8841-3e0000002ddb",
+            "date_created": "2023-02-06T15:42:34.608Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "b9506c8e-3364-4ae6-b494-4e1b3bd27337",
+            "name": "_handbook_revenue_handbook",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing revenue handbook",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "15f2bd16-dae5-4efa-8fdb-91ee893b7d93",
+            "date_created": "2023-02-07T21:03:51.436Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "be8dfd73-ee17-4767-83d5-9fc82c2ee3bc",
+            "name": "_page_block",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for page blocks",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "e20e5737-3011-4107-b4ed-6dfeea7a3c43",
+            "date_created": "2023-02-06T20:14:43.522Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "cb2432cc-dffa-47a6-af94-1659137f8920",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish press releases",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "press_releases"
+                ],
+                "location": "collection"
+            },
+            "operation": "7756ad5c-5472-4d2d-bedb-6ceffa471014",
+            "date_created": "2023-02-08T17:50:21.145Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ced5d50b-054b-41a1-92f3-913bf9664548",
+            "name": "_tab_block",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for tab blocks",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "01927652-6d96-4a8d-8f9d-5e5834a3e63e",
+            "date_created": "2023-02-06T19:45:47.038Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "d119ba33-15c0-4ecb-979e-b4290d88c4a7",
+            "name": "_handbook_geothermal_class_1",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing geothermal class 1",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "fb71a6a5-759b-446c-9c6b-56d04f147976",
+            "date_created": "2023-02-07T21:33:48.478Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "name": "_tab_blocks_tab_block",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for tab clocks tab blocks",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "5327a6c4-cc82-424f-96dd-27344385ecdd",
+            "date_created": "2023-02-06T19:39:59.242Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "de496a02-cb91-4e8e-80a9-7c9904b62ad3",
+            "name": "_press_release",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing multiple press releases",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "908b750c-f4b0-4229-91d8-ee96359f8a56",
+            "date_created": "2023-02-08T17:50:55.207Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "e0be0b1c-23f6-4e15-89ad-f77acc45a0d5",
+            "name": "Publish",
+            "icon": "published_with_changes",
+            "color": null,
+            "description": "Publish redirects",
+            "status": "active",
+            "trigger": "manual",
+            "accountability": "all",
+            "options": {
+                "collections": [
+                    "redirects"
+                ],
+                "location": "collection"
+            },
+            "operation": "362c2aea-a393-41ed-8567-ace8adec92f2",
+            "date_created": "2023-02-07T17:06:52.880Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
+            "name": "_file",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing file",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "bc043938-b32b-4c94-80d9-152e95a04349",
+            "date_created": "2023-02-07T23:04:25.431Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        }
+    ]
+}
