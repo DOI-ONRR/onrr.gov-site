@@ -735,7 +735,7 @@
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
                     "collection": "Interest_Oil_and_Gas",
-                    "item": "{{read_item}}"
+                    "item": "{{read_item.data.data}}"
                 }
             },
             "resolve": null,
@@ -907,25 +907,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "4253a322-1afa-48c6-989c-0f3328005f2f",
-            "name": "Read item",
-            "key": "read_item",
-            "type": "item-read",
-            "position_x": 19,
-            "position_y": 1,
-            "options": {
-                "collection": "Interest_Solids",
-                "key": [
-                    "{$trigger}}"
-                ]
-            },
-            "resolve": "0ef52ea1-4651-4bb5-b1b4-da69ecb163cd",
-            "reject": null,
-            "flow": "652d461e-2f82-4abd-ab1e-be6ea0bf84f2",
-            "date_created": "2023-02-07T21:56:44.238Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "44a814a8-e1f1-4c13-93dd-7d5ca428c44b",
             "name": "Update redirect in prod",
             "key": "update_redirect_in_prod",
@@ -959,8 +940,8 @@
                 "payload": {
                     "collection": "Interest_Solids",
                     "item": "{{$trigger}}",
-                    "new": "{{read_item}}",
-                    "old": "{{get_item_from_prod}}"
+                    "new": "{{read_item.data.data}}",
+                    "old": "{{get_item_from_prod.data.data}}"
                 }
             },
             "resolve": null,
@@ -1292,25 +1273,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "61db66f5-0ba9-42b8-b328-7027f0d05529",
-            "name": "Read item",
-            "key": "read_item",
-            "type": "item-read",
-            "position_x": 19,
-            "position_y": 1,
-            "options": {
-                "collection": "Interest_Oil_and_Gas",
-                "key": [
-                    "{$trigger}}"
-                ]
-            },
-            "resolve": "910afc71-5a43-42f5-b464-f3423f4b3722",
-            "reject": null,
-            "flow": "74f5cfd2-adb8-44f4-910d-3e5048c3e86e",
-            "date_created": "2023-02-07T21:57:09.695Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "6358f491-ee02-44a2-8841-3e0000002ddb",
             "name": "Compare objects",
             "key": "compare_objects",
@@ -1324,6 +1286,22 @@
             "reject": null,
             "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
             "date_created": "2023-02-06T15:45:06.205Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "640ae304-08a0-4d80-9d9f-ee5caff62b17",
+            "name": "Read item",
+            "key": "read_item",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env.PUBLIC_URL}}/items/Interest_Solids/{{$trigger}}"
+            },
+            "resolve": "0ef52ea1-4651-4bb5-b1b4-da69ecb163cd",
+            "reject": null,
+            "flow": "652d461e-2f82-4abd-ab1e-be6ea0bf84f2",
+            "date_created": "2023-02-25T14:15:11.537Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1863,8 +1841,8 @@
                 "payload": {
                     "collection": "Interest_Oil_and_Gas",
                     "item": "{{$trigger}}",
-                    "new": "{{read_item}}",
-                    "old": "{{get_item_from_prod}}"
+                    "new": "{{read_item.data.data}}",
+                    "old": "{{get_item_from_prod.data.data}}"
                 }
             },
             "resolve": null,
@@ -1891,6 +1869,22 @@
             "reject": null,
             "flow": "ced5d50b-054b-41a1-92f3-913bf9664548",
             "date_created": "2023-02-06T19:51:02.441Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "8a08351c-ed7a-46ed-9d55-0cf6c9ebb41d",
+            "name": "Read item",
+            "key": "read_item",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env.PUBLIC_URL}}/items/Interest_Oil_and_Gas/{{$trigger}}"
+            },
+            "resolve": "910afc71-5a43-42f5-b464-f3423f4b3722",
+            "reject": null,
+            "flow": "74f5cfd2-adb8-44f4-910d-3e5048c3e86e",
+            "date_created": "2023-02-25T14:16:58.995Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2952,7 +2946,7 @@
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
                     "collection": "Interest_Solids",
-                    "item": "{{read_item}}"
+                    "item": "{{read_item.data.data}}"
                 }
             },
             "resolve": null,
