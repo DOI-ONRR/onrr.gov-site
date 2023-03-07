@@ -1441,7 +1441,13 @@
             "position_x": 127,
             "position_y": 1,
             "options": {
-                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}"
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
+                    }
+                ]
             },
             "resolve": "8664db51-6e75-409d-8684-206c23d64eaa",
             "reject": "718fece8-8b71-4c18-b0f7-74571575993f",
@@ -1570,7 +1576,13 @@
             "position_x": 37,
             "position_y": 1,
             "options": {
-                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.collection}}/{{$trigger.item}}"
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.collection}}/{{$trigger.item}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
+                    }
+                ]
             },
             "resolve": "8354d1a8-daf1-4458-9603-27cde29a9046",
             "reject": "5ab10f49-b3f0-4729-b751-3bcc14d9ec75",
@@ -1954,7 +1966,7 @@
             "options": {
                 "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
                 "payload": {
-                    "fileUuid": "{{read_nymex_item.spreadsheet}}"
+                    "fileUuid": "{{read_nymex_item.Spreadsheet}}"
                 }
             },
             "resolve": "2c2e6662-9d85-46cb-bfd8-ecdbbe8177ce",
