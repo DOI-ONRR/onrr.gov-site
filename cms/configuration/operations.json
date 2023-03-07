@@ -462,6 +462,28 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "2796f52e-8ae8-42fb-8a9d-d9c886780aa1",
+            "name": "Get item from prod",
+            "key": "get_item_from_prod",
+            "type": "request",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env.UPSTREAM_URL}}/items/{{$trigger.collection}}/{{$trigger.item}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
+                    }
+                ]
+            },
+            "resolve": "82c0e774-38b7-4277-936d-b645e6ae4d6b",
+            "reject": null,
+            "flow": "953b9397-a8d3-4e58-8ae4-ee6ca762975b",
+            "date_created": "2023-03-07T16:21:03.996Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "2837e582-3f0e-42a1-ac5c-46fe42ad7443",
             "name": "Call file flow",
             "key": "call_file_flow",
@@ -1214,6 +1236,22 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "5fe06158-faf9-4bbb-bb69-d6074e6b0a6d",
+            "name": "Transform payload",
+            "key": "transform_payload",
+            "type": "exec",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "code": "module.exports = async function(data) {\n\tvar results = [];\n    for (var i = 0; i < data.$trigger.keys.length; i++) {\n        results.push({\n            \"item\": data.$trigger.keys[i],\n            \"collection\": `${data.$trigger.collection}`\n        });\n    }\n\treturn results;\n}"
+            },
+            "resolve": "d6b06403-5c67-4aa7-bb4d-066e8894a346",
+            "reject": null,
+            "flow": "f6333d82-d9b3-4a18-b1dc-050a0a8e5d1a",
+            "date_created": "2023-03-07T16:27:46.525Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "60365b4e-fac8-4652-9f49-7040d8f360d8",
             "name": "Create index zone in prod",
             "key": "create_index_zone_in_prod",
@@ -1703,6 +1741,29 @@
             "reject": null,
             "flow": "ced5d50b-054b-41a1-92f3-913bf9664548",
             "date_created": "2023-02-06T19:48:24.170Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "82c0e774-38b7-4277-936d-b645e6ae4d6b",
+            "name": "Delete item from prod",
+            "key": "delete_item_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "method": "DELETE",
+                "url": "{{$env.UPSTREAM_URL}}/items/{{$trigger.collection}}/{{$trigger.item}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
+                    }
+                ]
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "953b9397-a8d3-4e58-8ae4-ee6ca762975b",
+            "date_created": "2023-03-07T16:21:03.969Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2687,6 +2748,23 @@
             "reject": null,
             "flow": "4057920b-5817-4e69-8456-bffcbe048cc1",
             "date_created": "2023-02-07T17:15:31.807Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "d6b06403-5c67-4aa7-bb4d-066e8894a346",
+            "name": "Delete item from prod",
+            "key": "delete_item_from_prod",
+            "type": "trigger",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "flow": "953b9397-a8d3-4e58-8ae4-ee6ca762975b",
+                "payload": "{{transform_payload}}"
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "f6333d82-d9b3-4a18-b1dc-050a0a8e5d1a",
+            "date_created": "2023-03-07T16:30:54.744Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {

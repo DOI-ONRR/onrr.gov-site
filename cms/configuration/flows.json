@@ -442,6 +442,20 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "953b9397-a8d3-4e58-8ae4-ee6ca762975b",
+            "name": "_delete_item",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for deleting collection item from prod",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "2796f52e-8ae8-42fb-8a9d-d9c886780aa1",
+            "date_created": "2023-03-07T16:15:43.042Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "9cb14ffa-c7aa-46ea-9bd4-3deb87c2ca98",
             "name": "_pricing_ibmp",
             "icon": "bolt",
@@ -664,6 +678,67 @@
             "options": {},
             "operation": "bc043938-b32b-4c94-80d9-152e95a04349",
             "date_created": "2023-02-07T23:04:25.431Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "f6333d82-d9b3-4a18-b1dc-050a0a8e5d1a",
+            "name": "_delete_items",
+            "icon": "bolt",
+            "color": null,
+            "description": "Event-triggered flow for deleting items from prod when deleted from dev",
+            "status": "active",
+            "trigger": "event",
+            "accountability": "all",
+            "options": {
+                "type": "action",
+                "scope": [
+                    "items.delete"
+                ],
+                "collections": [
+                    "announcements",
+                    "card_blocks",
+                    "card_blocks_card_content_blocks",
+                    "contacts",
+                    "content_blocks",
+                    "events",
+                    "expansion_panel_block_label",
+                    "expansion_panels",
+                    "expansion_panels_expansion_panel_blocks",
+                    "geothermal_class_1",
+                    "geothermal_class_2_3",
+                    "Handbooks",
+                    "ibmp",
+                    "index_zones",
+                    "indian_gas_major_portion",
+                    "Interest_Oil_and_Gas",
+                    "Interest_Solids",
+                    "Late_Payment_Interest",
+                    "layout_column_blocks",
+                    "links",
+                    "Links",
+                    "menus",
+                    "menus_pages",
+                    "NYMEX",
+                    "pages",
+                    "pages_back",
+                    "pages_files",
+                    "pages_page_blocks",
+                    "plant_specific_ucas",
+                    "press_releases",
+                    "Pricing",
+                    "production_handbook",
+                    "redirects",
+                    "reporter_letters",
+                    "revenue_handbook",
+                    "rulemakings",
+                    "solid_minerals_handbook",
+                    "tab_block_label",
+                    "tab_blocks",
+                    "tab_blocks_tab_blocks"
+                ]
+            },
+            "operation": "5fe06158-faf9-4bbb-bb69-d6074e6b0a6d",
+            "date_created": "2023-03-07T16:09:08.369Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         }
     ]
