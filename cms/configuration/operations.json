@@ -205,7 +205,7 @@
             "name": "Get tab blocks tab block from prod",
             "key": "get_tab_blocks_tab_block_from_prod",
             "type": "request",
-            "position_x": 55,
+            "position_x": 109,
             "position_y": 1,
             "options": {
                 "url": "{{$env['UPSTREAM_URL']}}/items/tab_blocks_tab_blocks/{{$trigger}}"
@@ -241,6 +241,22 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "15ddf9da-2cc2-4b57-88fa-09e3dcbc031e",
+            "name": "Get flow name",
+            "key": "get_flow_name",
+            "type": "exec",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "code": "module.exports = async function(data) {\n    var name = '';\n    \n    switch (data.read_tab_blocks_tab_block.collection) {\n        case 'content_blocks':\n            name = '_content_block';\n            break;\n        case 'card_blocks':\n            name = '_card_block';\n            break;\n        case 'tab_block_label':\n            name = '_tab_block_label';\n            break;\n        case 'tab_blocks':\n            name = '_tab_block';\n            break;\n    }\n    \n    return {\n        \"flowName\": name\n    }\n}"
+            },
+            "resolve": "843c70c9-4b68-4fe0-a7dd-eff4902a2631",
+            "reject": null,
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-03-13T23:20:47.991Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "15f2bd16-dae5-4efa-8fdb-91ee893b7d93",
             "name": "Read handbook",
             "key": "read_handbook",
@@ -269,7 +285,7 @@
             "options": {
                 "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
                 "payload": {
-                    "fileUuid": "{{read_nymex_item.spreadsheet}}"
+                    "fileUuid": "{{read_index_zone_item.spreadsheet}}"
                 }
             },
             "resolve": "57792fcb-d561-4bab-8618-dc18dc8e984e",
@@ -420,6 +436,28 @@
             "reject": null,
             "flow": "0d0c4013-f5ad-4a79-b8e6-4d66a5c95654",
             "date_created": "2023-02-07T21:27:17.457Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "24b946bc-0ddf-4ab5-9e7a-a4a440b3612b",
+            "name": "Update tab block label in prod",
+            "key": "update_tab_block_label_in_prod",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{$trigger.item}}",
+                    "new": "{{read_tab_block_label}}",
+                    "old": "{{get_tab_block_label_from_prod.data.data}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "db576908-36a1-4730-ac7d-477209995557",
+            "date_created": "2023-03-13T21:47:06.783Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -820,8 +858,8 @@
             "name": "Create tab blocks tab block in prod",
             "key": "create_tab_blocks_tab_block_in_prod",
             "type": "trigger",
-            "position_x": 73,
-            "position_y": 17,
+            "position_x": 127,
+            "position_y": 18,
             "options": {
                 "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
                 "payload": {
@@ -853,6 +891,22 @@
             "reject": null,
             "flow": "af676dff-ccfe-4b80-8e79-e3daaae9c445",
             "date_created": "2023-02-06T20:08:20.313Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "3ce6c83d-4b4a-4a0e-b00c-fc0391fcbf00",
+            "name": "Filter flows by name",
+            "key": "filter_flows_by_name",
+            "type": "exec",
+            "position_x": 73,
+            "position_y": 1,
+            "options": {
+                "code": "const _ = require('lodash');\n\nmodule.exports = async function(data) {\n\tvar flow = _.find(data.get_flows.data.data, (f) => {\n        return f.name === data.get_flow_name.flowName;\n    });\n\n    return {\n    \t\"flowId\": flow.id\n    };\n}"
+            },
+            "resolve": "73c1446b-672b-4d89-b100-bf9bd4df2897",
+            "reject": null,
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-03-13T23:26:21.027Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -1053,7 +1107,7 @@
                     "{{$trigger}}"
                 ]
             },
-            "resolve": "b2236baf-0adc-4351-8e6c-f6adf632efdc",
+            "resolve": "15ddf9da-2cc2-4b57-88fa-09e3dcbc031e",
             "reject": null,
             "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
             "date_created": "2023-02-06T19:43:21.896Z",
@@ -1180,7 +1234,7 @@
             "name": "Update tab blocks tab block in prod",
             "key": "update_tab_blocks_tab_block_in_prod",
             "type": "trigger",
-            "position_x": 73,
+            "position_x": 127,
             "position_y": 1,
             "options": {
                 "flow": "b5277a7e-1f65-4f04-8f0f-9ac2f917388c",
@@ -1590,6 +1644,26 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "73c1446b-672b-4d89-b100-bf9bd4df2897",
+            "name": "Call flow",
+            "key": "call_flow",
+            "type": "trigger",
+            "position_x": 91,
+            "position_y": 1,
+            "options": {
+                "flow": "{{filter_flows_by_name.flowId}}",
+                "payload": {
+                    "item": "{{read_tab_blocks_tab_block.item}}",
+                    "collection": "{{read_tab_blocks_tab_block.collection}}"
+                }
+            },
+            "resolve": "101d0a44-e245-4443-a56f-c6f339b5d13c",
+            "reject": null,
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-03-13T23:26:32.970Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "7756ad5c-5472-4d2d-bedb-6ceffa471014",
             "name": "Call press releases flow",
             "key": "call_press_releases_flow",
@@ -1727,6 +1801,28 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "813b2ab3-2ad3-4837-bcf4-d59effd884b1",
+            "name": "Get tab block label from prod",
+            "key": "get_tab_block_label_from_prod",
+            "type": "request",
+            "position_x": 37,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env.UPSTREAM_URL}}/items/{{$trigger.collection}}/{{$trigger.item}}",
+                "headers": [
+                    {
+                        "header": "Authorization",
+                        "value": "Bearer {{$env.CMS_TOKEN}}"
+                    }
+                ]
+            },
+            "resolve": "24b946bc-0ddf-4ab5-9e7a-a4a440b3612b",
+            "reject": "bcde3622-38db-409f-8a54-831db345ae00",
+            "flow": "db576908-36a1-4730-ac7d-477209995557",
+            "date_created": "2023-03-13T21:47:06.795Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "81fc0fbe-7fa3-444e-b909-858fdbcdc3c4",
             "name": "Trigger _tab_blocks_tab_block",
             "key": "trigger_tab_blocks_tab_block",
@@ -1786,6 +1882,22 @@
             "reject": null,
             "flow": "3b01d511-b2ae-4f04-a14f-38eaec857485",
             "date_created": "2023-02-06T19:39:14.996Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "843c70c9-4b68-4fe0-a7dd-eff4902a2631",
+            "name": "Get flows",
+            "key": "get_flows",
+            "type": "request",
+            "position_x": 55,
+            "position_y": 1,
+            "options": {
+                "url": "{{$env['PUBLIC_URL']}}/flows"
+            },
+            "resolve": "3ce6c83d-4b4a-4a0e-b00c-fc0391fcbf00",
+            "reject": null,
+            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
+            "date_created": "2023-03-13T23:26:11.317Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -2459,26 +2571,6 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
-            "id": "b2236baf-0adc-4351-8e6c-f6adf632efdc",
-            "name": "Trigger _card_block flow",
-            "key": "trigger_card_block_flow",
-            "type": "trigger",
-            "position_x": 37,
-            "position_y": 1,
-            "options": {
-                "payload": {
-                    "collection": "card_blocks",
-                    "item": "{{ read_tab_blocks_tab_block.item }}"
-                },
-                "flow": "3b01d511-b2ae-4f04-a14f-38eaec857485"
-            },
-            "resolve": "101d0a44-e245-4443-a56f-c6f339b5d13c",
-            "reject": null,
-            "flow": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
-            "date_created": "2023-02-06T19:43:21.881Z",
-            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
-        },
-        {
             "id": "b3107ffb-f738-4e5b-9df5-a2ef22ddaf8b",
             "name": "Call interest flow",
             "key": "call_interest_flow",
@@ -2563,6 +2655,26 @@
             "reject": null,
             "flow": "ef65fc0a-3f60-4e85-b783-a0df4474823a",
             "date_created": "2023-02-08T01:40:35.107Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "bcde3622-38db-409f-8a54-831db345ae00",
+            "name": "Create tab block label",
+            "key": "create_tab_block_label",
+            "type": "trigger",
+            "position_x": 55,
+            "position_y": 17,
+            "options": {
+                "flow": "317b72c0-057f-443f-9847-e11ff943a9f5",
+                "payload": {
+                    "collection": "{{$trigger.collection}}",
+                    "item": "{{read_tab_block_label}}"
+                }
+            },
+            "resolve": null,
+            "reject": null,
+            "flow": "db576908-36a1-4730-ac7d-477209995557",
+            "date_created": "2023-03-13T21:48:07.110Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
@@ -3153,6 +3265,25 @@
             "reject": "2dad7cce-c00c-4dc9-91a0-cc3e1115ff8f",
             "flow": "9cb14ffa-c7aa-46ea-9bd4-3deb87c2ca98",
             "date_created": "2023-02-07T19:30:07.476Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
+            "id": "fe6038e4-5965-45df-9183-b5439da6205d",
+            "name": "Read tab block label",
+            "key": "read_tab_block_label",
+            "type": "item-read",
+            "position_x": 19,
+            "position_y": 1,
+            "options": {
+                "collection": "content_blocks",
+                "key": [
+                    "{{$trigger.item}}"
+                ]
+            },
+            "resolve": "813b2ab3-2ad3-4837-bcf4-d59effd884b1",
+            "reject": null,
+            "flow": "db576908-36a1-4730-ac7d-477209995557",
+            "date_created": "2023-03-13T21:47:06.808Z",
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {

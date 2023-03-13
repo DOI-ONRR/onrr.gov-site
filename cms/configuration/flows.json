@@ -620,6 +620,20 @@
             "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
         },
         {
+            "id": "db576908-36a1-4730-ac7d-477209995557",
+            "name": "_tab_block_label",
+            "icon": "bolt",
+            "color": null,
+            "description": "Embedded flow for publishing tab block labels",
+            "status": "active",
+            "trigger": "operation",
+            "accountability": "all",
+            "options": {},
+            "operation": "fe6038e4-5965-45df-9183-b5439da6205d",
+            "date_created": "2023-03-13T21:40:41.491Z",
+            "user_created": "37a5978c-9f80-4c93-b6d9-53408a797368"
+        },
+        {
             "id": "ddf04580-4e04-44a4-a6a8-e48175d0260e",
             "name": "_tab_blocks_tab_block",
             "icon": "bolt",
