@@ -1,7 +1,7 @@
 <template>
   <div class="home__wrap">
     <div class="text-center" v-if="$apollo.loading">
-      <v-progress-circular :value="20"></v-progress-circular>
+      <v-progress-circular :value="20" aria-label="circular progress bar"></v-progress-circular>
     </div>
     <div v-else>
       <HeroImage 
