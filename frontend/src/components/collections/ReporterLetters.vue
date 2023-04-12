@@ -2,24 +2,20 @@
   <div>
     <div v-if="collectionLayout === 'basic'">
       <v-list dense>
-        <v-list-item-group
-            color="secondary"
-          >
-            <v-list-item
-              v-for="(item, i) in filteredCollection"
-              :key="i"
-              :href="fileLink(`${ API }/reporter-letters/`, item)"
-              class="pa-0"
-              target="_blank"
-            >
-              <v-list-item-icon class="mr-1">
-                <v-icon color="secondary">{{ fileIcon(item.file.type) }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title" class="secondary--text text-body-1 text-wrap text-decoration-underline"></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-        </v-list-item-group>
+        <v-list-item
+          v-for="(item, i) in filteredCollection"
+          :key="i"
+          :href="fileLink(`${ API }/reporter-letters/`, item)"
+          class="pa-0"
+          target="_blank"
+        >
+          <v-list-item-icon class="mr-1">
+            <v-icon color="secondary">{{ fileIcon(item.file.type) }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" class="secondary--text text-body-1 text-wrap text-decoration-underline"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
       <div class="text-center">
         <v-btn

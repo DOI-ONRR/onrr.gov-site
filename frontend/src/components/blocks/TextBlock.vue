@@ -54,10 +54,10 @@ export default {
           role = `heading`
           break
         case 'paragraph':
-          role=''    
+          role = undefined    
           break
         default:
-          role=''
+          role = undefined
         break
       }
 
@@ -72,10 +72,10 @@ export default {
           level = this.block.data.level
           break
         case 'paragraph':
-          level=''    
+          level = undefined    
           break
         default:
-          level=''
+          level = undefined
         break
       }
 
