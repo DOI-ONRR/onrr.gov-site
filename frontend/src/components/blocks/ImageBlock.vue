@@ -20,7 +20,8 @@
               justify="center">
               <v-progress-circular 
                 indeterminate
-                color="grey lighten-5"></v-progress-circular>  
+                color="grey lighten-5"
+                aria-label="circular progress bar"></v-progress-circular>  
             </v-row>
           </template>
         </v-img>
