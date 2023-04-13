@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import { gaOutboundLinkMixin } from '@/mixins'
+import { gaOutboundLinkMixin, accessibilityMixin } from '@/mixins'
 
 export default {
   name: 'TextBlock',
-  mixins: [ gaOutboundLinkMixin ],
+  mixins: [ gaOutboundLinkMixin, accessibilityMixin ],
   data () {
     return {}
   },
@@ -25,6 +25,7 @@ export default {
   mounted: function() {
     this.$nextTick(function () {
       this.bindOutboundLinkListeners();
+      this.addAriaLabelToCeButtons();
     });
   },
   computed: {
