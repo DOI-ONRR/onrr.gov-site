@@ -4,28 +4,30 @@
             accordion
             :value="openedPanel">
             <v-expansion-panel
-            v-for="(block,i) in blockItems"
-            :key="i"
-            class="mb-4"
-            disable-icon-rotate
-            @click="addParamsToLocation({ panel: formattedLabel(block.item.block_label)  })"
-            >
-            <v-expansion-panel-header 
-                :ref="formattedLabel(block.item.block_label)"
-                color="expansionPanel">
-                {{ block.item.block_label }}
-                <template v-slot:actions>
-                    <v-icon color="secondary" class="v-icon-plus">
-                       mdi-plus-box
-                    </v-icon>
-                    <v-icon color="secondary" class="v-icon-minus">
-                       mdi-minus-box
-                    </v-icon>
-                </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content class="pt-4">
-                <LayoutBlock :layoutBlocks="block.panelBlocks"></LayoutBlock>
-            </v-expansion-panel-content>
+                v-for="(block,i) in blockItems"
+                :key="i"
+                class="mb-4"
+                disable-icon-rotate
+                @click="panelClickHandler(block.item.block_label)"
+                >
+                    <v-expansion-panel-header 
+                        :ref="formattedLabel(block.item.block_label)"
+                        color="expansionPanel"
+                        aria-expanded="false"
+                        :aria-controls="`panel-content-${i}`">
+                        {{ block.item.block_label }}
+                        <template v-slot:actions>
+                            <v-icon color="secondary" class="v-icon-plus">
+                            mdi-plus-box
+                            </v-icon>
+                            <v-icon color="secondary" class="v-icon-minus">
+                            mdi-minus-box
+                            </v-icon>
+                        </template>
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content class="pt-4" :id="`panel-content-${i}`">
+                        <LayoutBlock :layoutBlocks="block.panelBlocks"></LayoutBlock>
+                    </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
     </div>
@@ -38,10 +40,11 @@ const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/compon
 
 import { 
   pageBlockMixin,
-  editorBlockMixin
+  editorBlockMixin,
+  accessibilityMixin
 } from '@/mixins'
 export default {
-    mixins: [pageBlockMixin, editorBlockMixin],
+    mixins: [pageBlockMixin, editorBlockMixin, accessibilityMixin],
     name: 'ExpansionPanelBlock',
     data() {
         return {
@@ -77,6 +80,10 @@ export default {
         formattedLabelsArr() {
             const panelsArr = this.panels
             return panelsArr.map(block => this.formattedLabel(block.item.block_label))
+        },
+        panelClickHandler(blockLabel) {
+            this.addParamsToLocation({ panel: this.formattedLabel(blockLabel) })
+            this.removeAriaExpandedFromExpansionPanels()
         }
         
     },
@@ -112,9 +119,11 @@ export default {
             return openedId
         }
     },
-    created() {
-        // this.openedPanel()
-    },
+    mounted: function () {
+        this.$nextTick(function () {
+            this.removeAriaExpandedFromExpansionPanels();
+        })
+    }
 }
 </script>
 
