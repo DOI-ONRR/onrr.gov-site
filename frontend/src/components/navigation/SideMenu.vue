@@ -1,15 +1,13 @@
 <template>
   <div class="side-menu-wrap" ref="sideMenu">
     <v-list class="pa-0" v-if="!isMobile">
-      <v-list-item-group
-        color="primary">
-        <v-list-item 
-          link
-          exact
-          :to="`${ parentUrl }`">
-          {{ `${ parentTitle } Home` }}
-        </v-list-item>
-        <div v-for="item in sideMenuItems" :key="item.id">
+      <v-list-item 
+        link
+        exact
+        :to="`${ parentUrl }`">
+        {{ `${ parentTitle } Home` }}
+      </v-list-item>
+      <div v-for="item in sideMenuItems" :key="item.id">
         <v-list-item 
           link
           active-class="active"
@@ -18,8 +16,7 @@
           :to="`${ cItem.pages_id.url }`">
               {{ cItem.pages_id.title }}
         </v-list-item>
-        </div>
-      </v-list-item-group>
+      </div>
     </v-list>
     <div v-if="isMobile" class="side-menu-mobile">
       <v-list>
@@ -136,12 +133,12 @@ a.router-link-active {
     opacity: 0;
 }
 
-.v-list-item-group .v-list-item {
+.v-list .v-list-item {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-.v-list-item-group .v-list-item--active,
+.v-list .v-list-item--active,
 .side-menu-mobile .v-list-item--active {
   border-left: 4px solid var(--v-yellow-lighten1);
   color: black;
