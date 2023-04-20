@@ -121,7 +121,8 @@
       elevation="2"
       v-scroll="onScroll"
       v-show="fab"
-      @click="toTop">
+      @click="toTop"
+      aria-label="Scroll to top button">
       <v-icon color="white">mdi-chevron-up</v-icon>
     </v-btn>
   </div>
