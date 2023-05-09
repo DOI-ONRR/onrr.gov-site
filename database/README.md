@@ -1,4 +1,4 @@
-# directus database
+# Directus Database
 
 Backing-up a Project  
 1. Make a copy of the files within each storage adapter, and store them in a safe place
