@@ -1,4 +1,4 @@
-# directus database
+# Directus Database
 
 Backing-up a Project
 
