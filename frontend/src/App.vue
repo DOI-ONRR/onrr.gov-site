@@ -26,6 +26,14 @@ export default {
         { property: 'og:site_name', content: 'Office of Natural Resources Revenue' },
         { property: 'og:type', content: 'website' },
         { name: 'robots', content: 'index,follow' }
+      ],
+      script: [
+        {
+          src: 'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=ONRR',
+          id: '_fed_an_ua_tag',
+          async: true,
+          type: 'text/javascript'
+        }
       ]
     }
     
