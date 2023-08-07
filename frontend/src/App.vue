@@ -29,7 +29,7 @@ export default {
       ],
       script: [
         {
-          src: 'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=ONRR',
+          src: 'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=DOI&subagency=ONRR',
           id: '_fed_an_ua_tag',
           async: true,
           type: 'text/javascript'
