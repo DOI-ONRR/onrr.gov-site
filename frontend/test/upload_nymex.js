@@ -6,11 +6,6 @@ const main = async () => {
         await page.setDefaultTimeout(120000); //timeout 60 seconds now
     await page.goto('https://dev-onrr-cms.app.cloud.gov/admin/content/NYMEX/+')
     
-  //  await page.$eval('#directus > div > div.container > div.content > form > div:nth-child(1) > div > input[type=email]', el => el.value = 'jerome.louis@onrr.gov');
-  //  await page.waitForSelector('#directus > div > div.container > div.content > form > div:nth-child(2) > div > input[type=password]')
-  //  await page.$eval('#directus > div > div.container > div.content > form > div:nth-child(2) > div > input[type=password]', el => el.value='admin2pass!');
-//    await page.waitForSelector('button[type=submit]')
-//    await page.$eval('button[type=submit]', el => el.click())
 
 
     //    const el = await page.$x('/html/body/div[3]/div[24]/div/div[2]/ul/li[3]')
