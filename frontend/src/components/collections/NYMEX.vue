@@ -3,7 +3,9 @@
     <v-data-table
       :headers="headers"
       :items="filteredCollection"
-      item-key="month">
+      item-key="month"
+      items-per-page="12"
+      hide-default-footer>
       <template v-slot:top>
         <v-container>
           <v-row>
