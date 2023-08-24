@@ -4,7 +4,9 @@
             <v-data-table
                 :headers="headers"
                 :items="collectionItems"
-                item-key="title">
+                item-key="title"
+                items-per-page="12"
+                :footer-props="footerProps">
                 <template v-slot:top>
                     <v-container>
                         <v-row>
@@ -40,11 +42,13 @@ import {
   getMonth,
   formatToDollarInt
 } from '@/js/utils'
+import { dataTableFooterPropsMixin } from '@/mixins'
 const SelectField = () => import(/* webpackChunkName: "SelectField" */ '@/components/inputs/SelectField')
 const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectField" */ '@/components/inputs/MultipleSelectField')
 
 export default {
   name: 'IndexZonesCollection',
+  mixins: [dataTableFooterPropsMixin],
   data: () => ({
     indexZonesInputField: {
       items: [],
