@@ -1,8 +1,7 @@
 <template>
     <v-alert
         class="shutdown-banner"
-        color="primary"
-        text
+        color="#ECB947"
       >
       <v-icon
         color="primary"
