@@ -6,6 +6,7 @@
       </div>
     </div>
     <div v-else>
+      <shutdown-banner />
       <HeroImage
         v-if="page && pages_by_id" 
         :title="pages_by_id.hero_title"
@@ -39,8 +40,7 @@ import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import { mobileMixin } from '@/mixins'
 const SideMenu = () => import(/* webpackChunkName: "Sidemenu" */ '@/components/navigation/SideMenu')
 const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/components/sections/HeroImage')
-
-
+const ShutdownBanner = () =>  import(/* webpackChunkName: "ShutdownBanner" */ '@/components/sections/ShutdownBanner')
 
 export default {
   name: "TwoColumnLeft",
@@ -79,6 +79,7 @@ export default {
   components: {
     HeroImage,
     SideMenu,
+    ShutdownBanner
   },
   props: {
     slug: {
