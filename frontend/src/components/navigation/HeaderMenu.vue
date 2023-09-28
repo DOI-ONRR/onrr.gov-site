@@ -8,7 +8,7 @@
       text
       dark
       class="no-btn-hover"
-      :target="item.custom_url && item.custom_url ? '_blank' : '_self'"
+      :target="`${ item.custom_url ? '_blank' : '_self' }`"
     >
       <span class="v-btn__content-btn" v-if="item.menu_label === 'Revenue Data'">
         <v-btn
