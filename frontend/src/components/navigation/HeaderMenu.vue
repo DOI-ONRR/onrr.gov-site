@@ -14,6 +14,7 @@
         <v-btn
           class="mb-1"
           color="primary"
+          :target="_blank'"
         >
           <v-icon color="white" v-if="item.menu_icon" class="mr-1">{{ item.menu_icon }}</v-icon>
           <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
