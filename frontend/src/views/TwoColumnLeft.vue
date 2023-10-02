@@ -39,7 +39,6 @@ import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import { mobileMixin } from '@/mixins'
 const SideMenu = () => import(/* webpackChunkName: "Sidemenu" */ '@/components/navigation/SideMenu')
 const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/components/sections/HeroImage')
-const ShutdownBanner = () =>  import(/* webpackChunkName: "ShutdownBanner" */ '@/components/sections/ShutdownBanner')
 
 export default {
   name: "TwoColumnLeft",
@@ -77,8 +76,7 @@ export default {
   },
   components: {
     HeroImage,
-    SideMenu,
-    ShutdownBanner
+    SideMenu
   },
   props: {
     slug: {
