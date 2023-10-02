@@ -6,7 +6,6 @@
       </div>
     </div>
     <div v-else>
-      <shutdown-banner />
       <HeroImage
         v-if="page && pages_by_id" 
         :title="pages_by_id.hero_title"
