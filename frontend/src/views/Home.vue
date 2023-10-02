@@ -44,7 +44,6 @@ import {
 const RevenueBlock = () => import('@/components/blocks/RevenueBlock')
 const HeroImage = () => import('@/components/sections/HeroImage')
 const LayoutBlock = () => import('@/components/blocks/LayoutBlock')
-const ShutdownBanner = () =>  import(/* webpackChunkName: "ShutdownBanner" */ '@/components/sections/ShutdownBanner')
 
 export default {
   mixins: [pageBlockMixin],
@@ -72,8 +71,7 @@ export default {
   components: {
     RevenueBlock,
     HeroImage,
-    LayoutBlock,
-    ShutdownBanner
+    LayoutBlock
   },
   created () {
     // this.contentBlocks()
