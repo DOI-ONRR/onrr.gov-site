@@ -81,7 +81,7 @@
           >
           <span class="v-btn__content">
             <v-icon color="white" v-if="item.menu_icon">{{ item.menu_icon }}</v-icon>
-            <span class="mr-2" v-if="item.menu_label === 'Contact Us'" style="color: white;">{{ item.menu_label }}</span>
+            <span class="mr-2" v-if="item.menu_label === 'Contacts'" style="color: white;">{{ item.menu_label }}</span>
           </span>
         </v-btn> 
       </v-toolbar-items>
