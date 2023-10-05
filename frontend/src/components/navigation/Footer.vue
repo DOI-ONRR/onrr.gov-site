@@ -59,8 +59,7 @@
             <div class="logo-content">
               <span>U.S. Department of the Interior</span>
               <span>Office of Natural Resources Revenue (ONRR)</span>
-              <span>PO Box 25165</span>
-              <span>Denver, CO 80225-0165</span>
+              <span>PO Box 25165 Denver, CO 80225-0165</span>
             </div>
           </router-link>
         </div>
