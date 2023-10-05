@@ -169,7 +169,7 @@ export default {
     position: relative;
   }
 
-  span:nth-child(2) {
+  span:second-child {
     font-size: 1.5rem; 
     top: 4px;
     position: relative;
