@@ -59,7 +59,8 @@
             <div class="logo-content">
               <span>U.S. Department of the Interior</span>
               <span>Office of Natural Resources Revenue (ONRR)</span>
-              <span>PO Box 25165 Denver, CO 80225-0165</span>
+              <span>PO Box 25165</span>
+              <span>Denver, CO 80225-0165</span>
             </div>
           </router-link>
         </div>
@@ -175,7 +176,7 @@ export default {
   }
 
   span:last-child {
-    font-size: 1.5rem; 
+    font-size: .80rem; 
     top: -6px;
     position: relative;
   }
