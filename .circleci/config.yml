@@ -13,6 +13,7 @@ jobs:
     working_directory: ~/onrr.gov-site/frontend
     docker:
       - image: cimg/node:16.16
+    resource_class: xlarge
     steps:
       - checkout:
           path: ~/onrr.gov-site
@@ -38,6 +39,7 @@ jobs:
     working_directory: ~/onrr.gov-site/frontend
     docker:
       - image: cimg/node:16.16
+    resource_class: xlarge
     steps:
       - checkout:
           path: ~/onrr.gov-site
@@ -66,6 +68,7 @@ jobs:
     working_directory: ~/onrr.gov-site/frontend
     docker:
       - image: cimg/node:16.16
+    resource_class: xlarge
     steps:
       - checkout:
           path: ~/onrr.gov-site

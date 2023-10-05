@@ -58,8 +58,9 @@
           <router-link to="/">
             <div class="logo-content">
               <span>U.S. Department of the Interior</span>
-              <span>Office of Natural</span>
-              <span>Resources Revenue (ONRR)</span>
+              <span>Office of Natural Resources Revenue (ONRR)</span>
+              <span>PO Box 25165</span>
+              <span>Denver, CO 80225-0165</span>
             </div>
           </router-link>
         </div>
@@ -80,7 +81,7 @@
           >
           <span class="v-btn__content">
             <v-icon color="white" v-if="item.menu_icon">{{ item.menu_icon }}</v-icon>
-            <span class="mr-2" v-if="item.menu_label === 'Contact Us'" style="color: white;">{{ item.menu_label }}</span>
+            <span class="mr-2" v-if="item.menu_label === 'Contacts'" style="color: white;">{{ item.menu_label }}</span>
           </span>
         </v-btn> 
       </v-toolbar-items>
@@ -160,22 +161,20 @@ export default {
 
   span {
     display: block;
+    font-size: .80rem;
   }
 
   span:first-child {
-    font-size: .80rem;
     top: 8px;
     position: relative;
   }
 
   span:nth-child(2) {
-    font-size: 1.5rem; 
+    font-size: 1.2rem; 
     top: 4px;
     position: relative;
   }
-
-  span:last-child {
-    font-size: 1.5rem; 
+  span:last-child { 
     top: -6px;
     position: relative;
   }

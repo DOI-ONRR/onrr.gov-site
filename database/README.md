@@ -53,4 +53,4 @@ Restore dev db from local file
 Update table in dev
 `psql -U ${DB_USER} -d 'postgres://${DB_USER}:${DB_PASSWRORD}@${HOST}:${PORT}/${DB_NAME}' -f ./path/to/file.sql`
 
-+Test, delete this line later. 
++

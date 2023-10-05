@@ -40,8 +40,6 @@ import { mobileMixin } from '@/mixins'
 const SideMenu = () => import(/* webpackChunkName: "Sidemenu" */ '@/components/navigation/SideMenu')
 const HeroImage = () =>  import(/* webpackChunkName: "HeroImage" */ '@/components/sections/HeroImage')
 
-
-
 export default {
   name: "TwoColumnLeft",
   mixins: [mobileMixin],
@@ -78,7 +76,7 @@ export default {
   },
   components: {
     HeroImage,
-    SideMenu,
+    SideMenu
   },
   props: {
     slug: {
