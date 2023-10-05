@@ -100,7 +100,7 @@
           <v-list-item
             v-for="item in utilityItems"
             :key="item.id"
-            :to="`${ item.custom_url || item.link_to_page.url }`"
+            :href="item.custom_url || item.link_to_page.url"
           >
             <v-list-item-icon>
               <v-icon v-text="item.menu_icon"></v-icon>
