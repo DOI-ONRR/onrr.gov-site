@@ -161,10 +161,10 @@ export default {
 
   span {
     display: block;
+    font-size: .80rem;
   }
 
   span:first-child {
-    font-size: .80rem;
     top: 8px;
     position: relative;
   }
@@ -174,8 +174,7 @@ export default {
     top: 4px;
     position: relative;
   }
-  span:last-child {
-    font-size: .80rem; 
+  span:last-child { 
     top: -6px;
     position: relative;
   }
