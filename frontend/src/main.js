@@ -7,8 +7,6 @@ import fetch from 'node-fetch'
 import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import possibleTypes from './json/possibleTypes.json'
-//import VueGtag from "vue-gtag";
-import VueAnalytics from 'vue-analytics'
 
 
 
@@ -65,10 +63,6 @@ Vue.config.productionTip = false
 
 Vue.use(VueApollo)
 Vue.use(VueMeta)
-Vue.use(VueAnalytics, {
-  id: 'UA-33523145-1',
-  router
-})
 new Vue({
   vuetify,
   apolloProvider,
