@@ -11,10 +11,6 @@
     "schema": "CONFIG_PATH='../../.env'npx directus schema snapshot /tmp/directus_schema",
     "start:windows": "set CONFIG_PATH='../../.env' && npx directus start"
   },
-  "engines": {
-    "node": "16.x",
-    "npm": "8.x"
-  },
   "dependencies": {
     "axios": "^0.27.2",
     "directus": "^9.10.0",
