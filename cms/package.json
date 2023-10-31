@@ -12,8 +12,8 @@
     "start:windows": "set CONFIG_PATH='../../.env' && npx directus start"
   },
   "engines": {
-    "node": "16.x",
-    "npm": "8.x"
+    "node": "18.x",
+    "npm": "9.x"
   },
   "dependencies": {
     "axios": "^0.27.2",
