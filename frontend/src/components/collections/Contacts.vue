@@ -491,9 +491,9 @@ export default {
   background-color: var(--v-primary-base);
 }
 
-.backup-contact,
-.backup-contact-federal,
-.backup-contact-indian {
+.back-up-contact,
+.back-up-contact-federal,
+.back-up-contact-indian {
   background-color: var(--v-purple-lighten1);
 }
 
