@@ -65,7 +65,7 @@ export default {
   background-color: var(--v-primary-base);
 }
 
-.backup-contact {
+.back-up-contact {
   background-color: var(--v-purple-lighten1);
 }
 
