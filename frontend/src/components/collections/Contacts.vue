@@ -492,7 +492,10 @@ export default {
 }
 
 .back-up-contact,
+.backup-contact,
 .back-up-contact-federal,
+.backup-contact-federal,
+.backup-contact-indian,
 .back-up-contact-indian {
   background-color: var(--v-purple-lighten1);
 }
