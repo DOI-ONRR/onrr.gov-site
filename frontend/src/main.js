@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueGtm from '@gtm-support/vue2-gtm'
 import VueMeta from 'vue-meta'
 import router from './router'
 import VueApollo from 'vue-apollo'
@@ -7,6 +8,8 @@ import fetch from 'node-fetch'
 import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import possibleTypes from './json/possibleTypes.json'
+
+const GTM_ID = process.env.VUE_APP_ONRR_GTM_ID
 
 const cache = new InMemoryCache({
   possibleTypes
@@ -57,6 +60,10 @@ Vue.config.productionTip = false
 
 Vue.use(VueApollo)
 Vue.use(VueMeta)
+Vue.use(VueGtm, {
+  id: GTM_ID,
+  vueRouter: router
+})
 new Vue({
   vuetify,
   apolloProvider,
