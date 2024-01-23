@@ -11,6 +11,8 @@ import possibleTypes from './json/possibleTypes.json'
 
 const GTM_ID = process.env.ONRR_GTM_ID
 
+console.log(`GTM_ID (${GTM_ID})`)
+
 const cache = new InMemoryCache({
   possibleTypes
 })
