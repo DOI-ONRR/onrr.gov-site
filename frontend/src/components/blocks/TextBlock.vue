@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import { gaOutboundLinkMixin, accessibilityMixin } from '@/mixins'
+import { accessibilityMixin } from '@/mixins'
 
 export default {
   name: 'TextBlock',
-  mixins: [ gaOutboundLinkMixin, accessibilityMixin ],
+  mixins: [ accessibilityMixin ],
   data () {
     return {}
   },
