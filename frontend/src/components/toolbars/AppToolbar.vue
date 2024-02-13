@@ -90,7 +90,7 @@
       <v-list dense>
         <v-list-item-group>
           <v-list-item
-            to="https://search.usa.gov/search?affiliate=onrr.gov"
+            href="https://search.usa.gov/search?affiliate=onrr.gov"
           >
             <v-list-item-icon>
               <v-icon>mdi-magnify</v-icon>
