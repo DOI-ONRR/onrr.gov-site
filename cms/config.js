@@ -45,6 +45,8 @@ module.exports = function(env) {
     UPSTREAM_URL: "https://prod-onr-cms.app.cloud.gov",
     CMS_TOKEN: env.CMS_TOKEN,
     FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL,CMS_TOKEN",
-    FLOWS_EXEC_ALLOWED_MODULES: "lodash,axios,form-data,uuid"
+    FLOWS_EXEC_ALLOWED_MODULES: "lodash,axios,form-data,uuid",
+    CONTENT_SECURITY_POLICY_USE_DEFAULTS: true,
+    CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC_ELEM: "array:'self',https://cdn.tiny.cloud"
   }
 };
