@@ -13,7 +13,6 @@
     <editor
       api-key="1hrdiaheqykohhfo7c2kwhm7i3anqrhnr1njlltbu38hfxtx"
       :init="config"
-      initial-value="Hey, Dingus!"
     />
   </main>
 </template>

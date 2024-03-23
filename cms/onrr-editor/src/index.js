@@ -1,10 +1,10 @@
 import InterfaceComponent from './interface.vue';
 
 export default {
-	id: 'custom',
-	name: 'Custom',
+	id: 'onrr-editor',
+	name: 'ONRR Editor',
 	icon: 'box',
-	description: 'This is my custom interface!',
+	description: 'ONRR rich text editor',
 	component: InterfaceComponent,
 	options: null,
 	types: ['text'],
