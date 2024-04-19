@@ -1,141 +1,56 @@
 import LinkAutocomplete from '@editorjs/link-autocomplete';
-//import LinkAutocomplete from "./plugin-link-autocomplete";
-import notifier from 'codex-notifier';
 
 
 export default class extends LinkAutocomplete {
-    //
-    
-    constructor({ config, api }) {
-
-     super({config, api});
-     /**
-      * Essential tools
-      */
-     this.api = api;
-     this.config = config || {};
-     this.linkAutocomplete=new LinkAutocomplete({config, api})
-     this.selection = this.linkAutocomplete.selection
-     
-     console.debug("Overloading constructor?");
-    /**
-     * Config params
+    searchItemPressed(element) {
+        /**
+     * If no useful dataset info was given then do nothing
      */
-    this.searchEndpointUrl = this.config.endpoint;
-    this.searchQueryParam = this.config.queryParam;
-    /**
-     * Tool's nodes list
-     *
-     * toolButtons
-     *   |- toolButtonLink
-     *   |- toolButtonUnlink
-     *
-     * actionsWrapper
-     *   |- inputWrapper
-     *   |    |- inputField
-     *   |    |- loader
-     *   |
-     *   |- searchResults
-     *   |    |- searchItemWrapper
-     *   |    |    |- searchItemName
-     *   |    |    |- searchItemDescription
-     *   |    |
-     *   |    |- ...
-     *   |
-     *   |- linkDataWrapper
-     *        |- URL
-     *        |- name
-     *        |- description
-     */
+    if (!element.dataset || !element.dataset['href']) {
+        return;
+      }
+  
+      /**
+       * Get link's href
+       */
+      const href = element.dataset['href'];
+  
+      /**
+       * Restore origin selection
+       */
+      this.selection.restore();
+      this.selection.removeFakeBackground();
+  
+      /**
+       * Create a link by default browser's function
+       */
+      document.execCommand('createLink', false, href);
+  
+      /**
+       * Get this link element
+       */
+      const newLink = this.selection.findParentTag(this.tagName);
 
-      
-     
-    this.nodes = {
-      toolButtons: null,
-      toolButtonLink: null,
-      toolButtonUnlink: null,
+      newLink.text = element.dataset['name'];
+  
+      /**
+       * Fill up link element's dataset
+       */
+      Object.keys(element.dataset).forEach(key => {
+        if (key === 'href') {
+          return;
+        }
+  
+        newLink.dataset[key] = element.dataset[key];
+      });
 
-      actionsWrapper: null,
-      inputWrapper: null,
-      inputField: null,
-
-      searchResults: null,
-
-      linkDataWrapper: null,
-      linkDataTitleWrapper: null,
-      linkDataName: null,
-      linkDataDescription: null,
-      linkDataURL: null,
-    };
-     /**
-      * Define tag name for a link element
-      */
-     this.tagName = 'A';
-
-     /**
-      * Key codes
-      */
-     this.KEYS = {
-         ENTER: 13,
-         UP: 38,
-         DOWN: 40,
-     };
-
-     /**
-      * Define debounce timer
-      */
-    this.typingTimer = null;
- 
-     
- }
-    
-  /**
-   * Send search request
-   *
-   * @param {string} searchString - search string input
-   *
-   * @returns {Promise<SearchItemData[]>}
-   */
-    async searchRequest(searchString) {
-     /**
-      * Compose query string
-      *
-      * @type {string}
-      */
-     
-     const queryString = new URLSearchParams({ [this.searchQueryParam]: searchString }).toString();
-     
-     try {
-         /**
-          * Get raw search data
-          */
-         const searchResponseRaw = await fetch(`${this.searchEndpointUrl}?${queryString}`);
-         
-         /**
-          * Get JSON decoded data
-          */
-         const tmpSearchResponse = await searchResponseRaw.json();
-         let searchResponse={}
-
-         searchResponse.items=tmpSearchResponse.data.map( item => {return({href: item.url, name: item.label + ' (' + item.url + ')'})})
-
-         searchResponse.success=true;
-         //console.debug("Overloading search request?", searchResponse)
-      
-
-         if (searchResponse && searchResponse.success) {
-             return searchResponse.items;
-         } else {
-          console.warn('Link Autocomplete: invalid response format: "success: true" expected, but got %o. Response: %o', searchResponse.success, searchResponse);
-         }
-     } catch (e) {
-         notifier.show({
-          message: `${this.linkAutocomplete.DICTIONARY.searchRequestError} "${e.message}"`,
-          style: 'error',
-         });
-     }
-     
-     return [];
+      newLink.dataset['icon'] = 'my-icon'
+  
+      /**
+       * Collapse selection and close toolbar
+       */
+      this.selection.collapseToEnd();
+      this.api.inlineToolbar.close();
     }
 
 }

@@ -55,10 +55,9 @@
   import WarningTool from '@editorjs/warning';
   import ChecklistTool from '@editorjs/checklist';
   import DelimiterTool from '@editorjs/delimiter';
-  // import TableTool from '@editorjs/table';
-  import TableTool from './custom-plugins/table-custom/index'
+  import TableTool from '@editorjs/table';
   import CodeTool from '@editorjs/code';
-  import headerTool from '@editorjs/header';
+  import HeaderTool from '@editorjs/header';
   import UnderlineTool from '@editorjs/underline';
   import EmbedTool from '@editorjs/embed';
   import MarkerTool from '@editorjs/marker';
@@ -74,14 +73,12 @@
   // import SimpleTabs from "./custom-plugins/simple-tabs/index.js";
   import CollectionsTool from "./custom-plugins/plugin-collections";
 //  import Links from "./custom-plugins/plugin-links";
-  import horizontalruleTool from "./custom-plugins/plugin-horizontal-rule";
-//  import LinkAutocomplete from "./custom-plugins/plugin-link-autocomplete-patch.js"
-  import LinksInline from "./custom-plugins/plugin-links-inline.js"
+  import HorizontalRuleTool from "./custom-plugins/plugin-horizontal-rule";
+  import LinkAutocomplete from './custom-plugins/plugin-link-autocomplete-patch'
+  // import LinksInline from "./custom-plugins/plugin-links-inline.js"
 //  import LinksList from "./custom-plugins/plugin-links-list.js";
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
-  import ColorPlugin from './custom-plugins/editorjs-text-color-plugin/src/index';
   import CustomBlocksTool from './custom-plugins/plugin-custom-blocks';
-  //import Tooltip from '';
 
   export default defineComponent({
     emits: ['input', 'error'],
@@ -100,7 +97,7 @@
       },
       tools: {
         type: Array,
-        default: () => ['header', 'list', 'code', 'image', 'style','paragraph', 'table','tooltip', 'quote', 'underline', 'collection', 'horizontalrule', 'linksInline', 'customBlocks'],
+        default: () => ['header', 'list', 'code', 'image', 'paragraph', 'table', 'quote', 'underline', 'collection', 'horizontalrule', 'customBlocks'],
       },
       font: {
         type: String,
@@ -174,6 +171,7 @@
           // https://github.com/codex-team/editor.js/issues/1669
           readOnly: false,
           placeholder: props.placeholder,
+          inlineToolbar: ['bold', 'italic', 'linkAutocomplete'],
           tools: buildToolsOptions(),
           minHeight: 24,
           onChange: editorValueEmitter,
@@ -315,7 +313,7 @@ function unsetLinkHandler() {
 
         const defaults = {
           header: {
-            class: headerTool,
+            class: HeaderTool,
             shortcut: 'CMD+SHIFT+H',
             inlineToolbar: true,
           },
@@ -358,19 +356,12 @@ function unsetLinkHandler() {
           table: {
             class: TableTool,
             inlineToolbar: true,
-            withHeadings: true,
-            config: {
-              rows: 2,
-              cols: 3,
-              withHeadings: true
-            }
           },
           quote: {
             class: QuoteTool,
             inlineToolbar: true,
             shortcut: 'CMD+SHIFT+O',
           },
-
           marker: {
             class: MarkerTool,
             shortcut: 'CMD+SHIFT+M',
@@ -431,53 +422,32 @@ function unsetLinkHandler() {
           },
 	  */	
           horizontalrule: {
-            class: horizontalruleTool,
+            class: HorizontalRuleTool,
             inlineToolbar: true,
-          },
-          //tooltip: {
-           //   class: Tooltip,
-           //   inlineToolbar: true,
-            //  config: {
-             //   holder: "editorjs-tooltip"
-             // }
-            //},
-          Color: {
-            class: ColorPlugin,
-            inlineToolbar: true,
-            config: {
-              defaultColor: "#4F5464",
-              colorCollections: ["#71500F","#1A22FE","#4F5464"],
-               type: 'text'
-            }
           },
           alignmentTune: {
             class: AlignmentTuneTool
           },
-      /*    linkAutocomplete: {
+          linkAutocomplete: {
             class: LinkAutocomplete,
-            inlineToolbar: true,
             config: {
-              endpoint: '/items/links',
-              queryParam: 'search',
-              icons: {
-                pdf: '/assets/d4c8b602-4e9f-45fd-bc65-dd41fe85c390'
-              },
-	            base: 'https://dev-onrr-cms.app.cloud.gov'	 
-            },
+              endpoint: 'http://localhost:8055/onrr-editor-autocomplete',
+              queryParam: 'term' 
+            }
           },
-	  */
-          linksInline: {
-            class: LinksInline,
-            inlineToolbar: true,
-            config: {
-              endpoint: '/items/links?limit=-1',
-              page_id: document.URL.split('/').pop(), 
-              queryParam: 'search',
-	            base: 'https://dev-onrr-cms.app.cloud.gov'
+	  
+          // linksInline: {
+          //   class: LinksInline,
+          //   inlineToolbar: true,
+          //   config: {
+          //     endpoint: '/items/links?limit=-1',
+          //     page_id: document.URL.split('/').pop(), 
+          //     queryParam: 'search',
+	        //     base: 'https://dev-onrr-cms.app.cloud.gov'
 		    
-            },
+          //   },
 	
-          },
+          // },
          /* linksList: {
             class: LinksList,
             inlineToolbar: true,
@@ -507,10 +477,6 @@ function unsetLinkHandler() {
 				if ('header' in tools) {
 					tools.header.tunes = ['alignmentTune'];
 				}
-
-        // if ('color' in tools) {
-				// 	tools.color.tunes = ['alignmentTune'];
-				// }
 
         if ('paragraph' in tools) {
 					tools.paragraph.tunes = ['alignmentTune'];
@@ -553,43 +519,6 @@ function unsetLinkHandler() {
   .serif {
     font-family: var(--family-serif);
   }
-
-  .gold-text-color {
-    color: #71500F !important;
-  }
-  .blue-text-color {
-    color: #1A22FE !important;
-  }
-  /* .tooltip-tool__input{
-  border: 0;
-  border-radius: 0 0 4px 4px;
-  border-top: 1px solid rgba(201,201,204,.48);
-}
-
-.tooltip-tool__span{
-  padding: 3px;
-  border-radius: 6px;
-}
-
-.tooltip-tool__underline{
-  text-decoration: underline;
-}
-
-.tooltip-color::before {
-  background-color: transparent;
-}
-
-.tooltip-color::after {
-  background-color: transparent;
-}
-
-.tooltip-text-color {
-  color: transparent;
-}
-
-.cdx-tooltip {
-  display: inline-block;
-} */
 
   .sans-serif {
     font-family: var(--family-sans-serif);

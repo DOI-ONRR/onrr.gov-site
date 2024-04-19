@@ -161,8 +161,6 @@ gridBox.style.border = '1px solid grey';
 const mydiv = this._make("li");
 var aTag = document.createElement('a');
 aTag.setAttribute('href',url);
-aTag.setAttribute('aria-label',label);
-aTag.setAttribute('title',url);
 aTag.innerText = label;
 mydiv.appendChild(aTag);
 linkList.appendChild(mydiv);

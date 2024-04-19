@@ -604,6 +604,7 @@ export default class LinksInline {
       break
     case 'vnd.openxmlformats-officedocument.wordprocessingml.document':
       i.classList.add('mdi-file-word-box')
+      break
     case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
       i.classList.add('mdi-file-word-box')
       break
@@ -657,8 +658,6 @@ export default class LinksInline {
 
     var aTag = document.createElement('a');
     aTag.setAttribute('href',url);
-    aTag.setAttribute('aria-label',label);
-    aTag.setAttribute('title',url);
     aTag.setAttribute('download',label+'.'+extension);
     if(this.nodes.inlineButton.checked) {
       aTag.classList.add(LinksInline.CSS.linkButton)
@@ -690,8 +689,6 @@ export default class LinksInline {
 
     var aTag = document.createElement('a');
     aTag.setAttribute('href',url);
-    aTag.setAttribute('aria-label',label);
-    aTag.setAttribute('title',url);
     aTag.setAttribute('download',label+'.'+extension);
     console.debug("----------------------------inlineButton> ", this.nodes.inlineButton)
     if(this.nodes.inlineButton.checked) {

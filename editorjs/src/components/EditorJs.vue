@@ -6,7 +6,7 @@
 
     <div class="editorx_body">
       <!--editorjs id-->
-      <div class="codex-editor" id="codex-editor"/>
+      <div class id="codex-editor"/>
     </div>
     <button style="margin-left: 30%" type="button" name="button" @click="save()">save</button>
     <div class="editorx_body">
@@ -22,18 +22,16 @@
   // import SimpleTabs from '../custom-plugins/simple-tabs'
   import Collections from '../custom-plugins/plugin-collections'
   import HorizontalRuleTool from '../custom-plugins/plugin-horizontal-rule'
+  // import { LinkAutocomplete } from '@editorjs/link-autocomplete'
   import LinkAutocomplete from '../custom-plugins/plugin-link-autocomplete-patch'
-  import LinkTool from '@editorjs/link';
-  import ColorPlugin from '../custom-plugins/editorjs-text-color-plugin/src/index';
-  import Links from '../custom-plugins/plugin-links';
-  import LinksInline from '../custom-plugins/plugin-links-inline';
-  import LinksList from '../custom-plugins/plugin-links-list';
+  //import LinkTool from '@editorjs/link';
+  //import Links from '../custom-plugins/plugin-links';
+  //import LinksInline from '../custom-plugins/plugin-links-inline';
+  //import LinksList from '../custom-plugins/plugin-links-list';
   import AlignmentTuneTool from 'editorjs-text-alignment-blocktune'
   import ImageTool from '../custom-plugins/plugin-image-patch';
   import CustomBlocksTool from '../custom-plugins/plugin-custom-blocks';
-  //import TableTool from '@editorjs/table';
-  import TableTool from '../custom-plugins/table-custom/index';
-  //import Tooltip from '@editorjs-tooltip';
+  import TableTool from '@editorjs/table';
 
   export default {
     data() {
@@ -56,6 +54,7 @@
            * This Tool will be used as default
            */
           initialBlock: "paragraph",
+          inlineToolbar: ['bold', 'italic', 'linkAutocomplete'],
           tools: {
             header: {
               class: Header,
@@ -64,6 +63,7 @@
             },
             list: {
               class: List,
+              inlineToolbar: ['linkAutocomplete']
             },
             paragraph: {
               class: Paragraph,
@@ -76,21 +76,6 @@
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
-            Color: {
-            class: ColorPlugin,
-            inlineToolbar: true,
-            config: {
-              defaultColor: "#4F5464",
-              colorCollections: ["#71500F","#1A22FE","#4F5464"],
-               type: 'text'
-            }
-          },
-          //tooltip: {
-            //  class: Tooltip,
-            //  config: {
-             //   holder: "editorjs-tooltip"
-             // }
-           // },
             collection: {
               class: Collections,
               inlineToolbar: true,
@@ -101,57 +86,57 @@
                 reporterLettersTopicsEndpoint: 'http://localhost:8055/items/reporter_letters?fields[]=id,title,topics',
               }
             },
-            links: {
-              class: Links,
-              inlineToolbar: true,    
-              config: {
-                linksEndpoint: 'http://localhost:8055/items/links',
-                fieldsEndpoint: 'http://localhost:8055/fields'
-              }
-            },
-            linksInline: {
-              class: LinksInline,
-              inlineToolbar: true,    
-              config: {
-                endpoint: 'http://localhost:8055/items/links?limit=-1',
-                fields: 'http://localhost:8055/fields',
-                icons: {
-                  pdf: 'http://localhost:8055/assets/915d45f6-233d-4855-b0f9-736d2b61214a'
-                } 
-              }
-            },
-            linksList: {
-              class: LinksList,
-              inlineToolbar: true,    
-              config: {
-                endpoint: 'http://localhost:8055/items/links?limit=-1',
-                fields: 'http://localhost:8055/fields',
-                icons: {
-                  pdf: 'http://localhost:8055/assets/915d45f6-233d-4855-b0f9-736d2b61214a'
-                } 
-              }
-            },
+            // links: {
+            //   class: Links,
+            //   inlineToolbar: true,    
+            //   config: {
+            //     linksEndpoint: 'http://localhost:8055/items/links',
+            //     fieldsEndpoint: 'http://localhost:8055/fields'
+            //   }
+            // },
+            // linksInline: {
+            //   class: LinksInline,
+            //   inlineToolbar: true,    
+            //   config: {
+            //     endpoint: 'http://localhost:8055/items/links?limit=-1',
+            //     fields: 'http://localhost:8055/fields',
+            //     icons: {
+            //       pdf: 'http://localhost:8055/assets/915d45f6-233d-4855-b0f9-736d2b61214a'
+            //     } 
+            //   }
+            // },
+            // linksList: {
+            //   class: LinksList,
+            //   inlineToolbar: true,    
+            //   config: {
+            //     endpoint: 'http://localhost:8055/items/links?limit=-1',
+            //     fields: 'http://localhost:8055/fields',
+            //     icons: {
+            //       pdf: 'http://localhost:8055/assets/915d45f6-233d-4855-b0f9-736d2b61214a'
+            //     } 
+            //   }
+            // },
 
             horizontalrule2: {
               class: HorizontalRuleTool,
               inlineToolbar: true,
             },
-            linkTool: {
-              class: LinkTool,
-              config: {
-                endpoint: 'http://localhost:8055/items/links', // Your backend endpoint for url data fetching,
-                headers: {
-                  'Access-Control-Allow-Origin': "*"
-                }       
-              } 
-            }, 
-            link: {
+            // linkTool: {
+            //   class: LinkTool,
+            //   config: {
+            //     endpoint: 'http://localhost:8055/items/links', // Your backend endpoint for url data fetching,
+            //     headers: {
+            //       'Access-Control-Allow-Origin': "*"
+            //     }       
+            //   } 
+            // }, 
+            linkAutocomplete: {
               class: LinkAutocomplete,
-              inlineToolbar: true,
               config: {
-                endpoint: 'http://localhost:8055/items/links',
-                queryParam: 'search'
-              }
+                endpoint: 'http://localhost:8055/onrr-editor-autocomplete',
+                queryParam: 'term'
+              },
+              shortcut: 'CMD+SHIFT+I'
             },
 
             image: {
@@ -172,14 +157,8 @@
               class: CustomBlocksTool
             },
             table: {
-              class: TableTool, 
+              class: TableTool,
               inlineToolbar: true,
-              withHeadings: true,
-              config: {
-                rows: 2,
-                cols: 3,
-                withHeadings: true,
-              },
               tunes: ['alignmentTune']
             },
           },
@@ -209,13 +188,6 @@
     box-sizing: border-box;
   }
 
-  .gold-text-color {
-    color: #71500F !important;
-  }
-  .blue-text-color {
-    color: #1A22FE !important;
-  }
-
   .ce-block--focused {
     background: linear-gradient(
       90deg,
@@ -224,37 +196,6 @@
       rgba(0, 212, 255, 1) 100%
     )
   }
-
-  /* .tooltip-tool__input{
-  border: 0;
-  border-radius: 0 0 4px 4px;
-  border-top: 1px solid rgba(201,201,204,.48);
-}
-
-.tooltip-tool__span{
-  padding: 3px;
-  border-radius: 6px;
-}
-
-.tooltip-tool__underline{
-  text-decoration: underline;
-}
-
-.tooltip-color::before {
-  background-color: transparent;
-}
-
-.tooltip-color::after {
-  background-color: transparent;
-}
-
-.tooltip-text-color {
-  color: transparent;
-}
-
-.cdx-tooltip {
-  display: inline-block;
-} */
 
 
 </style>

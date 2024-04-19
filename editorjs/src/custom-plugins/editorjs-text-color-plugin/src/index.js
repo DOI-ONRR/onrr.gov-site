@@ -80,7 +80,7 @@ class Color {
    *
    * @param {Range} range - selected fragment
    */
-  surround(range) {
+  surround() {
     if (this.pluginType === 'marker') {
       document.execCommand('backColor', false, this.color);
     }else if (this.pluginType === 'text')

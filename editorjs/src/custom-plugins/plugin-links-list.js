@@ -325,8 +325,6 @@ export default class LinksList {
     icon.setAttribute("height", "20");
     
     aTag.setAttribute('href',this.config.base+url);
-    aTag.setAttribute('aria-label',label);
-    aTag.setAttribute('title',url);
     aTag.innerText = label;
     myLi.appendChild(aTag);
     if(iconSrc.length > 0) {
