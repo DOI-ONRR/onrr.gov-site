@@ -272,3 +272,16 @@
   border: 1px solid red !important;
   background-color: yellow !important;
 }
+
+.ce-inline-toolbar {
+  width: 403px;
+}
+.ce-link-autocomplete__actions-wrapper,
+.ce-link-autocomplete__items {
+  width: 400px;
+}
+
+.ce-link-autocomplete__field-input,
+.ce-link-autocomplete__search-item-name {
+  font-size: 12px;
+}
