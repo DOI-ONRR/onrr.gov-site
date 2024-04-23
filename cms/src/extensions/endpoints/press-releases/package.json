@@ -8,7 +8,7 @@
 	],
 	"directus:extension": {
 		"type": "endpoint",
-		"path": "press-releases/index.js",
+		"path": "dist/index.js",
 		"source": "src/index.js",
 		"host": "^9.6.0"
 	},
