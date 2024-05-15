@@ -9,7 +9,7 @@ services:
 
   directus:
     container_name: directus
-    image: directus/directus:9.22.4
+    image: directus/directus:9.26
     ports:
       - 8055:8055
     volumes:

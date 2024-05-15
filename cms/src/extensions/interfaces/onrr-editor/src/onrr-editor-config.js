@@ -1,0 +1,109 @@
+import { OnrrHyperlink } from './plugins/onrr-editorjs-hyperlink'
+import ColorPlugin from 'editorjs-text-color-plugin'
+import { OnrrLinkAutocomplete } from './plugins/onrr-link-autocomplete'
+import Paragraph from '@editorjs/paragraph'
+import Header from '@editorjs/header';
+import Quote from '@editorjs/quote';
+import NestedList from '@editorjs/nested-list';
+import CodeTool from '@editorjs/code';
+import Table from '@editorjs/table';
+import ImageTool from './plugins/onrr-image-tool';
+import HorizontalRuleTool from './plugins/horizontal-rule';
+import CollectionsTool from './plugins/collections-tool';
+
+export class OnrrEditorConfig {
+    #config;
+    constructor(config) {
+        if (typeof config !== 'object') {
+            throw new TypeError('The config parameter must be an object.');
+        }
+
+        this.#config = {
+            holder: config.holder,
+            inlineToolbar: ['bold', 'italic', 'hyperlink', 'color', 'linkAutocomplete'],
+            minHeight: 24,
+            onChange: config.changeHandler,
+            data: config.data,
+            tools: {
+                paragraph: {
+                    class: Paragraph
+                },
+                header: {
+                    class: Header
+                },
+                list: {
+                    class: NestedList,
+                    inlineToolbar: true,
+                    config: {
+                        defaultStyle: 'unordered'
+                    }
+                },
+                code: {
+                    class: CodeTool
+                },
+                image: {
+                    class: ImageTool,
+                    config: {
+                        picker: config.picker,
+                        baseURL: config.baseURL
+                    },
+                },
+                table: {
+                    class: Table,
+                    config: {
+                        rows: 2,
+                        cols: 3,
+                        withHeadings: true
+                    }
+                },
+                quote: {
+                    class: Quote
+                },
+                collection: {
+                    class: CollectionsTool,
+                    config: {
+                        collectionsEndpoint: `${config.baseURL}collections`,
+                        fieldsEndpoint: `${config.baseURL}fields`,
+                        contactsEndpoint: `${config.baseURL}items/contacts?limit=-1`,
+                        reporterLettersTopicsEndpoint: `${config.baseURL}items/reporter_letters?fields[]=id,title,topics`,
+                    }
+                },
+                horizontalrule: {
+                    class: HorizontalRuleTool,
+                    inlineToolbar: true,
+                },
+                hyperlink: {
+                    class: OnrrHyperlink,
+                    config: {
+                        shortcut: 'CMD+L',
+                        target: '_blank',
+                        rel: 'nofollow',
+                        availableTargets: ['_blank', '_self'],
+                        availableRels: ['author', 'noreferrer'],
+                        validate: false,
+                    }
+                },
+                color: {
+                    class: ColorPlugin,
+                    config: {
+                        colorCollections: ['#EC7878','#9C27B0','#673AB7','#3F51B5','#0070FF','#03A9F4','#00BCD4','#4CAF50','#8BC34A','#CDDC39', '#FFF'],
+                        defaultColor: '#FF1300',
+                        type: 'text', 
+                        customPicker: true
+                    } 
+                },
+                linkAutocomplete: {
+                    class: OnrrLinkAutocomplete,
+                    config: {
+                        endpoint: `${config.baseURL}link-autocomplete`,
+                        queryParam: 'term' 
+                    }
+                },
+            }
+        }
+    }
+
+    getConfig() {
+        return this.#config;
+    }
+}
