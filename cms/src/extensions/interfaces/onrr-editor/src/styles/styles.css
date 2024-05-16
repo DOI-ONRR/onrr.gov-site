@@ -5,6 +5,7 @@
 .ce-link-autocomplete__search-item {
     margin-bottom: 3px !important;
     padding: 4px 5px !important;
+    width: 388px;
 }
 
 .ce-link-autocomplete__actions-wrapper,
