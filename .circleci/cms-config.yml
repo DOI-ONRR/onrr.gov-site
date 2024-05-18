@@ -1,0 +1,46 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.2.0
+
+parameters:
+  run-build-cms:
+    type: boolean
+    default: false
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - node/install:
+          node-version: '16.13'
+      - run:
+          name: Build Directus extensions
+          command: |
+            ./scripts/build-extensions.sh
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: Deploy to cloud.gov
+          command: |
+            ./deploy-cms.sh --branch << pipeline.git.branch >>
+
+workflows:
+  build-cms:
+    when: << pipeline.parameters.run-build-cms >>
+    context:
+      - org-global
+    jobs: 
+      - build
+      - deploy:
+          requires: 
+            - build
+    filters:
+      branches:
+        only:
+          - dev
+          - main

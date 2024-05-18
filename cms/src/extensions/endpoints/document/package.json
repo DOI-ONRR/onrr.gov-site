@@ -13,7 +13,7 @@
 		"host": "^9.6.0"
 	},
 	"scripts": {
-		"build": "directus-extension build"
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-document/dist; cp package.json dist/index.js ../../../../extensions/directus-extension-document/dist"
 	},
 	"dependencies": {
 		"@directus/extensions-sdk": "^11.0.3"
