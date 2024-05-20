@@ -39,7 +39,7 @@ jobs:
       - run:
           name: Deploy to cloud.gov
           command: |
-            ./deploy-cms.sh --branch << pipeline.git.branch >>
+            ./deploy.sh --branch "$CIRCLE_BRANCH" --app "onrr-cms"
 
 workflows:
   build-cms:

@@ -1,0 +1,81 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.2.0
+
+parameters:
+  run-build-frontend:
+    type: boolean
+    default: false
+  run-copy-database:
+    type: boolean
+    default: false
+
+jobs:
+  database:
+    docker: 
+      - image: cimg/postgres:13.7
+    steps:
+      - checkout
+      - run:
+          name: Dump dev database
+          command: |
+            ./scripts/dump-dev-db.sh
+      - run:
+          name: Load prod database from dev dump
+          command: |
+            ./scripts/load-prod-db.sh
+      - store_artifacts:
+          path: /tmp/onrr_database_backup.pg
+          destination: onrr_database_backup.pg
+  pre-build:
+    working_directory: ~/onrr.gov-site/frontend
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - node/install:
+          node-version: '18.16.0'
+      - node/install-packages:
+          app-dir: frontend
+      - run:
+          command: |
+            cp nginx.conf."$CIRCLE_BRANCH" nginx.conf
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: Deploy to cloud.gov
+          command: |
+            ./deploy.sh --branch "$CIRCLE_BRANCH" --manifest "${CIRCLE_BRANCH}.manifest.yml"
+
+workflows:
+  build-frontend:
+    when: << pipeline.parameters.run-build-frontend >>
+    context:
+      - org-global
+    jobs: 
+      - pre-build
+      - node/run:
+          npm-run: "build:${CIRCLE_BRANCH}"
+          requires:
+            - pre-build
+      - deploy:
+          requires: 
+            - node/run
+    filters:
+      branches:
+        only:
+          - dev
+          - main
+  copy-database:
+    when: << pipeline.parameters.run-copy-database >>
+    context:
+      - org-global
+    jobs: 
+      - database
+    filters:
+      branches:
+        only:
+          - main
