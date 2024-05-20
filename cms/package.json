@@ -1,6 +1,6 @@
 {
   "name": "cms",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Mojo Nichols <mojo.nichols@onrr.gov>, Jeff Schwartz <jeffrey.schwartz@onrr.gov>",
   "description": "Directus CMS",
   "scripts": {

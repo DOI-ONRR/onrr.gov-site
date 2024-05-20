@@ -9,17 +9,29 @@ parameters:
     default: false
 
 jobs:
-  build:
+  install-node-deps:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - node/install:
-          node-version: '16.13'
-      - run:
-          name: Build Directus extensions
-          command: |
-            ./scripts/build-extensions.sh
+          node-version: '18.16.0'
+      - node/install-packages:
+          app-dir: cms
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/document
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/image-uploader
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/link-autocomplete
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/press-releases
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/reporter-letters
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/unbundling
+      - node/install-packages:
+          app-dir: cms/src/extensions/interfaces/onrr-editor
   deploy:
     docker:
       - image: cimg/base:stable
@@ -35,10 +47,12 @@ workflows:
     context:
       - org-global
     jobs: 
-      - build
+      - install-node-deps
+      - node/run:
+          npm-run: build:all
       - deploy:
           requires: 
-            - build
+            - node/run
     filters:
       branches:
         only:
