@@ -25,7 +25,7 @@ export class OnrrLinkAutocomplete extends LinkAutocomplete {
     /**
      * Get link's href
      */
-    const href = element.dataset['href'];
+    const href = `/document/${element.dataset['href']}`;
 
     /**
      * Restore origin selection
@@ -53,8 +53,6 @@ export class OnrrLinkAutocomplete extends LinkAutocomplete {
 
       newLink.dataset[key] = element.dataset[key];
     });
-
-    newLink.dataset['icon'] = 'my-icon'
 
     /**
      * Collapse selection and close toolbar
@@ -91,8 +89,6 @@ export class OnrrLinkAutocomplete extends LinkAutocomplete {
     /**
      * Fill up search list by new elements
      */
-    console.log('items:');
-    console.log(items);
     items.forEach(item => {
       const searchItem = Dom.make('div', [ LinkAutocomplete.CSS.searchItem ]);
 
