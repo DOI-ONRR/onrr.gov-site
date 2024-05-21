@@ -6,6 +6,7 @@
 		"directus-extension",
 		"directus-custom-endpoint"
 	],
+	"type": "module",
 	"directus:extension": {
 		"type": "endpoint",
 		"path": "dist/index.js",
@@ -13,7 +14,7 @@
 		"host": "^9.6.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-document/dist; cp package.json dist/index.js ../../../../extensions/directus-extension-document/dist"
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-document/dist; cp package.json ../../../../extensions/directus-extension-document; cp dist/index.js ../../../../extensions/directus-extension-document/dist"
 	},
 	"dependencies": {
 		"@directus/extensions-sdk": "^11.0.3"

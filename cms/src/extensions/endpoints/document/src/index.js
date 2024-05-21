@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
-const fs = require('fs');
+import fetch from 'node-fetch';
+import fs from 'fs';
 
 const streamToFile = (inputStream, filePath) => {
   return new Promise((resolve, reject) => {
@@ -20,6 +20,7 @@ const getFile = (async (filePath,url) => {
 
 
 export default (router, { services, exceptions }) => {
+  console.log("Rock you like a hurricane!!");
 	const { ItemsService } = services;
   const { ServiceUnavailableException } = exceptions;
 

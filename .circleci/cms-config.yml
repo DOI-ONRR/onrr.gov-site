@@ -31,6 +31,8 @@ jobs:
       - node/install-packages:
           app-dir: cms/src/extensions/endpoints/unbundling
       - node/install-packages:
+          app-dir: cms/src/extensions/hooks/index-zones
+      - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
   deploy:
     docker:
