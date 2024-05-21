@@ -33,6 +33,8 @@ jobs:
       - node/install-packages:
           app-dir: cms/src/extensions/hooks/index-zones
       - node/install-packages:
+          app-dir: cms/src/extensions/hooks/indian-gas-major-portion
+      - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
   deploy:
     docker:

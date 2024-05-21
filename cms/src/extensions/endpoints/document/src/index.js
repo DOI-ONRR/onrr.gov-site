@@ -20,7 +20,6 @@ const getFile = (async (filePath,url) => {
 
 
 export default (router, { services, exceptions }) => {
-  console.log("Rock you like a hurricane!!");
 	const { ItemsService } = services;
   const { ServiceUnavailableException } = exceptions;
 
