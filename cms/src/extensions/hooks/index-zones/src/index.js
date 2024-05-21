@@ -11,6 +11,6 @@ export default ({ filter, action }) => {
     	const filePath = `/tmp/${payload.spreadsheet}.xlsx`
 
     	await fileUtils.getFile(payload, filePath, url)
-    	await fileUtils.parseFile(payload, filePath)
+    	await fileUtils.parseFileIndexZones(payload, filePath)
 	})
 }

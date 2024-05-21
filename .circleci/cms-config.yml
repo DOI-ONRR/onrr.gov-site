@@ -35,6 +35,8 @@ jobs:
       - node/install-packages:
           app-dir: cms/src/extensions/hooks/indian-gas-major-portion
       - node/install-packages:
+          app-dir: cms/src/extensions/hooks/ibmp
+      - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
   deploy:
     docker:
