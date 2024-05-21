@@ -37,6 +37,8 @@ jobs:
       - node/install-packages:
           app-dir: cms/src/extensions/hooks/ibmp
       - node/install-packages:
+          app-dir: cms/src/extensions/hooks/nymex
+      - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
   deploy:
     docker:
