@@ -22,7 +22,8 @@ workflows:
   build-frontend:
     when: << pipeline.parameters.run-build-frontend >>
     jobs: 
-      - pre-build
+      - pre-build:
+          <<: *filters
       - node/run:
           context:
             - org-global
