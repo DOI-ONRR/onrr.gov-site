@@ -8,6 +8,33 @@ parameters:
     type: boolean
     default: false
 
+filters: &filters
+  filters:
+      branches:
+        only:
+          - dev
+          - main
+
+workflows:
+  build-cms:
+    when: << pipeline.parameters.run-build-cms >>
+    jobs: 
+      - install-node-deps:
+          context:
+            - org-global
+          <<: *filters
+      - node/run:
+          npm-run: build:all
+          context:
+            - org-global
+          <<: *filters
+      - deploy:
+          requires: 
+            - node/run
+          context:
+            - org-global
+          <<: *filters
+
 jobs:
   install-node-deps:
     docker:
@@ -48,21 +75,3 @@ jobs:
           name: Deploy to cloud.gov
           command: |
             ./deploy.sh --branch "$CIRCLE_BRANCH" --app "onrr-cms"
-
-workflows:
-  build-cms:
-    when: << pipeline.parameters.run-build-cms >>
-    context:
-      - org-global
-    jobs: 
-      - install-node-deps
-      - node/run:
-          npm-run: build:all
-      - deploy:
-          requires: 
-            - node/run
-    filters:
-      branches:
-        only:
-          - dev
-          - main

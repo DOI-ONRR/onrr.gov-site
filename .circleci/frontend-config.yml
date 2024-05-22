@@ -11,6 +11,39 @@ parameters:
     type: boolean
     default: false
 
+filters: &filters
+  filters:
+      branches:
+        only:
+          - dev
+          - main
+
+workflows:
+  build-frontend:
+    when: << pipeline.parameters.run-build-frontend >>
+    jobs: 
+      - pre-build
+      - node/run:
+          context:
+            - org-global
+          <<: *filters
+          npm-run: "build:${CIRCLE_BRANCH}"
+          requires:
+            - pre-build
+      - deploy:
+          context:
+            - org-global
+          <<: *filters
+          requires: 
+            - node/run
+  copy-database:
+    when: << pipeline.parameters.run-copy-database >>
+    jobs: 
+      - database:
+          context:
+            - org-global
+          <<: *filters
+
 jobs:
   database:
     docker: 
@@ -49,33 +82,3 @@ jobs:
           name: Deploy to cloud.gov
           command: |
             ./deploy.sh --branch "$CIRCLE_BRANCH" --manifest "${CIRCLE_BRANCH}.manifest.yml"
-
-workflows:
-  build-frontend:
-    when: << pipeline.parameters.run-build-frontend >>
-    context:
-      - org-global
-    jobs: 
-      - pre-build
-      - node/run:
-          npm-run: "build:${CIRCLE_BRANCH}"
-          requires:
-            - pre-build
-      - deploy:
-          requires: 
-            - node/run
-    filters:
-      branches:
-        only:
-          - dev
-          - main
-  copy-database:
-    when: << pipeline.parameters.run-copy-database >>
-    context:
-      - org-global
-    jobs: 
-      - database
-    filters:
-      branches:
-        only:
-          - main
