@@ -1,10 +1,5 @@
 import * as fileUtils from "../../../../utils/file-utils";
 
-const targetUrl =
-    process.env.NODE_ENV === "production"
-        ? "https://dev-onrr-cms.app.cloud.gov"
-        : "http://localhost:8055";
-
 export default (router, { services, exceptions }) => {
     const { ItemsService } = services;
     const { ServiceUnavailableException } = exceptions;
@@ -23,9 +18,10 @@ export default (router, { services, exceptions }) => {
             })
             .then(async (results) => {
                 const filePath = `/tmp/${file}`;
-                const url = "/assets/" + results[0].id;
+                const hostName = req.hostname == 'localhost' ? 'localhost:8055' : req.hostname;
+                const url = `${req.protocol}://${hostName}/assets/${results[0].id}`;
 
-                await fileUtils.getFile(filePath, `${targetUrl}${url}`);
+                await fileUtils.getFile(filePath, url);
                 return res.sendFile(filePath);
             })
             .catch((error) => {
