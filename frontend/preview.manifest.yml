@@ -8,3 +8,5 @@ applications:
   random-route: false
   buildpacks:
     - nginx_buildpack
+  env:
+    CMS_URL: https://preview-onrr-cms.app.cloud.gov

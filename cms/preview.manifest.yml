@@ -1,12 +1,13 @@
 ---
 applications: 
 - name: preview-onrr-cms
-  instances: 1
+  command: npx directus start
   disk_quota: 2G
   memory: 2G
-  random-route: false
   buildpacks:
     - nodejs_buildpack
   services:
-    - dev-onrr-psql
-    - dev-onrr-s3
+    - preview-onrr-psql
+    - preview-onrr-s3
+  env:
+    CONFIG_PATH: ./config.js

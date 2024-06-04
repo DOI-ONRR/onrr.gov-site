@@ -14,3 +14,4 @@ editorjs/*.tgz
 editorjs/*.zip
 
 frontend/.env.*
+frontend/dist/

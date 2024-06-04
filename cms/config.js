@@ -17,6 +17,7 @@ module.exports = function(env) {
     DB_DATABASE: vcap_services['aws-rds'][0].credentials.name,
     DB_USER: vcap_services['aws-rds'][0].credentials.username,
     DB_PASSWORD: vcap_services['aws-rds'][0].credentials.password,
+    DB_SSL: true,
     STORAGE_LOCATIONS: "aws",
     STORAGE_AWS_DRIVER: "s3",
     STORAGE_AWS_KEY: vcap_services['s3'][0].credentials.access_key_id,

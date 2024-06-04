@@ -24,6 +24,7 @@ workflows:
             - org-global
           <<: *filters
       - node/run:
+          app-dir: cms
           npm-run: build:all
           context:
             - org-global
