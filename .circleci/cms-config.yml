@@ -62,6 +62,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - run:
           name: Deploy to cloud.gov
           working_directory: ./.circleci/scripts
