@@ -64,11 +64,15 @@ jobs:
           app-dir: cms/src/extensions/hooks/nymex
       - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
+      - persist_to_workspace:
+          root: ~/project
+          paths: 
+            - .
   deploy-cms:
     executor: cms
-    working_directory: cms
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Deploy to cloud.gov
           command: |
