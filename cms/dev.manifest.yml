@@ -10,3 +10,7 @@ applications:
   services:
     - dev-onrr-psql
     - dev-onrr-s3
+  env:
+    CONFIG_PATH: ./config.js
+    UPSTREAM_URL: https://prod-onr-cms.app.cloud.gov
+    CORS_ORIGIN: https://preview-onrr-cms.app.cloud.gov

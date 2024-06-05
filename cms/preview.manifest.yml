@@ -11,3 +11,4 @@ applications:
     - preview-onrr-s3
   env:
     CONFIG_PATH: ./config.js
+    UPSTREAM_URL: https://dev-onrr-cms.app.cloud.gov

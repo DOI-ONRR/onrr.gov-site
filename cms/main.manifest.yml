@@ -10,3 +10,6 @@ applications:
   services:
     - onrr-psql
     - dev-onrr-s3
+  env:
+    CONFIG_PATH: ./config.js
+    CORS_ORIGIN: https://dev-onrr-cms.app.cloud.gov

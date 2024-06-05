@@ -26,12 +26,9 @@ module.exports = function(env) {
     STORAGE_AWS_BUCKET: vcap_services['s3'][0].credentials.bucket,
     STORAGE_AWS_REGION: vcap_services['s3'][0].credentials.region,
     
-    // CACHE_ENABLED: true,
-    // CACHE_STORE: "redis",
-    // CACHE_REDIS: "redis://cache:6379",
     CACHE_AUTO_PURGE: true,
     
-    ADMIN_EMAIL: `${ vcap_application.rganization_name }@onrr.gov`,
+    ADMIN_EMAIL: `${vcap_application.organization_name}@onrr.gov`,
     ADMIN_PASSWORD: vcap_application.organization_id,
 
     EMAIL_SENDMAIL_NEW_LINE: "unix",
@@ -40,10 +37,7 @@ module.exports = function(env) {
     EMAIL_TRANSPORT: "sendmail",
     GITHUB_TOKEN: env.GITHUB_TOKEN,
     MAX_RELATIONAL_DEPTH: 200,
-    // https://github.com/directus/directus/releases
     CORS_ENABLED: true,
-    CORS_ORIGIN: 'array:https://dev-onrr-cms.app.cloud.gov,https://dev-onrr-frontend.app.cloud.gov,http://0.0.0.0:8055',
-    UPSTREAM_URL: "https://prod-onr-cms.app.cloud.gov",
     CMS_TOKEN: env.CMS_TOKEN,
     FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL,CMS_TOKEN",
     FLOWS_EXEC_ALLOWED_MODULES: "lodash,axios,form-data,uuid"
