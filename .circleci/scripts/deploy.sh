@@ -50,7 +50,7 @@ sudo apt-get install cf8-cli
 
 cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s "$space"
 
-cf push -f "$manifest"
+cf push --strategy=rolling -f "$manifest"
 
 echo "manifest $manifest successfully deployed."
 

@@ -17,12 +17,12 @@ workflows:
   build-cms:
     when: << pipeline.parameters.run-build-cms >>
     jobs: 
-      - pre-build-cms:
+      - install-node-deps-cms:
           context:
             - org-global
       - build-cms-extensions:
           requires:
-            - pre-build-cms
+            - install-node-deps-cms
           context:
             - org-global
       - deploy-cms:
@@ -32,7 +32,7 @@ workflows:
             - org-global
 
 jobs:
-  pre-build-cms:
+  install-node-deps-cms:
     executor: cms
     steps:
       - checkout

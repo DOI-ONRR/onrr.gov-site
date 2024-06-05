@@ -19,7 +19,7 @@
 		"host": "^10.10.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-link-autocomplete/dist; cp package.json dist/index.js ../../../../extensions/directus-extension-link-autocomplete/dist",
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-link-autocomplete/dist; cp package.json ../../../../extensions/directus-extension-link-autocomplete; cp dist/index.js ../../../../extensions/directus-extension-link-autocomplete/dist",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link",
 		"dist": "directus-extension build; cp ./dist/index.js ../../../../extensions/directus-extension-link-autocomplete/dist; docker restart directus"
