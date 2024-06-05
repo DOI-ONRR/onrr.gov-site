@@ -11,30 +11,20 @@ parameters:
     type: boolean
     default: false
 
-filters: &filters
-  filters:
-      branches:
-        only:
-          - dev
-          - main
-
 workflows:
   build-frontend:
     when: << pipeline.parameters.run-build-frontend >>
     jobs: 
-      - pre-build:
-          <<: *filters
+      - pre-build
       - node/run:
           context:
             - org-global
-          <<: *filters
-          npm-run: "build:${CIRCLE_BRANCH}"
+          npm-run: build:deploy
           requires:
             - pre-build
       - deploy:
           context:
             - org-global
-          <<: *filters
           requires: 
             - node/run
   copy-database:
@@ -43,7 +33,6 @@ workflows:
       - database:
           context:
             - org-global
-          <<: *filters
 
 jobs:
   database:
@@ -72,9 +61,6 @@ jobs:
           node-version: '18.16.0'
       - node/install-packages:
           app-dir: frontend
-      - run:
-          command: |
-            cp nginx.conf."$CIRCLE_BRANCH" nginx.conf
   deploy:
     docker:
       - image: cimg/base:stable
@@ -82,4 +68,4 @@ jobs:
       - run:
           name: Deploy to cloud.gov
           command: |
-            ./deploy.sh --branch "$CIRCLE_BRANCH" --manifest "${CIRCLE_BRANCH}.manifest.yml"
+            ./deploy.sh --branch "$CIRCLE_BRANCH" --working-dir "frontend"

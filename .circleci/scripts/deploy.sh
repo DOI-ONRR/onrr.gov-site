@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEMP=$(getopt -o '' --long branch:,app:,manifest: -- "$@")
+TEMP=$(getopt -o '' --long branch:,working-dir: -- "$@")
 if [ $? != 0 ]; then
     echo "Terminating..." >&2
     exit 1
@@ -9,19 +9,16 @@ fi
 eval set -- "$TEMP"
 
 branch=""
-app=""
 manifest=""
+working_dir=""
 space=""
-deploy_object=""
 
 while true; do
     case "$1" in
         --branch)
             branch=$2; shift 2 ;;
-        --app)
+        --working-dir)
             app=$2; shift 2 ;;
-        --manifest)
-            manifest=$2; shift 2 ;;
         --)
             shift; break ;;
         *)
@@ -33,27 +30,23 @@ done
 if [ -z "$branch" ]; then
     echo "Error: --branch is required." >&2
     exit 1
-elif [ -z "$app" ] || [-z "$manifest"]; then
-    echo "Error: --app or --manifest is required." >&2
+elif [ -z "$working-dir"]; then
+    echo "Error: --working-dir is required." >&2
     exit 1
 fi
 
 if [ "$branch" == "dev" ]; then
     space="dev"
+    manifest="dev.manifest.yml"
 elif [ "$branch" == "main" ]; then
     space="prod"
+    manifest="main.manifest.yml"
 else
-    echo "Error: only dev and main are valid branches"
-    exit 1
+    space="dev"
+    manifest="preview.manifest.yml"
 fi
 
-if [ -n "$app" ]; then
-    deploy_object="$space-$app"
-elif [ -n "$manifest" ]; then
-    deploy_object="$manifest"
-fi
-
-cd cms
+cd "$working_dir"
 
 wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
 
@@ -63,10 +56,10 @@ sudo apt-get update
 
 sudo apt-get install cf8-cli
 
-cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s "$cf_space"
+cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s "$space"
 
-cf push "$deploy_object"
+cf push -f "$manifest"
 
-echo "$deploy_object successfully deployed."
+echo "manifest $manifest successfully deployed."
 
 exit 0
