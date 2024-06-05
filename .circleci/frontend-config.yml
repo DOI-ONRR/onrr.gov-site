@@ -17,7 +17,7 @@ parameters:
     default: false
 
 workflows:
-  build-frontend:
+  build-frontend-frontend:
     when: << pipeline.parameters.run-build-frontend >>
     jobs: 
       - pre-build
@@ -27,8 +27,8 @@ workflows:
           context:
             - org-global
           requires:
-            - pre-build
-      - deploy:
+            - pre-build-frontend
+      - deploy-frontend:
           context:
             - org-global
           requires: 

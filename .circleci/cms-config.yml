@@ -17,17 +17,17 @@ workflows:
   build-cms:
     when: << pipeline.parameters.run-build-cms >>
     jobs: 
-      - install-node-deps:
+      - pre-build-cms:
           context:
             - org-global
       - node/run:
           app-dir: cms
           npm-run: build:all
           requires:
-            - install-node-deps
+            - pre-build-cms
           context:
             - org-global
-      - deploy:
+      - deploy-cms:
           requires: 
             - node/run
           context:
