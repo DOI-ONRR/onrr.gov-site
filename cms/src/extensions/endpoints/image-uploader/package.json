@@ -18,7 +18,7 @@
 		"host": "^10.10.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-image-uploader/dist; cp package.json dist/index.js ../../../../extensions/directus-extension-image-uploader/dist",
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-image-uploader/dist; cp package.json ../../../../extensions/directus-extension-image-uploader; cp dist/index.js ../../../../extensions/directus-extension-image-uploader/dist",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link",
 		"build-local": "directus-extension build; cp ./dist/index.js ../../../../extensions/directus-extension-image-uploader/dist; docker restart directus"
