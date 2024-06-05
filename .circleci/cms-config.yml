@@ -20,16 +20,14 @@ workflows:
       - pre-build-cms:
           context:
             - org-global
-      - node/run:
-          app-dir: cms
-          npm-run: build:all
+      - build-extensions:
           requires:
             - pre-build-cms
           context:
             - org-global
       - deploy-cms:
           requires: 
-            - node/run
+            - build-extensions
           context:
             - org-global
 
@@ -68,8 +66,22 @@ jobs:
           root: ~/project
           paths: 
             - .
+  build-extensions:
+    executor: cms
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build extensions from source
+          command: |
+            npm run build:all
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./cms/extensions/*
   deploy-cms:
     executor: cms
+    working_directory: cms
     steps:
       - attach_workspace:
           at: ~/project

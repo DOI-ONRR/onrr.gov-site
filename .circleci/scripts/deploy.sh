@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEMP=$(getopt -o '' --long branch:,manifest-path: -- "$@")
+TEMP=$(getopt -o '' --long branch: -- "$@")
 if [ $? != 0 ]; then
     echo "Terminating..." >&2
     exit 1
@@ -10,15 +10,12 @@ eval set -- "$TEMP"
 
 branch=""
 manifest=""
-manifest_path=""
 space=""
 
 while true; do
     case "$1" in
         --branch)
             branch=$2; shift 2 ;;
-        --manifest-path)
-            manifest_path=$2; shift 2 ;;
         --)
             shift; break ;;
         *)
@@ -29,9 +26,6 @@ done
 
 if [ -z "$branch" ]; then
     echo "Error: --branch is required." >&2
-    exit 1
-elif [ -z "$manifest_path" ]; then
-    echo "Error: --manifest-path is required." >&2
     exit 1
 fi
 
@@ -56,7 +50,7 @@ sudo apt-get install cf8-cli
 
 cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s "$space"
 
-cf push -f "$manifest_path/$manifest"
+cf push -f "$manifest"
 
 echo "manifest $manifest successfully deployed."
 
