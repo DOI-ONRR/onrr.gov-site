@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   node: circleci/node@5.2.0
 
+executors:
+  cms:
+    docker:
+      - image: cimg/base:stable
+
 parameters:
   run-build-cms:
     type: boolean
@@ -18,6 +23,8 @@ workflows:
       - node/run:
           app-dir: cms
           npm-run: build:all
+          requires:
+            - install-node-deps
           context:
             - org-global
       - deploy:
@@ -27,9 +34,8 @@ workflows:
             - org-global
 
 jobs:
-  install-node-deps:
-    docker:
-      - image: cimg/base:stable
+  pre-build-cms:
+    executor: cms
     steps:
       - checkout
       - node/install:
@@ -58,9 +64,8 @@ jobs:
           app-dir: cms/src/extensions/hooks/nymex
       - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
-  deploy:
-    docker:
-      - image: cimg/base:stable
+  deploy-cms:
+    executor: cms
     steps:
       - checkout
       - run:

@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   node: circleci/node@5.2.0
 
+executors:
+  frontend:
+    docker:
+      - image: cimg/base:stable
+
 parameters:
   run-build-frontend:
     type: boolean
@@ -52,19 +57,17 @@ jobs:
       - store_artifacts:
           path: /tmp/onrr_database_backup.pg
           destination: onrr_database_backup.pg
-  pre-build:
+  pre-build-frontend:
     working_directory: ~/onrr.gov-site/frontend
-    docker:
-      - image: cimg/base:stable
+    executor: frontend
     steps:
       - checkout
       - node/install:
           node-version: '18.17.0'
       - node/install-packages:
           app-dir: frontend
-  deploy:
-    docker:
-      - image: cimg/base:stable
+  deploy-frontend:
+    executor: frontend
     steps:
       - checkout
       - run:
