@@ -17,9 +17,10 @@ workflows:
     jobs: 
       - pre-build
       - node/run:
+          app-dir: frontend
+          npm-run: build:deploy
           context:
             - org-global
-          npm-run: build:deploy
           requires:
             - pre-build
       - deploy:
@@ -68,4 +69,4 @@ jobs:
       - run:
           name: Deploy to cloud.gov
           command: |
-            ./deploy.sh --branch "$CIRCLE_BRANCH" --working-dir "frontend"
+            ./scripts/deploy.sh --branch "$CIRCLE_BRANCH" --working-dir "frontend"
