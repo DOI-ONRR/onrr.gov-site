@@ -20,19 +20,17 @@ workflows:
   build-frontend:
     when: << pipeline.parameters.run-build-frontend >>
     jobs: 
-      - pre-build-frontend
-      - node/run:
-          app-dir: frontend
-          npm-run: build:deploy
+      - install-node-deps-frontend
+      - build-frontend-app:
           context:
             - org-global
           requires:
-            - pre-build-frontend
+            - install-node-deps-frontend
       - deploy-frontend:
           context:
             - org-global
           requires: 
-            - node/run
+            - build-frontend-app
   copy-database:
     when: << pipeline.parameters.run-copy-database >>
     jobs: 
@@ -57,7 +55,7 @@ jobs:
       - store_artifacts:
           path: /tmp/onrr_database_backup.pg
           destination: onrr_database_backup.pg
-  pre-build-frontend:
+  install-node-deps-frontend:
     working_directory: ~/onrr.gov-site/frontend
     executor: frontend
     steps:
@@ -66,13 +64,33 @@ jobs:
           node-version: '18.17.0'
       - node/install-packages:
           app-dir: frontend
+      - persist_to_workspace:
+          root: ~/project
+          paths: 
+            - .
+  build-frontend-app:
+    docker:
+      - image: cimg/node:18.17.0
+    working_directory: frontend
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build extensions from source
+          command: |
+            npm run build:deploy
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./frontend/dist
   deploy-frontend:
     executor: frontend
     working_directory: frontend
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Deploy to cloud.gov
           command: |
             chmod +x ~/project/.circleci/scripts/deploy.sh
-            ~/project/.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH" --manifest-path "frontend"
+            ~/project/.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH"

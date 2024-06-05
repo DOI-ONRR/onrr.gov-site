@@ -10,5 +10,5 @@ workflows:
           base-revision: main
           name: check-updated-files
           mapping: |
-            cms/.* run-build-cms true .circleci/cms-config.yml
-#           frontend/.* run-build-frontend true .circleci/frontend-config.yml
+            frontend/.* run-build-frontend true .circleci/frontend-config.yml
+#           cms/.* run-build-cms true .circleci/cms-config.yml
