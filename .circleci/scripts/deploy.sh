@@ -18,7 +18,7 @@ while true; do
         --branch)
             branch=$2; shift 2 ;;
         --working-dir)
-            app=$2; shift 2 ;;
+            working_dir=$2; shift 2 ;;
         --)
             shift; break ;;
         *)
@@ -30,7 +30,7 @@ done
 if [ -z "$branch" ]; then
     echo "Error: --branch is required." >&2
     exit 1
-elif [ -z "$working-dir"]; then
+elif [ -z "$working_dir"]; then
     echo "Error: --working-dir is required." >&2
     exit 1
 fi

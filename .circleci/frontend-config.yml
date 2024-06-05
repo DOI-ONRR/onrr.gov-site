@@ -59,7 +59,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: '18.16.0'
+          node-version: '18.17.0'
       - node/install-packages:
           app-dir: frontend
   deploy:
