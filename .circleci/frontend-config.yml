@@ -68,5 +68,6 @@ jobs:
     steps:
       - run:
           name: Deploy to cloud.gov
+          working_directory: ./.circleci/scripts
           command: |
-            ./scripts/deploy.sh --branch "$CIRCLE_BRANCH" --working-dir "frontend"
+            ./deploy.sh --branch "$CIRCLE_BRANCH" --working-dir "frontend"
