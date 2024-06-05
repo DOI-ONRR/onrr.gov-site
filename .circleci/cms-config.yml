@@ -66,10 +66,11 @@ jobs:
           app-dir: cms/src/extensions/interfaces/onrr-editor
   deploy-cms:
     executor: cms
+    working_directory: cms
     steps:
       - checkout
       - run:
           name: Deploy to cloud.gov
           command: |
-            chmod +x ./.circleci/scripts/deploy.sh
-            ./.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH" --manifest-path "cms"
+            chmod +x ~/project/.circleci/scripts/deploy.sh
+            ~/project/.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH"

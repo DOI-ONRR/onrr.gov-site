@@ -68,10 +68,11 @@ jobs:
           app-dir: frontend
   deploy-frontend:
     executor: frontend
+    working_directory: frontend
     steps:
       - checkout
       - run:
           name: Deploy to cloud.gov
           command: |
-            chmod +x ./.circleci/scripts/deploy.sh
-            ./.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH" --manifest-path "frontend"
+            chmod +x ~/project/.circleci/scripts/deploy.sh
+            ~/project/.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH" --manifest-path "frontend"
