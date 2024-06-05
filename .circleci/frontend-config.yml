@@ -17,10 +17,10 @@ parameters:
     default: false
 
 workflows:
-  build-frontend-frontend:
+  build-frontend:
     when: << pipeline.parameters.run-build-frontend >>
     jobs: 
-      - pre-build
+      - pre-build-frontend
       - node/run:
           app-dir: frontend
           npm-run: build:deploy
