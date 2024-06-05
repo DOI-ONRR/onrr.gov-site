@@ -20,14 +20,14 @@ workflows:
       - pre-build-cms:
           context:
             - org-global
-      - build-extensions:
+      - build-cms-extensions:
           requires:
             - pre-build-cms
           context:
             - org-global
       - deploy-cms:
           requires: 
-            - build-extensions
+            - build-cms-extensions
           context:
             - org-global
 
@@ -66,8 +66,9 @@ jobs:
           root: ~/project
           paths: 
             - .
-  build-extensions:
-    executor: cms
+  build-cms-extensions:
+    docker:
+      - image: cimg/node:18.17.0
     steps:
       - attach_workspace:
           at: ~/project
