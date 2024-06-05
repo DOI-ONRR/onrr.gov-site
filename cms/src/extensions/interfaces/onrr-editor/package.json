@@ -19,7 +19,7 @@
 		"host": "^10.10.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-editor/dist; cp package.json dist/index.js ../../../../extensions/directus-extension-onrr-editor/dist",
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-editor/dist; cp package.json ../../../../extensions/directus-extension-onrr-editor; cp dist/index.js ../../../../extensions/directus-extension-onrr-editor/dist",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link",
 		"serve": "vue-cli-service serve"
