@@ -67,9 +67,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - run: chmod +x ./.circleci/scripts/deploy.sh
       - run:
           name: Deploy to cloud.gov
-          working_directory: ./.circleci/scripts
           command: |
-            ./deploy.sh --branch "$CIRCLE_BRANCH" --working-dir "frontend"
+            chmod +x ./.circleci/scripts/deploy.sh
+            ./.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH" --manifest-path "frontend"
