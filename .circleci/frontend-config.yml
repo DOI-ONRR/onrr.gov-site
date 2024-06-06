@@ -64,13 +64,14 @@ jobs:
           node-version: '18.17.0'
       - node/install-packages:
           cache-path: ~/project/frontend/node_modules
-          cache-version: v2
+          cache-version: v3
           app-dir: frontend
       - persist_to_workspace:
           root: ~/project
           paths: 
             - .
   build-frontend-app:
+    resource_class: xlarge
     docker:
       - image: cimg/node:18.17.0
     working_directory: frontend
