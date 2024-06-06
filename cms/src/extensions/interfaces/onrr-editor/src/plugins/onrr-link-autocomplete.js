@@ -25,7 +25,7 @@ export class OnrrLinkAutocomplete extends LinkAutocomplete {
     /**
      * Get link's href
      */
-    const href = `/document/${element.dataset['href']}`;
+    const href = `${element.dataset['path']}${element.dataset['href']}`;
 
     /**
      * Restore origin selection
