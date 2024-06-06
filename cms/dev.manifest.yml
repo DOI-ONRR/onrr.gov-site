@@ -1,6 +1,7 @@
 ---
 applications: 
 - name: dev-onrr-cms
+  command: npx directus start
   instances: 1
   disk_quota: 2G
   memory: 1G
