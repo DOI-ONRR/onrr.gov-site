@@ -64,7 +64,7 @@ jobs:
           node-version: '18.17.0'
       - node/install-packages:
           cache-path: ~/project/frontend/node_modules
-          cache-version: v1
+          cache-version: v2
           app-dir: frontend
       - persist_to_workspace:
           root: ~/project
