@@ -94,7 +94,7 @@
 			holder: editorElement.value,
 			changeHandler: editorValueEmitter,
 			data: getPreparedValue(props.value),
-			picker: null
+			picker: setFileHandler
 		});
 
 		editorjsInstance.value = new EditorJS(editorJsConfig.getConfig());
