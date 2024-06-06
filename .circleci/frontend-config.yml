@@ -5,6 +5,7 @@ orbs:
 
 executors:
   frontend:
+    resource_class: xlarge
     docker:
       - image: cimg/base:stable
 
@@ -62,6 +63,7 @@ jobs:
       - node/install:
           node-version: '18.17.0'
       - node/install-packages:
+          cache-path: ~/project/frontend/node_modules
           cache-version: v1
           app-dir: frontend
       - persist_to_workspace:
