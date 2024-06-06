@@ -76,7 +76,7 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
-          name: Build extensions from source
+          name: Build frontend
           command: |
             npm run build:deploy
       - persist_to_workspace:
