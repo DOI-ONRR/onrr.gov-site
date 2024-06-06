@@ -56,14 +56,13 @@ jobs:
           path: /tmp/onrr_database_backup.pg
           destination: onrr_database_backup.pg
   install-node-deps-frontend:
-    working_directory: ~/onrr.gov-site/frontend
     executor: frontend
     steps:
       - checkout
       - node/install:
           node-version: '18.17.0'
       - node/install-packages:
-          cache-version: v2
+          cache-version: v1
           app-dir: frontend
       - persist_to_workspace:
           root: ~/project
