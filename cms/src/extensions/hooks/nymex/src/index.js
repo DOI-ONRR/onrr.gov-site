@@ -10,7 +10,7 @@ export default ({ filter, action }) => {
 		const url = `${ base_url + payload.Spreadsheet }.xlsx`;
       	const filePath = `/tmp/${payload.Spreadsheet}.xlsx`;
 
-      	await fileUtils.getFile(payload, filePath, url);
+      	await fileUtils.getFile(filePath, url);
       	await fileUtils.parseFileNymex(payload, filePath);
 	});
 };

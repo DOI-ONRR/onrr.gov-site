@@ -156,6 +156,6 @@ export const parseFileNymex = (payload, file) => {
 
 export const getFile = async (filePath, url) => {
 	let response = await fetch(url)
-  	let promise = streamToFile(response.body, filePath)
+    let promise = streamToFile(response.body, filePath)
   	return promise
 }
