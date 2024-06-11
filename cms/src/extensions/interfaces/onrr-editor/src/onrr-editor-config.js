@@ -86,8 +86,8 @@ export class OnrrEditorConfig {
                 color: {
                     class: ColorPlugin,
                     config: {
-                        colorCollections: ['#EC7878','#9C27B0','#673AB7','#3F51B5','#0070FF','#03A9F4','#00BCD4','#4CAF50','#8BC34A','#CDDC39', '#FFF'],
-                        defaultColor: '#FF1300',
+                        colorCollections: ['#1A22FE','#D83933','#C05500','#538200'],
+                        defaultColor: '#000000',
                         type: 'text', 
                         customPicker: true
                     } 
