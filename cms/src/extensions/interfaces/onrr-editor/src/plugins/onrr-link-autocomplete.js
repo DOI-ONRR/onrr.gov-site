@@ -44,6 +44,11 @@ export class OnrrLinkAutocomplete extends LinkAutocomplete {
     const newLink = this.selection.findParentTag(this.tagName);
 
     /**
+     * All links except PDF documents open in current tab
+     */
+    newLink.target = href.toLowerCase().endsWith('pdf') ? '_blank' : '_self';
+
+    /**
      * Fill up link element's dataset
      */
     Object.keys(element.dataset).forEach(key => {
