@@ -4,7 +4,7 @@ import { OnrrLinkAutocomplete } from './plugins/onrr-link-autocomplete'
 import Paragraph from '@editorjs/paragraph'
 import Header from '@editorjs/header';
 import Quote from '@editorjs/quote';
-import NestedList from '@editorjs/nested-list';
+import { OnrrNestedList } from './plugins/onrr-editorjs-nested-list';
 import CodeTool from '@editorjs/code';
 import Table from '@editorjs/table';
 import ImageTool from './plugins/onrr-image-tool';
@@ -32,7 +32,7 @@ export class OnrrEditorConfig {
                     class: Header
                 },
                 list: {
-                    class: NestedList,
+                    class: OnrrNestedList,
                     inlineToolbar: true,
                     config: {
                         defaultStyle: 'unordered'
