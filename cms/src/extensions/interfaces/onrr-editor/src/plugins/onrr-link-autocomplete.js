@@ -49,6 +49,40 @@ export class OnrrLinkAutocomplete extends LinkAutocomplete {
     newLink.target = href.toLowerCase().endsWith('pdf') ? '_blank' : '_self';
 
     /**
+     * Add class for file icons
+     */
+    const match = href.toLowerCase().match(/\.([^\.]+)$/);
+    let iconClass = '';
+    switch (match[1]) {
+      case 'pdf':
+        iconClass = 'onrr-link-pdf';
+        break;
+    
+      case 'pptx':
+        iconClass = 'onrr-link-powerpoint';
+        break;
+
+      case 'docx':
+        iconClass = 'onrr-link-word';
+        break;
+      
+      case 'xlsx':
+        iconClass = 'onrr-link-excel';
+        break;
+      
+      case 'txt':
+        iconClass = 'onrr-link-text';
+        break;
+      
+      default:
+        break;
+    }
+
+    if (iconClass !== '') {
+      newLink.classList.add(iconClass);
+    }
+
+    /**
      * Fill up link element's dataset
      */
     Object.keys(element.dataset).forEach(key => {
