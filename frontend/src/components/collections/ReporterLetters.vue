@@ -50,11 +50,10 @@
             </template>
             <template v-slot:[`item.title`]="{ item }">
               <div>
-                <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank" class="link-item">{{ item.title }}</a><v-icon color="secondary">{{ fileIcon(item.file.type) }}</v-icon>
+                <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank" :class="['link-item', fileIconClass(item.file.filename_download)]">{{ item.title }}</a>
               </div>
               <div v-if="item.accessible_file">
-                <a :href="accessibleFileLink(`${ API }/reporter-letters/`, item)" target="_blank" class="link-item">{{ item.accessible_file.title }}</a>
-                <v-icon color="secondary">{{ fileIcon(item.accessible_file.type) }}</v-icon>
+                <a :href="accessibleFileLink(`${ API }/reporter-letters/`, item)" target="_blank" :class="['link-item', fileIconClass(item.accessible_file.filename_download)]">{{ item.accessible_file.title }}</a>
               </div>
             </template>
             <template v-slot:[`item.date`]="{ item }">
@@ -72,7 +71,8 @@
 <script>
 import {
   fileCollectionMixin,
-  dateMixin
+  dateMixin,
+  iconMixin
 } from '@/mixins'
 import { formatToSlug } from '@/js/utils'
 const MultipleSelectField = () => import(/* webpackChunkName: "MultipleSelectField" */ '@/components/inputs/MultipleSelectField')
@@ -80,7 +80,7 @@ const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components
 
 export default {
   name: 'ReporterLettersCollection',
-  mixins: [fileCollectionMixin, dateMixin],
+  mixins: [fileCollectionMixin, dateMixin, iconMixin],
   data: () => ({
     API: process.env.VUE_APP_API_URL,
     titleInputField: {
@@ -146,7 +146,6 @@ export default {
       return value.toLowerCase().includes(this.titleInputField.text.toLowerCase())
     },
     topicsFilter(value) {
-        console.log('topcis filter value --------> ', value)
         if (!this.topicsInputField.selected ||
           this.topicsInputField.selected === null ||
           this.topicsInputField.selected.length === 0) {
@@ -161,34 +160,6 @@ export default {
     },
     formattedLabel(label) {
       return formatToSlug(label)
-    },
-    fileIcon(fileType) {
-      let type
-      switch (fileType) {
-        case 'application/pdf':
-        case 'pdf':
-          type = 'mdi-file-pdf-box'
-          break;
-        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-          type = 'mdi-file-word-box'
-          break;
-        case 'xls':
-        case 'xlsx':
-        case 'vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-          type = 'mdi-file-excel-box'
-          break
-        case 'vnd.openxmlformats-officedocument.presentationml.presentation':
-          type = 'mdi-file-powerpoint-box'
-          break
-        case 'plain':
-          type = 'mdi-text-box'
-          break
-        default:
-          type = undefined
-          break;
-      }
-
-      return type;
     },
     filterCollectionByTopic() {
       return this.collectionTopics.map(topic => this.collection.filter(({ topics }) => topics.includes(topic)))
