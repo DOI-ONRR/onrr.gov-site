@@ -57,7 +57,7 @@
                 <div v-if="fileLink(`${ API }/press-releases/`, item)">
                   <a :href="fileLink(`${ API }/press-releases/`, item)"
                     @click="trackDownloads(item)"
-                    class="onnr-link-pdf"
+                    class="onrr-link-pdf"
                     target="_blank">View press release document</a>
                 </div>
               </v-list-item-content>
