@@ -33,8 +33,7 @@
         ${{ roundHalfUp(item.roll, 2) }}
       </template>
       <template v-slot:[`item.Spreadsheet`]="{ item }">
-        <a :href="fileLink(item.Spreadsheet.filename_download)">Download</a>
-        <v-icon color="secondary ml-2">mdi-file-excel-box</v-icon>
+        <a :href="fileLink(item.Spreadsheet.filename_download)" :class="fileIconClass(item.Spreadsheet.filename_download)">Download</a>
       </template>
     </v-data-table>
   </v-card>
@@ -42,6 +41,7 @@
 
 <script>
 import { store, mutations } from '@/store'
+import { iconMixin } from '@/mixins'
 import {
   getDay,
   getMonth,
@@ -51,6 +51,7 @@ import {
 
 export default {
   name: 'NYMEXCollection',
+  mixins: [iconMixin],
   data() {
     return {
       items: [],         
