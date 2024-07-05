@@ -56,3 +56,7 @@
 .v-list-item__title {
     line-height: 1.5em !important;
 }
+
+a:focus-visible {
+    outline: 1px solid #FFF;
+}
