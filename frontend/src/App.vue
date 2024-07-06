@@ -72,6 +72,10 @@ export default {
   /* shouldn't have to do this, need to figure out correct method https://vuetifyjs.com/en/api/v-breadcrumbs/ */
 }
 
+.theme--light.v-breadcrumbs .v-breadcrumbs__divider {
+  color: #767676 !important; 
+}
+
 .v-icon.mdi-file-pdf-box {
   font-size: 28px;
 }
