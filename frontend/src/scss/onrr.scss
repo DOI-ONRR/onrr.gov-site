@@ -60,3 +60,7 @@
 a:focus-visible {
     outline: 1px solid #FFF;
 }
+
+.v-toolbar__title {
+    overflow: visible !important;
+}

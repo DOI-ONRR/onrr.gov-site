@@ -45,17 +45,17 @@
       class="abs-bottom">
       <v-toolbar-title>
         <div class="footer-logo-wrap">
-          <router-link to="/">
+          <router-link to="/" class="override-overflow-hidden">
             <v-img
               alt="ONNR Logo"
-              class="shrink mr-2"
+              class="shrink"
               contain
               src="../../assets/images/logos/ONRR-mark-200x200.png"
               transition="scale-transition"
               width="70"
             />
           </router-link>
-          <router-link to="/">
+          <router-link to="/" class="ml-2">
             <div class="logo-content">
               <span>U.S. Department of the Interior</span>
               <span>Office of Natural Resources Revenue (ONRR)</span>
