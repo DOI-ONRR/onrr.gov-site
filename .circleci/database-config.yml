@@ -1,0 +1,35 @@
+version: 2.1
+
+parameters:
+  run-copy-database:
+    type: boolean
+    default: false
+
+workflows:
+  copy-database:
+    when: << pipeline.parameters.run-copy-database >>
+    jobs: 
+      - database:
+          context:
+            - org-global
+          filters:
+            branches:
+              only: main
+
+jobs:
+  database:
+    docker: 
+      - image: cimg/postgres:13.7
+    steps:
+      - checkout
+      - run:
+          name: Dump dev database
+          command: |
+            ./scripts/dump-dev-db.sh
+      - run:
+          name: Load prod database from dev dump
+          command: |
+            ./scripts/load-prod-db.sh
+      - store_artifacts:
+          path: /tmp/onrr_database_backup.pg
+          destination: onrr_database_backup.pg
