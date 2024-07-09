@@ -8,7 +8,7 @@
     "clean": "vue-cli-service build --clean",
     "build:dev": "vue-cli-service build --clean --mode development",
     "staging": "vue-cli-service build --clean --mode staging",
-    "build:deploy": "vue-cli-service build --clean  --mode production",
+    "build:deploy": "npx gulp updateUswds; vue-cli-service build --clean  --mode production",
     "build-fragment": "node src/js/possibleTypes.js",
     "lint": "vue-cli-service lint"
   },
