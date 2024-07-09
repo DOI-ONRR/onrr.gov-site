@@ -2,7 +2,7 @@
     <div class="pa-1">
         <div class="usa-accordion usa-accordion--bordered">
             <template v-for="(block, i) in blockItems">
-                <h4 class="usa-accordion__heading" :key="i">
+                <h3 class="usa-accordion__heading" :key="i">
                     <button
                     type="button"
                     class="usa-accordion__button"
@@ -10,7 +10,7 @@
                     >
                     {{ block.item.block_label }}
                     </button>
-                </h4>
+                </h3>
                 <div :id="`panel-content-${i}`" class="usa-accordion__content usa-prose" :key="i">
                     <LayoutBlock :layoutBlocks="block.panelBlocks"></LayoutBlock>
                 </div>
