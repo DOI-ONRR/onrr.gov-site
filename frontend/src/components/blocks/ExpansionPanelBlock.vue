@@ -1,41 +1,28 @@
 <template>
-    <div class="pa-1" id="foo-bar">
-        <v-expansion-panels
-            accordion
-            :value="openedPanel">
-            <v-expansion-panel
-                v-for="(block,i) in blockItems"
-                :key="i"
-                class="mb-4"
-                disable-icon-rotate
-                @click="panelClickHandler(block.item.block_label)"
-                >
-                    <v-expansion-panel-header 
-                        :ref="formattedLabel(block.item.block_label)"
-                        color="expansionPanel"
-                        aria-expanded="false"
-                        :aria-controls="`panel-content-${i}`">
-                        {{ block.item.block_label }}
-                        <template v-slot:actions>
-                            <v-icon color="secondary" class="v-icon-plus">
-                            mdi-plus-box
-                            </v-icon>
-                            <v-icon color="secondary" class="v-icon-minus">
-                            mdi-minus-box
-                            </v-icon>
-                        </template>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content class="pt-4" :id="`panel-content-${i}`">
-                        <LayoutBlock :layoutBlocks="block.panelBlocks"></LayoutBlock>
-                    </v-expansion-panel-content>
-            </v-expansion-panel>
-        </v-expansion-panels>
+    <div class="pa-1">
+        <div class="usa-accordion usa-accordion--bordered">
+            <template v-for="(block, i) in blockItems">
+                <h4 class="usa-accordion__heading" :key="i">
+                    <button
+                    type="button"
+                    class="usa-accordion__button"
+                    :aria-controls="`panel-content-${i}`"
+                    >
+                    {{ block.item.block_label }}
+                    </button>
+                </h4>
+                <div :id="`panel-content-${i}`" class="usa-accordion__content usa-prose" :key="i">
+                    <LayoutBlock :layoutBlocks="block.panelBlocks"></LayoutBlock>
+                </div>
+            </template>
+        </div>
     </div>
     
 </template>
 
 <script>
 import { formatToSlug } from '@/js/utils'
+import accordion from "@uswds/uswds/js/usa-accordion";
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
 
 import { 
@@ -122,6 +109,7 @@ export default {
     mounted: function () {
         this.$nextTick(function () {
             this.removeAriaExpandedFromExpansionPanels();
+            accordion.on();
         })
     }
 }
