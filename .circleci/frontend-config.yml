@@ -66,6 +66,14 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
+      - when:
+          condition:
+            equal: [ dev, << pipeline.git.branch >> ]
+          steps:
+            - run:
+                name: Overwrite robots.txt
+                command: |
+                  cp ./public/robots-dev.txt ./public/robots.txt
       - run:
           name: Deploy to cloud.gov
           command: |
