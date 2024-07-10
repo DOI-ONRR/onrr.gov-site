@@ -17,4 +17,4 @@ workflows:
           mapping: |
             cms/.* .circleci/cms-config.yml
             frontend/.* .circleci/frontend-config.yml
-            .* run-copy-database << pipeline.parameters.run-copy-database >> ./circleci/database-config.yml
+            .* ./circleci/database-config.yml
