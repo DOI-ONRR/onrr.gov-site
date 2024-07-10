@@ -12,8 +12,8 @@ workflows:
   generate-config:
     jobs:
       - path-filtering/filter:
-          base-revision: main
+          base-revision: << pipeline.git.branch >>
           name: check-updated-files
           mapping: |
-            cms/.* .circleci/cms-config.yml
-            frontend/.* .circleci/frontend-config.yml
+            cms/.* any .circleci/cms-config.yml
+            frontend/.* any .circleci/frontend-config.yml
