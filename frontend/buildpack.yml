@@ -1,3 +1,5 @@
 ---
 nginx:
   version: mainline
+  plaintext_env_vars:
+    - "CMS_URL"

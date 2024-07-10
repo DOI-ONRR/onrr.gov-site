@@ -4,6 +4,8 @@ node_modules/
 cms/docker-compose.yml
 cms/.env
 cms/Dockerfile
+cms/extensions/*
+cms/src/extensions/**/dist/
 
 editorjs/node_modules
 editorjs/editorjs
@@ -12,3 +14,4 @@ editorjs/*.tgz
 editorjs/*.zip
 
 frontend/.env.*
+frontend/dist/*

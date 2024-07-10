@@ -1,16 +1,17 @@
 <template>
-  <component :is="blockStyle === 'unordered' ? 'ul' : 'ol'">
-    <li
-    v-for="(item, i) in content"
-    :key="i">
-      <span v-html="item"></span>
-    </li>
+  <component :is="block.data.style === 'unordered' ? 'ul' : 'ol'">
+    <list-item v-for="(item, i) in block.data.items"
+      :content="item.content" :items="item.items" :listStyle="block.data.style" :key="i"/>
   </component>
 </template>
 
 <script>
+import ListItem from './ListItem.vue';
 export default {
   name: 'ListBlock',
+  components: {
+    ListItem
+  },
   data() {
     return {}
   },
@@ -18,14 +19,6 @@ export default {
     block: {
       type: [Object]
     },
-  },
-  computed: {
-    blockStyle() {
-      return this.block.data.style
-    },
-    content() {
-      return this.block.data.items
-    }
   }
 }
 </script>

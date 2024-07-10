@@ -40,5 +40,34 @@ export const iconMixin = {
         }
         return type;
       },
+      fileIconClass(filename) {
+        const match = filename.toLowerCase().match(/\.([^.]+)$/);
+        let iconClass = "";
+        switch (match[1]) {
+          case "pdf":
+            iconClass = "onrr-link-pdf";
+            break;
+    
+          case "pptx":
+            iconClass = "onrr-link-powerpoint";
+            break;
+    
+          case "docx":
+            iconClass = "onrr-link-word";
+            break;
+    
+          case "xlsx":
+            iconClass = "onrr-link-excel";
+            break;
+    
+          case "txt":
+            iconClass = "onrr-link-text";
+            break;
+    
+          default:
+            break;
+        }
+        return iconClass;
+      }
     }
   }

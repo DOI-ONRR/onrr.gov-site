@@ -1,0 +1,32 @@
+.ce-inline-toolbar {
+    width: 403px;
+}
+
+.ce-link-autocomplete__search-item {
+    margin-bottom: 3px !important;
+    padding: 4px 5px !important;
+    width: 388px;
+}
+
+.ce-link-autocomplete__actions-wrapper,
+.ce-link-autocomplete__items {
+    width: 400px;
+}
+
+.ce-link-autocomplete__field-input,
+.ce-link-autocomplete__search-item-name {
+    font-size: 12px;
+}
+
+.ce-link-autocomplete__search-item-file {
+    font-size: 12px;
+    margin-top: 0.15rem;
+    color: #526d87;
+}
+
+.ce-link-autocomplete__link-data-wrapper,
+.ce-link-autocomplete__link-data-title-wrapper,
+.ce-link-autocomplete__link-data-name,
+.ce-link-autocomplete__link-data-description {
+    width: 400px;
+}

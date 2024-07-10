@@ -48,6 +48,7 @@ export default {
 <style>
 /* shared table styles */
 @import '@/scss/tables.scss';
+@import '@/scss/onrr.scss';
 
 #app .home-content a:visited,
 #app .page-wrap a:visited {
@@ -69,6 +70,10 @@ export default {
   font-weight: bold;
   color: black !important; 
   /* shouldn't have to do this, need to figure out correct method https://vuetifyjs.com/en/api/v-breadcrumbs/ */
+}
+
+.theme--light.v-breadcrumbs .v-breadcrumbs__divider {
+  color: #767676 !important; 
 }
 
 .v-icon.mdi-file-pdf-box {

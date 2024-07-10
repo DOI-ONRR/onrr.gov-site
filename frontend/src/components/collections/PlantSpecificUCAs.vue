@@ -30,10 +30,10 @@
                   {{ item.transportation_system_or_gas_plant }}
                 </div>
                 <div v-else>
-                  <a :href="`/unbundling/${ item.file.filename_download }`" target="_blank">
+                  <a :href="`/unbundling/${ item.file.filename_download }`" target="_blank"
+                    :class="fileIconClass(item.file.filename_download)">
                     {{ item.transportation_system_or_gas_plant }}
                   </a>
-                  <v-icon color="secondary">{{ fileIcon(item.file.type) }}</v-icon>
                 </div>
             </template>
             <template v-slot:[`item.doc_date`]="{ item }">
@@ -47,7 +47,7 @@
 <script>
 import { 
   dateMixin,
-  iconMixin
+  iconMixin,
 } from '@/mixins'
 const TextField = () => import(/* webpackChunkName: "TextField" */ '@/components/inputs/TextField')
 export default {

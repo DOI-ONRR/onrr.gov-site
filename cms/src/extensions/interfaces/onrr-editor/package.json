@@ -1,0 +1,77 @@
+{
+	"name": "onrr-editor",
+	"description": "Interface extension based on Editor.js",
+	"icon": "extension",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-interface"
+	],
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "interface",
+		"path": "dist/index.js",
+		"source": "src/index.js",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-editor/dist; cp package.json ../../../../extensions/directus-extension-onrr-editor; cp dist/index.js ../../../../extensions/directus-extension-onrr-editor/dist",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"serve": "vue-cli-service serve"
+	},
+	"dependencies": {
+		"@directus/sdk": "^16.0.0",
+		"@editorjs/code": "^2.9.0",
+		"@editorjs/editorjs": "^2.28.2",
+		"@editorjs/header": "^2.8.1",
+		"@editorjs/image": "^2.9.0",
+		"@editorjs/link-autocomplete": "^0.1.0",
+		"@editorjs/nested-list": "^1.4.2",
+		"@editorjs/paragraph": "^2.11.4",
+		"@editorjs/quote": "^2.6.0",
+		"@editorjs/table": "^2.3.0",
+		"codex-notifier": "^1.1.2",
+		"core-js": "^3.8.3",
+		"cors": "^2.8.5",
+		"editorjs-hyperlink": "^1.0.6",
+		"editorjs-text-color-plugin": "^2.0.4",
+		"vuetify": "^3.5.17"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.12.16",
+		"@babel/eslint-parser": "^7.12.16",
+		"@directus/extensions-sdk": "11.0.3",
+		"@vue/cli-plugin-babel": "~5.0.0",
+		"@vue/cli-plugin-eslint": "~5.0.0",
+		"@vue/cli-service": "~5.0.0",
+		"dotenv": "^16.4.5",
+		"eslint": "^7.32.0",
+		"eslint-plugin-vue": "^8.0.3",
+		"vue": "^3.4.26"
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true
+		},
+		"extends": [
+			"plugin:vue/vue3-essential",
+			"eslint:recommended"
+		],
+		"parserOptions": {
+			"parser": "@babel/eslint-parser"
+		},
+		"rules": {}
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not dead",
+		"not ie 11"
+	]
+}

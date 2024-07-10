@@ -6,9 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --no-clean",
     "clean": "vue-cli-service build --clean",
-    "dev": "vue-cli-service build --clean --mode development",
+    "build:dev": "vue-cli-service build --clean --mode development",
     "staging": "vue-cli-service build --clean --mode staging",
-    "production": "vue-cli-service build --clean  --mode production",
+    "build:deploy": "vue-cli-service build --clean  --mode production",
     "build-fragment": "node src/js/possibleTypes.js",
     "lint": "vue-cli-service lint"
   },
