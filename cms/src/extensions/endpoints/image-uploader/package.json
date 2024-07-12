@@ -1,0 +1,34 @@
+{
+	"name": "file-uploader",
+	"description": "Endpoint extension for handling image uploads",
+	"icon": "extension",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-endpoint"
+	],
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "endpoint",
+		"path": "dist/index.js",
+		"source": "src/index.js",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-image-uploader/dist; cp package.json ../../../../extensions/directus-extension-image-uploader; cp dist/index.js ../../../../extensions/directus-extension-image-uploader/dist",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"build-local": "directus-extension build; cp ./dist/index.js ../../../../extensions/directus-extension-image-uploader/dist; docker restart directus"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "11.0.3"
+	},
+	"dependencies": {
+		"@directus/sdk": "^15.1.0",
+		"busboy": "^1.6.0",
+		"form-data": "^4.0.0"
+	}
+}

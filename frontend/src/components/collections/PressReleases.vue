@@ -9,11 +9,8 @@
           class="pa-0"
           target="_blank"
         >
-          <v-list-item-icon class="mr-1">
-            <v-icon color="secondary">mdi-file-pdf-box</v-icon>
-          </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" class="secondary--text text-body-1 text-wrap text-decoration-underline"></v-list-item-title>
+            <v-list-item-title v-text="item.title" class="secondary--text text-body-1 text-wrap text-decoration-underline onrr-link-pdf"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -58,12 +55,11 @@
                 </v-list-item-subtitle>
                 <div class="mb-2 text-body-1" v-if="item.excerpt" v-html="item.excerpt"></div>
                 <div v-if="fileLink(`${ API }/press-releases/`, item)">
-        <a :href="fileLink(`${ API }/press-releases/`, item)"
-        @click="trackDownloads(item)"
-          target="_blank">View press release document
-
-
-        </a><v-icon color="secondary">mdi-file-pdf-box</v-icon></div>
+                  <a :href="fileLink(`${ API }/press-releases/`, item)"
+                    @click="trackDownloads(item)"
+                    class="onrr-link-pdf"
+                    target="_blank">View press release document</a>
+                </div>
               </v-list-item-content>
             </v-list-item>
         </v-card>

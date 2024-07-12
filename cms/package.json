@@ -1,7 +1,7 @@
 {
   "name": "cms",
-  "version": "1.0.0",
-  "author": "Mojo Nichols <mojo.nichols@onrr.gov>",
+  "version": "2.0.0",
+  "author": "Mojo Nichols <mojo.nichols@onrr.gov>, Jeff Schwartz <jeffrey.schwartz@onrr.gov>",
   "description": "Directus CMS",
   "scripts": {
     "update": "CONFIG_PATH='/../../.env' npx directus database migrate:latest",
@@ -9,11 +9,23 @@
     "bootstrap": "CONFIG_PATH='../../.env' directus bootstrap",
     "start": "CONFIG_PATH='../../.env' npx directus start",
     "schema": "CONFIG_PATH='../../.env'npx directus schema snapshot /tmp/directus_schema",
-    "start:windows": "set CONFIG_PATH='../../.env' && npx directus start"
+    "start:windows": "set CONFIG_PATH='../../.env' && npx directus start",
+    "build:onrr-editor": "cd src/extensions/interfaces/onrr-editor; npm run build",
+    "build:link-autocomplete": "cd src/extensions/endpoints/link-autocomplete; npm run build",
+    "build:document": "cd src/extensions/endpoints/document; npm run build",
+    "build:image-uploader": "cd src/extensions/endpoints/image-uploader; npm run build",
+    "build:press-releases": "cd src/extensions/endpoints/press-releases; npm run build",
+    "build:reporter-letters": "cd src/extensions/endpoints/reporter-letters; npm run build",
+    "build:unbundling": "cd src/extensions/endpoints/unbundling; npm run build",
+    "build:index-zones": "cd src/extensions/hooks/index-zones; npm run build",
+    "build:indian-gas-major-portion": "cd src/extensions/hooks/indian-gas-major-portion; npm run build",
+    "build:ibmp": "cd src/extensions/hooks/ibmp; npm run build",
+    "build:nymex": "cd src/extensions/hooks/nymex; npm run build",
+    "build:all": "npm run build:onrr-editor; npm run build:link-autocomplete; npm run build:document; npm run build:image-uploader; npm run build:press-releases; npm run build:reporter-letters; npm run build:unbundling; build:index-zones; npm run build:indian-gas-major-portion; npm run build:ibmp; npm run build:nymex"
   },
   "engines": {
-    "node": "18.x",
-    "npm": "9.x"
+    "node": "18.20.3",
+    "npm": "10.8.1"
   },
   "dependencies": {
     "axios": "^0.27.2",

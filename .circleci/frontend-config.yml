@@ -1,0 +1,81 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.2.0
+
+executors:
+  frontend:
+    resource_class: xlarge
+    docker:
+      - image: cimg/base:stable
+
+parameters:
+  run-build-frontend:
+    type: boolean
+    default: false
+
+workflows:
+  build-frontend:
+    when: << pipeline.parameters.run-build-frontend >>
+    jobs: 
+      - install-node-deps-frontend
+      - build-frontend-app:
+          context:
+            - org-global
+          requires:
+            - install-node-deps-frontend
+      - deploy-frontend:
+          context:
+            - org-global
+          requires: 
+            - build-frontend-app
+
+jobs:
+  install-node-deps-frontend:
+    executor: frontend
+    steps:
+      - checkout
+      - node/install:
+          node-version: '18.17.0'
+      - node/install-packages:
+          cache-version: v1
+          app-dir: frontend
+      - persist_to_workspace:
+          root: ~/project
+          paths: 
+            - .
+  build-frontend-app:
+    resource_class: xlarge
+    docker:
+      - image: cimg/node:18.17.0
+    working_directory: frontend
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build frontend
+          command: |
+            npm run build:deploy
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./frontend/dist
+  deploy-frontend:
+    executor: frontend
+    working_directory: frontend
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - when:
+          condition:
+            equal: [ dev, << pipeline.git.branch >> ]
+          steps:
+            - run:
+                name: Overwrite robots.txt
+                command: |
+                  cp ./public/robots-dev.txt ./public/robots.txt
+      - run:
+          name: Deploy to cloud.gov
+          command: |
+            chmod +x ~/project/.circleci/scripts/deploy.sh
+            ~/project/.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH"

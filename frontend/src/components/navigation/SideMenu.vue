@@ -1,7 +1,8 @@
 <template>
   <div class="side-menu-wrap" ref="sideMenu">
-    <v-list class="pa-0" v-if="!isMobile">
+    <v-list class="pa-0" v-if="!isMobile" role="menu">
       <v-list-item 
+        role="menuitem"
         link
         exact
         :to="`${ parentUrl }`">
@@ -9,6 +10,7 @@
       </v-list-item>
       <div v-for="item in sideMenuItems" :key="item.id">
         <v-list-item 
+          role="menuitem"
           link
           active-class="active"
           v-for="cItem in item.menu_children" 

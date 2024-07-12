@@ -1,0 +1,30 @@
+{
+	"name": "link-autocomplete",
+	"description": "Endpoint extension used in Editor.js for inline links.",
+	"icon": "extension",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-endpoint"
+	],
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "endpoint",
+		"path": "dist/index.js",
+		"source": "src/index.js",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-link-autocomplete/dist; cp package.json ../../../../extensions/directus-extension-link-autocomplete; cp dist/index.js ../../../../extensions/directus-extension-link-autocomplete/dist",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"dist": "directus-extension build; cp ./dist/index.js ../../../../extensions/directus-extension-link-autocomplete/dist; docker restart directus"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "11.0.3"
+	}
+}

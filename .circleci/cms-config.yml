@@ -1,0 +1,94 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.2.0
+
+executors:
+  cms:
+    docker:
+      - image: cimg/base:stable
+
+parameters:
+  run-build-cms:
+    type: boolean
+    default: false
+
+workflows:
+  build-cms:
+    when: << pipeline.parameters.run-build-cms >>
+    jobs: 
+      - install-node-deps-cms:
+          context:
+            - org-global
+      - build-cms-extensions:
+          requires:
+            - install-node-deps-cms
+          context:
+            - org-global
+      - deploy-cms:
+          requires: 
+            - build-cms-extensions
+          context:
+            - org-global
+
+jobs:
+  install-node-deps-cms:
+    executor: cms
+    steps:
+      - checkout
+      - node/install:
+          node-version: '18.16.0'
+      - node/install-packages:
+          app-dir: cms
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/document
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/image-uploader
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/link-autocomplete
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/press-releases
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/reporter-letters
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/unbundling
+      - node/install-packages:
+          app-dir: cms/src/extensions/hooks/index-zones
+      - node/install-packages:
+          app-dir: cms/src/extensions/hooks/indian-gas-major-portion
+      - node/install-packages:
+          app-dir: cms/src/extensions/hooks/ibmp
+      - node/install-packages:
+          app-dir: cms/src/extensions/hooks/nymex
+      - node/install-packages:
+          app-dir: cms/src/extensions/interfaces/onrr-editor
+      - persist_to_workspace:
+          root: ~/project
+          paths: 
+            - .
+  build-cms-extensions:
+    docker:
+      - image: cimg/node:18.17.0
+    working_directory: cms
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build extensions from source
+          command: |
+            npm run build:all
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - ./cms/extensions/*
+  deploy-cms:
+    executor: cms
+    working_directory: cms
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Deploy to cloud.gov
+          command: |
+            chmod +x ~/project/.circleci/scripts/deploy.sh
+            ~/project/.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH"
