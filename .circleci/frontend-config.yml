@@ -10,6 +10,9 @@ executors:
       - image: cimg/base:stable
 
 parameters:
+  copy-database:
+    type: boolean
+    default: false
   run-build-frontend:
     type: boolean
     default: false
