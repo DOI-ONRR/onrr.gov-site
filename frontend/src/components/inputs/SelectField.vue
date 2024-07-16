@@ -38,6 +38,22 @@ export default {
     },
     created() {
         this.$emit('fields', this.field)
+    },
+    mounted: function() {
+        this.$nextTick(function() {
+            // Vuetify is adding readonly="readonly" without specifiying readonly.
+            // The code below is a fix so that ANDI doesn't flag readonly and aria-readonly
+            // mismatches as violations.
+            const el = this.$refs[this.field.ref].$el
+            if (!el) return;
+            const input = el.querySelector('input')
+            if (input.hasAttribute('readonly')) {
+                input.removeAttribute('readonly')
+            }
+            if (input.hasAttribute('aria-readonly')) {
+                input.removeAttribute('aria-readonly')
+            }
+        })
     }
 
 }
