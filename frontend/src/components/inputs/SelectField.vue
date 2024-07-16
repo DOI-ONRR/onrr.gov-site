@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-select
+            aria-readonly="true"
             outlined
             dense
             v-model="field.selected"
@@ -38,15 +39,7 @@ export default {
     },
     created() {
         this.$emit('fields', this.field)
-    },
-    // watch: {
-    //     'fields.selected': function(newVal) {
-    //         if (newVal === null) {
-    //             const query = { path: this.$route.fullPath, ...this.$route.query, query: params }
-    //             this.$router.remove(query).catch(() => {})
-    //         }
-    //     }
-    // }
+    }
 
 }
 </script>
