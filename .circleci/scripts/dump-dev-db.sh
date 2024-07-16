@@ -12,10 +12,10 @@ cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s
 
 cf install-plugin -f https://github.com/cloud-gov/cf-service-connect/releases/download/1.1.0/cf-service-connect-linux-amd64
 
-bash ./scripts/tunnel.sh dev-onrr-psql dev-onrr-cms
+bash ~/project/.circleci/scripts/tunnel.sh dev-onrr-psql dev-onrr-cms
 
-source ../../.tunnelrc
+source ~/.tunnelrc
 
 pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $s?
 
-return 0
+exit 0

@@ -10,10 +10,10 @@ INTERFACE=$2
 : ${INTERFACE:=$HASURA}
 echo "Starting tunnel to $DB_ENV "
 echo "cf connect-to-service -no-client $INTERFACE $DB_ENV"
-cf connect-to-service -no-client $INTERFACE $DB_ENV > ../../.creds &
+cf connect-to-service -no-client $INTERFACE $DB_ENV > ~/.creds &
 PID=$!
 
-while ! grep "Leave" ../../.creds > /dev/null;
+while ! grep "Leave" ~/.creds > /dev/null;
 do
     echo "waiting for tunnel....."
     sleep 2
@@ -22,13 +22,13 @@ done
 
 PGID=$()
 
-Port=`cat ../../.creds | grep Port: | cut -d ' ' -f2 |  tr -d '\n'`
-Host=`cat ../../.creds | grep Host: | cut -d ' ' -f2 |  tr -d '\n'`
-Username=`cat ../../.creds | grep Username: | cut -d ' ' -f2 |  tr -d '\n'`
-Password=`cat ../../.creds | grep Password: | cut -d ' ' -f2 |  tr -d '\n'`
-Name=`cat ../../.creds | grep Name: | cut -d ' ' -f2 |  tr -d '\n'`
+Port=`cat ~/.creds | grep Port: | cut -d ' ' -f2 |  tr -d '\n'`
+Host=`cat ~/.creds | grep Host: | cut -d ' ' -f2 |  tr -d '\n'`
+Username=`cat ~/.creds | grep Username: | cut -d ' ' -f2 |  tr -d '\n'`
+Password=`cat ~/.creds | grep Password: | cut -d ' ' -f2 |  tr -d '\n'`
+Name=`cat ~/.creds | grep Name: | cut -d ' ' -f2 |  tr -d '\n'`
 
-cat <<EOF > ../../.tunnelrc
+cat <<EOF > ~/.tunnelrc
 export Host=$Host
 export Port=$Port
 export Username=$Username
@@ -43,7 +43,7 @@ chmod 0600 ~/.pgpass
 echo "Tunnel and variables established to use on command line type"
 echo
 echo "to use variables:"
-echo "source ../../.tunnelrc"
+echo "source ~/.tunnelrc"
 echo "To use:"
 echo
 echo "psql postgres://\$Username:\$Password@\$Host:\$Port/\$Name -c '<command>'"
