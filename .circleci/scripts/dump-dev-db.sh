@@ -18,4 +18,4 @@ source ~/.tunnelrc
 
 pg_dump --user=$Username --host=$Host --port=$Port --dbname=$Name --verbose --no-acl --no-owner -Fc > /tmp/onrr_database_backup.pg | echo $s?
 
-return 0
+exit 0

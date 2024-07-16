@@ -8,4 +8,4 @@ source ~/.tunnelrc
 
 pg_restore --user=$Username --host=$Host --port=$Port --clean  --no-owner --no-acl --dbname=$Name --no-password /tmp/onrr_database_backup.pg || echo $?
 
-return 0
+exit 0
