@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-select
-            aria-readonly="true"
             outlined
             dense
             v-model="field.selected"
