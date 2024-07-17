@@ -49,9 +49,11 @@
             solo-inverted
             name="query"
             dense
-            label="Search"
             prepend-inner-icon="mdi-magnify"
             class="search-input">
+            <template v-slot:label>
+              <span class="search-label">Search</span>
+            </template>
           </v-text-field>
   </form>
         </li>
@@ -136,5 +138,9 @@ export default {
 
 .search-input.v-input--is-focused .v-icon {
   color: var(--v-secondary-base) !important;
+}
+
+.search-label {
+  color: #f3f3f8 !important;
 }
 </style>
