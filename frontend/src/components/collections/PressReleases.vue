@@ -15,10 +15,7 @@
         </v-list-item>
       </v-list>
       <div class="text-center">
-        <v-btn
-          color="secondary"
-          href="/about/public-affairs"
-          class="mx-auto">View All</v-btn>
+        <a href="/about/public-affairs" class="usa-button">View All</a>
       </div>
     </div>
     <div v-if="collectionLayout === 'full'">

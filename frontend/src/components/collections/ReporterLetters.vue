@@ -15,10 +15,7 @@
         </v-list-item>
       </v-list>
       <div class="text-center">
-        <v-btn
-          color="secondary"
-          :href="viewAllLink"
-          class="mx-auto">View All</v-btn>
+        <a :href="viewAllLink" class="usa-button">View All</a>
       </div>
     </div>
     <div v-if="collectionLayout === 'full'">
