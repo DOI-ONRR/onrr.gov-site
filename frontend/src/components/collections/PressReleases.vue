@@ -15,7 +15,7 @@
         </v-list-item>
       </v-list>
       <div class="text-center">
-        <a href="/about/public-affairs" class="usa-button">View All</a>
+        <a href="/about/public-affairs" class="usa-button">View All Press Releases</a>
       </div>
     </div>
     <div v-if="collectionLayout === 'full'">

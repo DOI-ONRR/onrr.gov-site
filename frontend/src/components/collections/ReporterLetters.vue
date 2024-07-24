@@ -15,7 +15,7 @@
         </v-list-item>
       </v-list>
       <div class="text-center">
-        <a :href="viewAllLink" class="usa-button">View All</a>
+        <a :href="viewAllLink" class="usa-button">View All Reporter Letters</a>
       </div>
     </div>
     <div v-if="collectionLayout === 'full'">
