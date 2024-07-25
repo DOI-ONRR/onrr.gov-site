@@ -6,12 +6,12 @@
                     <button
                     type="button"
                     class="usa-accordion__button"
-                    :aria-controls="`panel-content-${i}`"
+                    :aria-controls="`panel-content-${block.uuid}`"
                     >
                     {{ block.item.block_label }}
                     </button>
                 </h3>
-                <div :id="`panel-content-${i}`" class="usa-accordion__content usa-prose" :key="i">
+                <div :id="`panel-content-${block.uuid}`" class="usa-accordion__content usa-prose" :key="i">
                     <LayoutBlock :layoutBlocks="block.panelBlocks"></LayoutBlock>
                 </div>
             </template>
@@ -24,6 +24,7 @@
 import { formatToSlug } from '@/js/utils'
 import accordion from "@uswds/uswds/js/usa-accordion";
 const LayoutBlock = () => import(/* webpackChunkName: "LayoutBlock" */ '@/components/blocks/LayoutBlock')
+const { v4: uuidv4 } = require('uuid')
 
 import { 
   pageBlockMixin,
@@ -89,7 +90,8 @@ export default {
                     }
                 }
             })
-            return blockItems
+
+            return blockItems.map(item => ({ ...item, uuid: uuidv4()}))
         },
         openedPanel() {
             const defaultBlockId = this.block.item.open_by_default?.id
