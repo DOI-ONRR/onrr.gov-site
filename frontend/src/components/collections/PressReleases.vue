@@ -56,7 +56,7 @@
                   <a :href="fileLink(`${ API }/press-releases/`, item)"
                     @click="trackDownloads(item)"
                     class="onrr-link-pdf"
-                    target="_blank">View press release document</a>
+                    target="_blank">View press release document <span class="usa-sr-only">dated {{ getFullDate(item.date) }}</span></a>
                 </div>
               </v-list-item-content>
             </v-list-item>
