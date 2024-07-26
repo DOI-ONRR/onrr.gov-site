@@ -33,7 +33,7 @@ export default {
 <style scoped>
 ol {
   counter-reset: item;
-  list-style: square;
+  list-style: none;
 }
 
 ol > li {
