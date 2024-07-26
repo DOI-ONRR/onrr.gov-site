@@ -1,16 +1,14 @@
 <template>
-  <component :is="block.data.style === 'unordered' ? 'ul' : 'ol'">
-    <list-item v-for="(item, i) in block.data.items"
-      :content="item.content" :items="item.items" :listStyle="block.data.style" :key="i"/>
-  </component>
+  <nested-list :items="block.data.items" :listType="block.data.style" />
 </template>
 
 <script>
-import ListItem from './ListItem.vue';
+import NestedList from './NestedList.vue';
+
 export default {
   name: 'ListBlock',
   components: {
-    ListItem
+    NestedList
   },
   data() {
     return {}
