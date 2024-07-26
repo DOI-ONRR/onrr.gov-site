@@ -2,7 +2,7 @@
     <component :is="listType === 'unordered' ? 'ul' : 'ol'">
         <li v-for="item in items" :key="getKey(item)">
             <div v-html="item.content"></div>
-            <NestedList v-if="item.items" :items="item.items" :listType="listType" />
+            <NestedList v-if="item.items && item.items.length > 0" :items="item.items" :listType="listType" />
         </li>
     </component>
 </template>
