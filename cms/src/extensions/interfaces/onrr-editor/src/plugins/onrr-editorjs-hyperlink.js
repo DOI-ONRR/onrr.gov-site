@@ -29,4 +29,151 @@ export class OnrrHyperlink extends Hyperlink {
         this.nodes.button.appendChild(this.iconSvg('unlink', 24, 24));
         return this.nodes.button;
     }
+
+    renderActions() {
+      this.nodes.wrapper = document.createElement('div');
+      this.nodes.wrapper.classList.add(this.CSS.wrapper);
+
+      // Input
+      this.nodes.input = document.createElement('input');
+      this.nodes.input.placeholder = 'https://...';
+      this.nodes.input.classList.add(this.CSS.input);
+
+      let i;
+
+      // Target
+      this.nodes.selectTarget = document.createElement('select');
+      this.nodes.selectTarget.classList.add(this.CSS.selectTarget);
+      this.addOption(this.nodes.selectTarget, this.i18n.t('Select target'), '');
+      for (i=0; i<this.targetAttributes.length; i++) {
+          this.addOption(this.nodes.selectTarget, this.targetAttributes[i], this.targetAttributes[i]);
+      }
+
+      if(!!this.config.target) {
+          if(this.targetAttributes.length === 0) {
+              this.addOption(this.nodes.selectTarget, this.config.target, this.config.target);
+          }
+
+          this.nodes.selectTarget.value = this.config.target;
+      }
+
+      // Rel
+      this.nodes.selectRel = document.createElement('select');
+      this.nodes.selectRel.classList.add(this.CSS.selectRel);
+      this.addOption(this.nodes.selectRel, this.i18n.t('Select rel'), '');
+      for (i=0; i<this.relAttributes.length; i++) {
+          this.addOption(this.nodes.selectRel, this.relAttributes[i], this.relAttributes[i]);
+      }
+
+      if(!!this.config.rel) {
+          if(this.relAttributes.length === 0) {
+              this.addOption(this.nodes.selectTarget, this.config.rel, this.config.rel);
+          }
+
+          this.nodes.selectRel.value = this.config.rel;
+      }
+
+      // Button
+      this.nodes.buttonSave = document.createElement('button');
+      this.nodes.buttonSave.type = 'button';
+      this.nodes.buttonSave.classList.add(this.CSS.buttonSave);
+      this.nodes.buttonSave.innerHTML = this.i18n.t('Save');
+      this.nodes.buttonSave.addEventListener('click', (event) => {
+          this.savePressed(event);
+      });
+
+      // Link button toggle
+      this.nodes.linkButtonToggleWrapper = document.createElement('div');
+      this.nodes.linkButtonToggleWrapper.classList.add('link-button-toggle');
+
+      this.nodes.linkButtonToggle = document.createElement('input');
+      this.nodes.linkButtonToggle.type = 'checkbox';
+      this.nodes.linkButtonToggle.id = 'linkButton'
+      
+      this.nodes.linkButtonToggleLabel = document.createElement('label');
+      this.nodes.linkButtonToggleLabel.setAttribute('for', 'linkButton');
+      this.nodes.linkButtonToggleLabel.textContent = 'Style as button';
+
+      this.nodes.linkButtonToggleWrapper.appendChild(this.nodes.linkButtonToggle);
+      this.nodes.linkButtonToggleWrapper.appendChild(this.nodes.linkButtonToggleLabel);
+
+      // append
+      this.nodes.wrapper.appendChild(this.nodes.input);
+
+      if(!!this.targetAttributes && this.targetAttributes.length > 0) {
+          this.nodes.wrapper.appendChild(this.nodes.selectTarget);
+      }
+
+      if(!!this.relAttributes && this.relAttributes.length > 0) {
+          this.nodes.wrapper.appendChild(this.nodes.selectRel);
+      }
+
+      this.nodes.wrapper.appendChild(this.nodes.linkButtonToggleWrapper);
+
+      this.nodes.wrapper.appendChild(this.nodes.buttonSave);
+
+      return this.nodes.wrapper;
+  }
+
+  savePressed(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    let value = this.nodes.input.value || '';
+    let target = this.nodes.selectTarget.value || '';
+    let rel = this.nodes.selectRel.value || '';
+
+    if (!value.trim()) {
+        this.selection.restore();
+        this.unlink();
+        event.preventDefault();
+        this.closeActions();
+    }
+
+    if (!!this.config.validate && !!this.config.validate === true && !this.validateURL(value)) {
+        this.tooltip.show(this.nodes.input, 'The URL is not valid.', {
+            placement: 'top',
+        });
+        setTimeout(() => {
+            this.tooltip.hide();
+        }, 1000);
+        return;
+    }
+
+    value = this.prepareLink(value);
+
+    this.selection.restore();
+    this.selection.removeFakeBackground();
+
+    this.insertLink(value, target, rel, this.nodes.linkButtonToggle.checked);
+
+    this.selection.collapseToEnd();
+    this.inlineToolbar.close();
+  }
+
+  insertLink(link, target='', rel='', checked=false) {
+    let anchorTag = this.selection.findParentTag('A');
+    if (anchorTag) {
+        this.selection.expandToTag(anchorTag);
+    }else{
+        document.execCommand(this.commandLink, false, link);
+        anchorTag = this.selection.findParentTag('A');
+    }
+    if(anchorTag) {
+        if(!!target) {
+            anchorTag['target'] = target;
+        }else{
+            anchorTag.removeAttribute('target');
+        }
+        if(!!rel) {
+            anchorTag['rel'] = rel;
+        }else{
+            anchorTag.removeAttribute('rel');
+        }
+        if(checked) {
+          anchorTag.classList.add('usa-button');
+        }
+    }
+  }
 }
