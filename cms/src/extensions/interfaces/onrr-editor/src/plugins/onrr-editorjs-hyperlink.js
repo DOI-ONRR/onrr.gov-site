@@ -124,20 +124,13 @@ export class OnrrHyperlink extends Hyperlink {
     let target = this.nodes.selectTarget.value || '';
     let rel = this.nodes.selectRel.value || '';
 
-    if (!value.trim()) {
-        this.selection.restore();
-        this.unlink();
-        event.preventDefault();
-        this.closeActions();
-    }
-
-    if (!!this.config.validate && !!this.config.validate === true && !this.validateURL(value)) {
+    if (!!!value || !this.validateURL(value)) {
         this.tooltip.show(this.nodes.input, 'The URL is not valid.', {
             placement: 'top',
         });
         setTimeout(() => {
             this.tooltip.hide();
-        }, 1000);
+        }, 3000);
         return;
     }
 
