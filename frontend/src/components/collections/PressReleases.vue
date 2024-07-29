@@ -45,7 +45,7 @@
                 <div class="font-weight-bold text-uppercase">{{ getMonth(item.date, 'short') }}</div>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title class="text-h5 mb-1 text-wrap">
+                <v-list-item-title class="text-h5 mb-1 text-wrap" tag="h3">
                   {{ item.title }} <v-chip v-if="item.status === 'archived'" small color="orange" outlined>{{ item.status }}</v-chip>
                 </v-list-item-title>
                 <v-list-item-subtitle class="mb-2 black--text">
