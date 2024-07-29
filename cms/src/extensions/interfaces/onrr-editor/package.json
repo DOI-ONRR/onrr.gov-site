@@ -39,6 +39,7 @@
 		"core-js": "^3.8.3",
 		"cors": "^2.8.5",
 		"editorjs-hyperlink": "^1.0.6",
+		"editorjs-text-alignment-blocktune": "^1.0.3",
 		"editorjs-text-color-plugin": "^2.0.4",
 		"vuetify": "^3.5.17"
 	},

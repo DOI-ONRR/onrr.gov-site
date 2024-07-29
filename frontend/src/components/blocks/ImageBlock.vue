@@ -77,7 +77,7 @@ export default {
     },
     alignmentClasses() {
       let classes = ''
-      switch (this.block?.tunes?.alignmentTune?.alignment) {
+      switch (this.block?.tunes?.textAlignmentTune?.alignment) {
         case 'left':
           classes = 'd-flex justify-start'
           break;

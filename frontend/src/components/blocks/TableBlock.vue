@@ -77,7 +77,7 @@ export default {
         if (this.rightAlignedIndexes.includes(idx)) {
           return 'text-right'
         } else {
-          return (this.block?.tunes?.alignmentTune?.alignment) ? `text-${ this.block?.tunes?.alignmentTune?.alignment }` : 'text-left'
+          return (this.block?.tunes?.textAlignmentTune?.alignment) ? `text-${ this.block?.tunes?.textAlignmentTune?.alignment }` : 'text-left'
         }
       }
     }

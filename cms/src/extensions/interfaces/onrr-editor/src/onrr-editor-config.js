@@ -10,6 +10,7 @@ import Table from '@editorjs/table';
 import ImageTool from './plugins/onrr-image-tool';
 import HorizontalRuleTool from './plugins/horizontal-rule';
 import CollectionsTool from './plugins/collections-tool';
+import { OnrrAlignmentBlockTune } from './plugins/onrr-editorjs-alignment-blocktune';
 
 export class OnrrEditorConfig {
     #config;
@@ -26,10 +27,12 @@ export class OnrrEditorConfig {
             data: config.data,
             tools: {
                 paragraph: {
-                    class: Paragraph
+                    class: Paragraph,
+                    tunes: ['textAlignmentTune']
                 },
                 header: {
-                    class: Header
+                    class: Header,
+                    tunes: ['textAlignmentTune']
                 },
                 list: {
                     class: OnrrNestedList,
@@ -47,6 +50,7 @@ export class OnrrEditorConfig {
                         picker: config.picker,
                         baseURL: config.baseURL
                     },
+                    tunes: ['textAlignmentTune']
                 },
                 table: {
                     class: Table,
@@ -54,7 +58,8 @@ export class OnrrEditorConfig {
                         rows: 2,
                         cols: 3,
                         withHeadings: true
-                    }
+                    },
+                    tunes: ['textAlignmentTune']
                 },
                 quote: {
                     class: Quote
@@ -99,6 +104,12 @@ export class OnrrEditorConfig {
                         queryParam: 'term' 
                     }
                 },
+                textAlignmentTune: {
+                    class: OnrrAlignmentBlockTune,
+                    config:{
+                        default: "left"
+                    },
+                }
             }
         }
     }
