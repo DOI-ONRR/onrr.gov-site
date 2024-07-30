@@ -1,6 +1,6 @@
 <template>
   <div class="side-menu-wrap" ref="sideMenu">
-    <v-list class="pa-0" v-if="!isMobile" role="menu">
+    <v-list class="pa-0" v-if="!isMobile && sideMenuItems.length > 0" role="menu">
       <v-list-item 
         role="menuitem"
         link
