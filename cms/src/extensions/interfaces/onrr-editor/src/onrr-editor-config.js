@@ -32,7 +32,8 @@ export class OnrrEditorConfig {
                 },
                 header: {
                     class: Header,
-                    tunes: ['textAlignmentTune']
+                    tunes: ['textAlignmentTune'],
+                    inlineToolbar: true
                 },
                 list: {
                     class: OnrrNestedList,
