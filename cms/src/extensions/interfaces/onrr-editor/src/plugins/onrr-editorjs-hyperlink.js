@@ -167,6 +167,9 @@ export class OnrrHyperlink extends Hyperlink {
         if(checked) {
           anchorTag.classList.add('usa-button');
         }
+        else {
+          anchorTag.classList.add('usa-link');
+        }
     }
   }
 }
