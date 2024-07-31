@@ -1,4 +1,5 @@
 import Hyperlink from 'editorjs-hyperlink'
+import { isExternalURL } from '../utils/link-utils'
 
 export class OnrrHyperlink extends Hyperlink {
     
@@ -168,7 +169,10 @@ export class OnrrHyperlink extends Hyperlink {
           anchorTag.classList.add('usa-button');
         }
         else {
-          anchorTag.classList.add('usa-link');
+            anchorTag.classList.add('usa-link');
+            if(isExternalURL(anchorTag.href)) {
+                anchorTag.classList.add('usa-link--external');
+            }
         }
     }
   }
