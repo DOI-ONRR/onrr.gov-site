@@ -10,6 +10,7 @@ const CollectionBlock = () => import(/* webpackChunkName: "CollectionBlock" */ '
 const HorizontalRuleBlock = () => import(/* webpackChunkName: "HorizontalRuleBlock" */ '@/components/blocks/HorizontalRuleBlock')
 const ExpansionPanelBlock = () => import(/* webpackChunkName: "ExpansionPanelBlock" */ '@/components/blocks/ExpansionPanelBlock')
 const CustomBlock = () => import(/* webpackChunkName: "CustomBlock" */ '@/components/blocks/CustomBlock')
+const FormulaBlock = () => import(/* webpackChunkName: "CardBlock" */ '@/components/blocks/FormulaBlock')
 
 
 export const pageBlockMixin = {
@@ -33,7 +34,8 @@ export const pageBlockMixin = {
     CollectionBlock,
     HorizontalRuleBlock,
     ExpansionPanelBlock,
-    CustomBlock
+    CustomBlock,
+    FormulaBlock
   },
   created() {
     // console.log('Hello from the pageBlockMixin!')
@@ -51,6 +53,9 @@ export const pageBlockMixin = {
           break
         case 'card_blocks':
           block = CardBlock
+          break
+        case 'formula_blocks':
+          block = FormulaBlock
           break
         case 'header':
         case 'paragraph':
