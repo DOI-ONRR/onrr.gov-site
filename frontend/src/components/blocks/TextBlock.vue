@@ -31,7 +31,7 @@ export default {
   computed: {
     textClass() {
       let textClass = ''
-      let alignmentClass = `text-${ this.block?.tunes?.textAlignmentTune?.alignment }` || 'text-left'
+      let alignmentClass = `text-${ this.block?.tunes?.alignmentTune?.alignment }` || 'text-left'
 
       switch (this.block.type) {
         case 'header':

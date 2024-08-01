@@ -28,11 +28,11 @@ export class OnrrEditorConfig {
             tools: {
                 paragraph: {
                     class: Paragraph,
-                    tunes: ['textAlignmentTune']
+                    tunes: ['alignmentTune']
                 },
                 header: {
                     class: Header,
-                    tunes: ['textAlignmentTune'],
+                    tunes: ['alignmentTune'],
                     inlineToolbar: true
                 },
                 list: {
@@ -51,7 +51,7 @@ export class OnrrEditorConfig {
                         picker: config.picker,
                         baseURL: config.baseURL
                     },
-                    tunes: ['textAlignmentTune']
+                    tunes: ['alignmentTune']
                 },
                 table: {
                     class: Table,
@@ -60,7 +60,7 @@ export class OnrrEditorConfig {
                         cols: 3,
                         withHeadings: true
                     },
-                    tunes: ['textAlignmentTune']
+                    tunes: ['alignmentTune']
                 },
                 quote: {
                     class: Quote
@@ -105,7 +105,7 @@ export class OnrrEditorConfig {
                         queryParam: 'term' 
                     }
                 },
-                textAlignmentTune: {
+                alignmentTune: {
                     class: OnrrAlignmentBlockTune,
                     config:{
                         default: "left"
