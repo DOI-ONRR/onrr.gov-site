@@ -19,14 +19,12 @@
 		"host": "^10.10.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-flow-tab-blocks/dist; cp package.json ../../../../extensions/directus-extension-flow-tab-blocks; cp dist/index.js ../../../../extensions/directus-extension-flow-tab-blocks/dist",
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-flows/dist; cp package.json ../../../../extensions/directus-extension-flows; cp dist/index.js ../../../../extensions/directus-extension-flows/dist",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link"
 	},
-	"devDependencies": {
-		"@directus/extensions-sdk": "11.0.9"
-	},
 	"dependencies": {
+		"@directus/extensions-sdk": "^12.0.0",
 		"deep-diff": "^1.0.2",
 		"graphql-request": "^7.1.0",
 		"winston": "^3.14.0"

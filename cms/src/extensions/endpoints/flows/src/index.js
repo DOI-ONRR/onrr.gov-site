@@ -5,13 +5,32 @@ import { createTabBlocksTabBlocks } from './utils/tabBlocksTabBlocks';
 import { logger } from "./utils/logger";
 import diff from 'deep-diff';
 
-export default (router, context) => {
-	const localEndpoint = context.env.DIRECTUS_EXTENSION_FLOWS_LOCAL_ENDPOINT;
-	const upstreamEndpoint = context.env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_ENDPOINT;
-	const authToken = context.env.DIRECTUS_EXTENSION_FLOWS_AUTH_TOKEN;
 
-	router.get('/tab-blocks/:id', async (req, res) => {
+export default (router, { services, exceptions, database, env }) => {
+	const localEndpoint = env.DIRECTUS_EXTENSION_FLOWS_LOCAL_ENDPOINT;
+	const upstreamEndpoint = env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_ENDPOINT;
+	const authToken = env.DIRECTUS_EXTENSION_FLOWS_AUTH_TOKEN;
+
+	const { AccountabilityService } = services;
+
+	router.post('/tab-blocks/:id', async (req, res, next) => {
+		logger.info(JSON.stringify(services, null, 2))
+		logger.info(JSON.stringify(exceptions, null, 2))
 		try {
+			const authHeader = req.headers.authorization;
+			if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                throw new Error('Authentication token is required');
+            }
+			const token = authHeader.split(' ')[1];
+
+			const accountabilityService = new AccountabilityService({ database });
+
+            const user = await accountabilityService.verifyToken(token);
+
+            if (!user) {
+                throw new Error('Invalid or expired token');
+            }
+
 			const id = req.params.id;
 			const lhs = await getTabBlocksById(id, localEndpoint)
 			const rhs = await getTabBlocksById(id, upstreamEndpoint)
@@ -86,12 +105,9 @@ export default (router, context) => {
 	});
 
 	router.use((err, req, res, next) => {
-		logger.error('Unhandled error in /flows', { error: err.message });
-	
 		res.status(500).json({
 		  status: 'error',
-		  message: err.message,
-		  ...({ stack: err.stack })
+		  message: err.message
 		});
 	});
 
