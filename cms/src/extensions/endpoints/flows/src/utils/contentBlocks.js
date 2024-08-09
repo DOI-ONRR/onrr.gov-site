@@ -1,8 +1,8 @@
-import { createTabBlocksTabBlocksItems } from "../queries/tabBlocksTabBlocks";
+import { createContentBlocksItem } from '../queries/contentBlocks';
 import { GraphQLClient } from "graphql-request";
 import { logger } from '../utils/logger';
 
-export async function createTabBlocksTabBlocks(data, endpoint, authToken) {
+export async function createContentBlock(data, endpoint, authToken) {
     try {
         const variables = {
             data: data,
@@ -12,10 +12,10 @@ export async function createTabBlocksTabBlocks(data, endpoint, authToken) {
                 authorization: `Bearer ${authToken}`
             }
         });
-        const response = await client.request(createTabBlocksTabBlocksItems, variables);
+        const response = await client.request(createContentBlocksItem, variables);
         logger.info(JSON.stringify(response, null, 2));
-        return response;
+        return response.create_content_blocks_item.id;
     } catch (error) {
-        logger.error("Error creating tab blocks tab blocks:", error);
+        logger.error("Error creating content block:", error);
     }
 }
