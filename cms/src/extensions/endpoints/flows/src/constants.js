@@ -16,6 +16,7 @@ export const CollectionTypes = {
     CARD_BLOCKS: 'card_blocks',
     CONTENT_BLOCKS: 'content_blocks',
     TAB_BLOCKS: 'tab_blocks',
+    TAB_BLOCK_LABEL: 'tab_block_label',
     EXPANSION_PANELS: 'expansion_panels',
     EXPANSION_PANEL_BLOCK_LABEL: 'expansion_panel_block_label'
 }

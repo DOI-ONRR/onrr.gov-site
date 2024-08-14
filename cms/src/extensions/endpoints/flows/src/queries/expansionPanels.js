@@ -51,6 +51,13 @@ query expansion_panel_block_label_by_id($id: ID!) {
     }
 }`;
 
+export const createExpansionPanelItemMutation = gql`
+mutation create_expansion_panels_item($item: create_expansion_panels_input!) {
+    create_expansion_panels_item(data: $item) {
+        id
+    }
+}`;
+
 export const createExpansionPanelBlockLabelItem = gql`
 mutation create_expansion_panel_block_label_item($data: create_expansion_panel_block_label_input!) {
     create_expansion_panel_block_label_item(data: $data) {

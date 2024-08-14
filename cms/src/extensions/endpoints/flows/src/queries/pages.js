@@ -23,11 +23,18 @@ query pages_by_id($id: ID!) {
     }
 }`;
 
-export const createPagesItem = gql`
+export const createPagesItemMutation = gql`
 mutation create_pages_item($data: create_pages_input!) {
     create_pages_item(
         data: $data
     ) {
+        id
+    }
+}`;
+
+export const createPagesPageBlocksItemsMutation = gql`
+mutation create_pages_page_blocks_items($items: [create_pages_page_blocks_input!]) {
+    create_pages_page_blocks_items(data: $items) {
         id
     }
 }`;

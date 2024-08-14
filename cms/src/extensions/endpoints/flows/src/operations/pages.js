@@ -1,6 +1,7 @@
 import { 
     pagesById as pagesByIdQuery, 
-    createPagesItem as createPagesItemQuery ,
+    createPagesItemMutation,
+    createPagesPageBlocksItemsMutation,
     pagesByIdFull as pagesByIdFullQuery,
     pagesPageBlocks as pagesPageBlocksQuery,
     pagesPageBlocksItemByPageBlockId
@@ -67,10 +68,28 @@ export async function createPagesItem(data, endpoint, authToken) {
                 authorization: `Bearer ${authToken}`
             }
         });
-        const response = await client.request(createPagesItemQuery, variables);
+        const response = await client.request(createPagesItemMutation, variables);
         return response.create_pages_item.id;
     } catch (error) {
         logger.error("Error creating pages item:", error);
         throw new Error('Error creating pages item. Check log files.')
+    }
+}
+
+export async function createPagesPageBlocksItems(data, endpoint, authToken) {
+    try {
+        const variables = {
+            items: data,
+        };
+        const client = new GraphQLClient(endpoint, {
+            headers: {
+                authorization: `Bearer ${authToken}`
+            }
+        });
+        const response = await client.request(createPagesPageBlocksItemsMutation, variables);
+        return response.create_pages_page_blocks_items;
+    } catch (error) {
+        logger.error("Error in createPagesPageBlocksItems:", error);
+        throw new Error('Error in createPagesPageBlocksItems. Check log files.')
     }
 }

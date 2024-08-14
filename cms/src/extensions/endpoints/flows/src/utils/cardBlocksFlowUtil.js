@@ -9,7 +9,7 @@ export async function run(id) {
         const previous = await getCardBlocksById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
         logger.info(`cardBlocksFlowUtil.run:\n ${JSON.stringify(changes, null, 2)}`);
-        if (changes.length === 0) {
+        if (!changes) {
             return {
                 id: id,
                 collection: CollectionTypes.CARD_BLOCKS,
@@ -18,8 +18,7 @@ export async function run(id) {
         }
         const firstChange = changes[0];
         if (firstChange.kind == 'E' && !firstChange.lhs) {
-            //const createdId = await createCardBlock(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
-            const createdId = id;
+            const createdId = await createCardBlock(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
             logger.info(`Creating card block with id ${id}`);
             return {
                 id: createdId,

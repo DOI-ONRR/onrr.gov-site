@@ -8,8 +8,8 @@ export async function run(id) {
         const latest = await getContentBlocksById(id, Endpoints.LOCAL);
         const previous = await getContentBlocksById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
-        logger.debug(`contentBlocksFlowUtil.run (${id}):\n`, changes);
-        if (changes.length === 0) {
+        logger.info(`contentBlocksFlowUtil.run (${id}):\n`, changes);
+        if (!changes) {
             return {
                 id: id,
                 collection: CollectionTypes.CONTENT_BLOCKS,
@@ -18,8 +18,7 @@ export async function run(id) {
         }
         const firstChange = changes[0];
         if (firstChange.kind == 'E' && !firstChange.lhs) {
-            //const createdId = await createContentBlock(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
-            const createdId = id;
+            const createdId = await createContentBlock(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
             logger.info(`Creating content block with id ${id}`);
             return {
                 id: createdId,

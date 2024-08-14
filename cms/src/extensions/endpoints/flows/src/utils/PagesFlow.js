@@ -3,9 +3,9 @@ import {
     createPagesItem,
     pagesByIdFull,
     pagesPageBlocks as getPagesPageBlocks,
-    getPagesPageBlockItemByPageBlockId
+    getPagesPageBlockItemByPageBlockId,
+    createPagesPageBlocksItems
 } from '../operations/pages';
-import { createItemByCollection } from '../operations/misc';
 import { getContentBlocksById } from '../operations/contentBlocks';
 import { getCardBlocksById } from '../operations/cardBlocks';
 import { run as runCardBlocksFlow } from '../utils/cardBlocksFlowUtil';
@@ -60,23 +60,16 @@ export default class PagesFlow {
 
     async #createCollectionItem(item) {
         try {
-            var data = {};
             const pageBlockItem = await getPagesPageBlockItemByPageBlockId(item.id, this.__originUrl)
             switch (item.collection) {
                 case CollectionTypes.CARD_BLOCKS:
-                    await runCardBlocksFlow(pageBlockItem.id);
-                    break;
+                    return await runCardBlocksFlow(pageBlockItem.id);
                 case CollectionTypes.CONTENT_BLOCKS:
-                    await runContentBlocksFlow(pageBlockItem.id);
-                    break;
+                    return await runContentBlocksFlow(pageBlockItem.id);
                 case CollectionTypes.TAB_BLOCKS:
-                    await runTabBlocksFlow(pageBlockItem.id);
-                    break;
+                    return await runTabBlocksFlow(pageBlockItem.id);
                 case CollectionTypes.EXPANSION_PANELS:
-                    await runExpansionPanelsFlow(pageBlockItem.id);
-                    break;
-                default:
-                    break;
+                    return await runExpansionPanelsFlow(pageBlockItem.id);
             }
         }
         catch(error) {
@@ -88,7 +81,7 @@ export default class PagesFlow {
     async run() {
         try {
             const pageChanges = await this.#getDiff();
-            if (pageChanges.length == 0) {
+            if (!pageChanges) {
                 return {
                     message: 'Upstream matches origin'
                 }
@@ -96,22 +89,35 @@ export default class PagesFlow {
             const firstChange = pageChanges[0];
             if (firstChange.kind == 'E' && !firstChange.lhs) {
                 // see image-uploader code for uploading hero image upstream
-                const pagesId = -1; //await createPagesItem(this.__originPage, this.__upstreamUrl, this.__authToken);
+                const pagesId = await createPagesItem(this.__originPage, this.__upstreamUrl, this.__authToken);
                 const latestPagesPageBlocks = await getPagesPageBlocks(this.__pages_id, this.__originUrl);
                 const previousPagesPageBlocks = await getPagesPageBlocks(this.__pages_id, this.__upstreamUrl);
-                const pageBlockChanges = await diff(previousPagesPageBlocks, latestPagesPageBlocks);
-                logger.info(JSON.stringify(pageBlockChanges, null, 2));
+                const pageBlockChanges = diff(previousPagesPageBlocks, latestPagesPageBlocks);
+                let pageBlocksItems = [];
+                logger.info('pageBlockChanges: ', pageBlockChanges);
                 for (let change of pageBlockChanges) {
                     switch (change.item.kind) {
                         case 'N': // New
-                            this.#createCollectionItem(change.item.rhs);
+                            let response = await this.#createCollectionItem(change.item.rhs);
+                            logger.info('create response:', response)
+                            pageBlocksItems.push({
+                                id: change.item.rhs.id,
+                                pages_id: {
+                                    id: pagesId
+                                },
+                                collection: response.collection,
+                                item: response.id,
+                                sort: change.item.rhs.sort
+                            });
                             break;
                         default:
                             break;
                     }
                 }
+                const newPagesBlocksItems = await createPagesPageBlocksItems(pageBlocksItems, this.__upstreamUrl, this.__authToken);
                 return {
-                    message: `New pages_id: ${pagesId}`
+                    pages_id: pagesId,
+                    page_block_items: newPagesBlocksItems
                 }
             }
             return {

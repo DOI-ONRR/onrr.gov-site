@@ -2,6 +2,7 @@ import {
     getExpansionPanelBlockLabelById, 
     getExpansionPanelsById, 
     getExpansionPanelsExpansionPanelBlocks,
+    createExpansionPanelsItem,
     createExpansionBlockLabelItem,
     createExpansionPanelBlocksItems} from '../operations/expansionPanels';
 import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../constants";
@@ -16,7 +17,7 @@ async function runExpansionPanelBlockLabelItemFlow(id) {
         const previous = await getExpansionPanelBlockLabelById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
         logger.info(`expansionPanelsFlowUtil.runExpansionPanelBlockLabelItemFlow:\n ${JSON.stringify(changes, null, 2)}`);
-        if (changes.length === 0) {
+        if (!changes) {
             return {
                 id: id,
                 collection: CollectionTypes.EXPANSION_PANEL_BLOCK_LABEL,
@@ -25,8 +26,7 @@ async function runExpansionPanelBlockLabelItemFlow(id) {
         }
         const firstChange = changes[0];
         if (firstChange.kind == 'E' && !firstChange.lhs) {
-            //const createdId = await createExpansionBlockLabelItem(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
-            const createdId = id;
+            const createdId = await createExpansionBlockLabelItem(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
             logger.info(`Creating expansion panel block label with id ${id}`);
             return {
                 id: createdId,
@@ -40,9 +40,10 @@ async function runExpansionPanelBlockLabelItemFlow(id) {
     }
 }
 
-async function runExpansionPanelBlocksFlow(id, data) {
+async function runExpansionPanelBlocksFlow(data) {
     try {
-        
+        await createExpansionPanelBlocksItems(data, Endpoints.UPSTREAM, AuthToken);
+        logger.info(`Creating expansion_panels_expansion_panel_blocks:\n`, data);
     } catch (error) {
         logger.error(`Error in runExpansionPanelBlocksFlow (${id}):`, error)
         throw new Error('Error in runExpansionPanelBlocksFlow');
@@ -55,7 +56,7 @@ export async function run(id) {
         const previous = await getExpansionPanelsById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
         logger.info(`expansionPanelsFlowUtil.run:\n ${JSON.stringify(changes, null, 2)}`);
-        if (changes.length === 0) {
+        if (!changes) {
             return {
                 id: id,
                 collection: CollectionTypes.EXPANSION_PANELS,
@@ -64,9 +65,9 @@ export async function run(id) {
         }
         const firstChange = changes[0];
         if (firstChange.kind == 'E' && !firstChange.lhs) {
-            //const createdId = await createExpansionPanelBlockItem(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
-            const createdId = id;
+            const createdId = await createExpansionPanelsItem(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
             logger.info(`Creating expansion panel with id ${id}`);
+            var createExpansionPanelsExpansionPanelBlocksInput = [];
             const expansionPanelBlocks = await getExpansionPanelsExpansionPanelBlocks(id, Endpoints.LOCAL);
             for (let block of expansionPanelBlocks) {
                 let response = {};
@@ -81,7 +82,17 @@ export async function run(id) {
                         response = await runCardBlocksFlow(block.item.id);
                         break;
                 }
+                createExpansionPanelsExpansionPanelBlocksInput.push({
+                    id: block.id,
+                    expansion_panels_id: {
+                        id: id
+                    },
+                    item: response.id,
+                    collection: block.collection,
+                    sort: block.sort
+                })
             }
+            await runExpansionPanelBlocksFlow(createExpansionPanelsExpansionPanelBlocksInput);
             return {
                 id: createdId,
                 collection: CollectionTypes.EXPANSION_PANELS,
@@ -89,7 +100,7 @@ export async function run(id) {
             }
         }
     }
-    catch {
+    catch(error) {
         logger.error(`Error in expansionPanelsFlowUtil.run (${id}):`, error)
         throw new Error('Error in expansionPanelsFlowUtil.run');
     }

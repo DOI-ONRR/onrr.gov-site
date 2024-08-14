@@ -112,7 +112,7 @@ query tab_blocks_by_id($id: ID!) {
     }
 }`;
 
-export const getTopLevelTabBlocks = gql`
+export const tabBlocksTabBlocks = gql`
 query tab_blocks_tab_blocks($tabBlocksId: GraphQLStringOrFloat!) {
     tab_blocks_tab_blocks(
         filter: { tab_blocks_id: { id: { _eq: $tabBlocksId } } }
@@ -142,6 +142,15 @@ query tab_blocks_tab_blocks($tabBlocksId: GraphQLStringOrFloat!) {
                 collection: __typename
             }
         }
+    }
+}`;
+
+export const tabBlockLabelById = `
+query tab_block_label_by_id($id: ID!) {
+    tab_block_label_by_id(id: $id) {
+        id
+        sort
+        tab_block_label
     }
 }`;
 
