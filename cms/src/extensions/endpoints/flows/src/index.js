@@ -1,36 +1,17 @@
-import { getTabBlocksById, getTabBlocksByIdFull, createTabBlock } from "./utils/tabBlocks";
-import { createContentBlock } from './utils/contentBlocks';
-import { createTabBlockLabelItem } from './utils/tabBlockLabels';
-import { createTabBlocksTabBlocks } from './utils/tabBlocksTabBlocks';
+import { getTabBlocksById, getTabBlocksByIdFull, createTabBlock, createTabBlockLabelItem, createTabBlocksTabBlocks } from "./operations/tabBlocks";
+import { createContentBlock } from './operations/contentBlocks';
 import { logger } from "./utils/logger";
+import PagesFlow from "./utils/PagesFlow";
 import diff from 'deep-diff';
 
 
-export default (router, { services, exceptions, database, env }) => {
+export default (router, { env }) => {
 	const localEndpoint = env.DIRECTUS_EXTENSION_FLOWS_LOCAL_ENDPOINT;
 	const upstreamEndpoint = env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_ENDPOINT;
 	const authToken = env.DIRECTUS_EXTENSION_FLOWS_AUTH_TOKEN;
 
-	const { AccountabilityService } = services;
-
 	router.post('/tab-blocks/:id', async (req, res, next) => {
-		logger.info(JSON.stringify(services, null, 2))
-		logger.info(JSON.stringify(exceptions, null, 2))
 		try {
-			const authHeader = req.headers.authorization;
-			if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                throw new Error('Authentication token is required');
-            }
-			const token = authHeader.split(' ')[1];
-
-			const accountabilityService = new AccountabilityService({ database });
-
-            const user = await accountabilityService.verifyToken(token);
-
-            if (!user) {
-                throw new Error('Invalid or expired token');
-            }
-
 			const id = req.params.id;
 			const lhs = await getTabBlocksById(id, localEndpoint)
 			const rhs = await getTabBlocksById(id, upstreamEndpoint)
@@ -100,6 +81,21 @@ export default (router, { services, exceptions, database, env }) => {
 		}
 		catch(error) {
 			logger.error('Error in /tab-blocks', { error: error.message });
+			next(error);
+		}
+	});
+
+	router.post('/pages/:id', async (req, res, next) => {
+		try {
+			const id = req.params.id;
+			const pagesFlow = new PagesFlow(env, id);
+
+			const response = await pagesFlow.run();
+
+			res.json(response);
+		}
+		catch (error) {
+			logger.error('Error in /pages', { error: error.message });
 			next(error);
 		}
 	});

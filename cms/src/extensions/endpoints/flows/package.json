@@ -28,5 +28,8 @@
 		"deep-diff": "^1.0.2",
 		"graphql-request": "^7.1.0",
 		"winston": "^3.14.0"
+	},
+	"devDependencies": {
+		"jest": "^29.7.0"
 	}
 }

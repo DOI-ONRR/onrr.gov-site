@@ -1,16 +1,38 @@
-import { gql } from 'graphql-request';
+import { gql } from 'graphql-request'
 
-export const tabBlocksById = gql`
-query tab_blocks_by_id($id: ID!) {
-    tab_blocks_by_id(id: $id) {
+export const pagesById = gql`
+query pages_by_id($id: ID!) {
+    pages_by_id(id: $id) {
         id
         status
-        tab_block_label
-        block_v_col
+        sort
+        published_on
+        title
+        content
+        slug
+        template
+        meta_title
+        meta_description
+        url
+        hero_title
+        parent {
+            id
+        }
+        sidebar_blocks
+        page_builder
     }
 }`;
 
-export const tabBlocksByIdFull = gql`
+export const createPagesItem = gql`
+mutation create_pages_item($data: create_pages_input!) {
+    create_pages_item(
+        data: $data
+    ) {
+        id
+    }
+}`;
+
+export const pagesByIdFull = gql`
 fragment CardBlockFields on card_blocks {
     id
     collection: __typename
@@ -92,19 +114,31 @@ fragment TabBlockFields on tab_blocks {
     }
 }
 
-query tab_blocks_by_id($id: ID!) {
-    tab_blocks_by_id(id: $id) {
+query pages_by_id($id: ID!) {
+    pages_by_id(id: $id) {
         id
         status
-        block_v_col
-        tab_block_label
-        tab_blocks {
+        sort
+        published_on
+        title
+        content
+        slug
+        template
+        meta_title
+        meta_description
+        url
+        hero_title
+        parent {
             id
-            Sort
+        }
+        sidebar_blocks
+        page_builder
+        page_blocks {
+            id
+            collection
             item {
                 ...CardBlockFields
                 ...ContentBlockFields
-                ...TabBlockLabelFields
                 ...ExpansionPanelBlockFields
                 ...TabBlockFields
             }
@@ -112,60 +146,37 @@ query tab_blocks_by_id($id: ID!) {
     }
 }`;
 
-export const getTopLevelTabBlocks = gql`
-query tab_blocks_tab_blocks($tabBlocksId: GraphQLStringOrFloat!) {
-    tab_blocks_tab_blocks(
-        filter: { tab_blocks_id: { id: { _eq: $tabBlocksId } } }
-        sort: ["Sort"]
-    ) {
+export const pagesPageBlocks = gql`
+query pages_page_blocks($pages_id: GraphQLStringOrFloat!) {
+    pages_page_blocks(filter: { 
+        pages_id: { 
+            id: { 
+                _eq: $pages_id 
+            } 
+        } 
+    }) {
         id
-        Sort
+        collection
+        sort
+    }
+}`;
+
+export const pagesPageBlocksItemByPageBlockId = gql`
+query pages_page_blocks_item_by_page_block_id($id: ID!) {
+    pages_page_blocks_by_id(id: $id) {
         item {
-            ... on card_blocks {
+            ...on content_blocks {
                 id
-                collection: __typename
             }
-            ... on content_blocks {
+            ...on tab_blocks {
                 id
-                collection: __typename
             }
-            ... on expansion_panels {
+            ...on card_blocks {
                 id
-                collection: __typename
             }
-            ... on tab_block_label {
+            ...on expansion_panels {
                 id
-                collection: __typename
-            }
-            ... on tab_blocks {
-                id
-                collection: __typename
             }
         }
-    }
-}`;
-
-// *****************************************
-// Mutations
-// *****************************************
-
-export const createTabBlocksItem = gql`
-mutation create_tab_blocks_item($data: create_tab_blocks_input!) {
-    create_tab_blocks_item(data: $data) {
-        id
-    }
-}`;
-
-export const createTabBlockLabel = gql`
-mutation create_tab_block_label_item($data: create_tab_block_label_input!) {
-    create_tab_block_label_item(data: $data) {
-        id
-    }
-}`;
-
-export const createTabBlocksTabBlocksItems = gql`
-mutation create_tab_blocks_tab_blocks_items($data: [create_tab_blocks_tab_blocks_input!]) {
-    create_tab_blocks_tab_blocks_items(data: $data) {
-        id
     }
 }`;

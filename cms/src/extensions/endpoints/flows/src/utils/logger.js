@@ -3,7 +3,14 @@ const { combine, timestamp, prettyPrint, printf } = format;
 
 // Custom format for pretty-printing JSON objects
 const customFormat = printf(({ level, message, timestamp, ...metadata }) => {
-  let log = `${timestamp} [${level}]: ${message} `;
+  let log = `${timestamp} [${level}]: `;
+
+  if (typeof message === 'object') {
+    log += JSON.stringify(message, null, 2); // Pretty print the message if it's an object
+  } else {
+    log += message;
+  }
+
   if (Object.keys(metadata).length > 0) {
     log += JSON.stringify(metadata, null, 2); // Pretty print JSON with 2 spaces indentation
   }
@@ -11,6 +18,7 @@ const customFormat = printf(({ level, message, timestamp, ...metadata }) => {
 });
 
 export const logger = createLogger({
+  //level: process.env.LOG_LEVEL || 'info',
   level: 'info',
   format: combine(
     timestamp(),
