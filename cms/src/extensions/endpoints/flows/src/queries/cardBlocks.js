@@ -24,3 +24,11 @@ mutation create_card_blocks_item($data: create_card_blocks_input!) {
         id
     }
 }`;
+
+export const updateCardBlocksItemMutation = gql`
+mutation update_card_blocks_item($id: ID!, $item: update_card_blocks_input!) {
+    update_card_blocks_item(id: $id, data: $item) {
+        id
+        date_updated
+    }
+}`;

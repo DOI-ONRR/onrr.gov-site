@@ -39,7 +39,7 @@ mutation create_pages_page_blocks_items($items: [create_pages_page_blocks_input!
     }
 }`;
 
-export const pagesByIdFull = gql`
+export const pagesByIdDeepQuery = gql`
 fragment CardBlockFields on card_blocks {
     id
     collection: __typename
@@ -185,5 +185,13 @@ query pages_page_blocks_item_by_page_block_id($id: ID!) {
                 id
             }
         }
+    }
+}`;
+
+export const updatePagesItemMutation = gql`
+mutation update_pages_item($id: ID!, $item: update_pages_input!) {
+    update_pages_item(id: $id, data: $item) {
+        id
+        date_updated
     }
 }`;

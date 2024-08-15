@@ -1,4 +1,4 @@
-import { getCardBlocksById, createCardBlock } from "../operations/cardBlocks";
+import { getCardBlocksById, createCardBlock, updateCardBlocksItem } from "../operations/cardBlocks";
 import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../constants";
 import { diff } from "deep-diff";
 import { logger } from "./logger";
@@ -8,7 +8,6 @@ export async function run(id) {
         const latest = await getCardBlocksById(id, Endpoints.LOCAL);
         const previous = await getCardBlocksById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
-        logger.info(`cardBlocksFlowUtil.run:\n ${JSON.stringify(changes, null, 2)}`);
         if (!changes) {
             return {
                 id: id,
@@ -16,14 +15,22 @@ export async function run(id) {
                 message: ApiMessages.NO_CHANGES
             }
         }
-        const firstChange = changes[0];
-        if (firstChange.kind == 'E' && !firstChange.lhs) {
-            const createdId = await createCardBlock(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
-            logger.info(`Creating card block with id ${id}`);
-            return {
-                id: createdId,
-                collection: CollectionTypes.CARD_BLOCKS,
-                message: ApiMessages.ITEM_CREATED
+        for (const change of changes) {
+            if (change.kind == 'E' && !change.lhs) {
+                const createdId = await createCardBlock(change.rhs, Endpoints.UPSTREAM, AuthToken);
+                return {
+                    id: createdId,
+                    collection: CollectionTypes.CARD_BLOCKS,
+                    message: ApiMessages.ITEM_CREATED
+                }
+            }
+            if (change.kind === 'E') {
+                const updateResponse = await updateCardBlocksItem(id, latest, Endpoints.UPSTREAM, AuthToken);
+                return {
+                    item: updateResponse,
+                    collection: CollectionTypes.CARD_BLOCKS,
+                    message: ApiMessages.ITEM_UPDATED
+                }
             }
         }
     }

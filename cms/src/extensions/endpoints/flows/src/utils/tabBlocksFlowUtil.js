@@ -4,7 +4,8 @@ import {
     createTabBlock,
     getTabBlockLabelById,
     createTabBlockLabelItem,
-    createTabBlocksTabBlocks
+    createTabBlocksTabBlocks,
+    updateTabBlockLabelItem
 } from '../operations/tabBlocks';
 import { run as runCardBlocksFlow } from '../utils/cardBlocksFlowUtil';
 import { run as runContentBlocksFlow } from '../utils/contentBlocksFlowUtil';
@@ -13,7 +14,7 @@ import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../constants
 import { diff } from "deep-diff";
 import { logger } from "./logger";
 
-async function runTabBlockLabelItemFlow(id) {
+export async function runTabBlockLabelItemFlow(id) {
     try {
         const latest = await getTabBlockLabelById(id, Endpoints.LOCAL);
         const previous = await getTabBlockLabelById(id, Endpoints.UPSTREAM);
@@ -26,14 +27,22 @@ async function runTabBlockLabelItemFlow(id) {
                 message: ApiMessages.NO_CHANGES
             }
         }
-        const firstChange = changes[0];
-        if (firstChange.kind == 'E' && !firstChange.lhs) {
-            const createdId = await createTabBlockLabelItem(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
-            logger.info(`Creating tab block label with id ${id}`);
-            return {
-                id: createdId,
-                collection: CollectionTypes.TAB_BLOCK_LABEL,
-                message: ApiMessages.ITEM_CREATED
+        for (const change of changes) {
+            if (change.kind === 'E' && !change.lhs) {
+                const createdId = await createTabBlockLabelItem(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
+                return {
+                    id: createdId,
+                    collection: CollectionTypes.TAB_BLOCK_LABEL,
+                    message: ApiMessages.ITEM_CREATED
+                }
+            }
+            if (change.kind === 'E') {
+                const updatedItem = await updateTabBlockLabelItem(id, latest, Endpoints.UPSTREAM, AuthToken);
+                return {
+                    item: updatedItem,
+                    collection: CollectionTypes.TAB_BLOCK_LABEL,
+                    message: ApiMessages.ITEM_UPDATED
+                }
             }
         }
     }

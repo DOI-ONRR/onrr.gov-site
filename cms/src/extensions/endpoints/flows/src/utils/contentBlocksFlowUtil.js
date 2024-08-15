@@ -1,4 +1,4 @@
-import { getContentBlocksById, createContentBlock } from "../operations/contentBlocks";
+import { getContentBlocksById, createContentBlock, updateContentBlocksItem } from "../operations/contentBlocks";
 import { Endpoints, AuthToken, ApiMessages, CollectionTypes } from "../constants";
 import { diff } from "deep-diff";
 import { logger } from "./logger";
@@ -8,7 +8,7 @@ export async function run(id) {
         const latest = await getContentBlocksById(id, Endpoints.LOCAL);
         const previous = await getContentBlocksById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
-        logger.info(`contentBlocksFlowUtil.run (${id}):\n`, changes);
+        logger.info('content block changes: ', changes);
         if (!changes) {
             return {
                 id: id,
@@ -16,14 +16,22 @@ export async function run(id) {
                 message: ApiMessages.NO_CHANGES
             }
         }
-        const firstChange = changes[0];
-        if (firstChange.kind == 'E' && !firstChange.lhs) {
-            const createdId = await createContentBlock(firstChange.rhs, Endpoints.UPSTREAM, AuthToken);
-            logger.info(`Creating content block with id ${id}`);
-            return {
-                id: createdId,
-                collection: CollectionTypes.CONTENT_BLOCKS,
-                message: ApiMessages.ITEM_CREATED
+        for (const change of changes) {
+            if (change.kind === 'E' && !change.lhs) {
+                const createdId = await createContentBlock(change.rhs, Endpoints.UPSTREAM, AuthToken);
+                return {
+                    id: createdId,
+                    collection: CollectionTypes.CONTENT_BLOCKS,
+                    message: ApiMessages.ITEM_CREATED
+                }
+            }
+            if (change.kind === 'E') {
+                const updatedItem = await updateContentBlocksItem(id, latest, Endpoints.UPSTREAM, AuthToken);
+                return {
+                    item: updatedItem,
+                    collection: CollectionTypes.CONTENT_BLOCKS,
+                    message: ApiMessages.ITEM_UPDATED
+                }
             }
         }
     }

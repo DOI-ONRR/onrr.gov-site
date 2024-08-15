@@ -178,3 +178,11 @@ mutation create_tab_blocks_tab_blocks_items($data: [create_tab_blocks_tab_blocks
         id
     }
 }`;
+
+export const updateTabBlockLabelItemMutation = gql`
+mutation update_tab_block_label_item($id: ID!, $item: update_tab_block_label_input!) {
+    update_tab_block_label_item(id: $id, data: $item) {
+        id
+        date_updated
+    }
+}`;

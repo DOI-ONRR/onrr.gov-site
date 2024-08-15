@@ -21,3 +21,10 @@ mutation create_content_blocks_item($data: create_content_blocks_input!) {
         id
     }
 }`;
+
+export const updateContentBlocksItemMutation = gql`mutation update_content_blocks_item($id: ID!, $item: update_content_blocks_input!) {
+    update_content_blocks_item(id: $id, data: $item) {
+        id
+        date_updated
+    }
+}`;
