@@ -17,6 +17,7 @@ import { logger } from '../utils/logger';
 
 export async function getTabBlocksById(tabBlocksId, endpoint) {
     try {
+        console.log('in getTabBlocksById');
         const variables = {
             id: tabBlocksId,
         };
