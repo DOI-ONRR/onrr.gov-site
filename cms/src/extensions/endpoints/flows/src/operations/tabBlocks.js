@@ -1,6 +1,6 @@
 import { 
     tabBlocksById, 
-    tabBlocksByIdFull, 
+    tabBlocksByIdWithTabBlocks, 
     createTabBlocksItem, 
     createTabBlocksTabBlocksItems,
     createTabBlocksTabBlocksItemMutation,
@@ -59,16 +59,14 @@ export async function getTabBlocksTabBlocksById(tabBlocksTabBlocksId, endpoint) 
     }
 }
 
-export async function getTabBlocksByIdFull(tabBlocksId, endpoint) {
+export async function getTabBlocksByIdWithTabBlocks(tabBlocksId, endpoint) {
     try {
-        const variables = {
-            id: tabBlocksId,
-        };
         const client = new GraphQLClient(endpoint);
-        const data = await client.request(tabBlocksByIdFull, variables);
+        const data = await client.request(tabBlocksByIdWithTabBlocks, { id: tabBlocksId });
         return data;
     } catch (error) {
-        logger.error("Error fetching data:", error);
+        logger.error("Error in getTabBlocksByIdWithTabBlocks:", error);
+        throw new Error('Error in getTabBlocksByIdWithTabBlocks');
     }
 }
 

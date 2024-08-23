@@ -1,6 +1,6 @@
 import { getCardBlocksById, createCardBlock, updateCardBlocksItem } from "../operations/cardBlocks";
 import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../constants";
-import { diff } from "deep-diff";
+import diff from "deep-diff";
 import { logger } from "./logger";
 
 export async function run(id) {

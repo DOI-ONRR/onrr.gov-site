@@ -1,6 +1,6 @@
 import { getContentBlocksById, createContentBlock, updateContentBlocksItem } from "../operations/contentBlocks";
 import { Endpoints, AuthToken, ApiMessages, CollectionTypes } from "../constants";
-import { diff } from "deep-diff";
+import diff from "deep-diff";
 import { logger } from "./logger";
 
 export async function run(id) {

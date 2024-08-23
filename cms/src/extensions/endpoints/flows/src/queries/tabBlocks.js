@@ -10,7 +10,7 @@ query tab_blocks_by_id($id: ID!) {
     }
 }`;
 
-export const tabBlocksByIdFull = gql`
+export const tabBlocksByIdWithTabBlocks = gql`
 fragment CardBlockFields on card_blocks {
     id
     collection: __typename

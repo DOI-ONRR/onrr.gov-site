@@ -21,7 +21,8 @@
 	"scripts": {
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-flows/dist; cp package.json ../../../../extensions/directus-extension-flows; cp dist/index.js ../../../../extensions/directus-extension-flows/dist",
 		"dev": "directus-extension build -w --no-minify",
-		"link": "directus-extension link"
+		"link": "directus-extension link",
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
 	},
 	"dependencies": {
 		"@directus/extensions-sdk": "^12.0.0",
@@ -30,6 +31,9 @@
 		"winston": "^3.14.0"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.25.2",
+		"@babel/preset-env": "^7.25.4",
+		"babel-jest": "^29.7.0",
 		"jest": "^29.7.0"
 	}
 }

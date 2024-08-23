@@ -8,7 +8,7 @@ import {
 import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../constants";
 import { run as runCardBlocksFlow } from '../utils/cardBlocksFlowUtil';
 import { run as runContentBlocksFlow } from '../utils/contentBlocksFlowUtil';
-import { diff } from "deep-diff";
+import diff from "deep-diff";
 import { logger } from "./logger";
 
 async function runExpansionPanelBlockLabelItemFlow(id) {

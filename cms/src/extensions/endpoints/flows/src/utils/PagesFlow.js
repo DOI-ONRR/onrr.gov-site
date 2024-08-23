@@ -138,8 +138,8 @@ export default class PagesFlow {
             const previous = await getPagesByIdDeep(this.__pages_id, this.__upstreamUrl);
             const deepChanges = diff(previous, latest, this.#prefilterBlocks);
             // logger.info('latest page:\n', latest);
-            // logger.info('deepChanges: \n', deepChanges);
-            // return;
+            logger.info('deepChanges: \n', deepChanges);
+            return;
             if (!deepChanges) {
                 return;
             }
@@ -167,16 +167,6 @@ export default class PagesFlow {
         }
     }
 
-    #getPathOfLastItem(path) { // needed? all but last path node may do it
-        let lastIndex = -1;
-        for (let i = 0; i < path.length; i++) {
-            if (path[i] === "item") {
-              lastIndex = i;
-            }
-        }
-        return path.slice(0, lastIndex + 1);
-    }
-
     #getPathOfNextToLast(path) {
         return path.slice(0, path.length - 1);
     }
@@ -193,7 +183,6 @@ export default class PagesFlow {
                     const previousPagesPageBlocks = await getPagesPageBlocks(this.__pages_id, this.__upstreamUrl);
                     const pageBlockChanges = diff(previousPagesPageBlocks, latestPagesPageBlocks);
                     let pageBlocksItems = [];
-                    logger.info('pageBlockChanges: ', pageBlockChanges);
                     for (let change of pageBlockChanges) {
                         switch (change.item.kind) {
                             case 'N': // New

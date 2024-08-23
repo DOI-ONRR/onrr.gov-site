@@ -1,5 +1,6 @@
 import { 
     getTabBlocksById,
+    getTabBlocksByIdWithTabBlocks,
     getTabBlocksTabBlocks,
     getTabBlocksTabBlocksById,
     createTabBlock,
@@ -15,7 +16,7 @@ import { run as runCardBlocksFlow } from '../utils/cardBlocksFlowUtil';
 import { run as runContentBlocksFlow } from '../utils/contentBlocksFlowUtil';
 import { run as runExpansionPanelsFlow } from '../utils/expansionPanelsFlowUtil';
 import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../constants";
-import { diff } from "deep-diff";
+import diff from "deep-diff";
 import { logger } from "./logger";
 
 export async function runTabBlockLabelItemFlow(id) {
@@ -107,7 +108,7 @@ export async function run(id) {
             }
         }
         for (const change of changes) {
-            if (change.kind == 'E' && !change.lhs) {
+            if (change.kind == 'E' && !change.lhs && !Object.hasOwn(change, 'path')) {
                 const createdId = await createTabBlock(change.rhs, Endpoints.UPSTREAM, AuthToken);
                 var tabBlockItems = [];
                 const tabBlocksTabBlocks = await getTabBlocksTabBlocks(id, Endpoints.LOCAL);
@@ -140,14 +141,14 @@ export async function run(id) {
                         }
                     })
                 }
-                await createNewTabBlocksTabBlocks(tabBlockItems);
+                await createTabBlocksTabBlocks(data, Endpoints.UPSTREAM, AuthToken);
                 return {
                     id: createdId,
                     collection: CollectionTypes.TAB_BLOCKS,
                     message: ApiMessages.ITEM_CREATED
                 }
             }
-            if (change.kind == 'E') {
+            if (change.kind == 'E' && Object.hasOwn(change, 'path')) {
                 const updatedItem = await updateTabBlocksItem(id, latest, Endpoints.UPSTREAM, AuthToken);
                 return {
                     item: updatedItem,
@@ -160,14 +161,5 @@ export async function run(id) {
     catch(error) {
         logger.error(`Error in tabBlocksFlowUtil.run (${id}):`, error)
         throw new Error('Error in tabBlocksFlowUtil.run');
-    }
-}
-
-async function createNewTabBlocksTabBlocks(data) {
-    try {
-        await createTabBlocksTabBlocks(data, Endpoints.UPSTREAM, AuthToken);
-    } catch (error) {
-        logger.error(`Error in createNewTabBlocksTabBlocks (${id}):`, error)
-        throw new Error('Error in createNewTabBlocksTabBlocks');
     }
 }
