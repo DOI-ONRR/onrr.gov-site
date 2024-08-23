@@ -10,8 +10,8 @@ import {
 import { run as runCardBlocksFlow } from '../utils/cardBlocksFlowUtil';
 import { run as runContentBlocksFlow } from '../utils/contentBlocksFlowUtil';
 import { run as runExpansionPanelsFlow } from '../utils/expansionPanelsFlowUtil';
-import { run as runTabBlocksFlow, runTabBlockLabelItemFlow } from '../utils/tabBlocksFlowUtil';
-import { CollectionTypes } from '../constants';
+import { run as runTabBlocksFlow, runTabBlocksTabBlocksFlow, runTabBlockLabelItemFlow } from '../utils/tabBlocksFlowUtil';
+import { CollectionTypes, PathArrayTypes } from '../constants';
 import diff from 'deep-diff';
 import { logger } from './logger';
 
@@ -81,35 +81,81 @@ export default class PagesFlow {
         return path.some(segment => segment === 'blocks');
     }
 
+    async #deepChangeEdit(change, latest) {
+        var processedChange = {};
+        const itemPath = this.#getPathOfNextToLast(change.path);
+        const item = itemPath.reduce((acc, key) => acc && acc[key], latest);
+        if (change.path[change.path.length - 1] === 'item') {
+            switch (item.collection) {
+                case CollectionTypes.CARD_BLOCKS:
+                    processedChange = await runCardBlocksFlow(item.id);
+                    break;
+                case CollectionTypes.CONTENT_BLOCKS:
+                    processedChange = await runContentBlocksFlow(item.id);
+                    break;
+                case CollectionTypes.TAB_BLOCKS:
+                    processedChange = await runTabBlocksFlow(item.id);
+                    break;
+                case CollectionTypes.EXPANSION_PANELS:
+                    processedChange = await runExpansionPanelsFlow(item.id);
+                    break;
+                case CollectionTypes.TAB_BLOCK_LABEL:
+                    processedChange = await runTabBlockLabelItemFlow(item.id);
+                    break;
+            }
+        }
+        else if ('tab_blocks_id' in item) {
+            processedChange = await runTabBlocksTabBlocksFlow(item.id);
+        }
+        return processedChange;
+    }
+
+    async #deepChangeArray(change) {
+        const arrayType = change.path.at(-1);
+        switch (arrayType) {
+            case PathArrayTypes.TAB_BLOCKS:
+                if (change.item.kind === 'N') {
+                    if (change.item.rhs.item.collection === CollectionTypes.CONTENT_BLOCKS) {
+                        let contentBlockChange = await runContentBlocksFlow(change.item.rhs.item.id);
+                        let tabBlocksTabBlocksChange = await runTabBlocksTabBlocksFlow(change.item.rhs.id);
+                        return [contentBlockChange, tabBlocksTabBlocksChange];
+                    }
+                    if (change.item.rhs.collection === CollectionTypes.TAB_BLOCK_LABEL) {
+                        let tabBlockLabelChange = await runTabBlockLabelItemFlow(change.item.rhs.item.id);
+                        let tabBlocksTabBlocksChange = await runTabBlocksTabBlocksFlow(change.item.rhs.id);
+                        return [tabBlockLabelChange, tabBlocksTabBlocksChange];
+                    }
+                }
+                break;
+        }
+    }
+
     async #processDeepChanges() {
         try {
             var processedChanges = [];
+            var processedChange = null;
             const latest = await getPagesByIdDeep(this.__pages_id, this.__originUrl);
             const previous = await getPagesByIdDeep(this.__pages_id, this.__upstreamUrl);
             const deepChanges = diff(previous, latest, this.#prefilterBlocks);
-            //logger.info('deepChanges: \n', deepChanges);
+            // logger.info('latest page:\n', latest);
+            // logger.info('deepChanges: \n', deepChanges);
+            // return;
             if (!deepChanges) {
                 return;
             }
             for (let change of deepChanges) {
-                const lastItemPath = this.#getPathOfLastItem(change.path);
-                const item = lastItemPath.reduce((acc, key) => acc && acc[key], latest);
-                logger.info('item:\n', item);
-                switch (item.collection) {
-                    case CollectionTypes.CARD_BLOCKS:
-                        processedChanges.push(await runCardBlocksFlow(item.id));
+                switch (change.kind) {
+                    case 'E':
+                        processedChanges.push(await this.#deepChangeEdit(change, latest));
                         break;
-                    case CollectionTypes.CONTENT_BLOCKS:
-                        processedChanges.push(await runContentBlocksFlow(item.id));
-                        break;
-                    case CollectionTypes.TAB_BLOCKS:
-                        processedChanges.push(await runTabBlocksFlow(item.id));
-                        break;
-                    case CollectionTypes.EXPANSION_PANELS:
-                        processedChanges.push(await runExpansionPanelsFlow(item.id));
-                        break;
-                    case CollectionTypes.TAB_BLOCK_LABEL:
-                        processedChanges.push(await runTabBlockLabelItemFlow(item.id))
+                    case 'A':
+                        processedChange = await this.#deepChangeArray(change, latest);
+                        if (Array.isArray(processedChange)) {
+                            processedChanges.push(...processedChange);
+                        }
+                        else {
+                            processedChanges.push(processedChange);
+                        }
                         break;
                 }
             }
@@ -121,7 +167,7 @@ export default class PagesFlow {
         }
     }
 
-    #getPathOfLastItem(path) {
+    #getPathOfLastItem(path) { // needed? all but last path node may do it
         let lastIndex = -1;
         for (let i = 0; i < path.length; i++) {
             if (path[i] === "item") {
@@ -129,6 +175,10 @@ export default class PagesFlow {
             }
         }
         return path.slice(0, lastIndex + 1);
+    }
+
+    #getPathOfNextToLast(path) {
+        return path.slice(0, path.length - 1);
     }
 
     async run() {

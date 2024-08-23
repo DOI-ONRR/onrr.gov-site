@@ -8,7 +8,6 @@ export async function run(id) {
         const latest = await getContentBlocksById(id, Endpoints.LOCAL);
         const previous = await getContentBlocksById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
-        logger.info('content block changes: ', changes);
         if (!changes) {
             return {
                 id: id,

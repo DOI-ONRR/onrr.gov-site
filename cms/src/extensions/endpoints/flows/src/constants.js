@@ -17,6 +17,11 @@ export const CollectionTypes = {
     CONTENT_BLOCKS: 'content_blocks',
     TAB_BLOCKS: 'tab_blocks',
     TAB_BLOCK_LABEL: 'tab_block_label',
+    TAB_BLOCKS_TAB_BLOCKS: 'tab_blocks_tab_blocks',
     EXPANSION_PANELS: 'expansion_panels',
     EXPANSION_PANEL_BLOCK_LABEL: 'expansion_panel_block_label'
+}
+
+export const PathArrayTypes = {
+    TAB_BLOCKS: 'tab_blocks'
 }

@@ -111,6 +111,10 @@ fragment TabBlockFields on tab_blocks {
     tab_block_label
     block_v_col
     tab_blocks {
+        id
+        tab_blocks_id {
+            id
+        }
         item {
             ...CardBlockFields
             ...ContentBlockFields
@@ -118,6 +122,8 @@ fragment TabBlockFields on tab_blocks {
             ...TabBlockLabelFields
             ...TabBlockNestedFields
         }
+        collection
+        Sort
     }
 }
 

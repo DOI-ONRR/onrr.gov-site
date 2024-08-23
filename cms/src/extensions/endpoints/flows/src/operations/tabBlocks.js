@@ -2,11 +2,15 @@ import {
     tabBlocksById, 
     tabBlocksByIdFull, 
     createTabBlocksItem, 
-    createTabBlocksTabBlocksItems, 
+    createTabBlocksTabBlocksItems,
+    createTabBlocksTabBlocksItemMutation,
     createTabBlockLabel,
     tabBlocksTabBlocks,
+    tabBlocksTabBlocksById,
     tabBlockLabelById,
-    updateTabBlockLabelItemMutation
+    updateTabBlockLabelItemMutation,
+    updateTabBlocksItemMution,
+    updateTabBlocksTabBlocksItemMutation
 } from "../queries/tabBlocks";
 import { GraphQLClient } from "graphql-request";
 import { logger } from '../utils/logger';
@@ -18,7 +22,7 @@ export async function getTabBlocksById(tabBlocksId, endpoint) {
         };
         const client = new GraphQLClient(endpoint);
         const data = await client.request(tabBlocksById, variables);
-        return data;
+        return data.tab_blocks_by_id;
     } catch (error) {
         logger.error("Error fetching data:", error);
     }
@@ -28,7 +32,7 @@ export async function getTabBlockLabelById(id, endpoint) {
     try {
         const client = new GraphQLClient(endpoint);
         const data = await client.request(tabBlockLabelById, { id: id });
-        logger.info('getTabBlockLabelById', data);
+        //logger.info('getTabBlockLabelById', data);
         return data.tab_block_label_by_id;
     } catch (error) {
         logger.error("Error in getTabBlockLabelById:", error);
@@ -42,6 +46,16 @@ export async function getTabBlocksTabBlocks(tabBlocksId, endpoint) {
         return data.tab_blocks_tab_blocks;
     } catch (error) {
         logger.error("Error in getTabBlocksTabBlocks:", error);
+    }
+}
+
+export async function getTabBlocksTabBlocksById(tabBlocksTabBlocksId, endpoint) {
+    try {
+        const client = new GraphQLClient(endpoint);
+        const data = await client.request(tabBlocksTabBlocksById, { id: tabBlocksTabBlocksId });
+        return data.tab_blocks_tab_blocks_by_id;
+    } catch (error) {
+        logger.error("Error in getTabBlocksTabBlocksById:", error);
     }
 }
 
@@ -120,9 +134,54 @@ export async function createTabBlocksTabBlocks(data, endpoint, authToken) {
             }
         });
         const response = await client.request(createTabBlocksTabBlocksItems, variables);
-        logger.info(JSON.stringify(response, null, 2));
         return response;
     } catch (error) {
         logger.error("Error creating tab blocks tab blocks:", error);
+    }
+}
+
+export async function createTabBlocksTabBlocksItem(item, endpoint, authToken) {
+    try {
+        const client = new GraphQLClient(endpoint, {
+            headers: {
+                authorization: `Bearer ${authToken}`
+            }
+        });
+        const response = await client.request(createTabBlocksTabBlocksItemMutation, { data: item });
+        return response.create_tab_blocks_tab_blocks_item.id;
+    } catch (error) {
+        logger.error('Error in createTabBlocksTabBlocksItem: ', error)
+        throw new Error('Error in createTabBlocksTabBlocksItem');
+    }
+}
+
+export async function updateTabBlocksItem(id, item, endpoint, authToken) {
+    try {
+        const client = new GraphQLClient(endpoint, {
+            headers: {
+                authorization: `Bearer ${authToken}`
+            }
+        });
+        const response = await client.request(updateTabBlocksItemMution, { id: id, item: item });
+        return response.update_tab_blocks_item;
+    } catch (error) {
+        logger.error('Error in updateTabBlocksItem: ', error)
+        throw new Error('Error in updateTabBlocksItem');
+    }
+}
+
+export async function updateTabBlocksTabBlocksItem(item, endpoint, authToken) {
+    try {
+        logger.info('updateTabBlocksTabBlocksItem: \n', item);
+        const client = new GraphQLClient(endpoint, {
+            headers: {
+                authorization: `Bearer ${authToken}`
+            }
+        });
+        const response = await client.request(updateTabBlocksTabBlocksItemMutation, { id: item.id, item: item });
+        return response.update_tab_blocks_tab_blocks_item;
+    } catch (error) {
+        logger.error('Error in updateTabBlocksTabBlocksItem: ', error)
+        throw new Error('Error in updateTabBlocksTabBlocksItem');
     }
 }
