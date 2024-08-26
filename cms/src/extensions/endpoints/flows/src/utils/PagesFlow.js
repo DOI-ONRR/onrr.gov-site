@@ -7,10 +7,10 @@ import {
     createPagesPageBlocksItems,
     updatePagesItem
 } from '../operations/pages';
-import { run as runCardBlocksFlow } from '../utils/cardBlocksFlowUtil';
+import { run as runCardBlocksFlow } from '../services/cardBlocksFlow/cardBlocks';
 import { run as runContentBlocksFlow } from '../utils/contentBlocksFlowUtil';
-import { run as runExpansionPanelsFlow } from '../utils/expansionPanelsFlowUtil';
-import { run as runTabBlocksFlow, runTabBlocksTabBlocksFlow, runTabBlockLabelItemFlow } from '../utils/tabBlocksFlowUtil';
+import { run as runExpansionPanelsFlow } from '../services/expansionPanelsFlow/expansionPanels';
+import { runTabBlocks, runTabBlocksTabBlocks, runTabBlockLabel } from '../services/tabBlocksFlow';
 import { CollectionTypes, PathArrayTypes } from '../constants';
 import diff from 'deep-diff';
 import { logger } from './logger';
@@ -94,18 +94,18 @@ export default class PagesFlow {
                     processedChange = await runContentBlocksFlow(item.id);
                     break;
                 case CollectionTypes.TAB_BLOCKS:
-                    processedChange = await runTabBlocksFlow(item.id);
+                    processedChange = await runTabBlocks(item.id);
                     break;
                 case CollectionTypes.EXPANSION_PANELS:
                     processedChange = await runExpansionPanelsFlow(item.id);
                     break;
                 case CollectionTypes.TAB_BLOCK_LABEL:
-                    processedChange = await runTabBlockLabelItemFlow(item.id);
+                    processedChange = await runTabBlockLabel(item.id);
                     break;
             }
         }
         else if ('tab_blocks_id' in item) {
-            processedChange = await runTabBlocksTabBlocksFlow(item.id);
+            processedChange = await runTabBlocksTabBlocks(item.id);
         }
         return processedChange;
     }
@@ -117,12 +117,12 @@ export default class PagesFlow {
                 if (change.item.kind === 'N') {
                     if (change.item.rhs.item.collection === CollectionTypes.CONTENT_BLOCKS) {
                         let contentBlockChange = await runContentBlocksFlow(change.item.rhs.item.id);
-                        let tabBlocksTabBlocksChange = await runTabBlocksTabBlocksFlow(change.item.rhs.id);
+                        let tabBlocksTabBlocksChange = await runTabBlocksTabBlocks(change.item.rhs.id);
                         return [contentBlockChange, tabBlocksTabBlocksChange];
                     }
                     if (change.item.rhs.collection === CollectionTypes.TAB_BLOCK_LABEL) {
-                        let tabBlockLabelChange = await runTabBlockLabelItemFlow(change.item.rhs.item.id);
-                        let tabBlocksTabBlocksChange = await runTabBlocksTabBlocksFlow(change.item.rhs.id);
+                        let tabBlockLabelChange = await runTabBlockLabel(change.item.rhs.item.id);
+                        let tabBlocksTabBlocksChange = await runTabBlocksTabBlocks(change.item.rhs.id);
                         return [tabBlockLabelChange, tabBlocksTabBlocksChange];
                     }
                 }

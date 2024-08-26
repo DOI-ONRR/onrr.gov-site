@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-export const pagesById = gql`
+export const pagesByIdQuery = gql`
 query pages_by_id($id: ID!) {
     pages_by_id(id: $id) {
         id
@@ -39,7 +39,7 @@ mutation create_pages_page_blocks_items($items: [create_pages_page_blocks_input!
     }
 }`;
 
-export const pagesByIdDeepQuery = gql`
+export const pagesByIdWithPageBlocksQuery = gql`
 fragment CardBlockFields on card_blocks {
     id
     collection: __typename
@@ -159,7 +159,7 @@ query pages_by_id($id: ID!) {
     }
 }`;
 
-export const pagesPageBlocks = gql`
+export const pagesPageBlocksQuery = gql`
 query pages_page_blocks($pages_id: GraphQLStringOrFloat!) {
     pages_page_blocks(filter: { 
         pages_id: { 

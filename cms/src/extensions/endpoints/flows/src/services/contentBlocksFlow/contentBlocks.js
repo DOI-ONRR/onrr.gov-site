@@ -1,9 +1,9 @@
-import { getContentBlocksById, createContentBlock, updateContentBlocksItem } from "../operations/contentBlocks";
-import { Endpoints, AuthToken, ApiMessages, CollectionTypes } from "../constants";
+import { getContentBlocksById, createContentBlock, updateContentBlocksItem } from "../../operations/contentBlocks";
+import { Endpoints, AuthToken, ApiMessages, CollectionTypes } from "../../constants";
 import diff from "deep-diff";
-import { logger } from "./logger";
+import { logger } from "../../utils/logger";
 
-export async function run(id) {
+export async function runContentBlocks(id) {
     try {
         const latest = await getContentBlocksById(id, Endpoints.LOCAL);
         const previous = await getContentBlocksById(id, Endpoints.UPSTREAM);

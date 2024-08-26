@@ -1,9 +1,9 @@
-import { getCardBlocksById, createCardBlock, updateCardBlocksItem } from "../operations/cardBlocks";
-import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../constants";
+import { getCardBlocksById, createCardBlock, updateCardBlocksItem } from "../../operations/cardBlocks";
+import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import diff from "deep-diff";
-import { logger } from "./logger";
+import { logger } from "../../utils/logger";
 
-export async function run(id) {
+export async function runCardBlocks(id) {
     try {
         const latest = await getCardBlocksById(id, Endpoints.LOCAL);
         const previous = await getCardBlocksById(id, Endpoints.UPSTREAM);
@@ -35,7 +35,7 @@ export async function run(id) {
         }
     }
     catch {
-        logger.error(`Error in cardBlocksFlowUtil.run (${id}):`, error)
-        throw new Error('Error in cardBlocksFlowUtil.run');
+        logger.error(`Error in runCardBlocks (${id}):`, error)
+        throw new Error('Error in runCardBlocks');
     }
 }

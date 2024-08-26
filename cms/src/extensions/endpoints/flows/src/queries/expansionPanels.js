@@ -58,7 +58,7 @@ mutation create_expansion_panels_item($item: create_expansion_panels_input!) {
     }
 }`;
 
-export const createExpansionPanelBlockLabelItem = gql`
+export const createExpansionPanelBlockLabelItemMutation = gql`
 mutation create_expansion_panel_block_label_item($data: create_expansion_panel_block_label_input!) {
     create_expansion_panel_block_label_item(data: $data) {
         id
