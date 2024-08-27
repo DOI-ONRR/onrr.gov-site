@@ -1,13 +1,14 @@
 <template>
   <div>
     <div v-if="collectionLayout === 'basic'">
-      <v-list dense>
+      <v-list dense role="group">
         <v-list-item
           v-for="(item, i) in slicedCollection"
           :key="i"
           :href="fileLink(`${ API }/press-releases/`, item)"
           class="pa-0"
           target="_blank"
+          role="link"
         >
           <v-list-item-content>
             <v-list-item-title v-text="item.title" class="secondary--text text-body-1 text-wrap text-decoration-underline onrr-link-pdf"></v-list-item-title>
@@ -15,10 +16,7 @@
         </v-list-item>
       </v-list>
       <div class="text-center">
-        <v-btn
-          color="secondary"
-          href="/about/public-affairs"
-          class="mx-auto">View All</v-btn>
+        <a href="/about/public-affairs" class="usa-button">View All Press Releases</a>
       </div>
     </div>
     <div v-if="collectionLayout === 'full'">
@@ -58,7 +56,7 @@
                   <a :href="fileLink(`${ API }/press-releases/`, item)"
                     @click="trackDownloads(item)"
                     class="onrr-link-pdf"
-                    target="_blank">View press release document</a>
+                    target="_blank">View press release document <span class="usa-sr-only">dated {{ getFullDate(item.date) }}</span></a>
                 </div>
               </v-list-item-content>
             </v-list-item>

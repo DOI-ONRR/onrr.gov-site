@@ -30,7 +30,7 @@
         <SideMenu />
         <Breadcrumbs />
       </div>
-      <LayoutBlock :layoutBlocks="page.page_blocks"></LayoutBlock>
+      <LayoutBlock :layoutBlocks="page.page_blocks" id="main-content"></LayoutBlock>
     </div>
   </div>
 </template>

@@ -1,0 +1,10 @@
+/*
+----------------------------------------
+USWDS with settings overrides
+----------------------------------------
+*/
+
+ @use "uswds-core" with (
+    $theme-show-notifications: false
+ );
+

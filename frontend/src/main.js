@@ -8,6 +8,7 @@ import fetch from 'node-fetch'
 import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import possibleTypes from './json/possibleTypes.json'
+import '../public/assets/css/styles.css'
 
 const GTM_ID = process.env.VUE_APP_ONRR_GTM_ID
 

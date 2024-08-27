@@ -1,13 +1,14 @@
 <template>
   <div>
     <div v-if="collectionLayout === 'basic'">
-      <v-list dense>
+      <v-list dense role="group">
         <v-list-item
           v-for="(item, i) in filteredCollection"
           :key="i"
           :href="fileLink(`${ API }/reporter-letters/`, item)"
           class="pa-0"
           target="_blank"
+          role="link"
         >
           <v-list-item-content>
             <v-list-item-title v-text="item.title" class="secondary--text text-body-1 text-wrap text-decoration-underline onrr-link-pdf"></v-list-item-title>
@@ -15,10 +16,7 @@
         </v-list-item>
       </v-list>
       <div class="text-center">
-        <v-btn
-          color="secondary"
-          :href="viewAllLink"
-          class="mx-auto">View All</v-btn>
+        <a :href="viewAllLink" class="usa-button">View All Reporter Letters</a>
       </div>
     </div>
     <div v-if="collectionLayout === 'full'">

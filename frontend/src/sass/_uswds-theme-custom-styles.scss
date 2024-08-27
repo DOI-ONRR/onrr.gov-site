@@ -1,0 +1,46 @@
+/*
+* * * * * ==============================
+* * * * * ==============================
+* * * * * ==============================
+* * * * * ==============================
+========================================
+========================================
+========================================
+----------------------------------------
+USWDS THEME CUSTOM STYLES
+----------------------------------------
+!! Copy this file to your project's
+   sass root. Don't edit the version
+   in node_modules.
+----------------------------------------
+Custom project SASS goes here.
+
+i.e.
+@include u-padding-right('05');
+----------------------------------------
+*/
+
+@use "uswds-core" as *;
+
+a.usa-button,
+a.usa-button:visited {
+   color: #fff !important;
+}
+
+.skip-link {
+   position: absolute;
+   top: -40px;
+   left: 0;
+   background: #000;
+   color: #fff;
+   padding: 8px;
+   z-index: 100;
+   transition: top 0.3s;
+}
+.skip-link:focus {
+   top: 0;
+}
+
+ul li a {
+   line-height: 1.7 !important;
+}
