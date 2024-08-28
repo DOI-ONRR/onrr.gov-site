@@ -13,7 +13,7 @@ import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../consta
 import diff from "deep-diff";
 import { logger } from "../../utils/logger";
 
-async function runTabBlocks(id) {
+export async function runTabBlocks(id) {
     try {
         const latest = await getTabBlocksById(id, Endpoints.LOCAL);
         const previous = await getTabBlocksById(id, Endpoints.UPSTREAM);
@@ -81,5 +81,3 @@ async function runTabBlocks(id) {
         throw new Error('Error in runTabBlocks');
     }
 }
-
-export default runTabBlocks;

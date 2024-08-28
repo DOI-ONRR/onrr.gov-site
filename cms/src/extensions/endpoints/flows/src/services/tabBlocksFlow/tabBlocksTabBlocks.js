@@ -1,49 +1,53 @@
 import { 
     getTabBlocksTabBlocksById,
     createTabBlocksTabBlocksItem,
-    updateTabBlocksTabBlocksItem
+    updateTabBlocksTabBlocksItem,
+    getTabBlocksTabBlocks
 } from '../../operations/tabBlocks';
+import { runCardBlocks } from '../../../src/services/cardBlocksFlow';
+import { runContentBlocks } from '../contentBlocksFlow';
+import { runExpansionPanels } from '../expansionPanelsFlow';
+import { runTabBlocks } from '../tabBlocksFlow';
+import { runTabBlockLabel } from '../tabBlocksFlow';
+import { runTabBlocksTabBlocksItem } from '../tabBlocksFlow';
 import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import diff from "deep-diff";
 import { logger } from "../../utils/logger";
 
-async function runTabBlocksTabBlocks(id) {
+export async function runTabBlocksTabBlocks(tabBlockId) {
     try {
-        const latest = await getTabBlocksTabBlocksById(id, Endpoints.LOCAL);
-        const previous = await getTabBlocksTabBlocksById(id, Endpoints.UPSTREAM);
-        const changes = diff(previous, latest);
-        if (!changes) {
-            return {
-                id: id,
-                collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
-                message: ApiMessages.NO_CHANGES
+        const appliedChanges = [];
+        const latest = await getTabBlocksTabBlocks(tabBlockId, Endpoints.LOCAL);
+        for (const tabBlock of latest) {
+            let flowResponse;
+            switch (tabBlock.item.collection) {
+                case CollectionTypes.CARD_BLOCKS:
+                    flowResponse = await runCardBlocks(tabBlock.item.id);
+                    break;
+                case CollectionTypes.CONTENT_BLOCKS:
+                    flowResponse = await runContentBlocks(tabBlock.item.id);
+                    break;
+                case CollectionTypes.EXPANSION_PANELS:
+                    flowResponse = await runExpansionPanels(tabBlock.item.id);
+                    break;
+                case CollectionTypes.TAB_BLOCKS:
+                    flowResponse = await runTabBlocks(tabBlock.item.id);
+                    break;
+                case CollectionTypes.TAB_BLOCK_LABEL:
+                    flowResponse = await runTabBlockLabel(tabBlock.item.id);
+                    break;
             }
-        }
-        for (const change of changes) {
-            if (change.kind == 'E' && !change.lhs && !Object.hasOwn(change, 'path')) {
-                latest.item = latest.item.id;
-                const newId = await createTabBlocksTabBlocksItem(latest, Endpoints.UPSTREAM, AuthToken);
-                return {
-                    id: newId,
-                    collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                }
+            if (flowResponse) {
+                appliedChanges.push(flowResponse);
             }
-            if (change.kind === 'E' && Object.hasOwn(change, 'path')) {
-                latest.item = latest.item.id;
-                const updatedItem = await updateTabBlocksTabBlocksItem(latest, Endpoints.UPSTREAM, AuthToken);
-                return {
-                    id: updatedItem.id,
-                    collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
-                    message: ApiMessages.ITEM_UPDATED
-                }
-            }
-        }
+            appliedChanges.push(await runTabBlocksTabBlocksItem(tabBlock.id));
+        };
+        // this is where we handle deletes; latest and previous have to be compared
+        
+        return appliedChanges;
     }
     catch (error) {
-        logger.error(`Error in runTabBlocksTabBlockFlow (${id}):`, error)
+        logger.error(`Error in runTabBlocksTabBlockFlow (${tabBlockId}):`, error)
         throw new Error('Error in runTabBlocksTabBlockFlow');
     }
 }
-
-export default runTabBlocksTabBlocks;

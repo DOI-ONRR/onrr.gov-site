@@ -7,7 +7,7 @@ import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../consta
 import diff from "deep-diff";
 import { logger } from "../../utils/logger";
 
-async function runTabBlockLabel(id) {
+export async function runTabBlockLabel(id) {
     try {
         const latest = await getTabBlockLabelById(id, Endpoints.LOCAL);
         const previous = await getTabBlockLabelById(id, Endpoints.UPSTREAM);
@@ -42,5 +42,3 @@ async function runTabBlockLabel(id) {
         logger.error('Error in runTabBlockLabelItemFlow:', error);
     }
 }
-
-export default runTabBlockLabel;

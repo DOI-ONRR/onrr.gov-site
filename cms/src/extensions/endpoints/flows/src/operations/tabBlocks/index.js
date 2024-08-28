@@ -10,3 +10,4 @@ export { getTabBlocksTabBlocksById } from './getTabBlocksTabBlocksById';
 export { updateTabBlockLabelItem } from './updateTabBlockLabelItem';
 export { updateTabBlocksItem } from './updateTabBlocksItem';
 export { updateTabBlocksTabBlocksItem } from './updateTabBlocksTabBlocksItem';
+export { deleteTabBlocksTabBlocksItem } from './deleteTabBlocksTabBlocksItem';

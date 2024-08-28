@@ -1,4 +1,4 @@
-import { CollectionTypes, ApiMessages } from "../../src/constants";
+import { ApiMessages } from "../../src/constants";
 
 export const tabBlocksByIdMock = {
     "id": "146",
@@ -9,24 +9,8 @@ export const tabBlocksByIdMock = {
 
 export const tabBlocksTabBlocksMock = [
     {
-        "id": "2028",
-        "Sort": 1,
-        "item": {
-            "id": "395",
-            "collection": "tab_block_label"
-        }
-    },
-    {
-        "id": "2029",
-        "Sort": 2,
-        "item": {
-            "id": "1346",
-            "collection": "content_blocks"
-        }
-    },
-    {
         "id": "2026",
-        "Sort": 3,
+        "Sort": 1,
         "item": {
             "id": "394",
             "collection": "tab_block_label"
@@ -34,10 +18,26 @@ export const tabBlocksTabBlocksMock = [
     },
     {
         "id": "2027",
-        "Sort": 4,
+        "Sort": 2,
         "item": {
             "id": "73",
             "collection": "expansion_panels"
+        }
+    },
+    {
+        "id": "2028",
+        "Sort": 3,
+        "item": {
+            "id": "395",
+            "collection": "tab_block_label"
+        }
+    },
+    {
+        "id": "2029",
+        "Sort": 4,
+        "item": {
+            "id": "1346",
+            "collection": "content_blocks"
         }
     }
 ];

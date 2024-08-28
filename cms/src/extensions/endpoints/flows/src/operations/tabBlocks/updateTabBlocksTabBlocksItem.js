@@ -4,7 +4,6 @@ import { logger } from '../../utils/logger';
 
 export async function updateTabBlocksTabBlocksItem(item, endpoint, authToken) {
     try {
-        logger.info('updateTabBlocksTabBlocksItem: \n', item);
         const client = new GraphQLClient(endpoint, {
             headers: {
                 authorization: `Bearer ${authToken}`

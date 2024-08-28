@@ -264,3 +264,10 @@ mutation update_tab_blocks_tab_blocks_item($id: ID!, $item: update_tab_blocks_ta
     }
 }
 `;
+
+export const deleteTabBlocksTabBlocksItemMutation = gql`
+mutation delete_tab_blocks_tab_blocks_item($id: ID!) {
+    delete_tab_blocks_tab_blocks_item(id: $id) {
+        id
+    }
+}`;
