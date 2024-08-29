@@ -1,16 +1,14 @@
 import { 
-    getTabBlocksTabBlocksById,
-    createTabBlocksTabBlocksItem,
-    updateTabBlocksTabBlocksItem,
-    getTabBlocksTabBlocks
+    getTabBlocksTabBlocks,
+    deleteTabBlocksTabBlocksItem
 } from '../../operations/tabBlocks';
-import { runCardBlocks } from '../../../src/services/cardBlocksFlow';
+import { runCardBlocks } from '../cardBlocksFlow';
 import { runContentBlocks } from '../contentBlocksFlow';
 import { runExpansionPanels } from '../expansionPanelsFlow';
 import { runTabBlocks } from '../tabBlocksFlow';
 import { runTabBlockLabel } from '../tabBlocksFlow';
 import { runTabBlocksTabBlocksItem } from '../tabBlocksFlow';
-import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../constants";
+import { Endpoints, CollectionTypes, ApiMessages } from "../../constants";
 import diff from "deep-diff";
 import { logger } from "../../utils/logger";
 
@@ -42,8 +40,20 @@ export async function runTabBlocksTabBlocks(tabBlockId) {
             }
             appliedChanges.push(await runTabBlocksTabBlocksItem(tabBlock.id));
         };
-        // this is where we handle deletes; latest and previous have to be compared
-        
+        const previous = await getTabBlocksTabBlocks(tabBlockId, Endpoints.UPSTREAM);
+        const changes = diff(previous, latest);
+        if (changes) {
+            for (const change of changes) {
+                if (change.kind === 'A' && change.item.kind === 'D') {
+                    const deletedItemId = await deleteTabBlocksTabBlocksItem(change.item.lhs.id);
+                    appliedChanges.push({
+                        id: deletedItemId,
+                        collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
+                        message: ApiMessages.ITEM_DELETED
+                    });
+                }
+            }
+        }
         return appliedChanges;
     }
     catch (error) {

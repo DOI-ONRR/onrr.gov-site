@@ -1,5 +1,5 @@
 import { logger } from "./utils/logger";
-import PagesFlow from "./utils/PagesFlow";
+import { runPages } from "./services/pagesFlow";
 
 export default (router, { env }) => {
 	router.post('/pages/:id', async (req, res, next) => {

@@ -3,7 +3,7 @@ import {
     itemId,
     tabBlocksTabBlocksItemPrevious,
     tabBlocksTabBlocksItemLatest
-} from '../../__mocks__/tabBlocksTabBlocksItem.mocks';
+} from '../../__mocks__/tabBlocks/tabBlocksTabBlocksItem.mocks';
 import { ApiMessages } from '../../../src/constants';
 const { runTabBlocksTabBlocksItem: sut } = await import('../../../src/services/tabBlocksFlow/tabBlocksTabBlocksItem');
 

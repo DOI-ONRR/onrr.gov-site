@@ -6,7 +6,7 @@ import {
     tabBlocksByIdMock, 
     tabBlocksTabBlocksMock,
     runFlowItemCreatedMock
-} from '../../__mocks__/tabBlocks.mocks';
+} from '../../__mocks__/tabBlocks/tabBlocks.mocks';
 
 let getTabBlocksById, getTabBlocksTabBlocks, runTabBlockLabel, runContentBlocks, runExpansionPanels, createTabBlocksTabBlocks, createTabBlock;
 

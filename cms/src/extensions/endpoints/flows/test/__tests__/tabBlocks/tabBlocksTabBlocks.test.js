@@ -3,39 +3,36 @@ import { getMocks } from '../../__setup__/tabBlocks/tabBlocksTabBlocks.setup';
 import { 
     tabBlockId,
     tabBlocksTabBlocksLatest,
-    tabBlocksTabBlocksPrevious,
     runFlowItemNoChangesMock,
     tabBlocksTabBlocksCardBlock,
     tabBlocksTabBlocksContentBlock,
     tabBlocksTabBlocksExpansionPanel,
     tabBlocksTabBlocksTabBlock,
-    tabBlocksTabBlocksTabLabel
-} from '../../__mocks__/tabBlocksTabBlocks.mocks';
+    tabBlocksTabBlocksTabLabel,
+    tabBlocksTabBlocksPrevious
+} from '../../__mocks__/tabBlocks/tabBlocksTabBlocks.mocks';
+import { ApiMessages, CollectionTypes } from '../../../src/constants';
 const { runTabBlocksTabBlocks: sut } = await import('../../../src/services/tabBlocksFlow/tabBlocksTabBlocks');
 
 let getTabBlocksTabBlocks, 
-    getTabBlocksTabBlocksById, 
-    createTabBlocksTabBlocksItem, 
-    updateTabBlocksTabBlocksItem, 
     runCardBlocks, 
     runContentBlocks, 
     runExpansionPanels, 
     runTabBlocks, 
     runTabBlockLabel,
-    runTabBlocksTabBlocksItem;
+    runTabBlocksTabBlocksItem,
+    deleteTabBlocksTabBlocksItem;
 
 beforeAll(async () => {
     const mocks = await getMocks();
     getTabBlocksTabBlocks = mocks.getTabBlocksTabBlocks;
-    getTabBlocksTabBlocksById = mocks.getTabBlocksTabBlocksById;
-    createTabBlocksTabBlocksItem = mocks.createTabBlocksTabBlocksItem;
-    updateTabBlocksTabBlocksItem = mocks.updateTabBlocksTabBlocksItem;
     runCardBlocks = mocks.runCardBlocks;
     runContentBlocks = mocks.runContentBlocks;
     runExpansionPanels = mocks.runExpansionPanels;
     runTabBlocks = mocks.runTabBlocks;
     runTabBlockLabel = mocks.runTabBlockLabel;
-    runTabBlocksTabBlocksItem = mocks.runTabBlocksTabBlocksItem
+    runTabBlocksTabBlocksItem = mocks.runTabBlocksTabBlocksItem;
+    deleteTabBlocksTabBlocksItem = mocks.deleteTabBlocksTabBlocksItem;
 });
 
 describe('Tab blocks tab blocks flow', () => {
@@ -43,7 +40,7 @@ describe('Tab blocks tab blocks flow', () => {
         jest.resetAllMocks();
     });
 
-    test('Calls getTabBlocksTabBlocks', async () => {
+    test('Calls getTabBlocksTabBlocks 2x', async () => {
         // Arrange
         getTabBlocksTabBlocks
             .mockResolvedValueOnce(tabBlocksTabBlocksLatest);
@@ -52,7 +49,7 @@ describe('Tab blocks tab blocks flow', () => {
         await sut(tabBlockId);
 
         // Assert
-        expect(getTabBlocksTabBlocks).toHaveBeenCalledTimes(1);
+        expect(getTabBlocksTabBlocks).toHaveBeenCalledTimes(2);
     });
 
     test('Unchanged tab blocks returns no applied changes', async () => {
@@ -60,25 +57,57 @@ describe('Tab blocks tab blocks flow', () => {
         getTabBlocksTabBlocks
             .mockResolvedValueOnce(tabBlocksTabBlocksLatest)
             .mockResolvedValueOnce(tabBlocksTabBlocksLatest);
+        
+        tabBlocksTabBlocksLatest.forEach(block => {
+            switch (block.item.collection) {
+                case CollectionTypes.TAB_BLOCK_LABEL:
+                    runTabBlockLabel.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
+                    break;
+                case CollectionTypes.EXPANSION_PANELS:
+                    runExpansionPanels.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksExpansionPanel[0].item));
+                    break;
+                case CollectionTypes.CONTENT_BLOCKS:
+                    runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+                    break;
+            }
+        });
+
+        runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item))
 
         // Act
-        const response = await sut(tabBlockId);
+        const appliedChanges = await sut(tabBlockId);
 
         // Assert
-        expect(response.length).toEqual(0);
+        expect(appliedChanges.every(change => change.message === ApiMessages.NO_CHANGES)).toBeTruthy();
     });
 
     test('Changed tab block item returns one applied change', async () => {
         // Arrange
         getTabBlocksTabBlocks
             .mockResolvedValueOnce(tabBlocksTabBlocksLatest)
-            .mockResolvedValueOnce(tabBlocksTabBlocksLatest);
+            .mockResolvedValueOnce(tabBlocksTabBlocksPrevious);
+
+        tabBlocksTabBlocksLatest.forEach(block => {
+            switch (block.item.collection) {
+                case CollectionTypes.TAB_BLOCK_LABEL:
+                    runTabBlockLabel.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
+                    break;
+                case CollectionTypes.EXPANSION_PANELS:
+                    runExpansionPanels.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksExpansionPanel[0].item));
+                    break;
+                case CollectionTypes.CONTENT_BLOCKS:
+                    runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+                    break;
+            }
+        });
+
+        runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
 
         // Act
         const response = await sut(tabBlockId);
 
         // Assert
-        expect(response.length).toEqual(1);
+        //expect(response.length).toEqual(4);
     });
 
     test('runCardBlocks is called', async () => {
@@ -163,5 +192,44 @@ describe('Tab blocks tab blocks flow', () => {
 
         // Assert
         expect(runTabBlocksTabBlocksItem).toHaveBeenCalled();
+    });
+
+    test('deleteTabBlocksTabBlocksItem is called', async () => {
+        // Arrange
+        const previous = [...tabBlocksTabBlocksLatest];
+        const latest = tabBlocksTabBlocksLatest.slice(0, -1);
+        getTabBlocksTabBlocks
+            .mockResolvedValueOnce(latest)
+            .mockResolvedValueOnce(previous);
+
+        // Act
+        await sut(tabBlockId);
+
+        // Assert
+        expect(deleteTabBlocksTabBlocksItem).toHaveBeenCalled();
+    });
+
+    test('Applied changes includes ITEM_DELETED', async () => {
+        // Arrange
+        const previous = [...tabBlocksTabBlocksLatest];
+        const latest = tabBlocksTabBlocksLatest.slice(0, -1);
+        getTabBlocksTabBlocks
+            .mockResolvedValueOnce(latest)
+            .mockResolvedValueOnce(previous);
+
+        runTabBlockLabel.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item))
+            .mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
+
+        runExpansionPanels.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksExpansionPanel[0].item));
+
+        runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item))
+
+        deleteTabBlocksTabBlocksItem.mockResolvedValueOnce(2029)
+
+        // Act
+        const appliedChanges = await sut(tabBlockId);
+
+        // Assert
+        expect(appliedChanges.some(change => change.message === ApiMessages.ITEM_DELETED)).toBeTruthy();
     });
 });

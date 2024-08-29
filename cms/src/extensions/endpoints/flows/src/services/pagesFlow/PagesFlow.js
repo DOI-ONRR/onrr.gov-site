@@ -6,14 +6,15 @@ import {
     getPagesPageBlockItemByPageBlockId,
     createPagesPageBlocksItems,
     updatePagesItem
-} from '../operations/pages';
-import { run as runCardBlocksFlow } from '../services/cardBlocksFlow/cardBlocks';
-import { run as runContentBlocksFlow } from '../utils/contentBlocksFlowUtil';
-import { run as runExpansionPanelsFlow } from '../services/expansionPanelsFlow/expansionPanels';
-import { runTabBlocks, runTabBlocksTabBlocks, runTabBlockLabel } from '../services/tabBlocksFlow';
-import { CollectionTypes, PathArrayTypes } from '../constants';
+} from '../../operations/pages';
+import { runCardBlocks } from '../cardBlocksFlow/cardBlocks';
+import { runContentBlocks } from '../contentBlocksFlow';
+import { runExpansionPanels } from '../expansionPanelsFlow/expansionPanels';
+
+import { runTabBlocks, runTabBlocksTabBlocks, runTabBlockLabel } from '../tabBlocksFlow';
+import { CollectionTypes, PathArrayTypes } from '../../constants';
 import diff from 'deep-diff';
-import { logger } from './logger';
+import { logger } from '../../utils/logger';
 
 export default class PagesFlow {
     constructor(env, pages_id) {

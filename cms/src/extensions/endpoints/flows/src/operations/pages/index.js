@@ -1,5 +1,8 @@
 export { createPagesItem } from './createPagesItem';
-export { createPagesPageBlocksItems } from './createPagesPageBlocksItems'
+export { createPagesPageBlocksItems } from './createPagesPageBlocksItems';
+export { createPagesPageBlocksItem } from './createPagesPageBlocksItem';
+export { deletePagesPageBlocksItem } from './deletePagesPageBlocksItem';
+export { updatePagesPageBlocksItem } from './updatePagesPageBlocksItem';
 export { getPagesById } from './getPagesById';
 export { getPagesByIdWithPageBlocks } from './getPagesByIdWithPageBlocks';
 export { getPagesPageBlocks } from './getPagesPageBLocks';

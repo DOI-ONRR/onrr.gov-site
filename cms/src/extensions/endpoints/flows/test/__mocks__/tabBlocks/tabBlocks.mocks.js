@@ -1,4 +1,4 @@
-import { ApiMessages } from "../../src/constants";
+import { ApiMessages } from "../../../src/constants";
 
 export const tabBlocksByIdMock = {
     "id": "146",

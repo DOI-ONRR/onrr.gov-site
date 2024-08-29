@@ -19,7 +19,9 @@ export const CollectionTypes = {
     TAB_BLOCK_LABEL: 'tab_block_label',
     TAB_BLOCKS_TAB_BLOCKS: 'tab_blocks_tab_blocks',
     EXPANSION_PANELS: 'expansion_panels',
-    EXPANSION_PANEL_BLOCK_LABEL: 'expansion_panel_block_label'
+    EXPANSION_PANEL_BLOCK_LABEL: 'expansion_panel_block_label',
+    PAGES: 'pages',
+    PAGES_PAGE_BLOCKS: 'pages_page_blocks'
 }
 
 export const PathArrayTypes = {

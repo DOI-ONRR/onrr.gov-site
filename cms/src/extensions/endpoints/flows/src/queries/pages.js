@@ -39,6 +39,26 @@ mutation create_pages_page_blocks_items($items: [create_pages_page_blocks_input!
     }
 }`;
 
+export const createPagesPageBlocksItemMutation = gql`
+mutation create_pages_page_blocks_item($item: create_pages_page_blocks_input!) {
+    create_pages_page_blocks_item(data: $item) {
+        id
+    }
+}`;
+
+export const deletePagesPageBlocksItemMutation = gql`
+mutation delete_pages_page_blocks_item($id: ID!) {
+    delete_pages_page_blocks_item(id: $id) {
+        id
+    }
+}`;
+
+export const updatePagesPageBlocksItemMutation = gql`mutation update_pages_page_blocks_item($id: ID!, $item: update_pages_page_blocks_input!) {
+    update_pages_page_blocks_item(id: $id, data: $item) {
+        id
+    }
+}`;
+
 export const pagesByIdWithPageBlocksQuery = gql`
 fragment CardBlockFields on card_blocks {
     id
@@ -161,15 +181,26 @@ query pages_by_id($id: ID!) {
 
 export const pagesPageBlocksQuery = gql`
 query pages_page_blocks($pages_id: GraphQLStringOrFloat!) {
-    pages_page_blocks(filter: { 
-        pages_id: { 
-            id: { 
-                _eq: $pages_id 
-            } 
-        } 
-    }) {
+    pages_page_blocks(filter: { pages_id: { id: { _eq: $pages_id } } }) {
         id
+        pages_id {
+            id
+        }
         collection
+        item {
+            ... on content_blocks {
+                id
+            }
+            ... on tab_blocks {
+                id
+            }
+            ... on card_blocks {
+                id
+            }
+            ... on expansion_panels {
+                id
+            }
+        }
         sort
     }
 }`;

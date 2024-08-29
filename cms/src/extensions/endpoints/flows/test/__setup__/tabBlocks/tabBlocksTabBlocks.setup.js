@@ -4,18 +4,6 @@ jest.unstable_mockModule('../../../src/operations/tabBlocks/getTabBlocksTabBlock
     getTabBlocksTabBlocks: jest.fn()
 }));
 
-jest.unstable_mockModule('../../../src/operations/tabBlocks/getTabBlocksTabBlocksById', () => ({
-    getTabBlocksTabBlocksById: jest.fn()
-}));
-
-jest.unstable_mockModule('../../../src/operations/tabBlocks/createTabBlocksTabBlocksItem', () => ({
-    createTabBlocksTabBlocksItem: jest.fn()
-}));
-
-jest.unstable_mockModule('../../../src/operations/tabBlocks/updateTabBlocksTabBlocksItem', () => ({
-    updateTabBlocksTabBlocksItem: jest.fn()
-}));
-
 jest.unstable_mockModule('../../../src/services/cardBlocksFlow/cardBlocks', () => ({
     runCardBlocks: jest.fn()
 }));
@@ -40,28 +28,28 @@ jest.unstable_mockModule('../../../src/services/tabBlocksFlow/tabBlocksTabBlocks
     runTabBlocksTabBlocksItem: jest.fn()
 }));
 
+jest.unstable_mockModule('../../../src/operations/tabBlocks/deleteTabBlocksTabBlocksItem', () => ({
+    deleteTabBlocksTabBlocksItem: jest.fn()
+}));
+
 export const getMocks = async () => {
     const { getTabBlocksTabBlocks } = await import('../../../src/operations/tabBlocks/getTabBlocksTabBlocks');
-    const { getTabBlocksTabBlocksById } = await import('../../../src/operations/tabBlocks/getTabBlocksTabBlocksById');
-    const { createTabBlocksTabBlocksItem } = await import('../../../src/operations/tabBlocks/createTabBlocksTabBlocksItem');
-    const { updateTabBlocksTabBlocksItem } = await import('../../../src/operations/tabBlocks/updateTabBlocksTabBlocksItem');
     const { runCardBlocks } = await import('../../../src/services/cardBlocksFlow/cardBlocks');
     const { runContentBlocks } = await import('../../../src/services/contentBlocksFlow/contentBlocks');
     const { runExpansionPanels } = await import('../../../src/services/expansionPanelsFlow/expansionPanels');
     const { runTabBlocks } = await import('../../../src/services/tabBlocksFlow/tabBlocks');
     const { runTabBlockLabel } = await import('../../../src/services/tabBlocksFlow/tabBlockLabel');
     const { runTabBlocksTabBlocksItem } = await import('../../../src/services/tabBlocksFlow/tabBlocksTabBlocksItem');
+    const { deleteTabBlocksTabBlocksItem } = await import('../../../src/operations/tabBlocks/deleteTabBlocksTabBlocksItem');
 
     return {
         getTabBlocksTabBlocks,
-        getTabBlocksTabBlocksById,
-        createTabBlocksTabBlocksItem,
-        updateTabBlocksTabBlocksItem,
         runCardBlocks,
         runContentBlocks,
         runExpansionPanels,
         runTabBlocks,
         runTabBlockLabel,
-        runTabBlocksTabBlocksItem
+        runTabBlocksTabBlocksItem,
+        deleteTabBlocksTabBlocksItem
     };
 };
