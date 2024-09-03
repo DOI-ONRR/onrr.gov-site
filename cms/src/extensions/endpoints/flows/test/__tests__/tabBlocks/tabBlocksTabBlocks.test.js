@@ -21,7 +21,9 @@ let getTabBlocksTabBlocks,
     runTabBlocks, 
     runTabBlockLabel,
     runTabBlocksTabBlocksItem,
-    deleteTabBlocksTabBlocksItem;
+    deleteTabBlocksTabBlocksItem,
+    createTabBlocksTabBlocksItem,
+    updateTabBlocksTabBlocksItem;
 
 beforeAll(async () => {
     const mocks = await getMocks();
@@ -33,6 +35,8 @@ beforeAll(async () => {
     runTabBlockLabel = mocks.runTabBlockLabel;
     runTabBlocksTabBlocksItem = mocks.runTabBlocksTabBlocksItem;
     deleteTabBlocksTabBlocksItem = mocks.deleteTabBlocksTabBlocksItem;
+    createTabBlocksTabBlocksItem = mocks.createTabBlocksTabBlocksItem;
+    updateTabBlocksTabBlocksItem = mocks.updateTabBlocksTabBlocksItem;
 });
 
 describe('Tab blocks tab blocks flow', () => {
@@ -43,7 +47,7 @@ describe('Tab blocks tab blocks flow', () => {
     test('Calls getTabBlocksTabBlocks 2x', async () => {
         // Arrange
         getTabBlocksTabBlocks
-            .mockResolvedValueOnce(tabBlocksTabBlocksLatest);
+            .mockResolvedValue(tabBlocksTabBlocksLatest);
 
         // Act
         await sut(tabBlockId);
@@ -81,7 +85,7 @@ describe('Tab blocks tab blocks flow', () => {
         expect(appliedChanges.every(change => change.message === ApiMessages.NO_CHANGES)).toBeTruthy();
     });
 
-    test('Changed tab block item returns one applied change', async () => {
+    test('Addition of tab block item at end calls createTabBlocksTabBlocksItem', async () => {
         // Arrange
         getTabBlocksTabBlocks
             .mockResolvedValueOnce(tabBlocksTabBlocksLatest)
@@ -104,16 +108,50 @@ describe('Tab blocks tab blocks flow', () => {
         runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
 
         // Act
-        const response = await sut(tabBlockId);
+        await sut(tabBlockId);
 
         // Assert
-        //expect(response.length).toEqual(4);
+        expect(createTabBlocksTabBlocksItem).toHaveBeenCalled();
+    });
+
+    test('Addition of tab block item at beginning calls createTabBlocksTabBlocksItem and updateTabBlocksTabBlocksItem', async () => {
+        // Arrange
+        var latest = tabBlocksTabBlocksLatest.splice(2, 1);
+        latest = [...latest, ...JSON.parse(JSON.stringify(tabBlocksTabBlocksPrevious))];
+        latest[1].Sort = 2;
+        latest[2].Sort = 3;
+        getTabBlocksTabBlocks
+            .mockResolvedValueOnce(latest)
+            .mockResolvedValueOnce(tabBlocksTabBlocksPrevious);
+
+        tabBlocksTabBlocksLatest.forEach(block => {
+            switch (block.item.collection) {
+                case CollectionTypes.TAB_BLOCK_LABEL:
+                    runTabBlockLabel.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
+                    break;
+                case CollectionTypes.EXPANSION_PANELS:
+                    runExpansionPanels.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksExpansionPanel[0].item));
+                    break;
+                case CollectionTypes.CONTENT_BLOCKS:
+                    runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+                    break;
+            }
+        });
+
+        runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
+
+        // Act
+        await sut(tabBlockId);
+
+        // Assert
+        expect(createTabBlocksTabBlocksItem).toHaveBeenCalled();
+        expect(updateTabBlocksTabBlocksItem).toHaveBeenCalled();
     });
 
     test('runCardBlocks is called', async () => {
         // Arrange
         getTabBlocksTabBlocks
-            .mockResolvedValueOnce(tabBlocksTabBlocksCardBlock);
+            .mockResolvedValue(tabBlocksTabBlocksCardBlock);
 
         runCardBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksCardBlock[0].item))
 
@@ -127,7 +165,7 @@ describe('Tab blocks tab blocks flow', () => {
     test('runContentBlocks is called', async () => {
         // Arrange
         getTabBlocksTabBlocks
-            .mockResolvedValueOnce(tabBlocksTabBlocksContentBlock);
+            .mockResolvedValue(tabBlocksTabBlocksContentBlock);
 
         runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
 
@@ -141,7 +179,7 @@ describe('Tab blocks tab blocks flow', () => {
     test('runExpansionPanels is called', async () => {
         // Arrange
         getTabBlocksTabBlocks
-            .mockResolvedValueOnce(tabBlocksTabBlocksExpansionPanel);
+            .mockResolvedValue(tabBlocksTabBlocksExpansionPanel);
 
             runExpansionPanels.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksExpansionPanel[0].item))
 
@@ -155,7 +193,7 @@ describe('Tab blocks tab blocks flow', () => {
     test('runTabBlocks is called', async () => {
         // Arrange
         getTabBlocksTabBlocks
-            .mockResolvedValueOnce(tabBlocksTabBlocksTabBlock);
+            .mockResolvedValue(tabBlocksTabBlocksTabBlock);
 
             runTabBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabBlock[0].item))
 
@@ -169,7 +207,7 @@ describe('Tab blocks tab blocks flow', () => {
     test('runTabBlockLabel is called', async () => {
         // Arrange
         getTabBlocksTabBlocks
-            .mockResolvedValueOnce(tabBlocksTabBlocksTabLabel);
+            .mockResolvedValue(tabBlocksTabBlocksTabLabel);
 
             runTabBlockLabel.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item))
 
@@ -178,20 +216,6 @@ describe('Tab blocks tab blocks flow', () => {
 
         // Assert
         expect(runTabBlockLabel).toHaveBeenCalled();
-    });
-
-    test('runTabBlockTabBlockItem is called', async () => {
-        // Arrange
-        getTabBlocksTabBlocks
-            .mockResolvedValueOnce(tabBlocksTabBlocksTabLabel);
-
-            runTabBlocksTabBlocksItem.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item))
-
-        // Act
-        await sut(tabBlockId);
-
-        // Assert
-        expect(runTabBlocksTabBlocksItem).toHaveBeenCalled();
     });
 
     test('deleteTabBlocksTabBlocksItem is called', async () => {
@@ -231,5 +255,35 @@ describe('Tab blocks tab blocks flow', () => {
 
         // Assert
         expect(appliedChanges.some(change => change.message === ApiMessages.ITEM_DELETED)).toBeTruthy();
+    });
+
+    test('Change in order of tab blocks calls updateTabBlocksTabBlocksItem', async () => {
+        // Arrange
+        var latest = JSON.parse(JSON.stringify(tabBlocksTabBlocksPrevious));
+        latest[0].Sort = 2;
+        latest[1].Sort = 1;
+        getTabBlocksTabBlocks
+            .mockResolvedValueOnce(latest)
+            .mockResolvedValueOnce(tabBlocksTabBlocksPrevious);
+
+        tabBlocksTabBlocksLatest.forEach(block => {
+            switch (block.item.collection) {
+                case CollectionTypes.TAB_BLOCK_LABEL:
+                    runTabBlockLabel.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
+                    break;
+                case CollectionTypes.EXPANSION_PANELS:
+                    runExpansionPanels.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksExpansionPanel[0].item));
+                    break;
+                case CollectionTypes.CONTENT_BLOCKS:
+                    runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+                    break;
+            }
+        });
+
+        // Act
+        await sut(tabBlockId);
+
+        // Assert
+        expect(updateTabBlocksTabBlocksItem).toHaveBeenCalledTimes(2);
     });
 });

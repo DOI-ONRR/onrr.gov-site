@@ -28,10 +28,15 @@ jest.unstable_mockModule('../../../src/operations/tabBlocks/createTabBlocksTabBl
     createTabBlocksTabBlocks: jest.fn()
 }));
 
+jest.unstable_mockModule('../../../src/services/tabBlocksFlow/tabBlocksTabBlocks', () => ({
+    runTabBlocksTabBlocks: jest.fn()
+}));
+
 export const getMocks = async () => {
     const { getTabBlocksById } = await import('../../../src/operations/tabBlocks/getTabBlocksById');
     const { getTabBlocksTabBlocks } = await import('../../../src/operations/tabBlocks/getTabBlocksTabBlocks');
     const { runTabBlockLabel } = await import('../../../src/services/tabBlocksFlow/tabBlockLabel');
+    const { runTabBlocksTabBlocks } = await import('../../../src/services/tabBlocksFlow/tabBlocksTabBlocks');
     const { runContentBlocks } = await import('../../../src/services/contentBlocksFlow/contentBlocks');
     const { runExpansionPanels } = await import('../../../src/services/expansionPanelsFlow/expansionPanels');
     const { createTabBlocksTabBlocks } = await import('../../../src/operations/tabBlocks/createTabBlocksTabBlocks');
@@ -45,5 +50,6 @@ export const getMocks = async () => {
         runExpansionPanels,
         createTabBlocksTabBlocks,
         createTabBlock,
+        runTabBlocksTabBlocks
     };
 };

@@ -8,7 +8,14 @@ import {
     runFlowItemCreatedMock
 } from '../../__mocks__/tabBlocks/tabBlocks.mocks';
 
-let getTabBlocksById, getTabBlocksTabBlocks, runTabBlockLabel, runContentBlocks, runExpansionPanels, createTabBlocksTabBlocks, createTabBlock;
+let getTabBlocksById, 
+    getTabBlocksTabBlocks, 
+    runTabBlockLabel, 
+    runContentBlocks, 
+    runExpansionPanels, 
+    createTabBlocksTabBlocks, 
+    createTabBlock,
+    runTabBlocksTabBlocks;
 
 beforeAll(async () => {
     const mocks = await getMocks();
@@ -19,6 +26,7 @@ beforeAll(async () => {
     runExpansionPanels = mocks.runExpansionPanels;
     createTabBlocksTabBlocks = mocks.createTabBlocksTabBlocks;
     createTabBlock = mocks.createTabBlock;
+    runTabBlocksTabBlocks = mocks.runTabBlocksTabBlocks;
 });
 
 describe('Tab blocks flow', () => {
@@ -30,12 +38,13 @@ describe('Tab blocks flow', () => {
         // Arrange
         getTabBlocksById.mockResolvedValueOnce(tabBlocksByIdMock)
             .mockResolvedValueOnce(tabBlocksByIdMock);
+        runTabBlocksTabBlocks.mockResolvedValue([]);
 
         // Act
         const result = await sut(tabBlocksByIdMock.id);
 
         // Assert
-        expect(result.message).toEqual(ApiMessages.NO_CHANGES);
+        expect(result.find(change => change.message === ApiMessages.NO_CHANGES && change.collection === CollectionTypes.TAB_BLOCKS)).toBeTruthy();
         expect(getTabBlocksById).toHaveBeenCalledTimes(2);
     });
 
@@ -43,6 +52,7 @@ describe('Tab blocks flow', () => {
         // Arrange
         getTabBlocksById.mockResolvedValueOnce(tabBlocksByIdMock)
             .mockResolvedValueOnce(null);
+        runTabBlocksTabBlocks.mockResolvedValue([]);
 
         createTabBlock.mockResolvedValueOnce({
             id: tabBlocksByIdMock.id,
@@ -75,20 +85,33 @@ describe('Tab blocks flow', () => {
         const result = await sut(tabBlocksByIdMock.id);
 
         // Assert
-        expect(result.message).toEqual(ApiMessages.ITEM_CREATED);
+        expect(result.find(change => change.message === ApiMessages.ITEM_CREATED && change.collection === CollectionTypes.TAB_BLOCKS)).toBeTruthy();
     });
 
-    test('Adding tab blocks to existing block should return ITEM_CREATED', async () => {
+    test('Calls runTabBlocksTabBlocks', async () => {
         // Arrange
-        const latestTabBlocks = { ...tabBlocksByIdMock };
-        const previousTabBlocks = { ...tabBlocksByIdMock };
-        getTabBlocksById.mockResolvedValueOnce(latestTabBlocks)
-            .mockResolvedValueOnce(previousTabBlocks);
+        getTabBlocksById.mockResolvedValue(tabBlocksByIdMock);
+        runTabBlocksTabBlocks.mockResolvedValue([]);
 
         // Act
-        const result = await sut(tabBlocksByIdMock.id);
-        
+        await sut(tabBlocksByIdMock.id)
+
         // Assert
-        expect(result.message).toEqual(ApiMessages.NO_CHANGES);
+        expect(runTabBlocksTabBlocks).toHaveBeenCalled();
+    });
+
+    test('Results from tab blocks tab blocks are included in results', async () => {
+        // Arrange
+        getTabBlocksById.mockResolvedValue(tabBlocksByIdMock);
+        runTabBlocksTabBlocks.mockResolvedValue([runFlowItemCreatedMock({
+            id: 9999,
+            collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS
+        })]);
+
+        // Act
+        const results = await sut(tabBlocksByIdMock.id)
+
+        // Assert
+        expect(results.find(change => change.collection === CollectionTypes.TAB_BLOCKS_TAB_BLOCKS && change.message === ApiMessages.ITEM_CREATED)).toBeTruthy();
     });
 });

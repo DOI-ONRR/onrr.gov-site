@@ -28,22 +28,6 @@ export async function runPagesPageBlocks(pageId) {
                     message: ApiMessages.ITEM_CREATED
                 });
             } else {
-                let flowResult;
-                switch (latestPageBlock.collection) {
-                    case CollectionTypes.CARD_BLOCKS:
-                        flowResult = await runCardBlocks(latestPageBlock.item.id);
-                        break;
-                    case CollectionTypes.CONTENT_BLOCKS:
-                        flowResult = await runContentBlocks(latestPageBlock.item.id);
-                        break;
-                    case CollectionTypes.EXPANSION_PANELS:
-                        flowResult = await runExpansionPanels(latestPageBlock.item.id);
-                        break;
-                    case CollectionTypes.TAB_BLOCKS:
-                        flowResult = await runTabBlocks(latestPageBlock.item.id);
-                        break;
-                }
-                appliedChanges.push(flowResult);
                 const previousPageBlock = previousBlocks.find(block => block.id === latestPageBlock.id);
                 const blockChanges = diff(previousPageBlock, latestPageBlock);
                 if (blockChanges) {
@@ -57,6 +41,22 @@ export async function runPagesPageBlocks(pageId) {
                     });
                 }
             }
+            let flowResult;
+            switch (latestPageBlock.collection) {
+                case CollectionTypes.CARD_BLOCKS:
+                    flowResult = await runCardBlocks(latestPageBlock.item.id);
+                    break;
+                case CollectionTypes.CONTENT_BLOCKS:
+                    flowResult = await runContentBlocks(latestPageBlock.item.id);
+                    break;
+                case CollectionTypes.EXPANSION_PANELS:
+                    flowResult = await runExpansionPanels(latestPageBlock.item.id);
+                    break;
+                case CollectionTypes.TAB_BLOCKS:
+                    flowResult = await runTabBlocks(latestPageBlock.item.id);
+                    break;
+            }
+            appliedChanges.push(flowResult);
         }
         for (const previousPageBlock of previousBlocks) {
             if (!latestBlocks.find(block => block.id === previousPageBlock.id)) {
