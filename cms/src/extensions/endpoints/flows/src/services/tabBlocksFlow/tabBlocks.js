@@ -4,14 +4,14 @@ import {
     updateTabBlocksItem
 } from '../../operations/tabBlocks';
 import { runTabBlocksTabBlocks } from './tabBlocksTabBlocks';
-import { Endpoints, UpstreamAuthToken, CollectionTypes, ApiMessages } from "../../constants";
+import { Endpoints, UpstreamAuthToken, LocalAuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 
 export async function runTabBlocks(id) {
     try {
         var appliedChanges = []
-        const latest = await getTabBlocksById(id, Endpoints.LOCAL);
-        const previous = await getTabBlocksById(id, Endpoints.UPSTREAM);
+        const latest = await getTabBlocksById(id, Endpoints.LOCAL, LocalAuthToken);
+        const previous = await getTabBlocksById(id, Endpoints.UPSTREAM, UpstreamAuthToken);
         if (!previousVersionExists(previous)) {
             const createdId = await createTabBlock(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             appliedChanges.push({
