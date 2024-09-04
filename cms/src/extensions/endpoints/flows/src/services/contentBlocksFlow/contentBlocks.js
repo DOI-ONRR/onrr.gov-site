@@ -1,10 +1,10 @@
 import { getContentBlocksById, createContentBlock, updateContentBlocksItem } from "../../operations/contentBlocks";
-import { Endpoints, UpstreamAuthToken, ApiMessages, CollectionTypes } from "../../constants";
+import { Endpoints, UpstreamAuthToken, LocalAuthToken, ApiMessages, CollectionTypes } from "../../constants";
 import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 
 export async function runContentBlocks(id) {
     try {
-        const latest = await getContentBlocksById(id, Endpoints.LOCAL);
+        const latest = await getContentBlocksById(id, Endpoints.LOCAL, LocalAuthToken);
         const previous = await getContentBlocksById(id, Endpoints.UPSTREAM);
         if (!previousVersionExists(previous)) {
             const createdId = await createContentBlock(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
