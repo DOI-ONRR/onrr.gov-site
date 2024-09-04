@@ -10,7 +10,7 @@ export async function runExpansionPanels(id) {
     try {
         var appliedChanges = [];
         const latest = await getExpansionPanelsById(id, Endpoints.LOCAL, LocalAuthToken);
-        const previous = await getExpansionPanelsById(id, Endpoints.UPSTREAM);
+        const previous = await getExpansionPanelsById(id, Endpoints.UPSTREAM, UpstreamAuthToken);
         if (!previousVersionExists(previous)) {
             const createdId = await createExpansionPanelsItem(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             appliedChanges.push({

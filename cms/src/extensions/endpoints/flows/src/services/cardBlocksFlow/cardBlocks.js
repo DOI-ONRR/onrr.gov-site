@@ -5,7 +5,7 @@ import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 export async function runCardBlocks(id) {
     try {
         const latest = await getCardBlocksById(id, Endpoints.LOCAL, LocalAuthToken);
-        const previous = await getCardBlocksById(id, Endpoints.UPSTREAM);
+        const previous = await getCardBlocksById(id, Endpoints.UPSTREAM, UpstreamAuthToken);
         if (!previousVersionExists(previous)) {
             const createdId = await createCardBlock(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             return {

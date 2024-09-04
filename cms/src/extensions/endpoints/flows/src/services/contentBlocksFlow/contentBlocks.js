@@ -5,7 +5,7 @@ import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 export async function runContentBlocks(id) {
     try {
         const latest = await getContentBlocksById(id, Endpoints.LOCAL, LocalAuthToken);
-        const previous = await getContentBlocksById(id, Endpoints.UPSTREAM);
+        const previous = await getContentBlocksById(id, Endpoints.UPSTREAM, UpstreamAuthToken);
         if (!previousVersionExists(previous)) {
             const createdId = await createContentBlock(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             return {
