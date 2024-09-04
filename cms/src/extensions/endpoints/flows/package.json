@@ -19,7 +19,7 @@
 		"host": "^10.10.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-flows/dist; cp package.json ../../../../extensions/directus-extension-flows; cp dist/index.js ../../../../extensions/directus-extension-flows/dist",
+		"build": "node --experimental-vm-modules node_modules/jest/bin/jest.js; directus-extension build; mkdir -p ../../../../extensions/directus-extension-flows/dist; cp package.json ../../../../extensions/directus-extension-flows; cp dist/index.js ../../../../extensions/directus-extension-flows/dist",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link",
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
