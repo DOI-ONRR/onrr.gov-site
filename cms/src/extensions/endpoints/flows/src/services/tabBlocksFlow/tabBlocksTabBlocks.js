@@ -9,7 +9,7 @@ import { runContentBlocks } from '../contentBlocksFlow';
 import { runExpansionPanels } from '../expansionPanelsFlow';
 import { runTabBlocks } from '../tabBlocksFlow';
 import { runTabBlockLabel } from '../tabBlocksFlow';
-import { Endpoints, CollectionTypes, ApiMessages, AuthToken } from "../../constants";
+import { Endpoints, CollectionTypes, ApiMessages, UpstreamAuthToken } from "../../constants";
 import diff from "deep-diff";
 import { logger } from "../../utils/logger";
 
@@ -22,7 +22,8 @@ export async function runTabBlocksTabBlocks(tabBlockId) {
             if (!previousTabBlocks.find(block => block.id === latestTabBlock.id)) {
                 let newItem = JSON.parse(JSON.stringify(latestTabBlock));
                 newItem.item = latestTabBlock.item.id;
-                const createId = await createTabBlocksTabBlocksItem(newItem, Endpoints.UPSTREAM, AuthToken);
+                newItem.collection = latestTabBlock.item.collection;
+                const createId = await createTabBlocksTabBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({
                     id: createId,
                     collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
@@ -34,7 +35,8 @@ export async function runTabBlocksTabBlocks(tabBlockId) {
                 if (blockChanges) {
                     let updatedItem = JSON.parse(JSON.stringify(latestTabBlock));
                     updatedItem.item = latestTabBlock.item.id;
-                    const updateId = await updateTabBlocksTabBlocksItem(updatedItem, Endpoints.UPSTREAM, AuthToken);
+                    updatedItem.collection = latestTabBlock.item.collection;
+                    const updateId = await updateTabBlocksTabBlocksItem(updatedItem, Endpoints.UPSTREAM, UpstreamAuthToken);
                     appliedChanges.push({
                         id: updateId,
                         collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
@@ -66,7 +68,7 @@ export async function runTabBlocksTabBlocks(tabBlockId) {
         };
         for (const previousTabBlock of previousTabBlocks) {
             if (!latestTabBlocks.find(block => block.id === previousTabBlock.id)) {
-                const deletedItemId = await deleteTabBlocksTabBlocksItem(previousTabBlock.id, Endpoints.UPSTREAM, AuthToken);
+                const deletedItemId = await deleteTabBlocksTabBlocksItem(previousTabBlock.id, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({
                     id: deletedItemId,
                     collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,

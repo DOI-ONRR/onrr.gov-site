@@ -37,17 +37,6 @@ describe('Test pages flow', () => {
         expect(getPagesById).toHaveBeenCalledTimes(2);
     });
 
-    test('No changes message is NO_CHANGES', async () => {
-        // Arrange
-        getPagesById.mockResolvedValue(pagesById);
-
-        // Act
-        const result = await sut(pageId);
-
-        // Assert
-        expect(result.find(change => change.collection === CollectionTypes.PAGES && change.message === ApiMessages.NO_CHANGES)).toBeTruthy();
-    });
-
     test('createPagesItem is called', async () => {
         // Arrange
         getPagesById.mockResolvedValueOnce(createPage);

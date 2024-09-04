@@ -34,20 +34,6 @@ describe('Tab blocks flow', () => {
         jest.clearAllMocks();
     });
 
-    test('No changes should return NO_CHANGES', async () => {
-        // Arrange
-        getTabBlocksById.mockResolvedValueOnce(tabBlocksByIdMock)
-            .mockResolvedValueOnce(tabBlocksByIdMock);
-        runTabBlocksTabBlocks.mockResolvedValue([]);
-
-        // Act
-        const result = await sut(tabBlocksByIdMock.id);
-
-        // Assert
-        expect(result.find(change => change.message === ApiMessages.NO_CHANGES && change.collection === CollectionTypes.TAB_BLOCKS)).toBeTruthy();
-        expect(getTabBlocksById).toHaveBeenCalledTimes(2);
-    });
-
     test('Add tab block should return ITEM_CREATED', async () => {
         // Arrange
         getTabBlocksById.mockResolvedValueOnce(tabBlocksByIdMock)

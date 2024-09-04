@@ -1,5 +1,5 @@
 import { getCardBlocksById, createCardBlock, updateCardBlocksItem } from "../../operations/cardBlocks";
-import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../constants";
+import { Endpoints, UpstreamAuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 
 export async function runCardBlocks(id) {
@@ -7,7 +7,7 @@ export async function runCardBlocks(id) {
         const latest = await getCardBlocksById(id, Endpoints.LOCAL);
         const previous = await getCardBlocksById(id, Endpoints.UPSTREAM);
         if (!previousVersionExists(previous)) {
-            const createdId = await createCardBlock(latest, Endpoints.UPSTREAM, AuthToken);
+            const createdId = await createCardBlock(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             return {
                 id: createdId,
                 collection: CollectionTypes.CARD_BLOCKS,
@@ -15,7 +15,7 @@ export async function runCardBlocks(id) {
             }
         }
         else if (versionsDiffer(previous, latest)) {
-            const updatedId = await updateCardBlocksItem(id, latest, Endpoints.UPSTREAM, AuthToken);
+            const updatedId = await updateCardBlocksItem(id, latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             return {
                 id: updatedId,
                 collection: CollectionTypes.CARD_BLOCKS,

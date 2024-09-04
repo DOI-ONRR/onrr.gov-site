@@ -8,7 +8,7 @@ import { runCardBlocks } from '../cardBlocksFlow/cardBlocks';
 import { runContentBlocks } from '../contentBlocksFlow';
 import { runExpansionPanels } from '../expansionPanelsFlow/expansionPanels';
 import { runTabBlocks } from '../tabBlocksFlow';
-import { ApiMessages, AuthToken, CollectionTypes, Endpoints } from '../../constants';
+import { ApiMessages, UpstreamAuthToken, CollectionTypes, Endpoints } from '../../constants';
 import diff from 'deep-diff';
 import { logger } from '../../utils/logger';
 
@@ -21,7 +21,7 @@ export async function runPagesPageBlocks(pageId) {
             if (!previousBlocks.find(block => block.id === latestPageBlock.id)) {
                 let newItem = JSON.parse(JSON.stringify(latestPageBlock));
                 newItem.item = latestPageBlock.item.id;
-                const createId = await createPagesPageBlocksItem(newItem, Endpoints.UPSTREAM, AuthToken);
+                const createId = await createPagesPageBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({
                     id: createId,
                     collection: CollectionTypes.PAGES_PAGE_BLOCKS,
@@ -33,7 +33,7 @@ export async function runPagesPageBlocks(pageId) {
                 if (blockChanges) {
                     let updatedItem = JSON.parse(JSON.stringify(latestPageBlock));
                     updatedItem.item = latestPageBlock.item.id;
-                    const updateId = await updatePagesPageBlocksItem(updatedItem, Endpoints.UPSTREAM, AuthToken);
+                    const updateId = await updatePagesPageBlocksItem(updatedItem, Endpoints.UPSTREAM, UpstreamAuthToken);
                     appliedChanges.push({
                         id: updateId,
                         collection: CollectionTypes.PAGES_PAGE_BLOCKS,
@@ -60,7 +60,7 @@ export async function runPagesPageBlocks(pageId) {
         }
         for (const previousPageBlock of previousBlocks) {
             if (!latestBlocks.find(block => block.id === previousPageBlock.id)) {
-                const deleteId = await deletePagesPageBlocksItem(previousPageBlock.id, Endpoints.UPSTREAM, AuthToken);
+                const deleteId = await deletePagesPageBlocksItem(previousPageBlock.id, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({
                     id: deleteId,
                     collection: CollectionTypes.PAGES_PAGE_BLOCKS,

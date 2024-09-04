@@ -3,7 +3,7 @@ import {
     createExpansionPanelsItem, 
     updateExpansionPanelsItem} from '../../operations/expansionPanels';
 import { runExpansionPanelsExpansionPanelBlocks } from './expansionPanelsExpansionPanelBlocks';
-import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../constants";
+import { Endpoints, UpstreamAuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import { logger, versionsDiffer, previousVersionExists } from "../../utils";
 
 export async function runExpansionPanels(id) {
@@ -12,14 +12,14 @@ export async function runExpansionPanels(id) {
         const latest = await getExpansionPanelsById(id, Endpoints.LOCAL);
         const previous = await getExpansionPanelsById(id, Endpoints.UPSTREAM);
         if (!previousVersionExists(previous)) {
-            const createdId = await createExpansionPanelsItem(latest, Endpoints.UPSTREAM, AuthToken);
+            const createdId = await createExpansionPanelsItem(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             appliedChanges.push({
                 id: createdId,
                 collection: CollectionTypes.EXPANSION_PANELS,
                 message: ApiMessages.ITEM_CREATED
             })
         } else if (versionsDiffer(previous, latest)) {
-            const updatedId = await updateExpansionPanelsItem(latest, Endpoints.UPSTREAM, AuthToken);
+            const updatedId = await updateExpansionPanelsItem(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             appliedChanges.push({
                 id: updatedId,
                 collection: CollectionTypes.EXPANSION_PANELS,

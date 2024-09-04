@@ -26,6 +26,9 @@ query expansion_panels_expansion_panel_blocks(
         filter: { expansion_panels_id: { id: $expansion_panel_id } }
     ) {
         id
+        expansion_panels_id {
+            id
+        }
         collection
         sort
         item {

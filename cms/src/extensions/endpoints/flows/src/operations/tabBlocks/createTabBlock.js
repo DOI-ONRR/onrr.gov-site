@@ -13,7 +13,6 @@ export async function createTabBlock(data, endpoint, authToken) {
             }
         });
         const response = await client.request(createTabBlocksItem, variables);
-        logger.info(JSON.stringify(response, null, 2));
         return response.create_tab_blocks_item.id;
     } catch (error) {
         logger.error("Error creating tab block:", error);

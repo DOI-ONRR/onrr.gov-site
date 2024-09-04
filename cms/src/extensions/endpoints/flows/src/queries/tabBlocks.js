@@ -125,6 +125,9 @@ query tab_blocks_tab_blocks($tabBlocksId: GraphQLStringOrFloat!) {
         sort: ["Sort"]
     ) {
         id
+        tab_blocks_id {
+            id
+        }
         Sort
         item {
             ... on card_blocks {

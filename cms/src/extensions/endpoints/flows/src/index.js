@@ -5,10 +5,7 @@ export default (router, { env }) => {
 	router.post('/pages/:id', async (req, res, next) => {
 		try {
 			const id = req.params.id;
-			const pagesFlow = new PagesFlow(env, id);
-
-			const response = await pagesFlow.run();
-
+			const response = await runPages(id);
 			res.json(response);
 		}
 		catch (error) {

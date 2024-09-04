@@ -1,10 +1,9 @@
 import { tabBlocksById } from "../../queries/tabBlocks";
 import { GraphQLClient } from "graphql-request";
-import { logger } from '../../utils/logger';
+import { logger } from '../../utils';
 
 export async function getTabBlocksById(tabBlocksId, endpoint) {
     try {
-        console.log('in getTabBlocksById');
         const variables = {
             id: tabBlocksId,
         };

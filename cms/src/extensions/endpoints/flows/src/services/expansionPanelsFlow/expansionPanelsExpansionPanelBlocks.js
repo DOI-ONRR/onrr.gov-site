@@ -4,7 +4,7 @@ import {
     deleteExpansionPanelsExpansionPanelBlocksItem,
     updateExpansionPanelsExpansionPanelBlocksItem
 } from '../../operations/expansionPanels';
-import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../constants";
+import { Endpoints, UpstreamAuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import { runCardBlocks } from '../cardBlocksFlow';
 import { runContentBlocks } from '../contentBlocksFlow';
 import { runExpansionPanelBlockLabel } from './expansionPanelBlockLabel';
@@ -20,7 +20,7 @@ export async function runExpansionPanelsExpansionPanelBlocks(expansionPanelId) {
             if (!previousExpansionPanelBlocks.find(prevBlock => prevBlock.id === latestBlock.id)) {
                 const newBlock = JSON.parse(JSON.stringify(latestBlock));
                 newBlock.item = latestBlock.item.id;
-                const createdId = await createExpansionPanelsExpansionPanelBlocksItem(newBlock, Endpoints.UPSTREAM, AuthToken);
+                const createdId = await createExpansionPanelsExpansionPanelBlocksItem(newBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({
                     id: createdId,
                     collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,

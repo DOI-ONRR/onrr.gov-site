@@ -1,5 +1,5 @@
 import { getContentBlocksById, createContentBlock, updateContentBlocksItem } from "../../operations/contentBlocks";
-import { Endpoints, AuthToken, ApiMessages, CollectionTypes } from "../../constants";
+import { Endpoints, UpstreamAuthToken, ApiMessages, CollectionTypes } from "../../constants";
 import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 
 export async function runContentBlocks(id) {
@@ -7,14 +7,14 @@ export async function runContentBlocks(id) {
         const latest = await getContentBlocksById(id, Endpoints.LOCAL);
         const previous = await getContentBlocksById(id, Endpoints.UPSTREAM);
         if (!previousVersionExists(previous)) {
-            const createdId = await createContentBlock(latest, Endpoints.UPSTREAM, AuthToken);
+            const createdId = await createContentBlock(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             return {
                 id: createdId,
                 collection: CollectionTypes.CONTENT_BLOCKS,
                 message: ApiMessages.ITEM_CREATED
             }
         } else if (versionsDiffer(previous, latest)) {
-            const updatedItem = await updateContentBlocksItem(id, latest, Endpoints.UPSTREAM, AuthToken);
+            const updatedItem = await updateContentBlocksItem(id, latest, Endpoints.UPSTREAM, UpstreamAuthToken);
             return {
                 item: updatedItem,
                 collection: CollectionTypes.CONTENT_BLOCKS,

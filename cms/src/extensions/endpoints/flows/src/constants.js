@@ -3,7 +3,9 @@ export const Endpoints = {
     UPSTREAM: process.env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_ENDPOINT
 }
 
-export const AuthToken = process.env.DIRECTUS_EXTENSION_FLOWS_AUTH_TOKEN;
+export const UpstreamAuthToken = process.env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_AUTH_TOKEN;
+
+export const LocalAuthToken = process.env.DIRECTUS_EXTENSION_FLOWS_LOCAL_AUTH_TOKEN;
 
 export const ApiMessages = {
     ITEM_CREATED: 'item_created',
