@@ -22,6 +22,7 @@ export async function runCardBlocks(id) {
                 message: ApiMessages.ITEM_UPDATED
             }
         }
+        return null;
     }
     catch {
         logger.error(`Error in runCardBlocks (${id}):`, error)
