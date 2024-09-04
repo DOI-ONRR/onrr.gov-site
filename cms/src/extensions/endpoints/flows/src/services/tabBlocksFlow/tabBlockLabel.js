@@ -4,41 +4,31 @@ import {
     updateTabBlockLabelItem,
 } from '../../operations/tabBlocks';
 import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../constants";
-import diff from "deep-diff";
-import { logger } from "../../utils/logger";
+import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 
 export async function runTabBlockLabel(id) {
     try {
         const latest = await getTabBlockLabelById(id, Endpoints.LOCAL);
         const previous = await getTabBlockLabelById(id, Endpoints.UPSTREAM);
-        const changes = diff(previous, latest);
-        if (!changes) {
+        if (!previousVersionExists(previous)) {
+            const createdId = await createTabBlockLabelItem(change.rhs, Endpoints.UPSTREAM, AuthToken);
             return {
-                id: id,
+                id: createdId,
                 collection: CollectionTypes.TAB_BLOCK_LABEL,
-                message: ApiMessages.NO_CHANGES
+                message: ApiMessages.ITEM_CREATED
+            }
+        } else if (versionsDiffer(previous, latest)) {
+            const updatedId = await updateTabBlockLabelItem(id, latest, Endpoints.UPSTREAM, AuthToken);
+            return {
+                item: updatedId,
+                collection: CollectionTypes.TAB_BLOCK_LABEL,
+                message: ApiMessages.ITEM_UPDATED
             }
         }
-        for (const change of changes) {
-            if (change.kind === 'E' && !change.lhs) {
-                //const createdId = await createTabBlockLabelItem(change.rhs, Endpoints.UPSTREAM, AuthToken);
-                return {
-                    id: createdId,
-                    collection: CollectionTypes.TAB_BLOCK_LABEL,
-                    message: ApiMessages.ITEM_CREATED
-                }
-            }
-            if (change.kind === 'E') {
-                const updatedItem = await updateTabBlockLabelItem(id, latest, Endpoints.UPSTREAM, AuthToken);
-                return {
-                    item: updatedItem.id,
-                    collection: CollectionTypes.TAB_BLOCK_LABEL,
-                    message: ApiMessages.ITEM_UPDATED
-                }
-            }
-        }
+        return null;
     }
     catch(error) {
-        logger.error('Error in runTabBlockLabelItemFlow:', error);
+        logger.error('Error in runTabBlockLabel:', error);
+        throw new Error('Error in runTabBlockLabel');
     }
 }

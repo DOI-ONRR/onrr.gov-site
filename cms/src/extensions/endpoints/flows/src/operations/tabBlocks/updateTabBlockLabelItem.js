@@ -10,7 +10,7 @@ export async function updateTabBlockLabelItem(id, item, endpoint, authToken) {
             }
         });
         const response = await client.request(updateTabBlockLabelItemMutation, { id: id, item: item });
-        return response.update_tab_block_label_item;
+        return response.update_tab_block_label_item.id;
     } catch (error) {
         logger.error("Error in updateTabBlockLabelItem:", error);
         throw new Error('Error in updateTabBlockLabelItem');
