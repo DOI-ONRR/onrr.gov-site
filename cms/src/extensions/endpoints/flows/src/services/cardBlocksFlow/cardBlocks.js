@@ -1,32 +1,25 @@
 import { getCardBlocksById, createCardBlock, updateCardBlocksItem } from "../../operations/cardBlocks";
 import { Endpoints, AuthToken, CollectionTypes, ApiMessages } from "../../constants";
-import diff from "deep-diff";
-import { logger } from "../../utils/logger";
+import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 
 export async function runCardBlocks(id) {
     try {
         const latest = await getCardBlocksById(id, Endpoints.LOCAL);
         const previous = await getCardBlocksById(id, Endpoints.UPSTREAM);
-        const changes = diff(previous, latest);
-        if (!changes) {
-            null;
-        }
-        for (const change of changes) {
-            if (change.kind == 'E' && !change.lhs) {
-                const createdId = await createCardBlock(change.rhs, Endpoints.UPSTREAM, AuthToken);
-                return {
-                    id: createdId,
-                    collection: CollectionTypes.CARD_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                }
+        if (!previousVersionExists(previous)) {
+            const createdId = await createCardBlock(latest, Endpoints.UPSTREAM, AuthToken);
+            return {
+                id: createdId,
+                collection: CollectionTypes.CARD_BLOCKS,
+                message: ApiMessages.ITEM_CREATED
             }
-            if (change.kind === 'E') {
-                const updateResponse = await updateCardBlocksItem(id, latest, Endpoints.UPSTREAM, AuthToken);
-                return {
-                    item: updateResponse,
-                    collection: CollectionTypes.CARD_BLOCKS,
-                    message: ApiMessages.ITEM_UPDATED
-                }
+        }
+        else if (versionsDiffer(previous, latest)) {
+            const updatedId = await updateCardBlocksItem(id, latest, Endpoints.UPSTREAM, AuthToken);
+            return {
+                id: updatedId,
+                collection: CollectionTypes.CARD_BLOCKS,
+                message: ApiMessages.ITEM_UPDATED
             }
         }
     }
