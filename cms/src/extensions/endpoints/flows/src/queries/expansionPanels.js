@@ -72,6 +72,13 @@ mutation create_expansion_panel_block_label_item($data: create_expansion_panel_b
     }
 }`;
 
+export const updateExpansionPanelBlockLabelItemMutation = gql`
+mutation update_expansion_panel_block_label_item($id: ID!, $item: update_expansion_panel_block_label_input!) {
+    update_expansion_panel_block_label_item(id: $id, data: $item) {
+        id
+    }
+}`;
+
 export const createExpansionPanelsExpansionPanelBlocksItemMutation = gql`
 mutation create_expansion_panels_expansion_panel_blocks_item($item: create_expansion_panels_expansion_panel_blocks_input!) {
     create_expansion_panels_expansion_panel_blocks_item(data: $item) {
