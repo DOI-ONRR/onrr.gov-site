@@ -24,10 +24,6 @@ jest.unstable_mockModule('../../../src/services/tabBlocksFlow/tabBlockLabel', ()
     runTabBlockLabel: jest.fn()
 }));
 
-jest.unstable_mockModule('../../../src/services/tabBlocksFlow/tabBlocksTabBlocksItem', () => ({
-    runTabBlocksTabBlocksItem: jest.fn()
-}));
-
 jest.unstable_mockModule('../../../src/operations/tabBlocks/deleteTabBlocksTabBlocksItem', () => ({
     deleteTabBlocksTabBlocksItem: jest.fn()
 }));
@@ -47,7 +43,6 @@ export const getMocks = async () => {
     const { runExpansionPanels } = await import('../../../src/services/expansionPanelsFlow/expansionPanels');
     const { runTabBlocks } = await import('../../../src/services/tabBlocksFlow/tabBlocks');
     const { runTabBlockLabel } = await import('../../../src/services/tabBlocksFlow/tabBlockLabel');
-    const { runTabBlocksTabBlocksItem } = await import('../../../src/services/tabBlocksFlow/tabBlocksTabBlocksItem');
     const { deleteTabBlocksTabBlocksItem } = await import('../../../src/operations/tabBlocks/deleteTabBlocksTabBlocksItem');
     const { createTabBlocksTabBlocksItem } = await import('../../../src/operations/tabBlocks/createTabBlocksTabBlocksItem');
     const { updateTabBlocksTabBlocksItem } = await import('../../../src/operations/tabBlocks/updateTabBlocksTabBlocksItem');
@@ -59,7 +54,6 @@ export const getMocks = async () => {
         runExpansionPanels,
         runTabBlocks,
         runTabBlockLabel,
-        runTabBlocksTabBlocksItem,
         deleteTabBlocksTabBlocksItem,
         createTabBlocksTabBlocksItem,
         updateTabBlocksTabBlocksItem

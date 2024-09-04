@@ -20,7 +20,6 @@ let getTabBlocksTabBlocks,
     runExpansionPanels, 
     runTabBlocks, 
     runTabBlockLabel,
-    runTabBlocksTabBlocksItem,
     deleteTabBlocksTabBlocksItem,
     createTabBlocksTabBlocksItem,
     updateTabBlocksTabBlocksItem;
@@ -33,7 +32,6 @@ beforeAll(async () => {
     runExpansionPanels = mocks.runExpansionPanels;
     runTabBlocks = mocks.runTabBlocks;
     runTabBlockLabel = mocks.runTabBlockLabel;
-    runTabBlocksTabBlocksItem = mocks.runTabBlocksTabBlocksItem;
     deleteTabBlocksTabBlocksItem = mocks.deleteTabBlocksTabBlocksItem;
     createTabBlocksTabBlocksItem = mocks.createTabBlocksTabBlocksItem;
     updateTabBlocksTabBlocksItem = mocks.updateTabBlocksTabBlocksItem;
@@ -76,8 +74,6 @@ describe('Tab blocks tab blocks flow', () => {
             }
         });
 
-        runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item))
-
         // Act
         const appliedChanges = await sut(tabBlockId);
 
@@ -104,8 +100,6 @@ describe('Tab blocks tab blocks flow', () => {
                     break;
             }
         });
-
-        runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
 
         // Act
         await sut(tabBlockId);
@@ -137,8 +131,6 @@ describe('Tab blocks tab blocks flow', () => {
                     break;
             }
         });
-
-        runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
 
         // Act
         await sut(tabBlockId);
@@ -245,8 +237,6 @@ describe('Tab blocks tab blocks flow', () => {
             .mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item));
 
         runExpansionPanels.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksExpansionPanel[0].item));
-
-        runTabBlocksTabBlocksItem.mockResolvedValue(runFlowItemNoChangesMock(tabBlocksTabBlocksTabLabel[0].item))
 
         deleteTabBlocksTabBlocksItem.mockResolvedValueOnce(2029)
 
