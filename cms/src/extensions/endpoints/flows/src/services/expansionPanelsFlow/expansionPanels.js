@@ -3,13 +3,13 @@ import {
     createExpansionPanelsItem, 
     updateExpansionPanelsItem} from '../../operations/expansionPanels';
 import { runExpansionPanelsExpansionPanelBlocks } from './expansionPanelsExpansionPanelBlocks';
-import { Endpoints, UpstreamAuthToken, CollectionTypes, ApiMessages } from "../../constants";
+import { Endpoints, UpstreamAuthToken, LocalAuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import { logger, versionsDiffer, previousVersionExists } from "../../utils";
 
 export async function runExpansionPanels(id) {
     try {
         var appliedChanges = [];
-        const latest = await getExpansionPanelsById(id, Endpoints.LOCAL);
+        const latest = await getExpansionPanelsById(id, Endpoints.LOCAL, LocalAuthToken);
         const previous = await getExpansionPanelsById(id, Endpoints.UPSTREAM);
         if (!previousVersionExists(previous)) {
             const createdId = await createExpansionPanelsItem(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
