@@ -1,10 +1,10 @@
 import { getCardBlocksById, createCardBlock, updateCardBlocksItem } from "../../operations/cardBlocks";
-import { Endpoints, UpstreamAuthToken, CollectionTypes, ApiMessages } from "../../constants";
+import { Endpoints, UpstreamAuthToken, LocalAuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 
 export async function runCardBlocks(id) {
     try {
-        const latest = await getCardBlocksById(id, Endpoints.LOCAL);
+        const latest = await getCardBlocksById(id, Endpoints.LOCAL, LocalAuthToken);
         const previous = await getCardBlocksById(id, Endpoints.UPSTREAM);
         if (!previousVersionExists(previous)) {
             const createdId = await createCardBlock(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
