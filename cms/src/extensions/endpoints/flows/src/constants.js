@@ -6,7 +6,6 @@ export const Endpoints = {
 export const AuthToken = process.env.DIRECTUS_EXTENSION_FLOWS_AUTH_TOKEN;
 
 export const ApiMessages = {
-    NO_CHANGES: 'no_changes',
     ITEM_CREATED: 'item_created',
     ITEM_UPDATED: 'item_updated',
     ITEM_DELETED: 'item_deleted'
@@ -20,6 +19,7 @@ export const CollectionTypes = {
     TAB_BLOCKS_TAB_BLOCKS: 'tab_blocks_tab_blocks',
     EXPANSION_PANELS: 'expansion_panels',
     EXPANSION_PANEL_BLOCK_LABEL: 'expansion_panel_block_label',
+    EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS: 'expansion_panels_expansion_panel_blocks',
     PAGES: 'pages',
     PAGES_PAGE_BLOCKS: 'pages_page_blocks'
 }

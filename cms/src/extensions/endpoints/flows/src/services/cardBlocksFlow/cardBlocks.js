@@ -9,11 +9,7 @@ export async function runCardBlocks(id) {
         const previous = await getCardBlocksById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
         if (!changes) {
-            return {
-                id: id,
-                collection: CollectionTypes.CARD_BLOCKS,
-                message: ApiMessages.NO_CHANGES
-            }
+            null;
         }
         for (const change of changes) {
             if (change.kind == 'E' && !change.lhs) {

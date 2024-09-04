@@ -9,11 +9,7 @@ export async function runContentBlocks(id) {
         const previous = await getContentBlocksById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
         if (!changes) {
-            return {
-                id: id,
-                collection: CollectionTypes.CONTENT_BLOCKS,
-                message: ApiMessages.NO_CHANGES
-            }
+            return null;
         }
         for (const change of changes) {
             if (change.kind === 'E' && !change.lhs) {

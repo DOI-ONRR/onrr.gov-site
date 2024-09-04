@@ -11,6 +11,7 @@ import { logger } from "../../utils/logger";
 
 export async function runExpansionPanels(id) {
     try {
+        var appliedChanges = [];
         const latest = await getExpansionPanelsById(id, Endpoints.LOCAL);
         const previous = await getExpansionPanelsById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);

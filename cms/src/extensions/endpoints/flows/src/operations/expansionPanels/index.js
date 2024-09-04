@@ -3,5 +3,6 @@ export { getExpansionPanelsExpansionPanelBlocks } from './getExpansionPanelsExpa
 export { getExpansionPanelBlockLabelById } from './getExpansionPanelBlockLabelById';
 export { createExpansionPanelsItem } from './createExpansionPanelsItem';
 export { createExpansionBlockLabelItem } from './createExpansionBlockLabelItem';
-export { createExpansionPanelBlocksItems } from './createExpansionPanelBlocksItems';
-export { deleteExpansionPanelBlocksItem } from './deleteExpansionPanelBlocksItem';
+export { createExpansionPanelsExpansionPanelBlocksItem } from './createExpansionPanelsExpansionPanelBlocksItem';
+export { deleteExpansionPanelsExpansionPanelBlocksItem } from './deleteExpansionPanelsExpansionPanelBlocksItem';
+export { updateExpansionPanelsExpansionPanelBlocksItem } from './updateExpansionPanelsExpansionPanelBlocksItem';

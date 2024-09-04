@@ -9,11 +9,7 @@ export async function runExpansionPanelBlockLabel(id) {
         const previous = await getExpansionPanelBlockLabelById(id, Endpoints.UPSTREAM);
         const changes = diff(previous, latest);
         if (!changes) {
-            return {
-                id: id,
-                collection: CollectionTypes.EXPANSION_PANEL_BLOCK_LABEL,
-                message: ApiMessages.NO_CHANGES
-            }
+            return null;
         }
         const firstChange = changes[0];
         if (firstChange.kind == 'E' && !firstChange.lhs) {

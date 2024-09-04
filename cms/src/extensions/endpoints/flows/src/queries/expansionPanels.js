@@ -65,15 +65,23 @@ mutation create_expansion_panel_block_label_item($data: create_expansion_panel_b
     }
 }`;
 
-export const createExpansionPanelsExpansionPanelBlocksItems = gql`
-mutation create_expansion_panels_expansion_panel_blocks_items($data: [create_expansion_panels_expansion_panel_blocks_input!]) {
-    create_expansion_panels_expansion_panel_blocks_items(data: $data) {
+export const createExpansionPanelsExpansionPanelBlocksItemMutation = gql`
+mutation create_expansion_panels_expansion_panel_blocks_item($item: create_expansion_panels_expansion_panel_blocks_input!) {
+    create_expansion_panels_expansion_panel_blocks_item(data: $item) {
         id
     }
 }`;
 
-export const deleteExpansionPanelsExpansionPanelBlocksItem = gql`mutation delete_expansion_panels_expansion_panel_blocks_item($id: ID!) {
+export const deleteExpansionPanelsExpansionPanelBlocksItemMutation = gql`
+mutation delete_expansion_panels_expansion_panel_blocks_item($id: ID!) {
     delete_expansion_panels_expansion_panel_blocks_item(id: $id) {
+        id
+    }
+}`;
+
+export const updateExpansionPanelsExpansionPanelBlocksItemMutation = gql`
+mutation update_expansion_panels_expansion_panel_blocks_item($id: ID!, $item: update_expansion_panels_expansion_panel_blocks_input!) {
+    update_expansion_panels_expansion_panel_blocks_item(id: $id, data: $item) {
         id
     }
 }`;
