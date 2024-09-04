@@ -27,6 +27,7 @@ beforeAll(async () => {
 describe('Test pages flow', () => {
     beforeEach(async() => {
         jest.resetAllMocks();
+        runPagesPageBlocks.mockResolvedValue([]);
     });
 
     test('getPagesById is called 2x', async () => {

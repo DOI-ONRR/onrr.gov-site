@@ -27,7 +27,9 @@ export async function runExpansionPanels(id) {
             })
         }
         const expansionPanelsExpansionPanelBlocksChanges = await runExpansionPanelsExpansionPanelBlocks(id);
-        return [...appliedChanges, ...expansionPanelsExpansionPanelBlocksChanges];
+        return expansionPanelsExpansionPanelBlocksChanges.length > 0
+            ? appliedChanges.concat(expansionPanelsExpansionPanelBlocksChanges)
+            : appliedChanges;
         
     }
     catch(error) {

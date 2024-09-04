@@ -56,7 +56,11 @@ export async function runPagesPageBlocks(pageId) {
                     flowResult = await runTabBlocks(latestPageBlock.item.id);
                     break;
             }
-            appliedChanges.push(flowResult);
+            if (flowResult && !Array.isArray(flowResult)) {
+                appliedChanges.push(flowResult);
+            } else if (Array.isArray(flowResult) && flowResult.length > 0) {
+                appliedChanges.concat(flowResult);
+            }
         }
         for (const previousPageBlock of previousBlocks) {
             if (!latestBlocks.find(block => block.id === previousPageBlock.id)) {

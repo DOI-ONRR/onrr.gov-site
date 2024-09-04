@@ -24,7 +24,7 @@ export async function runCardBlocks(id) {
         }
         return null;
     }
-    catch {
+    catch (error) {
         logger.error(`Error in runCardBlocks (${id}):`, error)
         throw new Error('Error in runCardBlocks');
     }

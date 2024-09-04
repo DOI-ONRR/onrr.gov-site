@@ -10,7 +10,6 @@ import { logger, previousVersionExists, versionsDiffer } from "../../utils";
 export async function runPages(id) {
     try {
         var appliedChanges = [];
-        logger.info(LocalAuthToken);
         const latest = await getPagesById(id, Endpoints.LOCAL, LocalAuthToken);
         const previous = await getPagesById(id, Endpoints.UPSTREAM, UpstreamAuthToken);
         if (!previousVersionExists(previous)) {
@@ -29,9 +28,11 @@ export async function runPages(id) {
             });
         }
         const pagesPageBlocksResults = await runPagesPageBlocks(id);
-        return appliedChanges.concat(pagesPageBlocksResults);
+        return pagesPageBlocksResults.length > 0 
+            ? appliedChanges.concat(pagesPageBlocksResults) 
+            : appliedChanges;
     }
-    catch {
+    catch (error) {
         logger.error(`Error in runPages (${id}):`, error)
         throw new Error('Error in runPages');
     }
