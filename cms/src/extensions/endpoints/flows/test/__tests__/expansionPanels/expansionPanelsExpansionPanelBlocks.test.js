@@ -1,8 +1,5 @@
 import { jest } from '@jest/globals'
 import { getMocks } from '../../__setup__/expansionPanels/expansionPanelsExpansionPanelBlocks.setup';
-import { 
-    
-} from '../../__mocks__/tabBlocks/tabBlocksTabBlocks.mocks';
 import { ApiMessages, CollectionTypes } from '../../../src/constants';
 const { runExpansionPanelsExpansionPanelBlocks: sut } = await import('../../../src/services/expansionPanelsFlow/expansionPanelsExpansionPanelBlocks');
 
