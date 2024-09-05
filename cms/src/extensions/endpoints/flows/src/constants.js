@@ -1,6 +1,6 @@
 export const Endpoints = {
-    LOCAL: process.env.DIRECTUS_EXTENSION_FLOWS_LOCAL_ENDPOINT,
-    UPSTREAM: process.env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_ENDPOINT
+    LOCAL: `${process.env.DIRECTUS_PUBLIC_HOST}/graphql`,
+    UPSTREAM: `${process.env.UPSTREAM_URL}/graphql`
 }
 
 export const UpstreamAuthToken = process.env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_AUTH_TOKEN;

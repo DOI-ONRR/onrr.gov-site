@@ -3,7 +3,6 @@ export { createTabBlockLabelItem } from './createTabBlockLabelItem';
 export { createTabBlocksTabBlocksItem } from './createTabBlocksTabBlocksItem';
 export { getTabBlockLabelById } from './getTabBlockLabelById';
 export { getTabBlocksById as getTabBlocksById } from './getTabBlocksById';
-export { getTabBlocksByIdWithTabBlocks } from './getTabBlocksByIdWithTabBlocks';
 export { getTabBlocksTabBlocks as getTabBlocksTabBlocks } from './getTabBlocksTabBlocks';
 export { updateTabBlockLabelItem } from './updateTabBlockLabelItem';
 export { updateTabBlocksItem } from './updateTabBlocksItem';
