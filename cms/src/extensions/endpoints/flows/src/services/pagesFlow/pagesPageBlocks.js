@@ -19,7 +19,7 @@ export async function runPagesPageBlocks(pageId) {
         const previousBlocks = await getPagesPageBlocks(pageId, Endpoints.UPSTREAM);
         for (const latestPageBlock of latestBlocks) {
             if (!previousBlocks.find(block => block.id === latestPageBlock.id)) {
-                let newItem = JSON.parse(JSON.stringify(latestPageBlock));
+                var newItem = JSON.parse(JSON.stringify(latestPageBlock));
                 newItem.item = latestPageBlock.item.id;
                 const createId = await createPagesPageBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({
@@ -31,7 +31,7 @@ export async function runPagesPageBlocks(pageId) {
                 const previousPageBlock = previousBlocks.find(block => block.id === latestPageBlock.id);
                 const blockChanges = diff(previousPageBlock, latestPageBlock);
                 if (blockChanges) {
-                    let updatedItem = JSON.parse(JSON.stringify(latestPageBlock));
+                    var updatedItem = JSON.parse(JSON.stringify(latestPageBlock));
                     updatedItem.item = latestPageBlock.item.id;
                     const updateId = await updatePagesPageBlocksItem(updatedItem, Endpoints.UPSTREAM, UpstreamAuthToken);
                     appliedChanges.push({

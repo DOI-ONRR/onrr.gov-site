@@ -13,7 +13,6 @@ let getTabBlocksById,
     runTabBlockLabel, 
     runContentBlocks, 
     runExpansionPanels, 
-    createTabBlocksTabBlocks, 
     createTabBlock,
     runTabBlocksTabBlocks;
 
@@ -24,7 +23,6 @@ beforeAll(async () => {
     runTabBlockLabel = mocks.runTabBlockLabel;
     runContentBlocks = mocks.runContentBlocks;
     runExpansionPanels = mocks.runExpansionPanels;
-    createTabBlocksTabBlocks = mocks.createTabBlocksTabBlocks;
     createTabBlock = mocks.createTabBlock;
     runTabBlocksTabBlocks = mocks.runTabBlocksTabBlocks;
 });
@@ -64,8 +62,6 @@ describe('Tab blocks flow', () => {
             }
 
         });
-
-        createTabBlocksTabBlocks.mockResolvedValueOnce(tabBlocksTabBlocks);
 
         // Act
         const result = await sut(tabBlocksByIdMock.id);
