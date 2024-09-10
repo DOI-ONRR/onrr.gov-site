@@ -10,7 +10,7 @@ export async function getCardBlocksCardContentBlocks(id, endpoint, authToken) {
                 authorization: `Bearer ${authToken}`
             });
         }
-        const data = await client.request(cardBlocksCardContentBlocks, { id: id });
+        const data = await client.request(cardBlocksCardContentBlocks, { cardBlocksId: id });
         return data.card_blocks_card_content_blocks;
     } catch(error) {
         logger.error('Error in getCardBlocksCardContentBlocks: ', error);
