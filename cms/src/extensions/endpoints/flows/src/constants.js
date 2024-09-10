@@ -15,6 +15,7 @@ export const ApiMessages = {
 
 export const CollectionTypes = {
     CARD_BLOCKS: 'card_blocks',
+    CARD_BLOCKS_CARD_CONTENT_BLOCKS: 'card_blocks_card_content_blocks',
     CONTENT_BLOCKS: 'content_blocks',
     TAB_BLOCKS: 'tab_blocks',
     TAB_BLOCK_LABEL: 'tab_block_label',

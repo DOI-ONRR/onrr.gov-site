@@ -18,6 +18,25 @@ query card_blocks_by_id($id: ID!) {
     }
 }`;
 
+export const cardBlocksCardContentBlocks = gql`
+query card_blocks_card_content_blocks($cardBlocksId: GraphQLStringOrFloat!) {
+    card_blocks_card_content_blocks(
+        filter: { card_blocks_id: { id: { _eq: $cardBlocksId } } }
+        sort: ["Sort"]
+    ) {
+        id
+        card_blocks_id {
+            id
+        }
+        item {
+            ... on content_blocks {
+                id
+            }
+        }
+        Sort
+    }
+}`;
+
 export const createCardBlocksItem = gql`
 mutation create_card_blocks_item($data: create_card_blocks_input!) {
     create_card_blocks_item(data: $data) {
@@ -30,5 +49,26 @@ mutation update_card_blocks_item($id: ID!, $item: update_card_blocks_input!) {
     update_card_blocks_item(id: $id, data: $item) {
         id
         date_updated
+    }
+}`;
+
+export const createCardBlocksCardContentBlocksItemMutation = gql`
+mutation create_card_blocks_card_content_blocks_item($item: create_card_blocks_card_content_blocks_input!) {
+    create_card_blocks_card_content_blocks_item(data: $item) {
+        id
+    }
+}`;
+
+export const deleteCardBlocksCardContentBlocksItemMutation = gql`
+mutation delete_card_blocks_card_content_blocks_item($id: ID!) {
+    delete_card_blocks_card_content_blocks_item(id: $id) {
+        id
+    }
+}`;
+
+export const updateCardBlocksCardContentBlocksItemMutation = gql`
+mutation update_card_blocks_card_content_blocks_item($id: ID!, $item: update_card_blocks_card_content_blocks_input!) {
+    update_card_blocks_card_content_blocks_item(id: $id, data: $item) {
+        id
     }
 }`;
