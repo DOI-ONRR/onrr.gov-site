@@ -242,10 +242,10 @@
         },
         {
             "id": "535d8428-e9d5-4811-9972-f3aa5959d906",
-            "name": "_handbook_solid_materials_handbook",
+            "name": "_handbook_solid_minerals_handbook",
             "icon": "bolt",
             "color": null,
-            "description": "Embedded flow for publishing solid materials handbook",
+            "description": "Embedded flow for publishing solid minerals handbook",
             "status": "active",
             "trigger": "operation",
             "accountability": "all",

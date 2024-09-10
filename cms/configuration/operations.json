@@ -132,7 +132,7 @@
             "position_y": 1,
             "options": {
                 "method": "PATCH",
-                "url": "https://prod-onr-cms.app.cloud.gov/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}",
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.body.collection}}/{{$trigger.body.keys[0]}}",
                 "body": "{{read_item}}",
                 "headers": [
                     {
@@ -231,7 +231,7 @@
                     }
                 ],
                 "method": "POST",
-                "url": "https://prod-onr-cms.app.cloud.gov/items/{{$trigger.body.collection}}",
+                "url": "{{$env['UPSTREAM_URL']}}/items/{{$trigger.body.collection}}",
                 "body": "{{read_item}}"
             },
             "resolve": null,
@@ -266,7 +266,7 @@
             "options": {
                 "collection": "revenue_handbook",
                 "key": [
-                    "{$trigger}}"
+                    "{{$trigger}}"
                 ]
             },
             "resolve": "868ff943-b5c0-49f0-b40f-a8504d5b0ca5",
@@ -702,7 +702,7 @@
             "options": {
                 "collection": "geothermal_class_2_3",
                 "key": [
-                    "{$trigger}}"
+                    "{{$trigger}}"
                 ]
             },
             "resolve": "a958346f-91ab-4274-9879-f8492abd25ac",
@@ -938,7 +938,7 @@
             "options": {
                 "collection": "solid_minerals_handbook",
                 "key": [
-                    "{$trigger}}"
+                    "{{$trigger}}"
                 ]
             },
             "resolve": "b7c6f31f-5dc6-4963-9e9e-e81e4361a24a",
