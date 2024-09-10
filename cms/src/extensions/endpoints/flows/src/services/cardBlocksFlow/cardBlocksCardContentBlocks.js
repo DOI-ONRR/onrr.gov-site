@@ -18,7 +18,6 @@ export async function runCardBlocksCardContentBlocks(id) {
             if (!previous.find(prev => prev.id === latestContentBlock.id)) {
                 var newContentBlock = JSON.parse(JSON.stringify(latestContentBlock));
                 newContentBlock.item = latestContentBlock.item.id;
-                delete newContentBlock.id;
                 const createOperationId = await createCardBlocksCardContentBlocksItem(newContentBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({
                     id: createOperationId,
@@ -31,7 +30,6 @@ export async function runCardBlocksCardContentBlocks(id) {
                 if (blockChanges) {
                     let updatedItem = JSON.parse(JSON.stringify(latestContentBlock));
                     updatedItem.item = latestContentBlock.item.id;
-                    updatedItem.collection = CollectionTypes.CONTENT_BLOCKS;
                     const updateId = await updateCardBlocksCardContentBlocksItem(updatedItem, Endpoints.UPSTREAM, UpstreamAuthToken);
                     appliedChanges.push({
                         id: updateId,

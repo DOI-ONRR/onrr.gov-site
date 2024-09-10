@@ -33,6 +33,7 @@ query card_blocks_card_content_blocks($cardBlocksId: GraphQLStringOrFloat!) {
                 id
             }
         }
+        collection
         Sort
     }
 }`;
