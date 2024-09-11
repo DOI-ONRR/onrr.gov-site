@@ -181,14 +181,9 @@ export class OnrrHyperlink extends Hyperlink {
     }
 
     validateURL(str) {
-        const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-            '((\\d{1,3}\\.){3}\\d{1,3}))|'+ // OR ip (v4) address
-            '(\/[^\s]*)'+ // allows relative links
-            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-        return !!pattern.test(str);
+        const urlPattern =
+            /^(https?:\/\/(?:[a-zA-Z0-9-]+\.[a-zA-Z]{2,}|(?:\d{1,3}\.){3}\d{1,3})(?:\/[^\s?#]*)?(?:\?[^\s#]*)?)|(\/[\w\-\.]+(?:\/[\w\-\.]*)?(?:\?[^\s#]*)?)$/;
+        return !!urlPattern.test(str);
     }
 
     insertLink(link, target = "", rel = "", checked = false) {
