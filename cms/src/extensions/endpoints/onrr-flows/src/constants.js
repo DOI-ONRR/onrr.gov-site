@@ -30,7 +30,3 @@ export const CollectionTypes = {
     PAGES: 'pages',
     PAGES_PAGE_BLOCKS: 'pages_page_blocks'
 }
-
-export const PathArrayTypes = {
-    TAB_BLOCKS: 'tab_blocks'
-}

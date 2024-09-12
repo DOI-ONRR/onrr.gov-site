@@ -1,5 +1,4 @@
 import { createDirectus, rest, staticToken, updateFile } from '@directus/sdk';
-import { getFolderById } from './getFolderById';
 import { downloadFile } from './downloadFile';
 import { UpstreamAuthToken, Endpoints } from '../../constants';
 import { logger } from "../../utils";
@@ -10,6 +9,9 @@ export async function updateDirectusFile(file) {
             .with(staticToken(UpstreamAuthToken))
             .with(rest());
 
+        const fileUrl = `${Endpoints.LOCAL_CMS}/assets/${file.filename_disk}`;
+        const filenameDownload = file.filename_download;
+
         delete file.filename_disk;
         delete file.filename_download;
 
@@ -18,13 +20,9 @@ export async function updateDirectusFile(file) {
             formData.append(key, file[key]);
         });
 
-        const folder = await getFolderById(file.folder);
-
-        const fileUrl = `${Endpoints.LOCAL_CMS}/${folder.name}/${file.filename_download}`;
-
         const fileBlob = await downloadFile(fileUrl);
 
-        formData.append('file', fileBlob, file.filename_download);
+        formData.append('file', fileBlob, filenameDownload);
 
         const result = await client.request(updateFile(formData));
 
