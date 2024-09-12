@@ -1,6 +1,8 @@
 export const Endpoints = {
     LOCAL: `${process.env.DIRECTUS_PUBLIC_HOST}/graphql`,
-    UPSTREAM: `${process.env.UPSTREAM_URL}/graphql`
+    UPSTREAM: `${process.env.UPSTREAM_URL}/graphql`,
+    LOCAL_CMS: process.env.DIRECTUS_PUBLIC_HOST,
+    UPSTREAM_CMS: process.env.UPSTREAM_URL
 }
 
 export const UpstreamAuthToken = process.env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_AUTH_TOKEN;
@@ -10,7 +12,9 @@ export const LocalAuthToken = process.env.DIRECTUS_EXTENSION_FLOWS_LOCAL_AUTH_TO
 export const ApiMessages = {
     ITEM_CREATED: 'item_created',
     ITEM_UPDATED: 'item_updated',
-    ITEM_DELETED: 'item_deleted'
+    ITEM_DELETED: 'item_deleted',
+    FILE_UPLOADED: 'file_uploaded',
+    FILE_UPDATED: 'file_updated'
 }
 
 export const CollectionTypes = {
