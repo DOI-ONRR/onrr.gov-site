@@ -63,7 +63,7 @@ jobs:
       - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
       - node/install-packages:
-          app-dir: cms/src/extensions/endpoints/flows
+          app-dir: cms/src/extensions/endpoints/onrr-flows
       - persist_to_workspace:
           root: ~/project
           paths: 
