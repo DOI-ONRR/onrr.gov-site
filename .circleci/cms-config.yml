@@ -12,6 +12,9 @@ parameters:
   run-build-cms:
     type: boolean
     default: false
+  build-cms:
+    type: boolean
+    default: false
 
 workflows:
   build-cms:
