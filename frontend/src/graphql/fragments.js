@@ -62,6 +62,14 @@ export const expansionPanelBlockLabel = gql`
   }
 `
 
+export const formulaBlockFields = gql`
+  fragment formulaBlockFields on formula_blocks {
+    id
+    title
+    formula_tex
+  }
+`
+
 export const expansionPanelBlockFields = gql`
   ${expansionPanelBlockLabel}
   ${contentBlockFields}
@@ -90,6 +98,7 @@ export const nestedNestedTabBlockFields = gql`
   ${cardBlockFields}
   ${expansionPanelBlockFields}
   ${layoutColumnBlockFields}
+  ${formulaBlockFields}
   fragment nestedNestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -101,6 +110,7 @@ export const nestedNestedTabBlockFields = gql`
           ...cardBlockFields
           ...expansionPanelBlockFields
           ...layoutColumnBlockFields
+          ...formulaBlockFields
         }
     }
   }
@@ -112,6 +122,7 @@ export const nestedTabBlockFields = gql`
   ${cardBlockFields}
   ${nestedNestedTabBlockFields}
   ${layoutColumnBlockFields}
+  ${formulaBlockFields}
   fragment nestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -124,6 +135,7 @@ export const nestedTabBlockFields = gql`
           ...nestedNestedTabBlockFields
           ...expansionPanelBlockFields
           ...layoutColumnBlockFields
+          ...formulaBlockFields
         }
     }
   }
@@ -136,6 +148,7 @@ export const tabBlockFields = gql`
   ${nestedTabBlockFields}
   ${expansionPanelBlockFields}
   ${layoutColumnBlockFields}
+  ${formulaBlockFields}
   fragment tabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -148,6 +161,7 @@ export const tabBlockFields = gql`
         ...nestedTabBlockFields
         ...expansionPanelBlockFields
         ...layoutColumnBlockFields
+        ...formulaBlockFields
       }
     }
   }
@@ -159,6 +173,7 @@ export const pageFields = gql`
  ${cardBlockFields}
  ${expansionPanelBlockFields}
  ${layoutColumnBlockFields}
+ ${formulaBlockFields}
   fragment pageFields on pages {
     id
     title

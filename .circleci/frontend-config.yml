@@ -13,6 +13,9 @@ parameters:
   run-build-frontend:
     type: boolean
     default: false
+  build-frontend:
+    type: boolean
+    default: false
 
 workflows:
   build-frontend:

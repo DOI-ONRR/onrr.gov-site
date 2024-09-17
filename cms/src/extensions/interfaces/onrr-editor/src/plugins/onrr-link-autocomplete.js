@@ -82,6 +82,8 @@ export class OnrrLinkAutocomplete extends LinkAutocomplete {
       newLink.classList.add(iconClass);
     }
 
+    newLink.classList.add('usa-link');
+
     /**
      * Fill up link element's dataset
      */

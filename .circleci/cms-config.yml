@@ -12,6 +12,9 @@ parameters:
   run-build-cms:
     type: boolean
     default: false
+  build-cms:
+    type: boolean
+    default: false
 
 workflows:
   build-cms:
@@ -62,6 +65,8 @@ jobs:
           app-dir: cms/src/extensions/hooks/nymex
       - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
+      - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/onrr-flows
       - persist_to_workspace:
           root: ~/project
           paths: 
