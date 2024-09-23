@@ -32,7 +32,7 @@ export async function runExpansionPanelsExpansionPanelBlocks(expansionPanelId) {
                 if (blockChanges) {
                     var updatedItem = JSON.parse(JSON.stringify(previousBlock));
                     updatedItem.item = previousBlock.item.id;
-                    const updatedId = await updateExpansionPanelsExpansionPanelBlocksItem(updatedItem);
+                    const updatedId = await updateExpansionPanelsExpansionPanelBlocksItem(updatedItem, Endpoints.UPSTREAM, UpstreamAuthToken);
                     appliedChanges.push({
                         id: updatedId,
                         collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,
