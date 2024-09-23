@@ -30,3 +30,16 @@
 .ce-link-autocomplete__link-data-description {
     width: 400px;
 }
+
+.link-button-toggle {
+    margin-bottom: 0.8em;
+}
+
+.link-button-toggle input {
+    vertical-align: middle;
+}
+
+.link-button-toggle label {
+    display: inline-block !important;
+    margin-left: 0.5em;
+}

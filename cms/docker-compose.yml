@@ -1,12 +1,6 @@
 version: '3.2'
 
 services:
-  cache:
-    container_name: cache
-    image: redis:6
-    networks:
-      - directus
-
   directus:
     container_name: directus
     image: directus/directus:9.26
@@ -27,8 +21,6 @@ services:
         target: /package.json
     networks:
       - directus
-    depends_on:
-      - cache
     env_file: ../../.env
 
 networks:
@@ -36,6 +28,3 @@ networks:
 
 volumes:
   directus_data:
-
-
-

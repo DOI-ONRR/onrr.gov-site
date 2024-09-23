@@ -15,3 +15,4 @@ applications:
     CONFIG_PATH: ./config.js
     UPSTREAM_URL: https://prod-onr-cms.app.cloud.gov
     CORS_ORIGIN: https://preview-onrr-cms.app.cloud.gov
+    DIRECTUS_PUBLIC_HOST: https://dev-onrr-cms.app.cloud.gov
