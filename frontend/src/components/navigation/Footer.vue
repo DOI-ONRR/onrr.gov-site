@@ -6,17 +6,17 @@
           <li class="mobile-lg:grid-col-4 desktop:grid-col-auto usa-footer__primary-content"
             v-for="item in menuItemsTop"
             :key="item.id">
-            <a class="usa-footer__primary-link"
+            <a :class="`usa-footer__primary-link${ item.custom_url ? ' usa-link--external' : ''}`"
               :href="`${item.link_to_page ? item.link_to_page.url : item.custom_url}`"
-              :target="`${ item.custom_url ? '_blank' : '_self' }`">{{ item.menu_label }}</a></li>
+              target="_self">{{ item.menu_label }}</a></li>
         </ul>
         <ul class="grid-row grid-gap">
           <li class="mobile-lg:grid-col-4 desktop:grid-col-auto usa-footer__primary-content"
             v-for="item in menuItemsBottom"
             :key="item.id">
-            <a class="usa-footer__primary-link"
+            <a :class="`usa-footer__primary-link${ item.custom_url ? ' usa-link--external' : ''}`"
               :href="`${item.link_to_page ? item.link_to_page.url : item.custom_url}`"
-              :target="`${ item.custom_url ? '_blank' : '_self' }`">{{ item.menu_label }}</a></li>
+              target="_self">{{ item.menu_label }}</a></li>
         </ul>
       </nav>
     </div>
@@ -38,8 +38,8 @@
               />
             </router-link>
           </div>
-          <div class="mobile-lg:grid-col-auto display-flex flex-align-top">
-            <router-link to="/" class="ml-2">
+          <div class="mobile-lg:grid-col-auto display-flex flex-align-top footer-address">
+            <router-link to="/">
               <div class="logo-content text-white">
                 <div class="font-ui-3xs margin-top-neg-05">U.S. Department of the Interior</div>
                 <div class="font-sans-md margin-top-neg-05">Office of Natural Resources Revenue (ONRR)</div>
@@ -55,7 +55,7 @@
               :key="item.id"
               class="grid-col-auto text-center">
               <a :href="`${item.link_to_page ? item.link_to_page.url : item.custom_url}`"
-                :target="`${ item.custom_url ? '_blank' : '_self' }`"
+                target="_self"
                 :aria-label="`${item.menu_label} link`">
                 <svg class="onrr-social-icon" aria-hidden="true" focusable="false" role="img">
                   <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>

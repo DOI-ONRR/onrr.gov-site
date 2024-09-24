@@ -34,3 +34,9 @@
 .usa-footer__social-links {
   @include u-padding-bottom(0);
 }
+
+.footer-address {
+  @include at-media-max(930px) {
+    @include u-padding-top(1.5);
+  }
+}
