@@ -58,7 +58,7 @@
                 :target="`${ item.custom_url ? '_blank' : '_self' }`"
                 :aria-label="`${item.menu_label} link`">
                 <svg class="onrr-social-icon" aria-hidden="true" focusable="false" role="img">
-                  <use :href="`/assets/img/sprite.svg#${item.menu_icon}`"></use>
+                  <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
                 </svg>
                 <div v-if="item.menu_label === 'Contacts'" class="font-ui-3xs text-white">Contacts</div>
               </a>
