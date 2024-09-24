@@ -16,7 +16,7 @@
   background-color: #484554;
 
   > .usa-footer__nav > ul > li > a {
-     @include u-text('base-light');
+     @include u-text('base-lighter');
      @include u-font('sans', '2xs');
      @include u-text('normal');
      @include u-text('no-underline');
