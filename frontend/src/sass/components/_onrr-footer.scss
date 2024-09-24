@@ -1,0 +1,36 @@
+@use "uswds-core" as *;
+
+.usa-footer__logo {
+  a {
+    @include u-text('no-underline');
+  }
+}
+
+.onrr-social-icon {
+  @include u-width(4);
+  @include u-height(4);
+  fill: #ffffff;
+}
+
+.usa-footer__primary-section {
+  background-color: #484554;
+
+  > .usa-footer__nav > ul > li > a {
+     @include u-text('base-light');
+     @include u-font('sans', '2xs');
+     @include u-text('normal');
+     @include u-text('no-underline');
+
+     &:hover {
+      @include u-text('white');
+     }
+  }
+}
+
+.usa-footer__secondary-section {
+  background-color: #262431;
+}
+
+.usa-footer__social-links {
+  @include u-padding-bottom(0);
+}
