@@ -37,12 +37,14 @@ export class OnrrHyperlink extends Hyperlink {
     }
 
     renderActions() {
+        this.config.target = '_self';
+
         this.nodes.wrapper = document.createElement("div");
         this.nodes.wrapper.classList.add(this.CSS.wrapper);
 
         // Input
         this.nodes.input = document.createElement("input");
-        this.nodes.input.placeholder = "https://...";
+        this.nodes.input.placeholder = "Enter web URL, CMS path, or mailto address";
         this.nodes.input.classList.add(this.CSS.input);
 
         let i;
@@ -190,10 +192,11 @@ export class OnrrHyperlink extends Hyperlink {
         let anchorTag = this.selection.findParentTag("A");
         if (anchorTag) {
             this.selection.expandToTag(anchorTag);
-        } else {
-            document.execCommand(this.commandLink, false, link);
-            anchorTag = this.selection.findParentTag("A");
         }
+
+        document.execCommand(this.commandLink, false, link);
+        anchorTag = this.selection.findParentTag('A');
+
         if (anchorTag) {
             if (!!target) {
                 anchorTag["target"] = target;
