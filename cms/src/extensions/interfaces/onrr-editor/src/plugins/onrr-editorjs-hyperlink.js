@@ -182,7 +182,7 @@ export class OnrrHyperlink extends Hyperlink {
 
     validateURL(str) {
         const urlPattern =
-            /^(https?:\/\/(?:[a-zA-Z0-9-]+\.[a-zA-Z]{2,}|(?:\d{1,3}\.){3}\d{1,3})(?:\/[^\s?#]*)?(?:\?[^\s#]*)?)|(\/[\w\-\.]+(?:\/[\w\-\.]*)?(?:\?[^\s#]*)?)$/;
+            /^(https?:\/\/(?:[a-zA-Z0-9-]+\.[a-zA-Z]{2,}|(?:\d{1,3}\.){3}\d{1,3})(?:\/[^\s?#]*)?(?:\?[^\s#]*)?)|(\/[\w\-\.]+(?:\/[\w\-\.]*)?(?:\?[^\s#]*)?)|(mailto:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
         return urlPattern.test(str);
     }
 
@@ -209,9 +209,9 @@ export class OnrrHyperlink extends Hyperlink {
                 anchorTag.classList.add("usa-button");
             } else {
                 anchorTag.classList.add("usa-link");
-                if (isExternalURL(anchorTag.href)) {
-                    anchorTag.classList.add("usa-link--external");
-                }
+            }
+            if (isExternalURL(anchorTag.href)) {
+                anchorTag.classList.add("usa-link--external");
             }
         }
     }
