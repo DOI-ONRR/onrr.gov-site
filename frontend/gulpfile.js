@@ -12,11 +12,11 @@ uswds.settings.version = 3;
  * Path settings
  */
 uswds.paths.src.projectSass = './src/sass';
-uswds.paths.dist.css = "./public/assets/css";
+uswds.paths.dist.css = "./public/uswds/css";
 uswds.paths.dist.theme = "./src/sass";
-uswds.paths.dist.img = "./public/assets/img";
-uswds.paths.dist.fonts = "./public/assets/fonts";
-uswds.paths.dist.js = "./public/assets/js";
+uswds.paths.dist.img = "./public/uswds/img";
+uswds.paths.dist.fonts = "./public/uswds/fonts";
+uswds.paths.dist.js = "./public/uswds/js";
 
 /**
  * Exports

@@ -37,12 +37,14 @@ export class OnrrHyperlink extends Hyperlink {
     }
 
     renderActions() {
+        this.config.target = '_self';
+
         this.nodes.wrapper = document.createElement("div");
         this.nodes.wrapper.classList.add(this.CSS.wrapper);
 
         // Input
         this.nodes.input = document.createElement("input");
-        this.nodes.input.placeholder = "https://...";
+        this.nodes.input.placeholder = "Enter web URL, CMS path, or mailto address";
         this.nodes.input.classList.add(this.CSS.input);
 
         let i;
@@ -182,7 +184,7 @@ export class OnrrHyperlink extends Hyperlink {
 
     validateURL(str) {
         const urlPattern =
-            /^(https?:\/\/(?:[a-zA-Z0-9-]+\.[a-zA-Z]{2,}|(?:\d{1,3}\.){3}\d{1,3})(?:\/[^\s?#]*)?(?:\?[^\s#]*)?)|(\/[\w\-\.]+(?:\/[\w\-\.]*)?(?:\?[^\s#]*)?)$/;
+            /^(https?:\/\/(?:[a-zA-Z0-9-]+\.[a-zA-Z]{2,}|(?:\d{1,3}\.){3}\d{1,3})(?:\/[^\s?#]*)?(?:\?[^\s#]*)?)|(\/[\w\-\.]+(?:\/[\w\-\.]*)?(?:\?[^\s#]*)?)|(mailto:[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
         return urlPattern.test(str);
     }
 
@@ -190,10 +192,11 @@ export class OnrrHyperlink extends Hyperlink {
         let anchorTag = this.selection.findParentTag("A");
         if (anchorTag) {
             this.selection.expandToTag(anchorTag);
-        } else {
-            document.execCommand(this.commandLink, false, link);
-            anchorTag = this.selection.findParentTag("A");
         }
+
+        document.execCommand(this.commandLink, false, link);
+        anchorTag = this.selection.findParentTag('A');
+
         if (anchorTag) {
             if (!!target) {
                 anchorTag["target"] = target;
@@ -209,9 +212,9 @@ export class OnrrHyperlink extends Hyperlink {
                 anchorTag.classList.add("usa-button");
             } else {
                 anchorTag.classList.add("usa-link");
-                if (isExternalURL(anchorTag.href)) {
-                    anchorTag.classList.add("usa-link--external");
-                }
+            }
+            if (isExternalURL(anchorTag.href)) {
+                anchorTag.classList.add("usa-link--external");
             }
         }
     }

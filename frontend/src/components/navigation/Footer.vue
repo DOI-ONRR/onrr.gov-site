@@ -1,92 +1,74 @@
 <template>
-  <v-footer
-    padless
-    class="footer">
-    <v-toolbar 
-      tag="div"
-      dense
-      elevation="0"
-      class="top">
-      <v-toolbar-items>
-        <v-btn
-          v-for="item in menuItemsTop"
-          :key="item.id"
-          :to="item.link_to_page && item.link_to_page.url"
-          :href="item.custom_url && item.custom_url"
-          :target="`${ item.custom_url ? '_blank' : '_self' }`"
-          plain
-          color="white">
-          {{ item.menu_label }}
-        </v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
-    <v-toolbar
-      dense
-      elevation="0"
-      tag="div"
-      class="bottom">
-      <v-toolbar-items>
-        <v-btn
-          v-for="item in menuItemsBottom"
-          :key="item.id"
-          :to="item.link_to_page && item.link_to_page.url"
-          :href="item.custom_url && item.custom_url"
-          :target="`${ item.custom_url ? '_blank' : '_self' }`"
-          plain
-          color="white">
-          {{ item.menu_label }}
-        </v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
-    <v-toolbar
-      tag="div"
-      height="120px"
-      elevation="0"
-      class="abs-bottom">
-      <v-toolbar-title>
-        <div class="footer-logo-wrap">
-          <router-link to="/" class="override-overflow-hidden">
-            <v-img
-              alt="ONNR Logo"
-              class="shrink"
-              contain
-              src="../../assets/images/logos/ONRR-mark-200x200.png"
-              transition="scale-transition"
-              width="70"
-            />
-          </router-link>
-          <router-link to="/" class="ml-2">
-            <div class="logo-content">
-              <span>U.S. Department of the Interior</span>
-              <span>Office of Natural Resources Revenue (ONRR)</span>
-              <span>PO Box 25165</span>
-              <span>Denver, CO 80225-0165</span>
-            </div>
-          </router-link>
+  <footer class="usa-footer">
+    <div class="usa-footer__primary-section">
+      <nav class="usa-footer__nav" aria-label="Footer navigation">
+        <ul class="grid-row grid-gap">
+          <li class="mobile-lg:grid-col-4 desktop:grid-col-auto usa-footer__primary-content"
+            v-for="item in menuItemsTop"
+            :key="item.id">
+            <a :class="`usa-footer__primary-link${ item.custom_url ? ' usa-link--external' : ''}`"
+              :href="`${item.link_to_page ? item.link_to_page.url : item.custom_url}`"
+              target="_self">{{ item.menu_label }}</a></li>
+        </ul>
+        <ul class="grid-row grid-gap">
+          <li class="mobile-lg:grid-col-4 desktop:grid-col-auto usa-footer__primary-content"
+            v-for="item in menuItemsBottom"
+            :key="item.id">
+            <a :class="`usa-footer__primary-link${ item.custom_url ? ' usa-link--external' : ''}`"
+              :href="`${item.link_to_page ? item.link_to_page.url : item.custom_url}`"
+              target="_self">{{ item.menu_label }}</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="usa-footer__secondary-section">
+    <div class="grid-container">
+      <div class="grid-row grid-gap">
+        <div
+          class="usa-footer__logo grid-row mobile-lg:grid-col-6 mobile-lg:grid-gap-2"
+        >
+          <div class="mobile-lg:grid-col-auto">
+            <router-link to="/" class="override-overflow-hidden">
+              <v-img
+                alt="ONNR Logo"
+                class="shrink"
+                contain
+                src="../../assets/images/logos/ONRR-mark-200x200.png"
+                transition="scale-transition"
+                width="75"
+              />
+            </router-link>
+          </div>
+          <div class="mobile-lg:grid-col-auto display-flex flex-align-top footer-address">
+            <router-link to="/">
+              <div class="logo-content text-white">
+                <div class="font-ui-3xs margin-top-neg-05">U.S. Department of the Interior</div>
+                <div class="font-sans-md margin-top-neg-05">Office of Natural Resources Revenue (ONRR)</div>
+                <div class="font-sans-3xs margin-top-neg-05">PO Box 25165</div>
+                <div class="font-sans-3xs margin-top-neg-05">Denver, CO 80225-0165</div>
+              </div>
+            </router-link>
+          </div>
         </div>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-items
-      class="social-menu">
-        <v-btn
-          v-for="item in socialMenuItems"
-          :key="item.id"
-          :to="item.link_to_page && item.link_to_page.url"	
-          :href="item.custom_url && item.custom_url"
-          text
-          dark
-          :target="`${ item.custom_url ? '_blank' : '_self' }`"
-          class="no-btn-hover"
-          :aria-label="`${item.menu_label} link`"
-          >
-          <span class="v-btn__content">
-            <v-icon color="white" v-if="item.menu_icon">{{ item.menu_icon }}</v-icon>
-            <span class="mr-2" v-if="item.menu_label === 'Contacts'" style="color: white;">{{ item.menu_label }}</span>
-          </span>
-        </v-btn> 
-      </v-toolbar-items>
-    </v-toolbar>
-  </v-footer>
+        <div class="usa-footer__contact-links mobile-lg:grid-col-6 display-flex flex-align-center flex-justify-end">
+          <div class="usa-footer__social-links grid-row grid-gap">
+            <div v-for="item in socialMenuItems"
+              :key="item.id"
+              class="grid-col-auto text-center">
+              <a :href="`${item.link_to_page ? item.link_to_page.url : item.custom_url}`"
+                target="_self"
+                :aria-label="`${item.menu_label} link`">
+                <svg class="onrr-social-icon" aria-hidden="true" focusable="false" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
+                </svg>
+                <div v-if="item.menu_label === 'Contacts'" class="font-ui-3xs text-white">Contacts</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </footer>
 </template>
 
 <script>
@@ -119,98 +101,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.footer {
-  margin-top: 50px;
-  overflow: hidden;
-
-  a {
-    text-decoration: none;
-  }
-}
-
-.footer .top {
-  background-color: var(--v-neutrals-lighten1);
-  padding: 0;
-}
-
-.footer .bottom {
-  background-color: var(--v-neutrals-lighten1);
-  padding: 0;
-}
-
-.footer .abs-bottom {
-  background-color: var(--v-neutrals-base);
-  padding: 0;
-  width: 100%;
-
-  a {
-    color: white;
-  }
-}
-
-.footer-logo-wrap {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.footer-logo-wrap .logo-content {
-  position: relative;
-  top: -10px;
-
-  span {
-    display: block;
-    font-size: .80rem;
-  }
-
-  span:first-child {
-    top: 8px;
-    position: relative;
-  }
-
-  span:nth-child(2) {
-    font-size: 1.2rem; 
-    top: 4px;
-    position: relative;
-  }
-  span:last-child { 
-    top: -6px;
-    position: relative;
-  }
-}
-
-.social-menu {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  height: 50px;
-}
-
-.social-menu::after {
-  content: '';
-  flex: auto;
-}
-
-.social-menu .v-btn {
-  height: 50px !important;
-}
-
-.social-menu .v-btn:last-child {
-  margin-top: 6px;
-}
-
-.v-btn__content {
-  flex-direction: column;
-}
-
-.no-btn-hover {
-  text-transform: none;
-}
-
-.no-btn-hover::before {
-  background-color: transparent !important;
-}
-
-</style>

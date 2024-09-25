@@ -15,7 +15,7 @@ editorjs/*.zip
 
 frontend/.env.*
 frontend/dist/*
-frontend/public/assets/css/*
-frontend/public/assets/fonts/*
-frontend/public/assets/img/*
-frontend/public/assets/js/*
+frontend/public/uswds/css/*
+frontend/public/uswds/fonts/*
+frontend/public/uswds/img/*
+frontend/public/uswds/js/*

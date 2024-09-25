@@ -24,5 +24,3 @@ workflows:
             cms/.* run-build-cms true .circleci/cms-config.yml
             frontend/.* run-build-frontend true .circleci/frontend-config.yml
             .* run-copy-database << pipeline.parameters.copy-database >> .circleci/database-config.yml
-            .* run-build-cms << pipeline.parameters.build-cms >> .circleci/cms-config.yml
-            .* run-build-frontend << pipeline.parameters.build-frontend >> .circleci/frontend-config.yml
