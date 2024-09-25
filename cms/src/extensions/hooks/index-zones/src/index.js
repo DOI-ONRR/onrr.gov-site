@@ -1,7 +1,7 @@
 import * as fileUtils from '../../../../utils/file-utils';
 
 export default ({ filter, action }) => {
-	filter('index_zones.items.create', async payload => {
+	filter('index_zones.items.create', async (payload, meta, context) => {
     	let base_url =
       		process.env.PUBLIC_URL !== '/'
         	? `${process.env.PUBLIC_URL}/assets/`
