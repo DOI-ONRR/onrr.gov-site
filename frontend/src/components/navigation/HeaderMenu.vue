@@ -28,21 +28,6 @@
       </span>
 
     </v-btn>
-    <!-- <div class="mobile-lg:grid-col-6 display-flex flex-align-center flex-justify-end">
-      <div class="grid-row grid-gap">
-        <div v-for="item in menuItems"
-          :key="item.id"
-          class="grid-col-auto text-center">
-          <a :href="`${item.link_to_page ? item.link_to_page.url : item.custom_url}`"
-            target="_self"
-            :aria-label="`${item.menu_label} link`">
-            <svg class="onrr-social-icon" aria-hidden="true" focusable="false" role="img">
-              <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
