@@ -1,7 +1,25 @@
+const path = require('path');
 const targetUrl =
   process.env.NODE_ENV === 'production' ? '' : 'http://127.0.0.1:8055'
 const SITE = process.env.SITE
 module.exports = {
+  configureWebpack: {
+    ignoreWarnings: [
+      (warning) => /division\s+outside\s+of\s+calc/.test(warning.message),
+    ],
+    stats: 'errors-only',
+  },
+  css: {
+    loaderOptions: {
+      scss: {
+        sassOptions: {
+          includePaths: [
+            path.resolve(__dirname, './node_modules/@uswds/uswds/packages')
+          ]
+        }
+      }
+    }
+  },
   transpileDependencies: ['vuetify'],
 
   devServer: {

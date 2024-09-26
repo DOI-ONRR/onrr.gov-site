@@ -103,7 +103,9 @@
             :href="item.custom_url || item.link_to_page.url"
           >
             <v-list-item-icon>
-              <v-icon v-text="item.menu_icon"></v-icon>
+              <svg class="onrr-header-icon" aria-hidden="true" focusable="false" role="img">
+                <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
+              </svg>
             </v-list-item-icon>
             <v-list-item-title 
               v-text="item.menu_label"></v-list-item-title>

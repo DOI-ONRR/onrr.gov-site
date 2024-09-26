@@ -5,6 +5,20 @@ USWDS with settings overrides
 */
 
  @use "uswds-core" with (
-    $theme-show-notifications: false
+    $theme-show-notifications: false,
+    $theme-typeface-tokens: (
+      'lato': (
+         'display-name': "Lato",
+         'cap-height': 364px,
+         'stack': "Helvetica, Arial, sans-serif",
+      ),
+   ),
+    $theme-utility-breakpoints: (
+      'desktop-lg': true,
+      'widescreen': true,
+   ),
+   $theme-grid-container-max-width: 'full',
+   $theme-footer-max-width: 'full',
+   $theme-font-type-sans: 'lato'
  );
 

@@ -15,26 +15,20 @@
           class="mb-1"
           color="primary"
         >
-          <v-icon color="white" v-if="item.menu_icon" class="mr-1">{{ item.menu_icon }}</v-icon>
+          <svg class="onrr-header-icon" aria-hidden="true" focusable="false" role="img">
+            <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
+          </svg>
           <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
         </v-btn>
       </span>
 
       <span class="v-btn__content" v-else>
-        <v-icon color="white" v-if="item.menu_icon" class="mr-1">{{ item.menu_icon }}</v-icon>
+        <svg class="onrr-header-icon" aria-hidden="true" focusable="false" role="img">
+          <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
+        </svg>
         <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
       </span>
 
-    </v-btn>
-    <v-btn
-      v-if="hostname === 'localhost' || hostname === '192.168.0.22'"
-      plain>
-      <v-switch
-        v-model="themeSwitch"
-        flat
-        color="anchor"
-        label="">
-      </v-switch>
     </v-btn>
   </div>
 </template>
