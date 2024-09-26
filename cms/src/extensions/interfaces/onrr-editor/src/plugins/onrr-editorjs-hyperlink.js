@@ -38,7 +38,6 @@ export class OnrrHyperlink extends Hyperlink {
 
     renderActions() {
         this.config.target = '_self';
-
         this.nodes.wrapper = document.createElement("div");
         this.nodes.wrapper.classList.add(this.CSS.wrapper);
 
