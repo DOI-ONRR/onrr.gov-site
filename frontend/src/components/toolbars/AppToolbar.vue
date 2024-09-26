@@ -114,6 +114,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-btn
+      id="return-to-top"
       color="primary"
       dark
       fab
@@ -135,7 +136,6 @@ import { MENU_QUERY } from '@/graphql/queries'
 import HeaderMenu from '@/components/navigation/HeaderMenu'
 import MainMenu from '@/components/navigation/MainMenu'
 
-const OFFSET = 30
 const FAB_OFFSET = 150
 
 export default {
@@ -199,18 +199,26 @@ export default {
       if (window.pageYOffset < 0) {
         return
       }
-      if (Math.abs(window.pageYOffset - this.lastScrollPosition) < OFFSET) {
-        return
-      }
       this.showSystemBar = window.pageYOffset < this.lastScrollPosition
       this.lastScrollPosition = window.pageYOffset
+
+      var footer = document.querySelector('.usa-footer');
+      var returnToTopButton = document.getElementById('return-to-top');
+
+      var footerTop = footer.getBoundingClientRect().top;
+      var viewportHeight = window.innerHeight;
+
+      if (footerTop <= viewportHeight) {
+        returnToTopButton.style.bottom = viewportHeight - footerTop + 20 + "px";
+      } else {
+        returnToTopButton.style.position = "fixed";
+        returnToTopButton.style.bottom = "20px";
+      }
     },
     toTop () {
       this.$vuetify.goTo(0)
     },
     onResize () {
-      // console.log('window.innerWidth------------>', window.innerWidth)
-      // isMobile vuetify lg size
       this.isMobile = window.innerWidth < 1264
     }
   },
