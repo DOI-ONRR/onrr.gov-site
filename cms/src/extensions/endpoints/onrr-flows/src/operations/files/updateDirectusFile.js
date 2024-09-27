@@ -20,11 +20,15 @@ export async function updateDirectusFile(file) {
             formData.append(key, file[key]);
         });
 
+        logger.debug('Downloading file from local...', fileUrl);
         const fileBlob = await downloadFile(fileUrl);
 
         formData.append('file', fileBlob, filenameDownload);
 
+        logger.debug('Updating file to upstream...', Endpoints.UPSTREAM_CMS);
         const result = await client.request(updateFile(formData));
+
+        logger.debug('File successfully updated\n', result);
 
         return result;
     } catch (error) {
