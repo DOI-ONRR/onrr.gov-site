@@ -9,15 +9,15 @@ import { runContentBlocks } from '../contentBlocksFlow';
 import { runExpansionPanels } from '../expansionPanelsFlow';
 import { runTabBlocks } from '../tabBlocksFlow';
 import { runTabBlockLabel } from '../tabBlocksFlow';
-import { Endpoints, CollectionTypes, ApiMessages, UpstreamAuthToken } from "../../constants";
+import { Endpoints, CollectionTypes, ApiMessages, UpstreamAuthToken, LocalAuthToken } from "../../constants";
 import diff from "deep-diff";
 import { logger } from "../../utils/logger";
 
 export async function runTabBlocksTabBlocks(tabBlockId) {
     try {
         const appliedChanges = [];
-        const latestTabBlocks = await getTabBlocksTabBlocks(tabBlockId, Endpoints.LOCAL);
-        const previousTabBlocks = await getTabBlocksTabBlocks(tabBlockId, Endpoints.UPSTREAM);
+        const latestTabBlocks = await getTabBlocksTabBlocks(tabBlockId, Endpoints.LOCAL, LocalAuthToken);
+        const previousTabBlocks = await getTabBlocksTabBlocks(tabBlockId, Endpoints.UPSTREAM, UpstreamAuthToken);
         for (const latestTabBlock of latestTabBlocks) {
             if (!previousTabBlocks.find(block => block.id === latestTabBlock.id)) {
                 let newItem = JSON.parse(JSON.stringify(latestTabBlock));
