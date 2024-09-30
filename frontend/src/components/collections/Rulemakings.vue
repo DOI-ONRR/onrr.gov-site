@@ -4,7 +4,8 @@
             <v-data-table
                 :headers="headers"
                 :items="collection"
-                item-key="title">
+                item-key="title"
+                class="onrr-data-table">
                 <template v-slot:top>
                     <v-container>
                         <v-row>
@@ -17,12 +18,12 @@
                         </v-row>
                     </v-container>
                 </template>
+                <template v-slot:[`item.final_publication_date`]="{ item }">
+                    <th>{{ item.final_publication_date }}</th>
+                </template>
                 <template v-slot:[`item.rule_title`]="{ item }">
                     <a :href="item.webpage_link">{{ item.rule_title }}</a><br>
                     <span v-if="item.informal_title">"{{ item.informal_title }}"</span>
-                </template>
-                <template v-slot:[`item.date`]="{ item }">
-                    {{ formatNiceDate(item.date) }}
                 </template>
                 <template v-slot:[`item.commodity_subject_matter`]="{ item }">
                     {{ getTopics(item.commodity_subject_matter) }}
@@ -126,8 +127,7 @@ export default {
                     text: 'Final Publication Date',
                     align: 'start',
                     sortable: true,
-                    value: 'final_publication_date',
-                    // filter: this.titleFilter,
+                    value: 'final_publication_date'
                 },
                 {
                     text: 'RIN',
@@ -161,6 +161,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>
