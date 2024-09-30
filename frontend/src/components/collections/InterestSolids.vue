@@ -6,8 +6,8 @@
               :items="collectionItems"
               item-key="title"
               class="onrr-data-table">
-              <template v-slot:[`item.period`]="{ item }">
-                <th>{{ item.period }}</th>
+              <template v-slot:[`item.Period`]="{ item }">
+                <th>{{ item.Period }}</th>
               </template>
               <template v-slot:[`item.fedieral_and_indian_underpayment`]="{ item }">
                   {{ item.indian_underpayment }}
