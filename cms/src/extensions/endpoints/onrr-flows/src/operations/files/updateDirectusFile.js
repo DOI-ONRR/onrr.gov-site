@@ -26,7 +26,7 @@ export async function updateDirectusFile(file) {
         formData.append('file', fileBlob, filenameDownload);
 
         logger.debug('Updating file to upstream...', Endpoints.UPSTREAM_CMS);
-        const result = await client.request(updateFile(formData));
+        const result = await client.request(updateFile(file.id, formData));
 
         logger.debug('File successfully updated\n', result);
 
