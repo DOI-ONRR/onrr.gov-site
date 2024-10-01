@@ -5,7 +5,8 @@
       :items="filteredCollection"
       item-key="month"
       items-per-page="12"
-      hide-default-footer>
+      hide-default-footer
+      class="onrr-data-table">
       <template v-slot:top>
         <v-container>
           <v-row>
@@ -24,7 +25,7 @@
         </v-container>
       </template>
       <template v-slot:[`item.date`]="{ item }">
-        {{ getMonth(item.date, 'long') }}
+        <th>{{ getMonth(item.date, 'long') }}</th>
       </template>
       <template v-slot:[`item.average`]="{ item }">
         ${{ roundHalfUp(item.average, 2) }}

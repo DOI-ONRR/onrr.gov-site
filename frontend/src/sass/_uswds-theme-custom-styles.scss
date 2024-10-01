@@ -45,3 +45,42 @@ a.usa-button:visited {
 ul li a {
    line-height: 1.7 !important;
 }
+
+.onrr-data-table {
+   .v-data-table__wrapper {
+      table {
+         tbody {
+            tr {
+               th {
+                  font-weight: normal;
+                  font-size: 0.875rem !important;
+               }
+            }
+            tr:not(:last-child) {
+              th:not(.-data-table__mobile-row) {
+                 border-bottom: 1px solid var(--v-accent-base) !important;
+              }
+           }
+        }
+     }
+  }
+}
+
+.onrr-simple-table {
+   table {
+      tbody {
+         tr {
+            th {
+               font-weight: normal;
+               font-size: 0.875rem !important;
+            }
+         }
+         tr:not(:last-child) {
+           td, th:not(.-data-table__mobile-row) {
+              border-bottom: 1px solid var(--v-accent-base) !important;
+              font-size: 0.875rem !important;
+           }
+        }
+     }
+  }
+}

@@ -5,7 +5,8 @@
             :headers="headers"
             :items="collection"
             :search="searchInputField.text"
-            hide-default-header>
+            hide-default-header
+            class="onrr-data-table">
             <template v-slot:top>
                 <v-container>
                     <v-row>
@@ -23,6 +24,9 @@
                     </th>
                 </tr>
               </thead>
+            </template>
+            <template v-slot:[`item.chapter`]="{ item }">
+              <th>{{ item.chapter }}</th>
             </template>
             <template v-slot:[`item.toc_page`]="{ item }">
                 <div><a :href="handbookLink(item.url, item.actual_page)" target="_blank">{{ item.toc_page }}</a></div>

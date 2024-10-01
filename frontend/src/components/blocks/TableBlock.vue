@@ -1,5 +1,5 @@
 <template>
-  <v-simple-table>
+  <v-simple-table class="onrr-simple-table">
     <template v-slot:default>
       <thead>
         <tr>
@@ -16,12 +16,19 @@
           v-for="(items, index) in tableRowItems"
             :key="index"
             :class="[textClass, 'black--text']">
-          <td
+          <div
             v-for="(item, index) in items"
             :key="index"
+            style="display: contents;">
+            <th v-if="index === 0"
             :class="[textClass(index), 'black--text', 'pa-2']">
-            <span v-html="isCellNumeric(item, index)"></span>
-          </td>
+              <span v-html="isCellNumeric(item, index)"></span>
+            </th>
+            <td v-else
+            :class="[textClass(index), 'black--text', 'pa-2']">
+              <span v-html="isCellNumeric(item, index)"></span>
+            </td>  
+          </div>
         </tr>
       </tbody>
     </template>
