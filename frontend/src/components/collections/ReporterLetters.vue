@@ -24,7 +24,8 @@
         <v-data-table
             :headers="headers"
             :items="collection"
-            item-key="title">
+            item-key="title"
+            class="onrr-data-table">
             <template v-slot:top>
                 <v-container>
                     <v-row>
@@ -47,12 +48,14 @@
                 <div class="text-h6 text-capitalize">{{ header.text }}</div>
             </template>
             <template v-slot:[`item.title`]="{ item }">
-              <div>
-                <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank" :class="['link-item', fileIconClass(item.file.filename_download)]">{{ item.title }}</a>
-              </div>
-              <div v-if="item.accessible_file">
-                <a :href="accessibleFileLink(`${ API }/reporter-letters/`, item)" target="_blank" :class="['link-item', fileIconClass(item.accessible_file.filename_download)]">{{ item.accessible_file.title }}</a>
-              </div>
+              <th>
+                <div>
+                  <a :href="fileLink(`${ API }/reporter-letters/`,item)" target="_blank" :class="['link-item', fileIconClass(item.file.filename_download)]">{{ item.title }}</a>
+                </div>
+                <div v-if="item.accessible_file">
+                  <a :href="accessibleFileLink(`${ API }/reporter-letters/`, item)" target="_blank" :class="['link-item', fileIconClass(item.accessible_file.filename_download)]">{{ item.accessible_file.title }}</a>
+                </div>
+              </th>
             </template>
             <template v-slot:[`item.date`]="{ item }">
             {{formatNiceDate(item.date)}}

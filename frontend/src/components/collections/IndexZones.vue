@@ -6,7 +6,8 @@
                 :items="collectionItems"
                 item-key="title"
                 items-per-page="12"
-                :footer-props="footerProps">
+                :footer-props="footerProps"
+                class="onrr-data-table">
                 <template v-slot:top>
                     <v-container>
                         <v-row>
@@ -20,7 +21,7 @@
                     </v-container>
                 </template>
                 <template v-slot:[`item.index_zone`]="{ item }">
-                    {{ item.index_zone }} ({{ item.abbreviation }})
+                    <th>{{ item.index_zone }} ({{ item.abbreviation }})</th>
                 </template>
                 <template v-slot:[`item.year`]="{ item }">
                     {{ item.year }}

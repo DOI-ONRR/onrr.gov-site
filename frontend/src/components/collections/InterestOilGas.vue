@@ -4,9 +4,10 @@
           <v-data-table
               :headers="headers"
               :items="collectionItems"
-              item-key="title">
-              <template v-slot:[`item.period`]="{ item }">
-                  {{ item.period }}
+              item-key="title"
+              class="onrr-data-table">
+              <template v-slot:[`item.Period`]="{ item }">
+                <th>{{ item.Period }}</th>
               </template>
               <template v-slot:[`item.indian_underpayment`]="{ item }">
                   {{ item.indian_underpayment }}

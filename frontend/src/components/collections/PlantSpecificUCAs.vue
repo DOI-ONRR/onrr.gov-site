@@ -5,7 +5,7 @@
             :headers="headers"
             :items="collection"
             :search="searchInputField.text"
-            class="plant-specific-ucas-table"
+            class="plant-specific-ucas-table onrr-data-table"
             hide-default-header>
             <template v-slot:top>
                 <v-container>
@@ -26,15 +26,17 @@
               </thead>
             </template>
             <template v-slot:[`item.transportation_system_or_gas_plant`]="{ item }">
-                <div v-if="item.file === null">
-                  {{ item.transportation_system_or_gas_plant }}
-                </div>
-                <div v-else>
-                  <a :href="`/unbundling/${ item.file.filename_download }`" target="_blank"
-                    :class="fileIconClass(item.file.filename_download)">
+                <th>
+                  <div v-if="item.file === null">
                     {{ item.transportation_system_or_gas_plant }}
-                  </a>
-                </div>
+                  </div>
+                  <div v-else>
+                    <a :href="`/unbundling/${ item.file.filename_download }`" target="_blank"
+                      :class="fileIconClass(item.file.filename_download)">
+                      {{ item.transportation_system_or_gas_plant }}
+                    </a>
+                  </div>
+                  </th>
             </template>
             <template v-slot:[`item.doc_date`]="{ item }">
                 <div>{{ formatNiceDate(item.doc_date) }}</div>
