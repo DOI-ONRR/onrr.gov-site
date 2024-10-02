@@ -95,6 +95,8 @@ export class OnrrLinkAutocomplete extends LinkAutocomplete {
       newLink.dataset[key] = element.dataset[key];
     });
 
+    newLink.ariaLabel = `Download ${newLink.innerText}`;
+
     /**
      * Collapse selection and close toolbar
      */
