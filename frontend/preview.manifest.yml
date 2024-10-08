@@ -2,9 +2,9 @@
 applications: 
 - name: preview-onrr-frontend
   path: ./
-  instances: 1
+  instances: 2
   disk_quota: 1G
-  memory: 100M
+  memory: 128M
   random-route: false
   buildpacks:
     - nginx_buildpack
