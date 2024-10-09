@@ -1,7 +1,7 @@
 <template>
     <component :is="listType === 'unordered' ? 'ul' : 'ol'">
         <li v-for="item in items" :key="getKey(item)">
-            <div v-html="item.content"></div>
+            <span v-html="item.content"></span>
             <NestedList v-if="item.items && item.items.length > 0" :items="item.items" :listType="listType" />
         </li>
     </component>
@@ -44,7 +44,9 @@ ol > li {
 ol > li:before {
   content: counters(item, '.') '. ';
   position: absolute;
-  left: -1em;
+  right: 100%;
+  padding-right: 0.35em;
+  text-align: right;
 }
 
 ol ol {
@@ -59,7 +61,9 @@ ol ol > li {
 ol ol > li:before {
   content: counters(item, '.') '.' counters(subitem, '.') '. ';
   position: absolute;
-  left: -1.9em;
+  right: 100%;
+  padding-right: 0.35em;
+  text-align: right;
 }
 
 ol ol ol {
@@ -75,6 +79,8 @@ ol ol ol > li:before {
   content: counters(item, '.') '.' counters(subitem, '.') '.'
     counters(subsubitem, '.') '. ';
   position: absolute;
-  left: -1em;
+  right: 100%;
+  padding-right: 0.35em;
+  text-align: right;
 }
 </style>
