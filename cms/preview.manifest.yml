@@ -4,7 +4,7 @@ applications:
   command: npx directus start
   instances: 4
   disk_quota: 1G
-  memory: 128M
+  memory: 1024M
   buildpacks:
     - nodejs_buildpack
   services:

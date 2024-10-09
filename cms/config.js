@@ -5,7 +5,7 @@ module.exports = function(env) {
   return {
     PORT: process.env.PORT || 8055,
     PUBLIC_URL: `https://${ vcap_application.uris[0] }`,
-    LOG_LEVEL: "info",
+    LOG_LEVEL: "debug",
     LOG_STYLE: "pretty",
 
     KEY: vcap_application.application_id,
