@@ -2,7 +2,7 @@
 applications: 
 - name: prod-onrr-frontend
   path: ./
-  instances: 4
+  instances: 3
   disk_quota: 1G
   memory: 512M
   random-route: false

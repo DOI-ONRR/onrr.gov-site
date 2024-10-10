@@ -2,9 +2,9 @@
 applications: 
 - name: dev-onrr-cms
   command: npx directus start
-  instances: 4
+  instances: 1
   disk_quota: 1G
-  memory: 128M
+  memory: 512M
   random-route: false
   buildpacks:
     - nodejs_buildpack
