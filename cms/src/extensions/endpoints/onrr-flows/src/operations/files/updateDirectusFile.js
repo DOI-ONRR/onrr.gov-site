@@ -24,7 +24,7 @@ export async function updateDirectusFile(file) {
 
         formData.append('file', fileBlob, filenameDownload);
 
-        const result = await client.request(updateFile(formData));
+        const result = await client.request(updateFile(file.id, formData));
 
         return result;
     } catch (error) {
