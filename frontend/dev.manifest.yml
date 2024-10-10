@@ -4,7 +4,7 @@ applications:
   path: ./
   instances: 2
   disk_quota: 1G
-  memory: 256M
+  memory: 128M
   random-route: false
   buildpacks:
     - nginx_buildpack
