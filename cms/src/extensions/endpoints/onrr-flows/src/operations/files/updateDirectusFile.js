@@ -20,12 +20,15 @@ export async function updateDirectusFile(file) {
             formData.append(key, file[key]);
         });
 
+        logger.debug('updateDirectusFile, downloading file');
         const fileBlob = await downloadFile(fileUrl);
 
-        formData.append('file', fileBlob, filenameDownload);
+        //formData.append('file', fileBlob, filenameDownload);
 
+        logger.debug('updateDirectusFile, calling update file...');
         const result = await client.request(updateFile(formData));
 
+        logger.debug('result \n', result);
         return result;
     } catch (error) {
         logger.error('Error in updateDirectusFile:\n', error);
