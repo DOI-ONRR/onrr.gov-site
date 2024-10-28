@@ -1,12 +1,11 @@
-version: '3.2'
 services:
   database:
     container_name: database
-    image: postgres:12
+    image: postgres:16
     ports:
       - 5432:5432
     volumes:
-      - directus_data:/var/lib/postgresql/data
+      - directus_data:/var/lib/postgresql15/data
       - ./src:/src
       - ./ddl:/ddl
       - ./backup:/backup
