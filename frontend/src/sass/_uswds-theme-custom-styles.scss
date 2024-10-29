@@ -84,3 +84,59 @@ ul li a {
      }
   }
 }
+
+.onrr-feedback-form {
+   width: 21rem;
+   font-family: Lato, Helvetica, Arial, sans-serif !important;
+}
+
+.onrr-question-label {
+   margin-top: 0 !important;
+   font-family: lato !important;
+   font-size: 1rem !important;
+}
+
+.onrr-text-area {
+   font-family: lato !important;
+   font-size: 1rem !important;
+}
+
+.onrr-submit-button {
+   float: right;
+   margin-bottom: 1rem !important;
+   margin-right: 0 !important;
+   font-family: lato !important;
+}
+
+.thumb-radio-group {
+   display: flex;
+   gap: 40px;
+}
+
+.thumb-radio-group label {
+   cursor: pointer;
+}
+
+.thumb-icon {
+   width: 40px !important;
+   height: 40px !important;
+   fill: var(--v-primary-base) !important;
+   transition: fill 0.3s ease;
+   cursor: pointer;
+}
+
+.thumb-icon:hover {
+   fill: var(--v-primary-darken1) !important
+}
+
+.question-options {
+   display: flex;
+   justify-content: center;
+   gap: 20px;
+}
+
+.option-text {
+   font-family: Lato, Helvetica, Arial, sans-serif !important;
+   text-align: center;
+   font-size: 0.9rem;
+}

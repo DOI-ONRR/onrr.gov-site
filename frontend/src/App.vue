@@ -5,6 +5,7 @@
       <router-view :key="$route.path" />
       <!-- <router-view name="TwoColumnLeft" /> -->
     </v-main>
+    <site-feedback />
     <Footer />
   </v-app>
 </template>
@@ -13,6 +14,7 @@
 // @ is an alias to /src
 import AppToolbar from '@/components/toolbars/AppToolbar'
 import Footer from '@/components/navigation/Footer'
+import SiteFeedback from './components/sections/SiteFeedback';
 
 export default {
   name: 'App',
@@ -32,7 +34,8 @@ export default {
   },
   components: {
     AppToolbar,
-    Footer
+    Footer,
+    SiteFeedback
   },
 
   data: () => ({
