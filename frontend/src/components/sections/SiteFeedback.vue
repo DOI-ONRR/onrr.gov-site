@@ -27,7 +27,7 @@ export default {
                 var submitButton = formElement.querySelector('button.submit_form_button[type="submit"]');
 
                 // Hide the touchpoints footer always 
-                if (!!touchpointsFooter) {
+                if (touchpointsFooter) {
                     touchpointsFooter.classList.add("display-none");
                 }
 
@@ -46,11 +46,13 @@ export default {
                         submitButton.classList.remove("display-none");
                     }
 
-                    gas4('was_this_helpful_submit', {
-                        'event_category': 'cx_feedback',
-                        'event_action': 'was_this_page_helpful2',
-                        'event_label': response
-                    });
+                    if (typeof gas4 === 'function') {
+                        gas4('was_this_helpful_submit', {
+                            'event_category': 'cx_feedback',
+                            'event_action': 'was_this_page_helpful2',
+                            'event_label': response
+                        });
+                    }
                 };
 
                 var handleYesButtonClick = function (event) {
@@ -68,16 +70,15 @@ export default {
                 var newHeader = document.createElement('p');
                 var haychOne = header.querySelector('h1');
                 newHeader.innerHTML = haychOne.innerHTML;
-                for (var i = 0; i < haychOne.attributes.length; i++) {
-                    var attr = haychOne.attributes[i];
+                for (const attr of haychOne.attributes) {
                     newHeader.setAttribute(attr.name, attr.value);
                 }
                 newHeader.classList.add('font-ui-lg', 'text-medium', 'text-center');
                 haychOne.parentNode.replaceChild(newHeader, haychOne);
 
                 var questionOptions = formElement.querySelectorAll('.question-options label');
-                for (var i = 0; i < questionOptions.length; i++) {
-                    questionOptions[i].classList.remove('usa-radio__label');
+                for (const questionOption of questionOptions) {
+                    questionOption.classList.remove('usa-radio__label');
 
                     var optionSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                     optionSvg.setAttribute("class", "usa-icon thumb-icon");
@@ -90,18 +91,18 @@ export default {
 
                     var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
 
-                    if (i == 0) {
+                    if (questionOption.innerHTML === 'Yes') {
                         use.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/uswds/img/sprite.svg#thumb_up_alt");
                         div.textContent = "Yes";
                     }
-                    if (i == 1) {
+                    if (questionOption.innerHTML === 'No') {
                         use.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/uswds/img/sprite.svg#thumb_down_alt");
                         div.textContent = "No";
                     }
                     optionSvg.appendChild(use);
-                    questionOptions[i].innerHTML = '';
-                    questionOptions[i].appendChild(optionSvg);
-                    questionOptions[i].appendChild(div);
+                    questionOption.innerHTML = '';
+                    questionOption.appendChild(optionSvg);
+                    questionOption.appendChild(div);
                 }
 
                 submitButton.classList.add('onrr-submit-button');
