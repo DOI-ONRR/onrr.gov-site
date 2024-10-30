@@ -1,16 +1,21 @@
-<template @>
+<template>
     <div id="touchpoints-yes-no-form" class="onrr-feedback-form"></div>
 </template>
 <script>
 export default {
     name: 'SiteFeedback',
+    props: {
+        feedbackFormKey: Number
+    },
     mounted() {
-        document.addEventListener("onTouchpointsFormLoaded", this.handleTouchpointsFormLoaded);
+        this.$nextTick(() => {
+            document.addEventListener("onTouchpointsFormLoaded", this.handleTouchpointsFormLoaded);
 
-        const script = document.createElement('script');
-        script.src = 'https://touchpoints.app.cloud.gov/touchpoints/2dcadeaf.js';
-        script.async = true;
-        document.head.appendChild(script);
+            const script = document.createElement('script');
+            script.src = '/2dcadeaf.js';
+            script.async = true;
+            this.$el.appendChild(script);
+        });
     },
     methods: {
         handleTouchpointsFormLoaded(e) {
@@ -114,7 +119,17 @@ export default {
                 
                 var questionTextarea = formElement.querySelector('.question textarea');
                 questionTextarea.classList.add('font-sans-xs');
+                
             } 
+        }
+    },
+    watch: {
+        feedbackFormKey: function(newVal, oldVal) {
+            if (oldVal > 0) {
+                let FBAform = eval('typeof FBAform !== "undefined" ? FBAform : undefined');
+                let touchpointFormOptions2dcadeaf = eval('typeof touchpointFormOptions2dcadeaf !== "undefined" ? touchpointFormOptions2dcadeaf : undefined');
+                new FBAform(document,window).init(touchpointFormOptions2dcadeaf);
+            }
         }
     }
 }

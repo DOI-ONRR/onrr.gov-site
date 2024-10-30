@@ -5,7 +5,7 @@
       <router-view :key="$route.path" />
       <!-- <router-view name="TwoColumnLeft" /> -->
     </v-main>
-    <site-feedback />
+    <site-feedback :key="feedbackKey" :feedback-form-key="feedbackKey" />
     <Footer />
   </v-app>
 </template>
@@ -38,11 +38,23 @@ export default {
     SiteFeedback
   },
 
-  data: () => ({
-    //
-  }),
-  created() {
-    // console.log('this.$route.fullPath --------------------> ', this.$route.fullPath)
+  data: function() {
+    return {
+      feedbackKey: 0
+    }
+  },
+  methods: {
+    reloadSiteFeedback() {
+      this.feedbackKey += 1;
+    }
+  },
+  watch: {
+    $route: function(newVal, oldVal) {
+      if (oldVal.path === "/" && oldVal.name == null) {
+        return;
+      }
+      this.reloadSiteFeedback();
+    }
   }
 };
 </script>
