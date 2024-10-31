@@ -2,9 +2,9 @@
 applications: 
 - name: preview-onrr-cms
   command: npx directus start
-  instances: 4
+  instances: 1
   disk_quota: 1G
-  memory: 128M
+  memory: 512M
   buildpacks:
     - nodejs_buildpack
   services:

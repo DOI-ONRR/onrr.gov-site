@@ -129,7 +129,6 @@ export default {
     this.tab = activeTab || this.formattedLabel(this.tabItems[0].item.tab_block_label)
   },
   mounted() {
-    console.log('TabsBlock mounted!')
     // set nested tab item
     setTimeout(() => {
       const activeTabs = this.$route.query.tabs && this.$route.query.tabs.split(',')
