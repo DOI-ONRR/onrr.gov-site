@@ -5,6 +5,7 @@
       <router-view :key="$route.path" />
       <!-- <router-view name="TwoColumnLeft" /> -->
     </v-main>
+    <site-feedback :key="feedbackKey" :feedback-form-key="feedbackKey" />
     <Footer />
   </v-app>
 </template>
@@ -13,6 +14,7 @@
 // @ is an alias to /src
 import AppToolbar from '@/components/toolbars/AppToolbar'
 import Footer from '@/components/navigation/Footer'
+import SiteFeedback from './components/sections/SiteFeedback';
 
 export default {
   name: 'App',
@@ -32,14 +34,27 @@ export default {
   },
   components: {
     AppToolbar,
-    Footer
+    Footer,
+    SiteFeedback
   },
 
-  data: () => ({
-    //
-  }),
-  created() {
-    // console.log('this.$route.fullPath --------------------> ', this.$route.fullPath)
+  data: function() {
+    return {
+      feedbackKey: 0
+    }
+  },
+  methods: {
+    reloadSiteFeedback() {
+      this.feedbackKey += 1;
+    }
+  },
+  watch: {
+    $route: function(newVal, oldVal) {
+      if (oldVal.path === "/" && oldVal.name == null) {
+        return;
+      }
+      this.reloadSiteFeedback();
+    }
   }
 };
 </script>
