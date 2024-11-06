@@ -192,7 +192,9 @@ export default {
       ]
     },
     filteredCollection() {
-      const collection = (this.filteredByTopicCollection) ? this.filteredByTopicCollection[0].slice(0, 5) : this.collection && this.collection.slice(0, 5)
+      const collection = (this.filteredByTopicCollection && this.filteredByTopicCollection.length > 0) 
+        ? this.filteredByTopicCollection[0].slice(0, 5) 
+        : this.collection && this.collection.slice(0, 5)
       return collection
     },
     viewAllLink() {
