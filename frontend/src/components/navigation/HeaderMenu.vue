@@ -19,6 +19,9 @@
             <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
           </svg>
           <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
+          <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+            <use xlink:href="/uswds/img/sprite.svg#launch"></use>
+          </svg>
         </v-btn>
       </span>
 
