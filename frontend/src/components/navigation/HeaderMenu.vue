@@ -10,19 +10,14 @@
       class="no-btn-hover"
       :target="item.custom_url && item.custom_url ? '_blank' : '_self'"
     >
-      <span class="v-btn__content-btn" v-if="item.menu_label === 'Revenue Data'">
-        <v-btn
-          class="mb-1"
-          color="primary"
-        >
-          <svg class="onrr-header-icon" aria-hidden="true" focusable="false" role="img">
-            <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
-          </svg>
-          <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
-          <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
-            <use xlink:href="/uswds/img/sprite.svg#launch"></use>
-          </svg>
-        </v-btn>
+      <span class="v-btn__content" v-if="item.menu_label === 'Revenue Data'">
+        <svg class="onrr-header-icon" aria-hidden="true" focusable="false" role="img">
+          <use :href="`/uswds/img/sprite.svg#${item.menu_icon}`"></use>
+        </svg>
+        <span class="mr-2" v-if="item.menu_label">{{ item.menu_label }}</span>
+        <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+          <use xlink:href="/uswds/img/sprite.svg#launch"></use>
+        </svg>
       </span>
 
       <span class="v-btn__content" v-else>
