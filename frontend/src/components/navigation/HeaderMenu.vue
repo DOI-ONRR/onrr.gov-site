@@ -8,7 +8,7 @@
       text
       dark
       class="no-btn-hover"
-      :target="item.custom_url && item.custom_url ? '_blank' : '_self'"
+      target="_self"
     >
       <span class="v-btn__content" v-if="item.menu_label === 'Revenue Data'">
         <svg class="onrr-header-icon" aria-hidden="true" focusable="false" role="img">
