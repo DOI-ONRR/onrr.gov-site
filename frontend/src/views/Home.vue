@@ -73,13 +73,6 @@ export default {
     HeroImage,
     LayoutBlock
   },
-  created () {
-    // this.contentBlocks()
-    console.log('view vuetify obj--------->', this.$vuetify)
-  },
-  mounted () {
-    // console.log('breakpoint-------> ', this.$vuetify.breakpoint.width)
-  },
   methods: {},
   computed: {
     cssProps () {
