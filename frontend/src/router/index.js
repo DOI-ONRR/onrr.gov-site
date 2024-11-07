@@ -1,12 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { apolloClient } from '@/main.js'
-// import Home from '@/views/Home'
-// import TwoColumnLeft from '@/views/TwoColumnLeft'
 
 import { 
-  // PAGES_QUERY, 
-  // REDIRECTS_QUERY,
   PAGES_REDIRECTS_QUERY
 } from '@/graphql/queries'
 
@@ -154,8 +150,6 @@ router.beforeEach(async (to, from, next) => {
   const path = location.pathname.toString();
   const decodedPath = decodeURI(path);
 
-  // console.log('path ---------> ', path);
-
   let pages;
   let redirects;
   let redirectFound
@@ -166,10 +160,6 @@ router.beforeEach(async (to, from, next) => {
     // see if redirect exists
     redirectFound = redirects.find(redirect => redirect.old_url === decodedPath);
   }
-
-
-  // console.log('query ------> ', query);
-  // console.log('redirectFound --------> ', redirectFound);
 
   if (redirectFound) {
     // check to see if page exists and if not open new tab for redirect

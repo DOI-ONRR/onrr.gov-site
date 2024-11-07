@@ -76,40 +76,44 @@ export default {
                 // ONRR-specific changes:
                 var newHeader = document.createElement('p');
                 var haychOne = header.querySelector('h1');
-                newHeader.innerHTML = haychOne.innerHTML;
-                for (const attr of haychOne.attributes) {
-                    newHeader.setAttribute(attr.name, attr.value);
+                if (haychOne) {
+                    newHeader.innerHTML = haychOne.innerHTML;
+                    for (const attr of haychOne.attributes) {
+                        newHeader.setAttribute(attr.name, attr.value);
+                    }
+                    newHeader.classList.add('font-ui-lg', 'text-medium', 'text-center');
+                    haychOne.parentNode.replaceChild(newHeader, haychOne);
                 }
-                newHeader.classList.add('font-ui-lg', 'text-medium', 'text-center');
-                haychOne.parentNode.replaceChild(newHeader, haychOne);
 
                 var questionOptions = formElement.querySelectorAll('.question-options label');
                 for (const questionOption of questionOptions) {
-                    questionOption.classList.remove('usa-radio__label');
+                    if (questionOption.classList.contains('usa-radio__label')) {
+                        questionOption.classList.remove('usa-radio__label');
 
-                    var optionSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                    optionSvg.setAttribute("class", "usa-icon thumb-icon");
-                    optionSvg.setAttribute("aria-hidden", "true");
-                    optionSvg.setAttribute("focusable", "false");
-                    optionSvg.setAttribute("role", "img");
+                        var optionSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                        optionSvg.setAttribute("class", "usa-icon thumb-icon");
+                        optionSvg.setAttribute("aria-hidden", "true");
+                        optionSvg.setAttribute("focusable", "false");
+                        optionSvg.setAttribute("role", "img");
 
-                    var div = document.createElement("div");
-                    div.className = "option-text";
+                        var div = document.createElement("div");
+                        div.className = "option-text";
 
-                    var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+                        var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
 
-                    if (questionOption.innerHTML === 'Yes') {
-                        use.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/uswds/img/sprite.svg#thumb_up_alt");
-                        div.textContent = "Yes";
+                        if (questionOption.innerHTML === 'Yes') {
+                            use.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/uswds/img/sprite.svg#thumb_up_alt");
+                            div.textContent = "Yes";
+                        }
+                        if (questionOption.innerHTML === 'No') {
+                            use.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/uswds/img/sprite.svg#thumb_down_alt");
+                            div.textContent = "No";
+                        }
+                        optionSvg.appendChild(use);
+                        questionOption.innerHTML = '';
+                        questionOption.appendChild(optionSvg);
+                        questionOption.appendChild(div);
                     }
-                    if (questionOption.innerHTML === 'No') {
-                        use.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/uswds/img/sprite.svg#thumb_down_alt");
-                        div.textContent = "No";
-                    }
-                    optionSvg.appendChild(use);
-                    questionOption.innerHTML = '';
-                    questionOption.appendChild(optionSvg);
-                    questionOption.appendChild(div);
                 }
 
                 submitButton.classList.add('onrr-submit-button');

@@ -71,6 +71,9 @@ export default {
         return {
           ID: this.pageId
         }
+      },
+      skip() {
+        return !this.pageId;
       }
     }
   },
