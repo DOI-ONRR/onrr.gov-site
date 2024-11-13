@@ -13,6 +13,9 @@ parameters:
   build-frontend:
     type: boolean
     default: false
+  restart-frontend:
+    type: boolean
+    default: false
 
 workflows:
   generate-config:
@@ -26,3 +29,21 @@ workflows:
             .* run-copy-database << pipeline.parameters.copy-database >> .circleci/database-config.yml
             .* run-build-cms << pipeline.parameters.build-cms >> .circleci/cms-config.yml
             .* run-build-frontend << pipeline.parameters.build-frontend >> .circleci/frontend-config.yml
+  restart-frontend-workflow:
+    when: << pipeline.parameters.restart-frontend >>
+    jobs:
+      - restart-job:
+          context:
+            - org-global
+
+jobs:
+  restart-job:
+    docker:
+      - image: cimg/base:2024.11
+    steps:
+      - checkout
+      - run:
+          name: Execute restart script
+          command: |
+            chmod +x ~/project/.circleci/scripts/restart.sh
+            ~/project/.circleci/scripts/restart.sh
