@@ -1,9 +1,7 @@
-version: '3.2'
-
 services:
   directus:
     container_name: directus
-    image: directus/directus:9.26
+    image: directus/directus:11.2.1
     ports:
       - 8055:8055
     volumes:

@@ -29,12 +29,12 @@
     "npm": "10.8.1"
   },
   "dependencies": {
-    "axios": "^0.27.2",
-    "directus": "^9.10.0",
-    "jszip": "^3.9.1",
-    "node-fetch": "^2.6.7",
-    "pg": "^8.7.3",
-    "read-excel-file": "^5.2.28"
+    "axios": "^1.7.7",
+    "directus": "^11.2.1",
+    "jszip": "^3.10.1",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.13.1",
+    "read-excel-file": "^5.8.6"
   },
   "main": "index.js",
   "keywords": [],

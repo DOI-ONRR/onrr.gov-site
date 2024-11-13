@@ -26,10 +26,8 @@ export const layoutColumnBlockFields = gql`
 export const cardBlockFields = gql`
   fragment cardBlockFields on card_blocks {
     id
-    block_color
     block_label
     block_v_col
-    block_icon
     block_content
     equal_col_height
     card_content_blocks {
@@ -84,9 +82,15 @@ export const expansionPanelBlockFields = gql`
       id
       item {
         __typename
-        ...expansionPanelBlockLabel
-        ...contentBlockFields
-        ...cardBlockFields
+        ... on expansion_panel_block_label {
+          ...expansionPanelBlockLabel
+        }
+        ... on content_blocks {
+          ...contentBlockFields
+        }
+        ... on card_blocks {
+          ...cardBlockFields
+        }
       }
     }
   }
@@ -105,12 +109,24 @@ export const nestedNestedTabBlockFields = gql`
         id
         item {
           __typename
-          ...tabBlockLabelFields
-          ...contentBlockFields
-          ...cardBlockFields
-          ...expansionPanelBlockFields
-          ...layoutColumnBlockFields
-          ...formulaBlockFields
+          ... on tab_block_label {
+            ...tabBlockLabelFields
+          }
+          ... on content_blocks {
+            ...contentBlockFields
+          }
+          ... on card_blocks {
+            ...cardBlockFields
+          }
+          ... on expansion_panels {
+            ...expansionPanelBlockFields
+          }
+          ... on layout_column_blocks {
+            ...layoutColumnBlockFields
+          }
+          ... on formula_blocks {
+            ...formulaBlockFields
+          }
         }
     }
   }
@@ -129,13 +145,27 @@ export const nestedTabBlockFields = gql`
         id
         item {
           __typename
-          ...tabBlockLabelFields
-          ...contentBlockFields
-          ...cardBlockFields
-          ...nestedNestedTabBlockFields
-          ...expansionPanelBlockFields
-          ...layoutColumnBlockFields
-          ...formulaBlockFields
+          ... on tab_block_label {
+            ...tabBlockLabelFields
+          }
+          ... on content_blocks {
+            ...contentBlockFields
+          }
+          ... on card_blocks {
+            ...cardBlockFields
+          }
+          ... on tab_blocks {
+            ...nestedNestedTabBlockFields
+          }
+          ... on expansion_panels {
+            ...expansionPanelBlockFields
+          }
+          ... on layout_column_blocks {
+            ...layoutColumnBlockFields
+          }
+          ... on formula_blocks {
+            ...formulaBlockFields
+          }
         }
     }
   }
@@ -155,13 +185,27 @@ export const tabBlockFields = gql`
       id
       item {
         __typename
-        ...tabBlockLabelFields
-        ...contentBlockFields
-        ...cardBlockFields
-        ...nestedTabBlockFields
-        ...expansionPanelBlockFields
-        ...layoutColumnBlockFields
-        ...formulaBlockFields
+        ... on tab_block_label {
+          ...tabBlockLabelFields
+        }
+        ... on content_blocks {
+          ...contentBlockFields
+        }
+        ... on card_blocks {
+          ...cardBlockFields
+        }
+        ... on tab_blocks {
+          ...nestedTabBlockFields
+        }
+        ... on expansion_panels {
+          ...expansionPanelBlockFields
+        }
+        ... on layout_column_blocks {
+          ...layoutColumnBlockFields
+        }
+        ... on formula_blocks {
+          ...formulaBlockFields
+        }
       }
     }
   }
@@ -187,11 +231,21 @@ export const pageFields = gql`
       id
       item {
         __typename
-        ...contentBlockFields
-        ...tabBlockFields
-        ...cardBlockFields
-        ...expansionPanelBlockFields
-        ...layoutColumnBlockFields
+        ... on content_blocks {
+          ...contentBlockFields
+        }
+        ... on tab_blocks {
+          ...tabBlockFields
+        }
+        ... on card_blocks {
+          ...cardBlockFields
+        }
+        ... on expansion_panels {
+          ...expansionPanelBlockFields
+        }
+        ... on layout_column_blocks {
+          ...layoutColumnBlockFields
+        }
       }
     }
     meta_title
