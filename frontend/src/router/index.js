@@ -136,6 +136,8 @@ function getApolloQuery() {
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
   
+  console.log('from.query', from.query);
+  console.log('to.query', to.query);
   await store.dispatch('updatePageLoaded', false);
 
   // Apollo query
@@ -181,7 +183,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     const pageFound = pages.find(page => page.url === path);
     if (pageFound) {
-      console.log('pageFound', from.query);
       // check for query params
       if (!hasQueryParams(to) && hasQueryParams(from)) {
         if ('tabs' in from.query) {
@@ -199,7 +200,6 @@ router.beforeEach(async (to, from, next) => {
 
   // check for query params
   if (!hasQueryParams(to) && hasQueryParams(from)) {
-    console.log('down here', from.query);
     if ('tabs' in from.query) {
       await store.dispatch('updatePageLoaded', true);
     }
