@@ -9,6 +9,7 @@ import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import possibleTypes from './json/possibleTypes.json'
 import '../public/uswds/css/styles.css'
+import store from './store/index'
 
 const GTM_ID = process.env.VUE_APP_ONRR_GTM_ID
 
@@ -69,6 +70,7 @@ new Vue({
   vuetify,
   apolloProvider,
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
 

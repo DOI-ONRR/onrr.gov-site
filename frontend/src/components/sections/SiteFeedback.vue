@@ -1,7 +1,9 @@
 <template>
-    <div id="touchpoints-yes-no-form" class="onrr-feedback-form"></div>
+    <div id="touchpoints-yes-no-form" class="onrr-feedback-form" v-show="isPageLoaded"></div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     name: 'SiteFeedback',
     props: {
@@ -135,6 +137,11 @@ export default {
                 new FBAform(document,window).init(touchpointFormOptions2dcadeaf);
             }
         }
+    },
+    computed: {
+        ...mapGetters([
+            'isPageLoaded',
+        ])
     }
 }
 </script>

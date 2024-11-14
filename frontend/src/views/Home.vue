@@ -40,6 +40,7 @@ import { HOME_PAGE_QUERY } from '@/graphql/queries'
 import { 
   pageBlockMixin
 } from '@/mixins'
+import { mapActions } from 'vuex';
 
 const RevenueBlock = () => import('@/components/blocks/RevenueBlock')
 const HeroImage = () => import('@/components/sections/HeroImage')
@@ -55,6 +56,11 @@ export default {
     return {
       API_URL: process.env.VUE_APP_API_URL,
     }
+  },
+  mounted: function() {
+    this.$nextTick(function () {
+      this.updatePageLoaded(true);
+    })
   },
   apollo: {
     pages_by_id: {
@@ -73,7 +79,11 @@ export default {
     HeroImage,
     LayoutBlock
   },
-  methods: {},
+  methods: {
+    ...mapActions([
+      'updatePageLoaded'
+    ])
+  },
   computed: {
     cssProps () {
       return {
