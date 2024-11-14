@@ -82,7 +82,6 @@ export default {
   },
   watch: {
     pages_by_id(newValue) {
-      console.log('here');
       if (newValue) {
         this.updatePageLoaded(true);
       }

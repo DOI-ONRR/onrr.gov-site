@@ -97,7 +97,6 @@ export default {
       }
     }
   },
-
   methods: {
     ...mapActions([
       'updatePageLoaded'
@@ -110,6 +109,13 @@ export default {
   },
   props: {
     slug: String
+  },
+  watch: {
+    pages_by_id(newValue) {
+      if (newValue) {
+        this.updatePageLoaded(true);
+      }
+    },
   },
   computed: {
     findPageByUrl () {
