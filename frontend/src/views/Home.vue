@@ -55,12 +55,8 @@ export default {
   data() {
     return {
       API_URL: process.env.VUE_APP_API_URL,
+      pages_by_id: {}
     }
-  },
-  mounted: function() {
-    this.$nextTick(function () {
-      this.updatePageLoaded(true);
-    })
   },
   apollo: {
     pages_by_id: {
@@ -83,6 +79,14 @@ export default {
     ...mapActions([
       'updatePageLoaded'
     ])
+  },
+  watch: {
+    pages_by_id(newValue) {
+      console.log('here');
+      if (newValue) {
+        this.updatePageLoaded(true);
+      }
+    },
   },
   computed: {
     cssProps () {

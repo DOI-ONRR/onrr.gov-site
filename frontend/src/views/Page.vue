@@ -77,7 +77,7 @@ export default {
   data () {
     return {
       pages: [],
-      pages_by_id: [],
+      pages_by_id: {},
       code: '',
       colCount: 1
     }
@@ -110,11 +110,6 @@ export default {
   },
   props: {
     slug: String
-  },
-  mounted () {
-    this.$nextTick(function () {
-      this.updatePageLoaded();
-    });
   },
   computed: {
     findPageByUrl () {
