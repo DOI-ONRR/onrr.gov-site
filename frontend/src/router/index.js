@@ -198,6 +198,7 @@ router.beforeEach(async (to, from, next) => {
 
   // check for query params
   if (!hasQueryParams(to) && hasQueryParams(from)) {
+    console.log(from.query);
     if ('tabs' in from.query) {
       await store.dispatch('updatePageLoaded', true);
     }
