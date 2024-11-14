@@ -181,6 +181,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
     const pageFound = pages.find(page => page.url === path);
     if (pageFound) {
+      console.log('pageFound', from.query);
       // check for query params
       if (!hasQueryParams(to) && hasQueryParams(from)) {
         if ('tabs' in from.query) {
@@ -198,7 +199,7 @@ router.beforeEach(async (to, from, next) => {
 
   // check for query params
   if (!hasQueryParams(to) && hasQueryParams(from)) {
-    console.log(from.query);
+    console.log('down here', from.query);
     if ('tabs' in from.query) {
       await store.dispatch('updatePageLoaded', true);
     }
