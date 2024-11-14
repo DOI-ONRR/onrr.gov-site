@@ -52,6 +52,12 @@ cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s
 
 cf push --strategy=rolling -f "$manifest"
 
-echo "manifest $manifest successfully deployed."
+exit_code=$?
 
-exit 0
+if [ $exit_code -ne 0 ]; then
+  echo "Error: cf push failed with exit code $exit_code"
+  exit $exit_code
+else
+  echo "manifest $manifest successfully deployed."
+  exit 0
+fi
