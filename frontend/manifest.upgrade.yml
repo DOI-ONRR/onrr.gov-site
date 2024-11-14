@@ -1,0 +1,12 @@
+---
+applications: 
+- name: upgrade-onrr-frontend
+  path: ./
+  instances: 1
+  disk_quota: 1G
+  memory: 256M
+  random-route: false
+  buildpacks:
+    - nginx_buildpack
+  env:
+    CMS_URL: https://upgrade-onrr-cms.app.cloud.gov
