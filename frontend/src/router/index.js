@@ -136,8 +136,8 @@ function getApolloQuery() {
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
   
-  console.log('from.query', from.query);
-  console.log('to.query', to.query);
+  console.log('from', from);
+  console.log('to', to);
   await store.dispatch('updatePageLoaded', false);
 
   // Apollo query
