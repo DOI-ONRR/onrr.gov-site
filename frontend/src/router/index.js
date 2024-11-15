@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { apolloClient } from '@/main.js'
+import store from '../store/index'
 
 import { 
   PAGES_REDIRECTS_QUERY
@@ -104,17 +105,13 @@ const router = new VueRouter({
   linkExactActiveClass: "nav-active-class",
   routes,
   scrollBehavior(to, from, savedPosition) {
-    // console.log('scrollBehavior to, from, savedPosition: ', to, from, savedPosition)
     if (to.hash) {
       return {
         selector: to.hash,
         behavior: 'smooth',
-        // offset: { x: 0 }
       }
     } else if (savedPosition) {
       return savedPosition
-    } else {
-      // return { x: 0, y: 0 }
     }
   }
 })
@@ -138,11 +135,10 @@ function getApolloQuery() {
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
-  // console.log('beforeRouteEnter to ------------>', to);
-  // console.log('beforeRouteEnter from ------------>', from);
-  // console.log('beforeRouteEnter next ------------>', next);
-
-  // getRedirects()
+  
+  if (from.path !== to.path) {
+    await store.dispatch('updatePageLoaded', false);
+  }
 
   // Apollo query
   const query = await getApolloQuery();
