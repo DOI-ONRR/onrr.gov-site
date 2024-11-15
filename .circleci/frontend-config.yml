@@ -1,13 +1,13 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.2.0
+  node: circleci/node@6.3.0
 
 executors:
   frontend:
     resource_class: xlarge
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
 
 parameters:
   run-build-frontend:
