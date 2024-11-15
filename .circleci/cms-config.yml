@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.2.0
+  node: circleci/node@6.3.0
 
 executors:
   cms:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
 
 parameters:
   run-build-cms:

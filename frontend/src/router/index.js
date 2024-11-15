@@ -185,9 +185,6 @@ router.beforeEach(async (to, from, next) => {
     if (pageFound) {
       // check for query params
       if (!hasQueryParams(to) && hasQueryParams(from)) {
-        if ('tabs' in from.query) {
-          await store.dispatch('updatePageLoaded', true);
-        }
         next({ name: to.name, query: from.query })
       } else {
         next()
@@ -200,9 +197,6 @@ router.beforeEach(async (to, from, next) => {
 
   // check for query params
   if (!hasQueryParams(to) && hasQueryParams(from)) {
-    if ('tabs' in from.query) {
-      await store.dispatch('updatePageLoaded', true);
-    }
     next({ name: to.name, query: from.query })
   } else {
     next()
