@@ -22,7 +22,7 @@ jobs:
       BUILD_FRONTEND: << pipeline.parameters.build-frontend >>
       COPY_DATABASE: << pipeline.parameters.copy-database >>
       TRIGGER_SOURCE: << pipeline.trigger_source >>
-    working_directory: .circleci
+    working_directory: ~/project/.circleci
     steps:
       - checkout
       - run: 
