@@ -6,7 +6,7 @@ echo "BUILD_FRONTEND: $BUILD_FRONTEND"
 echo "COPY_DATABASE: $COPY_DATABASE"
 echo "CIRCLE_BRANCH: $CIRCLE_BRANCH"
 
-pwd
+cd ~/project/.circleci
 
 if [ "$TRIGGER_SOURCE" = "api" ]; then
   if [ "$BUILD_CMS" = "true" ] && [ "$BUILD_FRONTEND" = "true" ]; then
