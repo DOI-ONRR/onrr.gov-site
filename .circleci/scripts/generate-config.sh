@@ -8,30 +8,25 @@ echo "CIRCLE_BRANCH: $CIRCLE_BRANCH"
 
 cd ~/project/.circleci
 
-if [ "$TRIGGER_SOURCE" = "api" ]; then
-  if [ "$BUILD_CMS" = "true" ] && [ "$BUILD_FRONTEND" = "true" ]; then
-    if [ "$COPY_DATABASE" = "true" ]; then
-      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1) * select(fileIndex == 2) * select(fileIndex == 3)' parameters.yml frontend-config.yml cms-config.yml database-config.yml > generated-config.yml
-    else
-      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1) * select(fileIndex == 2)' parameters.yml frontend-config.yml cms-config.yml > generated-config.yml
-    fi
-  else
-    if [ "$BUILD_CMS" = "true" ]; then
-      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml cms-config.yml > generated-config.yml
-    elif [ "$BUILD_FRONTEND" = "true" ]; then
-      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml frontend-config.yml > generated-config.yml
-    elif [ "$COPY_DATABASE" = "true" ]; then
-      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml database-config.yml > generated-config.yml
-    else
-      cat <<EOF > generated-config.yml
-version: 2.1
-workflows: {}
-EOF
-    fi
-  fi
-elif [ "$TRIGGER_SOURCE" = "scheduled_pipeline" ]; then
+config_files=(parameters.yml)
+
+if [ "$TRIGGER_SOURCE" = "scheduled_pipeline" ]; then
   cat restart-config.yml > generated-config.yml
-else
+  exit 0
+elif [ "$TRIGGER_SOURCE" = "api" ]; then
+  if [ "$BUILD_CMS" = "true" ]; then
+    config_files+=(cms-config.yml)
+  fi
+  
+  if [ "$BUILD_FRONTEND" = "true" ]; then
+    config_files+=(frontend-config.yml)
+  fi
+  
+  if [ "$COPY_DATABASE" = "true" ]; then
+    config_files+=(database-config.yml)
+  fi
+
+elif [ "$TRIGGER_SOURCE" = "webhook" ]; then
   last_commit=$(git rev-parse "$CIRCLE_BRANCH~1")
 
   changed_files=$(git diff --name-only "$last_commit" origin/main)
@@ -42,17 +37,33 @@ else
   echo "$changed_files" | grep -q '^frontend/'
   frontend_changed=$?
 
-  if [ "$cms_changed" -eq 0 ] && [ "$frontend_changed" -eq 0 ]; then
-    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1) * select(fileIndex == 2)' parameters.yml frontend-config.yml cms-config.yml > generated-config.yml
-  elif [ "$cms_changed" -eq 0 ]; then
-    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml cms-config.yml > generated-config.yml
-  elif [ "$frontend_changed" -eq 0 ]; then
-    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml frontend-config.yml > generated-config.yml
-  else
-    cat <<EOF > generated-config.yml
+  if [ "$cms_changed" -eq 0 ]; then
+    config_files+=(cms-config.yml)
+  fi
+  
+  if [ "$frontend_changed" -eq 0 ]; then
+    config_files+=(frontend-config.yml)
+  fi
+  
+fi
+
+config_count=${#config_files[@]}
+
+if [ "$config_count" -gt 1 ]; then
+  merged={}
+
+  for file in "${config_files[@]}"; do
+    if [ -f "$file" ]; then
+      merged=$(echo "$merged" | yq eval-all '. * input' - "$file")
+    else
+      echo "Warning: $file does not exist. Skipping."
+    fi
+  done
+
+  echo "$merged" > generated-config.yml
+else
+  cat <<EOF > generated-config.yml
 version: 2.1
 workflows: {}
 EOF
-  fi
-  
 fi
