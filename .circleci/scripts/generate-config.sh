@@ -30,7 +30,6 @@ EOF
 elif [ "$TRIGGER_SOURCE" = "scheduled_pipeline" ]; then
   cat restart-config.yml > generated-config.yml
 else
-  git fetch "origin/$CIRCLE_BRANCH"
   last_commit=$(git rev-parse "$CIRCLE_BRANCH~1")
 
   changed_files=$(git diff --name-only "$last_commit" origin/main)
