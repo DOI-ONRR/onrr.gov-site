@@ -22,15 +22,12 @@ jobs:
       BUILD_FRONTEND: << pipeline.parameters.build-frontend >>
       COPY_DATABASE: << pipeline.parameters.copy-database >>
       TRIGGER_SOURCE: << pipeline.trigger_source >>
-    working_directory: ~/project/.circleci
     steps:
       - checkout
       - run: 
           name: Generate config
           command: |
-            ls -la
-            ls -la ./scripts
-            ./scripts/generate-config.sh
+            ~/project/.circleci/scripts/generate-config.sh
       - continuation/continue:
           configuration_path: generated-config.yml
 
