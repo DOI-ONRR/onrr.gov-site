@@ -8,17 +8,8 @@ executors:
     docker:
       - image: cimg/base:current
 
-parameters:
-  run-build-cms:
-    type: boolean
-    default: false
-  build-cms:
-    type: boolean
-    default: false
-
 workflows:
   build-cms:
-    when: << pipeline.parameters.run-build-cms >>
     jobs: 
       - install-node-deps-cms:
           context:
