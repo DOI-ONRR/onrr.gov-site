@@ -28,7 +28,8 @@ jobs:
       - run: 
           name: Generate config
           command: |
-            pwd
+            ls -la
+            ls -la ./scripts
             ./scripts/generate-config.sh
       - continuation/continue:
           configuration_path: generated-config.yml
