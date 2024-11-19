@@ -4,13 +4,10 @@ parameters:
   copy-database:
     type: boolean
     default: false
-  run-copy-database:
-    type: boolean
-    default: false
 
 workflows:
   copy-database:
-    when: << pipeline.parameters.run-copy-database >>
+    when: << pipeline.parameters.copy-database >>
     jobs: 
       - database:
           context:

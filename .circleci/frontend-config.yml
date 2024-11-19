@@ -9,6 +9,11 @@ executors:
     docker:
       - image: cimg/base:current
 
+parameters:
+  build-frontend:
+    type: boolean
+    default: false
+
 workflows:
   build-frontend:
     jobs: 
