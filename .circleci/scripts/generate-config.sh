@@ -11,17 +11,17 @@ cd ~/project/.circleci
 if [ "$TRIGGER_SOURCE" = "api" ]; then
   if [ "$BUILD_CMS" = "true" ] && [ "$BUILD_FRONTEND" = "true" ]; then
     if [ "$COPY_DATABASE" = "true" ]; then
-      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' frontend-config.yml cms-config.yml | yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' - database-config.yml > generated-config.yml
+      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1) * select(fileIndex == 2) * select(fileIndex == 3)' parameters.yml frontend-config.yml cms-config.yml database-config.yml > generated-config.yml
     else
-      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' frontend-config.yml cms-config.yml > generated-config.yml
+      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1) * select(fileIndex == 2)' parameters.yml frontend-config.yml cms-config.yml > generated-config.yml
     fi
   else
     if [ "$BUILD_CMS" = "true" ]; then
-      cat cms-config.yml > generated-config.yml
+      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml cms-config.yml > generated-config.yml
     elif [ "$BUILD_FRONTEND" = "true" ]; then
-      cat frontend-config.yml > generated-config.yml
+      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml frontend-config.yml > generated-config.yml
     elif [ "$COPY_DATABASE" = "true" ]; then
-      cat database-config.yml > generated-config.yml
+      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml database-config.yml > generated-config.yml
     else
       cat <<EOF > generated-config.yml
 version: 2.1
@@ -43,11 +43,11 @@ else
   frontend_changed=$?
 
   if [ "$cms_changed" -eq 0 ] && [ "$frontend_changed" -eq 0 ]; then
-    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' frontend-config.yml cms-config.yml > generated-config.yml
+    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1) * select(fileIndex == 2)' parameters.yml frontend-config.yml cms-config.yml > generated-config.yml
   elif [ "$cms_changed" -eq 0 ]; then
-    cat cms-config.yml > generated-config.yml
+    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml cms-config.yml > generated-config.yml
   elif [ "$frontend_changed" -eq 0 ]; then
-    cat frontend-config.yml > generated-config.yml
+    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' parameters.yml frontend-config.yml > generated-config.yml
   else
     cat <<EOF > generated-config.yml
 version: 2.1

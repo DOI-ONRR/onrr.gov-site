@@ -1,13 +1,7 @@
 version: 2.1
 
-parameters:
-  copy-database:
-    type: boolean
-    default: false
-
 workflows:
   copy-database:
-    when: << pipeline.parameters.copy-database >>
     jobs: 
       - database:
           context:

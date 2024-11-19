@@ -8,11 +8,6 @@ executors:
     docker:
       - image: cimg/base:current
 
-parameters:
-  build-cms:
-    type: boolean
-    default: false
-
 workflows:
   build-cms:
     jobs: 

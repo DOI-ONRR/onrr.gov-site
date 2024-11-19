@@ -1,0 +1,12 @@
+version: 2.1
+
+parameters:
+  build-cms:
+    type: boolean
+    default: false
+  build-frontend:
+    type: boolean
+    default: false
+  copy-database:
+    type: boolean
+    default: false
