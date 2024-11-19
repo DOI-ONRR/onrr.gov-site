@@ -6,6 +6,8 @@ echo "BUILD_FRONTEND: $BUILD_FRONTEND"
 echo "COPY_DATABASE: $COPY_DATABASE"
 echo "CIRCLE_BRANCH: $CIRCLE_BRANCH"
 
+pwd
+
 if [ "$TRIGGER_SOURCE" = "api" ]; then
   if [ "$BUILD_CMS" = "true" ] && [ "$BUILD_FRONTEND" = "true" ]; then
     if [ "$COPY_DATABASE" = "true" ]; then
@@ -40,11 +42,11 @@ else
   echo "$changed_files" | grep -q '^frontend/'
   frontend_changed=$?
 
-  if [ "$cms_changed" ] && [ "$frontend_changed" ]; then
+  if [ "$cms_changed" -eq 0 ] && [ "$frontend_changed" -eq 0 ]; then
     yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' frontend-config.yml cms-config.yml > generated-config.yml
-  elif [ "$cms_changed" ]; then
+  elif [ "$cms_changed" -eq 0 ]; then
     cat cms-config.yml > generated-config.yml
-  elif [ "$frontend_changed" ]; then
+  elif [ "$frontend_changed" -eq 0 ]; then
     cat frontend-config.yml > generated-config.yml
   else
     cat <<EOF > generated-config.yml
