@@ -1,11 +1,5 @@
 #!/bin/bash
 
-echo "TRIGGER_SOURCE: $TRIGGER_SOURCE"
-echo "BUILD_CMS: $BUILD_CMS"
-echo "BUILD_FRONTEND: $BUILD_FRONTEND"
-echo "COPY_DATABASE: $COPY_DATABASE"
-echo "CIRCLE_BRANCH: $CIRCLE_BRANCH"
-
 cd ~/project/.circleci
 
 config_files=(parameters.yml)
@@ -49,21 +43,23 @@ fi
 
 config_count=${#config_files[@]}
 
-if [ "$config_count" -gt 1 ]; then
-  merged={}
-
-  for file in "${config_files[@]}"; do
-    if [ -f "$file" ]; then
-      merged=$(echo "$merged" | yq eval-all '. * input' - "$file")
-    else
-      echo "Warning: $file does not exist. Skipping."
-    fi
-  done
-
-  echo "$merged" > generated-config.yml
-else
+if [ "$config_count" -eq 1 ]; then
   cat <<EOF > generated-config.yml
 version: 2.1
 workflows: {}
 EOF
+
+  exit 0
 fi
+
+merged="{}"
+
+for file in "${config_files[@]}"; do
+  if [ -f "$file" ]; then
+    merged=$(yq eval-all '. as $item ireduce ({}; . * $item)' <(echo "$merged") "$file")
+  else
+    echo "Warning: $file does not exist. Skipping."
+  fi
+done
+
+echo "$merged" > generated-config.yml
