@@ -9,17 +9,8 @@ executors:
     docker:
       - image: cimg/base:current
 
-parameters:
-  run-build-frontend:
-    type: boolean
-    default: false
-  build-frontend:
-    type: boolean
-    default: false
-
 workflows:
   build-frontend:
-    when: << pipeline.parameters.run-build-frontend >>
     jobs: 
       - install-node-deps-frontend
       - build-frontend-app:
