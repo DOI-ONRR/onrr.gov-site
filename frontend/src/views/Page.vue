@@ -38,6 +38,7 @@
 <script>
 import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import { pageBlockMixin, editorBlockMixin, mobileMixin } from '@/mixins'
+import { mapActions } from 'vuex';
 
 const Breadcrumbs = () =>
   import(
@@ -76,7 +77,7 @@ export default {
   data () {
     return {
       pages: [],
-      pages_by_id: [],
+      pages_by_id: {},
       code: '',
       colCount: 1
     }
@@ -96,8 +97,10 @@ export default {
       }
     }
   },
-
   methods: {
+    ...mapActions([
+      'updatePageLoaded'
+    ]),
     async loadUsers () {
       const response = await fetch('https://reqres.in/api/users')
       const { data: users } = await response.json()
@@ -106,6 +109,13 @@ export default {
   },
   props: {
     slug: String
+  },
+  watch: {
+    pages_by_id(newValue) {
+      if (newValue) {
+        this.updatePageLoaded(true);
+      }
+    },
   },
   computed: {
     findPageByUrl () {

@@ -3,7 +3,6 @@
     <AppToolbar />
     <v-main>
       <router-view :key="$route.path" />
-      <!-- <router-view name="TwoColumnLeft" /> -->
     </v-main>
     <site-feedback :key="feedbackKey" :feedback-form-key="feedbackKey" />
     <Footer />

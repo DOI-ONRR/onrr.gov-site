@@ -1,24 +1,15 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.2.0
+  node: circleci/node@6.3.0
 
 executors:
   cms:
     docker:
-      - image: cimg/base:stable
-
-parameters:
-  run-build-cms:
-    type: boolean
-    default: false
-  build-cms:
-    type: boolean
-    default: false
+      - image: cimg/base:current
 
 workflows:
   build-cms:
-    when: << pipeline.parameters.run-build-cms >>
     jobs: 
       - install-node-deps-cms:
           context:

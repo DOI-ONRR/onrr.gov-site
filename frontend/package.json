@@ -35,7 +35,8 @@
     "vue-meta": "^2.4.0",
     "vue-router": "^3.5.3",
     "vue-tag": "^1.0.0",
-    "vuetify": "^2.6.4"
+    "vuetify": "^2.6.4",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",

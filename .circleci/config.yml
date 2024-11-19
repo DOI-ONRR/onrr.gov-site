@@ -1,7 +1,7 @@
 version: 2.1
 setup: true
 orbs:
-  path-filtering: circleci/path-filtering@1.1.0
+  continuation: circleci/continuation@1.0.0
 
 parameters:
   copy-database:
@@ -14,15 +14,24 @@ parameters:
     type: boolean
     default: false
 
+jobs:
+  setup:
+    executor: continuation/default
+    environment:
+      BUILD_CMS: << pipeline.parameters.build-cms >>
+      BUILD_FRONTEND: << pipeline.parameters.build-frontend >>
+      COPY_DATABASE: << pipeline.parameters.copy-database >>
+      TRIGGER_SOURCE: << pipeline.trigger_source >>
+    steps:
+      - checkout
+      - run: 
+          name: Generate config
+          command: |
+            ~/project/.circleci/scripts/generate-config.sh
+      - continuation/continue:
+          configuration_path: /home/circleci/project/.circleci/generated-config.yml
+
 workflows:
-  generate-config:
+  setup-workflow:
     jobs:
-      - path-filtering/filter:
-          base-revision: << pipeline.git.branch >>
-          name: check-updated-files
-          mapping: |
-            cms/.* run-build-cms true .circleci/cms-config.yml
-            frontend/.* run-build-frontend true .circleci/frontend-config.yml
-            .* run-copy-database << pipeline.parameters.copy-database >> .circleci/database-config.yml
-            .* run-build-cms << pipeline.parameters.build-cms >> .circleci/cms-config.yml
-            .* run-build-frontend << pipeline.parameters.build-frontend >> .circleci/frontend-config.yml
+      - setup
