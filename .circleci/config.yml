@@ -25,10 +25,6 @@ jobs:
     working_directory: .circleci
     steps:
       - checkout
-      - run:
-          name: Install yq
-          command: |
-            sudo snap install yq
       - run: 
           name: Generate config
           command: |
