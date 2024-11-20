@@ -14,3 +14,4 @@ applications:
   env:
     CONFIG_PATH: ./config.js
     CORS_ORIGIN: https://dev-onrr-cms.app.cloud.gov
+    PUBLIC_URL: https://prod-onr-cms.app.cloud.gov

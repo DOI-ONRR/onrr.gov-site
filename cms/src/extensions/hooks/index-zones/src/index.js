@@ -10,7 +10,7 @@ export default ({ filter, action }) => {
     	const url = `${base_url + payload.spreadsheet}.xlsx`
     	const filePath = `/tmp/${payload.spreadsheet}.xlsx`
 
-    	await fileUtils.getFile(filePath, url)
+		await fileUtils.getFile(filePath, url)
     	await fileUtils.parseFileIndexZones(payload, filePath)
 	})
 }

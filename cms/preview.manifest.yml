@@ -14,3 +14,4 @@ applications:
     CONFIG_PATH: ./config.js
     UPSTREAM_URL: https://dev-onrr-cms.app.cloud.gov
     DIRECTUS_PUBLIC_HOST: https://preview-onrr-cms.app.cloud.gov
+    PUBLIC_URL: https://preview-onrr-cms.app.cloud.gov

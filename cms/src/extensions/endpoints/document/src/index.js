@@ -1,7 +1,7 @@
 import * as fileUtils from '../../../../utils/file-utils';
 
 export default (router, context) => {
-	const { services, getSchema } = context;
+  const { services, getSchema } = context;
   const { FilesService } = services;
 
   router.get('/:file', async (req, res, next) => {
@@ -25,4 +25,3 @@ export default (router, context) => {
 
   });
 };
-
