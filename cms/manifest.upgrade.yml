@@ -1,0 +1,17 @@
+---
+applications: 
+- name: upgrade-onrr-cms
+  command: npx directus start
+  instances: 1
+  disk_quota: 1G
+  memory: 512M
+  buildpacks:
+    - nodejs_buildpack
+  services:
+    - upgrade-onrr-psql
+    - upgrade-onrr-s3
+  env:
+    CONFIG_PATH: ./config.js
+    UPSTREAM_URL: https://dev-onrr-cms.app.cloud.gov
+    DIRECTUS_PUBLIC_HOST: https://upgrade-onrr-cms.app.cloud.gov
+    PUBLIC_URL: https://upgrade-onrr-cms.app.cloud.gov

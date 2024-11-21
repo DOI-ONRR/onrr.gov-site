@@ -187,18 +187,18 @@
 
 <style lang="css" scoped>
 .bordered {
-	padding: var(--input-padding);
-	background-color: var(--background-page);
-	border: var(--border-width) solid var(--border-normal);
-	border-radius: var(--border-radius);
+	padding: var(--theme--form--field--input--padding) max(32px,var(--theme--form--field--input--padding) + 16px);
+    background-color: var(--theme--background);
+    border: var(--theme--border-width) solid var(--theme--form--field--input--border-color);
+    border-radius: var(--theme--border-radius);
 }
 
 .bordered:hover {
-	border-color: var(--border-normal-alt);
+	border-color: var(--theme--form--field--input--border-color-hover);
 }
 
 .bordered:focus-within {
-	border-color: var(--primary);
+	border-color: var(--theme--form--field--input--border-color-focus);
 }
 
 .monospace {
