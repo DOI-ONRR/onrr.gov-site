@@ -22,7 +22,8 @@
     "build:ibmp": "cd src/extensions/hooks/ibmp; npm run build",
     "build:nymex": "cd src/extensions/hooks/nymex; npm run build",
     "build:onrr-flows": "cd src/extensions/endpoints/onrr-flows; npm run build",
-    "build:all": "npm run build:onrr-editor; npm run build:link-autocomplete; npm run build:document; npm run build:image-uploader; npm run build:press-releases; npm run build:reporter-letters; npm run build:unbundling; npm run build:index-zones; npm run build:indian-gas-major-portion; npm run build:ibmp; npm run build:nymex; npm run build:onrr-flows"
+    "build:onrr-generate-uuid": "cd src/extensions/operations/onrr-generate-uuid; npm run build",
+    "build:all": "npm run build:onrr-generate-uuid; npm run build:onrr-editor; npm run build:link-autocomplete; npm run build:document; npm run build:image-uploader; npm run build:press-releases; npm run build:reporter-letters; npm run build:unbundling; npm run build:index-zones; npm run build:indian-gas-major-portion; npm run build:ibmp; npm run build:nymex; npm run build:onrr-flows"
   },
   "engines": {
     "node": "18.20.4"
