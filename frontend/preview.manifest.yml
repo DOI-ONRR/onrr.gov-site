@@ -10,3 +10,4 @@ applications:
     - nginx_buildpack
   env:
     CMS_URL: https://preview-onrr-cms.app.cloud.gov
+    VUE_APP_ONRR_GTM_ID: GTM-ABC1234

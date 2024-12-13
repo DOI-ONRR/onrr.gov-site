@@ -1,4 +1,4 @@
-module.exports = function(env) {
+module.exports = function (env) {
   const vcap_services = JSON.parse(env.VCAP_SERVICES)
   const vcap_application = JSON.parse(env.VCAP_APPLICATION)
 
@@ -37,8 +37,7 @@ module.exports = function(env) {
     GITHUB_TOKEN: env.GITHUB_TOKEN,
     MAX_RELATIONAL_DEPTH: 200,
     CORS_ENABLED: true,
-    CMS_TOKEN: env.CMS_TOKEN,
-    FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL,CMS_TOKEN,DIRECTUS_PUBLIC_HOST",
-    FLOWS_EXEC_ALLOWED_MODULES: "lodash,axios,form-data,uuid"
+    CMS_TOKEN: env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_AUTH_TOKEN,
+    FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL,CMS_TOKEN,DIRECTUS_PUBLIC_HOST"
   }
 };

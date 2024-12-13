@@ -58,6 +58,8 @@ jobs:
           app-dir: cms/src/extensions/interfaces/onrr-editor
       - node/install-packages:
           app-dir: cms/src/extensions/endpoints/onrr-flows
+      - node/install-packages:
+          app-dir: cms/src/extensions/operations/onrr-generate-uuid
       - persist_to_workspace:
           root: ~/project
           paths: 
