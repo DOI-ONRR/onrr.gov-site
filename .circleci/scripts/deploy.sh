@@ -29,7 +29,10 @@ if [ -z "$branch" ]; then
     exit 1
 fi
 
-if [ "$branch" == "dev" ]; then
+if [ "$branch" == "upgrade-directus" ]; then
+    space="dev"
+    manifest="manifest.upgrade.yml"
+elif [ "$branch" == "dev" ]; then
     space="dev"
     manifest="dev.manifest.yml"
 elif [ "$branch" == "main" ]; then

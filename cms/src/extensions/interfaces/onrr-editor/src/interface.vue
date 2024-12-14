@@ -1,25 +1,22 @@
 <template>
-	<v-dialog :model-value="fileHandler" @update:model-value="unsetFileHandler" @esc="unsetFileHandler">
-		<v-card>
-			<v-card-title>
-				<i18n-t keypath="upload_from_device" />
-			</v-card-title>
-			<v-card-text>
-				<v-upload 
-				:ref="uploaderComponentElement" 
-				@input="handleFile" 
-				:multiple="false" 
-				:folder="folder"
-				:from-library="true"
-				:from-url="false" />
-			</v-card-text>
-			<v-card-actions>
-				<v-button secondary @click="unsetFileHandler">
-					<i18n-t keypath="cancel" />
-				</v-button>
-			</v-card-actions>
-		</v-card>
-	</v-dialog>
+	<v-drawer 
+		cancelable="true"
+		:model-value="fileHandler" 
+		@update:model-value="unsetFileHandler" 
+		@esc="unsetFileHandler"
+		@cancel="unsetFileHandler"
+		title="Upload Image from Device"
+		icon="image">
+		
+		<v-upload 
+			:ref="uploaderComponentElement" 
+			@input="handleFile" 
+			:multiple="false" 
+			:folder="folder"
+			:from-library="true"
+			:from-url="false"
+			class="onrr-image-upload"/>
+	</v-drawer>
 	<div :class="className" ref="editorElement"></div>
 </template>
 
@@ -186,19 +183,20 @@
 </script>
 
 <style lang="css" scoped>
+
 .bordered {
-	padding: var(--input-padding);
-	background-color: var(--background-page);
-	border: var(--border-width) solid var(--border-normal);
-	border-radius: var(--border-radius);
+	padding: var(--theme--form--field--input--padding) max(32px,var(--theme--form--field--input--padding) + 16px);
+    background-color: var(--theme--background);
+    border: var(--theme--border-width) solid var(--theme--form--field--input--border-color);
+    border-radius: var(--theme--border-radius);
 }
 
 .bordered:hover {
-	border-color: var(--border-normal-alt);
+	border-color: var(--theme--form--field--input--border-color-hover);
 }
 
 .bordered:focus-within {
-	border-color: var(--primary);
+	border-color: var(--theme--form--field--input--border-color-focus);
 }
 
 .monospace {
@@ -211,5 +209,15 @@
 
 .sans-serif {
 	font-family: var(--family-sans-serif);
+}
+
+.onrr-image-upload {
+	margin: 0 2rem;
+    border: var(--theme--border-width) dashed var(--theme--form--field--input--border-color);
+    border-radius: var(--theme--border-radius);
+}
+
+.onrr-image-upload:hover {
+	border-color: var(--theme--form--field--input--border-color-hover);
 }
 </style>

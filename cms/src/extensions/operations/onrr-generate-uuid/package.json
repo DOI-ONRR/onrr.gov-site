@@ -1,0 +1,39 @@
+{
+	"name": "onrr-generate-uuid",
+	"description": "Custom operation extension for generating uuids in flows.",
+	"icon": "electric_bolt",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-operation"
+	],
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "operation",
+		"path": {
+			"app": "dist/app.js",
+			"api": "dist/api.js"
+		},
+		"source": {
+			"app": "src/app.js",
+			"api": "src/api.js"
+		},
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-generate-uuid/dist; cp package.json ../../../../extensions/directus-extension-onrr-generate-uuid; cp dist/*.js ../../../../extensions/directus-extension-onrr-generate-uuid/dist",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "12.1.4",
+		"vue": "^3.5.13"
+	},
+	"dependencies": {
+		"uuid": "^11.0.3"
+	}
+}
