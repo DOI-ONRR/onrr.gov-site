@@ -12,7 +12,7 @@
     "start:windows": "set CONFIG_PATH='../../.env' && npx directus start",
     "build:onrr-editor": "cd src/extensions/interfaces/onrr-editor; npm run build",
     "build:link-autocomplete": "cd src/extensions/endpoints/link-autocomplete; npm run build",
-    "build:delayed-timeout": "cd src/extensions/endpoints/document; npm run build",
+    "build:delayed-timeout": "cd src/extensions/endpoints/delayed-timeout; npm run build",
     "build:document": "cd src/extensions/endpoints/document; npm run build",
     "build:image-uploader": "cd src/extensions/endpoints/image-uploader; npm run build",
     "build:press-releases": "cd src/extensions/endpoints/press-releases; npm run build",
