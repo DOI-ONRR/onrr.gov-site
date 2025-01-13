@@ -9,4 +9,4 @@ applications:
   buildpacks:
     - nginx_buildpack
   env:
-    CMS_URL: https://dev-onrr-cms.app.cloud.gov
+    CMS_URL: dev-onrr-cms.app.cloud.gov
