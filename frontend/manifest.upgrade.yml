@@ -9,4 +9,4 @@ applications:
   buildpacks:
     - nginx_buildpack
   env:
-    CMS_URL: upgrade-onrr-cms.app.cloud.gov
+    CMS_URL: https://upgrade-onrr-cms.app.cloud.gov
