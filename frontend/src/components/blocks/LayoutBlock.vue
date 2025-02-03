@@ -5,7 +5,6 @@
         v-for="block in layoutItems" 
         :key="block.id" 
         cols="12" 
-        sm="12"
         :md="block.item.layoutCol" 
         :class="[
           'layout-block-container',
@@ -15,7 +14,7 @@
           <v-col 
             v-for="nestedBlock in block.nestedBlocks" 
             :key="nestedBlock.id" 
-            sm="12"
+            cols="12"
             :md="nestedBlock.item.block_v_col" 
             :class="[
               'nested-block-container', 
