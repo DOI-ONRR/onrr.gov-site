@@ -15,8 +15,8 @@
           <v-col 
             v-for="nestedBlock in block.nestedBlocks" 
             :key="nestedBlock.id" 
-            sm="12"
-            :md="nestedBlock.item.block_v_col" 
+            cols="12"
+            :lg="nestedBlock.item.block_v_col" 
             :class="[
               'nested-block-container', 
               nestedBlock.item.__typename, 
