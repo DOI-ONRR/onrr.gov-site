@@ -1,7 +1,7 @@
 ---
 applications: 
 - name: preview-onrr-frontend
-  path: ./
+  path: dist
   instances: 1
   disk_quota: 1G
   memory: 512M
