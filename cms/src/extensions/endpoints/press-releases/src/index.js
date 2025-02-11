@@ -17,7 +17,7 @@ export default (router, context) => {
 
     const filePath = `/tmp/${fileName}`;
     const hostname = (req.hostname === 'localhost') ? 'localhost:8055' : `${req.hostname}:61443`
-    const url = https://${hostname}/assets/${files[0].id}`;
+    const url = `https://${hostname}/assets/${files[0].id}`;
     
     await fileUtils.getFile(filePath, url);
     
