@@ -16,7 +16,7 @@ export default (router, context) => {
     const files = await filesService.readByQuery({ fields: ['*'],  filter: {filename_download: {'_eq': fileName}}});
 
     const filePath = `/tmp/${fileName}`;
-    const hostname = (req.hostname === 'localhost') ? 'localhost:8055' : req.hostname
+    const hostname = (req.hostname === 'localhost') ? 'localhost:8055' : `${req.hostname}:61443`
     const url = `${req.protocol}://${hostname}/assets/${files[0].id}`;
     
     await fileUtils.getFile(filePath, url);
