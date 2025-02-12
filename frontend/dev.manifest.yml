@@ -7,6 +7,4 @@ applications:
   memory: 512M
   random-route: false
   buildpacks:
-    - nginx_buildpack
-  env:
-    CMS_URL: https://dev-onrr-cms.app.cloud.gov
+    - staticfile_buildpack
