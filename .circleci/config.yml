@@ -13,6 +13,9 @@ parameters:
   build-frontend:
     type: boolean
     default: false
+  build-route-service:
+    type: boolean
+    default: false
 
 jobs:
   setup:
@@ -20,6 +23,7 @@ jobs:
     environment:
       BUILD_CMS: << pipeline.parameters.build-cms >>
       BUILD_FRONTEND: << pipeline.parameters.build-frontend >>
+      BUILD_ROUTE_SERVICE: << pipeline.parameters.build-route-service >>
       COPY_DATABASE: << pipeline.parameters.copy-database >>
       TRIGGER_SOURCE: << pipeline.trigger_source >>
     steps:

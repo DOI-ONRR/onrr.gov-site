@@ -1,0 +1,51 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@7.1.0
+
+executors:
+  route-service:
+    resource_class: xlarge
+    docker:
+      - image: cimg/base:current
+
+parameters:
+  build-route-service:
+    type: boolean
+    default: false
+
+workflows:
+  build-route-service:
+    jobs: 
+      - install-node-deps-route-service
+      - deploy-route-service:
+          context:
+            - org-global
+          requires: 
+            - install-node-deps-route-service
+
+jobs:
+  install-node-deps-route-service:
+    executor: route-service
+    steps:
+      - checkout
+      - node/install:
+          node-version: '18.17.0'
+      - node/install-packages:
+          cache-version: v1
+          app-dir: route-service
+      - persist_to_workspace:
+          root: ~/project
+          paths: 
+            - .
+  deploy-route-service:
+    executor: route-service
+    working_directory: route-service
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Deploy to cloud.gov
+          command: |
+            chmod +x ~/project/.circleci/scripts/deploy.sh
+            ~/project/.circleci/scripts/deploy.sh --branch "$CIRCLE_BRANCH"

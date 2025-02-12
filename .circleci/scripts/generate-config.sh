@@ -15,6 +15,10 @@ elif [ "$TRIGGER_SOURCE" = "api" ]; then
   if [ "$BUILD_FRONTEND" = "true" ]; then
     config_files+=(frontend-config.yml)
   fi
+
+  if [ "$BUILD_ROUTE_SERVICE" = "true" ]; then
+    config_files+=(route-service-config.yml)
+  fi
   
   if [ "$COPY_DATABASE" = "true" ]; then
     config_files+=(database-config.yml)
@@ -31,12 +35,19 @@ elif [ "$TRIGGER_SOURCE" = "webhook" ]; then
   echo "$changed_files" | grep -q '^frontend/'
   frontend_changed=$?
 
+  echo "$changed_files" | grep -q '^route-service/'
+  route_service_changed=$?
+
   if [ "$cms_changed" -eq 0 ]; then
     config_files+=(cms-config.yml)
   fi
   
   if [ "$frontend_changed" -eq 0 ]; then
     config_files+=(frontend-config.yml)
+  fi
+
+  if [ "$route_service_changed" -eq 0 ]; then
+    config_files+=(route-service-config.yml)
   fi
   
 fi
