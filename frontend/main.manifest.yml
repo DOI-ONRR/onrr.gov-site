@@ -1,7 +1,7 @@
 ---
 applications: 
 - name: prod-onrr-frontend
-  path: ./
+  path: dist
   instances: 2
   disk_quota: 1G
   memory: 512M
