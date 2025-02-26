@@ -35,6 +35,8 @@ jobs:
       - node/install-packages:
           app-dir: cms
       - node/install-packages:
+          app-dir: cms/src/extensions/endpoints/delayed-timeout
+      - node/install-packages:
           app-dir: cms/src/extensions/endpoints/document
       - node/install-packages:
           app-dir: cms/src/extensions/endpoints/image-uploader
