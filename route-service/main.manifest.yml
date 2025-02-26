@@ -5,7 +5,6 @@ applications:
   routes:
     - onrr.gov
     - www.onrr.gov
-    - onrr-connection.onrr.gov
   buildpacks:
     - nodejs_buildpack
   instances: 2
