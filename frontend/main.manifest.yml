@@ -6,5 +6,8 @@ applications:
   disk_quota: 1G
   memory: 512M
   random-route: false
+  routes:
+    - prod-onrr-frontend.apps.internal
+    - prod-onrr-frontend.app.cloud.gov
   buildpacks:
     - staticfile_buildpack
