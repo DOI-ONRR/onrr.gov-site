@@ -90,7 +90,7 @@ app.all('*', (req, res) => {
     options.headers = {
       'Accept': req.headers['accept'] || '*/*',
       'Accept-Encoding': req.headers['accept-encoding'] || 'identity',
-      'Accept-Language': req.headers['accept-language'],
+      'Accept-Language': req.headers['accept-language'] || 'en-US',
       'X-Forwarded-For': req.headers['x-forwarded-for'],
     };
 
