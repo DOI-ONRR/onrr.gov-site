@@ -7,7 +7,7 @@ applications:
   memory: 512M
   random-route: false
   routes:
-    - prod-onrr-frontend.apps.internal
-    - prod-onrr-frontend.app.cloud.gov
+  - route: prod-onrr-frontend.apps.internal
+  - route: prod-onrr-frontend.app.cloud.gov
   buildpacks:
     - staticfile_buildpack
