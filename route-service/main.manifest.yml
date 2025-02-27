@@ -3,8 +3,8 @@ applications:
 - name: prod-onrr-route-service
   default-route: true
   routes:
-    - onrr.gov
-    - www.onrr.gov
+  - route: onrr.gov
+  - route: www.onrr.gov
   buildpacks:
     - nodejs_buildpack
   instances: 2

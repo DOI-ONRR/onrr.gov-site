@@ -7,8 +7,8 @@ applications:
   memory: 512M
   random-route: false
   routes:
-    - prod-onrr-cms.apps.internal
-    - prod-onrr-cms.app.cloud.gov
+  - route: prod-onrr-cms.apps.internal
+  - route: prod-onrr-cms.app.cloud.gov
   buildpacks:
     - nodejs_buildpack
   services:
