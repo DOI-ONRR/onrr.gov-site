@@ -1,13 +1,12 @@
 ---
 applications: 
 - name: preview-onrr-frontend
-  path: ./
+  path: dist
   instances: 1
   disk_quota: 1G
   memory: 512M
   random-route: false
   buildpacks:
-    - nginx_buildpack
+    - staticfile_buildpack
   env:
-    CMS_URL: https://preview-onrr-cms.app.cloud.gov
     VUE_APP_ONRR_GTM_ID: GTM-ABC1234

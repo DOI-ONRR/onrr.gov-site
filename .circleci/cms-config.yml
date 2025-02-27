@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@6.3.0
+  node: circleci/node@7.1.0
 
 executors:
   cms:
@@ -34,8 +34,6 @@ jobs:
           node-version: '18.16.0'
       - node/install-packages:
           app-dir: cms
-      - node/install-packages:
-          app-dir: cms/src/extensions/endpoints/delayed-timeout
       - node/install-packages:
           app-dir: cms/src/extensions/endpoints/document
       - node/install-packages:

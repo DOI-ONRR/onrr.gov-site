@@ -1,12 +1,13 @@
 ---
 applications: 
 - name: prod-onrr-frontend
-  path: ./
-  instances: 3
+  path: dist
+  instances: 2
   disk_quota: 1G
   memory: 512M
   random-route: false
+  routes:
+    - prod-onrr-frontend.apps.internal
+    - prod-onrr-frontend.app.cloud.gov
   buildpacks:
-    - nginx_buildpack
-  env:
-    CMS_URL: https://prod-onr-cms.app.cloud.gov
+    - staticfile_buildpack
