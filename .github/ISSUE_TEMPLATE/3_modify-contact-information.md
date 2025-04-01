@@ -1,11 +1,8 @@
----
-name: 3. I want to modify contact information on onrr.gov
-about: Use this template for any modifications (update and additions) to contacts lists on onrr.gov
-title: ''
-labels: ''
-assignees: ''
-
----
+**Hello,
+Thank you for contacting the Open Data, Design, and Development team!
+Our team is currently short-staffed, and while we are doing our best to respond as quickly as possible, there may be delays.
+We appreciate your patience and will get back to you as soon as we can.
+Thank you for your understanding!**
 
 If your request is to add or update contact information, PLEASE [read through this example in our Wiki.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-update-contact-information)
 
