@@ -1,8 +1,11 @@
-**Hello,
-Thank you for contacting the Open Data, Design, and Development team!
-Our team is currently short-staffed, and while we are doing our best to respond as quickly as possible, there may be delays.
-We appreciate your patience and will get back to you as soon as we can.
-Thank you for your understanding!**
+---
+name: 2. I want to add new documents (or other content) to onrr.gov
+about: Use this template if you want to add a new document (or other content) that does not already exist on onrr.gov
+title: ''
+labels: ''
+assignees: ''
+
+---
 
 If your request is to add new content, PLEASE [read through this example on our wiki.](https://github.com/ONRR/onrr.gov-site/wiki/Using-github#example---clear-request-to-add-new-content)
 
