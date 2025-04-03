@@ -58,7 +58,7 @@ export async function runExpansionPanelsExpansionPanelBlocks(expansionPanelId) {
         }
         for (var previousBlock of previousExpansionPanelBlocks) {
             if (!latestExpansionPanelBlocks.find(block => block.id === previousBlock.id)) {
-                const deletedId = await deleteExpansionPanelsExpansionPanelBlocksItem(previousBlock.id);
+                const deletedId = await deleteExpansionPanelsExpansionPanelBlocksItem(previousBlock.id, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({
                     id: deletedId,
                     collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,
