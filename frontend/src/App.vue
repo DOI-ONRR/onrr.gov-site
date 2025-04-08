@@ -27,6 +27,8 @@ export default {
         { property: 'og:site_name', content: 'Office of Natural Resources Revenue' },
         { property: 'og:type', content: 'website' },
         { name: 'robots', content: 'index,follow' }
+        {name: 'description', content: 'ONRR.gov helps industry report and pay royalties for energy and natural resources on federal and tribal lands. It provides tools, guidance, and resources to ensure compliance with regulations.
+        '}
       ]
     }
     
