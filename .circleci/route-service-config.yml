@@ -5,7 +5,7 @@ orbs:
 
 executors:
   route-service:
-    resource_class: xlarge
+    resource_class: medium+
     docker:
       - image: cimg/base:current
 
