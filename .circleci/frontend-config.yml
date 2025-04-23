@@ -1,11 +1,11 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@6.3.0
+  node: circleci/node@7.1.0
 
 executors:
   frontend:
-    resource_class: xlarge
+    resource_class: medium+
     docker:
       - image: cimg/base:current
 
@@ -44,7 +44,7 @@ jobs:
           paths: 
             - .
   build-frontend-app:
-    resource_class: xlarge
+    resource_class: medium+
     docker:
       - image: cimg/node:18.17.0
     working_directory: frontend

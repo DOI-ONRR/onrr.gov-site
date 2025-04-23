@@ -1,0 +1,12 @@
+---
+applications:
+- name: preview-onrr-route-service
+  default-route: true
+  buildpacks:
+    - nodejs_buildpack
+  instances: 1
+  disk_quota: 1G
+  memory: 512M
+  env:
+    CMS_HOST: preview-onrr-cms.apps.internal
+    FRONTEND_HOST: preview-onrr-frontend.apps.internal

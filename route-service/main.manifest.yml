@@ -1,0 +1,15 @@
+---
+applications:
+- name: prod-onrr-route-service
+  default-route: true
+  routes:
+  - route: onrr.gov
+  - route: www.onrr.gov
+  buildpacks:
+    - nodejs_buildpack
+  instances: 2
+  disk_quota: 1G
+  memory: 512M
+  env:
+    CMS_HOST: prod-onrr-cms.apps.internal
+    FRONTEND_HOST: prod-onrr-frontend.apps.internal

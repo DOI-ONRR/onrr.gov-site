@@ -6,6 +6,9 @@ applications:
   disk_quota: 2G
   memory: 512M
   random-route: false
+  routes:
+  - route: prod-onrr-cms.apps.internal
+  - route: prod-onrr-cms.app.cloud.gov
   buildpacks:
     - nodejs_buildpack
   services:
