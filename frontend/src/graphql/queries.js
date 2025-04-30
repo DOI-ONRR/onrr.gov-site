@@ -96,7 +96,7 @@ query PagesById($ID: ID!) {
 // Home page query
 export const HOME_PAGE_QUERY = gql`
 ${pageFields}
-query PagesById($ID: ID!) {
+query HomePageQuery($ID: ID!) {
   pages_by_id (id: $ID) {
     ...pageFields
     sidebar_blocks
