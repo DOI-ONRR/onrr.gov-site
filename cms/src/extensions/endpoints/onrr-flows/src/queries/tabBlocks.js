@@ -11,7 +11,7 @@ query tab_blocks_by_id($id: ID!) {
 }`;
 
 export const tabBlocksTabBlocks = gql`
-query tab_blocks_tab_blocks($tabBlocksId: GraphQLStringOrFloat!) {
+query tab_blocks_tab_blocks($tabBlocksId: String!) {
     tab_blocks_tab_blocks(
         filter: { tab_blocks_id: { id: { _eq: $tabBlocksId } } }
         sort: ["Sort"]
