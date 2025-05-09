@@ -64,7 +64,7 @@ export default {
       loadingKey: 'loading...',
       variables () {
         return {
-          ID: 1
+          ID: process.env.VUE_APP_HOME_PAGE_ID
         }
       },
       fetchPolicy: 'cache-and-network'
