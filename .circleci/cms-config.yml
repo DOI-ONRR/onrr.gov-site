@@ -57,6 +57,7 @@ jobs:
           app-dir: cms/src/extensions/hooks/nymex
       - node/install-packages:
           app-dir: cms/src/extensions/interfaces/onrr-editor
+          override-ci-command: npm install --legacy-peer-deps
       - node/install-packages:
           app-dir: cms/src/extensions/endpoints/onrr-flows
       - node/install-packages:

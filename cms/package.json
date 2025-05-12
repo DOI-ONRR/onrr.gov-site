@@ -29,12 +29,12 @@
     "node": "18.20.6"
   },
   "dependencies": {
-    "axios": "^1.7.7",
-    "directus": "^11.2.2",
+    "axios": "^1.9.0",
+    "directus": "^11.7.2",
     "jszip": "^3.10.1",
     "node-fetch": "^3.3.2",
-    "pg": "^8.13.1",
-    "read-excel-file": "^5.8.6"
+    "pg": "^8.15.6",
+    "read-excel-file": "^5.8.8"
   },
   "main": "index.js",
   "keywords": [],
