@@ -20,7 +20,7 @@ query expansion_panels_by_id($id: ID!) {
 */
 export const expansionPanelsExpansionPanelBlocks = gql`
 query expansion_panels_expansion_panel_blocks(
-    $expansion_panel_id: number_filter_operators!
+    $expansion_panel_id: string_filter_operators!
 ) {
     expansion_panels_expansion_panel_blocks(
         filter: { expansion_panels_id: { id: $expansion_panel_id } }

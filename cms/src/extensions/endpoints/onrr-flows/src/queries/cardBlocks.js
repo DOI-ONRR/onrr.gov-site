@@ -19,7 +19,7 @@ query card_blocks_by_id($id: ID!) {
 }`;
 
 export const cardBlocksCardContentBlocks = gql`
-query card_blocks_card_content_blocks($cardBlocksId: GraphQLStringOrFloat!) {
+query card_blocks_card_content_blocks($cardBlocksId: String!) {
     card_blocks_card_content_blocks(
         filter: { card_blocks_id: { id: { _eq: $cardBlocksId } } }
         sort: ["Sort"]

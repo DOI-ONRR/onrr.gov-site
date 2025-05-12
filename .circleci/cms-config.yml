@@ -5,6 +5,7 @@ orbs:
 
 executors:
   cms:
+    resource_class: medium+
     docker:
       - image: cimg/base:current
 
