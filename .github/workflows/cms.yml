@@ -1,0 +1,116 @@
+name: CMS Pipeline
+
+on:
+  push:
+    paths: 'cms/**'
+    branches-ignore:
+      - main
+  
+  pull_request:
+    paths: 'cms/**'
+    types: [closed]
+    branches:
+      - dev
+      - main
+
+jobs:
+  build-cms:
+    if: |
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+    
+    - name: Install CMS dependencies
+      run: npm ci
+      working-directory: cms
+
+    - name: Install document dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/endpoints/document
+
+    - name: Install image-uploader dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/endpoints/image-uploader
+
+    - name: Install link-autocomplete dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/endpoints/link-auto-complete
+
+    - name: Install onrr-flows dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/endpoints/onrr-flows
+
+    - name: Install press-releases dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/endpoints/press-releases
+
+    - name: Install reporter-letters dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/endpoints/reporter-letters
+
+    - name: Install unbundling dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/endpoints/unbundling
+
+    - name: Install index-zones dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/hooks/index-zones
+
+    - name: Install indian-gas-major-portion dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/hooks/indian-gas-major-portion
+
+    - name: Install ibmp dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/hooks/ibmp
+
+    - name: Install nymex dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/hooks/nymex
+
+    - name: Install onrr-editor dependencies
+      run: npm ci --legacy-peer-deps
+      working-directory: cms/src/extensions/interfaces/onrr-editor
+
+    - name: Install onrr-generate-uuid dependencies
+      run: npm ci
+      working-directory: cms/src/extensions/operations/onrr-generate-uuid
+
+    - name: Build extensions
+      run: npm run build:all
+      working-directory: cms
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: cms/extensions
+        path: cms/extensions/*
+
+  deploy-cms:
+    needs: build-cms
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: cms/extensions
+          path: cms/extensions/*
+
+      - name: Deploy CMS
+        working-directory: cms
+        run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
