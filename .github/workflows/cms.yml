@@ -101,7 +101,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: cms/extensions
-        path: cms/extensions/*
+        path: cms/extensions/**
 
   deploy-cms:
     needs: build-cms
@@ -114,11 +114,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: cms/extensions
-          path: cms/extensions/*
+          path: cms/extensions
 
       - name: Deploy CMS
         working-directory: cms
-        run: ../.github/scripts/deploy.sh --branch ${{ github.event.inputs.branch || github.ref_name }}
+        run: ../.github/scripts/deploy.sh --branch ${{ github.event.inputs.branch != '' && github.event.inputs.branch || github.ref_name }}
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
