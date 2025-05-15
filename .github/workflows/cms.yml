@@ -43,7 +43,7 @@ jobs:
 
     - name: Install link-autocomplete dependencies
       run: npm ci
-      working-directory: cms/src/extensions/endpoints/link-auto-complete
+      working-directory: cms/src/extensions/endpoints/link-autocomplete
 
     - name: Install onrr-flows dependencies
       run: npm ci
