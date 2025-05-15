@@ -13,6 +13,14 @@ on:
       - dev
       - main
 
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to deploy
+        required: false
+        default: dev
+
+
 jobs:
   build-cms:
     if: |
@@ -110,7 +118,7 @@ jobs:
 
       - name: Deploy CMS
         working-directory: cms
-        run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
+        run: ../.github/scripts/deploy.sh --branch ${{ github.event.inputs.branch || github.ref_name }}
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
