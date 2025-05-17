@@ -14,16 +14,11 @@ on:
       - main
 
   workflow_dispatch:
-    inputs:
-      branch:
-        description: Branch to deploy
-        required: false
-        default: dev
-
 
 jobs:
   build-cms:
     if: |
+      github.event_name == 'workflow_dispatch' ||
       github.event_name == 'push' || 
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
@@ -118,7 +113,7 @@ jobs:
 
       - name: Deploy CMS
         working-directory: cms
-        run: ../.github/scripts/deploy.sh --branch ${{ github.event.inputs.branch != '' && github.event.inputs.branch || github.ref_name }}
+        run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
