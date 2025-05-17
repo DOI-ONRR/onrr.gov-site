@@ -17,8 +17,7 @@ on:
     inputs:
       branch:
         description: Branch to deploy
-        required: false
-        default: dev
+        required: true
 
 
 jobs:
