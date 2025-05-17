@@ -18,7 +18,7 @@ on:
       branch:
         description: Branch to deploy
         required: false
-        default: upgrade-directus
+        default: dev
 
 
 jobs:
