@@ -17,7 +17,8 @@ on:
     inputs:
       branch:
         description: Branch to deploy
-        required: true
+        required: false
+        default: upgrade-directus
 
 
 jobs:
