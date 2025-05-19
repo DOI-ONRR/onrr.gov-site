@@ -59,7 +59,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist
-          path: dist
+          path: frontend/dist
 
       - name: Overwrite robots.txt
         if: github.ref_type == 'branch' && github.ref_name == 'dev'
