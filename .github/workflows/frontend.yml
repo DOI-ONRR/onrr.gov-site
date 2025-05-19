@@ -1,0 +1,73 @@
+name: Frontend Pipeline
+
+on:
+  push:
+    paths: 'frontend/**'
+    branches-ignore:
+      - main
+  
+  pull_request:
+    paths: 'frontend/**'
+    types: [closed]
+    branches:
+      - dev
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  build-frontend:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - name: Install CMS dependencies
+        run: npm ci
+        working-directory: frontend
+
+      - name: Build frontend
+        run: npm run build:deploy
+        working-directory: frontend
+        env:
+          VUE_APP_ONRR_GTM_ID: ${{ secrets.VUE_APP_ONRR_GTM_ID }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/**
+
+  deploy-frontend:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Overwrite robots.txt
+        run: |
+          cp ./public/robots-dev.txt ./public/robots.txt
+
+      - name: Deploy frontend
+        working-directory: frontend
+        run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}

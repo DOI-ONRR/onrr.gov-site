@@ -1,10 +1,9 @@
-/node_modules
-
-/.storybook
-/src
-/public
+node_modules/
+src/
+test/
 .gitignore
 .package*.json
 .README.md
-.babel.config.js 
-.vue.config.js 
+.babel.config.js
+.vue.config.js
+*manifest.yml
