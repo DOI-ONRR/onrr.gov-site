@@ -31,7 +31,7 @@ fi
 
 if [ "$branch" == "upgrade-directus" ]; then
     space="dev"
-    manifest="manifest.upgrade.yml"
+    manifest="upgrade.manifest.yml"
 elif [ "$branch" == "dev" ]; then
     space="dev"
     manifest="dev.manifest.yml"
