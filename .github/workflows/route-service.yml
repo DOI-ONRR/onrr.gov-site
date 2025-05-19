@@ -1,0 +1,34 @@
+name: Route Service Pipeline
+
+on:
+  push:
+    paths: 'route-service/**'
+    branches-ignore:
+      - main
+  
+  pull_request:
+    paths: 'route-service/**'
+    types: [closed]
+    branches:
+      - dev
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  deploy-route-service:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy frontend
+        working-directory: route-service
+        run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
