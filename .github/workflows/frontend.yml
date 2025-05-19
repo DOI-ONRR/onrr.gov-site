@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist/**
+          path: frontend/dist/**
 
   deploy-frontend:
     needs: build-frontend
@@ -62,6 +62,7 @@ jobs:
           path: dist
 
       - name: Overwrite robots.txt
+        if: github.ref_type == 'branch' && github.ref_name == 'dev'
         run: |
           cp ./public/robots-dev.txt ./public/robots.txt
 
