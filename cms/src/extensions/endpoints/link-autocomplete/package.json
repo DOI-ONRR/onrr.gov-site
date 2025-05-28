@@ -25,6 +25,6 @@
 		"dist": "directus-extension build; cp ./dist/index.js ../../../../extensions/directus-extension-link-autocomplete/dist; docker restart directus"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "11.0.3"
+		"@directus/extensions-sdk": "13.1.0"
 	}
 }

@@ -180,7 +180,7 @@ query pages_by_id($id: ID!) {
 }`;
 
 export const pagesPageBlocksQuery = gql`
-query pages_page_blocks($pages_id: String!) {
+query pages_page_blocks($pages_id: ID!) {
     pages_page_blocks(filter: { pages_id: { id: { _eq: $pages_id } } }) {
         id
         pages_id {

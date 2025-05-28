@@ -1,6 +1,7 @@
-src 
-static 
-uploads
+src/
+uploads/
 docker-compose.yml
-node_modules
-cms-package.json/*
+Dockerfile
+node_modules/
+cms-package.json/
+configuration/

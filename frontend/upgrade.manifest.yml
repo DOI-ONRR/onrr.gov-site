@@ -1,7 +1,7 @@
 ---
 applications: 
 - name: upgrade-onrr-frontend
-  path: ./dist
+  path: dist
   instances: 1
   disk_quota: 1G
   memory: 256M
