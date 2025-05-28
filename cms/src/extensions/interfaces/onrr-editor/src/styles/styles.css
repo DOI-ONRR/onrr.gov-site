@@ -1,3 +1,7 @@
+.ce-popover--inline .ce-popover--nested .ce-popover__container {
+    width: 413px;
+}
+
 .ce-inline-toolbar {
     width: 403px;
 }
