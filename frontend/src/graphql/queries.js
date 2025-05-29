@@ -33,7 +33,7 @@ export const MENU_QUERY = gql`query {
 
 // Announcements query
 export const ANNOUNCEMENTS_QUERY = gql`query {
-  announcements {
+  announcements(sort: "sort") {
     id
     title 
     content

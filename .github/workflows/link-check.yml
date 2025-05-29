@@ -1,0 +1,16 @@
+name: Check Links
+
+on:
+  schedule:
+    - cron: '0 6 * * 0'  # 11 PM Mountain Standard Time (MST)
+  workflow_dispatch:
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check for broken links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --exclude-mail --no-progress https://www.onrr.gov

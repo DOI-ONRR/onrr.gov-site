@@ -2,6 +2,9 @@
   "name": "onrr-frontend-app-vue",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "20.18.2"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --no-clean",
