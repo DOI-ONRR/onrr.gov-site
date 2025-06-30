@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="block in block.item.block_content?.blocks" :key="block.id">
+    <div v-for="block in (block.item.block_content && block.item.block_content.blocks) || []" :key="block.id">
       <EditorBlock :blockContent="block"></EditorBlock>
     </div>
   </div>
