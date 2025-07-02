@@ -4,7 +4,7 @@ import { chromium } from "playwright";
 import fetch from "node-fetch";
 
 async function run() {
-  const sitemapUrl = "https://revenuedata.doi.gov/sitemap-0.xml";
+  const sitemapUrl = "https://www.onrr.gov/sitemap.xml";
 
   // Download sitemap XML
   console.log(`Fetching sitemap from: ${sitemapUrl}`);
