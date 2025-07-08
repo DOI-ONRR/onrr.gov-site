@@ -2,6 +2,3 @@ src/
 uploads/
 docker-compose.yml
 Dockerfile
-node_modules/
-cms-package.json/
-configuration/

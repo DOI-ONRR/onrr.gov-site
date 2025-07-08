@@ -26,11 +26,11 @@
     "build:all": "npm run build:onrr-generate-uuid; npm run build:onrr-editor; npm run build:link-autocomplete; npm run build:document; npm run build:image-uploader; npm run build:press-releases; npm run build:reporter-letters; npm run build:unbundling; npm run build:index-zones; npm run build:indian-gas-major-portion; npm run build:ibmp; npm run build:nymex; npm run build:onrr-flows"
   },
   "engines": {
-    "node": "20.18.2"
+    "node": "20.19.2"
   },
   "dependencies": {
     "axios": "^1.9.0",
-    "directus": "^11.7.2",
+    "directus": "^11.9.2",
     "jszip": "^3.10.1",
     "node-fetch": "^3.3.2",
     "pg": "^8.15.6",
