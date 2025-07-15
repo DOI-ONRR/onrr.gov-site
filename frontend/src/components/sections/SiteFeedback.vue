@@ -125,6 +125,30 @@ export default {
                 
                 var questionTextarea = formElement.querySelector('.question textarea');
                 questionTextarea.classList.add('font-sans-xs');
+
+                // Handle form submission
+                formElement.addEventListener('submit', function(event) {
+                    const xpath = "//label[contains(normalize-space(.), 'What were you looking for?')]/following-sibling::textarea[1]";
+
+                    const result = document.evaluate(
+                        xpath,
+                        document,
+                        null,
+                        XPathResult.FIRST_ORDERED_NODE_TYPE,
+                        null
+                    );
+
+                    const whatWereYouLookingFor = result.singleNodeValue;
+
+                    if (typeof gas4Function === "function") {
+                        gas4('form_submit', {  
+                            'event_category': 'cx_feedback',  
+                            'event_action': 'what_were_you_looking_for', 
+                            'event_label': whatWereYouLookingFor.value 
+                        });
+                    } 
+                });
+            }
                 
             } 
         }
