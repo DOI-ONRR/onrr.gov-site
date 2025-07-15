@@ -140,6 +140,8 @@ export default {
 
                     const whatWereYouLookingFor = result.singleNodeValue;
 
+                    const gas4Function = eval('typeof gas4 !== "undefined" ? gas4 : undefined');
+
                     if (typeof gas4Function === "function") {
                         gas4Function('form_submit', {  
                             'event_category': 'cx_feedback',  
