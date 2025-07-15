@@ -127,7 +127,7 @@ export default {
                 questionTextarea.classList.add('font-sans-xs');
 
                 // Handle form submission
-                formElement.addEventListener('submit', function(event) {
+                formElement.addEventListener('submit', function() {
                     const xpath = "//label[contains(normalize-space(.), 'What were you looking for?')]/following-sibling::textarea[1]";
 
                     const result = document.evaluate(
