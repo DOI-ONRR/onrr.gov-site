@@ -141,7 +141,7 @@ export default {
                     const whatWereYouLookingFor = result.singleNodeValue;
 
                     if (typeof gas4Function === "function") {
-                        gas4('form_submit', {  
+                        gas4Function('form_submit', {  
                             'event_category': 'cx_feedback',  
                             'event_action': 'what_were_you_looking_for', 
                             'event_label': whatWereYouLookingFor.value 
