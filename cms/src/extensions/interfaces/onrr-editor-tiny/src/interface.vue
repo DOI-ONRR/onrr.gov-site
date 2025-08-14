@@ -3,6 +3,7 @@
     <editor
       api-key="no-api-key"
       tinymce-script-src="/tinymce-static/tinymce/tinymce.min.js"
+      license-key="gpl"
       :init="config"
       @change="handleDirty"
       :initial-value="value"

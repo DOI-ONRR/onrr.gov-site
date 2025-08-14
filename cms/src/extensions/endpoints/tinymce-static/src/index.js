@@ -1,31 +1,24 @@
 import path from 'node:path';
-import serveStatic from 'serve-static';
+import fs from 'node:fs';
+import express from 'express';
 
-/**
- * Exposes files under:
- *   /tinymce-static/tinymce
- */
 export default {
-  id: 'tinymce-static',
+  id: 'tinymce-static', // base URL => /tinymce-static
   handler: (router) => {
-    // Absolute path to public assets
     const rootDir = path.join(
       process.cwd(),
-			'extensions',
+      'extensions',
       'directus-extension-onrr-editor-tiny',
       'public'
     );
 
-    const staticMiddleware = serveStatic(rootDir, {
-      fallthrough: true,
-      setHeaders(res, filePath) {
-        if (filePath.endsWith('.js')) {
-          res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
-          res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
-        }
-      },
-    });
+    router.use('/', express.static(rootDir, { index: false, maxAge: '7d', immutable: true }));
 
-    router.use('/tinymce-static', staticMiddleware);
+    // sanity checks
+    router.get('/_ping', (_req, res) => res.send('ok'));
+    router.get('/_check', (_req, res) => {
+      const filePath = path.join(rootDir, 'tinymce', 'tinymce.min.js');
+      res.json({ id: 'tinymce-static', rootDir, filePath, exists: fs.existsSync(filePath) });
+    });
   },
 };

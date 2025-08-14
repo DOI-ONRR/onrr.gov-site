@@ -6,6 +6,7 @@ const config = {
   menubar: false,
   promotion: false,
   branding: false,
+  statusbar: false,
   setup: function (editor) {
     const documentSelected = (autocompleteApi, rng, value) => {
       const doc = JSON.parse(value)
