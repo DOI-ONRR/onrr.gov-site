@@ -1,7 +1,8 @@
 <template>
   <main class="onrr-editor">
     <editor
-      api-key="1hrdiaheqykohhfo7c2kwhm7i3anqrhnr1njlltbu38hfxtx"
+      api-key="no-api-key"
+      tinymce-script-src="/tinymce-static/tinymce/tinymce.min.js"
       :init="config"
       @change="handleDirty"
       :initial-value="value"
