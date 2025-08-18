@@ -16,11 +16,25 @@ const emit = defineEmits(['update:modelValue']);
 const mountEl = ref(null);
 let view = null;
 
-const heightTheme = (h) => {
+const editorTheme = (h) => {
   const v = typeof h === 'number' ? `${h}px` : h;
   return EditorView.theme({
-    '&': { border: '1px solid var(--border-subdued)', borderRadius: '8px', height: v },
-    '.cm-scroller': { overflow: 'auto', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', fontSize: '13px', lineHeight: '1.45', padding: '8px' },
+    '&': {
+      border: 'var(--theme--border-width) solid var(--theme--form--field--input--border-color)',
+      borderRadius: 'var(--theme--border-radius)',
+      height: v,
+    },
+    '.cm-scroller': {
+      overflow: 'auto',
+      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+      fontSize: '13px',
+      lineHeight: '1.45',
+    },
+    '.cm-gutter': {
+      backgroundColor: 'var(--theme--form--field--input--background-subdued)',
+      width: '3rem',
+      color: 'var(--theme--foreground-subdued)',
+    },
   });
 };
 
@@ -30,8 +44,7 @@ onMounted(() => {
     extensions: [
       lineNumbers(),
       history(),
-      heightTheme(props.height),
-      // html(),
+      editorTheme(props.height),
       EditorView.updateListener.of((u) => {
         if (u.docChanged) emit('update:modelValue', u.state.doc.toString());
       }),
@@ -57,4 +70,13 @@ watch(() => props.disabled, (d) => {
 onBeforeUnmount(() => view?.destroy());
 </script>
 
-<template><div ref="mountEl" /></template>
+<template>
+  <div ref="mountEl" class="input-code-mirror"/>
+</template>
+
+<style scoped lang="scss">
+  .input-code-mirror {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+</style>
