@@ -1,10 +1,17 @@
-<!-- InputCodeMirror.vue (minimal, fixed) -->
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
-import { EditorState } from '@codemirror/state';
-import { EditorView, lineNumbers /* , gutter, GutterMarker */ } from '@codemirror/view';
+import { EditorState, Compartment } from '@codemirror/state';
+import { EditorView, lineNumbers } from '@codemirror/view';
+import {
+  defaultHighlightStyle, syntaxHighlighting, indentOnInput,
+  bracketMatching, foldGutter, foldKeymap
+} from "@codemirror/language"
+import {
+  autocompletion, completionKeymap, closeBrackets,
+  closeBracketsKeymap
+} from "@codemirror/autocomplete"
 import { history } from '@codemirror/commands';
-// optional: import { html } from '@codemirror/lang-html';
+import { html } from '@codemirror/lang-html';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -14,6 +21,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const mountEl = ref(null);
+let language = null;
 let view = null;
 
 const editorTheme = (h) => {
@@ -23,6 +31,10 @@ const editorTheme = (h) => {
       border: 'var(--theme--border-width) solid var(--theme--form--field--input--border-color)',
       borderRadius: 'var(--theme--border-radius)',
       height: v,
+      overflow: 'hidden',
+    },
+    '&:hover': {
+      borderColor: 'var(--theme--form--field--input--border-color-hover)',
     },
     '.cm-scroller': {
       overflow: 'auto',
@@ -30,20 +42,36 @@ const editorTheme = (h) => {
       fontSize: '13px',
       lineHeight: '1.45',
     },
+    '.cm-gutters.cm-gutters-before': {
+      borderRightWidth: '0',
+    },
     '.cm-gutter': {
       backgroundColor: 'var(--theme--form--field--input--background-subdued)',
+      borderRight: 'var(--theme--border-width) solid var(--theme--form--field--input--border-color)',
       width: '3rem',
       color: 'var(--theme--foreground-subdued)',
     },
+    '&.cm-focused': {
+      borderColor: 'var(--theme--form--field--input--border-color-focus)',
+      outline: 'none',
+    }
   });
 };
 
 onMounted(() => {
+  language = new Compartment
+
   const state = EditorState.create({
     doc: props.modelValue || '',
     extensions: [
       lineNumbers(),
+      syntaxHighlighting(defaultHighlightStyle),
+      bracketMatching(),
+      closeBrackets(),
+      autocompletion(),
+      indentOnInput(),
       history(),
+      language.of(html()),
       editorTheme(props.height),
       EditorView.updateListener.of((u) => {
         if (u.docChanged) emit('update:modelValue', u.state.doc.toString());
