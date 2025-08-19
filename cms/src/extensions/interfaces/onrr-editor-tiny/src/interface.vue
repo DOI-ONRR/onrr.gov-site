@@ -79,7 +79,6 @@ const config = computed(() => {
           if (typeof e.preventDefault === 'function') e.preventDefault()
           sourceCode.value = editor.getContent({ format: 'html' })
           codeEditorDrawerOpen.value = true
-          console.log('code:', editor.getContent({ format: 'html' }))
         }
       })
     },
@@ -175,6 +174,7 @@ function onSaveFromDrawer() {
     <Editor
       api-key="no-api-key"
       tinymce-script-src="/tinymce-static/tinymce/tinymce.min.js"
+      content_css="default"
       license-key="gpl"
       :init="config"
       :initial-value="value"
@@ -188,13 +188,7 @@ function onSaveFromDrawer() {
     background-color: var(--background-page);
     border: var(--border-width) solid var(--border-normal);
     border-radius: var(--border-radius);
-  }
-
-  .onrr-editor:hover {
-    border-color: var(--border-normal-alt);
-  }
-
-  .onrr-editor:focus-within {
+  }.onrr-editor:focus-within {
     border-color: var(--primary);
   }
 
