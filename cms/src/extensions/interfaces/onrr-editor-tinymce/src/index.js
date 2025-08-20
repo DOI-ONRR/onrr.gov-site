@@ -1,10 +1,10 @@
 import InterfaceComponent from './interface.vue'
 
 export default {
-  id: 'onrr-editor-tiny',
-  name: 'ONRR Editor (tiny)',
+  id: 'onrr-editor-tinymce',
+  name: 'ONRR Editor (TinyMCE)',
   icon: 'wysiwyg',
-  description: 'ONRR rich text editor',
+  description: 'ONRR rich text editor using TinyMCE',
   component: InterfaceComponent,
   types: ['text', 'string'],
   relational: true,

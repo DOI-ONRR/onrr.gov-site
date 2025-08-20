@@ -84,6 +84,14 @@ jobs:
         run: npm ci --legacy-peer-deps
         working-directory: cms/src/extensions/interfaces/onrr-editor
 
+      - name: Install tinymce-static dependencies
+        run: npm ci 
+        working-directory: cms/src/extensions/endpoints/tinymce-static
+
+      - name: Install onrr-editor-tinymce dependencies
+        run: npm ci 
+        working-directory: cms/src/extensions/interfaces/onrr-editor-tinymce
+
       - name: Install onrr-generate-uuid dependencies
         run: npm ci
         working-directory: cms/src/extensions/operations/onrr-generate-uuid
