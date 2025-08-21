@@ -190,7 +190,7 @@ export default {
   },
   watch: {
     apolloLoading: {
-      handler(newVal, _oldVal) {
+      handler(newVal) {
         if (!newVal) {
           this.indexZonesList()
           this.indexZonesYearList()
