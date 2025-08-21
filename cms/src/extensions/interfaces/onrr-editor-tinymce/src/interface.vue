@@ -1,3 +1,120 @@
+<template>
+  <main class="onrr-editor">
+    <v-drawer
+      v-model="codeEditorDrawerOpen"
+      title="Edit Source Code"
+      icon="code"
+      @cancel="codeEditorDrawerOpen = false"
+      cancelable="true"
+    >
+      <template #actions>
+        <div class="flex gap-2 items-center">
+          <v-button 
+            :loading="saving" 
+            :icon="true"
+            :rounded="true"
+            @click="onSaveFromDrawer">
+            <v-icon name="check" class="mr-1" />
+          </v-button>
+        </div>
+      </template>
+      <InputCodeMirror
+        ref="codeRef"
+        v-model="sourceCode"
+        language="html"
+        :height="260"
+        :tabSize="2"
+        :softWrap="true"
+        :disabled="disabled"
+      />
+    </v-drawer>
+
+    <v-drawer
+      v-model="imageDrawerOpen"
+      title="Add/Edit Image"
+      icon="image"
+      @cancel="imageDrawerOpen = false"
+      cancelable="true"
+    >
+      <template #actions>
+        <div class="flex gap-2 items-center">
+          <v-button 
+            :loading="saving" 
+            :icon="true"
+            :rounded="true"
+            @click="insertImage">
+            <v-icon name="check" class="mr-1" />
+          </v-button>
+        </div>
+      </template>
+
+      <div v-if="!selectedImage">
+        <v-upload 
+          :from-library="true"
+          :from-url="false"
+          :from-user="true"
+          :folder="folder"
+          @input="handleUploadInput"
+          class="onrr-image-upload"
+        />
+      </div>
+      <div v-else class="tw-px-4" style="overflow: auto;">
+        <div class="flex tw-gap-4 items-start border rounded tw-p-3" style="background: var(--background-subdued);">
+          <img
+            :src="assetUrl(selectedImage.id) + '?width=360&format=auto'"
+            class="tw-border-solid tw-border-2 tw-border-slate-200 tw-p-2 tw-rounded-md tw-mb-4 tw-w-64 tw-h-auto tw-object-cover tw-mx-auto tw-block"
+          />
+
+          <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mt-8" >
+            <div>
+              <p class="tw-font-bold tw-ml-1">Alternative Text</p>
+              <v-input
+              :model-value="form.alt"
+              @update:model-value="v => form.alt = v"
+            />
+            </div>
+            <div>
+              <p class="tw-font-bold tw-ml-1">Image URL</p>
+              <v-input
+              :model-value="form.href"
+              @update:model-value="v => form.href = v"
+            />
+            </div>
+            <div>
+              <p class="tw-font-bold tw-ml-1">Width</p>
+              <v-input
+              :model-value="form.width"
+              type="number"
+              min="1"
+              @update:model-value="v => form.width = v"
+            />
+            </div>
+            <div>
+              <p class="tw-font-bold tw-ml-1">Height</p>
+              <v-input
+              :model-value="form.height"
+              type="number"
+              min="1"
+              @update:model-value="v => form.height = v"
+            />
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-drawer>
+
+    <Editor
+      api-key="no-api-key"
+      tinymce-script-src="/tinymce-static/tinymce/tinymce.min.js"
+      content_css="default"
+      license-key="gpl"
+      :init="config"
+      :initial-value="value"
+      ref="tinyRef"
+    />
+  </main>
+</template>
+
 <script setup>
 import { computed, ref, watch, reactive } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
@@ -144,7 +261,6 @@ function initFormFromFile(f) {
 function clearSelectedImage() {
   selectedImage.value = null
   form.alt = ''
-  form.caption = ''
   form.width = undefined
   form.height = undefined
   form.href = ''
@@ -165,22 +281,18 @@ function handleUploadInput(payload) {
   initFormFromFile(f)
 }
 
-function insertReviewedImage() {
+function insertImage() {
   const ed = getTinyEditorInstance()
   const f = selectedImage.value
   if (!ed || !f) return
 
-  const alt = escapeAttr(form.alt ?? f.title ?? '')
-  const cls = form.className ? ` class="${escapeAttr(form.className)}"` : ''
+  const alt = escapeAttr(form.alt ?? '')
   const w = form.width ? ` width="${Number(form.width)}"` : ''
   const h = form.height ? ` height="${Number(form.height)}"` : ''
-  const src = assetUrl(f.id)
-  const img = `<img src="${src}" alt="${alt}"${w}${h}${cls}>`
-  const wrapped = form.href ? `<a href="${escapeAttr(form.href)}">${img}</a>` : img
+  const src = form.href
+  const img = `<img src="${src}" alt="${alt}"${w}${h}>`
 
-  const html = form.caption && String(form.caption).trim()
-    ? `<figure>${wrapped}<figcaption>${escapeAttr(form.caption)}</figcaption></figure>`
-    : `<p>${wrapped}</p>`
+  const html = `<p>${img}</p>`
 
   ed.insertContent(html)
   clearSelectedImage()
@@ -192,132 +304,6 @@ function assetUrl(id) {
 }
 
 </script>
-
-<template>
-  <main class="onrr-editor">
-    <v-drawer
-      v-model="codeEditorDrawerOpen"
-      title="Edit Source Code"
-      icon="code"
-      @cancel="codeEditorDrawerOpen = false"
-      cancelable="true"
-    >
-      <template #actions>
-        <div class="flex gap-2 items-center">
-          <v-button 
-            :loading="saving" 
-            :icon="true"
-            :rounded="true"
-            @click="onSaveFromDrawer">
-            <v-icon name="check" class="mr-1" />
-          </v-button>
-        </div>
-      </template>
-      <InputCodeMirror
-        ref="codeRef"
-        v-model="sourceCode"
-        language="html"
-        :height="260"
-        :tabSize="2"
-        :softWrap="true"
-        :disabled="disabled"
-      />
-    </v-drawer>
-
-    <v-drawer
-      v-model="imageDrawerOpen"
-      title="Add/Edit Image"
-      icon="image"
-      @cancel="imageDrawerOpen = false"
-      cancelable="true"
-    >
-      <template #actions>
-        <div class="flex gap-2 items-center">
-          <v-button 
-            :loading="saving" 
-            :icon="true"
-            :rounded="true"
-            @click="insertImage">
-            <v-icon name="check" class="mr-1" />
-          </v-button>
-        </div>
-      </template>
-
-      <div v-if="!selectedImage">
-        <v-upload 
-          :from-library="true"
-          :from-url="false"
-          :from-user="true"
-          :folder="folder"
-          @input="handleUploadInput"
-          class="onrr-image-upload"
-        />
-      </div>
-      <div v-else class="tw-p-4 space-y-4" style="overflow: auto;">
-        <div class="flex tw-gap-4 items-start border rounded tw-p-3" style="background: var(--background-subdued);">
-          <img
-            :src="assetUrl(selectedImage.id) + '?width=360&format=auto'"
-            alt=""
-            style="width: 160px; height: auto; border-radius: 6px; object-fit: cover;"
-          />
-
-          <div class="tw-grid" style="grid-template-columns: 1fr 1fr; gap: 12px; width: 100%;">
-            <v-input
-              :model-value="form.alt"
-              label="Alt text"
-              name="Alt text"
-              placeholder="Describe the image"
-              @update:model-value="v => form.alt = v"
-            />
-            <v-input
-              :model-value="form.href"
-              label="Link (optional)"
-              placeholder="https://example.com"
-              @update:model-value="v => form.href = v"
-            />
-            <v-input
-              :model-value="form.width"
-              type="number"
-              min="1"
-              label="Width (px)"
-              @update:model-value="v => form.width = v"
-            />
-            <v-input
-              :model-value="form.height"
-              type="number"
-              min="1"
-              label="Height (px)"
-              @update:model-value="v => form.height = v"
-            />
-            <v-input
-              :model-value="form.className"
-              label="CSS class (optional)"
-              placeholder="e.g. img-responsive"
-              @update:model-value="v => form.className = v"
-            />
-            <v-textarea
-              :model-value="form.caption"
-              label="Caption (optional)"
-              placeholder="Short caption under the image"
-              @update:model-value="v => form.caption = v"
-              :rows="2"
-            />
-          </div>
-        </div>
-      </div>
-    </v-drawer>
-
-    <Editor
-      api-key="no-api-key"
-      tinymce-script-src="/tinymce-static/tinymce/tinymce.min.js"
-      content_css="default"
-      license-key="gpl"
-      :init="config"
-      :initial-value="value"
-      ref="tinyRef"
-    />
-  </main>
-</template>
 
 <style scoped>
   .onrr-editor {
@@ -338,19 +324,6 @@ function assetUrl(id) {
     border-color: var(--theme--form--field--input--border-color-hover);
   }
 
-  .onrr-editor .tox-tbtn[aria-label='Insert/edit link'] .tox-icon svg {
-    display: none;
-  }
-
-  .onrr-editor .tox-tbtn[aria-label='Insert/edit link'] .tox-icon::after {
-    display: inline-block;
-    margin-block-start: 4px;
-    color: var(--theme--form--field--input--foreground);
-    font-size: 24px;
-    font-family: 'Material Symbols';
-    content: 'insert_link';
-    font-feature-settings: 'liga';
-  }
 </style>
 
 <style>
