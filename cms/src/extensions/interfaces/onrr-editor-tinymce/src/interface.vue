@@ -69,34 +69,33 @@
             <div>
               <p class="tw-font-bold tw-ml-1">Alternative Text</p>
               <v-input
-              :model-value="form.alt"
-              @update:model-value="v => form.alt = v"
-            />
+                v-model="form.alt"
+              />
             </div>
             <div>
               <p class="tw-font-bold tw-ml-1">Image URL</p>
               <v-input
-              :model-value="form.href"
-              @update:model-value="v => form.href = v"
-            />
+                :model-value="form.href"
+                @update:model-value="v => form.href = v"
+              />
             </div>
             <div>
               <p class="tw-font-bold tw-ml-1">Width</p>
               <v-input
-              :model-value="form.width"
-              type="number"
-              min="1"
-              @update:model-value="v => form.width = v"
-            />
+                :model-value="form.width"
+                type="number"
+                min="1"
+                @update:model-value="v => form.width = v"
+              />
             </div>
             <div>
               <p class="tw-font-bold tw-ml-1">Height</p>
               <v-input
-              :model-value="form.height"
-              type="number"
-              min="1"
-              @update:model-value="v => form.height = v"
-            />
+                :model-value="form.height"
+                type="number"
+                min="1"
+                @update:model-value="v => form.height = v"
+              />
             </div>
           </div>
         </div>
@@ -139,12 +138,11 @@ const lastAppliedFromProps = ref(null)
 const folder = ref(null)
 const selectedImage = ref(null)
 const form = reactive({
+  id: '',
   alt: '',
-  caption: '',
   width: undefined,
   height: undefined,
   href: '',
-  className: '',
 })
 
 const config = computed(() => {
@@ -178,7 +176,21 @@ const config = computed(() => {
         icon: 'image',
         tooltip: 'Insert / Edit Image',
         onAction: () => {
-          imageDrawerOpen.value = true
+          const node = editor.selection.getNode();
+          if (node?.nodeName !== 'IMG') {
+            imageDrawerOpen.value = true
+            return;
+          }
+
+          const data = {
+            href: assetUrl(editor.dom.getAttrib(node, 'data-filename-disk')) || '',
+            alt: editor.dom.getAttrib(node, 'alt') || '',
+            width: editor.dom.getAttrib(node, 'width') || editor.dom.getStyle(node, 'width') || '',
+            height: editor.dom.getAttrib(node, 'height') || editor.dom.getStyle(node, 'height') || '',
+            id: editor.dom.getAttrib(node, 'data-id') || ''
+          }
+
+          openImageDrawer(data)
         },
       })
 
@@ -252,6 +264,7 @@ function onSaveFromDrawer() {
 
 function initFormFromFile(f) {
   selectedImage.value = f
+  form.id = f.id || ''
   form.alt = f.title || ''
   form.width = f.width || undefined
   form.height = f.height || undefined
@@ -260,15 +273,21 @@ function initFormFromFile(f) {
 
 function clearSelectedImage() {
   selectedImage.value = null
+  form.id = ''
   form.alt = ''
   form.width = undefined
   form.height = undefined
   form.href = ''
-  form.className = ''
 }
 
 function escapeAttr(str) {
   return String(str ?? '').replaceAll('"', '&quot;');
+}
+
+function openImageDrawer(initial) {
+  selectedImage.value = { ...selectedImage.value, ...initial };
+  Object.assign(form, initial);
+  imageDrawerOpen.value = true;
 }
 
 function handleUploadInput(payload) {
@@ -290,7 +309,7 @@ function insertImage() {
   const w = form.width ? ` width="${Number(form.width)}"` : ''
   const h = form.height ? ` height="${Number(form.height)}"` : ''
   const src = form.href
-  const img = `<img src="${src}" alt="${alt}"${w}${h}>`
+  const img = `<img src="${src}" alt="${alt}"${w}${h} data-id="${form.id}" data-filename-disk="${f.filename_disk}">`
 
   const html = `<p>${img}</p>`
 
@@ -299,8 +318,8 @@ function insertImage() {
   imageDrawerOpen.value = false
 }
 
-function assetUrl(id) {
-  return `/assets/${id}`
+function assetUrl(filenameDisk) {
+  return `/assets/${filenameDisk}`
 }
 
 </script>
