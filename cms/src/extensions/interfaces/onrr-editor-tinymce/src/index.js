@@ -1,5 +1,4 @@
 import InterfaceComponent from './interface.vue'
-
 export default {
   id: 'onrr-editor-tinymce',
   name: 'ONRR Editor (TinyMCE)',

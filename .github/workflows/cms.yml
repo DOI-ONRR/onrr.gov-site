@@ -16,11 +16,57 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-cms:
+  gate:
+    runs-on: ubuntu-latest
     if: |
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'push' || 
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    steps:
+      - run: echo "Ok to proceed with build"
+  build-tinymce-styles:
+    needs: gate
+    runs-on: ubuntu-latest
+    env:
+      TINYMCE_REF: "8.0.2"
+      EXT_DIR: "cms/src/extensions/interfaces/onrr-editor-tiny"
+      UI_SKIN: "onrr"       # your ui skin folder name
+      CONTENT_SKIN: "onrr-content"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout TinyMCE (shallow)
+        uses: actions/checkout@v4
+        with:
+          repository: tinymce/tinymce
+          ref: ${{ env.TINYMCE_REF }}
+          path: tinymce
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+          cache-dependency-path: |
+            tinymce/yarn.lock
+            ${{ env.EXT_DIR }}/package-lock.json
+
+      - name: Build TinyMCE Oxide (no dev server)
+        working-directory: tinymce
+        run: |
+          yarn
+          yarn build
+          # If you only need a build artifact, 'oxide-build' is sufficient:
+          yarn oxide-build
+
+      - name: Copy compiled skins into extension
+        run: |
+          mkdir -p "${EXT_DIR}/public/tinymce/skins/ui/${UI_SKIN}"
+          mkdir -p "${EXT_DIR}/public/tinymce/skins/content/${CONTENT_SKIN}"
+          cp -R tinymce/modules/oxide/build/skins/ui/${UI_SKIN}/* "${EXT_DIR}/public/tinymce/skins/ui/${UI_SKIN}/"
+          cp -R tinymce/modules/oxide/build/skins/content/${CONTENT_SKIN}/* "${EXT_DIR}/public/tinymce/skins/content/${CONTENT_SKIN}/"
+  build-cms:
+    needs: gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

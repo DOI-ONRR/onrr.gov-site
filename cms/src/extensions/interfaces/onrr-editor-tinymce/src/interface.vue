@@ -1,6 +1,5 @@
 <script setup>
-
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, reactive } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
 import { createTinyConfig } from './tinymce/config'
 import InputCodeMirror from './InputCodeMirror.vue';
@@ -20,6 +19,16 @@ const sourceCode = ref('')
 const tinyRef = ref(null)
 const codeRef = ref(null)
 const lastAppliedFromProps = ref(null)
+const folder = ref(null)
+const selectedImage = ref(null)
+const form = reactive({
+  alt: '',
+  caption: '',
+  width: undefined,
+  height: undefined,
+  href: '',
+  className: '',
+})
 
 const config = computed(() => {
   const base = createTinyConfig()
@@ -124,6 +133,64 @@ function onSaveFromDrawer() {
   codeEditorDrawerOpen.value = false
 }
 
+function initFormFromFile(f) {
+  selectedImage.value = f
+  form.alt = f.title || ''
+  form.width = f.width || undefined
+  form.height = f.height || undefined
+  form.href = `${assetUrl(f.filename_disk)}`
+}
+
+function clearSelectedImage() {
+  selectedImage.value = null
+  form.alt = ''
+  form.caption = ''
+  form.width = undefined
+  form.height = undefined
+  form.href = ''
+  form.className = ''
+}
+
+function escapeAttr(str) {
+  return String(str ?? '').replaceAll('"', '&quot;');
+}
+
+function handleUploadInput(payload) {
+  if (!payload) {
+    imageDrawerOpen.value = false
+    return
+  }
+  const f = Array.isArray(payload) ? payload[0] : payload
+  if (!f) return
+  initFormFromFile(f)
+}
+
+function insertReviewedImage() {
+  const ed = getTinyEditorInstance()
+  const f = selectedImage.value
+  if (!ed || !f) return
+
+  const alt = escapeAttr(form.alt ?? f.title ?? '')
+  const cls = form.className ? ` class="${escapeAttr(form.className)}"` : ''
+  const w = form.width ? ` width="${Number(form.width)}"` : ''
+  const h = form.height ? ` height="${Number(form.height)}"` : ''
+  const src = assetUrl(f.id)
+  const img = `<img src="${src}" alt="${alt}"${w}${h}${cls}>`
+  const wrapped = form.href ? `<a href="${escapeAttr(form.href)}">${img}</a>` : img
+
+  const html = form.caption && String(form.caption).trim()
+    ? `<figure>${wrapped}<figcaption>${escapeAttr(form.caption)}</figcaption></figure>`
+    : `<p>${wrapped}</p>`
+
+  ed.insertContent(html)
+  clearSelectedImage()
+  imageDrawerOpen.value = false
+}
+
+function assetUrl(id) {
+  return `/assets/${id}`
+}
+
 </script>
 
 <template>
@@ -164,11 +231,80 @@ function onSaveFromDrawer() {
       @cancel="imageDrawerOpen = false"
       cancelable="true"
     >
-      <v-upload 
-        :from-library="true"
-			  :from-url="false"
-        class="onrr-image-upload"
-      />
+      <template #actions>
+        <div class="flex gap-2 items-center">
+          <v-button 
+            :loading="saving" 
+            :icon="true"
+            :rounded="true"
+            @click="insertImage">
+            <v-icon name="check" class="mr-1" />
+          </v-button>
+        </div>
+      </template>
+
+      <div v-if="!selectedImage">
+        <v-upload 
+          :from-library="true"
+          :from-url="false"
+          :from-user="true"
+          :folder="folder"
+          @input="handleUploadInput"
+          class="onrr-image-upload"
+        />
+      </div>
+      <div v-else class="tw-p-4 space-y-4" style="overflow: auto;">
+        <div class="flex tw-gap-4 items-start border rounded tw-p-3" style="background: var(--background-subdued);">
+          <img
+            :src="assetUrl(selectedImage.id) + '?width=360&format=auto'"
+            alt=""
+            style="width: 160px; height: auto; border-radius: 6px; object-fit: cover;"
+          />
+
+          <div class="tw-grid" style="grid-template-columns: 1fr 1fr; gap: 12px; width: 100%;">
+            <v-input
+              :model-value="form.alt"
+              label="Alt text"
+              name="Alt text"
+              placeholder="Describe the image"
+              @update:model-value="v => form.alt = v"
+            />
+            <v-input
+              :model-value="form.href"
+              label="Link (optional)"
+              placeholder="https://example.com"
+              @update:model-value="v => form.href = v"
+            />
+            <v-input
+              :model-value="form.width"
+              type="number"
+              min="1"
+              label="Width (px)"
+              @update:model-value="v => form.width = v"
+            />
+            <v-input
+              :model-value="form.height"
+              type="number"
+              min="1"
+              label="Height (px)"
+              @update:model-value="v => form.height = v"
+            />
+            <v-input
+              :model-value="form.className"
+              label="CSS class (optional)"
+              placeholder="e.g. img-responsive"
+              @update:model-value="v => form.className = v"
+            />
+            <v-textarea
+              :model-value="form.caption"
+              label="Caption (optional)"
+              placeholder="Short caption under the image"
+              @update:model-value="v => form.caption = v"
+              :rows="2"
+            />
+          </div>
+        </div>
+      </div>
     </v-drawer>
 
     <Editor
@@ -215,4 +351,8 @@ function onSaveFromDrawer() {
     content: 'insert_link';
     font-feature-settings: 'liga';
   }
+</style>
+
+<style>
+@import "./styles/tailwind.css";
 </style>
