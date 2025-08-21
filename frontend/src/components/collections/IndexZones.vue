@@ -95,7 +95,6 @@ export default {
     indexZonesList() {
         let indexZonesArr = []
         this.collectionItems && this.collectionItems.map(item => {
-          // console.log('this.collectionItems item: ', item)
           if (item.index_zone) {
             if (!indexZonesArr.includes(item.index_zone)) {
               indexZonesArr.push(item.index_zone)
@@ -190,11 +189,18 @@ export default {
     this.indexZonesYearsInputField.selected = years || null;
   },
   watch: {
-    apolloLoading: function (newVal, oldVal) {
-      if (newVal === 0 && oldVal === 1) {
-        this.indexZonesList();
-        this.indexZonesYearList();
-      }
+    apolloLoading: {
+      handler(newVal, oldVal) {
+        if (!newVal) {
+          this.indexZonesList()
+          this.indexZonesYearList()
+        }
+      },
+      immediate: true
+    },
+    collection() {
+      this.indexZonesList()
+      this.indexZonesYearList()
     }
   }
 }
