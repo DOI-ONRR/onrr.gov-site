@@ -1,6 +1,63 @@
 <template>
   <main class="onrr-editor">
     <v-drawer
+      v-model="standardLinkDrawerOpen"
+      title="Add/Edit Link"
+      icon="link"
+      @cancel="standardLinkDrawerOpen = false"
+      cancelable="true"
+    >
+      <template #actions>
+        <div class="flex gap-2 items-center">
+          <v-button 
+            :loading="saving" 
+            :icon="true"
+            :rounded="true"
+            @click="insertLink"
+          >
+            <v-icon name="check" class="mr-1" />
+          </v-button>
+        </div>
+      </template>
+
+      <div class="tw-px-4" style="overflow: auto;">
+        <div class="flex tw-gap-4 items-start border rounded tw-p-3" style="background: var(--background-subdued);">
+          <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mt-8" >
+            <div>
+              <p class="tw-font-bold tw-ml-1">URL</p>
+              <v-input
+                v-model="standardLinkForm.href"
+              />
+            </div>
+            <div>
+              <p class="tw-font-bold tw-ml-1">Display Text</p>
+              <v-input
+                :model-value="standardLinkForm.text"
+                @update:model-value="v => standardLinkForm.text = v"
+              />
+            </div>
+            <div>
+              <p class="tw-font-bold tw-ml-1">Tooltip</p>
+              <v-input
+                :model-value="standardLinkForm.title"
+                @update:model-value="v => standardLinkForm.title = v"
+              />
+            </div>
+            <div>
+              <p class="tw-font-bold tw-ml-1">Open link in</p>
+              <v-checkbox
+                class="block"
+                v-model="standardLinkForm.openInNewTab"
+                @update:value="v => standardLinkForm.openInNewTab = v"
+              >New Tab
+              </v-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-drawer>
+
+    <v-drawer
       v-model="codeEditorDrawerOpen"
       title="Edit Source Code"
       icon="code"
@@ -69,32 +126,32 @@
             <div>
               <p class="tw-font-bold tw-ml-1">Alternative Text</p>
               <v-input
-                v-model="form.alt"
+                v-model="imageForm.alt"
               />
             </div>
             <div>
               <p class="tw-font-bold tw-ml-1">Image URL</p>
               <v-input
-                :model-value="form.href"
-                @update:model-value="v => form.href = v"
+                :model-value="imageForm.href"
+                @update:model-value="v => imageForm.href = v"
               />
             </div>
             <div>
               <p class="tw-font-bold tw-ml-1">Width</p>
               <v-input
-                :model-value="form.width"
+                :model-value="imageForm.width"
                 type="number"
                 min="1"
-                @update:model-value="v => form.width = v"
+                @update:model-value="v => imageForm.width = v"
               />
             </div>
             <div>
               <p class="tw-font-bold tw-ml-1">Height</p>
               <v-input
-                :model-value="form.height"
+                :model-value="imageForm.height"
                 type="number"
                 min="1"
-                @update:model-value="v => form.height = v"
+                @update:model-value="v => imageForm.height = v"
               />
             </div>
           </div>
@@ -131,18 +188,26 @@ const emit = defineEmits(['input'])
 
 const codeEditorDrawerOpen = ref(false)
 const imageDrawerOpen = ref(false)
+const standardLinkDrawerOpen = ref(false)
 const sourceCode = ref('')
 const tinyRef = ref(null)
 const codeRef = ref(null)
 const lastAppliedFromProps = ref(null)
 const folder = ref(null)
 const selectedImage = ref(null)
-const form = reactive({
+const imageForm = reactive({
   id: '',
   alt: '',
   width: undefined,
   height: undefined,
   href: '',
+})
+
+const standardLinkForm = reactive({
+  href: '',
+  text: '',
+  title: '',
+  openInNewTab: false,
 })
 
 const config = computed(() => {
@@ -218,6 +283,10 @@ const config = computed(() => {
           sourceCode.value = editor.getContent({ format: 'html' })
           codeEditorDrawerOpen.value = true
         }
+        else if (e.command === 'mceOnrrLink') {
+          if (typeof e.preventDefault === 'function') e.preventDefault()
+          standardLinkDrawerOpen.value = true
+        }
       })
     },
   }
@@ -231,6 +300,28 @@ watch(() => props.value, (val) => {
   if (ed && ed.getContent({ format: 'html' }) !== html) {
     ed.setContent(html, { format: 'html' })
     ed.nodeChanged?.()
+  }
+})
+
+watch (() => standardLinkDrawerOpen.value, (val) => {
+  if (val) {
+    const ed = getTinyEditorInstance()
+    const nodeType = ed.selection.getNode().nodeName
+    const selectedNode = ed.selection.getNode()
+    if (nodeType == 'A') {
+      standardLinkForm.title = selectedNode.getAttribute('title')
+      standardLinkForm.href = selectedNode.getAttribute('href')
+      standardLinkForm.text = selectedNode.getHTML()
+      const target = selectedNode.getAttribute('target')
+      if (target == '_blank') {
+        standardLinkForm.openInNewTab = true
+      }
+    }
+    else {
+      const selectedRange = ed.selection.getRng()
+      const selectedText = selectedRange.commonAncestorContainer.data
+      standardLinkForm.text = selectedText.substring(selectedRange.startOffset, selectedRange.endOffset)
+    }
   }
 })
 
@@ -264,20 +355,27 @@ function onSaveFromDrawer() {
 
 function initFormFromFile(f) {
   selectedImage.value = f
-  form.id = f.id || ''
-  form.alt = f.title || ''
-  form.width = f.width || undefined
-  form.height = f.height || undefined
-  form.href = `${assetUrl(f.filename_disk)}`
+  imageForm.id = f.id || ''
+  imageForm.alt = f.title || ''
+  imageForm.width = f.width || undefined
+  imageForm.height = f.height || undefined
+  imageForm.href = `${assetUrl(f.filename_disk)}`
 }
 
 function clearSelectedImage() {
   selectedImage.value = null
-  form.id = ''
-  form.alt = ''
-  form.width = undefined
-  form.height = undefined
-  form.href = ''
+  imageForm.id = ''
+  imageForm.alt = ''
+  imageForm.width = undefined
+  imageForm.height = undefined
+  imageForm.href = ''
+}
+
+function clearStandardLinkForm() {
+  standardLinkForm.title = ''
+  standardLinkForm.href = ''
+  standardLinkForm.text = ''
+  standardLinkForm.openInNewTab = false
 }
 
 function escapeAttr(str) {
@@ -286,7 +384,7 @@ function escapeAttr(str) {
 
 function openImageDrawer(initial) {
   selectedImage.value = { ...selectedImage.value, ...initial };
-  Object.assign(form, initial);
+  Object.assign(imageForm, initial);
   imageDrawerOpen.value = true;
 }
 
@@ -305,17 +403,38 @@ function insertImage() {
   const f = selectedImage.value
   if (!ed || !f) return
 
-  const alt = escapeAttr(form.alt ?? '')
-  const w = form.width ? ` width="${Number(form.width)}"` : ''
-  const h = form.height ? ` height="${Number(form.height)}"` : ''
-  const src = form.href
-  const img = `<img src="${src}" alt="${alt}"${w}${h} data-id="${form.id}" data-filename-disk="${f.filename_disk}">`
+  const alt = escapeAttr(imageForm.alt ?? '')
+  const w = imageForm.width ? ` width="${Number(imageForm.width)}"` : ''
+  const h = imageForm.height ? ` height="${Number(imageForm.height)}"` : ''
+  const src = imageForm.href
+  const img = `<img src="${src}" alt="${alt}"${w}${h} data-id="${imageForm.id}" data-filename-disk="${f.filename_disk}">`
 
   const html = `<p>${img}</p>`
 
   ed.insertContent(html)
   clearSelectedImage()
   imageDrawerOpen.value = false
+}
+
+function insertLink() {
+  const ed = getTinyEditorInstance()
+  if (!ed) return
+
+  const url = standardLinkForm.href
+  const displayText = standardLinkForm.text
+  const title = standardLinkForm.title
+  const target = standardLinkForm.openInNewTab ? '_blank' : '_self';
+  var classes = 'usa-link'
+  if (standardLinkForm.openInNewTab) {
+    classes += ' usa-link--external'
+  }
+  const link = `<a href="${url}" target="${target}" title="${title}" class="${classes}">${displayText}</a>`
+
+  console.log('link', link)
+
+  ed.insertContent(link)
+  clearStandardLinkForm();
+  standardLinkDrawerOpen.value = false
 }
 
 function assetUrl(filenameDisk) {

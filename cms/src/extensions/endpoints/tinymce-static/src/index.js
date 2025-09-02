@@ -3,12 +3,15 @@ import fs from 'node:fs';
 import express from 'express';
 
 export default {
-  id: 'tinymce-static', // base URL => /tinymce-static
+  id: 'tinymce-static', // Base URL => /tinymce-static
+  // Example mappings:
+  //  /tinymce-static/tinymce/tinymce.min.js  -> <rootDir>/tinymce/tinymce.min.js
+  //  /tinymce-static/plugins/my-custom-link.js -> <rootDir>/plugins/my-custom-link.js
   handler: (router) => {
     const rootDir = path.join(
       process.cwd(),
       'extensions',
-      'directus-extension-onrr-editor-tiny',
+      'directus-extension-onrr-editor-tinymce',
       'public'
     );
 
@@ -17,8 +20,19 @@ export default {
     // sanity checks
     router.get('/_ping', (_req, res) => res.send('ok'));
     router.get('/_check', (_req, res) => {
-      const filePath = path.join(rootDir, 'tinymce', 'tinymce.min.js');
-      res.json({ id: 'tinymce-static', rootDir, filePath, exists: fs.existsSync(filePath) });
+      const tinymcePath = path.join(rootDir, 'tinymce', 'tinymce.min.js');
+      const pluginPath = path.join(rootDir, 'plugins', 'link.js');
+      const tinymceExists = fs.existsSync(tinymcePath);
+      const pluginExists = fs.existsSync(pluginPath);
+
+      res.json({
+        id: 'tinymce-static',
+        rootDir,
+        tinymcePath,
+        tinymceExists,
+        pluginPath,
+        pluginExists
+      });
     });
   },
 };

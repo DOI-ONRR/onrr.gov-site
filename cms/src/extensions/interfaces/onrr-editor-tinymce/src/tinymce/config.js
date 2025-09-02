@@ -2,8 +2,11 @@ import { createDirectus, rest } from '@directus/sdk';
   
 export function createTinyConfig() {
   const base = {
-    toolbar: 'bold italic underline h1 h2 h3 numlist bullist removeformat blockquote link image code ',
-    plugins: 'lists link image table code',
+    toolbar: 'bold italic underline h1 h2 h3 numlist bullist removeformat blockquote onrr-link image code',
+    plugins: 'lists image table code onrr-link',
+    external_plugins: {
+      myPlugin: 'http://localhost:8056/tinymce-static/plugins/link.js'
+    },
     menubar: false,
     promotion: false,
     branding: false,
