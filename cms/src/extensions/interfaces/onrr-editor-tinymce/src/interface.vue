@@ -13,7 +13,7 @@
             :loading="saving" 
             :icon="true"
             :rounded="true"
-            @click="insertLink"
+            @click="upsertLink"
           >
             <v-icon name="check" class="mr-1" />
           </v-button>
@@ -315,7 +315,7 @@ watch (() => linkDrawerOpen.value, async (val) => {
     const selectedNode = ed.selection.getNode()
     if (nodeType == 'A') {
       linkForm.title = selectedNode.getAttribute('title')
-      linkForm.href = selectedNode.getAttribute('data-path')
+      linkForm.href = selectedNode.getAttribute('href')
       linkForm.text = selectedNode.getHTML()
       const target = selectedNode.getAttribute('target')
       if (target == '_blank') {
@@ -449,23 +449,54 @@ function insertImage() {
   imageDrawerOpen.value = false
 }
 
-function insertLink() {
-  const ed = getTinyEditorInstance()
-  if (!ed) return
+function upsertLink() {
+  const editor = getTinyEditorInstance()
+  if (!editor) return
 
-  const url = linkForm.href
-  const displayText = linkForm.text
-  const title = linkForm.title
-  const target = linkForm.openInNewTab ? '_blank' : '_self';
-  var classes = 'usa-link'
-  if (linkForm.openInNewTab) {
-    classes += ' usa-link--external'
-  }
-  const link = `<a href="${url}" target="${target}" title="${title}" class="${classes}" data-path="${url}">${displayText}</a>`
+  editor.undoManager.transact(() => {
+    const selection = editor.selection;
+    const dom = editor.dom;
 
-  ed.insertContent(link)
-  clearLinkForm();
-  linkDrawerOpen.value = false
+    const url = linkForm.href
+    const displayText = linkForm.text
+    const title = linkForm.title
+    const target = linkForm.openInNewTab ? '_blank' : '_self';
+    var classes = 'usa-link'
+    if (linkForm.openInNewTab) {
+      classes += ' usa-link--external'
+    }
+
+    let anchor = dom.getParent(selection.getNode(), 'a[href]');
+
+    if (anchor) {
+      if (url != null) dom.setAttrib(anchor, 'href', url);
+      dom.setAttrib(anchor, 'target', target)
+      dom.setAttrib(anchor, 'title', title)
+
+      if (typeof displayText === 'string') {
+        const rng = dom.createRng();
+        rng.selectNodeContents(anchor);
+        selection.setRng(rng);
+        selection.setContent(dom.encode(displayText));
+      }
+
+      selection.select(anchor);
+      editor.nodeChanged();
+      clearLinkForm();
+      linkDrawerOpen.value = false
+      return;
+    } 
+
+    const link = `<a href="${url}" target="${target}" title="${title}" class="${classes}">${displayText}</a>`
+
+    editor.insertContent(link)
+    clearLinkForm();
+    linkDrawerOpen.value = false
+    const newAnchor = dom.getParent(selection.getNode(), 'a[href]');
+    if (newAnchor) selection.select(newAnchor);
+    editor.nodeChanged();
+
+  })
 }
 
 function assetUrl(filenameDisk) {

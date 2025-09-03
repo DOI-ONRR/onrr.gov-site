@@ -11,6 +11,7 @@ export function createTinyConfig() {
     promotion: false,
     branding: false,
     statusbar: false,
+    relative_urls: false,
     setup: function (editor) {
       const documentSelected = (autocompleteApi, rng, value) => {
         const doc = JSON.parse(value)
