@@ -41,6 +41,7 @@
 		"@codemirror/state": "6.5.2",
 		"@codemirror/view": "6.38.1",
 		"@directus/sdk": "^20.0.2",
+		"@tarekraafat/autocomplete.js": "^10.2.9",
 		"@tinymce/tinymce-vue": "^6.3.0",
 		"jsonlint-mod": "^1.7.6",
 		"tinymce": "^8.0.2"

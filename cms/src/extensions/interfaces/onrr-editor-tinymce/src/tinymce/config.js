@@ -5,7 +5,7 @@ export function createTinyConfig() {
     toolbar: 'bold italic underline h1 h2 h3 numlist bullist removeformat blockquote onrr-link image code',
     plugins: 'lists image table code onrr-link',
     external_plugins: {
-      myPlugin: 'http://localhost:8056/tinymce-static/plugins/link.js'
+      onnrLink: 'http://localhost:8056/tinymce-static/plugins/link.js'
     },
     menubar: false,
     promotion: false,

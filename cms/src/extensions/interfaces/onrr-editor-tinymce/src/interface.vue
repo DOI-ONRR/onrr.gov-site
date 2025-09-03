@@ -1,10 +1,10 @@
 <template>
   <main class="onrr-editor">
     <v-drawer
-      v-model="standardLinkDrawerOpen"
+      v-model="linkDrawerOpen"
       title="Add/Edit Link"
       icon="link"
-      @cancel="standardLinkDrawerOpen = false"
+      @cancel="linkDrawerOpen = false"
       cancelable="true"
     >
       <template #actions>
@@ -20,35 +20,38 @@
         </div>
       </template>
 
-      <div class="tw-px-4" style="overflow: auto;">
+      <div class="tw-px-4">
         <div class="flex tw-gap-4 items-start border rounded tw-p-3" style="background: var(--background-subdued);">
-          <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mt-8" >
+          <div class="tw-grid tw-grid-cols-2 tw-gap-8 tw-mt-0" >
+            <div class="tw-col-span-2">
+              <document-lookup ref="documentLookupRef" @item-selected="updateLinkForm"/>
+            </div>
             <div>
-              <p class="tw-font-bold tw-ml-1">URL</p>
+              <p class="tw-font-bold tw-ml-1 tw-mb-2">URL</p>
               <v-input
-                v-model="standardLinkForm.href"
+                v-model="linkForm.href"
               />
             </div>
             <div>
-              <p class="tw-font-bold tw-ml-1">Display Text</p>
+              <p class="tw-font-bold tw-ml-1 tw-mb-2">Display Text</p>
               <v-input
-                :model-value="standardLinkForm.text"
-                @update:model-value="v => standardLinkForm.text = v"
+                :model-value="linkForm.text"
+                @update:model-value="v => linkForm.text = v"
               />
             </div>
             <div>
-              <p class="tw-font-bold tw-ml-1">Tooltip</p>
+              <p class="tw-font-bold tw-ml-1 tw-mb-2">Tooltip</p>
               <v-input
-                :model-value="standardLinkForm.title"
-                @update:model-value="v => standardLinkForm.title = v"
+                :model-value="linkForm.title"
+                @update:model-value="v => linkForm.title = v"
               />
             </div>
             <div>
-              <p class="tw-font-bold tw-ml-1">Open link in</p>
+              <p class="tw-font-bold tw-ml-1 tw-mb-2">Open link in</p>
               <v-checkbox
                 class="block"
-                v-model="standardLinkForm.openInNewTab"
-                @update:value="v => standardLinkForm.openInNewTab = v"
+                v-model="linkForm.openInNewTab"
+                @update:value="v => linkForm.openInNewTab = v"
               >New Tab
               </v-checkbox>
             </div>
@@ -172,10 +175,11 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, reactive } from 'vue'
+import { computed, ref, watch, reactive, nextTick } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
 import { createTinyConfig } from './tinymce/config'
 import InputCodeMirror from './InputCodeMirror.vue';
+import DocumentLookup from './DocumentLookup.vue';
 
 const props = defineProps({
   value: {
@@ -188,10 +192,11 @@ const emit = defineEmits(['input'])
 
 const codeEditorDrawerOpen = ref(false)
 const imageDrawerOpen = ref(false)
-const standardLinkDrawerOpen = ref(false)
+const linkDrawerOpen = ref(false)
 const sourceCode = ref('')
 const tinyRef = ref(null)
 const codeRef = ref(null)
+const documentLookupRef = ref(null)
 const lastAppliedFromProps = ref(null)
 const folder = ref(null)
 const selectedImage = ref(null)
@@ -203,7 +208,7 @@ const imageForm = reactive({
   href: '',
 })
 
-const standardLinkForm = reactive({
+const linkForm = reactive({
   href: '',
   text: '',
   title: '',
@@ -285,7 +290,7 @@ const config = computed(() => {
         }
         else if (e.command === 'mceOnrrLink') {
           if (typeof e.preventDefault === 'function') e.preventDefault()
-          standardLinkDrawerOpen.value = true
+          linkDrawerOpen.value = true
         }
       })
     },
@@ -303,25 +308,46 @@ watch(() => props.value, (val) => {
   }
 })
 
-watch (() => standardLinkDrawerOpen.value, (val) => {
+watch (() => linkDrawerOpen.value, async (val) => {
   if (val) {
     const ed = getTinyEditorInstance()
     const nodeType = ed.selection.getNode().nodeName
     const selectedNode = ed.selection.getNode()
     if (nodeType == 'A') {
-      standardLinkForm.title = selectedNode.getAttribute('title')
-      standardLinkForm.href = selectedNode.getAttribute('href')
-      standardLinkForm.text = selectedNode.getHTML()
+      linkForm.title = selectedNode.getAttribute('title')
+      linkForm.href = selectedNode.getAttribute('data-path')
+      linkForm.text = selectedNode.getHTML()
       const target = selectedNode.getAttribute('target')
       if (target == '_blank') {
-        standardLinkForm.openInNewTab = true
+        linkForm.openInNewTab = true
       }
     }
     else {
       const selectedRange = ed.selection.getRng()
-      const selectedText = selectedRange.commonAncestorContainer.data
-      standardLinkForm.text = selectedText.substring(selectedRange.startOffset, selectedRange.endOffset)
+      if (selectedRange.startOffset !== selectedRange.endOffset) {
+        const selectedText = selectedRange.commonAncestorContainer.data
+        linkForm.text = selectedText.substring(selectedRange.startOffset, selectedRange.endOffset)
+      }
     }
+
+    // set focus in document lookup field
+    await nextTick()
+    await new Promise(requestAnimationFrame)
+    const root = documentLookupRef.value?.$el ?? documentLookupRef.value
+    if (root) {
+      const selector = [
+        'input:not([disabled]):not([type="hidden"])',
+        'textarea:not([disabled])',
+        'select:not([disabled])',
+        '[tabindex]:not([tabindex="-1"])'
+      ].join(',')
+      const el = root.querySelector(selector)
+      if (el && typeof el.focus === 'function') {
+        el.focus()
+      }
+    }
+  } else {
+    clearLinkForm();
   }
 })
 
@@ -371,11 +397,18 @@ function clearSelectedImage() {
   imageForm.href = ''
 }
 
-function clearStandardLinkForm() {
-  standardLinkForm.title = ''
-  standardLinkForm.href = ''
-  standardLinkForm.text = ''
-  standardLinkForm.openInNewTab = false
+function clearLinkForm() {
+  linkForm.title = ''
+  linkForm.href = ''
+  linkForm.text = ''
+  linkForm.openInNewTab = false
+}
+
+function updateLinkForm(selected) {
+  linkForm.href = `${selected.path}${selected.href}`
+  if (linkForm.text === '') {
+    linkForm.text = selected.name
+  }
 }
 
 function escapeAttr(str) {
@@ -420,21 +453,19 @@ function insertLink() {
   const ed = getTinyEditorInstance()
   if (!ed) return
 
-  const url = standardLinkForm.href
-  const displayText = standardLinkForm.text
-  const title = standardLinkForm.title
-  const target = standardLinkForm.openInNewTab ? '_blank' : '_self';
+  const url = linkForm.href
+  const displayText = linkForm.text
+  const title = linkForm.title
+  const target = linkForm.openInNewTab ? '_blank' : '_self';
   var classes = 'usa-link'
-  if (standardLinkForm.openInNewTab) {
+  if (linkForm.openInNewTab) {
     classes += ' usa-link--external'
   }
-  const link = `<a href="${url}" target="${target}" title="${title}" class="${classes}">${displayText}</a>`
-
-  console.log('link', link)
+  const link = `<a href="${url}" target="${target}" title="${title}" class="${classes}" data-path="${url}">${displayText}</a>`
 
   ed.insertContent(link)
-  clearStandardLinkForm();
-  standardLinkDrawerOpen.value = false
+  clearLinkForm();
+  linkDrawerOpen.value = false
 }
 
 function assetUrl(filenameDisk) {
