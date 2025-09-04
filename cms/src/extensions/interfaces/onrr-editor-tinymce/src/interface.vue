@@ -15,78 +15,17 @@
       @save="onSaveFromDrawer"
     />
 
-    <v-drawer
+    <image-drawer
       v-model="imageDrawerOpen"
-      title="Add/Edit Image"
-      icon="image"
-      @cancel="imageDrawerOpen = false"
-      cancelable="true"
-    >
-      <template #actions>
-        <div class="flex gap-2 items-center">
-          <v-button 
-            :loading="saving" 
-            :icon="true"
-            :rounded="true"
-            @click="insertImage">
-            <v-icon name="check" class="mr-1" />
-          </v-button>
-        </div>
-      </template>
-
-      <div v-if="!selectedImage">
-        <v-upload 
-          :from-library="true"
-          :from-url="false"
-          :from-user="true"
-          :folder="folder"
-          @input="handleUploadInput"
-          class="onrr-image-upload"
-        />
-      </div>
-      <div v-else class="tw-px-4" style="overflow: auto;">
-        <div class="flex tw-gap-4 items-start border rounded tw-p-3" style="background: var(--background-subdued);">
-          <img
-            :src="assetUrl(selectedImage.id) + '?width=360&format=auto'"
-            class="tw-border-solid tw-border-2 tw-border-slate-200 tw-p-2 tw-rounded-md tw-mb-4 tw-w-64 tw-h-auto tw-object-cover tw-mx-auto tw-block"
-          />
-
-          <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mt-8" >
-            <div>
-              <p class="tw-font-bold tw-ml-1">Alternative Text</p>
-              <v-input
-                v-model="imageForm.alt"
-              />
-            </div>
-            <div>
-              <p class="tw-font-bold tw-ml-1">Image URL</p>
-              <v-input
-                :model-value="imageForm.href"
-                @update:model-value="v => imageForm.href = v"
-              />
-            </div>
-            <div>
-              <p class="tw-font-bold tw-ml-1">Width</p>
-              <v-input
-                :model-value="imageForm.width"
-                type="number"
-                min="1"
-                @update:model-value="v => imageForm.width = v"
-              />
-            </div>
-            <div>
-              <p class="tw-font-bold tw-ml-1">Height</p>
-              <v-input
-                :model-value="imageForm.height"
-                type="number"
-                min="1"
-                @update:model-value="v => imageForm.height = v"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </v-drawer>
+      v-model:form="imageForm"
+      :selected-image="selectedImage"
+      :folder="folder"
+      :saving="saving"
+      :asset-url="assetUrl"
+      @upload-input="handleUploadInput"
+      @clear="clearSelectedImage"
+      @save="insertImage"
+    />
 
     <Editor
       api-key="no-api-key"
@@ -106,6 +45,7 @@ import Editor from '@tinymce/tinymce-vue'
 import { createTinyConfig } from './tinymce/config'
 import CodeEditorDrawer from './CodeEditorDrawer.vue'
 import LinkDrawer from './LinkDrawer.vue';
+import ImageDrawer from './ImageDrawer.vue'
 
 const props = defineProps({
   value: {
@@ -408,18 +348,10 @@ function assetUrl(filenameDisk) {
     background-color: var(--background-page);
     border: var(--border-width) solid var(--border-normal);
     border-radius: var(--border-radius);
-  }.onrr-editor:focus-within {
+  }
+  
+  .onrr-editor:focus-within {
     border-color: var(--primary);
-  }
-
-  .onrr-image-upload {
-    margin: 0 2rem;
-      border: var(--theme--border-width) dashed var(--theme--form--field--input--border-color);
-      border-radius: var(--theme--border-radius);
-  }
-
-  .onrr-image-upload:hover {
-    border-color: var(--theme--form--field--input--border-color-hover);
   }
 
 </style>
