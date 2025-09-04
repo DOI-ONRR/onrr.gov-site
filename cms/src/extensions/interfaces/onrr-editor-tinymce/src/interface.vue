@@ -1,64 +1,11 @@
 <template>
   <main class="onrr-editor">
-    <v-drawer
-      v-model="linkDrawerOpen"
-      title="Add/Edit Link"
-      icon="link"
-      @cancel="linkDrawerOpen = false"
-      cancelable="true"
-    >
-      <template #actions>
-        <div class="flex gap-2 items-center">
-          <v-button 
-            :loading="saving" 
-            :icon="true"
-            :rounded="true"
-            @click="upsertLink"
-          >
-            <v-icon name="check" class="mr-1" />
-          </v-button>
-        </div>
-      </template>
-
-      <div class="tw-px-4">
-        <div class="flex tw-gap-4 items-start border rounded tw-p-3" style="background: var(--background-subdued);">
-          <div class="tw-grid tw-grid-cols-2 tw-gap-8 tw-mt-0" >
-            <div class="tw-col-span-2">
-              <document-lookup ref="documentLookupRef" @item-selected="updateLinkForm"/>
-            </div>
-            <div>
-              <p class="tw-font-bold tw-ml-1 tw-mb-2">URL</p>
-              <v-input
-                v-model="linkForm.href"
-              />
-            </div>
-            <div>
-              <p class="tw-font-bold tw-ml-1 tw-mb-2">Display Text</p>
-              <v-input
-                :model-value="linkForm.text"
-                @update:model-value="v => linkForm.text = v"
-              />
-            </div>
-            <div>
-              <p class="tw-font-bold tw-ml-1 tw-mb-2">Tooltip</p>
-              <v-input
-                :model-value="linkForm.title"
-                @update:model-value="v => linkForm.title = v"
-              />
-            </div>
-            <div>
-              <p class="tw-font-bold tw-ml-1 tw-mb-2">Open link in</p>
-              <v-checkbox
-                class="block"
-                v-model="linkForm.openInNewTab"
-                @update:value="v => linkForm.openInNewTab = v"
-              >New Tab
-              </v-checkbox>
-            </div>
-          </div>
-        </div>
-      </div>
-    </v-drawer>
+    
+    <link-drawer 
+      v-model="linkDrawerOpen" 
+      :initial-form="linkInitialForm" 
+      :saving="saving" 
+      @save="onLinkSave" />
 
     <v-drawer
       v-model="codeEditorDrawerOpen"
@@ -179,7 +126,7 @@ import { computed, ref, watch, reactive, nextTick } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
 import { createTinyConfig } from './tinymce/config'
 import InputCodeMirror from './InputCodeMirror.vue';
-import DocumentLookup from './DocumentLookup.vue';
+import LinkDrawer from './LinkDrawer.vue';
 
 const props = defineProps({
   value: {
@@ -196,7 +143,6 @@ const linkDrawerOpen = ref(false)
 const sourceCode = ref('')
 const tinyRef = ref(null)
 const codeRef = ref(null)
-const documentLookupRef = ref(null)
 const lastAppliedFromProps = ref(null)
 const folder = ref(null)
 const selectedImage = ref(null)
@@ -208,12 +154,16 @@ const imageForm = reactive({
   href: '',
 })
 
-const linkForm = reactive({
-  href: '',
-  text: '',
-  title: '',
-  openInNewTab: false,
-})
+function defaultLinkForm() {
+  return {
+    href: '',
+    text: '',
+    title: '',
+    openInNewTab: false,
+  }
+}
+
+const linkInitialForm = ref(defaultLinkForm())
 
 const config = computed(() => {
   const base = createTinyConfig()
@@ -314,40 +264,23 @@ watch (() => linkDrawerOpen.value, async (val) => {
     const nodeType = ed.selection.getNode().nodeName
     const selectedNode = ed.selection.getNode()
     if (nodeType == 'A') {
-      linkForm.title = selectedNode.getAttribute('title')
-      linkForm.href = selectedNode.getAttribute('href')
-      linkForm.text = selectedNode.getHTML()
+      linkInitialForm.value.title = selectedNode.getAttribute('title')
+      linkInitialForm.value.href = selectedNode.getAttribute('href')
+      linkInitialForm.value.text = selectedNode.getHTML()
       const target = selectedNode.getAttribute('target')
       if (target == '_blank') {
-        linkForm.openInNewTab = true
+        linkInitialForm.value.openInNewTab = true
       }
     }
     else {
       const selectedRange = ed.selection.getRng()
       if (selectedRange.startOffset !== selectedRange.endOffset) {
         const selectedText = selectedRange.commonAncestorContainer.data
-        linkForm.text = selectedText.substring(selectedRange.startOffset, selectedRange.endOffset)
-      }
-    }
-
-    // set focus in document lookup field
-    await nextTick()
-    await new Promise(requestAnimationFrame)
-    const root = documentLookupRef.value?.$el ?? documentLookupRef.value
-    if (root) {
-      const selector = [
-        'input:not([disabled]):not([type="hidden"])',
-        'textarea:not([disabled])',
-        'select:not([disabled])',
-        '[tabindex]:not([tabindex="-1"])'
-      ].join(',')
-      const el = root.querySelector(selector)
-      if (el && typeof el.focus === 'function') {
-        el.focus()
+        linkInitialForm.value.text = selectedText.substring(selectedRange.startOffset, selectedRange.endOffset)
       }
     }
   } else {
-    clearLinkForm();
+    linkInitialForm.value = defaultLinkForm()
   }
 })
 
@@ -397,20 +330,6 @@ function clearSelectedImage() {
   imageForm.href = ''
 }
 
-function clearLinkForm() {
-  linkForm.title = ''
-  linkForm.href = ''
-  linkForm.text = ''
-  linkForm.openInNewTab = false
-}
-
-function updateLinkForm(selected) {
-  linkForm.href = `${selected.path}${selected.href}`
-  if (linkForm.text === '') {
-    linkForm.text = selected.name
-  }
-}
-
 function escapeAttr(str) {
   return String(str ?? '').replaceAll('"', '&quot;');
 }
@@ -449,7 +368,7 @@ function insertImage() {
   imageDrawerOpen.value = false
 }
 
-function upsertLink() {
+function onLinkSave(linkForm) {
   const editor = getTinyEditorInstance()
   if (!editor) return
 
@@ -472,6 +391,7 @@ function upsertLink() {
       if (url != null) dom.setAttrib(anchor, 'href', url);
       dom.setAttrib(anchor, 'target', target)
       dom.setAttrib(anchor, 'title', title)
+      dom.setAttrib(anchor, 'class', classes)
 
       if (typeof displayText === 'string') {
         const rng = dom.createRng();
@@ -482,7 +402,7 @@ function upsertLink() {
 
       selection.select(anchor);
       editor.nodeChanged();
-      clearLinkForm();
+      linkInitialForm.value = defaultLinkForm()
       linkDrawerOpen.value = false
       return;
     } 
@@ -490,7 +410,7 @@ function upsertLink() {
     const link = `<a href="${url}" target="${target}" title="${title}" class="${classes}">${displayText}</a>`
 
     editor.insertContent(link)
-    clearLinkForm();
+    linkInitialForm.value = defaultLinkForm()
     linkDrawerOpen.value = false
     const newAnchor = dom.getParent(selection.getNode(), 'a[href]');
     if (newAnchor) selection.select(newAnchor);
