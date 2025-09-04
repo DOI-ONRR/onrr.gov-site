@@ -7,34 +7,13 @@
       :saving="saving" 
       @save="onLinkSave" />
 
-    <v-drawer
+    <code-editor-drawer
       v-model="codeEditorDrawerOpen"
-      title="Edit Source Code"
-      icon="code"
-      @cancel="codeEditorDrawerOpen = false"
-      cancelable="true"
-    >
-      <template #actions>
-        <div class="flex gap-2 items-center">
-          <v-button 
-            :loading="saving" 
-            :icon="true"
-            :rounded="true"
-            @click="onSaveFromDrawer">
-            <v-icon name="check" class="mr-1" />
-          </v-button>
-        </div>
-      </template>
-      <InputCodeMirror
-        ref="codeRef"
-        v-model="sourceCode"
-        language="html"
-        :height="260"
-        :tabSize="2"
-        :softWrap="true"
-        :disabled="disabled"
-      />
-    </v-drawer>
+      v-model:code="sourceCode"
+      :saving="saving"
+      :disabled="disabled"
+      @save="onSaveFromDrawer"
+    />
 
     <v-drawer
       v-model="imageDrawerOpen"
@@ -125,7 +104,7 @@
 import { computed, ref, watch, reactive, nextTick } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
 import { createTinyConfig } from './tinymce/config'
-import InputCodeMirror from './InputCodeMirror.vue';
+import CodeEditorDrawer from './CodeEditorDrawer.vue'
 import LinkDrawer from './LinkDrawer.vue';
 
 const props = defineProps({
@@ -142,7 +121,6 @@ const imageDrawerOpen = ref(false)
 const linkDrawerOpen = ref(false)
 const sourceCode = ref('')
 const tinyRef = ref(null)
-const codeRef = ref(null)
 const lastAppliedFromProps = ref(null)
 const folder = ref(null)
 const selectedImage = ref(null)
