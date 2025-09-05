@@ -147,11 +147,15 @@ jobs:
             tinymce/yarn.lock
             tinymce/package-lock.json
 
-      - run: ls -R cms/src/extensions/interfaces/onrr-wysiwyg | head -50
-      - name: Copy our files to tinymce path
+      - name: Copy TinyMCE skin LESS
+        shell: bash
         run: |
-          cp "${SRC_DIR}/src/tinymce/modules/oxide/src/less/skins/ui/default/*" tinyce/modules/oxide/src/less/skins/ui/default/
-
+          mkdir -p tinymce/modules/oxide/src/less/skins/ui/default/
+          shopt -s nullglob
+          cp -v "${SRC_DIR}/src/tinymce/modules/oxide/src/less/skins/ui/default/"* \
+                "tinymce/modules/oxide/src/less/skins/ui/default/"
+          shopt -u nullglob
+      
       - name: Build TinyMCE Oxide 
         working-directory: tinymce
         run: |
