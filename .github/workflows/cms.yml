@@ -118,6 +118,7 @@ jobs:
     env:
       TINYMCE_REF: "8.0.2"
       EXT_DIR: "cms/extensions/interfaces/onrr-wysiwyg"
+      SRC_DIR: "cms/src/extensions/interfaces/onrr-wysiwyg"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -144,11 +145,12 @@ jobs:
           cache: yarn
           cache-dependency-path: |
             tinymce/yarn.lock
-            ${{ env.EXT_DIR }}/package-lock.json
+            tinymce/package-lock.json
 
       - name: Build TinyMCE Oxide 
         working-directory: tinymce
         run: |
+          yarn
           yarn oxide-build
 
       - name: Copy compiled skins into extension
