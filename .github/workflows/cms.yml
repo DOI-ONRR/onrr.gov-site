@@ -147,6 +147,7 @@ jobs:
             tinymce/yarn.lock
             tinymce/package-lock.json
 
+      - run: ls -R cms/src/extensions/interfaces/onrr-wysiwyg | head -50
       - name: Copy our files to tinymce path
         run: |
           cp "${SRC_DIR}/src/tinymce/modules/oxide/src/less/skins/ui/default/*" tinyce/modules/oxide/src/less/skins/ui/default/
