@@ -1,9 +1,9 @@
 import InterfaceComponent from './interface.vue'
 export default {
-  id: 'onrr-editor-tinymce',
-  name: 'ONRR Editor (TinyMCE)',
+  id: 'onrr-wysiwyg',
+  name: 'ONRR WYSIWYG',
   icon: 'wysiwyg',
-  description: 'ONRR rich text editor using TinyMCE',
+  description: 'ONRR WYSIWYG using TinyMCE',
   component: InterfaceComponent,
   types: ['text', 'string'],
   relational: true,

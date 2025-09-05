@@ -1,6 +1,6 @@
 {
-	"name": "onrr-editor-tiny",
-	"description": "ONRR Editor (tiny)",
+	"name": "onrr-wysiwyg",
+	"description": "ONRR WYSIWYG",
 	"icon": "extension",
 	"version": "1.0.0",
 	"keywords": [
@@ -19,8 +19,8 @@
 		"host": "^10.10.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-editor-tinymce/dist; cp package.json ../../../../extensions/directus-extension-onrr-editor-tinymce; cp dist/index.js ../../../../extensions/directus-extension-onrr-editor-tinymce/dist",
-		"dev": "directus-extension build -w --no-minify; mkdir -p ../../../../extensions/directus-extension-onrr-editor-tinymce/dist; cp package.json ../../../../extensions/directus-extension-onrr-editor-tinymce; cp dist/index.js ../../../../extensions/directus-extension-onrr-editor-tinymce/dist",
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/dist; cp package.json ../../../../extensions/directus-extension-onrr-wysiwyg; cp dist/index.js ../../../../extensions/directus-extension-onrr-wysiwyg/dist",
+		"dev": "directus-extension build -w --no-minify; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/dist; cp package.json ../../../../extensions/directus-extension-onrr-wysiwyg; cp dist/index.js ../../../../extensions/directus-extension-onrr-wysiwyg/dist",
 		"link": "directus-extension link"
 	},
 	"devDependencies": {

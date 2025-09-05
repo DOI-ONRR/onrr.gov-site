@@ -1,5 +1,5 @@
 {
-	"name": "tinymce-static",
+	"name": "wysiwyg-static",
 	"description": "Endpoint extension for serving tinymce",
 	"icon": "extension",
 	"version": "1.0.0",

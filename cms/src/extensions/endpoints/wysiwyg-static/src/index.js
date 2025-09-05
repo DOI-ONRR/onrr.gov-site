@@ -3,15 +3,15 @@ import fs from 'node:fs';
 import express from 'express';
 
 export default {
-  id: 'tinymce-static', // Base URL => /tinymce-static
+  id: 'wysiwyg-static', // Base URL => /wysiwyg-static
   // Example mappings:
-  //  /tinymce-static/tinymce/tinymce.min.js  -> <rootDir>/tinymce/tinymce.min.js
-  //  /tinymce-static/plugins/my-custom-link.js -> <rootDir>/plugins/my-custom-link.js
+  //  /wysiwyg-static/tinymce/tinymce.min.js  -> <rootDir>/tinymce/tinymce.min.js
+  //  /wysiwyg-static/plugins/my-custom-link.js -> <rootDir>/plugins/my-custom-link.js
   handler: (router) => {
     const rootDir = path.join(
       process.cwd(),
       'extensions',
-      'directus-extension-onrr-editor-tinymce',
+      'directus-extension-onrr-wysiwyg',
       'public'
     );
 
@@ -26,7 +26,7 @@ export default {
       const pluginExists = fs.existsSync(pluginPath);
 
       res.json({
-        id: 'tinymce-static',
+        id: 'wysiwyg-static',
         rootDir,
         tinymcePath,
         tinymceExists,
