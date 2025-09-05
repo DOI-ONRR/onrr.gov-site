@@ -149,7 +149,7 @@ jobs:
 
       - name: Copy our files to tinymce path
         run: |
-          cp "${SRC_DIR}/tinymce/modules/oxide/src/less/skins/ui/default/*" tinyce/modules/oxide/src/less/skins/ui/default/
+          cp "${SRC_DIR}/src/tinymce/modules/oxide/src/less/skins/ui/default/*" tinyce/modules/oxide/src/less/skins/ui/default/
 
       - name: Build TinyMCE Oxide 
         working-directory: tinymce
@@ -159,7 +159,7 @@ jobs:
 
       - name: (Debug) Check extensions
         run: ls -ltr "cms/extensions"
-        
+
       - name: Copy compiled skins into extension
         run: |
           cp -R tinymce/modules/oxide/build/* "${EXT_DIR}/public/tinymce/"
