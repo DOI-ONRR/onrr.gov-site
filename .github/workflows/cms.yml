@@ -24,53 +24,14 @@ jobs:
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     steps:
       - run: echo "Ok to proceed with build"
-  build-tinymce-styles:
-    needs: gate
-    runs-on: ubuntu-latest
-    env:
-      TINYMCE_REF: "8.0.2"
-      EXT_DIR: "cms/src/extensions/interfaces/onrr-editor-tiny"
-      UI_SKIN: "onrr"       # your ui skin folder name
-      CONTENT_SKIN: "onrr-content"
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Checkout TinyMCE (shallow)
-        uses: actions/checkout@v4
-        with:
-          repository: tinymce/tinymce
-          ref: ${{ env.TINYMCE_REF }}
-          path: tinymce
-          fetch-depth: 1
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: yarn
-          cache-dependency-path: |
-            tinymce/yarn.lock
-            ${{ env.EXT_DIR }}/package-lock.json
-
-      - name: Build TinyMCE Oxide (no dev server)
-        working-directory: tinymce
-        run: |
-          yarn
-          yarn build
-          # If you only need a build artifact, 'oxide-build' is sufficient:
-          yarn oxide-build
-
-      - name: Copy compiled skins into extension
-        run: |
-          mkdir -p "${EXT_DIR}/public/tinymce/skins/ui/${UI_SKIN}"
-          mkdir -p "${EXT_DIR}/public/tinymce/skins/content/${CONTENT_SKIN}"
-          cp -R tinymce/modules/oxide/build/skins/ui/${UI_SKIN}/* "${EXT_DIR}/public/tinymce/skins/ui/${UI_SKIN}/"
-          cp -R tinymce/modules/oxide/build/skins/content/${CONTENT_SKIN}/* "${EXT_DIR}/public/tinymce/skins/content/${CONTENT_SKIN}/"
-  build-cms:
+  build-cms-extensions:
     needs: gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -130,13 +91,13 @@ jobs:
         run: npm ci --legacy-peer-deps
         working-directory: cms/src/extensions/interfaces/onrr-editor
 
-      - name: Install tinymce-static dependencies
+      - name: Install wysiwyg-static dependencies
         run: npm ci 
-        working-directory: cms/src/extensions/endpoints/tinymce-static
+        working-directory: cms/src/extensions/endpoints/wysiwyg-static
 
-      - name: Install onrr-editor-tinymce dependencies
+      - name: Install onrr-wysiwyg dependencies
         run: npm ci 
-        working-directory: cms/src/extensions/interfaces/onrr-editor-tinymce
+        working-directory: cms/src/extensions/interfaces/onrr-wysiwyg
 
       - name: Install onrr-generate-uuid dependencies
         run: npm ci
@@ -151,13 +112,62 @@ jobs:
         with:
           name: cms-extensions
           path: cms/extensions/**
+  build-tinymce:
+    needs: build-cms-extensions
+    runs-on: ubuntu-latest
+    env:
+      TINYMCE_REF: "8.0.2"
+      EXT_DIR: "cms/extensions/interfaces/onrr-wysiwyg"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: Download build artifacts from previous job
+        uses: actions/download-artifact@v4
+        with:
+          name: cms-extensions
+          path: cms/extensions
 
+      - name: Checkout TinyMCE (shallow)
+        uses: actions/checkout@v4
+        with:
+          repository: tinymce/tinymce
+          ref: ${{ env.TINYMCE_REF }}
+          path: tinymce
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+          cache-dependency-path: |
+            tinymce/yarn.lock
+            ${{ env.EXT_DIR }}/package-lock.json
+
+      - name: Build TinyMCE Oxide 
+        working-directory: tinymce
+        run: |
+          yarn oxide-build
+
+      - name: Copy compiled skins into extension
+        run: |
+          cp -R tinymce/modules/oxide/build/* "${EXT_DIR}/public/tinymce/"
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cms-extensions
+          path: cms/extensions/**
   deploy-cms:
-    needs: build-cms
+    needs: build-tinymce
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       
       - name: Download build artifacts
         uses: actions/download-artifact@v4

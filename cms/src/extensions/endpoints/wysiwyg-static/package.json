@@ -19,7 +19,7 @@
 		"host": "^10.10.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-tinymce-static/dist; cp package.json ../../../../extensions/directus-extension-tinymce-static; cp dist/index.js ../../../../extensions/directus-extension-tinymce-static/dist",
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-wysiwyg-static/dist; cp package.json ../../../../extensions/directus-extension-wysiwyg-static; cp dist/index.js ../../../../extensions/directus-extension-wysiwyg-static/dist",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link",
 		"validate": "directus-extension validate"
