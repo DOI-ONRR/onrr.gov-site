@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { createDirectus, rest } from '@directus/sdk';
+import { useApi } from '@directus/extensions-sdk';
 import autoComplete from "@tarekraafat/autocomplete.js";
 import { ref, onMounted } from "vue";
 
@@ -19,19 +19,18 @@ function focus() { documentLookupRef.value?.focus() }
 
 defineExpose({ focus })
 
+const api = useApi();
+
+
 const config = {
   selector: "#documentLookup",
   wrapper: false,
   data: {
     src: async (searchTerm) => {
-      const client = createDirectus('http://localhost:8056').with(rest());
-
-      const response =  await client.request(() => ({
-        path: `/link-autocomplete/?term=${searchTerm}`,
-        method: 'GET',
-      }));
-
-      return response.items
+      const { data } = await api.get('/link-autocomplete', { params: { term: searchTerm } });
+      // Support either `{ items: [...] }` or `{ data: { items: [...] } }` from the endpoint
+      const items = Array.isArray(data?.items) ? data.items : Array.isArray(data?.data?.items) ? data.data.items : [];
+      return items;
     },
     keys: ['name']
   },
