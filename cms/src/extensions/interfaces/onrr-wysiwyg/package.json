@@ -1,0 +1,57 @@
+{
+	"name": "onrr-wysiwyg",
+	"description": "ONRR WYSIWYG",
+	"icon": "extension",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-interface"
+	],
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "interface",
+		"path": "dist/index.js",
+		"source": "src/index.js",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/dist; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins; cp package.json ../../../../extensions/directus-extension-onrr-wysiwyg; cp dist/index.js ../../../../extensions/directus-extension-onrr-wysiwyg/dist; cp src/tinymce/plugins/link.js ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "^16.0.0",
+		"autoprefixer": "^10.4.20",
+		"postcss": "^8.5.6",
+		"sass": "^1.90.0",
+		"tailwindcss": "^3.4.13",
+		"vite": "^7.1.2",
+		"vue": "^3.5.18"
+	},
+	"dependencies": {
+		"@codemirror/commands": "6.8.1",
+		"@codemirror/lang-css": "^6.3.1",
+		"@codemirror/lang-html": "6.4.9",
+		"@codemirror/lang-javascript": "^6.2.4",
+		"@codemirror/lang-sql": "^6.9.1",
+		"@codemirror/state": "6.5.2",
+		"@codemirror/view": "6.38.1",
+		"@directus/sdk": "^20.0.2",
+		"@tarekraafat/autocomplete.js": "^10.2.9",
+		"@tinymce/tinymce-vue": "^6.3.0",
+		"jsonlint-mod": "^1.7.6",
+		"tinymce": "^8.0.2"
+	},
+	"overrides": {
+		"@codemirror/state": "6.5.2",
+		"@codemirror/view": "6.38.1",
+		"@codemirror/commands": "6.8.1",
+		"@codemirror/gutter": "6.2.0",
+		"@codemirror/rangeset": "6.2.0",
+		"@codemirror/lang-html": "6.4.9"
+	}
+}
