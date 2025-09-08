@@ -117,7 +117,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TINYMCE_REF: "8.0.2"
-      EXT_DIR: "cms/extensions/interfaces/onrr-wysiwyg"
+      TARGET_DIR: "cms/extensions/interfaces/onrr-wysiwyg/public/tinymce"
       SRC_DIR: "cms/src/extensions/interfaces/onrr-wysiwyg"
     steps:
       - name: Checkout code
@@ -167,7 +167,8 @@ jobs:
 
       - name: Copy compiled skins into extension
         run: |
-          cp -R tinymce/modules/oxide/build/* "${EXT_DIR}/public/tinymce/"
+          mkdir -p "${TARGET_DIR}"
+          cp -R tinymce/modules/oxide/build/* "${TARGET_DIR}/"
       
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
