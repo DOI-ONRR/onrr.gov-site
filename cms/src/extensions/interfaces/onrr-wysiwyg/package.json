@@ -19,7 +19,7 @@
 		"host": "^10.10.0"
 	},
 	"scripts": {
-		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/dist; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins; cp package.json ../../../../extensions/directus-extension-onrr-wysiwyg; cp dist/index.js ../../../../extensions/directus-extension-onrr-wysiwyg/dist; cp src/tinymce/plugins/link.js ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins",
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/dist; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/public/tinymce; cp -R node_modules/tinymce/* ../../../../extensions/directus-extension-onrr-wysiwyg/public/tinymce; cp package.json ../../../../extensions/directus-extension-onrr-wysiwyg; cp dist/index.js ../../../../extensions/directus-extension-onrr-wysiwyg/dist; cp src/tinymce/plugins/link.js ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link"
 	},
@@ -29,6 +29,7 @@
 		"postcss": "^8.5.6",
 		"sass": "^1.90.0",
 		"tailwindcss": "^3.4.13",
+		"tinymce": "^8.0.2",
 		"vite": "^7.1.2",
 		"vue": "^3.5.18"
 	},
@@ -43,8 +44,7 @@
 		"@directus/sdk": "^20.0.2",
 		"@tarekraafat/autocomplete.js": "^10.2.9",
 		"@tinymce/tinymce-vue": "^6.3.0",
-		"jsonlint-mod": "^1.7.6",
-		"tinymce": "^8.0.2"
+		"jsonlint-mod": "^1.7.6"
 	},
 	"overrides": {
 		"@codemirror/state": "6.5.2",
