@@ -29,7 +29,7 @@
 
     <Editor
       api-key="no-api-key"
-      tinymce-script-src="/tinymce-static/tinymce/tinymce.min.js"
+      tinymce-script-src="/wysiwyg-static/tinymce/tinymce.min.js"
       content_css="default"
       license-key="gpl"
       :init="config"
