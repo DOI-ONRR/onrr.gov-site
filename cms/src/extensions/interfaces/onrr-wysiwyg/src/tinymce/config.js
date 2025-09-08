@@ -9,7 +9,9 @@ export function createTinyConfig() {
     promotion: false,
     branding: false,
     statusbar: false,
-    relative_urls: false
+    relative_urls: false,
+    skin: 'default',
+    content_css: 'default',
   }
 
   return { ...base }
