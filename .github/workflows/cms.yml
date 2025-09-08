@@ -164,7 +164,7 @@ jobs:
 
       - name: Copy compiled TinyMCE into extension
         run: |
-          mkdir -p "${DEPLOY_DIR}"
+          rm -r "${DEPLOY_DIR}/skins/ui/oxide*"
           cp -R tinymce/modules/oxide/build/* "${DEPLOY_DIR}/"
       
       - name: Upload build artifacts
