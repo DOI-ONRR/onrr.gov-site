@@ -175,6 +175,7 @@ jobs:
         with:
           name: cms-extensions
           path: cms/extensions/**
+          overwrite: true
   deploy-cms:
     needs: build-tinymce
     runs-on: ubuntu-latest
