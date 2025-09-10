@@ -26,8 +26,7 @@
         :from-url="false"
         :from-user="true"
         :folder="folder"
-        @input="payload => $emit('upload-input', payload)"
-        class="onrr-image-upload"
+        @input="handleUploadInput"
       />
     </div>
 
@@ -44,27 +43,22 @@
           </div>
           <div>
             <p class="tw-font-bold tw-ml-1">Image URL</p>
-            <v-input
-              :model-value="localForm.href"
-              @update:model-value="v => (localForm.href = v)"
-            />
+            <v-input v-model="localForm.href" />
           </div>
           <div>
             <p class="tw-font-bold tw-ml-1">Width</p>
             <v-input
-              :model-value="localForm.width"
+              v-model.number="localForm.width"
               type="number"
               min="1"
-              @update:model-value="v => (localForm.width = v)"
             />
           </div>
           <div>
             <p class="tw-font-bold tw-ml-1">Height</p>
             <v-input
-              :model-value="localForm.height"
+              v-model.number="localForm.height"
               type="number"
               min="1"
-              @update:model-value="v => (localForm.height = v)"
             />
           </div>
         </div>
@@ -80,7 +74,7 @@
 </template>
 
 <script setup>
-import { computed, watch, ref } from 'vue'
+import { computed, watch, ref, toRaw } from 'vue'
 
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
@@ -108,8 +102,58 @@ watch(() => props.modelValue, (open) => {
 })
 
 watch(localForm, (v) => {
-  emit('update:form', { ...v })
+  // Only sync when the drawer is open to avoid unintentional writes
+  if (!props.modelValue) return
+  // Emit a plain object (no proxies/refs) to the parent to avoid accidental prop reassignments upstream
+  const raw = toRaw(v)
+  emit('update:form', {
+    id: raw.id || '',
+    alt: raw.alt || '',
+    width: raw.width,
+    height: raw.height,
+    href: raw.href || '',
+  })
 }, { deep: true })
+
+// When a user picks an image from the uploader, update our local form fields
+// (and still bubble the raw payload up so the parent can keep selectedImage in sync)
+const handleUploadInput = (payload) => {
+  const asset = Array.isArray(payload) ? payload[0] : payload
+  if (!asset) return
+
+  // Prefer direct id, fallback to filename_disk or nested file object keys some uploaders return
+  const key = asset?.id ?? asset?.filename_disk ?? asset?.file?.id ?? asset?.file?.filename_disk
+
+  if (key) {
+    localForm.value.id = asset.id || ''
+    localForm.value.href = props.assetUrl(key)
+  }
+
+  if (asset.width) localForm.value.width = asset.width
+  if (asset.height) localForm.value.height = asset.height
+
+  // Only auto-fill alt if user hasn't typed one yet
+  if (!localForm.value.alt) {
+    localForm.value.alt = asset.title || asset.description || asset.filename_download || ''
+  }
+
+  // Keep existing parent behavior
+  emit('upload-input', payload)
+}
+
+// If the parent updates selectedImage (e.g., from library pick), reflect it into the form
+watch(() => props.selectedImage, (img) => {
+  if (!img) return
+  const key = img.id ?? img.filename_disk
+  localForm.value = {
+    ...localForm.value,
+    id: img.id || '',
+    href: key ? props.assetUrl(key) : localForm.value.href,
+    width: img.width ?? localForm.value.width,
+    height: img.height ?? localForm.value.height,
+    alt: localForm.value.alt || img.title || img.description || img.filename_download || '',
+  }
+}, { immediate: false })
 
 const thumbnailUrl = computed(() => {
   if (!props.selectedImage) return ''
@@ -122,8 +166,6 @@ const thumbnailUrl = computed(() => {
 <style scoped>
 .onrr-image-upload {
   margin: 0 2rem;
-  border: var(--theme--border-width) dashed var(--theme--form--field--input--border-color);
-  border-radius: var(--theme--border-radius);
 }
 .onrr-image-upload:hover {
   border-color: var(--theme--form--field--input--border-color-hover);

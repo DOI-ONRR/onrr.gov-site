@@ -17,11 +17,12 @@
 
     <image-drawer
       v-model="imageDrawerOpen"
-      v-model:form="imageForm"
+      :form="imageForm"
       :selected-image="selectedImage"
       :folder="folder"
       :saving="saving"
       :asset-url="assetUrl"
+      @update:form="onUpdateImageForm"
       @upload-input="handleUploadInput"
       @clear="clearSelectedImage"
       @save="insertImage"
@@ -71,6 +72,13 @@ const imageForm = reactive({
   height: undefined,
   href: '',
 })
+
+function onUpdateImageForm(payload) {
+  // Merge incoming changes into our reactive object rather than reassigning the binding
+  if (payload && typeof payload === 'object') {
+    Object.assign(imageForm, payload)
+  }
+}
 
 function defaultLinkForm() {
   return {
@@ -319,7 +327,7 @@ function onLinkSave(linkForm) {
       }
 
       selection.select(anchor);
-      editor.nodeChanged();
+      editor?.nodeChanged?.()
       linkInitialForm.value = defaultLinkForm()
       linkDrawerOpen.value = false
       return;
@@ -332,7 +340,7 @@ function onLinkSave(linkForm) {
     linkDrawerOpen.value = false
     const newAnchor = dom.getParent(selection.getNode(), 'a[href]');
     if (newAnchor) selection.select(newAnchor);
-    editor.nodeChanged();
+    editor?.nodeChanged?.();
 
   })
 }
