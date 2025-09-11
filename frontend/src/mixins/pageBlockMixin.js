@@ -11,6 +11,7 @@ const HorizontalRuleBlock = () => import(/* webpackChunkName: "HorizontalRuleBlo
 const ExpansionPanelBlock = () => import(/* webpackChunkName: "ExpansionPanelBlock" */ '@/components/blocks/ExpansionPanelBlock')
 const CustomBlock = () => import(/* webpackChunkName: "CustomBlock" */ '@/components/blocks/CustomBlock')
 const FormulaBlock = () => import(/* webpackChunkName: "CardBlock" */ '@/components/blocks/FormulaBlock')
+const WysiwygBlock = () => import(/* webpackChunkName: "WysiwygBlock" */ '@/components/blocks/WysiwygBlock')
 
 
 export const pageBlockMixin = {
@@ -42,7 +43,6 @@ export const pageBlockMixin = {
   },
   methods: {
     pageBlock(type) {
-      // console.log('pageBlockMixin pageBlock type: ', type)
       let block
       switch (type) {
         case 'tab_blocks':
@@ -84,6 +84,9 @@ export const pageBlockMixin = {
           break
         case 'customBlocks':
           block = CustomBlock 
+          break
+        case 'wysiwyg_blocks':
+          block = WysiwygBlock
           break
         default:
           console.warn('pageBlock not found!', type)

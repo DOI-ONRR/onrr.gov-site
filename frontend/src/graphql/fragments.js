@@ -70,6 +70,14 @@ export const formulaBlockFields = gql`
   }
 `
 
+export const wysiwygBlocksFields = gql`
+  fragment wysiwygBlocksFields on wysiwyg_blocks {
+    id
+    title
+    content
+  }
+`
+
 export const expansionPanelBlockFields = gql`
   ${expansionPanelBlockLabel}
   ${contentBlockFields}
@@ -220,6 +228,7 @@ export const pageFields = gql`
  ${expansionPanelBlockFields}
  ${layoutColumnBlockFields}
  ${formulaBlockFields}
+ ${wysiwygBlocksFields}
   fragment pageFields on pages {
     id
     title
@@ -247,6 +256,9 @@ export const pageFields = gql`
         }
         ... on layout_column_blocks {
           ...layoutColumnBlockFields
+        }
+        ... on wysiwyg_blocks {
+          ...wysiwygBlocksFields
         }
       }
     }
