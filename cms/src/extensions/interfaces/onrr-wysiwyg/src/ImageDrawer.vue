@@ -66,7 +66,7 @@
 
       <div class="tw-flex tw-justify-between tw-items-center tw-mt-4 tw-px-4">
         <v-button @click="$emit('clear')">
-          Clear selection
+          Clear
         </v-button>
       </div>
     </div>
