@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, reactive, nextTick } from 'vue'
+import { computed, ref, watch, reactive, onBeforeUnmount } from 'vue'
 import Editor from '@tinymce/tinymce-vue'
 import { createTinyConfig } from './tinymce/config'
 import CodeEditorDrawer from './CodeEditorDrawer.vue'
@@ -209,6 +209,14 @@ watch (() => linkDrawerOpen.value, async (val) => {
     linkInitialForm.value = defaultLinkForm()
   }
 })
+
+onBeforeUnmount(() => {
+  const ed = getTinyEditorInstance();
+  if (ed && !ed.removed) {
+    ed.off?.();
+    tinymce.remove(ed);
+  }
+});
 
 function getTinyEditorInstance() {
   const comp = tinyRef.value
