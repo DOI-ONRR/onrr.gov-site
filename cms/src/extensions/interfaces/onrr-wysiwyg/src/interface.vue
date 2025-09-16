@@ -223,10 +223,12 @@ watch (() => linkDrawerOpen.value, async (val) => {
 })
 
 onBeforeUnmount(() => {
+  console.log('onBeforeUnmount')
   const ed = getTinyEditorInstance();
   if (ed && !ed.removed) {
     ed.off?.();
     tinymce.remove(ed);
+    console.log('onBeforeUnmount, tinymce removed')
   }
 });
 
