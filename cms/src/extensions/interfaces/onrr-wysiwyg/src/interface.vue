@@ -327,10 +327,32 @@ function onLinkSave(linkForm) {
     const url = linkForm.href
     const displayText = linkForm.text
     const title = linkForm.title
-    const target = linkForm.openInNewTab ? '_blank' : '_self';
+    const target = linkForm.openInNewTab ? '_blank' : linkForm.href.toLowerCase().endsWith('pdf') ? '_blank' : '_self'
     var classes = 'usa-link'
-    if (linkForm.openInNewTab) {
-      classes += ' usa-link--external'
+    const match = linkForm.href.toLowerCase().match(/\.([^\.]+)$/);
+    switch (match[1]) {
+      case 'pdf':
+        classes += ' onrr-link-pdf';
+        break;
+    
+      case 'pptx':
+        classes += ' onrr-link-powerpoint';
+        break;
+
+      case 'docx':
+        classes += ' onrr-link-word';
+        break;
+      
+      case 'xlsx':
+        classes += ' onrr-link-excel';
+        break;
+      
+      case 'txt':
+        classes += ' onrr-link-text';
+        break;
+      
+      default:
+        break;
     }
 
     let anchor = dom.getParent(selection.getNode(), 'a[href]');
