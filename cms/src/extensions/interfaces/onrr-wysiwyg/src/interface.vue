@@ -86,6 +86,7 @@ function defaultLinkForm() {
     text: '',
     title: '',
     openInNewTab: false,
+    isButton: false
   }
 }
 
@@ -208,6 +209,9 @@ watch (() => linkDrawerOpen.value, async (val) => {
       const target = selectedNode.getAttribute('target')
       if (target == '_blank') {
         linkInitialForm.value.openInNewTab = true
+      }
+      if (tinymce.activeEditor.dom.hasClass(selectedNode, 'usa-button')) {
+        linkInitialForm.value.isButton = true
       }
     }
     else {
@@ -353,6 +357,10 @@ function onLinkSave(linkForm) {
       
       default:
         break;
+    }
+
+    if (linkForm.isButton) {
+      classes += ' usa-button'
     }
 
     let anchor = dom.getParent(selection.getNode(), 'a[href]');

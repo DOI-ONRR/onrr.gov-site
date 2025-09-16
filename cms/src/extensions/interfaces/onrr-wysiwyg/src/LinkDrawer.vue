@@ -43,6 +43,12 @@
               New Tab
             </v-checkbox>
           </div>
+
+          <div>
+            <v-checkbox class="block" v-model="form.isButton" @update:value="v => form.isButton = v">
+              Style as button
+            </v-checkbox>
+          </div>
         </div>
       </div>
     </div>
@@ -57,7 +63,7 @@ const props = defineProps({
   modelValue: { type: Boolean, required: true },
   initialForm: {
     type: Object,
-    default: () => ({ href: '', text: '', title: '', openInNewTab: false }),
+    default: () => ({ href: '', text: '', title: '', openInNewTab: false, isButton: false }),
   },
   saving: { type: Boolean, default: false },
   title: { type: String, default: 'Add/Edit Link' },
@@ -88,7 +94,7 @@ watch(() => props.modelValue, async (open) => {
     }
   } else {
     // reset on close
-    form.value = { href: '', text: '', title: '', openInNewTab: false }
+    form.value = { href: '', text: '', title: '', openInNewTab: false, isButton: false }
   }
 })
 
