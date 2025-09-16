@@ -140,3 +140,7 @@ ul li a {
    text-align: center;
    font-size: 0.9rem;
 }
+
+thead th {
+   border-bottom: 3px solid var(--v-accent-base)!important;
+}

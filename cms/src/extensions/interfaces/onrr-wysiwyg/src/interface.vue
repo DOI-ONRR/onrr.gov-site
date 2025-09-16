@@ -168,6 +168,18 @@ const config = computed(() => {
           if (typeof e.preventDefault === 'function') e.preventDefault()
           linkDrawerOpen.value = true
         }
+        else if (e.command === 'mceOnrrTable') {
+          editor.setContent(generateTable(), { format: 'html' })
+          editor.nodeChanged?.()
+        }
+        else if (e.command === 'mceTableProps') {
+          e.preventDefault();
+          e.stopPropagation?.();
+          editor.notificationManager.open({
+            text: 'The ONRR WYSIWYG editor does not support editing table properties.',
+            type: 'info'
+          });
+        }
       })
     },
   }
@@ -355,6 +367,29 @@ function onLinkSave(linkForm) {
 
 function assetUrl(filenameDisk) {
   return `/assets/${filenameDisk}`
+}
+
+function generateTable() {
+  return `
+    <table class="usa-table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row"></th>
+          <td></td>
+        </tr>
+        <tr>
+          <th scope="row"></th>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  `;
 }
 
 </script>
