@@ -169,7 +169,7 @@ const config = computed(() => {
           linkDrawerOpen.value = true
         }
         else if (e.command === 'mceOnrrTable') {
-          editor.setContent(generateTable(), { format: 'html' })
+          editor.insertContent(generateTable(), { format: 'html' })
           editor.nodeChanged?.()
         }
         else if (e.command === 'mceTableProps') {
