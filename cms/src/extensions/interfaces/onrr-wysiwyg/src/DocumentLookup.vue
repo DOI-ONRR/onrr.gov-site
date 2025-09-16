@@ -32,13 +32,13 @@ const config = {
       const items = Array.isArray(data?.items) ? data.items : Array.isArray(data?.data?.items) ? data.data.items : [];
       return items;
     },
-    keys: ['name']
+    keys: ['name', 'href']
   },
   resultItem: {
     class: 'result-item',
     highlight: 'content-item-highlight',
     element: (item, data) => {
-      item.innerHTML = `<div><div>${data.match}</div><div>${data.value.href}</div></div>`
+      item.innerHTML = `<div><div>${data.value.name}</div><div>${data.value.href}</div></div>`
     }
   }
 }
