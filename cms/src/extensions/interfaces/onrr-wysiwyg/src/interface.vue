@@ -363,6 +363,13 @@ function onLinkSave(linkForm) {
       classes += ' usa-button'
     }
 
+    const targetUrl = new URL(linkForm.href, window.location.href);
+    const browserHost = window.location.host;
+
+    if (targetUrl.host !== browserHost) {
+      classes += ' usa-link--external'
+    }
+
     let anchor = dom.getParent(selection.getNode(), 'a[href]');
 
     if (anchor) {
