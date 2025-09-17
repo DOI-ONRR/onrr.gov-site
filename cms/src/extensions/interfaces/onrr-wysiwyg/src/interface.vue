@@ -410,7 +410,7 @@ function assetUrl(filenameDisk) {
 
 function generateTable() {
   return `
-    <table class="usa-table usa-table--borderless usa-table--striped usa-table--compact">
+    <table class="usa-table usa-table--borderless usa-table--striped">
       <thead>
         <tr>
           <th scope="col"></th>

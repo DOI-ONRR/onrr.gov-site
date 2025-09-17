@@ -144,3 +144,26 @@ ul li a {
 thead th {
    border-bottom: 3px solid var(--v-accent-base)!important;
 }
+
+.usa-table.usa-table--striped tbody tr:nth-of-type(odd) td,
+.usa-table.usa-table--striped tbody tr:nth-of-type(odd) th {
+  background-color: transparent;
+}
+
+.usa-table.usa-table--striped tbody tr:nth-of-type(2n+2) td,
+.usa-table.usa-table--striped tbody tr:nth-of-type(2n+2) th {
+  background-color: var(--v-neutrals-lighten3) !important;
+}
+
+.usa-table.usa-table--striped tbody tr:not(:last-child) td,
+.usa-table.usa-table--striped tbody tr:not(:last-child) th {
+   border-bottom: 1px solid var(--v-accent-base) !important;
+}
+
+.usa-table {
+   width: 100%;
+
+   td, th {
+      @include u-padding(1);
+   }
+}
