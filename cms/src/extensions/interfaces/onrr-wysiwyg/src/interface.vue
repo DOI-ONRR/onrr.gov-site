@@ -311,9 +311,19 @@ function insertImage() {
   const w = imageForm.width ? ` width="${Number(imageForm.width)}"` : ''
   const h = imageForm.height ? ` height="${Number(imageForm.height)}"` : ''
   const src = imageForm.href
-  const img = `<img src="${src}" alt="${alt}"${w}${h} data-id="${imageForm.id}" data-filename-disk="${f.filename_disk}">`
-
-  const html = `<p>${img}</p>`
+  
+  const html = `
+<div class="d-flex justify-start">
+  <figure class="figure-block">
+    <img
+      src="${src}"
+      alt="${alt}"
+      ${w}
+      ${h}
+      class="img-block"
+      loading="lazy" />
+  </figure>
+</div>`.trim();
 
   ed.insertContent(html)
   clearSelectedImage()

@@ -1,6 +1,6 @@
 export function createTinyConfig() {
   const base = {
-    toolbar: 'bold italic underline blocks forecolor | alignleft aligncenter alignright | onrr-table numlist bullist removeformat blockquote onrr-link image code',
+    toolbar: 'bold italic underline blocks forecolor | alignleft aligncenter alignright | onrr-table numlist bullist hr removeformat blockquote onrr-link image code',
     plugins: 'lists image code onrr-link onrr-table table',
     external_plugins: {
       onrrLink: '/wysiwyg-static/plugins/link.js',

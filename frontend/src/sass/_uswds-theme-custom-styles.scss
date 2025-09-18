@@ -167,3 +167,13 @@ thead th {
       @include u-padding(1);
    }
 }
+
+.figure-block { 
+   max-width: 100%; 
+}
+
+.img-block { 
+   max-width: 100%; 
+   height: auto; 
+   object-fit: contain; 
+}
