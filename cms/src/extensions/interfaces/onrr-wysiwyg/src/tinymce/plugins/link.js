@@ -6,10 +6,16 @@ tinymce.PluginManager.add('onrr-link', (editor, url) => {
       editor.execCommand('mceOnrrLink', false);
     },
     onSetup(api) {
-      const unbind = editor.selection.selectorChanged('a[href]', (state) => {
+      const dispose = editor.selection.selectorChanged('a[href]', (state) => {
         api.setActive(state);
       });
-      return () => unbind();
+      return () => {
+        if (typeof dispose === 'function') {
+          dispose();
+        } else if (dispose && typeof dispose.unbind === 'function') {
+          dispose.unbind();
+        }
+      };
     },
   });
 

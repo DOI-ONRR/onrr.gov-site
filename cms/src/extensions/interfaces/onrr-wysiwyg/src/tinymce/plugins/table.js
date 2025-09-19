@@ -6,10 +6,16 @@ tinymce.PluginManager.add('onrr-table', (editor, url) => {
       editor.execCommand('mceOnrrTable', false);
     },
     onSetup(api) {
-      const unbind = editor.selection.selectorChanged('table', (state) => {
+      const dispose = editor.selection.selectorChanged('table', (state) => {
         api.setActive(state);
       });
-      return () => unbind();
+      return () => {
+        if (typeof dispose === 'function') {
+          dispose();
+        } else if (dispose && typeof dispose.unbind === 'function') {
+          dispose.unbind();
+        }
+      };
     },
   });
 
