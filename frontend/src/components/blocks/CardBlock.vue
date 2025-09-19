@@ -6,23 +6,12 @@
     <v-card-subtitle v-if="cardSubtitle" class="v-card__subtitle black--text">
       {{ cardSubtitle }}
     </v-card-subtitle>
-      <v-icon v-if="blockIcon === 'alert'" class="alert-color mdi mdi-alert " :class="blockColor" ></v-icon> 
-      <v-icon v-if="blockIcon === 'info'" class="info-color mdi mdi-information" :class="blockColor"></v-icon> 
+    <v-icon v-if="blockIcon === 'alert'" class="alert-color mdi mdi-alert " :class="blockColor"></v-icon> 
+    <v-icon v-if="blockIcon === 'info'" class="info-color mdi mdi-information" :class="blockColor"></v-icon> 
     <v-card-text class="text--primary body-1">
-
-
-<div v-if="blockItems.length === 0">
-
-<div v-for="block in block.item.block_content.blocks" :key="block.id">
-          <EditorBlock :blockContent="block"></EditorBlock>
-        </div>
-      </div>
-      
+      <div v-html="processedContent"></div>
       <LayoutBlock :layoutBlocks="blockItems" v-if="blockItems.length > 1"></LayoutBlock>
     </v-card-text>
-    <!-- <v-card-actions>
-      Actions here...
-    </v-card-actions> -->
   </v-card>
 </template>
 
@@ -52,9 +41,6 @@ export default {
   components: {
     LayoutBlock
   },
-  mounted() {
-    // console.log('Hello, from CardBlock!')
-  },
   computed: {
     blocks() {
       const blocks = this.block.block_content.blocks
@@ -73,6 +59,22 @@ export default {
       const blocks = [...this.block.item.card_content_blocks.filter(block => block.item !== null)]
       return blocks
     },
+    processedContent() {
+      if (!this.block.item.block_content_html) return "";
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(this.block.item.block_content_html, "text/html");
+      const baseUrl = process.env.VUE_APP_API_URL;
+
+      doc.querySelectorAll("img").forEach(img => {
+        const originalSrc = img.getAttribute("src");
+        if (originalSrc && originalSrc.startsWith("/")) {
+          img.setAttribute("src", `${baseUrl}${originalSrc}`);
+        }
+      });
+
+      return doc.body.innerHTML;
+    }
   }
 }
 </script>
