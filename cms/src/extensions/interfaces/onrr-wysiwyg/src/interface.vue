@@ -171,7 +171,7 @@ const config = computed(() => {
         }
         else if (e.command === 'mceOnrrTable') {
           editor.insertContent(generateTable(), { format: 'html' })
-          editor.nodeChanged?.()
+          safeNodeChanged(editor)
         }
         else if (e.command === 'mceTableProps') {
           e.preventDefault();
@@ -193,7 +193,7 @@ watch(() => props.value, (val) => {
   const ed = getTinyEditorInstance()
   if (ed && ed.getContent({ format: 'html' }) !== html) {
     ed.setContent(html, { format: 'html' })
-    ed.nodeChanged?.()
+    safeNodeChanged(ed)
   }
 })
 
@@ -227,21 +227,32 @@ watch (() => linkDrawerOpen.value, async (val) => {
 })
 
 onBeforeUnmount(() => {
-  console.log('onBeforeUnmount')
   const ed = getTinyEditorInstance();
-  if (ed && !ed.removed) {
-    ed.off?.();
-    tinymce.remove(ed);
-    console.log('onBeforeUnmount, tinymce removed')
+  try {
+    ed?.off?.();
+    // Prefer instance removal if available; fall back to global remove if present
+    if (ed?.remove) {
+      ed.remove();
+    } else if (typeof window !== 'undefined' && window.tinymce?.remove) {
+      window.tinymce.remove(ed);
+    }
+  } catch (e) {
+    // swallow cleanup errors to avoid noisy logs during teardown
+  } finally {
+    tinyRef.value = null;
   }
 });
 
 function getTinyEditorInstance() {
   const comp = tinyRef.value
   if (!comp) return null
-  if (comp.editor) return comp.editor
-  if (typeof comp.getEditor === 'function') return comp.getEditor()
-  return null
+  const inst = comp.editor || (typeof comp.getEditor === 'function' ? comp.getEditor() : null)
+  if (!inst || inst.removed) return null
+  return inst
+}
+
+function safeNodeChanged(ed) {
+  ed?.nodeChanged?.();
 }
 
 function applyCodeToEditor(html) {
@@ -254,7 +265,7 @@ function applyCodeToEditor(html) {
     if (bm) ed.selection?.moveToBookmark?.(bm)
   })
 
-  ed.nodeChanged?.()
+  safeNodeChanged(ed)
   ed.dispatch?.('change')
   ed.dispatch?.('input')
 }
@@ -396,7 +407,7 @@ function onLinkSave(linkForm) {
       }
 
       selection.select(anchor);
-      editor?.nodeChanged?.()
+      safeNodeChanged(editor)
       linkInitialForm.value = defaultLinkForm()
       linkDrawerOpen.value = false
       return;
@@ -409,7 +420,7 @@ function onLinkSave(linkForm) {
     linkDrawerOpen.value = false
     const newAnchor = dom.getParent(selection.getNode(), 'a[href]');
     if (newAnchor) selection.select(newAnchor);
-    editor?.nodeChanged?.();
+    safeNodeChanged(editor)
 
   })
 }
