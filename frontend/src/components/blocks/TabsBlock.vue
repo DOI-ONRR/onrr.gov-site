@@ -29,7 +29,7 @@
           text
           elevation="0"
           >
-          <v-card-text style="white-space: pre-line;" class="pl-1 pr-1 pt-4 pb-4 text-body-1 tab-content">
+          <v-card-text class="pl-1 pr-1 pt-4 pb-4 text-body-1 tab-content">
             <LayoutBlock :layoutBlocks="block.tabBlocks"></LayoutBlock>
           </v-card-text>
         </v-card>
@@ -76,8 +76,6 @@ export default {
         const parentItem = Array.from(selectedTabs).map(item => this.formattedLabel(item.innerText))[0]
         const childItem = Array.from(selectedNestedTabs).map(item => this.formattedLabel(item.innerText))[0]
         const tabs = childItem ? [parentItem, childItem].toString() : parentItem
-
-        console.log('getSelectedTabs selectedTabs, selectedNestedTabs: ', selectedTabs, selectedNestedTabs)
 
         const query = { path: this.$route.fullPath, ...this.$route.query, query: { tabs: tabs } }
         this.$router.push(query).catch(() => {})

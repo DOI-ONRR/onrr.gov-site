@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <h4 class="margin-bottom-2">{{ block.item.title }}</h4>
-    <div v-html="processedContent"></div>
-  </div>
+  <div v-html="processedContent"></div>
 </template>
 
 <script>

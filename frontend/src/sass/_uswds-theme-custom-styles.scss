@@ -162,9 +162,11 @@ thead th {
 
 .usa-table {
    width: 100%;
+   font-size: 0.875rem;
 
    td, th {
       @include u-padding(1);
+      border-bottom: none;
    }
 }
 
@@ -176,4 +178,44 @@ thead th {
    max-width: 100%; 
    height: auto; 
    object-fit: contain; 
+}
+
+h2, h3, h4, h5, h6 {
+   @include u-margin-bottom(3);
+   @include u-margin-top(2);
+}
+
+h2 {
+   font-size: 2.125rem !important;
+   font-weight: 400;
+   line-height: 2.125rem;
+   letter-spacing: -0.0083333333em !important;
+}
+
+h3:not(.usa-accordion__heading) {
+   font-size: 1.5rem !important;
+   font-weight: 400;
+   line-height: 1.5rem;
+   letter-spacing: normal !important;
+}
+
+h4 {
+   font-size: 1.25rem !important;
+   font-weight: 700;
+   line-height: 1.25rem;
+   letter-spacing: .0073529412em !important;
+}
+
+h5 {
+   font-size: 1.125rem !important;
+   font-weight: 400;
+   line-height: 1.125rem;
+   letter-spacing: normal !important;
+}
+
+h6 {
+   font-size: 1.25rem !important;
+   font-weight: 500;
+   line-height: 2rem;
+   letter-spacing: .0125em !important;
 }

@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <div v-for="block in block.item.block_content.blocks" :key="block.id">
-      <EditorBlock :blockContent="block"></EditorBlock>
-    </div>
-  </div>
+  <div v-html="processedContent"></div>
 </template>
 
 <script>
@@ -16,17 +12,24 @@ export default {
   },
   props: {
     block: [Array, Object]
+  },
+  computed: {
+    processedContent() {
+      if (!this.block.item.block_content_html) return "";
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(this.block.item.block_content_html, "text/html");
+      const baseUrl = process.env.VUE_APP_API_URL;
+
+      doc.querySelectorAll("img").forEach(img => {
+        const originalSrc = img.getAttribute("src");
+        if (originalSrc && originalSrc.startsWith("/")) {
+          img.setAttribute("src", `${baseUrl}${originalSrc}`);
+        }
+      });
+
+      return doc.body.innerHTML;
+    }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.content-block {
-  h2 {
-    font-size: 1.5rem !important;
-  }
-}
-.text-h4 {
-  margin-bottom: 24px;
-}
-</style>

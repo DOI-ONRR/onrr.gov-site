@@ -12,6 +12,7 @@ export const contentBlockFields = gql`
     block_label
     block_v_col
     block_content
+    block_content_html
     equal_col_height
   }
 `
@@ -67,14 +68,6 @@ export const formulaBlockFields = gql`
     id
     title
     formula_tex
-  }
-`
-
-export const wysiwygBlocksFields = gql`
-  fragment wysiwygBlocksFields on wysiwyg_blocks {
-    id
-    title
-    content
   }
 `
 
@@ -228,7 +221,6 @@ export const pageFields = gql`
  ${expansionPanelBlockFields}
  ${layoutColumnBlockFields}
  ${formulaBlockFields}
- ${wysiwygBlocksFields}
   fragment pageFields on pages {
     id
     title
@@ -256,9 +248,6 @@ export const pageFields = gql`
         }
         ... on layout_column_blocks {
           ...layoutColumnBlockFields
-        }
-        ... on wysiwyg_blocks {
-          ...wysiwygBlocksFields
         }
       }
     }
