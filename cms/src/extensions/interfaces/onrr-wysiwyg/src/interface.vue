@@ -29,7 +29,7 @@
     />
 
     <Editor
-      :key=""editorKey
+      :key="editorKey"
       api-key="no-api-key"
       tinymce-script-src="/wysiwyg-static/tinymce/tinymce.min.js"
       content_css="default"
