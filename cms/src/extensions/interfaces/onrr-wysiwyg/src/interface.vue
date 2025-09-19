@@ -29,6 +29,7 @@
     />
 
     <Editor
+      :key=""editorKey
       api-key="no-api-key"
       tinymce-script-src="/wysiwyg-static/tinymce/tinymce.min.js"
       content_css="default"
@@ -65,6 +66,7 @@ const tinyRef = ref(null)
 const lastAppliedFromProps = ref(null)
 const folder = ref(null)
 const selectedImage = ref(null)
+const editorKey = ref(0)
 const imageForm = reactive({
   id: '',
   alt: '',
@@ -72,6 +74,10 @@ const imageForm = reactive({
   height: undefined,
   href: '',
 })
+
+function bumpEditorKey() { 
+  editorKey.value += 1 
+}
 
 function onUpdateImageForm(payload) {
   // Merge incoming changes into our reactive object rather than reassigning the binding
@@ -108,14 +114,19 @@ const config = computed(() => {
     setup(editor) {
       if (typeof base.setup === 'function') base.setup(editor)
 
-      editor.on('init', () => {
+      let alive = true
+      editor.on('Remove', () => { alive = false })
+
+      const onlyIfAlive = (fn) => (...args) => { if (alive) fn(...args) }
+
+      editor.on('init', onlyIfAlive(() => {
         const incoming = props.value ?? ''
         if (incoming && editor.getContent({ format: 'html' }) !== incoming) {
           editor.setContent(incoming, { format: 'html' })
         }
         sourceCode.value = editor.getContent({ format: 'html' })
         lastAppliedFromProps.value = sourceCode.value
-      })
+      }))
 
       sourceCode.value = editor.getContent({ format: 'html' })
 
@@ -149,7 +160,7 @@ const config = computed(() => {
         },
       })
 
-      editor.on('input change Undo Redo KeyUp', () => {
+      editor.on('input change Undo Redo KeyUp', onlyIfAlive(() => {
         const html = editor.getContent({ format: 'html' })
         sourceCode.value = html
         // If this content matches the last programmatic value, do not emit
@@ -157,9 +168,9 @@ const config = computed(() => {
         // From this point, treat it as a user change
         lastAppliedFromProps.value = null
         emit('input', html)
-      })
+      }))
 
-      editor.on('BeforeExecCommand', (e) => {
+      editor.on('BeforeExecCommand', onlyIfAlive((e) => {
         if (e.command === 'mceCodeEditor') {
           if (typeof e.preventDefault === 'function') e.preventDefault()
           sourceCode.value = editor.getContent({ format: 'html' })
@@ -171,7 +182,7 @@ const config = computed(() => {
         }
         else if (e.command === 'mceOnrrTable') {
           editor.insertContent(generateTable(), { format: 'html' })
-          safeNodeChanged(editor)
+          // safeNodeChanged(editor)
         }
         else if (e.command === 'mceTableProps') {
           e.preventDefault();
@@ -181,7 +192,7 @@ const config = computed(() => {
             type: 'info'
           });
         }
-      })
+      }))
     },
   }
 })
@@ -193,7 +204,7 @@ watch(() => props.value, (val) => {
   const ed = getTinyEditorInstance()
   if (ed && ed.getContent({ format: 'html' }) !== html) {
     ed.setContent(html, { format: 'html' })
-    safeNodeChanged(ed)
+    ed.fire?.('change')
   }
 })
 
@@ -227,27 +238,22 @@ watch (() => linkDrawerOpen.value, async (val) => {
 })
 
 onBeforeUnmount(() => {
-  const ed = getTinyEditorInstance();
+  bumpEditorKey()
+  const ed = getTinyEditorInstance()
   try {
-    ed?.off?.();
-    // Prefer instance removal if available; fall back to global remove if present
-    if (ed?.remove) {
-      ed.remove();
-    } else if (typeof window !== 'undefined' && window.tinymce?.remove) {
-      window.tinymce.remove(ed);
-    }
-  } catch (e) {
-    // swallow cleanup errors to avoid noisy logs during teardown
-  } finally {
-    tinyRef.value = null;
-  }
+    ed?.off?.()
+    // If the editor is already removed, ed.remove() is a no-op in current Tiny builds
+    ed?.remove?.()
+  } catch {}
+  tinyRef.value = null
 });
 
 function getTinyEditorInstance() {
   const comp = tinyRef.value
   if (!comp) return null
   const inst = comp.editor || (typeof comp.getEditor === 'function' ? comp.getEditor() : null)
-  if (!inst || inst.removed) return null
+  // Treat falsy, removed, or missing containers as dead
+  if (!inst || inst.removed || !inst.getContainer?.()) return null
   return inst
 }
 
@@ -258,16 +264,14 @@ function safeNodeChanged(ed) {
 function applyCodeToEditor(html) {
   const ed = getTinyEditorInstance()
   if (!ed) return
-
   ed.undoManager?.transact(() => {
     const bm = ed.selection?.getBookmark?.(2, true)
     ed.setContent(html, { format: 'html' })
     if (bm) ed.selection?.moveToBookmark?.(bm)
   })
-
-  safeNodeChanged(ed)
-  ed.dispatch?.('change')
-  ed.dispatch?.('input')
+  
+  ed.fire?.('change')
+  ed.fire?.('input')
 }
 
 function onSaveFromDrawer() {
@@ -407,7 +411,7 @@ function onLinkSave(linkForm) {
       }
 
       selection.select(anchor);
-      safeNodeChanged(editor)
+      // safeNodeChanged(editor)
       linkInitialForm.value = defaultLinkForm()
       linkDrawerOpen.value = false
       return;
@@ -420,7 +424,7 @@ function onLinkSave(linkForm) {
     linkDrawerOpen.value = false
     const newAnchor = dom.getParent(selection.getNode(), 'a[href]');
     if (newAnchor) selection.select(newAnchor);
-    safeNodeChanged(editor)
+    // safeNodeChanged(editor)
 
   })
 }
