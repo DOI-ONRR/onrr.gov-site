@@ -12,6 +12,7 @@
     "start:windows": "set CONFIG_PATH='../../.env' && npx directus start",
     "build:wysiwyg-static": "cd src/extensions/endpoints/wysiwyg-static; npm run build",
     "build:onrr-wysiwyg": "cd src/extensions/interfaces/onrr-wysiwyg; npm run build",
+    "build:onrr-editor": "cd src/extensions/interfaces/onrr-editor; npm run build",
     "build:link-autocomplete": "cd src/extensions/endpoints/link-autocomplete; npm run build",
     "build:document": "cd src/extensions/endpoints/document; npm run build",
     "build:image-uploader": "cd src/extensions/endpoints/image-uploader; npm run build",
@@ -24,7 +25,7 @@
     "build:nymex": "cd src/extensions/hooks/nymex; npm run build",
     "build:onrr-flows": "cd src/extensions/endpoints/onrr-flows; npm run build",
     "build:onrr-generate-uuid": "cd src/extensions/operations/onrr-generate-uuid; npm run build",
-    "build:all": "npm run build:onrr-generate-uuid; npm run build:wysiwyg-static; npm run build:onrr-wysiwyg; npm run build:link-autocomplete; npm run build:document; npm run build:image-uploader; npm run build:press-releases; npm run build:reporter-letters; npm run build:unbundling; npm run build:index-zones; npm run build:indian-gas-major-portion; npm run build:ibmp; npm run build:nymex; npm run build:onrr-flows"
+    "build:all": "npm run build:onrr-generate-uuid; npm run build:wysiwyg-static; npm run build:onrr-wysiwyg; npm run build:onrr-editor; npm run build:link-autocomplete; npm run build:document; npm run build:image-uploader; npm run build:press-releases; npm run build:reporter-letters; npm run build:unbundling; npm run build:index-zones; npm run build:indian-gas-major-portion; npm run build:ibmp; npm run build:nymex; npm run build:onrr-flows"
   },
   "engines": {
     "node": "20.19.2"
