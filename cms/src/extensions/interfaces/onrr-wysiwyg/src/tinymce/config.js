@@ -1,5 +1,9 @@
 export function createTinyConfig() {
   const base = {
+    base_url: '/wysiwyg-static/tinymce',
+    suffix: '.min',
+    skin_url: '/wysiwyg-static/tinymce/skins/ui/default',
+    content_css: ['/wysiwyg-static/tinymce/skins/ui/default/content.min.css'],
     toolbar: 'bold italic underline blocks forecolor | alignleft aligncenter alignright | onrr-table numlist bullist hr removeformat blockquote onrr-link image code',
     plugins: 'lists image code onrr-link onrr-table table',
     external_plugins: {
@@ -18,8 +22,6 @@ export function createTinyConfig() {
     branding: false,
     statusbar: false,
     relative_urls: false,
-    skin: 'default',
-    content_css: 'default',
     ui_mode: 'split',
     object_resizing: false,
     table_toolbar: 'tablecaption tabledelete | tableinsertrowafter tableinsertrowbefore tabledeleterow | tableinsertcolafter tableinsertcolbefore tabledeletecol | tablerowheader tablecolheader'
