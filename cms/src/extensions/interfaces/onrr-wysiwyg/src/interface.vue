@@ -182,7 +182,6 @@ const config = computed(() => {
         }
         else if (e.command === 'mceOnrrTable') {
           editor.insertContent(generateTable(), { format: 'html' })
-          // safeNodeChanged(editor)
         }
         else if (e.command === 'mceTableProps') {
           e.preventDefault();
@@ -255,10 +254,6 @@ function getTinyEditorInstance() {
   // Treat falsy, removed, or missing containers as dead
   if (!inst || inst.removed || !inst.getContainer?.()) return null
   return inst
-}
-
-function safeNodeChanged(ed) {
-  ed?.nodeChanged?.();
 }
 
 function applyCodeToEditor(html) {
@@ -359,29 +354,31 @@ function onLinkSave(linkForm) {
     const target = linkForm.openInNewTab ? '_blank' : linkForm.href.toLowerCase().endsWith('pdf') ? '_blank' : '_self'
     var classes = 'usa-link'
     const match = linkForm.href.toLowerCase().match(/\.([^\.]+)$/);
-    switch (match[1]) {
-      case 'pdf':
-        classes += ' onrr-link-pdf';
-        break;
-    
-      case 'pptx':
-        classes += ' onrr-link-powerpoint';
-        break;
+    if (match) {
+      switch (match[1]) {
+        case 'pdf':
+          classes += ' onrr-link-pdf';
+          break;
+      
+        case 'pptx':
+          classes += ' onrr-link-powerpoint';
+          break;
 
-      case 'docx':
-        classes += ' onrr-link-word';
-        break;
-      
-      case 'xlsx':
-        classes += ' onrr-link-excel';
-        break;
-      
-      case 'txt':
-        classes += ' onrr-link-text';
-        break;
-      
-      default:
-        break;
+        case 'docx':
+          classes += ' onrr-link-word';
+          break;
+        
+        case 'xlsx':
+          classes += ' onrr-link-excel';
+          break;
+        
+        case 'txt':
+          classes += ' onrr-link-text';
+          break;
+        
+        default:
+          break;
+      }
     }
 
     if (linkForm.isButton) {
@@ -411,7 +408,6 @@ function onLinkSave(linkForm) {
       }
 
       selection.select(anchor);
-      // safeNodeChanged(editor)
       linkInitialForm.value = defaultLinkForm()
       linkDrawerOpen.value = false
       return;
@@ -424,7 +420,6 @@ function onLinkSave(linkForm) {
     linkDrawerOpen.value = false
     const newAnchor = dom.getParent(selection.getNode(), 'a[href]');
     if (newAnchor) selection.select(newAnchor);
-    // safeNodeChanged(editor)
 
   })
 }
