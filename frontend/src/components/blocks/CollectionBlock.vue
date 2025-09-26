@@ -2,14 +2,13 @@
   <div>
     <keep-alive>
       <component 
-        :is="collectionBlock(collection)" 
+        :is="collectionBlock()" 
         :collection="items" 
         :collectionName="collection"
         :collectionLayout="collectionLayout"
         :collectionPage="collectionPage"
         :collectionTab="collectionTab"
         :collectionAccordion="collectionAccordion"
-        :collectionTopics="collectionTopics"
         :apolloLoading="$apolloData.loading"></component>
     </keep-alive>
   </div>
@@ -61,71 +60,53 @@ export default {
   apollo: {
     collectionItems: {
       query() {
-        if (this.block.data.collection === 'reporter_letters') {
-          return REPORTER_LETTERS_QUERY
-        }
-        else if (this.block.data.collection === 'press_releases') {
-          return PRESS_RELEASES_QUERY
-        }
-        else if (this.block.data.collection === 'announcements') {
-          return ANNOUNCEMENTS_QUERY
-        }
-        else if (this.block.data.collection === 'events') {
-          // Do events query stuff
-        }
-        else if (this.block.data.collection === 'companies') {
-          // Do companies query stuff
-        }
-        else if (this.block.data.collection === 'contacts') {
-          return CONTACTS_QUERY
-        }
-        else if (this.block.data.collection === 'NYMEX') {
-          return NYMEX_QUERY
-        }
-        else if (this.block.data.collection === 'rulemakings') {
-          return RULEMAKINGS_QUERY
-        }
-        else if (this.block.data.collection === 'index_zones') {
-          return INDEX_ZONES_QUERY
-        }
-        else if (this.block.data.collection === 'ibmp') {
-          return IBMP_QUERY
-        }
-        else if (this.block.data.collection === 'indian_gas_major_portion') {
-          return INDIAN_GAS_MAJOR_PORTION_QUERY
-        }
-	else if (this.block.data.collection === 'Interest_Oil_and_Gas') {
-          return INTEREST_OIL_AND_GAS_QUERY
-        }
-	else if (this.block.data.collection === 'Interest_Solids') {
-          return INTEREST_SOLIDS_QUERY
-        }
-        else if (this.block.data.collection === 'solid_minerals_handbook') {
-          return SOLID_MINERALS_HANDBOOK_QUERY
-        }
-        else if (this.block.data.collection === 'production_handbook') {
-          return PRODUCTION_HANDBOOK_QUERY
-        }
-        else if (this.block.data.collection === 'revenue_handbook') {
-          return REVENUE_HANDBOOK_QUERY
-        }
-        else if (this.block.data.collection === 'geothermal_class_1') {
-          return GEOTHERMAL_CLASS_1_QUERY
-        }
-        else if (this.block.data.collection === 'geothermal_class_2_3') {
-          return GEOTHERMAL_CLASS_2_3_QUERY
-        }
-        else if (this.block.data.collection === 'plant_specific_ucas') {
-          return PLANT_SPECIFIC_UCAS_QUERY
+
+        switch (this.block.item?.collection) {
+          case 'reporter_letters':
+            return REPORTER_LETTERS_QUERY;
+          case 'press_releases':
+            return PRESS_RELEASES_QUERY;
+          case 'announcements':
+            return ANNOUNCEMENTS_QUERY;
+          case 'contacts':
+            return CONTACTS_QUERY;
+          case 'NYMEX':
+            return NYMEX_QUERY;
+          case 'rulemakings':
+            return RULEMAKINGS_QUERY;
+          case 'index_zones':
+            return INDEX_ZONES_QUERY;
+          case 'ibmp':
+            return IBMP_QUERY;
+          case 'indian_gas_major_portion':
+            return INDIAN_GAS_MAJOR_PORTION_QUERY;
+          case 'Interest_Oil_and_Gas':
+            return INTEREST_OIL_AND_GAS_QUERY;
+          case 'Interest_Solids':
+            return INTEREST_SOLIDS_QUERY;
+          case 'solid_minerals_handbook':
+            return SOLID_MINERALS_HANDBOOK_QUERY;
+          case 'production_handbook':
+            return PRODUCTION_HANDBOOK_QUERY;
+          case 'revenue_handbook':
+            return REVENUE_HANDBOOK_QUERY;
+          case 'geothermal_class_1':
+            return GEOTHERMAL_CLASS_1_QUERY;
+          case 'geothermal_class_2_3':
+            return GEOTHERMAL_CLASS_2_3_QUERY;
+          case 'plant_specific_ucas':
+            return PLANT_SPECIFIC_UCAS_QUERY;
+          default:
+            return null;
         }
       },
       update: data => data
     }
   },
   methods: {
-    collectionBlock(type) {
+    collectionBlock() {
       let collectionBlock
-      switch (type) {
+      switch (this.block.item.collection) {
         case 'reporter_letters':
           collectionBlock = ReporterLettersCollection
           break
@@ -186,25 +167,22 @@ export default {
   },
   computed: {
     collection() {
-      return this.block.data.collection
+      return this.block.item.collection
     },
     collectionLayout() {
-      return this.block.data.layout
+      return this.block.item.layout
     },
     collectionPage() {
-      return this.block.data.page
+      return this.block.item.page
     },
     collectionTab() {
-      return this.block.data.tab || null
+      return this.block.item.tab || null
     },
     collectionAccordion() {
-      return this.block.data.accordion || null
-    },
-    collectionTopics() {
-      return this.block.data.topics || null
+      return this.block.item.accordion || null
     },
     items() {
-      const items = this.collectionItems && this.collectionItems[this.block.data.collection].filter(item => item.status === this.block.data.status)
+      const items = this.collectionItems && this.collectionItems[this.block.item.collection].filter(item => item.status === this.block.item.status)
       return items
     }
   }

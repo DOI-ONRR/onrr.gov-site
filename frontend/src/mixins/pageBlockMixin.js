@@ -73,7 +73,7 @@ export const pageBlockMixin = {
         case 'image':
           block = ImageBlock 
           break
-        case 'collection':
+        case 'collection_blocks':
           block = CollectionBlock 
           break
         case 'horizontalrule':

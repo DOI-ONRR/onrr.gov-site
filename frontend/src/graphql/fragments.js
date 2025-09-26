@@ -72,6 +72,23 @@ export const formulaBlockFields = gql`
   }
 `
 
+export const collectionBlockFields = gql`
+  fragment collectionBlockFields on collection_blocks {
+    id
+    collection
+    header
+    description
+    accordion
+    page
+    tab
+    items_per_page
+    filter
+    status
+    layout
+    __typename
+  }
+`
+
 export const expansionPanelBlockFields = gql`
   ${expansionPanelBlockLabel}
   ${contentBlockFields}
@@ -222,6 +239,7 @@ export const pageFields = gql`
  ${expansionPanelBlockFields}
  ${layoutColumnBlockFields}
  ${formulaBlockFields}
+ ${collectionBlockFields}
   fragment pageFields on pages {
     id
     title
@@ -249,6 +267,9 @@ export const pageFields = gql`
         }
         ... on layout_column_blocks {
           ...layoutColumnBlockFields
+        }
+        ... on collection_blocks {
+          ...collectionBlockFields
         }
       }
     }
