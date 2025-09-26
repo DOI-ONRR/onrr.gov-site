@@ -3,7 +3,7 @@
 	  :model-value="props.value"
 	  :items="items"
 	  @update:model-value="(v) => emit('input', v)"
-		showDeselect="true"
+		multiple="true"
 	/>
 </template>
 
@@ -22,18 +22,27 @@ const items = ref([])
 const api = useApi();
 
 const query = `
-	query {
-		contacts: contacts_aggregated(groupBy: ["page"], filter: { page: { _nnull: true } }, limit: -1) {
-        group
+  query {
+    reporter_letters(limit: -1) {
+        topics
     }
-	}
+  }
 `;
 
 onMounted(async () => {
 	const { data } = await api.post('/graphql', { query });
-	items.value = data.data.contacts.map(item => ({
-		text: item.group.page,
-		value: item.group.page
+	const distinctTopics = []
+	data.data.reporter_letters.forEach(letter => {
+		letter.topics.forEach(topic => {
+			if (!distinctTopics.includes(topic)) {
+				distinctTopics.push(topic)
+			}
+		})
+	});
+	distinctTopics.sort((t1, t2) => t1.localeCompare(t2))
+	items.value = distinctTopics.map(item => ({
+		text: item,
+		value: item
 	}));
 })
 

@@ -21,11 +21,19 @@ const items = ref([])
 
 const api = useApi();
 
+const query = `
+	query {
+		contacts: contacts_aggregated(groupBy: ["tab"], filter: { tab: { _nnull: true } }, limit: -1) {
+        group
+    }
+	}
+`;
+
 onMounted(async () => {
-	const { data } = await api.get('/contacts/tabs');
-	items.value = data.tabs.map(item => ({
-		text: item,
-		value: item
+	const { data } = await api.post('/graphql', { query });
+	items.value = data.data.contacts.map(item => ({
+		text: item.group.tab,
+		value: item.group.tab
 	}));
 })
 

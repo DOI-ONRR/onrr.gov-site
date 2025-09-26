@@ -11,12 +11,12 @@
     "schema": "CONFIG_PATH='../../.env'npx directus schema snapshot /tmp/directus_schema",
     "start:windows": "set CONFIG_PATH='../../.env' && npx directus start",
     "build:wysiwyg-static": "cd src/extensions/endpoints/wysiwyg-static; npm run build",
-    "build:wysiwyg-contacts": "cd src/extensions/endpoints/contacts; npm run build",
     "build:onrr-wysiwyg": "cd src/extensions/interfaces/onrr-wysiwyg; npm run build",
     "build:onrr-editor": "cd src/extensions/interfaces/onrr-editor; npm run build",
     "build:contacts-accordion-select": "cd src/extensions/interfaces/contacts-accordion-select; npm run build",
     "build:contacts-page-select": "cd src/extensions/interfaces/contacts-page-select; npm run build",
     "build:contacts-tab-select": "cd src/extensions/interfaces/contacts-tab-select; npm run build",
+    "build:topics-select": "cd src/extensions/interfaces/topics-select; npm run build",
     "build:link-autocomplete": "cd src/extensions/endpoints/link-autocomplete; npm run build",
     "build:document": "cd src/extensions/endpoints/document; npm run build",
     "build:image-uploader": "cd src/extensions/endpoints/image-uploader; npm run build",
@@ -29,7 +29,7 @@
     "build:nymex": "cd src/extensions/hooks/nymex; npm run build",
     "build:onrr-flows": "cd src/extensions/endpoints/onrr-flows; npm run build",
     "build:onrr-generate-uuid": "cd src/extensions/operations/onrr-generate-uuid; npm run build",
-    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:wysiwyg-contacts build:onrr-wysiwyg build:onrr-editor build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows"
+    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:onrr-editor build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows"
   },
   "engines": {
     "node": "20.19.2"

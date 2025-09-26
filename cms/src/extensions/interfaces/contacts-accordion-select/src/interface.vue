@@ -21,11 +21,19 @@ const items = ref([])
 
 const api = useApi();
 
+const query = `
+	query {
+		contacts: contacts_aggregated(groupBy: ["accordion"], filter: { accordion: { _nnull: true } }, limit: -1) {
+        group
+    }
+	}
+`;
+
 onMounted(async () => {
-	const { data } = await api.get('/contacts/accordions');
-	items.value = data.accordions.map(item => ({
-		text: item,
-		value: item
+	const { data } = await api.post('/graphql', { query });
+	items.value = data.data.contacts.map(item => ({
+		text: item.group.accordion,
+		value: item.group.accordion
 	}));
 })
 
