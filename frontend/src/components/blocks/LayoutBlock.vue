@@ -25,11 +25,6 @@
           </v-col>
         </v-row>
       </v-col>
-      <!-- <v-row>
-        <v-col v-for="block in layoutBlocks" :key="block.id" sm="12" :md="block.item.block_v_col"  :class="['block-container', block.item.__typename, block.item.equal_col_height ? 'flex' : 'no-flex']">
-          <component :is="pageBlock(block.item.__typename)" :block="block" class="block-component"></component>
-        </v-col>
-      </v-row> -->
     </v-row>
   </div>
 </template>
@@ -46,7 +41,6 @@ export default {
   },
   props: {
     layoutBlocks: Array,
-    // layoutBlocksRight: Array
   },
   computed: {
     layoutItems() {

@@ -10,7 +10,7 @@
     <v-icon v-if="blockIcon === 'info'" class="info-color mdi mdi-information" :class="blockColor"></v-icon> 
     <v-card-text class="text--primary body-1">
       <div v-html="processedContent"></div>
-      <LayoutBlock :layoutBlocks="blockItems" v-if="blockItems.length > 1"></LayoutBlock>
+      <LayoutBlock :layoutBlocks="blockItems" v-if="blockItems.length > 0"></LayoutBlock>
     </v-card-text>
   </v-card>
 </template>
