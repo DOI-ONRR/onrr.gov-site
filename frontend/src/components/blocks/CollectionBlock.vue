@@ -182,7 +182,7 @@ export default {
       return this.block.item.accordion || null
     },
     items() {
-      const items = this.collectionItems && this.collectionItems[this.block.item.collection].filter(item => item.status === this.block.item.status)
+      const items = this.collectionItems && this.collectionItems[this.block.item.collection].filter(item => item.status === this.block.item.item_status)
       return items
     }
   }

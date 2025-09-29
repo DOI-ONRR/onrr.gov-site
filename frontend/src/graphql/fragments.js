@@ -85,6 +85,7 @@ export const collectionBlockFields = gql`
     filter
     status
     layout
+    item_status
     __typename
   }
 `
@@ -124,6 +125,7 @@ export const nestedNestedTabBlockFields = gql`
   ${expansionPanelBlockFields}
   ${layoutColumnBlockFields}
   ${formulaBlockFields}
+  ${collectionBlockFields}
   fragment nestedNestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -148,6 +150,9 @@ export const nestedNestedTabBlockFields = gql`
           ... on formula_blocks {
             ...formulaBlockFields
           }
+          ... on collection_blocks {
+            ...collectionBlockFields
+          }
         }
     }
   }
@@ -160,6 +165,7 @@ export const nestedTabBlockFields = gql`
   ${nestedNestedTabBlockFields}
   ${layoutColumnBlockFields}
   ${formulaBlockFields}
+  ${collectionBlockFields}
   fragment nestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -187,6 +193,9 @@ export const nestedTabBlockFields = gql`
           ... on formula_blocks {
             ...formulaBlockFields
           }
+          ... on collection_blocks {
+            ...collectionBlockFields
+          }
         }
     }
   }
@@ -200,6 +209,7 @@ export const tabBlockFields = gql`
   ${expansionPanelBlockFields}
   ${layoutColumnBlockFields}
   ${formulaBlockFields}
+  ${collectionBlockFields}
   fragment tabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -226,6 +236,9 @@ export const tabBlockFields = gql`
         }
         ... on formula_blocks {
           ...formulaBlockFields
+        }
+        ... on collection_blocks {
+          ...collectionBlockFields
         }
       }
     }
