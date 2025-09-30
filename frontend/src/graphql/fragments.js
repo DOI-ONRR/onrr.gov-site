@@ -87,10 +87,10 @@ export const collectionBlockFields = gql`
     page
     tab
     items_per_page
-    filter
     status
     layout
     item_status
+    category_header_level
     __typename
   }
 `

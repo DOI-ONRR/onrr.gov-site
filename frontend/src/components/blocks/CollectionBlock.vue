@@ -9,6 +9,7 @@
         :collectionPage="collectionPage"
         :collectionTab="collectionTab"
         :collectionAccordion="collectionAccordion"
+        :categoryHeaderLevel="categoryHeaderLevel"
         :apolloLoading="$apolloData.loading"></component>
     </keep-alive>
   </div>
@@ -180,6 +181,9 @@ export default {
     },
     collectionAccordion() {
       return this.block.item.accordion || null
+    },
+    categoryHeaderLevel() {
+      return this.block.item.category_header_level || null
     },
     items() {
       const items = this.collectionItems && this.collectionItems[this.block.item.collection].filter(item => item.status === this.block.item.item_status)
