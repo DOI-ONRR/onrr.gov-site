@@ -33,7 +33,7 @@ export default {
       loadingKey: 'loading...',
       variables () {
         return {
-          ID: "53" // 404 page id cms
+          ID: "26bf9014-50d5-48a5-b7ae-e5f159b36951" // 404 page id cms
         }
       },
     },
