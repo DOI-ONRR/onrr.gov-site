@@ -436,6 +436,8 @@ export default {
 .collection-category {
   border-top: 2px solid var(--v-purple-base);
   background-color: var(--v-purple-lighten2);
+  font-size: large !important;
+  font-weight: bold !important;
 }
 .contact-card {
   min-height: 165px;
