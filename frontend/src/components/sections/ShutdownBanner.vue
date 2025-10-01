@@ -6,7 +6,7 @@
       <v-icon
         color="primary"
         class="shutdown-icon">mdi-information</v-icon>
-        Due to the government shutdown, we are not able to update this site. We will resume work on the site when the shutdown ends.
+        Because of the federal government shutdown, onrr.gov is not being updated and the agency will not be able to respond to inquiries until appropriations are enacted. For more information please visit: <a href="https://www.doi.gov/shutdown" class="usa-link usa-link--external" target="_blank">https://www.doi.gov/shutdown</a>.
       </v-alert>
 </template>
 
