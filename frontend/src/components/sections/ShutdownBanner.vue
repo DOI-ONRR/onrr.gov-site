@@ -6,7 +6,7 @@
       <v-icon
         color="primary"
         class="shutdown-icon">mdi-information</v-icon>
-        Due to the lapse in appropriations, this site is currently not being updated.
+        Due to the government shutdown, we are not able to update this site. We will resume work on the site when the shutdown ends.
       </v-alert>
 </template>
 
