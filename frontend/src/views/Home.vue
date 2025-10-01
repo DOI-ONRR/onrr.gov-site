@@ -4,6 +4,7 @@
       <v-progress-circular :value="20" aria-label="circular progress bar"></v-progress-circular>
     </div>
     <div v-else>
+      <shutdown-banner />
       <HeroImage 
         v-if="pages_by_id" 
         :title="pages_by_id.hero_title"
@@ -45,6 +46,7 @@ import { mapActions } from 'vuex';
 const RevenueBlock = () => import('@/components/blocks/RevenueBlock')
 const HeroImage = () => import('@/components/sections/HeroImage')
 const LayoutBlock = () => import('@/components/blocks/LayoutBlock')
+const ShutdownBanner = () => import('@/components/sections/ShutdownBanner')
 
 export default {
   mixins: [pageBlockMixin],
@@ -73,7 +75,8 @@ export default {
   components: {
     RevenueBlock,
     HeroImage,
-    LayoutBlock
+    LayoutBlock,
+    ShutdownBanner
   },
   methods: {
     ...mapActions([
