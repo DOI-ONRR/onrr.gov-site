@@ -46,6 +46,7 @@ import { mapActions } from 'vuex';
 const RevenueBlock = () => import('@/components/blocks/RevenueBlock')
 const HeroImage = () => import('@/components/sections/HeroImage')
 const LayoutBlock = () => import('@/components/blocks/LayoutBlock')
+const ShutdownBanner = () => import('@/components/sections/ShutdownBanner')
 
 export default {
   mixins: [pageBlockMixin],
@@ -74,7 +75,8 @@ export default {
   components: {
     RevenueBlock,
     HeroImage,
-    LayoutBlock
+    LayoutBlock,
+    ShutdownBanner
   },
   methods: {
     ...mapActions([
