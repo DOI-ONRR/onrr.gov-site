@@ -6,7 +6,7 @@
       <v-icon
         color="primary"
         class="shutdown-icon">mdi-information</v-icon>
-        Because of the federal government shutdown, onrr.gov is not being updated and the agency will not be able to respond to inquiries until appropriations are enacted. For more information please visit: <a href="https://www.doi.gov/shutdown" class="usa-link usa-link--external" target="_blank">https://www.doi.gov/shutdown</a>
+       Due to the current lapse of federal appropriations: this website may not be up to date; transactions submitted via this website might not be processed until appropriations are enacted; and we may not be able to respond to inquiries until appropriations are enacted. For more information, please visit The Department of the Interior shutdown page at: <a href="https://www.doi.gov/shutdown" class="usa-link usa-link--external" target="_blank">https://www.doi.gov/shutdown</a>
       </v-alert>
 </template>
 
