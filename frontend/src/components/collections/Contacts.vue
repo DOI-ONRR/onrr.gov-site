@@ -1,40 +1,47 @@
 <template>
   <div>
-    <v-container class="pa-0 mt-10">
+    <v-container v-if="collectionHeader">
+      <v-row>
+        <v-col cols="12" sm="6">
+          <div v-html="collectionHeader"></div>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container class="pa-0">
         <v-row>
           <v-col cols="12" sm="6">
             <TextField :fields="searchInputField"></TextField>
           </v-col>
         </v-row>
- <div v-if="visibleItems.length > 0 && showResults">
-        <v-row v-if="searchResults">
-          <v-col cols="12" sm="4">
-            <SelectField :fields="categoriesSelectField"></SelectField>
-          </v-col>
-          <v-col cols="12" sm="4" v-if="tabCategoriesSelectField.items.length > 1">
-            <SelectField :fields="tabCategoriesSelectField"></SelectField>
-          </v-col>
-          <v-col cols="12" sm="4" v-if="accordionCategoriesSelectField.items.length > 1">
-            <SelectField :fields="accordionCategoriesSelectField"></SelectField>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <div class="text-left mt-4">
-              Displaying {{ visibleItems.length }} of {{ filteredCollectionItems.length }} contacts
-            </div>
-          </v-col>
-          <v-col>
-            <div class="text-right mb-4">
-              <v-pagination
-              v-model="page"
-              color="secondary"
-              :length="Math.ceil(filteredCollectionItems.length/perPage)">
-              </v-pagination>
-            </div>
-          </v-col>
-        </v-row>
-</div>
+        <div v-if="visibleItems.length > 0 && showResults">
+            <v-row v-if="searchResults">
+              <v-col cols="12" sm="4">
+                <SelectField :fields="categoriesSelectField"></SelectField>
+              </v-col>
+              <v-col cols="12" sm="4" v-if="tabCategoriesSelectField.items.length > 1">
+                <SelectField :fields="tabCategoriesSelectField"></SelectField>
+              </v-col>
+              <v-col cols="12" sm="4" v-if="accordionCategoriesSelectField.items.length > 1">
+                <SelectField :fields="accordionCategoriesSelectField"></SelectField>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <div class="text-left mt-4">
+                  Displaying {{ visibleItems.length }} of {{ filteredCollectionItems.length }} contacts
+                </div>
+              </v-col>
+              <v-col>
+                <div class="text-right mb-4">
+                  <v-pagination
+                  v-model="page"
+                  color="secondary"
+                  :length="Math.ceil(filteredCollectionItems.length/perPage)">
+                  </v-pagination>
+                </div>
+              </v-col>
+            </v-row>
+        </div>
     </v-container>
 
     <div v-if="visibleItems.length > 0 && showResults">
@@ -171,6 +178,7 @@ export default {
     collectionPage: String,
     collectionTab: String,
     collectionAccordion: String,
+    collectionHeader: String,
     showToolbar: Boolean,
     filter: String,
     categoryHeaderLevel: String

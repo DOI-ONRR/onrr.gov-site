@@ -9,6 +9,7 @@
         :collectionPage="collectionPage"
         :collectionTab="collectionTab"
         :collectionAccordion="collectionAccordion"
+        :collectionHeader="collectionHeader"
         :categoryHeaderLevel="categoryHeaderLevel"
         :apolloLoading="$apolloData.loading"></component>
     </keep-alive>
@@ -182,6 +183,9 @@ export default {
     collectionAccordion() {
       return this.block.item.accordion || null
     },
+    collectionHeader() {
+      return this.block.item.header || null
+    },  
     categoryHeaderLevel() {
       return this.block.item.category_header_level || null
     },
