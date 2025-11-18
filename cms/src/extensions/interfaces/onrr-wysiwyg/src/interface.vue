@@ -331,7 +331,9 @@ function insertImage() {
       ${w}
       ${h}
       class="img-block"
-      loading="lazy" />
+      loading="lazy"
+      data-id="${imageForm.id}" 
+      data-filename-disk="${f.filename_disk}" />
   </figure>
 </div>`.trim();
 
