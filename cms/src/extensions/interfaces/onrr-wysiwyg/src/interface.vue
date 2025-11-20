@@ -26,6 +26,7 @@
       @upload-input="handleUploadInput"
       @clear="clearSelectedImage"
       @save="insertImage"
+      @cancel="cancelImage"
     />
 
     <Editor
@@ -338,6 +339,11 @@ function insertImage() {
 </div>`.trim();
 
   ed.insertContent(html)
+  clearSelectedImage()
+  imageDrawerOpen.value = false
+}
+
+function cancelImage() {
   clearSelectedImage()
   imageDrawerOpen.value = false
 }

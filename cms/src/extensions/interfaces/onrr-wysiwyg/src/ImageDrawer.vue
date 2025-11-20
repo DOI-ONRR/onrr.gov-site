@@ -5,7 +5,8 @@
     icon="image"
     cancelable="true"
     @update:model-value="v => $emit('update:modelValue', v)"
-    @cancel="$emit('update:modelValue', false)"
+    @cancel="$emit('cancel')"
+    @esc="cancel"
   >
     <template #actions>
       <div class="flex gap-2 items-center">
@@ -89,7 +90,7 @@ const props = defineProps({
   assetUrl: { type: Function, required: true },
 })
 
-const emit = defineEmits(['update:modelValue', 'update:form', 'upload-input', 'clear', 'save'])
+const emit = defineEmits(['update:modelValue', 'update:form', 'upload-input', 'clear', 'save', 'cancel'])
 
 // local copy so we can debounce/validate before syncing, but we keep it simple and sync immediately
 const localForm = ref({ ...props.form })
