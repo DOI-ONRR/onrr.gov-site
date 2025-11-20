@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import {
   pageFields,
+  collectionBlockFields,
   // fileCollectionFields
   // sectionHeadingBlocks,
   // contentBlocks,
@@ -96,10 +97,24 @@ query PagesById($ID: ID!) {
 // Home page query
 export const HOME_PAGE_QUERY = gql`
 ${pageFields}
+${collectionBlockFields}
 query HomePageQuery($ID: ID!) {
   pages_by_id (id: $ID) {
     ...pageFields
-    sidebar_blocks
+    sidebar_blocks {
+      id
+      item {
+        ... on content_blocks {
+          ...contentBlockFields
+          __typename
+        }
+        ... on collection_blocks {
+          ...collectionBlockFields
+          __typename
+        }
+      }
+      __typename
+      }
   }
 }`
 

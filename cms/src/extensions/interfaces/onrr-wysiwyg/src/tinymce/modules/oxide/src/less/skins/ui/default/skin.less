@@ -1,0 +1,28 @@
+@import 'src/less/theme/theme';
+
+.tox-tinymce:hover {
+  border-color: var(--theme--form--field--input--border-color-hover);
+}
+
+.tox-edit-focus {
+  border-color: var(--theme--form--field--input--border-color-focus) !important;
+  box-shadow: var(--theme--form--field--input--box-shadow-focus);
+}
+
+.tox-tbtn[aria-label='Insert/edit link'] .tox-icon svg {
+  display: none;
+}
+
+.tox-tbtn[aria-label='Insert/edit link'] .tox-icon::after {
+  display: inline-block;
+  margin-block-start: 4px;
+  color: var(--theme--form--field--input--foreground);
+  font-size: 24px;
+  font-family: 'Material Symbols', system-ui;
+  content: 'insert_link';
+  font-feature-settings: 'liga';
+}
+
+.tox .tox-edit-area:before {
+  border: none !important;
+}
