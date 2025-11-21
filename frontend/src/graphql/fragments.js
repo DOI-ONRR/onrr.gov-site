@@ -99,6 +99,7 @@ export const expansionPanelBlockFields = gql`
   ${expansionPanelBlockLabel}
   ${contentBlockFields}
   ${cardBlockFields}
+  ${collectionBlockFields}
   fragment expansionPanelBlockFields on expansion_panels {
     id
     block_label
@@ -117,6 +118,9 @@ export const expansionPanelBlockFields = gql`
         }
         ... on card_blocks {
           ...cardBlockFields
+        }
+        ... on collection_blocks {
+          ...collectionBlockFields
         }
       }
     }
