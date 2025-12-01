@@ -10,6 +10,7 @@
         :collectionTab="collectionTab"
         :collectionAccordion="collectionAccordion"
         :collectionHeader="collectionHeader"
+        :topics="topics"
         :categoryHeaderLevel="categoryHeaderLevel"
         :apolloLoading="$apolloData.loading"></component>
     </keep-alive>
@@ -192,6 +193,9 @@ export default {
     items() {
       const items = this.collectionItems && this.collectionItems[this.block.item.collection].filter(item => item.status === this.block.item.item_status)
       return items
+    },
+    topics() {
+      return this.block.item.topics || null
     }
   }
 }

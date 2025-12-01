@@ -257,7 +257,7 @@ export const PRESS_RELEASES_QUERY = gql`
 
 export const REPORTER_LETTERS_QUERY = gql`
   query {
-    reporter_letters(limit: -1) {
+    reporter_letters(limit: -1, sort: ["-date"]) {
       id
       title
       date

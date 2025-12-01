@@ -8,5 +8,5 @@ export default {
 	description: 'Select field for distinct reporter letters topics',
 	component: InterfaceComponent,
 	options: null,
-	types: ['string'],
+	types: ['json'],
 };

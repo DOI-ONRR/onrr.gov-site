@@ -91,6 +91,7 @@ export const collectionBlockFields = gql`
     layout
     item_status
     category_header_level
+    topics
     __typename
   }
 `
