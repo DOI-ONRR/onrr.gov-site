@@ -173,7 +173,10 @@ export default {
     collection: [Object, Array],
     collectionName: String,
     collectionLayout: String,
-    collectionPage: String,
+    collectionPage: {
+      type: String,
+      default: 'contacts'
+    },
     collectionTab: String,
     collectionAccordion: String,
     collectionHeader: String,
@@ -193,7 +196,6 @@ export default {
       return this.page = 1
     },
     findSearchValue(item) {
-      // console.log('findSearchValue item, searchfield: ', item, this.searchInputField.text)
       if (item !== null && (this.searchInputField.text !== undefined && this.searchInputField.text !== null)) {
         return this.searchInputField.text
         .toLowerCase()
@@ -201,13 +203,7 @@ export default {
         .every(v => item && item.toLowerCase().includes(v))
       }
     },
-    headerTagValue(){
-      console.log('return h3');
-      return 'h3';
-    },
     filterProperties(items) {
-      // console.log('filteredProperties items: ', items)
-
       const filteredItems = items
         .filter(({ page, tab, accordion, letter, header, operatorNumber, companyName, agency }) => {
           return this.findSearchValue(letter) ||
@@ -219,17 +215,13 @@ export default {
             this.findSearchValue(tab) ||
             this.findSearchValue(accordion)
         })
-      // console.log('filterProperties filteredItems: ', filteredItems)
       return filteredItems || items
     },
     filterContacts(items) {
-      // console.log('filterContacts -------> ', items)
       const filteredItems = items.map(item => {
         return { ...item, contacts: item.contacts.filter(contact => {
 
           if (contact.contact !== null) {
-            // console.log('filter contact: ', contact)
-            // console.log('found match: ', contact.contact.toLowerCase().includes(this.searchInputField.text.toLowerCase()))
             return this.findSearchValue(contact.contact) ||
               this.findSearchValue(contact.email) ||
               this.findSearchValue(contact.role)
@@ -237,12 +229,9 @@ export default {
         })}
       }).filter(item => item.contacts.length > 0)
 
-      // console.log('wtf filteredItems --------> ', filteredItems)
-
       return filteredItems
     },
     filterByCategory(items) {
-      // console.log('filterByCategory items ----> ', items)
       let filteredItems
       if (this.categoriesSelectField.selected !== null) {
         filteredItems = items.filter(item => (
@@ -307,25 +296,22 @@ export default {
       return nObj
     },
     filterByPage(items) {
-      const page = this.collectionPage || this.categoriesSelectField.selected
-      const results  = (page !== null) ? items.filter(item => item.page === page) : items
-      // console.log('filterByPage results -----> ', results)
+      const page = this.contactsPage || this.categoriesSelectField.selected
+      const results  = (page !== null) ? 
+        items.filter(item => item.page === (page !== 'contacts' ? page : item.page)) 
+        : items
       return results
     },
     filterByTab(items) {
-      // console.log('filterByTab items -----> ', items)
       const tab = this.collectionTab
-      || this.tabCategoriesSelectField.selected
+        || this.tabCategoriesSelectField.selected
       const results = (tab !== null) ? items.filter(item => item.tab === tab) : items
-      // console.log('filterByTab results -----> ', results)
       return results
     },
     filterByAccordion(items) {
-      // console.log('filterByAccordion items -----> ', items)
       const accordion = this.collectionAccordion
-      || this.accordionCategoriesSelectField.selected
+        || this.accordionCategoriesSelectField.selected
       const results = (accordion !== null) ? items.filter(item => item.accordion === accordion) : items
-      // console.log('filterByAccordion results ------> ', results)
       return results
     },
     categoryItems() {
@@ -355,17 +341,14 @@ export default {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
     },
     showResults() {
-     if ( this.collectionPage.length > 0 ) {
-     return  true
-     }else if  ( this.searchInputField.text.length > 0) {
-     return true
-     } else {
-        return false
-     }
+      if ((this.contactsPage.length > 0 && this.contactsPage !== 'contacts' ) || this.searchInputField.text.length > 0) {
+        return true
+      }
+      return false
     },
     filteredCollectionItems() {
       this.resetPagination()
-      const filteredList= (this.collectionPage || this.searchResults)
+      const filteredList= (this.contactsPage || this.searchResults)
       ? this.filterByPage(this.filterByTab(this.filterByAccordion(this.formattedContactsCollection)))
       : this.filterProperties(this.formattedContactsCollection)
 
@@ -382,7 +365,11 @@ export default {
         }
       }
     },
-
+    contactsPage() {
+      return this.collectionPage == null
+        ? 'contacts'
+        : this.collectionPage
+    }
   },
   watch: {
     'searchInputField.text': function() {
