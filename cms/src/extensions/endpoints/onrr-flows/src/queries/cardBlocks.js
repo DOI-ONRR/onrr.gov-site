@@ -11,7 +11,7 @@ query card_blocks_by_id($id: ID!) {
         column_three
         block_color
         block_label
-        block_content
+        block_content_html
         block_v_col
         equal_col_height
         block_icon
@@ -30,6 +30,9 @@ query card_blocks_card_content_blocks($cardBlocksId: ID!) {
         }
         item {
             ... on content_blocks {
+                id
+            }
+            ... on collection_blocks {
                 id
             }
         }

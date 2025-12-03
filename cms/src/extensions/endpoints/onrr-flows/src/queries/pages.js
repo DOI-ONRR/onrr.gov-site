@@ -68,7 +68,7 @@ fragment CardBlockFields on card_blocks {
     block_v_col
     block_color
     block_icon
-    block_content
+    block_content_html
 }
 
 fragment ContentBlockFields on content_blocks {
@@ -78,7 +78,22 @@ fragment ContentBlockFields on content_blocks {
     block_label
     block_v_col
     equal_col_height
-    block_content
+    block_content_html
+}
+
+fragment CollectionBlockFields on collection_blocks {
+    id
+    collection
+    header
+    description
+    accordion
+    page
+    tab
+    items_per_page
+    status
+    layout
+    item_status
+    category_header_level
 }
 
 fragment ExpansionPanelBlockFields on expansion_panels {
@@ -92,6 +107,7 @@ fragment ExpansionPanelBlockFields on expansion_panels {
             ...CardBlockFields
             ...ContentBlockFields
             ...ExpansionPanelBlockLabelFields
+            ...CollectionBlockFields
         }
     }
 }
@@ -141,6 +157,7 @@ fragment TabBlockFields on tab_blocks {
             ...ExpansionPanelBlockFields
             ...TabBlockLabelFields
             ...TabBlockNestedFields
+            ...CollectionBlockFields
         }
         collection
         Sort
@@ -164,7 +181,13 @@ query pages_by_id($id: ID!) {
         parent {
             id
         }
-        sidebar_blocks
+        sidebar_blocks {
+            id
+            item {
+                ...ContentBlockFields
+                ...CollectionBlockFields
+            }
+        }
         page_builder
         page_blocks {
             id
@@ -174,6 +197,7 @@ query pages_by_id($id: ID!) {
                 ...ContentBlockFields
                 ...ExpansionPanelBlockFields
                 ...TabBlockFields
+                ...CollectionBlockFields
             }
         }
     }
@@ -200,6 +224,9 @@ query pages_page_blocks($pages_id: ID!) {
             ... on expansion_panels {
                 id
             }
+            ... on collection_blocks {
+                id
+            }
         }
         sort
     }
@@ -219,6 +246,9 @@ query pages_page_blocks_item_by_page_block_id($id: ID!) {
                 id
             }
             ...on expansion_panels {
+                id
+            }
+            ... on collection_blocks {
                 id
             }
         }

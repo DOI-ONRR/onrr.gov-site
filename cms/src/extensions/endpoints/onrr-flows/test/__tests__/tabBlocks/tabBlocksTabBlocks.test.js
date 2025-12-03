@@ -29,6 +29,7 @@ beforeAll(async () => {
     getTabBlocksTabBlocks = mocks.getTabBlocksTabBlocks;
     runCardBlocks = mocks.runCardBlocks;
     runContentBlocks = mocks.runContentBlocks;
+    runCollectionBlocks = mocks.runCollectionBlocks;
     runExpansionPanels = mocks.runExpansionPanels;
     runTabBlocks = mocks.runTabBlocks;
     runTabBlockLabel = mocks.runTabBlockLabel;
@@ -71,6 +72,9 @@ describe('Tab blocks tab blocks flow', () => {
                 case CollectionTypes.CONTENT_BLOCKS:
                     runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
                     break;
+                case CollectionTypes.COLLECTION_BLOCKS:
+                    runCollectionBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+                    break;
             }
         });
 
@@ -97,6 +101,9 @@ describe('Tab blocks tab blocks flow', () => {
                     break;
                 case CollectionTypes.CONTENT_BLOCKS:
                     runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+                    break;
+                case CollectionTypes.COLLECTION_BLOCKS:
+                    runCollectionBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
                     break;
             }
         });
@@ -128,6 +135,9 @@ describe('Tab blocks tab blocks flow', () => {
                     break;
                 case CollectionTypes.CONTENT_BLOCKS:
                     runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+                    break;
+                case CollectionTypes.COLLECTION_BLOCKS:
+                    runCollectionBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
                     break;
             }
         });
@@ -166,6 +176,20 @@ describe('Tab blocks tab blocks flow', () => {
 
         // Assert
         expect(runContentBlocks).toHaveBeenCalled();
+    });
+
+    test('runCollectionBlocks is called', async () => {
+        // Arrange
+        getTabBlocksTabBlocks
+            .mockResolvedValue(tabBlocksTabBlocksContentBlock);
+
+        runCollectionBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+
+        // Act
+        await sut(tabBlockId);
+
+        // Assert
+        expect(runCollectionBlocks).toHaveBeenCalled();
     });
 
     test('runExpansionPanels is called', async () => {

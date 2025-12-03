@@ -28,6 +28,10 @@ jest.unstable_mockModule('../../../src/services/contentBlocksFlow/contentBlocks'
     runContentBlocks: jest.fn()
 }));
 
+jest.unstable_mockModule('../../../src/services/collectionBlocksFlow/collectionBlocks', () => ({
+    runCollectionBlocks: jest.fn()
+}));
+
 jest.unstable_mockModule('../../../src/services/expansionPanelsFlow/expansionPanelBlockLabel', () => ({
     runExpansionPanelBlockLabel: jest.fn()
 }));
@@ -39,6 +43,7 @@ export const getMocks = async () => {
     const { updateExpansionPanelsExpansionPanelBlocksItem } = await import('../../../src/operations/expansionPanels/updateExpansionPanelsExpansionPanelBlocksItem');
     const { runCardBlocks } = await import('../../../src/services/cardBlocksFlow/cardBlocks');
     const { runContentBlocks } = await import('../../../src/services/contentBlocksFlow/contentBlocks');
+    const { runCollectionBlocks } = await import('../../../src/services/collectionBlocksFlow/collectionBlocks');
     const { runExpansionPanelBlockLabel } = await import('../../../src/services/expansionPanelsFlow/expansionPanelBlockLabel');
 
     return {
@@ -48,6 +53,7 @@ export const getMocks = async () => {
         updateExpansionPanelsExpansionPanelBlocksItem,
         runCardBlocks,
         runContentBlocks,
+        runCollectionBlocks,
         runExpansionPanelBlockLabel,
         expansionPanelId,
         expansionPanelsExpansionPanelBlocks,

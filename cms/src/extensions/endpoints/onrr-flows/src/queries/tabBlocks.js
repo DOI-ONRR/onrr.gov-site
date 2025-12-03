@@ -42,6 +42,10 @@ query tab_blocks_tab_blocks($tabBlocksId: ID!) {
                 id
                 collection: __typename
             }
+            ... on collection_blocks {
+                id
+                collection: __typename
+            }
         }
     }
 }`;
@@ -66,6 +70,9 @@ query tab_blocks_tab_blocks_by_id($id: ID!) {
                 id
             }
             ... on tab_block_label {
+                id
+            }
+            ... on collection_blocks {
                 id
             }
         }

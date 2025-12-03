@@ -21,12 +21,17 @@ jest.unstable_mockModule('../../../src/services/contentBlocksFlow/contentBlocks'
     runContentBlocks: jest.fn()
 }));
 
+jest.unstable_mockModule('../../../src/services/collectionBlocksFlow/collectionBlocks', () => ({
+    runCollectionBlocks: jest.fn()
+}));
+
 export const getMocks = async () => { 
     const { getCardBlocksCardContentBlocks } = await import('../../../src/operations/cardBlocks/getCardBlocksCardContentBlocks');
     const { createCardBlocksCardContentBlocksItem } = await import('../../../src/operations/cardBlocks/createCardBlocksCardContentBlocksItem');
     const { deleteCardBlocksCardContentBlocksItem } = await import('../../../src/operations/cardBlocks/deleteCardBlocksCardContentBlocksItem');
     const { updateCardBlocksCardContentBlocksItem } = await import('../../../src/operations/cardBlocks/updateCardBlocksCardContentBlocksItem');
     const { runContentBlocks } = await import('../../../src/services/contentBlocksFlow/contentBlocks');
+    const { runCollectionBlocks } = await import('../../../src/services/collectionBlocksFlow/collectionBlocks');
 
     return {
         getCardBlocksCardContentBlocks,
@@ -34,6 +39,7 @@ export const getMocks = async () => {
         deleteCardBlocksCardContentBlocksItem,
         updateCardBlocksCardContentBlocksItem,
         runContentBlocks,
+        runCollectionBlocks,
         cardBlocksCardContentBlocks
     }
 }
