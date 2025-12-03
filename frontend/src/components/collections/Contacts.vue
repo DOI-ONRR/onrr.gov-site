@@ -341,7 +341,8 @@ export default {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
     },
     showResults() {
-      if ((this.contactsPage.length > 0 && this.contactsPage !== 'contacts' ) || this.searchInputField.text.length > 0) {
+      if ((this.contactsPage.length > 0 && this.contactsPage !== 'contacts' ) 
+        || (this.searchInputField.text && this.searchInputField.text.length > 0)) {
         return true
       }
       return false
