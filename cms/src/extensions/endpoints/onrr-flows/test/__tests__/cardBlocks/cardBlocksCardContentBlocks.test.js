@@ -9,6 +9,7 @@ let getCardBlocksCardContentBlocks,
     deleteCardBlocksCardContentBlocksItem,
     updateCardBlocksCardContentBlocksItem,
     runContentBlocks,
+    runCollectionBlocks,
     cardBlocksCardContentBlocks;
 
 beforeAll(async () => {
@@ -18,6 +19,7 @@ beforeAll(async () => {
     deleteCardBlocksCardContentBlocksItem = mocks.deleteCardBlocksCardContentBlocksItem;
     updateCardBlocksCardContentBlocksItem = mocks.updateCardBlocksCardContentBlocksItem;
     runContentBlocks = mocks.runContentBlocks;
+    runCollectionBlocks = mocks.runCollectionBlocks;
     cardBlocksCardContentBlocks = mocks.cardBlocksCardContentBlocks;
 });
 
@@ -106,6 +108,18 @@ describe('Card content block tests', () => {
 
         // Assert
         expect(runContentBlocks).toHaveBeenCalled();
+    });
+
+    test('Calls runCollectionBlocks', async () => {
+        // Arrange
+        getCardBlocksCardContentBlocks.mockResolvedValueOnce(cardBlocksCardContentBlocks)
+            .mockResolvedValueOnce([]);
+
+        // Act
+        await sut();
+
+        // Assert
+        expect(runCollectionBlocks).toHaveBeenCalled();
     });
 
     test('Calls updateCardBlocksCardContentBlocksItem', async () => {
