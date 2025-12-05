@@ -40,6 +40,14 @@ export const expansionPanelsExpansionPanelBlocks = [
         "item": {
             "id": "1345"
         }
+    },
+    {
+        "id": "1022",
+        "collection": "collection_blocks",
+        "sort": 6,
+        "item": {
+            "id": "5246"
+        }
     }
 ];
 

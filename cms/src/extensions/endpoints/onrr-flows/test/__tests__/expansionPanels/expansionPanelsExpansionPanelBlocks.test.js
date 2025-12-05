@@ -9,6 +9,7 @@ let getExpansionPanelsExpansionPanelBlocks,
     updateExpansionPanelsExpansionPanelBlocksItem,
     runCardBlocks,
     runContentBlocks,
+    runCollectionBlocks,
     runExpansionPanelBlockLabel,
     expansionPanelId,
     expansionPanelsExpansionPanelBlocks,
@@ -25,6 +26,7 @@ beforeAll(async () => {
     expansionPanelsExpansionPanelBlocksPrevious = mocks.expansionPanelsExpansionPanelBlocksPrevious;
     runCardBlocks = mocks.runCardBlocks;
     runContentBlocks = mocks.runContentBlocks;
+    runCollectionBlocks = mocks.runCollectionBlocks;
     runExpansionPanelBlockLabel = mocks.runExpansionPanelBlockLabel;
 });
 
@@ -188,5 +190,16 @@ describe('Expansion panels expansion panel blocks flow', () => {
 
         // Assert
         expect(runExpansionPanelBlockLabel).toHaveBeenCalled();
+    });
+
+    test('runCollectionBlocks should be called', async () => {
+        // Arrange
+        getExpansionPanelsExpansionPanelBlocks.mockResolvedValue(expansionPanelsExpansionPanelBlocks);
+
+        // Act
+        await sut(expansionPanelId);
+
+        // Assert
+        expect(runCollectionBlocks).toHaveBeenCalled();
     });
 });
