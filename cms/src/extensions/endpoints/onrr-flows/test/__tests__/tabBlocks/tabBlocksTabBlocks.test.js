@@ -6,6 +6,7 @@ import {
     runFlowItemNoChangesMock,
     tabBlocksTabBlocksCardBlock,
     tabBlocksTabBlocksContentBlock,
+    tabBlocksTabBlocksCollectionBlock,
     tabBlocksTabBlocksExpansionPanel,
     tabBlocksTabBlocksTabBlock,
     tabBlocksTabBlocksTabLabel,
@@ -73,7 +74,7 @@ describe('Tab blocks tab blocks flow', () => {
                     runContentBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
                     break;
                 case CollectionTypes.COLLECTION_BLOCKS:
-                    runCollectionBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+                    runCollectionBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksCollectionBlock[0].item))
                     break;
             }
         });
@@ -181,9 +182,9 @@ describe('Tab blocks tab blocks flow', () => {
     test('runCollectionBlocks is called', async () => {
         // Arrange
         getTabBlocksTabBlocks
-            .mockResolvedValue(tabBlocksTabBlocksContentBlock);
+            .mockResolvedValue(tabBlocksTabBlocksCollectionBlock);
 
-        runCollectionBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksContentBlock[0].item))
+        runCollectionBlocks.mockResolvedValueOnce(runFlowItemNoChangesMock(tabBlocksTabBlocksCollectionBlock[0].item))
 
         // Act
         await sut(tabBlockId);

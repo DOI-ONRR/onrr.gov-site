@@ -57,6 +57,17 @@ export const tabBlocksTabBlocksTabLabel = [
     }
 ]
 
+export const tabBlocksTabBlocksCollectionBlock = [
+    {
+        "id": "2031",
+        "Sort": 1,
+        "item": {
+            "id": "394",
+            "collection": "collection_blocks"
+        }
+    }
+]
+
 export const tabBlocksTabBlocksLatest = [
     {
         "id": "2026",
@@ -88,6 +99,14 @@ export const tabBlocksTabBlocksLatest = [
         "item": {
             "id": "1346",
             "collection": "content_blocks"
+        }
+    },
+    {
+        "id": "2031",
+        "Sort": 5,
+        "item": {
+            "id": "5246",
+            "collection": "collection_blocks"
         }
     }
 ];

@@ -33,14 +33,14 @@ jest.unstable_mockModule('../../../src/services/tabBlocksFlow/tabBlocks', () => 
 }));
 
 jest.unstable_mockModule('../../../src/services/collectionBlocksFlow/collectionBlocks', () => ({
-    runTabBlocks: jest.fn()
+    runCollectionBlocks: jest.fn()
 }));
 
 import { pageId, pagesPageBlocks } from '../../__mocks__/pages/pagesPageBlocks.mocks';
 import { ApiMessages, CollectionTypes } from '../../../src/constants';
 
 export const getMocks = async () => {
-    const { getPagesPageBlocks } = await import('../../../src/operations/pages/getPagesPageBLocks');
+    const { getPagesPageBlocks } = await import('../../../src/operations/pages/getPagesPageBlocks');
     const { createPagesPageBlocksItem } = await import('../../../src/operations/pages/createPagesPageBlocksItem');
     const { deletePagesPageBlocksItem } = await import('../../../src/operations/pages/deletePagesPageBlocksItem');
     const { updatePagesPageBlocksItem } = await import('../../../src/operations/pages/updatePagesPageBlocksItem');

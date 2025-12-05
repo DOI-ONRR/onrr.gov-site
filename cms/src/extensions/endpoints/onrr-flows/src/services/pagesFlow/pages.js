@@ -6,6 +6,7 @@ import {
 import { runPagesPageBlocks } from './pagesPageBlocks';
 import { Endpoints, UpstreamAuthToken, LocalAuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import { logger, previousVersionExists, versionsDiffer } from "../../utils";
+import { runPagesSidebarBlocks } from './pagesSidebarBlocks';
 
 export async function runPages(id) {
     try {
@@ -28,8 +29,13 @@ export async function runPages(id) {
             });
         }
         const pagesPageBlocksResults = await runPagesPageBlocks(id);
-        return pagesPageBlocksResults.length > 0 
-            ? appliedChanges.concat(pagesPageBlocksResults) 
+        if (pagesPageBlocksResults.length > 0) {
+            appliedChanges.concat(pagesPageBlocksResults)
+        }
+
+        const pagesSidebarBlocksResults = await runPagesSidebarBlocks(id);
+        return pagesSidebarBlocksResults.length > 0
+            ? appliedChanges.concat(pagesSidebarBlocksResults)
             : appliedChanges;
     }
     catch (error) {

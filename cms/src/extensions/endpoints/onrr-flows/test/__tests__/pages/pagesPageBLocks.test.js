@@ -27,6 +27,7 @@ beforeAll(async () => {
     runContentBlocks = mocks.runContentBlocks;
     runExpansionPanels = mocks.runExpansionPanels;
     runTabBlocks = mocks.runTabBlocks;
+    runCollectionBlocks = mocks.runCollectionBlocks;
 });
 
 describe('Pages page blocks flow', () => {
@@ -80,6 +81,18 @@ describe('Pages page blocks flow', () => {
 
         // Assert()
         expect(createPagesPageBlocksItem).toHaveBeenCalled();
+    });
+
+    test('Calls runCollectionBlocks', async () => {
+        // Arrange
+        getPagesPageBlocks.mockResolvedValueOnce(pagesPageBlocks)
+            .mockResolvedValueOnce([]);
+
+        // Act
+        await sut(pageId);
+
+        // Assert
+        expect(runCollectionBlocks).toHaveBeenCalled();
     });
 
     test('Creation of new page block item returns ITEM_CREATED', async () => {

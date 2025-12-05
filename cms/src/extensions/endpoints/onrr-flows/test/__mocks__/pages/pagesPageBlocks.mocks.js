@@ -44,5 +44,16 @@ export const pagesPageBlocks = [
             id: 74
         },
         sort: 4
-    }
+    },
+    {
+        id: 603,
+        pages_id: {
+            id: 203
+        },
+        collection: "collection_blocks",
+        item: {
+            id: 5246
+        },
+        sort: 5
+    },
 ]

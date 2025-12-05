@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request';
 
-export const CollectionBlocksById = gql`
+export const getCollectionBlocksByIdQuery = gql`
 query collection_blocks_by_id($id: ID!) {
     collection_blocks_by_id(id: $id) {
         id
@@ -20,7 +20,7 @@ query collection_blocks_by_id($id: ID!) {
     }
 }`;
 
-export const createCollectionBlocksItem = gql`
+export const createCollectionBlocksItemQuery = gql`
 mutation create_collection_blocks_item($data: create_collection_blocks_input!) {
     create_collection_blocks_item(data: $data) {
         id
