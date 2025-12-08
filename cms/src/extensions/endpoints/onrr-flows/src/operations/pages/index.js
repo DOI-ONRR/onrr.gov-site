@@ -7,5 +7,5 @@ export { deletePagesSidebarBlocksItem } from './deletePagesSidebarBlocksItem';
 export { updatePagesSidebarBlocksItem } from './updatePagesSidebarBlocksItem';
 export { getPagesById } from './getPagesById';
 export { getPagesPageBlocks } from './getPagesPageBlocks';
-export { getPagesSidebarBlocks } from './getPagesSidebarBlocks'
+export { getPagesSidebarBlocks } from './getPagesSidebarBlocks';
 export { updatePagesItem } from './updatePagesItem';

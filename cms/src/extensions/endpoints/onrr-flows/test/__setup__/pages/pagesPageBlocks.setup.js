@@ -37,7 +37,6 @@ jest.unstable_mockModule('../../../src/services/collectionBlocksFlow/collectionB
 }));
 
 import { pageId, pagesPageBlocks } from '../../__mocks__/pages/pagesPageBlocks.mocks';
-import { ApiMessages, CollectionTypes } from '../../../src/constants';
 
 export const getMocks = async () => {
     const { getPagesPageBlocks } = await import('../../../src/operations/pages/getPagesPageBlocks');
