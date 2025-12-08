@@ -18,7 +18,6 @@ query pages_by_id($id: ID!) {
         parent {
             id
         }
-        sidebar_blocks
         page_builder
     }
 }`;
