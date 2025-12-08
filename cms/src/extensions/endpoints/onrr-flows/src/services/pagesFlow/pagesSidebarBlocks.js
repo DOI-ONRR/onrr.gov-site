@@ -15,7 +15,7 @@ export async function runPagesSidebarBlocks(pageId) {
         var appliedChanges = [];
         const latestBlocks = await getPagesSidebarBlocks(pageId, Endpoints.LOCAL);
         const previousBlocks = await getPagesSidebarBlocks(pageId, Endpoints.UPSTREAM);
-        for (const latestSidebarBlock of latestBlocks) {
+        for (const latestSidebarBlock of (latestBlocks || [])) {
             if (!previousBlocks.find(block => block.id === latestSidebarBlock.id)) {
                 var newItem = JSON.parse(JSON.stringify(latestSidebarBlock));
                 newItem.item = latestSidebarBlock.item.id;
@@ -54,7 +54,7 @@ export async function runPagesSidebarBlocks(pageId) {
                 appliedChanges.concat(flowResult);
             }
         }
-        for (const previousSidebarBlock of previousBlocks) {
+        for (const previousSidebarBlock of (previousBlocks || [])) {
             if (!latestBlocks.find(block => block.id === previousSidebarBlock.id)) {
                 const deleteId = await deletePagesSidebarBlocksItem(previousSidebarBlock.id, Endpoints.UPSTREAM, UpstreamAuthToken);
                 appliedChanges.push({

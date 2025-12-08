@@ -41,6 +41,18 @@ describe('Pages sidebar blocks flow', () => {
     expect(getPagesSidebarBlocks).toHaveBeenCalled();
   });
 
+  test('Completes with no sidebar blocks', async () => {
+    // Arrange
+    getPagesSidebarBlocks.mockResolvedValueOnce([])
+      .mockResolvedValueOnce(null);
+
+    // Act
+    await sut(pageId);
+
+    // Assert
+    expect(getPagesSidebarBlocks).toHaveBeenCalled();
+  });
+
   test('Calls runContentBlocks', async () => {
     // Arrange
     getPagesSidebarBlocks.mockResolvedValueOnce(pagesSidebarBlocks)
