@@ -10,7 +10,7 @@ export async function deletePagesSidebarBlocksItem(id, endpoint, authToken) {
             }
         });
         const response = await client.request(deletePagesSidebarBlocksItemMutation, { id: id });
-        return response.delete_pages_page_blocks_item.id;
+        return response.delete_pages_sidebar_blocks_item.id;
     } catch (error) {
         logger.error("Error in deletePagesSidebarBlocksItem:", error);
         throw new Error('Error in deletePagesSidebarBlocksItem')
