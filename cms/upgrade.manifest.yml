@@ -12,6 +12,6 @@ applications:
     - upgrade-onrr-s3
   env:
     CONFIG_PATH: ./config.js
-    UPSTREAM_URL: https://dev-onrr-cms.app.cloud.gov
+    UPSTREAM_URL: https://preview-onrr-cms.app.cloud.gov
     DIRECTUS_PUBLIC_HOST: https://upgrade-onrr-cms.app.cloud.gov
     PUBLIC_URL: https://upgrade-onrr-cms.app.cloud.gov

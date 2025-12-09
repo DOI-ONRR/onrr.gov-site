@@ -9,7 +9,7 @@ export async function getPagesSidebarBlocks(pagesId, endpoint) {
         };
         const client = new GraphQLClient(endpoint);
         const data = await client.request(pagesSidebarBlocksQuery, variables);
-        return data.pages_page_blocks;
+        return data.pages_sidebar_blocks;
     } catch (error) {
         logger.error("Error in getPagesSidebarBlocks:", error);
         throw new Error ('Error in getPagesSidebarBlocks');
