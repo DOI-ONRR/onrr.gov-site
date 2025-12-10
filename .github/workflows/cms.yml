@@ -24,6 +24,7 @@ jobs:
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     steps:
       - run: echo "Ok to proceed with build"
+
   build-cms-extensions:
     needs: gate
     runs-on: ubuntu-latest
@@ -38,7 +39,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install CMS dependencies
         run: npm ci
         working-directory: cms
@@ -92,11 +93,11 @@ jobs:
         working-directory: cms/src/extensions/interfaces/onrr-editor
 
       - name: Install wysiwyg-static dependencies
-        run: npm ci 
+        run: npm ci
         working-directory: cms/src/extensions/endpoints/wysiwyg-static
 
       - name: Install onrr-wysiwyg dependencies
-        run: npm ci 
+        run: npm ci
         working-directory: cms/src/extensions/interfaces/onrr-wysiwyg
 
       - name: Install onrr-generate-uuid dependencies
@@ -107,17 +108,22 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Remove lockfiles for vendored deploy
+      - name: Clean for vendored deploy
         run: |
-          # keep only root cms/node_modules
+          # remove all node_modules except cms/node_modules
           find cms -type d -name node_modules -not -path "cms/node_modules" -prune -exec rm -rf '{}' +
+          # remove lockfiles so CF doesn't try to reinstall
           find cms -name "package-lock.json" -delete
+          find cms -name "npm-shrinkwrap.json" -delete
+          find cms -name "yarn.lock" -delete
+          find cms -name "pnpm-lock.yaml" -delete
 
       - name: Upload CMS deploy artifact
         uses: actions/upload-artifact@v4
         with:
           name: cms-deploy
           path: cms
+
   build-tinymce:
     needs: build-cms-extensions
     runs-on: ubuntu-latest
@@ -132,7 +138,7 @@ jobs:
           name: cms-deploy
           path: .
 
-      - name: Checkout code
+      - name: Checkout source repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
@@ -146,7 +152,8 @@ jobs:
           path: tinymce
           fetch-depth: 1
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node for TinyMCE
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: yarn
@@ -173,28 +180,19 @@ jobs:
         run: |
           mkdir -p "${DEPLOY_DIR}"
           cp -R tinymce/modules/oxide/build/* "${DEPLOY_DIR}/"
-      
-      - name: Remove extension node_modules and lockfiles
-        run: |
-          # keep only root cms/node_modules
-          find cms -type d -name node_modules -not -path "cms/node_modules" -prune -exec rm -rf '{}' +
-          # strip lockfiles so CF doesn’t reinstall
-          find cms -name "package-lock.json" -delete
-          find cms -name "npm-shrinkwrap.json" -delete
-          find cms -name "yarn.lock" -delete
-          find cms -name "pnpm-lock.yaml" -delete
-      
-      - name: Upload build artifacts
+
+      - name: Upload final CMS deploy artifact
         uses: actions/upload-artifact@v4
         with:
           name: cms-deploy
           path: cms
           overwrite: true
+
   deploy-cms:
     needs: build-tinymce
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo (for deploy.sh)
+      - name: Checkout repo (for deploy.sh & manifests)
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
@@ -203,23 +201,22 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: cms-deploy
-          path: cms-deploy
+          path: .
 
       - name: Inspect CMS deploy tree
-        working-directory: cms-deploy
         run: |
           echo "Top-level contents:"
           ls -R | head -200
           echo
           echo "Any lockfiles? (should be none)"
-          find . -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
+          find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
           echo
           echo "Does cms/node_modules exist?"
           ls -d cms/node_modules || echo "cms/node_modules is missing!"
 
       - name: Deploy CMS
-        working-directory: cms-deploy
-        run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
+        run: .github/scripts/deploy.sh --branch ${{ github.ref_name }}
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_ORG: ${{ secrets.CF_ORG }}
