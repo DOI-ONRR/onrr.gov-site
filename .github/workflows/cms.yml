@@ -108,6 +108,16 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
+      - name: Debug cms node_modules before artifact upload
+        run: |
+          echo "cms/ contents:"
+          ls cms
+          echo
+          echo "Does cms/node_modules exist BEFORE upload?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing before upload!"
+          echo
+          echo "Size of cms/node_modules (if present):"
+          du -sh cms/node_modules || true
 
       - name: Upload CMS deploy artifact
         uses: actions/upload-artifact@v4
@@ -128,6 +138,20 @@ jobs:
         with:
           name: cms-deploy
           path: .
+
+      - name: Debug cms tree after artifact download
+        run: |
+          echo "Workspace contents after download:"
+          ls
+          echo
+          echo "cms/ contents after download:"
+          ls cms || echo "cms directory is missing!"
+          echo
+          echo "Does cms/node_modules exist AFTER download?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing after download!"
+          echo
+          echo "Size of cms/node_modules (if present):"
+          du -sh cms/node_modules || true
 
       - name: Checkout source repo
         uses: actions/checkout@v4
