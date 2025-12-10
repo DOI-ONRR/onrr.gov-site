@@ -109,6 +109,8 @@ jobs:
 
       - name: Remove lockfiles for vendored deploy
         run: |
+          # keep only root cms/node_modules
+          find cms -type d -name node_modules -not -path "cms/node_modules" -prune -exec rm -rf '{}' +
           find cms -name "package-lock.json" -delete
 
       - name: Upload CMS deploy artifact
@@ -122,13 +124,19 @@ jobs:
     env:
       TINYMCE_REF: "8.0.2"
       DEPLOY_DIR: "cms/extensions/directus-extension-onrr-wysiwyg/public/tinymce"
-      SRC_DIR: "cms/src/extensions/interfaces/onrr-wysiwyg"
+      SRC_DIR: "source/cms/src/extensions/interfaces/onrr-wysiwyg"
     steps:
       - name: Download CMS deploy artifact
         uses: actions/download-artifact@v4
         with:
           name: cms-deploy
           path: .
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: source
 
       - name: Checkout TinyMCE (shallow)
         uses: actions/checkout@v4
@@ -165,6 +173,16 @@ jobs:
         run: |
           mkdir -p "${DEPLOY_DIR}"
           cp -R tinymce/modules/oxide/build/* "${DEPLOY_DIR}/"
+      
+      - name: Remove extension node_modules and lockfiles
+        run: |
+          # keep only root cms/node_modules
+          find cms -type d -name node_modules -not -path "cms/node_modules" -prune -exec rm -rf '{}' +
+          # strip lockfiles so CF doesn’t reinstall
+          find cms -name "package-lock.json" -delete
+          find cms -name "npm-shrinkwrap.json" -delete
+          find cms -name "yarn.lock" -delete
+          find cms -name "pnpm-lock.yaml" -delete
       
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
