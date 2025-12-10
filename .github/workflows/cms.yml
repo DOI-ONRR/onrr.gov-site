@@ -107,11 +107,11 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Upload build artifacts
+      - name: Upload CMS deploy artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions/**
+          name: cms-deploy
+          path: cms/**
   build-tinymce:
     needs: build-cms-extensions
     runs-on: ubuntu-latest
@@ -125,11 +125,11 @@ jobs:
         with:
           fetch-depth: 1
       
-      - name: Download build artifacts from previous job
+      - name: Download CMS deploy artifact
         uses: actions/download-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions
+          name: cms-deploy
+          path: .
 
       - name: Checkout TinyMCE (shallow)
         uses: actions/checkout@v4
@@ -169,8 +169,8 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions/**
+          name: cms-deploy
+          path: cms/**
           overwrite: true
   deploy-cms:
     needs: build-tinymce
@@ -181,14 +181,14 @@ jobs:
         with:
           fetch-depth: 1
       
-      - name: Download build artifacts
+      - name: Download CMS deploy artifact
         uses: actions/download-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions
+          name: cms-deploy
+          path: cms-deploy
 
       - name: Deploy CMS
-        working-directory: cms
+        working-directory: cms-deploy
         run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
