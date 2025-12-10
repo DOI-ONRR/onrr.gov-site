@@ -108,15 +108,6 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Clean for vendored deploy
-        run: |
-          # remove all node_modules except cms/node_modules
-          find cms -mindepth 2 -type d -name node_modules -prune -exec rm -rf '{}' +
-          # remove lockfiles so CF doesn't try to reinstall
-          find cms -name "package-lock.json" -delete
-          find cms -name "npm-shrinkwrap.json" -delete
-          find cms -name "yarn.lock" -delete
-          find cms -name "pnpm-lock.yaml" -delete
 
       - name: Upload CMS deploy artifact
         uses: actions/upload-artifact@v4
@@ -203,16 +194,37 @@ jobs:
           name: cms-deploy
           path: .
 
-      - name: Inspect CMS deploy tree
+      - name: Prepare CMS tree for vendored deploy
         run: |
-          echo "Top-level contents:"
-          ls -R | head -200
+          echo "Before cleanup:"
+          ls -d cms/node_modules || echo "cms/node_modules is missing BEFORE cleanup!"
           echo
-          echo "Any lockfiles? (should be none)"
+          echo "Lockfiles BEFORE cleanup:"
           find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
           echo
-          echo "Does cms/node_modules exist?"
-          ls -d cms/node_modules || echo "cms/node_modules is missing!"
+          # If node_modules is missing here, fail fast so we know the artifact didn't contain deps
+          if [ ! -d "cms/node_modules" ]; then
+            echo "ERROR: cms/node_modules is missing; cms-deploy artifact does not contain vendored dependencies."
+            exit 1
+          fi
+          echo "Removing nested node_modules (keeping cms/node_modules)..."
+          find cms -mindepth 2 -type d -name node_modules -prune -exec rm -rf '{}' +
+          echo "Removing lockfiles..."
+          find cms -name "package-lock.json" -delete
+          find cms -name "npm-shrinkwrap.json" -delete
+          find cms -name "yarn.lock" -delete
+          find cms -name "pnpm-lock.yaml" -delete
+
+      - name: Inspect CMS deploy tree
+        run: |
+          echo "Top-level contents after cleanup:"
+          ls -R | head -200
+          echo
+          echo "Any lockfiles after cleanup? (should be none)"
+          find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
+          echo
+          echo "Does cms/node_modules exist after cleanup?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing AFTER cleanup!"
 
       - name: Deploy CMS
         run: .github/scripts/deploy.sh --branch ${{ github.ref_name }}
