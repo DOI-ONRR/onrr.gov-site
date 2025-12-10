@@ -261,6 +261,7 @@ jobs:
           ls -d cms/node_modules || echo "cms/node_modules is missing AFTER cleanup!"
 
       - name: Deploy CMS
+        working-directory: cms
         run: .github/scripts/deploy.sh --branch ${{ github.ref_name }}
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
