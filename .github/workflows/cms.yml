@@ -194,6 +194,11 @@ jobs:
     needs: build-tinymce
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo (for deploy.sh)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
       - name: Download CMS deploy artifact
         uses: actions/download-artifact@v4
         with:
@@ -201,7 +206,7 @@ jobs:
           path: cms-deploy
 
       - name: Inspect CMS deploy tree
-        working-directory: .
+        working-directory: cms-deploy
         run: |
           echo "Top-level contents:"
           ls -R | head -200
@@ -211,7 +216,7 @@ jobs:
           echo
           echo "Does cms/node_modules exist?"
           ls -d cms/node_modules || echo "cms/node_modules is missing!"
-      
+
       - name: Deploy CMS
         working-directory: cms-deploy
         run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
