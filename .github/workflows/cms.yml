@@ -110,13 +110,12 @@ jobs:
       - name: Remove lockfiles for vendored deploy
         run: |
           find cms -name "package-lock.json" -delete
-          find cms -name "npm-shrinkwrap.json" -delete
 
       - name: Upload CMS deploy artifact
         uses: actions/upload-artifact@v4
         with:
           name: cms-deploy
-          path: cms/**
+          path: cms
   build-tinymce:
     needs: build-cms-extensions
     runs-on: ubuntu-latest
@@ -125,11 +124,6 @@ jobs:
       DEPLOY_DIR: "cms/extensions/directus-extension-onrr-wysiwyg/public/tinymce"
       SRC_DIR: "cms/src/extensions/interfaces/onrr-wysiwyg"
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      
       - name: Download CMS deploy artifact
         uses: actions/download-artifact@v4
         with:
@@ -176,23 +170,30 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cms-deploy
-          path: cms/**
+          path: cms
           overwrite: true
   deploy-cms:
     needs: build-tinymce
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      
       - name: Download CMS deploy artifact
         uses: actions/download-artifact@v4
         with:
           name: cms-deploy
-          path: cms-deploy
+          path: .
 
+      - name: Inspect CMS deploy tree
+        working-directory: cms-deploy
+        run: |
+          echo "Top-level contents:"
+          ls -R | head -200
+          echo
+          echo "Any lockfiles? (should be none)"
+          find . -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
+          echo
+          echo "Does cms/node_modules exist?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing!"
+      
       - name: Deploy CMS
         working-directory: cms-deploy
         run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
