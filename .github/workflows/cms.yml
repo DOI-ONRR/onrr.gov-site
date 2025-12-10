@@ -107,6 +107,11 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
+      - name: Remove lockfiles for vendored deploy
+        run: |
+          find cms -name "package-lock.json" -delete
+          find cms -name "npm-shrinkwrap.json" -delete
+
       - name: Upload CMS deploy artifact
         uses: actions/upload-artifact@v4
         with:
