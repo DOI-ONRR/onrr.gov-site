@@ -6,6 +6,7 @@ import {
 } from '../../operations/tabBlocks';
 import { runCardBlocks } from '../cardBlocksFlow';
 import { runContentBlocks } from '../contentBlocksFlow';
+import { runCollectionBlocks } from '../collectionBlocksFlow';
 import { runExpansionPanels } from '../expansionPanelsFlow';
 import { runTabBlocks } from '../tabBlocksFlow';
 import { runTabBlockLabel } from '../tabBlocksFlow';
@@ -60,6 +61,9 @@ export async function runTabBlocksTabBlocks(tabBlockId) {
                     break;
                 case CollectionTypes.TAB_BLOCK_LABEL:
                     flowResponse = await runTabBlockLabel(latestTabBlock.item.id);
+                    break;
+                case CollectionTypes.COLLECTION_BLOCKS:
+                    flowResponse = await runCollectionBlocks(latestTabBlock.item.id);
                     break;
             }
             if (flowResponse) {

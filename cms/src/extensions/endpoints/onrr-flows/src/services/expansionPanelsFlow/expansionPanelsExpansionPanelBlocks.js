@@ -10,6 +10,7 @@ import { runContentBlocks } from '../contentBlocksFlow';
 import { runExpansionPanelBlockLabel } from './expansionPanelBlockLabel';
 import diff from "deep-diff";
 import { logger } from "../../utils/logger";
+import { runCollectionBlocks } from '../collectionBlocksFlow';
 
 export async function runExpansionPanelsExpansionPanelBlocks(expansionPanelId) {
     try {
@@ -50,6 +51,9 @@ export async function runExpansionPanelsExpansionPanelBlocks(expansionPanelId) {
                     break;
                 case CollectionTypes.EXPANSION_PANEL_BLOCK_LABEL:
                     flowResult = await runExpansionPanelBlockLabel(latestBlock.item.id);
+                    break;
+                case CollectionTypes.COLLECTION_BLOCKS:
+                    flowResult = await runCollectionBlocks(latestBlock.item.id);
                     break;
             }
             if (flowResult) {

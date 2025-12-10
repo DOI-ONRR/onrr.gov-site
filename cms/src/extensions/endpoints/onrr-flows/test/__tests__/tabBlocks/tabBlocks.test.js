@@ -12,6 +12,7 @@ let getTabBlocksById,
     getTabBlocksTabBlocks, 
     runTabBlockLabel, 
     runContentBlocks, 
+    runCollectionBlocks,
     runExpansionPanels, 
     createTabBlock,
     runTabBlocksTabBlocks;
@@ -22,6 +23,7 @@ beforeAll(async () => {
     getTabBlocksTabBlocks = mocks.getTabBlocksTabBlocks;
     runTabBlockLabel = mocks.runTabBlockLabel;
     runContentBlocks = mocks.runContentBlocks;
+    runCollectionBlocks = mocks.runCollectionBlocks;
     runExpansionPanels = mocks.runExpansionPanels;
     createTabBlock = mocks.createTabBlock;
     runTabBlocksTabBlocks = mocks.runTabBlocksTabBlocks;

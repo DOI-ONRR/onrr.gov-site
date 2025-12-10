@@ -41,6 +41,9 @@ query expansion_panels_expansion_panel_blocks(
             ... on expansion_panel_block_label {
                 id
             }
+            ... on collection_blocks {
+                id
+            }
         }
     }
 }`;

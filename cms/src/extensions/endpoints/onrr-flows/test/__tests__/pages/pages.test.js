@@ -10,7 +10,9 @@ let getPagesById,
     createPage,
     updatePagesItem,
     runPagesPageBlocks,
-    runPagesPageBlocksResults;
+    runPagesPageBlocksResults,
+    runPagesSidebarBlocks,
+    runPagesSidebarBlocksResults;
 
 beforeAll(async () => {
     const mocks = await getMocks();
@@ -22,12 +24,15 @@ beforeAll(async () => {
     updatePagesItem = mocks.updatePagesItem;
     runPagesPageBlocks = mocks.runPagesPageBlocks;
     runPagesPageBlocksResults = mocks.runPagesPageBlocksResults;
+    runPagesSidebarBlocks = mocks.runPagesSidebarBlocks;
+    runPagesSidebarBlocksResults = mocks.runPagesSidebarBlocksResults;
 });
 
 describe('Test pages flow', () => {
     beforeEach(async() => {
         jest.resetAllMocks();
         runPagesPageBlocks.mockResolvedValue([]);
+        runPagesSidebarBlocks.mockResolvedValue([]);
     });
 
     test('getPagesById is called 2x', async () => {
@@ -101,5 +106,17 @@ describe('Test pages flow', () => {
 
         // Assert
         expect(runPagesPageBlocks).toHaveBeenCalled();
+    });
+
+    test('runPagesSidebarBlocks is called', async () => {
+        // Arrange
+        getPagesById.mockResolvedValue(pagesById);
+        runPagesSidebarBlocks.mockResolvedValue(runPagesSidebarBlocksResults);
+
+        // Act
+        await sut(pageId);
+
+        // Assert
+        expect(runPagesSidebarBlocks).toHaveBeenCalled();
     });
 });

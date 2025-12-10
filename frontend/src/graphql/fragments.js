@@ -12,6 +12,7 @@ export const contentBlockFields = gql`
     block_label
     block_v_col
     block_content
+    block_content_html
     equal_col_height
   }
 `
@@ -31,11 +32,17 @@ export const cardBlockFields = gql`
     block_v_col
     block_icon
     block_content
+    block_content_html
     equal_col_height
     card_content_blocks {
       id
       item {
-        ...contentBlockFields
+        ... on content_blocks {
+          ...contentBlockFields
+        }
+        ... on collection_blocks {
+          ...collectionBlockFields
+        }
       }
     }
   }
@@ -70,10 +77,30 @@ export const formulaBlockFields = gql`
   }
 `
 
+export const collectionBlockFields = gql`
+  fragment collectionBlockFields on collection_blocks {
+    id
+    collection
+    header
+    description
+    accordion
+    page
+    tab
+    items_per_page
+    status
+    layout
+    item_status
+    category_header_level
+    topics
+    __typename
+  }
+`
+
 export const expansionPanelBlockFields = gql`
   ${expansionPanelBlockLabel}
   ${contentBlockFields}
   ${cardBlockFields}
+  ${collectionBlockFields}
   fragment expansionPanelBlockFields on expansion_panels {
     id
     block_label
@@ -93,6 +120,9 @@ export const expansionPanelBlockFields = gql`
         ... on card_blocks {
           ...cardBlockFields
         }
+        ... on collection_blocks {
+          ...collectionBlockFields
+        }
       }
     }
   }
@@ -105,6 +135,7 @@ export const nestedNestedTabBlockFields = gql`
   ${expansionPanelBlockFields}
   ${layoutColumnBlockFields}
   ${formulaBlockFields}
+  ${collectionBlockFields}
   fragment nestedNestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -129,6 +160,9 @@ export const nestedNestedTabBlockFields = gql`
           ... on formula_blocks {
             ...formulaBlockFields
           }
+          ... on collection_blocks {
+            ...collectionBlockFields
+          }
         }
     }
   }
@@ -141,6 +175,7 @@ export const nestedTabBlockFields = gql`
   ${nestedNestedTabBlockFields}
   ${layoutColumnBlockFields}
   ${formulaBlockFields}
+  ${collectionBlockFields}
   fragment nestedTabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -168,6 +203,9 @@ export const nestedTabBlockFields = gql`
           ... on formula_blocks {
             ...formulaBlockFields
           }
+          ... on collection_blocks {
+            ...collectionBlockFields
+          }
         }
     }
   }
@@ -181,6 +219,7 @@ export const tabBlockFields = gql`
   ${expansionPanelBlockFields}
   ${layoutColumnBlockFields}
   ${formulaBlockFields}
+  ${collectionBlockFields}
   fragment tabBlockFields on tab_blocks {
     id
     tab_blocks {
@@ -208,6 +247,9 @@ export const tabBlockFields = gql`
         ... on formula_blocks {
           ...formulaBlockFields
         }
+        ... on collection_blocks {
+          ...collectionBlockFields
+        }
       }
     }
   }
@@ -220,6 +262,7 @@ export const pageFields = gql`
  ${expansionPanelBlockFields}
  ${layoutColumnBlockFields}
  ${formulaBlockFields}
+ ${collectionBlockFields}
   fragment pageFields on pages {
     id
     title
@@ -247,6 +290,9 @@ export const pageFields = gql`
         }
         ... on layout_column_blocks {
           ...layoutColumnBlockFields
+        }
+        ... on collection_blocks {
+          ...collectionBlockFields
         }
       }
     }

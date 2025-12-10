@@ -100,13 +100,13 @@ export default {
       icon: 'mdi-chevron-down',
       params: 'topic'
     },
-    filteredByTopicCollection: null,
+    filteredCollection: []
   }),
   props: {
     collection: [Array, Object],
     collectionName: String,
     collectionLayout: String,
-    collectionTopics: Array,
+    topics: [],
   },
   components: {
     MultipleSelectField,
@@ -163,7 +163,10 @@ export default {
       return formatToSlug(label)
     },
     filterCollectionByTopic() {
-      return this.collectionTopics.map(topic => this.collection.filter(({ topics }) => topics.includes(topic)))
+      const topicsSet = new Set(this.topics)
+      return (Array.isArray(this.topics) && this.topics.length > 0)
+        ? this.collection.filter(({ topics }) => topics.some(topic => topicsSet.has(topic)))
+        : this.collection
     }
   },
   computed: {
@@ -191,26 +194,27 @@ export default {
         }
       ]
     },
-    filteredCollection() {
-      const collection = (this.filteredByTopicCollection && this.filteredByTopicCollection.length > 0) 
-        ? this.filteredByTopicCollection[0].slice(0, 5) 
-        : this.collection && this.collection.slice(0, 5)
-      return collection
-    },
     viewAllLink() {
-      const link = (this.filteredByTopicCollection) ? `/references/reporter-letters?topic=${  encodeURIComponent(this.collectionTopics.join(',')) }` : `/references/reporter-letters`
-      return link
+      return (Array.isArray(this.topics) && this.topics.length > 0) 
+        ? `/references/reporter-letters?topic=${  encodeURIComponent(this.topics.join(',')) }` 
+        : `/references/reporter-letters`
     }
   },
-  created() {
-    setTimeout(function () {
-      this.topicList()
-      this.filteredByTopicCollection = this.filterCollectionByTopic()
-    }.bind(this), 500)
+  watch: {
+    collection: {
+      handler () {
+        if (!Array.isArray(this.collection)) {
+          return
+        }
+        this.topicList()
+        this.filteredCollection = this.filterCollectionByTopic().slice(0, 5)
+      },
+      immediate: true,
+    },
   },
   mounted() {
-    const topics = this.$route.query.topic && this.$route.query.topic.split(',')
-    this.topicsInputField.selected = topics || null
+    const topicsList = this.$route.query.topic && this.$route.query.topic.split(',')
+    this.topicsInputField.selected = topicsList || null
   }
 }
 </script>
