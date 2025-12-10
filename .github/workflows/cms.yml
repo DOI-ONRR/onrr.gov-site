@@ -188,7 +188,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cms-deploy
-          path: cms-deploy
+          path: cms
           overwrite: true
   deploy-cms:
     needs: build-tinymce
@@ -201,7 +201,7 @@ jobs:
           path: .
 
       - name: Inspect CMS deploy tree
-        working-directory: cms-deploy
+        working-directory: .
         run: |
           echo "Top-level contents:"
           ls -R | head -200
