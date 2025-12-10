@@ -6,7 +6,7 @@ applications:
     - nodejs_buildpack
   instances: 1
   disk_quota: 1G
-  memory: 512M
+  memory: 1G
   env:
     CMS_HOST: dev-onrr-cms.apps.internal
     FRONTEND_HOST: dev-onrr-frontend.apps.internal
