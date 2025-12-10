@@ -108,22 +108,26 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Debug cms node_modules before artifact upload
+      - name: Debug cms node_modules before tar
         run: |
           echo "cms/ contents:"
           ls cms
           echo
-          echo "Does cms/node_modules exist BEFORE upload?"
-          ls -d cms/node_modules || echo "cms/node_modules is missing before upload!"
+          echo "Does cms/node_modules exist BEFORE tar?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing before tar!"
           echo
           echo "Size of cms/node_modules (if present):"
           du -sh cms/node_modules || true
 
-      - name: Upload CMS deploy artifact
+      - name: Create CMS deploy tarball
+        run: |
+          tar -czf cms-deploy.tar.gz cms
+
+      - name: Upload CMS deploy tarball
         uses: actions/upload-artifact@v4
         with:
-          name: cms-deploy
-          path: cms
+          name: cms-deploy-tar
+          path: cms-deploy.tar.gz
 
   build-tinymce:
     needs: build-cms-extensions
@@ -133,22 +137,20 @@ jobs:
       DEPLOY_DIR: "cms/extensions/directus-extension-onrr-wysiwyg/public/tinymce"
       SRC_DIR: "source/cms/src/extensions/interfaces/onrr-wysiwyg"
     steps:
-      - name: Download CMS deploy artifact
+      - name: Download CMS deploy tarball
         uses: actions/download-artifact@v4
         with:
-          name: cms-deploy
+          name: cms-deploy-tar
           path: .
 
-      - name: Debug cms tree after artifact download
+      - name: Extract CMS deploy tarball
         run: |
-          echo "Workspace contents after download:"
+          tar -xzf cms-deploy.tar.gz
+          echo "After extract, workspace contents:"
           ls
           echo
-          echo "cms/ contents after download:"
-          ls cms || echo "cms directory is missing!"
-          echo
-          echo "Does cms/node_modules exist AFTER download?"
-          ls -d cms/node_modules || echo "cms/node_modules is missing after download!"
+          echo "Does cms/node_modules exist AFTER extract?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing after extract!"
           echo
           echo "Size of cms/node_modules (if present):"
           du -sh cms/node_modules || true
@@ -196,13 +198,19 @@ jobs:
           mkdir -p "${DEPLOY_DIR}"
           cp -R tinymce/modules/oxide/build/* "${DEPLOY_DIR}/"
 
-      - name: Upload final CMS deploy artifact
+      - name: Re-pack CMS deploy tarball
+        run: |
+          rm -f cms-deploy.tar.gz
+          tar -czf cms-deploy.tar.gz cms
+
+      - name: Upload final CMS deploy tarball
         uses: actions/upload-artifact@v4
         with:
-          name: cms-deploy
-          path: cms
+          name: cms-deploy-tar
+          path: cms-deploy.tar.gz
           overwrite: true
 
+  # 3) Overlay cms/ onto repo checkout, clean for vendored deploy, and run deploy.sh
   deploy-cms:
     needs: build-tinymce
     runs-on: ubuntu-latest
@@ -212,23 +220,29 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Download CMS deploy artifact
+      - name: Download CMS deploy tarball
         uses: actions/download-artifact@v4
         with:
-          name: cms-deploy
+          name: cms-deploy-tar
           path: .
 
-      - name: Prepare CMS tree for vendored deploy
+      - name: Extract CMS deploy tarball (overlays repo cms/)
         run: |
-          echo "Before cleanup:"
+          tar -xzf cms-deploy.tar.gz
+          echo "After extract in deploy-cms, workspace contents:"
+          ls
+          echo
+          echo "Does cms/node_modules exist BEFORE cleanup?"
           ls -d cms/node_modules || echo "cms/node_modules is missing BEFORE cleanup!"
           echo
           echo "Lockfiles BEFORE cleanup:"
           find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
-          echo
-          # If node_modules is missing here, fail fast so we know the artifact didn't contain deps
+
+      - name: Prepare CMS tree for vendored deploy
+        run: |
+          # Fail fast if node_modules still isn't here
           if [ ! -d "cms/node_modules" ]; then
-            echo "ERROR: cms/node_modules is missing; cms-deploy artifact does not contain vendored dependencies."
+            echo "ERROR: cms/node_modules is missing; cms-deploy tarball does not contain vendored dependencies."
             exit 1
           fi
           echo "Removing nested node_modules (keeping cms/node_modules)..."
@@ -238,16 +252,12 @@ jobs:
           find cms -name "npm-shrinkwrap.json" -delete
           find cms -name "yarn.lock" -delete
           find cms -name "pnpm-lock.yaml" -delete
-
-      - name: Inspect CMS deploy tree
-        run: |
-          echo "Top-level contents after cleanup:"
-          ls -R | head -200
           echo
-          echo "Any lockfiles after cleanup? (should be none)"
+          echo "After cleanup:"
+          echo "Any lockfiles? (should be none)"
           find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
           echo
-          echo "Does cms/node_modules exist after cleanup?"
+          echo "Does cms/node_modules exist AFTER cleanup?"
           ls -d cms/node_modules || echo "cms/node_modules is missing AFTER cleanup!"
 
       - name: Deploy CMS
