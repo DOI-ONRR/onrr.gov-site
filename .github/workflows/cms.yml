@@ -117,7 +117,7 @@ jobs:
           find cms/src cms/extensions -type d -name node_modules || true
 
           # Remove node_modules only under src/ and extensions/
-          # find cms/src cms/extensions -type d -name node_modules -prune -exec rm -rf '{}' +
+          find cms/src cms/extensions -type d -name node_modules -prune -exec rm -rf '{}' +
 
           echo
           echo "Nested node_modules AFTER cleanup (should be none):"
