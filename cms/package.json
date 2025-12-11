@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "axios": "^1.9.0",
+    "debug": "^4.4.3",
     "directus": "^11.9.2",
     "human-signals": "^8.0.1",
     "jszip": "^3.10.1",
