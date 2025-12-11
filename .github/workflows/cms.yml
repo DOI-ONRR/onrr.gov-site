@@ -108,28 +108,16 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Remove nested node_modules (keep cms/node_modules)
+      - name: Debug cms node_modules before tar
         run: |
-          echo "Before cleanup:"
-          ls -d cms/node_modules || echo "cms/node_modules is missing before cleanup!"
+          echo "cms/ contents:"
+          ls cms
           echo
-          echo "Nested node_modules BEFORE cleanup:"
-          find cms/src cms/extensions -type d -name node_modules || true
-
-          # Remove node_modules only under src/ and extensions/
-          find cms/src cms/extensions -type d -name node_modules -prune -exec rm -rf '{}' +
-
+          echo "Does cms/node_modules exist BEFORE tar?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing before tar!"
           echo
-          echo "Nested node_modules AFTER cleanup (should be none):"
-          find cms/src cms/extensions -type d -name node_modules || true
-          echo
-          echo "Confirm cms/node_modules still exists:"
-          ls -d cms/node_modules || echo "cms/node_modules is missing after cleanup!"
-          # Check the dependency tree
-          npm ls execa human-signals
-
-          # Make sure the file exists
-          ls node_modules/human-signals/build/src/main.js
+          echo "Size of cms/node_modules (if present):"
+          du -sh cms/node_modules || true
 
       - name: Create CMS deploy tarball
         run: |
@@ -222,6 +210,7 @@ jobs:
           path: cms-deploy.tar.gz
           overwrite: true
 
+  # 3) Overlay cms/ onto repo checkout, clean for vendored deploy, and run deploy.sh
   deploy-cms:
     needs: build-tinymce
     runs-on: ubuntu-latest
@@ -251,13 +240,23 @@ jobs:
 
       - name: Prepare CMS tree for vendored deploy
         run: |
+          # Check the dependency tree
+          npm ls execa human-signals
+
+          # Make sure the file exists
+          ls node_modules/human-signals/build/src/main.js
           # Fail fast if node_modules still isn't here
           if [ ! -d "cms/node_modules" ]; then
             echo "ERROR: cms/node_modules is missing; cms-deploy tarball does not contain vendored dependencies."
             exit 1
           fi
           echo "Removing nested node_modules (keeping cms/node_modules)..."
-          # find cms -mindepth 2 -type d -name node_modules -prune -exec rm -rf '{}' +
+          find cms -mindepth 2 -type d -name node_modules -prune -exec rm -rf '{}' +
+          # Check the dependency tree
+          npm ls execa human-signals
+
+          # Make sure the file exists
+          ls node_modules/human-signals/build/src/main.js
           echo "Removing lockfiles..."
           find cms -name "package-lock.json" -delete
           find cms -name "npm-shrinkwrap.json" -delete
@@ -270,11 +269,6 @@ jobs:
           echo
           echo "Does cms/node_modules exist AFTER cleanup?"
           ls -d cms/node_modules || echo "cms/node_modules is missing AFTER cleanup!"
-          # Check the dependency tree
-          npm ls execa human-signals
-
-          # Make sure the file exists
-          ls node_modules/human-signals/build/src/main.js
 
       - name: Deploy CMS
         working-directory: cms
