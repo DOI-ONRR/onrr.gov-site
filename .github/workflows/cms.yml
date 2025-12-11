@@ -109,8 +109,8 @@ jobs:
 
       - name: Create CMS deploy tarball (node_modules + built extensions only)
         run: |
-          # Archive only the vendored deps and built Directus extensions
-          tar -czf cms-deploy.tar.gz cms/node_modules cms/extensions
+          # Archive only the built Directus extensions
+          tar -czf cms-deploy.tar.gz cms/extensions
 
       - name: Upload CMS deploy tarball
         uses: actions/upload-artifact@v4
@@ -135,14 +135,6 @@ jobs:
       - name: Extract CMS deploy tarball
         run: |
           tar -xzf cms-deploy.tar.gz
-          echo "After extract, workspace contents:"
-          ls
-          echo
-          echo "Does cms/node_modules exist AFTER extract?"
-          ls -d cms/node_modules || echo "cms/node_modules is missing after extract!"
-          echo
-          echo "Size of cms/node_modules (if present):"
-          du -sh cms/node_modules || true
 
       - name: Checkout source repo
         uses: actions/checkout@v4
@@ -219,22 +211,6 @@ jobs:
           tar -xzf cms-deploy.tar.gz
           echo "After extract in deploy-cms, workspace contents:"
           ls
-          echo
-          echo "Does cms/node_modules exist BEFORE cleanup?"
-          ls -d cms/node_modules || echo "cms/node_modules is missing BEFORE cleanup!"
-
-      - name: Prepare CMS tree for vendored deploy
-        run: |
-          # Fail fast if node_modules still isn't here
-          if [ ! -d "cms/node_modules" ]; then
-            echo "ERROR: cms/node_modules is missing; cms-deploy tarball does not contain vendored dependencies."
-            exit 1
-          fi
-          echo "Removing nested node_modules (keeping cms/node_modules)..."
-          find cms -mindepth 2 -type d -name node_modules -prune -exec rm -rf '{}' +
-          echo
-          echo "Does cms/node_modules exist AFTER cleanup?"
-          ls -d cms/node_modules || echo "cms/node_modules is missing AFTER cleanup!"
 
       - name: Deploy CMS
         working-directory: cms
