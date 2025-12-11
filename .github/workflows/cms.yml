@@ -222,9 +222,6 @@ jobs:
           echo
           echo "Does cms/node_modules exist BEFORE cleanup?"
           ls -d cms/node_modules || echo "cms/node_modules is missing BEFORE cleanup!"
-          echo
-          echo "Lockfiles BEFORE cleanup:"
-          find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
 
       - name: Prepare CMS tree for vendored deploy
         run: |
@@ -235,15 +232,6 @@ jobs:
           fi
           echo "Removing nested node_modules (keeping cms/node_modules)..."
           find cms -mindepth 2 -type d -name node_modules -prune -exec rm -rf '{}' +
-          echo "Removing lockfiles..."
-          find cms -name "package-lock.json" -delete
-          find cms -name "npm-shrinkwrap.json" -delete
-          find cms -name "yarn.lock" -delete
-          find cms -name "pnpm-lock.yaml" -delete
-          echo
-          echo "After cleanup:"
-          echo "Any lockfiles? (should be none)"
-          find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
           echo
           echo "Does cms/node_modules exist AFTER cleanup?"
           ls -d cms/node_modules || echo "cms/node_modules is missing AFTER cleanup!"
