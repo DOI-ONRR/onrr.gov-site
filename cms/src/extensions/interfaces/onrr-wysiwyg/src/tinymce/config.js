@@ -24,7 +24,8 @@ export function createTinyConfig() {
     relative_urls: false,
     ui_mode: 'split',
     object_resizing: false,
-    table_toolbar: 'tablecaption tabledelete | tableinsertrowafter tableinsertrowbefore tabledeleterow | tableinsertcolafter tableinsertcolbefore tabledeletecol | tablerowheader tablecolheader'
+    table_toolbar: 'tablecaption tabledelete | tableinsertrowafter tableinsertrowbefore tabledeleterow | tableinsertcolafter tableinsertcolbefore tabledeletecol | tablerowheader tablecolheader',
+    paste_as_text: true,
   }
 
   return { ...base }

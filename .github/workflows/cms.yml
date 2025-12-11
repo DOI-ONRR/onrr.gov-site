@@ -38,7 +38,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install CMS dependencies
         run: npm ci
         working-directory: cms
@@ -92,11 +92,11 @@ jobs:
         working-directory: cms/src/extensions/interfaces/onrr-editor
 
       - name: Install wysiwyg-static dependencies
-        run: npm ci 
+        run: npm ci
         working-directory: cms/src/extensions/endpoints/wysiwyg-static
 
       - name: Install onrr-wysiwyg dependencies
-        run: npm ci 
+        run: npm ci
         working-directory: cms/src/extensions/interfaces/onrr-wysiwyg
 
       - name: Install onrr-generate-uuid dependencies
@@ -107,29 +107,58 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Upload build artifacts
+      - name: Debug cms node_modules before tar
+        run: |
+          echo "cms/ contents:"
+          ls cms
+          echo
+          echo "Does cms/node_modules exist BEFORE tar?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing before tar!"
+          echo
+          echo "Size of cms/node_modules (if present):"
+          du -sh cms/node_modules || true
+
+      - name: Create CMS deploy tarball
+        run: |
+          tar -czf cms-deploy.tar.gz cms
+
+      - name: Upload CMS deploy tarball
         uses: actions/upload-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions/**
+          name: cms-deploy-tar
+          path: cms-deploy.tar.gz
+
   build-tinymce:
     needs: build-cms-extensions
     runs-on: ubuntu-latest
     env:
       TINYMCE_REF: "8.0.2"
       DEPLOY_DIR: "cms/extensions/directus-extension-onrr-wysiwyg/public/tinymce"
-      SRC_DIR: "cms/src/extensions/interfaces/onrr-wysiwyg"
+      SRC_DIR: "source/cms/src/extensions/interfaces/onrr-wysiwyg"
     steps:
-      - name: Checkout code
+      - name: Download CMS deploy tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: cms-deploy-tar
+          path: .
+
+      - name: Extract CMS deploy tarball
+        run: |
+          tar -xzf cms-deploy.tar.gz
+          echo "After extract, workspace contents:"
+          ls
+          echo
+          echo "Does cms/node_modules exist AFTER extract?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing after extract!"
+          echo
+          echo "Size of cms/node_modules (if present):"
+          du -sh cms/node_modules || true
+
+      - name: Checkout source repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      
-      - name: Download build artifacts from previous job
-        uses: actions/download-artifact@v4
-        with:
-          name: cms-extensions
-          path: cms/extensions
+          path: source
 
       - name: Checkout TinyMCE (shallow)
         uses: actions/checkout@v4
@@ -139,7 +168,8 @@ jobs:
           path: tinymce
           fetch-depth: 1
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node for TinyMCE
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: yarn
@@ -164,28 +194,70 @@ jobs:
 
       - name: Copy compiled TinyMCE into extension
         run: |
+          mkdir -p "${DEPLOY_DIR}"
           cp -R tinymce/modules/oxide/build/* "${DEPLOY_DIR}/"
-      
-      - name: Upload build artifacts
+
+      - name: Re-pack CMS deploy tarball
+        run: |
+          rm -f cms-deploy.tar.gz
+          tar -czf cms-deploy.tar.gz cms
+
+      - name: Upload final CMS deploy tarball
         uses: actions/upload-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions/**
+          name: cms-deploy-tar
+          path: cms-deploy.tar.gz
           overwrite: true
+
+  # 3) Overlay cms/ onto repo checkout, clean for vendored deploy, and run deploy.sh
   deploy-cms:
     needs: build-tinymce
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repo (for deploy.sh & manifests)
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      
-      - name: Download build artifacts
+
+      - name: Download CMS deploy tarball
         uses: actions/download-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions
+          name: cms-deploy-tar
+          path: .
+
+      - name: Extract CMS deploy tarball (overlays repo cms/)
+        run: |
+          tar -xzf cms-deploy.tar.gz
+          echo "After extract in deploy-cms, workspace contents:"
+          ls
+          echo
+          echo "Does cms/node_modules exist BEFORE cleanup?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing BEFORE cleanup!"
+          echo
+          echo "Lockfiles BEFORE cleanup:"
+          find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
+
+      - name: Prepare CMS tree for vendored deploy
+        run: |
+          # Fail fast if node_modules still isn't here
+          if [ ! -d "cms/node_modules" ]; then
+            echo "ERROR: cms/node_modules is missing; cms-deploy tarball does not contain vendored dependencies."
+            exit 1
+          fi
+          echo "Removing nested node_modules (keeping cms/node_modules)..."
+          find cms -mindepth 2 -type d -name node_modules -prune -exec rm -rf '{}' +
+          echo "Removing lockfiles..."
+          find cms -name "package-lock.json" -delete
+          find cms -name "npm-shrinkwrap.json" -delete
+          find cms -name "yarn.lock" -delete
+          find cms -name "pnpm-lock.yaml" -delete
+          echo
+          echo "After cleanup:"
+          echo "Any lockfiles? (should be none)"
+          find cms -name "package-lock.json" -o -name "npm-shrinkwrap.json" -o -name "yarn.lock" -o -name "pnpm-lock.yaml" || true
+          echo
+          echo "Does cms/node_modules exist AFTER cleanup?"
+          ls -d cms/node_modules || echo "cms/node_modules is missing AFTER cleanup!"
 
       - name: Deploy CMS
         working-directory: cms
@@ -193,3 +265,4 @@ jobs:
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_ORG: ${{ secrets.CF_ORG }}
