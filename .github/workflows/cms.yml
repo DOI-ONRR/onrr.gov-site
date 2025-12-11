@@ -240,11 +240,6 @@ jobs:
 
       - name: Prepare CMS tree for vendored deploy
         run: |
-          # Check the dependency tree
-          npm ls execa human-signals
-
-          # Make sure the file exists
-          ls node_modules/human-signals/build/src/main.js
           # Fail fast if node_modules still isn't here
           if [ ! -d "cms/node_modules" ]; then
             echo "ERROR: cms/node_modules is missing; cms-deploy tarball does not contain vendored dependencies."
@@ -252,11 +247,6 @@ jobs:
           fi
           echo "Removing nested node_modules (keeping cms/node_modules)..."
           find cms -mindepth 2 -type d -name node_modules -prune -exec rm -rf '{}' +
-          # Check the dependency tree
-          npm ls execa human-signals
-
-          # Make sure the file exists
-          ls node_modules/human-signals/build/src/main.js
           echo "Removing lockfiles..."
           find cms -name "package-lock.json" -delete
           find cms -name "npm-shrinkwrap.json" -delete
