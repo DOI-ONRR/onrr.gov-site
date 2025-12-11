@@ -107,20 +107,10 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Debug cms node_modules before tar
+      - name: Create CMS deploy tarball (node_modules + built extensions only)
         run: |
-          echo "cms/ contents:"
-          ls cms
-          echo
-          echo "Does cms/node_modules exist BEFORE tar?"
-          ls -d cms/node_modules || echo "cms/node_modules is missing before tar!"
-          echo
-          echo "Size of cms/node_modules (if present):"
-          du -sh cms/node_modules || true
-
-      - name: Create CMS deploy tarball
-        run: |
-          tar -czf cms-deploy.tar.gz cms
+          # Archive only the vendored deps and built Directus extensions
+          tar -czf cms-deploy.tar.gz cms/node_modules cms/extensions
 
       - name: Upload CMS deploy tarball
         uses: actions/upload-artifact@v4
@@ -209,7 +199,6 @@ jobs:
           path: cms-deploy.tar.gz
           overwrite: true
 
-  # 3) Overlay cms/ onto repo checkout, clean for vendored deploy, and run deploy.sh
   deploy-cms:
     needs: build-tinymce
     runs-on: ubuntu-latest
