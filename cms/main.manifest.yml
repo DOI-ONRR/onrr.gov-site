@@ -4,7 +4,7 @@ applications:
   command: npx directus start
   instances: 3
   disk_quota: 2G
-  memory: 2G
+  memory: 1G
   random-route: false
   routes:
   - route: prod-onrr-cms.apps.internal
