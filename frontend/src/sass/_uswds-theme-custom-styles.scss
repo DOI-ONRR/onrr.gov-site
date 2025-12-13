@@ -223,3 +223,7 @@ h6 {
 hr {
    @include u-margin-y(2);
 }
+
+ul + p {
+   @include u-margin-top(2);
+}
