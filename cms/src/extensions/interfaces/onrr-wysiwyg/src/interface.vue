@@ -65,6 +65,7 @@ const linkDrawerOpen = ref(false)
 const sourceCode = ref('')
 const tinyRef = ref(null)
 const lastAppliedFromProps = ref(null)
+const lastEmittedToParent = ref(null)
 const folder = ref(null)
 const selectedImage = ref(null)
 const editorKey = ref(0)
@@ -75,6 +76,15 @@ const imageForm = reactive({
   height: undefined,
   href: '',
 })
+
+function normalizeNbsp(html) {
+  // Normalize TinyMCE/DOM non-breaking spaces so comparisons are stable.
+  // - `&nbsp;` (named) and `&#160;` (numeric) often round-trip differently.
+  // - `\u00A0` is the raw NBSP character.
+  return String(html ?? '')
+    .replaceAll('&nbsp;', '\u00A0')
+    .replaceAll('&#160;', '\u00A0')
+}
 
 function bumpEditorKey() { 
   editorKey.value += 1 
@@ -164,10 +174,17 @@ const config = computed(() => {
       editor.on('input change Undo Redo KeyUp', onlyIfAlive(() => {
         const html = editor.getContent({ format: 'html' })
         sourceCode.value = html
+
         // If this content matches the last programmatic value, do not emit
         if (lastAppliedFromProps.value === html) return
+
         // From this point, treat it as a user change
         lastAppliedFromProps.value = null
+
+        // Track the exact string we emitted so the prop watcher can avoid re-setting
+        // editor content (which can reset the caret) when the parent simply echoes it back.
+        lastEmittedToParent.value = html
+
         emit('input', html)
       }))
 
@@ -200,11 +217,29 @@ const config = computed(() => {
 watch(() => props.value, (val) => {
   const html = val ?? ''
   sourceCode.value = html
-  lastAppliedFromProps.value = html
+
   const ed = getTinyEditorInstance()
-  if (ed && ed.getContent({ format: 'html' }) !== html) {
+  if (!ed) {
+    lastAppliedFromProps.value = html
+    return
+  }
+
+  // If the parent is simply echoing the latest user edit back into the prop,
+  // avoid setContent() to prevent caret resets. Normalize NBSP to handle
+  // &nbsp; vs \u00A0 vs &#160; differences.
+  const emitted = lastEmittedToParent.value
+  if (emitted != null && normalizeNbsp(emitted) === normalizeNbsp(html)) {
+    // Clear once we've observed the echo.
+    lastEmittedToParent.value = null
+    return
+  }
+
+  // Apply true external changes (record switches, programmatic updates, etc.)
+  lastAppliedFromProps.value = html
+
+  if (normalizeNbsp(ed.getContent({ format: 'html' })) !== normalizeNbsp(html)) {
     ed.setContent(html, { format: 'html' })
-    ed.fire?.('change')
+    ed.dispatch?.('change')
   }
 })
 
@@ -266,8 +301,8 @@ function applyCodeToEditor(html) {
     if (bm) ed.selection?.moveToBookmark?.(bm)
   })
   
-  ed.fire?.('change')
-  ed.fire?.('input')
+  ed.dispatch?.('change')
+  ed.dispatch?.('input')
 }
 
 function onSaveFromDrawer() {
