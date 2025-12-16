@@ -20,6 +20,10 @@ jest.unstable_mockModule('../../../src/services/contentBlocksFlow/contentBlocks'
     runContentBlocks: jest.fn()
 }));
 
+jest.unstable_mockModule('../../../src/services/collectionBlocksFlow/collectionBlocks', () => ({
+    runCollectionBlocks: jest.fn()
+}));
+
 jest.unstable_mockModule('../../../src/services/expansionPanelsFlow/expansionPanels', () => ({
     runExpansionPanels: jest.fn()
 }));
@@ -34,6 +38,7 @@ export const getMocks = async () => {
     const { runTabBlockLabel } = await import('../../../src/services/tabBlocksFlow/tabBlockLabel');
     const { runTabBlocksTabBlocks } = await import('../../../src/services/tabBlocksFlow/tabBlocksTabBlocks');
     const { runContentBlocks } = await import('../../../src/services/contentBlocksFlow/contentBlocks');
+    const { runCollectionBlocks } = await import('../../../src/services/collectionBlocksFlow/collectionBlocks');
     const { runExpansionPanels } = await import('../../../src/services/expansionPanelsFlow/expansionPanels');
     const { createTabBlock } = await import('../../../src/operations/tabBlocks/createTabBlock');
 
@@ -42,6 +47,7 @@ export const getMocks = async () => {
         getTabBlocksTabBlocks,
         runTabBlockLabel,
         runContentBlocks,
+        runCollectionBlocks,
         runExpansionPanels,
         createTabBlock,
         runTabBlocksTabBlocks

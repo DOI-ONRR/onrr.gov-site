@@ -21,6 +21,7 @@ export const CollectionTypes = {
     CARD_BLOCKS: 'card_blocks',
     CARD_BLOCKS_CARD_CONTENT_BLOCKS: 'card_blocks_card_content_blocks',
     CONTENT_BLOCKS: 'content_blocks',
+    COLLECTION_BLOCKS: 'collection_blocks',
     TAB_BLOCKS: 'tab_blocks',
     TAB_BLOCK_LABEL: 'tab_block_label',
     TAB_BLOCKS_TAB_BLOCKS: 'tab_blocks_tab_blocks',
@@ -28,5 +29,6 @@ export const CollectionTypes = {
     EXPANSION_PANEL_BLOCK_LABEL: 'expansion_panel_block_label',
     EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS: 'expansion_panels_expansion_panel_blocks',
     PAGES: 'pages',
-    PAGES_PAGE_BLOCKS: 'pages_page_blocks'
+    PAGES_PAGE_BLOCKS: 'pages_page_blocks',
+    PAGES_SIDEBAR_BLOCKS: 'pages_sideabar_blocks'
 }

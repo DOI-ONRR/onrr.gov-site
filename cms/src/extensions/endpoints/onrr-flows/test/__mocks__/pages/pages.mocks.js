@@ -82,3 +82,16 @@ export const runPagesPageBlocksResults = [
       message: "no_changes",
     },
   ]
+
+export const runPagesSidebarBlocksResults = [
+    {
+      id: '4f3b6c2e-4d1f-4f39-9a55-3b0f4b4c9f72',
+      collection: "content_blocks",
+      message: "item_updated",
+    },
+    {
+      id: 'c8e2d1ab-8f07-4c3c-9c4b-2c6a0f94e318',
+      collection: "collection_blocks",
+      message: "item_updated",
+    }
+  ]

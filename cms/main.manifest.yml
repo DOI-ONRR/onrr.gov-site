@@ -2,9 +2,9 @@
 applications: 
 - name: prod-onrr-cms
   command: npx directus start
-  instances: 3
+  instances: 2
   disk_quota: 2G
-  memory: 512M
+  memory: 2G
   random-route: false
   routes:
   - route: prod-onrr-cms.apps.internal

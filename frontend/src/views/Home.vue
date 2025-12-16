@@ -24,9 +24,9 @@
           </v-col>
           <!-- Sidebar -->
           <v-col cols="12" xs="12" sm="4">
-            <div v-for="block in page.sidebar_blocks.blocks" :key="block.id">
+            <div v-for="block in page.sidebar_blocks" :key="block.id">
                 <!-- Dynamic components -- https://vuejs.org/v2/guide/components-dynamic-async.html -->
-                <component :is="pageBlock(block.type)" :block="block" class="block-component"></component>
+                <component :is="pageBlock(block.item.__typename)" :block="block" class="block-component"></component>
             </div>
           </v-col>
         </v-row>
@@ -79,7 +79,7 @@ export default {
   methods: {
     ...mapActions([
       'updatePageLoaded'
-    ])
+    ]),
   },
   watch: {
     pages_by_id(newValue) {
@@ -95,8 +95,9 @@ export default {
       }
     },
     page () {
-      return this.pages_by_id
-    }
+      const p = this.pages_by_id
+      return p
+    },
   }
 }
 </script>

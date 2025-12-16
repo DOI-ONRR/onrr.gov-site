@@ -16,22 +16,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-cms:
+  gate:
+    runs-on: ubuntu-latest
     if: |
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'push' || 
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    steps:
+      - run: echo "Ok to proceed with build"
+  build-cms-extensions:
+    needs: gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-      
+
       - name: Install CMS dependencies
         run: npm ci
         working-directory: cms
@@ -84,6 +91,14 @@ jobs:
         run: npm ci --legacy-peer-deps
         working-directory: cms/src/extensions/interfaces/onrr-editor
 
+      - name: Install wysiwyg-static dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/endpoints/wysiwyg-static
+
+      - name: Install onrr-wysiwyg dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/onrr-wysiwyg
+
       - name: Install onrr-generate-uuid dependencies
         run: npm ci
         working-directory: cms/src/extensions/operations/onrr-generate-uuid
@@ -92,24 +107,110 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Upload build artifacts
+      - name: Create CMS deploy tarball (node_modules + built extensions only)
+        run: |
+          # Archive only the built Directus extensions
+          tar -czf cms-deploy.tar.gz cms/extensions
+
+      - name: Upload CMS deploy tarball
         uses: actions/upload-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions/**
+          name: cms-deploy-tar
+          path: cms-deploy.tar.gz
 
-  deploy-cms:
-    needs: build-cms
+  build-tinymce:
+    needs: build-cms-extensions
     runs-on: ubuntu-latest
+    env:
+      TINYMCE_REF: "8.0.2"
+      DEPLOY_DIR: "cms/extensions/directus-extension-onrr-wysiwyg/public/tinymce"
+      SRC_DIR: "source/cms/src/extensions/interfaces/onrr-wysiwyg"
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Download build artifacts
+      - name: Download CMS deploy tarball
         uses: actions/download-artifact@v4
         with:
-          name: cms-extensions
-          path: cms/extensions
+          name: cms-deploy-tar
+          path: .
+
+      - name: Extract CMS deploy tarball
+        run: |
+          tar -xzf cms-deploy.tar.gz
+
+      - name: Checkout source repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: source
+
+      - name: Checkout TinyMCE (shallow)
+        uses: actions/checkout@v4
+        with:
+          repository: tinymce/tinymce
+          ref: ${{ env.TINYMCE_REF }}
+          path: tinymce
+          fetch-depth: 1
+
+      - name: Setup Node for TinyMCE
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+          cache-dependency-path: |
+            tinymce/yarn.lock
+            tinymce/package-lock.json
+
+      - name: Copy TinyMCE skin LESS
+        shell: bash
+        run: |
+          mkdir -p tinymce/modules/oxide/src/less/skins/ui/default/
+          shopt -s nullglob
+          cp -v "${SRC_DIR}/src/tinymce/modules/oxide/src/less/skins/ui/default/"* \
+                "tinymce/modules/oxide/src/less/skins/ui/default/"
+          shopt -u nullglob
+      
+      - name: Build TinyMCE Oxide 
+        working-directory: tinymce
+        run: |
+          yarn
+          yarn oxide-build
+
+      - name: Copy compiled TinyMCE into extension
+        run: |
+          mkdir -p "${DEPLOY_DIR}"
+          cp -R tinymce/modules/oxide/build/* "${DEPLOY_DIR}/"
+
+      - name: Re-pack CMS deploy tarball
+        run: |
+          rm -f cms-deploy.tar.gz
+          tar -czf cms-deploy.tar.gz cms
+
+      - name: Upload final CMS deploy tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: cms-deploy-tar
+          path: cms-deploy.tar.gz
+          overwrite: true
+
+  deploy-cms:
+    needs: build-tinymce
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo (for deploy.sh & manifests)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download CMS deploy tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: cms-deploy-tar
+          path: .
+
+      - name: Extract CMS deploy tarball (overlays repo cms/)
+        run: |
+          tar -xzf cms-deploy.tar.gz
+          echo "After extract in deploy-cms, workspace contents:"
+          ls
 
       - name: Deploy CMS
         working-directory: cms
@@ -117,3 +218,4 @@ jobs:
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_ORG: ${{ secrets.CF_ORG }}

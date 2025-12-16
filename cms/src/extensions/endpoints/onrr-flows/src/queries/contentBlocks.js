@@ -9,7 +9,7 @@ query content_blocks_by_id($id: ID!) {
         column_one
         column_two
         column_three
-        block_content
+        block_content_html
         block_v_col
         equal_col_height
     }

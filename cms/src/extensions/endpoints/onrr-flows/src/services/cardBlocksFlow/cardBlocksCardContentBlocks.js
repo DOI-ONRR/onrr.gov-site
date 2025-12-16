@@ -8,6 +8,7 @@ import {
 import { runContentBlocks } from '../contentBlocksFlow';
 import { ApiMessages, CollectionTypes, Endpoints, UpstreamAuthToken } from '../../constants';
 import diff from 'deep-diff';
+import { runCollectionBlocks } from '../collectionBlocksFlow';
 
 export async function runCardBlocksCardContentBlocks(id) {
     try {
@@ -38,9 +39,19 @@ export async function runCardBlocksCardContentBlocks(id) {
                     });
                 }
             }
-            const contentBlockFlowResult = await runContentBlocks(latestContentBlock.item.id);
-            if (contentBlockFlowResult) {
-                appliedChanges.push(contentBlockFlowResult);
+            switch (latestContentBlock.item.collection) {
+                case (CollectionTypes.CONTENT_BLOCKS):
+                    const contentBlockFlowResult = await runContentBlocks(latestContentBlock.item.id);
+                    if (contentBlockFlowResult) {
+                        appliedChanges.push(contentBlockFlowResult);
+                    }
+                    break;
+                case (CollectionTypes.COLLECTION_BLOCKS):
+                    const collectionBlocksFlowResult = await runCollectionBlocks(latestContentBlock.item.id);
+                    if (collectionBlocksFlowResult) {
+                        appliedChanges.push(collectionBlocksFlowResult);
+                    }
+                    break;
             }
         }
         for (var previousContentBlock of previous) {

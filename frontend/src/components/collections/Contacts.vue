@@ -1,46 +1,52 @@
 <template>
   <div>
-    <v-container class="pa-0 mt-10">
+    <v-container class="pa-0">
+      <v-row v-if="collectionHeader">
+        <v-col cols="12" sm="6">
+          <div v-html="collectionHeader"></div>
+        </v-col>
+      </v-row>
         <v-row>
           <v-col cols="12" sm="6">
             <TextField :fields="searchInputField"></TextField>
           </v-col>
         </v-row>
- <div v-if="visibleItems.length > 0 && showResults">
-        <v-row v-if="searchResults">
-          <v-col cols="12" sm="4">
-            <SelectField :fields="categoriesSelectField"></SelectField>
-          </v-col>
-          <v-col cols="12" sm="4" v-if="tabCategoriesSelectField.items.length > 1">
-            <SelectField :fields="tabCategoriesSelectField"></SelectField>
-          </v-col>
-          <v-col cols="12" sm="4" v-if="accordionCategoriesSelectField.items.length > 1">
-            <SelectField :fields="accordionCategoriesSelectField"></SelectField>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <div class="text-left mt-4">
-              Displaying {{ visibleItems.length }} of {{ filteredCollectionItems.length }} contacts
-            </div>
-          </v-col>
-          <v-col>
-            <div class="text-right mb-4">
-              <v-pagination
-              v-model="page"
-              color="secondary"
-              :length="Math.ceil(filteredCollectionItems.length/perPage)">
-              </v-pagination>
-            </div>
-          </v-col>
-        </v-row>
-</div>
+        <div v-if="visibleItems.length > 0 && showResults">
+            <v-row v-if="searchResults">
+              <v-col cols="12" sm="4">
+                <SelectField :fields="categoriesSelectField"></SelectField>
+              </v-col>
+              <v-col cols="12" sm="4" v-if="tabCategoriesSelectField.items.length > 1">
+                <SelectField :fields="tabCategoriesSelectField"></SelectField>
+              </v-col>
+              <v-col cols="12" sm="4" v-if="accordionCategoriesSelectField.items.length > 1">
+                <SelectField :fields="accordionCategoriesSelectField"></SelectField>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <div class="text-left mt-4">
+                  Displaying {{ visibleItems.length }} of {{ filteredCollectionItems.length }} contacts
+                </div>
+              </v-col>
+              <v-col>
+                <div class="text-right mb-4">
+                  <v-pagination
+                  v-model="page"
+                  color="secondary"
+                  :length="Math.ceil(filteredCollectionItems.length/perPage)">
+                  </v-pagination>
+                </div>
+              </v-col>
+            </v-row>
+        </div>
     </v-container>
 
     <div v-if="visibleItems.length > 0 && showResults">
       <v-fade-transition group hide-on-leave leave-absolute origin="top left">
         <div v-for="(item, i) in visibleItems" :key="i" class="mb-5">
-            <component :is="headerChange" class="collection-category pa-3 mb-3" style="font-size:large;">
+
+            <component :is="categoryHeaderLevel" class="collection-category pa-3 mb-3" style="font-size:large;">
             <span v-if="!searchResults">
               {{ item.header }}
               <span v-if="item.agency !== null">({{ item.agency }})</span>
@@ -165,16 +171,18 @@ export default {
   },
   props: {
     collection: [Object, Array],
-    block: {
-      type: Object
-    },
     collectionName: String,
     collectionLayout: String,
-    collectionPage: String,
+    collectionPage: {
+      type: String,
+      default: 'contacts'
+    },
     collectionTab: String,
     collectionAccordion: String,
+    collectionHeader: String,
     showToolbar: Boolean,
     filter: String,
+    categoryHeaderLevel: String
   },
   components: {
     TextField,
@@ -188,7 +196,6 @@ export default {
       return this.page = 1
     },
     findSearchValue(item) {
-      // console.log('findSearchValue item, searchfield: ', item, this.searchInputField.text)
       if (item !== null && (this.searchInputField.text !== undefined && this.searchInputField.text !== null)) {
         return this.searchInputField.text
         .toLowerCase()
@@ -196,13 +203,7 @@ export default {
         .every(v => item && item.toLowerCase().includes(v))
       }
     },
-    headerTagValue(){
-      console.log('return h3');
-      return 'h3';
-    },
     filterProperties(items) {
-      // console.log('filteredProperties items: ', items)
-
       const filteredItems = items
         .filter(({ page, tab, accordion, letter, header, operatorNumber, companyName, agency }) => {
           return this.findSearchValue(letter) ||
@@ -214,17 +215,13 @@ export default {
             this.findSearchValue(tab) ||
             this.findSearchValue(accordion)
         })
-      // console.log('filterProperties filteredItems: ', filteredItems)
       return filteredItems || items
     },
     filterContacts(items) {
-      // console.log('filterContacts -------> ', items)
       const filteredItems = items.map(item => {
         return { ...item, contacts: item.contacts.filter(contact => {
 
           if (contact.contact !== null) {
-            // console.log('filter contact: ', contact)
-            // console.log('found match: ', contact.contact.toLowerCase().includes(this.searchInputField.text.toLowerCase()))
             return this.findSearchValue(contact.contact) ||
               this.findSearchValue(contact.email) ||
               this.findSearchValue(contact.role)
@@ -232,12 +229,9 @@ export default {
         })}
       }).filter(item => item.contacts.length > 0)
 
-      // console.log('wtf filteredItems --------> ', filteredItems)
-
       return filteredItems
     },
     filterByCategory(items) {
-      // console.log('filterByCategory items ----> ', items)
       let filteredItems
       if (this.categoriesSelectField.selected !== null) {
         filteredItems = items.filter(item => (
@@ -302,25 +296,22 @@ export default {
       return nObj
     },
     filterByPage(items) {
-      const page = this.collectionPage || this.categoriesSelectField.selected
-      const results  = (page !== null) ? items.filter(item => item.page === page) : items
-      // console.log('filterByPage results -----> ', results)
+      const page = this.contactsPage || this.categoriesSelectField.selected
+      const results  = (page !== null) ? 
+        items.filter(item => item.page === (page !== 'contacts' ? page : item.page)) 
+        : items
       return results
     },
     filterByTab(items) {
-      // console.log('filterByTab items -----> ', items)
       const tab = this.collectionTab
-      || this.tabCategoriesSelectField.selected
+        || this.tabCategoriesSelectField.selected
       const results = (tab !== null) ? items.filter(item => item.tab === tab) : items
-      // console.log('filterByTab results -----> ', results)
       return results
     },
     filterByAccordion(items) {
-      // console.log('filterByAccordion items -----> ', items)
       const accordion = this.collectionAccordion
-      || this.accordionCategoriesSelectField.selected
+        || this.accordionCategoriesSelectField.selected
       const results = (accordion !== null) ? items.filter(item => item.accordion === accordion) : items
-      // console.log('filterByAccordion results ------> ', results)
       return results
     },
     categoryItems() {
@@ -349,53 +340,22 @@ export default {
     visibleItems() {
       return this.filteredCollectionItems.slice((this.page - 1) * this.perPage, this.page * this.perPage)
     },
-    headerStyle() {
-      console.log('the text block value:- '+JSON.stringify(TextBlock));
-      console.log('the text block value:- '+JSON.stringify(this.block));
-      return 'h3';
-    },
-    headerChange(){
-      const tabsPresent = document.querySelectorAll('.v-tabs-slider-wrapper');
-      const blockPresent = document.querySelectorAll('.block-component');
-      let headerValue = '';
-      blockPresent.forEach((e,i)=>{
-        if(blockPresent[i] && blockPresent[i].attributes){
-          let attValue = blockPresent[i].attributes;
-          if(attValue && attValue['variant']
-           && attValue['variant'].value && 
-           attValue['variant'].value !== 'body1'){
-            headerValue = attValue['variant'].value;
-          }
-        }
-      });
-      const blockPresentClass = document.getElementsByClassName('.block-component');
-      console.log('the header text block value:- h '+JSON.stringify(TextBlock));
-      console.log('the blockPresentClass:- h '+blockPresentClass);
-      if(tabsPresent && tabsPresent.length > 0){
-        headerValue = 'h'+ (Number(headerValue[1]) + 1);
-        return headerValue;
-      }
-      return headerValue;
-    },
     showResults() {
-     if ( this.collectionPage.length > 0 ) {
-     return  true
-     }else if  ( this.searchInputField.text.length > 0) {
-     return true
-     } else {
-        return false
-     }
+      if ((this.contactsPage.length > 0 && this.contactsPage !== 'contacts' ) 
+        || (this.searchInputField.text && this.searchInputField.text.length > 0)) {
+        return true
+      }
+      return false
     },
     filteredCollectionItems() {
       this.resetPagination()
-      const filteredList= (this.collectionPage || this.searchResults)
+      const filteredList= (this.contactsPage || this.searchResults)
       ? this.filterByPage(this.filterByTab(this.filterByAccordion(this.formattedContactsCollection)))
       : this.filterProperties(this.formattedContactsCollection)
 
       if (this.categoriesSelectField.selected === null && this.searchInputField.text === null) {
         return this.formattedContactsCollection
       } else {
-        console.log('filteredList yo ------> ', filteredList)
         if (this.searchInputField.text) {
           const filteredProperties = this.filterProperties(filteredList)
           return (filteredProperties.length === 0)
@@ -406,7 +366,11 @@ export default {
         }
       }
     },
-
+    contactsPage() {
+      return this.collectionPage == null
+        ? 'contacts'
+        : this.collectionPage
+    }
   },
   watch: {
     'searchInputField.text': function() {
@@ -466,6 +430,8 @@ export default {
 .collection-category {
   border-top: 2px solid var(--v-purple-base);
   background-color: var(--v-purple-lighten2);
+  font-size: large !important;
+  font-weight: bold !important;
 }
 .contact-card {
   min-height: 165px;

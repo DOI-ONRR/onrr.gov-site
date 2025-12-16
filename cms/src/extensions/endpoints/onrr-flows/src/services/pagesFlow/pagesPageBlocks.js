@@ -6,6 +6,7 @@ import {
 } from '../../operations/pages';
 import { runCardBlocks } from '../cardBlocksFlow/cardBlocks';
 import { runContentBlocks } from '../contentBlocksFlow';
+import { runCollectionBlocks } from '../collectionBlocksFlow';
 import { runExpansionPanels } from '../expansionPanelsFlow/expansionPanels';
 import { runTabBlocks } from '../tabBlocksFlow';
 import { ApiMessages, UpstreamAuthToken, CollectionTypes, Endpoints } from '../../constants';
@@ -48,6 +49,9 @@ export async function runPagesPageBlocks(pageId) {
                     break;
                 case CollectionTypes.CONTENT_BLOCKS:
                     flowResult = await runContentBlocks(latestPageBlock.item.id);
+                    break;
+                case CollectionTypes.COLLECTION_BLOCKS:
+                    flowResult = await runCollectionBlocks(latestPageBlock.item.id);
                     break;
                 case CollectionTypes.EXPANSION_PANELS:
                     flowResult = await runExpansionPanels(latestPageBlock.item.id);
