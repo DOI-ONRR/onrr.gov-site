@@ -57,21 +57,6 @@ function handleError(res, message) {
 
 app.all('*', (req, res) => {
   const requestedPath = req.originalUrl.split('?')[0];
-  console.log('requestedPath', requestedPath)
-
-  // --- Redirects (do this before any proxying) ---
-  if (requestedPath === '/revenue-data') {
-    return res.redirect(301, 'https://revenuedata.doi.gov');
-  }
-
-  if (requestedPath === '/explore-data') {
-    return res.redirect(301, 'https://revenuedata.doi.gov/explore');
-  }
-
-  if (requestedPath === '/query-data') {
-    return res.redirect(301, 'https://revenuedata.doi.gov/query-data');
-  }
-  
   const isProxyPath = PROXY_PATHS.some(path => requestedPath.startsWith(path));
 
   if (requestedPath === '/graphql') {

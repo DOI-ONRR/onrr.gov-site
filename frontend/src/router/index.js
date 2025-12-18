@@ -125,17 +125,24 @@ function getApolloQuery() {
   return apolloClient.query({ query: PAGES_REDIRECTS_QUERY});
 }
 
-// function createLinkEvent(url) {
-//   const link = document.createElement('a');
-//   link.href = url;
-//   link.target = '_blank';
-//   link.click();
-// }
+const EXTERNAL_REDIRECTS = new Map([
+  ['/revenue-data', 'https://revenuedata.doi.gov'],
+  ['/explore-data', 'https://revenuedata.doi.gov/explore'],
+  ['/query-data', 'https://revenuedata.doi.gov/query-data'],
+]);
 
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
   
+  const target = EXTERNAL_REDIRECTS.get(to.path);
+  if (target) {
+    // preserve query/hash if present
+    const q = to.fullPath.includes('?') ? to.fullPath.slice(to.fullPath.indexOf('?')) : '';
+    const h = to.hash || '';
+    window.location.assign(`${target}${q}${h}`);
+  }
+
   if (from.path !== to.path) {
     await store.dispatch('updatePageLoaded', false);
   }
