@@ -137,10 +137,12 @@ router.beforeEach(async (to, from, next) => {
   
   const target = EXTERNAL_REDIRECTS.get(to.path);
   if (target) {
-    // preserve query/hash if present
+    // preserve query/hash if you want
     const q = to.fullPath.includes('?') ? to.fullPath.slice(to.fullPath.indexOf('?')) : '';
     const h = to.hash || '';
-    window.location.assign(`${target}${q}${h}`);
+
+    window.location.replace(`${target}${q}${h}`);
+    return; // don't call next()
   }
 
   if (from.path !== to.path) {
