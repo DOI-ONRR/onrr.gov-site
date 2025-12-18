@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import { apolloClient } from '@/main.js'
 import store from '../store/index'
 
-import { 
+import {
   PAGES_REDIRECTS_QUERY
 } from '@/graphql/queries'
 
@@ -81,7 +81,7 @@ const routes = [
                         meta: {
                           breadcrumb: ''
                         },
-                        
+
                       },
                     ]
                   },
@@ -125,11 +125,21 @@ function getApolloQuery() {
   return apolloClient.query({ query: PAGES_REDIRECTS_QUERY});
 }
 
+function isAbsoluteUrl(url) {
+  return /^https?:\/\//i.test(url);
+}
+
+function toAbsoluteUrl(baseUrl, url) {
+  if (!url) return baseUrl;
+  if (isAbsoluteUrl(url)) return url;
+  return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
 const EXTERNAL_REDIRECTS = new Map([
   ['/revenue-data', 'https://revenuedata.doi.gov'],
   ['/explore-data', 'https://revenuedata.doi.gov/explore'],
   ['/query-data', 'https://revenuedata.doi.gov/query-data'],
-  ['/download-data', 'https://revenuedata.doi.gov/query-data'],
+  ['/download-data', 'https://revenuedata.doi.gov/downloads'],
   ['/revenue-data-glossary', 'https://revenuedata.doi.gov/glossary'],
   ['/how-revenue-works', 'https://revenuedata.doi.gov/how-revenue-works'],
 ]);
@@ -137,15 +147,17 @@ const EXTERNAL_REDIRECTS = new Map([
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
-  
+
   const target = EXTERNAL_REDIRECTS.get(to.path);
   if (target) {
-    // preserve query/hash if you want
-    const q = to.fullPath.includes('?') ? to.fullPath.slice(to.fullPath.indexOf('?')) : '';
-    const h = to.hash || '';
+    const qs = Object.keys(to.query || {}).length
+      ? `?${new URLSearchParams(to.query).toString()}`
+      : '';
+    const hash = to.hash || '';
 
-    window.location.replace(`${target}${q}${h}`);
-    return; // don't call next()
+    // Use replace so Back doesn't land on the intermediary route
+    window.location.assign(`${target}${qs}${hash}`);
+    return; // IMPORTANT: do not call next()
   }
 
   if (from.path !== to.path) {
@@ -174,7 +186,7 @@ router.beforeEach(async (to, from, next) => {
     //TODO: better way to find hashes and query params
     const redirectToUrl = redirectFound.new_url.includes('?') ? redirectFound.new_url.split('?')[0] : redirectFound.new_url.split('#')[0];
     const pageFound = pages.find(page => page.url === redirectToUrl);
-    
+
     // check if url has extension
     const fileExtension = redirectToUrl.includes('.') ? redirectToUrl.split('.').pop() : undefined;
 
@@ -183,31 +195,29 @@ router.beforeEach(async (to, from, next) => {
         window.location.replace(`${ baseUrl }${ redirectFound.new_url }`);
         return;
       } else {
-        location.href = '/404';
+        next('/404');
+        return;
       }
     } else {
-      window.location.href = `${ baseUrl }${ redirectFound.new_url }`;
+      window.location.replace(toAbsoluteUrl(baseUrl, redirectFound.new_url));
+      return;
     }
   } else {
     const pageFound = pages.find(page => page.url === path);
-    if (pageFound) {
-      // check for query params
-      if (!hasQueryParams(to) && hasQueryParams(from)) {
-        next({ name: to.name, query: from.query })
-      } else {
-        next()
-      }
-    } else {
-      location.href = '/404';
+
+    if (!pageFound) {
+      next('/404');
+      return;
     }
-  }
 
+    // check for query params (only once)
+    if (!hasQueryParams(to) && hasQueryParams(from)) {
+      next({ name: to.name, query: from.query });
+      return;
+    }
 
-  // check for query params
-  if (!hasQueryParams(to) && hasQueryParams(from)) {
-    next({ name: to.name, query: from.query })
-  } else {
-    next()
+    next();
+    return;
   }
 
 })
