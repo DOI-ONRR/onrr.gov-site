@@ -57,6 +57,7 @@ function handleError(res, message) {
 
 app.all('*', (req, res) => {
   const requestedPath = req.originalUrl.split('?')[0];
+  console.log('requestedPath', requestedPath)
 
   // --- Redirects (do this before any proxying) ---
   if (requestedPath === '/revenue-data') {
