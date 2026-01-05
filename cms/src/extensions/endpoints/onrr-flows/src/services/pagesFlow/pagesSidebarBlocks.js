@@ -6,15 +6,15 @@ import {
 } from '../../operations/pages';
 import { runContentBlocks } from '../contentBlocksFlow';
 import { runCollectionBlocks } from '../collectionBlocksFlow';
-import { ApiMessages, UpstreamAuthToken, CollectionTypes, Endpoints } from '../../constants';
+import { ApiMessages, LocalAuthToken, UpstreamAuthToken, CollectionTypes, Endpoints } from '../../constants';
 import diff from 'deep-diff';
 import { logger } from '../../utils/logger';
 
 export async function runPagesSidebarBlocks(pageId) {
     try {
         var appliedChanges = [];
-        const latestBlocks = await getPagesSidebarBlocks(pageId, Endpoints.LOCAL);
-        const previousBlocks = await getPagesSidebarBlocks(pageId, Endpoints.UPSTREAM);
+        const latestBlocks = await getPagesSidebarBlocks(pageId, Endpoints.LOCAL, LocalAuthToken);
+        const previousBlocks = await getPagesSidebarBlocks(pageId, Endpoints.UPSTREAM, UpstreamAuthToken);
         for (const latestSidebarBlock of (latestBlocks || [])) {
             if (!previousBlocks.find(block => block.id === latestSidebarBlock.id)) {
                 var newItem = JSON.parse(JSON.stringify(latestSidebarBlock));
