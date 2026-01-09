@@ -166,14 +166,10 @@ router.beforeEach(async (to, from, next) => {
     // check if url has extension
     const fileExtension = redirectToUrl.includes('.') ? redirectToUrl.split('.').pop() : undefined;
 
-    console.log('redirectToUrl --------> ', redirectToUrl);
-    console.log('pageFound ------> ', pageFound);
-    console.log('fileExtension -------> ', fileExtension);
-
     if (!pageFound) {
       if (fileExtension) {
-        window.open(`${ baseUrl }${ redirectFound.new_url }`, '_blank', 'noopener noreferrer');
-        history.back();
+        window.location.replace(`${ baseUrl }${ redirectFound.new_url }`);
+        return;
       } else {
         location.href = '/404';
       }
