@@ -16,7 +16,7 @@ applications:
     - dev-onrr-s3
   env:
     CONFIG_PATH: ./config.js
-    UPSTREAM_URL: https://prod-onr-cms.app.cloud.gov
+    UPSTREAM_URL: https://prod-onrr-cms.app.cloud.gov
     CORS_ORIGIN: https://preview-onrr-cms.app.cloud.gov
     DIRECTUS_PUBLIC_HOST: https://dev-onrr-cms.app.cloud.gov
     PUBLIC_URL: https://dev-onrr-cms.app.cloud.gov
