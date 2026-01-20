@@ -1,7 +1,7 @@
 ---
 applications: 
 - name: upgrade-onrr-cms
-  command: npx directus start
+  command: ./node_modules/.bin/directus start
   instances: 1
   disk_quota: 1G
   memory: 1G
