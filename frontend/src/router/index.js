@@ -136,12 +136,12 @@ function toAbsoluteUrl(baseUrl, url) {
 }
 
 const EXTERNAL_REDIRECTS = new Map([
-  ['/revenue-data', 'https://revenuedata.doi.gov'],
-  ['/explore-data', 'https://revenuedata.doi.gov/explore'],
-  ['/query-data', 'https://revenuedata.doi.gov/query-data'],
-  ['/download-data', 'https://revenuedata.doi.gov/downloads'],
-  ['/revenue-data-glossary', 'https://revenuedata.doi.gov/glossary'],
-  ['/how-revenue-works', 'https://revenuedata.doi.gov/how-revenue-works'],
+  ['/revenue-data', 'https://revenuedata.onrr.gov'],
+  ['/explore-data', 'https://revenuedata.onrr.gov/explore'],
+  ['/query-data', 'https://revenuedata.onrr.gov/query-data'],
+  ['/download-data', 'https://revenuedata.onrr.gov/downloads'],
+  ['/revenue-data-glossary', 'https://revenuedata.onrr.gov/glossary'],
+  ['/how-revenue-works', 'https://revenuedata.onrr.gov/how-revenue-works'],
 ]);
 
 // If url path doesn't exist lets redirect to the 404 page
