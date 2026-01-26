@@ -39,7 +39,7 @@ export async function runCardBlocksCardContentBlocks(id) {
                     });
                 }
             }
-            switch (latestContentBlock.item.collection) {
+            switch (latestContentBlock.collection) {
                 case (CollectionTypes.CONTENT_BLOCKS):
                     const contentBlockFlowResult = await runContentBlocks(latestContentBlock.item.id);
                     if (contentBlockFlowResult) {
