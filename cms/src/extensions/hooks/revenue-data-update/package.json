@@ -1,0 +1,30 @@
+{
+	"name": "revenue-data-update",
+	"description": "Please enter a description for your extension",
+	"icon": "extension",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-hook"
+	],
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "hook",
+		"path": "dist/index.js",
+		"source": "src/index.js",
+		"host": "^10.10.0"
+	},
+	"scripts": {
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-revenue-data-update/dist; cp package.json ../../../../extensions/directus-extension-revenue-data-update; cp dist/index.js ../../../../extensions/directus-extension-revenue-data-update/dist",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"validate": "directus-extension validate"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "17.0.5"
+	}
+}
