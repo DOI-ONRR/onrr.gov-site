@@ -2,22 +2,28 @@
  * CSV parser for disbursement data files.
  */
 
+import { mapHeader } from './fieldMappings.js';
+
 /**
  * Parses a CSV string into an array of objects.
  * Uses the first row as headers for object keys.
  *
  * @param {string} csvString - The CSV content as a string
+ * @param {Object} [fieldMap] - Optional mapping of CSV headers to property names
  * @returns {Array<Object>} - Array of records with header keys
  */
-export function parseCsv(csvString) {
+export function parseCsv(csvString, fieldMap = null) {
   const lines = parseLines(csvString);
 
   if (lines.length === 0) {
     return [];
   }
 
-  // First line is headers
-  const headers = parseLine(lines[0]);
+  // First line is headers - map to property names if fieldMap provided
+  const rawHeaders = parseLine(lines[0]);
+  const headers = fieldMap
+    ? rawHeaders.map(h => mapHeader(h, fieldMap))
+    : rawHeaders;
 
   // Parse remaining lines as data rows
   const records = [];

@@ -7,6 +7,7 @@
 
 import { getFileContents } from './getFileContents.js';
 import { parseCsv } from './parseCsv.js';
+import { DISBURSEMENT_FIELD_MAP } from './fieldMappings.js';
 import {
   transformDisbursementRecord,
   transformFipsCode,
@@ -54,8 +55,8 @@ export async function processDisbursementUpdate(fileId, context) {
 
     // Step 2 - Parse the file contents (CSV)
     console.log('[Disbursement Update] Parsing CSV');
-    const records = parseCsv(fileContents);
-    console.log('[Disbursement Update] parsed record count:', { records });
+    const records = parseCsv(fileContents, DISBURSEMENT_FIELD_MAP);
+    console.log('[Disbursement Update] parsed record count:', records.length);
 
     // Step 3 - Transform each record using disbursement transformers
     const { ItemsService } = services;
