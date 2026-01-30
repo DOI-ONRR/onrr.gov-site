@@ -30,6 +30,8 @@ export function transformCommodity(record) {
   // Capitalize first letter, lowercase the rest
   if (commodity.length > 0) {
     commodity = commodity.charAt(0).toUpperCase() + commodity.slice(1).toLowerCase();
+  } else {
+    commodity = 'Not tied to a commodity';
   }
 
   return {

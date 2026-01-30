@@ -2,7 +2,7 @@
  * Disbursement data update process.
  *
  * Processes a disbursement data file uploaded to Directus,
- * transforming and loading the data into the appropriate tables.
+ * transforming and loading the reference data into the appropriate tables.
  */
 
 import { getFileContents } from './getFileContents.js';
@@ -90,10 +90,12 @@ export async function processDisbursementUpdate(fileId, context) {
     const fundService = new ItemsService('fund', { schema, accountability });
     const locationService = new ItemsService('location', { schema, accountability });
     const periodService = new ItemsService('period', { schema, accountability });
+    const commodityService = new ItemsService('commodity', { schema, accountability });
 
     const fundMap = new Map();
     const locationMap = new Map();
     const periodMap = new Map();
+    const commodityMap = new Map();
 
     for (const record of transformedRecords) {
       // Build and deduplicate fund record
@@ -131,6 +133,11 @@ export async function processDisbursementUpdate(fileId, context) {
           periodMap.set(periodKey, { record: periodRecord, id: null });
         }
       }
+
+      // Track and deduplicate commodity
+      if (!commodityMap.has(record.commodity)) {
+        commodityMap.set(record.commodity, { commodity: commodity, id: null});
+      }
     }
 
     // Step 4 - Query/insert fund records and store IDs
@@ -139,8 +146,8 @@ export async function processDisbursementUpdate(fileId, context) {
         // Check if fund already exists
         const existing = await fundService.readByQuery({
           filter: {
-            fund_type: { _eq: entry.record.fund_type },
-            fund_class: { _eq: entry.record.fund_class },
+            type: { _eq: entry.record.type },
+            class: { _eq: entry.record.class },
             recipient: { _eq: entry.record.recipient },
             revenue_type: { _eq: entry.record.revenue_type },
             source: { _eq: entry.record.source },
@@ -226,7 +233,30 @@ export async function processDisbursementUpdate(fileId, context) {
       }
     }
 
-    // Step 7 - Insert disbursement records using cached IDs
+    // Step 7 - Retrieve commodity record
+    for (const [key, entry] of periodMap.entries()) {
+      try {
+        const commodity = await commodityService.readByQuery({
+          filter: {
+            name: { _eq: entry.commodity },
+            product: { _eq: (!entry.commodity ? '' : entry.commodity) }
+          },
+          fields: ['id'],
+          limit: 1,
+        });   
+
+        entry.id = commodity[0].id;
+
+      } catch (error) {
+        result.errors.push({
+          type: 'commodity_read',
+          commodity: entry.commodity,
+          message: error.message,
+        });
+      }
+    }
+
+    // Step 8 - Insert disbursement records using cached IDs
     const disbursementService = new ItemsService('disbursement', { schema, accountability });
 
     for (const record of transformedRecords) {
@@ -270,12 +300,15 @@ export async function processDisbursementUpdate(fileId, context) {
         const periodKey = periodRecord.period_date;
         const periodId = periodMap.get(periodKey)?.id;
 
+        // Get commodity ID from map
+        const commodityId = commodityMap(record.commodity)?.id;
+
         // Skip if any foreign key is missing
-        if (!fundId || !locationId || !periodId) {
+        if (!fundId || !locationId || !periodId || !commodityId) {
           result.errors.push({
             type: 'disbursement_skip',
             message: 'Missing foreign key',
-            details: { fundId, locationId, periodId },
+            details: { fundId, locationId, periodId, commodityId },
           });
           continue;
         }
@@ -289,7 +322,7 @@ export async function processDisbursementUpdate(fileId, context) {
           location: locationId,
           period: periodId,
           amount,
-          commodity: record.commodity || '',
+          commodity: commodityId,
           unit: record.unit || 'dollars',
           unit_abbr: record.unit_abbr || '$',
         };
@@ -305,7 +338,7 @@ export async function processDisbursementUpdate(fileId, context) {
       }
     }
 
-    // Step 8 - Update process status/log
+    // Step 9 - Update process status/log
     result.completedAt = new Date().toISOString();
     result.success = result.errors.length === 0;
 

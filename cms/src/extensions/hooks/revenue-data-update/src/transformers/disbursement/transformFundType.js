@@ -24,6 +24,7 @@ export function transformFundType(record) {
   // Append suffix based on disbursement_type
   if (disbursementType.includes('8(g)')) {
     fundType = `${fundType} 8(g)`;
+    disbursementType = '8(g) offshore';
   } else if (disbursementType.includes('GoMESA') || disbursementType === 'OCS Gulf') {
     fundType = `${fundType} - OCS Gulf`;
     disbursementType = 'OCS Gulf';

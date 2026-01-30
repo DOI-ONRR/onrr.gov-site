@@ -22,8 +22,8 @@ export function buildFundRecord(record) {
   }
 
   return {
-    fund_type: record.fund_type || '',
-    fund_class: record.fund_class || '',
+    type: record.fund_type || '',
+    class: record.fund_class || '',
     recipient: record.recipient || '',
     revenue_type: record.category || '',
     source,
