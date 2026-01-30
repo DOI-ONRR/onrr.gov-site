@@ -1224,6 +1224,30 @@ collections:
       translations: null
       unarchive_value: null
       versioning: false
+  - collection: revenue_data_update
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: revenue_data_update
+      color: null
+      display_template: null
+      group: null
+      hidden: true
+      icon: null
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: revenue_data_update
   - collection: revenue_handbook
     meta:
       accountability: all
@@ -5413,6 +5437,46 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: commodity
+    field: legacy_id
+    type: integer
+    meta:
+      collection: commodity
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_id
+      table: commodity
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contacts
     field: id
     type: integer
@@ -8535,8 +8599,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 15
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -8667,36 +8731,156 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: disbursement
-    field: raw_amount
-    type: string
+    field: legacy_commodity_id
+    type: integer
     meta:
       collection: disbursement
       conditions: null
       display: null
       display_options: null
-      field: raw_amount
+      field: legacy_commodity_id
       group: null
-      hidden: false
+      hidden: true
       interface: input
       note: null
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special: null
       translations: null
       validation: null
       validation_message: null
       width: full
     schema:
-      name: raw_amount
+      name: legacy_commodity_id
       table: disbursement
-      data_type: character varying
+      data_type: integer
       default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: disbursement
+    field: legacy_fund_id
+    type: integer
+    meta:
+      collection: disbursement
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_fund_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_fund_id
+      table: disbursement
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: disbursement
+    field: legacy_location_id
+    type: integer
+    meta:
+      collection: disbursement
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_location_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_location_id
+      table: disbursement
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: disbursement
+    field: legacy_period_id
+    type: integer
+    meta:
+      collection: disbursement
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_period_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_period_id
+      table: disbursement
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -10844,8 +11028,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 13
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11173,8 +11357,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 14
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11213,8 +11397,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 14
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11253,8 +11437,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 14
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11293,8 +11477,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 12
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11333,8 +11517,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 12
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11373,8 +11557,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 14
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11413,8 +11597,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 13
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11453,8 +11637,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 3
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -11655,6 +11839,46 @@ fields:
       max_length: 255
       numeric_precision: null
       numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: federal_sales
+    field: legacy_id
+    type: integer
+    meta:
+      collection: federal_sales
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_id
+      table: federal_sales
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -12387,6 +12611,46 @@ fields:
       max_length: 255
       numeric_precision: null
       numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: fund
+    field: legacy_id
+    type: integer
+    meta:
+      collection: fund
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_id
+      table: fund
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -15231,8 +15495,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 5
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -16051,6 +16315,46 @@ fields:
       max_length: 255
       numeric_precision: null
       numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: location
+    field: legacy_id
+    type: integer
+    meta:
+      collection: location
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_id
+      table: location
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -18763,6 +19067,86 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: period
+    field: period_date
+    type: date
+    meta:
+      collection: period
+      conditions: null
+      display: null
+      display_options: null
+      field: period_date
+      group: null
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: period_date
+      table: period
+      data_type: date
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: period
+    field: legacy_id
+    type: integer
+    meta:
+      collection: period
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_id
+      table: period
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: plant_specific_ucas
     field: id
     type: integer
@@ -20197,46 +20581,6 @@ fields:
       foreign_key_table: commodity
       foreign_key_column: id
   - collection: production
-    field: volume
-    type: integer
-    meta:
-      collection: production
-      conditions: null
-      display: null
-      display_options: null
-      field: volume
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 9
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: volume
-      table: production
-      data_type: integer
-      default_value: null
-      max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: production
     field: unit
     type: string
     meta:
@@ -20346,6 +20690,166 @@ fields:
       default_value: null
       max_length: null
       numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: production
+    field: legacy_commodity_id
+    type: integer
+    meta:
+      collection: production
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_commodity_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_commodity_id
+      table: production
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: production
+    field: legacy_location_id
+    type: integer
+    meta:
+      collection: production
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_location_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_location_id
+      table: production
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: production
+    field: legacy_period_id
+    type: integer
+    meta:
+      collection: production
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_period_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_period_id
+      table: production
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: production
+    field: volume
+    type: bigInteger
+    meta:
+      collection: production
+      conditions: null
+      display: null
+      display_options: null
+      field: volume
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: volume
+      table: production
+      data_type: bigint
+      default_value: null
+      max_length: null
+      numeric_precision: 64
       numeric_scale: 0
       is_nullable: true
       is_unique: false
@@ -22233,8 +22737,8 @@ fields:
       data_type: numeric
       default_value: null
       max_length: null
-      numeric_precision: 10
-      numeric_scale: 5
+      numeric_precision: 14
+      numeric_scale: 2
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -22365,34 +22869,506 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: revenue
-    field: raw_amount
-    type: string
+    field: legacy_location_id
+    type: integer
     meta:
       collection: revenue
       conditions: null
       display: null
       display_options: null
-      field: raw_amount
+      field: legacy_location_id
       group: null
-      hidden: false
+      hidden: true
       interface: input
       note: null
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special: null
       translations: null
       validation: null
       validation_message: null
       width: full
     schema:
-      name: raw_amount
+      name: legacy_location_id
       table: revenue
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue
+    field: legacy_period_id
+    type: integer
+    meta:
+      collection: revenue
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_period_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_period_id
+      table: revenue
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue
+    field: legacy_commodity_id
+    type: integer
+    meta:
+      collection: revenue
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_commodity_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_commodity_id
+      table: revenue
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue
+    field: legacy_fund_id
+    type: integer
+    meta:
+      collection: revenue
+      conditions: null
+      display: null
+      display_options: null
+      field: legacy_fund_id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legacy_fund_id
+      table: revenue
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: id
+    type: uuid
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: revenue_data_update
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: user_created
+    type: uuid
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: revenue_data_update
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: revenue_data_update
+    field: date_created
+    type: timestamp
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: revenue_data_update
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: dataset
+    type: string
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: dataset
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Disbursement
+            value: disbursement
+          - text: Revenue
+            value: revenue
+          - text: Federal Sales
+            value: federal-sales
+          - text: Production
+            value: production
+          - text: Federal Revenue by Company
+            value: federal-revenue-by-company
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: dataset
+      table: revenue_data_update
       data_type: character varying
       default_value: null
       max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: period
+    type: string
+    meta:
+      collection: revenue_data_update
+      conditions:
+        - name: Disabled for disbursement
+          readonly: true
+          rule:
+            _and:
+              - dataset:
+                  _eq: disbursement
+      display: null
+      display_options: null
+      field: period
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Calendar Year
+            value: calendar-year
+          - text: Fiscal Year
+            value: fiscal-year
+          - text: Monthly
+            value: monthly
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: period
+      table: revenue_data_update
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: file
+    type: uuid
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: file
+      group: null
+      hidden: false
+      interface: file
+      note: null
+      options:
+        folder: 6157e772-1927-4a4d-8ea0-d14b26714e0c
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: file
+      table: revenue_data_update
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: revenue_data_update
+    field: status
+    type: string
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: status
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: status
+      table: revenue_data_update
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: result
+    type: json
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: result
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: result
+      table: revenue_data_update
+      data_type: json
+      default_value: null
+      max_length: null
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -27340,6 +28316,48 @@ relations:
       foreign_key_table: fund
       foreign_key_column: id
       constraint_name: revenue_fund_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: revenue_data_update
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: revenue_data_update
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: revenue_data_update
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: revenue_data_update_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: revenue_data_update
+    field: file
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: revenue_data_update
+      many_field: file
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: revenue_data_update
+      column: file
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: revenue_data_update_file_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: revenue_handbook
