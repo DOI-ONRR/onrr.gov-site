@@ -50,13 +50,10 @@ export async function processDisbursementUpdate(fileId, context) {
 
   try {
     // Step 1 - Retrieve the file from Directus
-    console.log('[Disbursement Update] Getting file contents:');
     const fileContents = await getFileContents(fileId, { services, schema, accountability });
 
     // Step 2 - Parse the file contents (CSV)
-    console.log('[Disbursement Update] Parsing CSV');
     const records = parseCsv(fileContents, DISBURSEMENT_FIELD_MAP);
-    console.log('[Disbursement Update] parsed record count:', records.length);
 
     // Step 3 - Transform each record using disbursement transformers
     const { ItemsService } = services;
@@ -69,7 +66,6 @@ export async function processDisbursementUpdate(fileId, context) {
     const transformedRecords = [];
     for (const record of records) {
       // Apply synchronous transformations
-      console.log('[Disbursement Update] transforming disbursement record:', { record });
       let transformed = transformDisbursementRecord(record);
 
       // Skip records filtered out by transformations (e.g., disbursement = '-')
@@ -136,7 +132,7 @@ export async function processDisbursementUpdate(fileId, context) {
 
       // Track and deduplicate commodity
       if (!commodityMap.has(record.commodity)) {
-        commodityMap.set(record.commodity, { commodity: commodity, id: null});
+        commodityMap.set(record.commodity, { commodity: record.commodity, id: null});
       }
     }
 
@@ -181,9 +177,21 @@ export async function processDisbursementUpdate(fileId, context) {
           filter: {
             land_class: { _eq: entry.record.land_class },
             land_category: { _eq: entry.record.land_category },
-            state: { _eq: entry.record.state },
-            county: { _eq: entry.record.county },
-            fips_code: { _eq: entry.record.fips_code },
+            _and: [
+              {_or: [
+                {county: { _eq: entry.record.county }},
+                {county: { _empty: true }}
+              ]},
+              {_or: [
+                {state: { _eq: entry.record.state }},
+                {state: { _empty: true }}
+              ]},
+              {_or: [
+                {fips_code: { _eq: entry.record.fips_code }},
+                {fips_code: { _empty: true }}
+              ]}
+            ],
+            offshore_region: { _empty: true },
           },
           fields: ['id'],
           limit: 1,
@@ -234,12 +242,16 @@ export async function processDisbursementUpdate(fileId, context) {
     }
 
     // Step 7 - Retrieve commodity record
-    for (const [key, entry] of periodMap.entries()) {
+    for (const [key, entry] of commodityMap.entries()) {
       try {
         const commodity = await commodityService.readByQuery({
           filter: {
             name: { _eq: entry.commodity },
-            product: { _eq: (!entry.commodity ? '' : entry.commodity) }
+            _or: [
+                { product: { _eq: entry.commodity } },
+                { product: { _empty: true } }
+            ],
+            mineral_lease_type: { _empty: true }
           },
           fields: ['id'],
           limit: 1,
@@ -259,77 +271,102 @@ export async function processDisbursementUpdate(fileId, context) {
     // Step 8 - Insert disbursement records using cached IDs
     const disbursementService = new ItemsService('disbursement', { schema, accountability });
 
+    let disbursementRecords = [];
+
     for (const record of transformedRecords) {
+      // Build the related records to get lookup keys
+      const fundRecord = buildFundRecord(record);
+      const locationRecord = buildLocationRecord(record);
+      const periodRecord = buildPeriodRecord(record);
+
+      if (periodRecord === null) {
+        result.errors.push({
+          type: 'disbursement_skip',
+          message: 'Invalid period date',
+          record: { month: record.month, calendar_year: record.calendar_year },
+        });
+        continue;
+      }
+
+      // Get fund ID from map
+      const fundKey = [
+        fundRecord.fund_type,
+        fundRecord.fund_class,
+        fundRecord.recipient,
+        fundRecord.revenue_type,
+        fundRecord.source,
+        fundRecord.disbursement_type,
+      ].join('|');
+      const fundId = fundMap.get(fundKey)?.id;
+
+      // Get location ID from map
+      const locationKey = [
+        locationRecord.land_class,
+        locationRecord.land_category,
+        locationRecord.state,
+        locationRecord.county,
+        locationRecord.fips_code,
+      ].join('|');
+      const locationId = locationMap.get(locationKey)?.id;
+
+      // Get period ID from map
+      const periodKey = periodRecord.period_date;
+      const periodId = periodMap.get(periodKey)?.id;
+
+      // Get commodity ID from map
+      const commodityId = commodityMap.get(record.commodity)?.id;
+
+      // Skip if any foreign key is missing
+      if (!fundId || !locationId || !periodId || !commodityId) {
+        result.errors.push({
+          type: 'disbursement_skip',
+          message: 'Missing foreign key',
+          details: { fundId, locationId, periodId, commodityId },
+        });
+        continue;
+      }
+
+      // Parse disbursement amount
+      const amount = parseFloat(record.disbursement?.replace(/,/g, '') || '0');
+
+      disbursementRecords.push({
+        fund: fundId,
+        location: locationId,
+        period: periodId,
+        commodity: commodityId,
+        amount,
+        unit: record.unit || 'dollars',
+        unit_abbr: record.unit_abbr || '$',
+      });
+    }
+
+    // Aggregate disbursement data
+    const disbursementAggregate = new Map();
+
+    disbursementRecords.forEach(record => {
+      const key = `${record.location}:${record.period}:${record.fund}:${record.commodity}`;
+  
+      if (disbursementAggregate.has(key)) {
+        disbursementAggregate.get(key).amount += record.amount;
+        disbursementAggregate.get(key).duplicate_no++;
+      } else {
+        disbursementAggregate.set(key, { 
+          location: record.location,
+          period: record.period,
+          fund: record.fund,
+          commodity: record.commodity,
+          amount: record.amount,
+          unit: record.unit,
+          unit_abbr: record.unit_abbr,
+          duplicate_no: 1
+        });
+      }
+    });
+
+    for (const disbursementRecord of disbursementAggregate.values()) {
       try {
-        // Build the related records to get lookup keys
-        const fundRecord = buildFundRecord(record);
-        const locationRecord = buildLocationRecord(record);
-        const periodRecord = buildPeriodRecord(record);
-
-        if (periodRecord === null) {
-          result.errors.push({
-            type: 'disbursement_skip',
-            message: 'Invalid period date',
-            record: { month: record.month, calendar_year: record.calendar_year },
-          });
-          continue;
-        }
-
-        // Get fund ID from map
-        const fundKey = [
-          fundRecord.fund_type,
-          fundRecord.fund_class,
-          fundRecord.recipient,
-          fundRecord.revenue_type,
-          fundRecord.source,
-          fundRecord.disbursement_type,
-        ].join('|');
-        const fundId = fundMap.get(fundKey)?.id;
-
-        // Get location ID from map
-        const locationKey = [
-          locationRecord.land_class,
-          locationRecord.land_category,
-          locationRecord.state,
-          locationRecord.county,
-          locationRecord.fips_code,
-        ].join('|');
-        const locationId = locationMap.get(locationKey)?.id;
-
-        // Get period ID from map
-        const periodKey = periodRecord.period_date;
-        const periodId = periodMap.get(periodKey)?.id;
-
-        // Get commodity ID from map
-        const commodityId = commodityMap(record.commodity)?.id;
-
-        // Skip if any foreign key is missing
-        if (!fundId || !locationId || !periodId || !commodityId) {
-          result.errors.push({
-            type: 'disbursement_skip',
-            message: 'Missing foreign key',
-            details: { fundId, locationId, periodId, commodityId },
-          });
-          continue;
-        }
-
-        // Parse disbursement amount
-        const amount = parseFloat(record.disbursement?.replace(/,/g, '') || '0');
-
-        // Create disbursement record
-        const disbursementRecord = {
-          fund: fundId,
-          location: locationId,
-          period: periodId,
-          amount,
-          commodity: commodityId,
-          unit: record.unit || 'dollars',
-          unit_abbr: record.unit_abbr || '$',
-        };
-
         await disbursementService.createOne(disbursementRecord);
         result.disbursementsCreated++;
-
       } catch (error) {
         result.errors.push({
           type: 'disbursement_insert',

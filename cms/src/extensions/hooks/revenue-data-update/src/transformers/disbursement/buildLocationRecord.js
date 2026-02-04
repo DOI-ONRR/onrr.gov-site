@@ -17,6 +17,6 @@ export function buildLocationRecord(record) {
     land_category: record.land_category || '',
     state: record.state || '',
     county: record.county || '',
-    fips_code: record.fips_code || '',
+    fips_code: (!record.fips_code && !record.county && record.state.length == 2) ? record.state : record.fips_code,
   };
 }

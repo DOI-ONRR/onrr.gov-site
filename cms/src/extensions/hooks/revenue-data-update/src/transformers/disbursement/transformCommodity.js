@@ -10,11 +10,16 @@
  * @returns {Object} - The record with transformed commodity
  */
 export function transformCommodity(record) {
-  if (!record.commodity) {
-    return record;
-  }
 
   let commodity = record.commodity;
+
+  if (!record.commodity) {
+    commodity = 'Not tied to a commodity';
+    return {
+      ...record,
+      commodity,
+    };
+  }
 
   // Apply specific replacements
   if (commodity.startsWith('CO2')) {
@@ -28,11 +33,7 @@ export function transformCommodity(record) {
   }
 
   // Capitalize first letter, lowercase the rest
-  if (commodity.length > 0) {
-    commodity = commodity.charAt(0).toUpperCase() + commodity.slice(1).toLowerCase();
-  } else {
-    commodity = 'Not tied to a commodity';
-  }
+  commodity = commodity.charAt(0).toUpperCase() + commodity.slice(1).toLowerCase();
 
   return {
     ...record,

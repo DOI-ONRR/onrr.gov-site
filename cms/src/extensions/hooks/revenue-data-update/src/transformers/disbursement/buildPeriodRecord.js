@@ -31,10 +31,10 @@ export function buildPeriodRecord(record) {
   const periodDateStr = formatDate(periodDate);
 
   return {
-    period: 'Monthly',
+    type: 'Monthly',
     calendar_year: calendarYear,
     fiscal_year: fiscalYear,
-    month: calendarMonth,
+    calendar_month: calendarMonth,
     month_long: monthName,
     month_short: monthShort,
     fiscal_month: fiscalMonth,
