@@ -9,7 +9,7 @@ export async function transformFipsCode(record, lookupFipsCode) {
   if (!record.county || !record.state) {
     return {
       ...record,
-      fips_code: '',
+      fips_code: null,
     };
   }
 
@@ -17,13 +17,13 @@ export async function transformFipsCode(record, lookupFipsCode) {
     const fipsCode = await lookupFipsCode(record.county, record.state);
     return {
       ...record,
-      fips_code: fipsCode || '',
+      fips_code: fipsCode || null,
     };
   } catch (error) {
-    // If lookup fails, return empty fips_code (matches SQL EXCEPTION handler)
+    // If lookup fails, return empty fips_code
     return {
       ...record,
-      fips_code: '',
+      fips_code: null,
     };
   }
 }

@@ -22,9 +22,12 @@
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-revenue-data-update/dist; cp package.json ../../../../extensions/directus-extension-revenue-data-update; cp dist/index.js ../../../../extensions/directus-extension-revenue-data-update/dist",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link",
-		"validate": "directus-extension validate"
+		"validate": "directus-extension validate",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "17.0.5"
+		"@directus/extensions-sdk": "17.0.5",
+		"vitest": "^2.1.0"
 	}
 }

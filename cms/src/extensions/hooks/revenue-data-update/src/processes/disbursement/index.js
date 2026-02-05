@@ -46,8 +46,6 @@ export async function processDisbursementUpdate(fileId, context) {
     errors: [],
   };
 
-  console.log('[Disbursement Update] Process started:', { fileId });
-
   try {
     // Step 1 - Retrieve the file from Directus
     const fileContents = await getFileContents(fileId, { services, schema, accountability });
@@ -177,20 +175,9 @@ export async function processDisbursementUpdate(fileId, context) {
           filter: {
             land_class: { _eq: entry.record.land_class },
             land_category: { _eq: entry.record.land_category },
-            _and: [
-              {_or: [
-                {county: { _eq: entry.record.county }},
-                {county: { _empty: true }}
-              ]},
-              {_or: [
-                {state: { _eq: entry.record.state }},
-                {state: { _empty: true }}
-              ]},
-              {_or: [
-                {fips_code: { _eq: entry.record.fips_code }},
-                {fips_code: { _empty: true }}
-              ]}
-            ],
+            county: { _eq: entry.record.county },
+            state: { _eq: entry.record.state },
+            fips_code: { _eq: entry.record.fips_code },
             offshore_region: { _empty: true },
           },
           fields: ['id'],
