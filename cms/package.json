@@ -32,7 +32,7 @@
     "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:onrr-editor build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows"
   },
   "engines": {
-    "node": "22.14.0"
+    "node": "22.20.0"
   },
   "dependencies": {
     "axios": "^1.13.2",
