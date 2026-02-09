@@ -69,8 +69,21 @@ export default {
       loadingKey: 'loading...',
       variables () {
         return {
-          ID: this.pageId
+          ID: this.pageId,
+          version: this.$route.query.version || null
         }
+      },
+      context() {
+        const token = this.$route.query.token
+        
+        if (token) {
+          return {
+            headers: {
+              authorization: `Bearer ${token}`
+            }
+          }
+        }
+        return {}
       },
       skip() {
         return !this.pageId;
