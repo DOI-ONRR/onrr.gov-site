@@ -26,7 +26,7 @@
             sm="12"
             md="9"
             col="12">
-              <router-view />
+              <router-view :pageData="pages_by_id" :pages="pages" />
           </v-col>
         </v-row>
       </v-container>
