@@ -71,15 +71,22 @@ app.all('*', (req, res) => {
         variables: req.body.variables || {},
       });
 
+      const headers = {
+        'Content-Type': 'application/json',
+        'Content-Length': postData.length,
+      };
+
+      // Forward authorization header if present
+      if (req.headers['authorization']) {
+        headers['Authorization'] = req.headers['authorization'];
+      }
+
       const options = {
         hostname: CMS_HOST,
         port: PORT,
         path: req.originalUrl,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': postData.length,
-        },
+        headers,
         body: postData,
       };
 
