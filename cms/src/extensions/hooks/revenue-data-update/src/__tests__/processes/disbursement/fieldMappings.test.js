@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { DISBURSEMENT_FIELD_MAP, mapHeader } from '../../../processes/disbursement/fieldMappings.js';
+import { DISBURSEMENT_FIELD_MAP } from '../../../processes/disbursement/fieldMappings.js';
 
 describe('DISBURSEMENT_FIELD_MAP', () => {
   it('should map "Month" to "month"', () => {
@@ -44,44 +44,5 @@ describe('DISBURSEMENT_FIELD_MAP', () => {
 
   it('should map "Disbursement" to "disbursement"', () => {
     expect(DISBURSEMENT_FIELD_MAP['Disbursement']).toBe('disbursement');
-  });
-});
-
-describe('mapHeader', () => {
-  it('should return mapped value when header exists in map', () => {
-    const result = mapHeader('Calendar Year', DISBURSEMENT_FIELD_MAP);
-    expect(result).toBe('calendar_year');
-  });
-
-  it('should return snake_case fallback for unmapped header', () => {
-    const result = mapHeader('Unknown Header', DISBURSEMENT_FIELD_MAP);
-    expect(result).toBe('unknown_header');
-  });
-
-  it('should handle headers with multiple spaces', () => {
-    const result = mapHeader('Some  Long  Header', {});
-    expect(result).toBe('some_long_header');
-  });
-
-  it('should handle single word header', () => {
-    const result = mapHeader('Name', {});
-    expect(result).toBe('name');
-  });
-
-  it('should handle empty string header', () => {
-    const result = mapHeader('', {});
-    expect(result).toBe('');
-  });
-
-  it('should use exact match from map', () => {
-    const customMap = { 'My Header': 'custom_field' };
-    const result = mapHeader('My Header', customMap);
-    expect(result).toBe('custom_field');
-  });
-
-  it('should be case-sensitive for map lookup', () => {
-    const result = mapHeader('calendar year', DISBURSEMENT_FIELD_MAP);
-    // Should not match 'Calendar Year', so falls back to snake_case
-    expect(result).toBe('calendar_year');
   });
 });

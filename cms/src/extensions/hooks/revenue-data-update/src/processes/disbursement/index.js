@@ -5,8 +5,7 @@
  * transforming and loading the reference data into the appropriate tables.
  */
 
-import { getFileContents } from './getFileContents.js';
-import { parseCsv } from './parseCsv.js';
+import { getFileContents, parseCsv } from '../shared/index.js';
 import { DISBURSEMENT_FIELD_MAP } from './fieldMappings.js';
 import {
   transformDisbursementRecord,

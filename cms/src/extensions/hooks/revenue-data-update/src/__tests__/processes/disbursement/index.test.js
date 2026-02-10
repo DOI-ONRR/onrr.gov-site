@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { processDisbursementUpdate } from '../../../processes/disbursement/index.js';
 
 // Mock all dependencies
-vi.mock('../../../processes/disbursement/getFileContents.js', () => ({
+vi.mock('../../../processes/shared/getFileContents.js', () => ({
   getFileContents: vi.fn(),
 }));
 
-vi.mock('../../../processes/disbursement/parseCsv.js', () => ({
+vi.mock('../../../processes/shared/parseCsv.js', () => ({
   parseCsv: vi.fn(),
 }));
 
@@ -27,8 +27,8 @@ vi.mock('../../../transformers/disbursement/index.js', () => ({
 }));
 
 // Import mocked modules
-import { getFileContents } from '../../../processes/disbursement/getFileContents.js';
-import { parseCsv } from '../../../processes/disbursement/parseCsv.js';
+import { getFileContents } from '../../../processes/shared/getFileContents.js';
+import { parseCsv } from '../../../processes/shared/parseCsv.js';
 import {
   transformDisbursementRecord,
   transformFipsCode,

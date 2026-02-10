@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseCsv } from '../../../processes/disbursement/parseCsv.js';
+import { parseCsv } from '../../../processes/shared/parseCsv.js';
 
 describe('parseCsv', () => {
   it('should parse a simple CSV string', () => {

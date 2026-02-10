@@ -1,8 +1,8 @@
 /**
- * CSV parser for disbursement data files.
+ * CSV parser for data files.
  */
 
-import { mapHeader } from './fieldMappings.js';
+import { mapHeader } from './utils.js';
 
 /**
  * Parses a CSV string into an array of objects.
