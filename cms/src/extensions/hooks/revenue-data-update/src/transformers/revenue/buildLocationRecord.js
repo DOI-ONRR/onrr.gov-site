@@ -10,9 +10,9 @@ export function buildLocationRecord(record) {
   return {
     land_class: record.land_class_code || '',
     land_category: record.land_category_code_desc || '',
-    state: record.state || '',
-    county: record.county_code_desc || '',
-    fips_code: record.fips_code || '',
-    offshore_region: record.agency_state_region_code_desc || '',
+    state: record.state || null,
+    county: record.county_code_desc || null,
+    fips_code: record.fips_code || null,
+    offshore_region: record.agency_state_region_code_desc || null,
   };
 }

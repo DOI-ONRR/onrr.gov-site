@@ -23,7 +23,7 @@ describe('buildLocationRecord', () => {
     });
   });
 
-  it('should replace null values with empty strings', () => {
+  it('should replace null values with null for nullable fields', () => {
     const record = {
       land_class_code: null,
       land_category_code_desc: null,
@@ -37,28 +37,28 @@ describe('buildLocationRecord', () => {
     expect(result).toEqual({
       land_class: '',
       land_category: '',
-      state: '',
-      county: '',
-      fips_code: '',
-      offshore_region: '',
+      state: null,
+      county: null,
+      fips_code: null,
+      offshore_region: null,
     });
   });
 
-  it('should replace undefined values with empty strings', () => {
+  it('should replace undefined values with null for nullable fields', () => {
     const record = {};
     const result = buildLocationRecord(record);
 
     expect(result).toEqual({
       land_class: '',
       land_category: '',
-      state: '',
-      county: '',
-      fips_code: '',
-      offshore_region: '',
+      state: null,
+      county: null,
+      fips_code: null,
+      offshore_region: null,
     });
   });
 
-  it('should preserve empty string values', () => {
+  it('should preserve empty string values as null for nullable fields', () => {
     const record = {
       land_class_code: '',
       land_category_code_desc: '',
@@ -72,10 +72,10 @@ describe('buildLocationRecord', () => {
     expect(result).toEqual({
       land_class: '',
       land_category: '',
-      state: '',
-      county: '',
-      fips_code: '',
-      offshore_region: '',
+      state: null,
+      county: null,
+      fips_code: null,
+      offshore_region: null,
     });
   });
 });

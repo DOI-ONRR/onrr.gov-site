@@ -8,11 +8,11 @@
  */
 export function buildFundRecord(record) {
   return {
-    revenue_type: record.revenue_type || '',
-    source: record.land_category_code_desc || '',
-    fund_type: '',
-    fund_class: '',
-    recipient: '',
-    disbursement_type: '',
+    revenue_type: record.revenue_type || null,
+    source: record.land_category_code_desc || null,
+    fund_type: null,
+    fund_class: null,
+    recipient: null,
+    disbursement_type: null,
   };
 }

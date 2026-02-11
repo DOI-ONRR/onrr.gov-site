@@ -147,6 +147,7 @@ export async function processRevenueUpdate(fileId, context) {
         if (existing.length > 0) {
           entry.id = existing[0].id;
         } else {
+          console.log('[Revenue update process]: adding fund', entry.record);
           const newId = await fundService.createOne({
             revenue_type: entry.record.revenue_type,
             source: entry.record.source,
@@ -186,6 +187,7 @@ export async function processRevenueUpdate(fileId, context) {
         if (existing.length > 0) {
           entry.id = existing[0].id;
         } else {
+          console.log('[Revenue update process]: adding location', entry.record);
           const newId = await locationService.createOne(entry.record);
           entry.id = newId;
           result.locationsCreated++;
@@ -233,8 +235,8 @@ export async function processRevenueUpdate(fileId, context) {
         const commodity = await commodityService.readByQuery({
           filter: {
             name: { _eq: entry.commodity },
-            mineral_lease_type: { _eq: entry.mineral_lease_type },
-            product: { _eq: entry.product },
+            mineral_lease_type: { _eq: (entry.mineral_lease_type || null) },
+            product: { _eq: (entry.product || null) },
           },
           fields: ['id'],
           limit: 1,
@@ -461,7 +463,7 @@ async function loadFiscalYearRevenue(periodService, revenueService, result) {
         filter: {
           period: { _in: monthlyPeriodIds },
         },
-        fields: ['location', 'commodity', 'fund', 'revenue'],
+        fields: ['location', 'commodity', 'fund', 'amount'],
         limit: -1,
       });
 
@@ -470,7 +472,7 @@ async function loadFiscalYearRevenue(periodService, revenueService, result) {
       for (const rev of monthlyRevenue) {
         const key = `${rev.location}:${rev.commodity}:${rev.fund}`;
         if (aggregate.has(key)) {
-          aggregate.get(key).revenue += rev.revenue;
+          aggregate.get(key).amount += rev.ramount;
           aggregate.get(key).duplicate_no++;
         } else {
           aggregate.set(key, {
@@ -478,7 +480,7 @@ async function loadFiscalYearRevenue(periodService, revenueService, result) {
             period: fyPeriod.id,
             commodity: rev.commodity,
             fund: rev.fund,
-            revenue: rev.revenue,
+            amount: rev.amount,
             unit: 'dollars',
             unit_abbr: '$',
             duplicate_no: 1,
@@ -560,7 +562,7 @@ async function loadCalendarYearRevenue(periodService, revenueService, result) {
         filter: {
           period: { _in: monthlyPeriodIds },
         },
-        fields: ['location', 'commodity', 'fund', 'revenue'],
+        fields: ['location', 'commodity', 'fund', 'amount'],
         limit: -1,
       });
 
@@ -569,7 +571,7 @@ async function loadCalendarYearRevenue(periodService, revenueService, result) {
       for (const rev of monthlyRevenue) {
         const key = `${rev.location}:${rev.commodity}:${rev.fund}`;
         if (aggregate.has(key)) {
-          aggregate.get(key).revenue += rev.revenue;
+          aggregate.get(key).amount += rev.amount;
           aggregate.get(key).duplicate_no++;
         } else {
           aggregate.set(key, {
@@ -577,7 +579,7 @@ async function loadCalendarYearRevenue(periodService, revenueService, result) {
             period: cyPeriod.id,
             commodity: rev.commodity,
             fund: rev.fund,
-            revenue: rev.revenue,
+            amount: rev.amount,
             unit: 'dollars',
             unit_abbr: '$',
             duplicate_no: 1,

@@ -12,14 +12,14 @@ describe('buildFundRecord', () => {
     expect(result).toEqual({
       revenue_type: 'Royalties',
       source: 'Offshore',
-      fund_type: '',
-      fund_class: '',
-      recipient: '',
-      disbursement_type: '',
+      fund_type: null,
+      fund_class: null,
+      recipient: null,
+      disbursement_type: null,
     });
   });
 
-  it('should replace null values with empty strings', () => {
+  it('should replace null values with null', () => {
     const record = {
       revenue_type: null,
       land_category_code_desc: null,
@@ -27,26 +27,26 @@ describe('buildFundRecord', () => {
     const result = buildFundRecord(record);
 
     expect(result).toEqual({
-      revenue_type: '',
-      source: '',
-      fund_type: '',
-      fund_class: '',
-      recipient: '',
-      disbursement_type: '',
+      revenue_type: null,
+      source: null,
+      fund_type: null,
+      fund_class: null,
+      recipient: null,
+      disbursement_type: null,
     });
   });
 
-  it('should replace undefined values with empty strings', () => {
+  it('should replace undefined values with null', () => {
     const record = {};
     const result = buildFundRecord(record);
 
     expect(result).toEqual({
-      revenue_type: '',
-      source: '',
-      fund_type: '',
-      fund_class: '',
-      recipient: '',
-      disbursement_type: '',
+      revenue_type: null,
+      source: null,
+      fund_type: null,
+      fund_class: null,
+      recipient: null,
+      disbursement_type: null,
     });
   });
 
@@ -54,19 +54,19 @@ describe('buildFundRecord', () => {
     expect(buildFundRecord({ revenue_type: 'Rents', land_category_code_desc: 'Onshore' })).toEqual({
       revenue_type: 'Rents',
       source: 'Onshore',
-      fund_type: '',
-      fund_class: '',
-      recipient: '',
-      disbursement_type: '',
+      fund_type: null,
+      fund_class: null,
+      recipient: null,
+      disbursement_type: null,
     });
 
     expect(buildFundRecord({ revenue_type: 'Other revenues', land_category_code_desc: 'Not Tied to a Lease' })).toEqual({
       revenue_type: 'Other revenues',
       source: 'Not Tied to a Lease',
-      fund_type: '',
-      fund_class: '',
-      recipient: '',
-      disbursement_type: '',
+      fund_type: null,
+      fund_class: null,
+      recipient: null,
+      disbursement_type: null,
     });
   });
 });
