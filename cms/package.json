@@ -32,17 +32,17 @@
     "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:onrr-editor build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows"
   },
   "engines": {
-    "node": "22.14.0"
+    "node": "22.20.0"
   },
   "dependencies": {
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "debug": "^4.4.3",
-    "directus": "^11.14.1",
+    "directus": "^11.15.1",
     "human-signals": "^8.0.1",
     "jszip": "^3.10.1",
     "node-fetch": "^3.3.2",
-    "pg": "^8.17.1",
-    "read-excel-file": "^6.0.1"
+    "pg": "^8.18.0",
+    "read-excel-file": "^6.0.3"
   },
   "main": "index.js",
   "keywords": [],
