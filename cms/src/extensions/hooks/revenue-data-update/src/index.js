@@ -1,5 +1,6 @@
 import { processDisbursementUpdate } from './processes/disbursement/index.js';
 import { processProductionUpdate } from './processes/production/index.js';
+import { processRevenueUpdate } from './processes/revenue/index.js';
 
 export default ({ filter, action }, { services, database, getSchema }) => {
 	const { ItemsService } = services;
@@ -23,6 +24,9 @@ export default ({ filter, action }, { services, database, getSchema }) => {
 				break;
 			case 'production':
 				result = await processProductionUpdate(meta.payload.file, context);
+				break;
+			case 'revenue':
+				result = await processRevenueUpdate(meta.payload.file, context);
 				break;
 		}
 
