@@ -1,6 +1,7 @@
 import { processDisbursementUpdate } from './processes/disbursement/index.js';
 import { processProductionUpdate } from './processes/production/index.js';
 import { processRevenueUpdate } from './processes/revenue/index.js';
+import { processCYProductionUpdate } from './processes/cy-production/index.js';
 
 export default ({ filter, action }, { services, database, getSchema }) => {
 	const { ItemsService } = services;
@@ -23,7 +24,11 @@ export default ({ filter, action }, { services, database, getSchema }) => {
 				result = await processDisbursementUpdate(meta.payload.file, context);
 				break;
 			case 'production':
-				result = await processProductionUpdate(meta.payload.file, context);
+				if (meta.payload.period === 'calendar-year') {
+					result = await processCYProductionUpdate(meta.payload.file, context);
+				} else {
+					result = await processProductionUpdate(meta.payload.file, context);
+				}
 				break;
 			case 'revenue':
 				result = await processRevenueUpdate(meta.payload.file, context);
