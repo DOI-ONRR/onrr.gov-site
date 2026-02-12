@@ -186,9 +186,9 @@ export async function processCYProductionUpdate(fileId, context) {
       try {
         const commodity = await commodityService.readByQuery({
           filter: {
-            commodity: { _eq: entry.commodity },
+            name: { _eq: entry.commodity },
             product: { _eq: entry.product },
-            mineral_lease_type: { _eq: '' },
+            mineral_lease_type: { _eq: null },
           },
           fields: ['id'],
           limit: 1,
@@ -324,7 +324,6 @@ export async function processCYProductionUpdate(fileId, context) {
       const key = `${record.location}:${record.period}:${record.commodity}`;
 
       if (productionAggregate.has(key)) {
-        productionAggregate.get(key).volume += record.volume;
         productionAggregate.get(key).duplicate_no++;
       } else {
         productionAggregate.set(key, {

@@ -278,7 +278,7 @@ describe('processCYProductionUpdate', () => {
 
       expect(mockCommodityService.readByQuery).toHaveBeenCalledWith(expect.objectContaining({
         filter: expect.objectContaining({
-          commodity: { _eq: 'Gas' },
+          name: { _eq: 'Gas' },
         }),
       }));
     });
@@ -319,7 +319,7 @@ describe('processCYProductionUpdate', () => {
           fips_code: '',
           offshore_region: 'Offshore Gulf of America',
           product: 'Gas (Mcf)',
-          volume: '1000',
+          volume: '500',
         },
         {
           calendar_year: '2023',
@@ -340,7 +340,7 @@ describe('processCYProductionUpdate', () => {
       expect(mockProductionService.createOne).toHaveBeenCalledTimes(1);
       expect(mockProductionService.createOne).toHaveBeenCalledWith(
         expect.objectContaining({
-          volume: 1500,
+          volume: 500,
           duplicate_no: 2,
         })
       );
