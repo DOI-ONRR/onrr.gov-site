@@ -3,6 +3,7 @@ import { processProductionUpdate } from './processes/production/index.js';
 import { processRevenueUpdate } from './processes/revenue/index.js';
 import { processCYProductionUpdate } from './processes/cy-production/index.js';
 import { processFYProductionUpdate } from './processes/fy-production/index.js';
+import { processRevenueByCompanyUpdate } from './processes/revenue-by-company/index.js';
 
 export default ({ filter, action }, { services, database, getSchema }) => {
 	const { ItemsService } = services;
@@ -35,6 +36,9 @@ export default ({ filter, action }, { services, database, getSchema }) => {
 				break;
 			case 'revenue':
 				result = await processRevenueUpdate(meta.payload.file, context);
+				break;
+			case 'federal-revenue-by-company':
+				result = await processRevenueByCompanyUpdate(meta.payload.file, context);
 				break;
 		}
 
