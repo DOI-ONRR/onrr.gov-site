@@ -2,9 +2,15 @@ import { expansionPanelsExpansionPanelBlocks } from "../../queries/expansionPane
 import { GraphQLClient } from "graphql-request";
 import { logger } from '../../utils/logger';
 
-export async function getExpansionPanelsExpansionPanelBlocks(id, endpoint) {
+export async function getExpansionPanelsExpansionPanelBlocks(id, endpoint, authToken) {
     try {
         const client = new GraphQLClient(endpoint);
+        if (authToken) {
+            client.setHeaders({
+                authorization: `Bearer ${authToken}`
+            });
+        }
+        
         const variables = {
             expansion_panel_id: {
                 "_eq": id
