@@ -24,12 +24,12 @@ export function transformProduct(record) {
       'Geothermal - direct use - millions of gallons (mgal)',
     'Geothermal - Direct Utilization, Millions of BTUs (mmbtu)':
       'Geothermal - Direct Use - Millions of BTUS (mmbtu)',
-    'Geothermal - Electrical Generation, Kilowatt Hours':
-      'Geothermal - Electrical Generation (Kilowatt Hours)',
-    'Geothermal - Electrical Generation, Other':
-      'Geothermal - Electrical Generation (Other)',
-    'Geothermal - Electrical Generation, Thousands of Pounds':
-      'Geothermal - Electrical Generation (Thousands of Pounds)',
+    'Geothermal - Electrical Generation, Kilowatt Hours (kwh)':
+      'Geothermal - Electrical Generation - Kilowatt Hours (kwh)',
+    'Geothermal - Electrical Generation, Other (mmbtu)':
+      'Geothermal - Electrical Generation - Other (mmbtu)',
+    'Geothermal - Electrical Generation, Thousands of Pounds (klb)':
+      'Geothermal - Electrical Generation - Thousands of Pounds (klb)',
     'Geothermal - sulfur': 'Geothermal - Sulfur (tons)',
   };
 

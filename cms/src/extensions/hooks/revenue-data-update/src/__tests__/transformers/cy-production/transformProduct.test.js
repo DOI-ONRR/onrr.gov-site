@@ -20,8 +20,8 @@ describe('transformProduct', () => {
   });
 
   it('should transform geothermal products', () => {
-    expect(transformProduct({ product: 'Geothermal - Direct Utilization, Hundreds of Gallons' }).product)
-      .toBe('Geothermal - direct use (hundreds of gallons)');
+    expect(transformProduct({ product: 'Geothermal - Direct Utilization, Hundreds of Gallons (cgal)' }).product)
+      .toBe('Geothermal - direct use - hundreds of gallons (cgal)');
 
     expect(transformProduct({ product: 'Geothermal - sulfur' }).product)
       .toBe('Geothermal - sulfur (tons)');
