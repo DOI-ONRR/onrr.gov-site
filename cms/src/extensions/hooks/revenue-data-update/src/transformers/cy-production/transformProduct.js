@@ -16,14 +16,14 @@ export function transformProduct(record) {
   // Apply specific replacements
   const productMappings = {
     'Sand/Gravel-Cubic Yards (cyd)': 'Sand/Gravel (Cubic Yards)',
-    'Geothermal - Direct Utilization, Hundreds of Gallons':
-      'Geothermal - Direct Use (Hundreds of Gallons)',
+    'Geothermal - Direct Utilization, Hundreds of Gallons (cgal)':
+      'Geothermal - direct use - hundreds of gallons (cgal)',
     'Geothermal - Direct Use, Millions of Gallons':
       'Geothermal - Direct Use (Millions of Gallons)',
-    'Geothermal - Direct Use, Millions of Gallons (cgal)':
-      'Geothermal - Direct Use, Millions of Gallons (mgal)',
-    'Geothermal - Direct Utilization, Millions of BTUs':
-      'Geothermal - Direct Use (Millions of BTUs)',
+    'Geothermal - Direct Use, Millions of Gallons (mgal)':
+      'Geothermal - direct use - millions of gallons (mgal)',
+    'Geothermal - Direct Utilization, Millions of BTUs (mmbtu)':
+      'Geothermal - Direct Use - Millions of BTUS (mmbtu)',
     'Geothermal - Electrical Generation, Kilowatt Hours':
       'Geothermal - Electrical Generation (Kilowatt Hours)',
     'Geothermal - Electrical Generation, Other':
