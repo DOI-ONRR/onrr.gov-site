@@ -26,6 +26,12 @@ describe('transformProductCodeDesc', () => {
     expect(result.product_code_desc).toBe('Geothermal - Electrical Generation (Kilowatt Hours)');
   });
 
+  it('should transform Geothermal - Direct Utilization, Other', () => {
+    const record = { product_code_desc: 'Geothermal - Direct Utilization, Other' };
+    const result = transformProductCodeDesc(record);
+    expect(result.product_code_desc).toBe('Geothermal - Direct Utilization - Other');
+  });
+
   it('should transform Geothermal - Electrical Generation, Other', () => {
     const record = { product_code_desc: 'Geothermal - Electrical Generation, Other' };
     const result = transformProductCodeDesc(record);

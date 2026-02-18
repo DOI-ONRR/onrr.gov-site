@@ -22,7 +22,7 @@ import {
  * @param {Object} context - Directus hook context containing services
  * @returns {Promise<Object>} - Result summary of the update process
  */
-export async function processRevenueUpdate(fileId, context) {
+export async function processRevenueUpdate(fileId, context, options = {}) {
   const { services, database, schema, accountability } = context;
 
   const result = {
@@ -35,6 +35,7 @@ export async function processRevenueUpdate(fileId, context) {
     fundsCreated: 0,
     locationsCreated: 0,
     periodsCreated: 0,
+    revenueDeleted: 0,
     revenueCreated: 0,
     errors: [],
   };
@@ -59,6 +60,11 @@ export async function processRevenueUpdate(fileId, context) {
 
       transformedRecords.push(transformed);
       result.recordsProcessed++;
+    }
+
+    // Step 3b - Delete existing revenue for true-up period
+    if (options.period === 'true-up') {
+      await deleteTrueUpRevenue(transformedRecords, services, schema, accountability, result);
     }
 
     // Step 4 - Summarize Native American revenue
@@ -388,6 +394,7 @@ export async function processRevenueUpdate(fileId, context) {
       fundsCreated: result.fundsCreated,
       locationsCreated: result.locationsCreated,
       periodsCreated: result.periodsCreated,
+      revenueDeleted: result.revenueDeleted,
       revenueCreated: result.revenueCreated,
       errorCount: result.errors.length,
       success: result.success,
@@ -408,6 +415,84 @@ export async function processRevenueUpdate(fileId, context) {
   }
 
   return result;
+}
+
+/**
+ * Deletes existing revenue records for a true-up update.
+ * Based on: delete_revenue.sql
+ *
+ * Finds the minimum accept_date from the uploaded records, then deletes
+ * all revenue records whose period has a period_date >= that date.
+ *
+ * @param {Object[]} transformedRecords - Records after transformation
+ * @param {Object} services - Directus services
+ * @param {Object} schema - Database schema
+ * @param {Object} accountability - User accountability info
+ * @param {Object} result - Result object to update
+ */
+async function deleteTrueUpRevenue(transformedRecords, services, schema, accountability, result) {
+  const { ItemsService } = services;
+  const periodService = new ItemsService('period', { schema, accountability });
+  const revenueService = new ItemsService('revenue', { schema, accountability });
+
+  try {
+    // Find the minimum accept_date from uploaded records (as YYYY-MM-DD)
+    const acceptDates = transformedRecords
+      .map(r => r.accept_date)
+      .filter(Boolean)
+      .map(dateStr => {
+        if (dateStr.includes('/')) {
+          const parts = dateStr.split('/');
+          const month = String(parts[0]).padStart(2, '0');
+          const day = String(parts[1]).padStart(2, '0');
+          return `${parts[2]}-${month}-${day}`;
+        }
+        return dateStr;
+      })
+      .sort();
+
+    if (acceptDates.length === 0) {
+      return;
+    }
+
+    const minDate = acceptDates[0];
+
+    // Find all periods with period_date >= minDate
+    const periods = await periodService.readByQuery({
+      filter: {
+        period_date: { _gte: minDate },
+      },
+      fields: ['id'],
+      limit: -1,
+    });
+
+    if (periods.length === 0) {
+      return;
+    }
+
+    const periodIds = periods.map(p => p.id);
+
+    // Delete all revenue records for those periods
+    const existingRevenue = await revenueService.readByQuery({
+      filter: {
+        period: { _in: periodIds },
+      },
+      fields: ['id'],
+      limit: -1,
+    });
+
+    for (const rev of existingRevenue) {
+      await revenueService.deleteOne(rev.id);
+      result.revenueDeleted++;
+    }
+
+    console.log(`[Revenue Update] True-up: deleted ${result.revenueDeleted} revenue records from ${minDate} onwards`);
+  } catch (error) {
+    result.errors.push({
+      type: 'true_up_delete',
+      message: error.message,
+    });
+  }
 }
 
 /**

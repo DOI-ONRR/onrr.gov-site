@@ -19,6 +19,8 @@ export function transformProductCodeDesc(record) {
       'Geothermal - Direct Use (Hundreds of Gallons)',
     'Geothermal - Direct Utilization, Millions of BTUs':
       'Geothermal - Direct Use (Millions of BTUs)',
+    'Geothermal - Direct Utilization, Other':
+      'Geothermal - Direct Utilization - Other',
     'Geothermal - Direct Use, Millions of Gallons':
       'Geothermal - Direct Use (Millions of Gallons)',
     'Geothermal - Electrical Generation, Kilowatt Hours':

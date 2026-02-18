@@ -36,7 +36,7 @@ export default ({ filter, action }, { services, database, getSchema }) => {
 				}
 				break;
 			case 'revenue':
-				result = await processRevenueUpdate(meta.payload.file, context);
+				result = await processRevenueUpdate(meta.payload.file, context, { period: meta.payload.period });
 				break;
 			case 'federal-revenue-by-company':
 				result = await processRevenueByCompanyUpdate(meta.payload.file, context);

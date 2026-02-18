@@ -42,6 +42,7 @@ describe('processRevenueUpdate', () => {
     mockRevenueService = {
       readByQuery: vi.fn().mockResolvedValue([]),
       createOne: vi.fn().mockResolvedValue(1),
+      deleteOne: vi.fn().mockResolvedValue(undefined),
     };
 
     mockContext = {
@@ -473,6 +474,93 @@ describe('processRevenueUpdate', () => {
         expect.objectContaining({
           offshore_region: 'Gulf of America',
           fips_code: 'GMR',
+        })
+      );
+    });
+  });
+
+  describe('true-up revenue deletion', () => {
+    const makeRevenueRecord = (acceptDate = '1/1/2026') => ({
+      accept_date: acceptDate,
+      land_class_code: 'Federal',
+      land_category_code_desc: 'Offshore',
+      state: '',
+      county_code_desc: '',
+      fips_code: '',
+      agency_state_region_code_desc: 'GULF OF AMERICA',
+      revenue_type: 'Royalties',
+      mineral_production_code_desc: 'Oil & Gas',
+      commodity: 'Oil',
+      product_code_desc: 'Oil',
+      revenue: '1000.00',
+    });
+
+    it('should delete revenue records when period is true-up', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([makeRevenueRecord('3/1/2026')]);
+
+      // Period query returns periods >= min accept_date
+      mockPeriodService.readByQuery
+        .mockResolvedValueOnce([{ id: 'period-1' }, { id: 'period-2' }]) // true-up period lookup
+        .mockResolvedValueOnce([]) // subsequent period queries
+        .mockResolvedValue([]);
+
+      // Revenue query for deletion returns existing records
+      mockRevenueService.readByQuery
+        .mockResolvedValueOnce([{ id: 'rev-1' }, { id: 'rev-2' }, { id: 'rev-3' }]) // true-up revenue lookup
+        .mockResolvedValue([]);
+
+      const result = await processRevenueUpdate('test-file-id', mockContext, { period: 'true-up' });
+
+      expect(mockRevenueService.deleteOne).toHaveBeenCalledTimes(3);
+      expect(result.revenueDeleted).toBe(3);
+    });
+
+    it('should not delete revenue records when period is not true-up', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([makeRevenueRecord()]);
+
+      const result = await processRevenueUpdate('test-file-id', mockContext);
+
+      expect(result.revenueDeleted).toBe(0);
+    });
+
+    it('should handle true-up delete errors gracefully', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([makeRevenueRecord()]);
+
+      // Period query fails
+      mockPeriodService.readByQuery.mockRejectedValueOnce(new Error('Delete query failed'));
+
+      const result = await processRevenueUpdate('test-file-id', mockContext, { period: 'true-up' });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          type: 'true_up_delete',
+          message: 'Delete query failed',
+        })
+      );
+    });
+
+    it('should use minimum accept_date for true-up deletion', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([
+        makeRevenueRecord('6/1/2026'),
+        makeRevenueRecord('3/1/2026'),
+        makeRevenueRecord('9/1/2026'),
+      ]);
+
+      mockPeriodService.readByQuery.mockResolvedValue([]);
+      mockRevenueService.readByQuery.mockResolvedValue([]);
+
+      await processRevenueUpdate('test-file-id', mockContext, { period: 'true-up' });
+
+      // Should query periods with min date 2026-03-01
+      expect(mockPeriodService.readByQuery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          filter: expect.objectContaining({
+            period_date: { _gte: '2026-03-01' },
+          }),
         })
       );
     });
