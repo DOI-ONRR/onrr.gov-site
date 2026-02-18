@@ -864,7 +864,7 @@ collections:
       sort_field: sort
       translations: null
       unarchive_value: draft
-      versioning: false
+      versioning: true
     schema:
       name: pages
   - collection: pages_back
@@ -1011,7 +1011,7 @@ collections:
       name: parent_url
   - collection: period
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -1083,7 +1083,7 @@ collections:
       name: press_releases
   - collection: production
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -1179,7 +1179,7 @@ collections:
       name: reporter_letters
   - collection: revenue
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -1225,7 +1225,7 @@ collections:
       versioning: false
   - collection: revenue_data_update
     meta:
-      accountability: all
+      accountability: activity
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -1234,8 +1234,8 @@ collections:
       color: null
       display_template: null
       group: null
-      hidden: true
-      icon: null
+      hidden: false
+      icon: insights
       item_duplication_fields: null
       note: null
       preview_url: null
@@ -4681,31 +4681,50 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: collection_blocks
-    field: divider_contacts
-    type: alias
+    field: layout
+    type: string
     meta:
       collection: collection_blocks
       conditions: null
       display: null
       display_options: null
-      field: divider_contacts
+      field: layout
       group: null
       hidden: false
-      interface: presentation-divider
+      interface: select-dropdown
       note: null
       options:
-        title: Contacts
+        choices:
+          - text: Basic
+            value: basic
+          - text: Full
+            value: full
       readonly: false
       required: false
       searchable: true
-      sort: 15
-      special:
-        - alias
-        - no-data
+      sort: 9
+      special: null
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
+    schema:
+      name: layout
+      table: collection_blocks
+      data_type: character varying
+      default_value: basic
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: collection_blocks
     field: page
     type: string
@@ -4740,51 +4759,6 @@ fields:
       table: collection_blocks
       data_type: character varying
       default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: collection_blocks
-    field: layout
-    type: string
-    meta:
-      collection: collection_blocks
-      conditions: null
-      display: null
-      display_options: null
-      field: layout
-      group: null
-      hidden: false
-      interface: select-dropdown
-      note: null
-      options:
-        choices:
-          - text: Basic
-            value: basic
-          - text: Full
-            value: full
-      readonly: false
-      required: false
-      searchable: true
-      sort: 9
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: layout
-      table: collection_blocks
-      data_type: character varying
-      default_value: basic
       max_length: 255
       numeric_precision: null
       numeric_scale: null
@@ -4889,32 +4863,6 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
-  - collection: collection_blocks
-    field: divider_reporter_letters
-    type: alias
-    meta:
-      collection: collection_blocks
-      conditions: null
-      display: null
-      display_options: null
-      field: divider_reporter_letters
-      group: null
-      hidden: false
-      interface: presentation-divider
-      note: null
-      options:
-        title: Report Letters
-      readonly: false
-      required: false
-      searchable: true
-      sort: 20
-      special:
-        - alias
-        - no-data
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
   - collection: collection_blocks
     field: item_status
     type: string
@@ -5067,6 +5015,58 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: collection_blocks
+    field: divider_contacts
+    type: alias
+    meta:
+      collection: collection_blocks
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_contacts
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Contacts
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: collection_blocks
+    field: divider_reporter_letters
+    type: alias
+    meta:
+      collection: collection_blocks
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_reporter_letters
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Report Letters
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: commodity
     field: id
     type: uuid
@@ -18403,18 +18403,18 @@ fields:
     schema:
       name: id
       table: pages_sidebar_blocks
-      data_type: uuid
-      default_value: null
+      data_type: integer
+      default_value: nextval('pages_sidebar_blocks_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: false
+      has_auto_increment: true
       foreign_key_table: null
       foreign_key_column: null
   - collection: pages_sidebar_blocks
@@ -18813,7 +18813,7 @@ fields:
       name: type
       table: period
       data_type: character varying
-      default_value: null
+      default_value: Monthly
       max_length: 255
       numeric_precision: null
       numeric_scale: null
@@ -23194,7 +23194,7 @@ fields:
       max_length: 255
       numeric_precision: null
       numeric_scale: null
-      is_nullable: true
+      is_nullable: false
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -23209,12 +23209,34 @@ fields:
     meta:
       collection: revenue_data_update
       conditions:
-        - name: Disabled for disbursement
-          readonly: true
+        - name: Revenue period choice
+          options:
+            choices:
+              - text: Monthly
+                value: monthly
+              - text: True Up
+                value: true-up
+          readonly: false
+          required: true
           rule:
             _and:
               - dataset:
-                  _eq: disbursement
+                  _eq: revenue
+        - name: Production period choice
+          options:
+            choices:
+              - text: Monthly
+                value: monthly
+              - text: Calendar Year
+                value: calendar-year
+              - text: Fiscal Year
+                value: fiscal-year
+          readonly: false
+          required: true
+          rule:
+            _and:
+              - dataset:
+                  _eq: production
       display: null
       display_options: null
       field: period
@@ -23223,14 +23245,8 @@ fields:
       interface: select-dropdown
       note: null
       options:
-        choices:
-          - text: Calendar Year
-            value: calendar-year
-          - text: Fiscal Year
-            value: fiscal-year
-          - text: Monthly
-            value: monthly
-      readonly: false
+        choices: null
+      readonly: true
       required: false
       searchable: true
       sort: 6
@@ -23270,7 +23286,7 @@ fields:
       interface: file
       note: null
       options:
-        folder: 6157e772-1927-4a4d-8ea0-d14b26714e0c
+        folder: 64c1856b-89cb-4ece-871e-66a584bdc68f
       readonly: false
       required: false
       searchable: true
@@ -23289,7 +23305,7 @@ fields:
       max_length: null
       numeric_precision: null
       numeric_scale: null
-      is_nullable: true
+      is_nullable: false
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -23298,46 +23314,6 @@ fields:
       has_auto_increment: false
       foreign_key_table: directus_files
       foreign_key_column: id
-  - collection: revenue_data_update
-    field: status
-    type: string
-    meta:
-      collection: revenue_data_update
-      conditions: null
-      display: null
-      display_options: null
-      field: status
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 8
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: status
-      table: revenue_data_update
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
   - collection: revenue_data_update
     field: result
     type: json
@@ -23368,6 +23344,46 @@ fields:
       data_type: json
       default_value: null
       max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: status
+    type: string
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: status
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: status
+      table: revenue_data_update
+      data_type: character varying
+      default_value: running
+      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -26411,12 +26427,12 @@ relations:
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: collection_blocks
-    field: user_updated
+    field: user_created
     related_collection: directus_users
     meta:
       junction_field: null
       many_collection: collection_blocks
-      many_field: user_updated
+      many_field: user_created
       one_allowed_collections: null
       one_collection: directus_users
       one_collection_field: null
@@ -26425,10 +26441,9 @@ relations:
       sort_field: null
     schema:
       table: collection_blocks
-      column: user_updated
+      column: user_created
       foreign_key_table: directus_users
       foreign_key_column: id
-      constraint_name: collection_blocks_user_updated_foreign
       constraint_name: collection_blocks_user_created_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
