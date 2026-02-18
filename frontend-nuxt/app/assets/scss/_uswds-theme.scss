@@ -1,0 +1,16 @@
+/*
+----------------------------------------
+USWDS with settings overrides
+----------------------------------------
+*/
+
+@use "uswds-core" with (
+  $theme-show-notifications: false,
+  $theme-utility-breakpoints: (
+    'desktop-lg': true,
+    'widescreen': true,
+  ),
+  $theme-grid-container-max-width: 'full',
+  $theme-footer-max-width: 'full',
+  $utilities-use-important: true
+);
