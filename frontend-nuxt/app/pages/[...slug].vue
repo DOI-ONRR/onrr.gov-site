@@ -74,6 +74,10 @@ const sidenavLinks = computed(() => {
               v-else-if="block.item?.__typename === 'tab_blocks'"
               :block="block.item"
             />
+            <CardBlock
+              v-else-if="block.item?.__typename === 'card_blocks'"
+              :block="block.item"
+            />
           </div>
         </div>
       </div>
