@@ -15,6 +15,8 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
   menuLabel: parentTitle.value,
 }, { enabled: !!parentTitle.value })
 
+const parentLink = computed(() => menuData.value?.menus?.[0]?.link_to_page || null)
+
 const sidenavLinks = computed(() => {
   const menu = menuData.value?.menus?.[0]
   if (!menu) return []
@@ -28,7 +30,7 @@ const sidenavLinks = computed(() => {
 </script>
 
 <template>
-  <section class="grid-container usa-section">
+  <section class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
       <div class="grid-col-2">
         <nav v-if="sidenavLinks.length" aria-label="Side navigation">
@@ -42,6 +44,21 @@ const sidenavLinks = computed(() => {
         </nav>
       </div>
       <div class="grid-col-10">
+        <nav class="usa-breadcrumb" aria-label="Breadcrumbs">
+          <ol class="usa-breadcrumb__list">
+            <li class="usa-breadcrumb__list-item">
+              <NuxtLink to="/" class="usa-breadcrumb__link">Home</NuxtLink>
+            </li>
+            <li v-if="parentLink" class="usa-breadcrumb__list-item">
+              <NuxtLink :to="parentLink.url" class="usa-breadcrumb__link">
+                {{ parentLink.title }}
+              </NuxtLink>
+            </li>
+            <li class="usa-breadcrumb__list-item usa-current" aria-current="page">
+              <span>{{ page?.title }}</span>
+            </li>
+          </ol>
+        </nav>
         <h1>{{ page?.hero_title || page?.title }}</h1>
         <div class="grid-row grid-gap">
           <div

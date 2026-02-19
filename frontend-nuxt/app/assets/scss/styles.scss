@@ -1,3 +1,4 @@
+@use "@fontsource-variable/plus-jakarta-sans/index.css";
 @forward "uswds-theme";
 @forward "uswds-global";
 @forward "uswds-utilities";
@@ -11,3 +12,4 @@
 @forward "usa-table";
 @forward "usa-header";
 @forward "usa-sidenav";
+@forward "usa-breadcrumb";
