@@ -1,0 +1,8 @@
+fragment fileCollectionFields on reporter_letters {
+  id
+  title
+  date
+  file {
+    id
+  }
+}

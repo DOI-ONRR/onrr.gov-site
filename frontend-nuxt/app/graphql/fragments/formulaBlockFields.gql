@@ -1,0 +1,5 @@
+fragment formulaBlockFields on formula_blocks {
+  id
+  title
+  formula_tex
+}

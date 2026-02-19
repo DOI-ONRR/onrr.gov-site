@@ -1,0 +1,4 @@
+fragment expansionPanelBlockLabel on expansion_panel_block_label {
+  id
+  block_label
+}

@@ -1,0 +1,21 @@
+query GetMenus {
+  menus {
+    id
+    custom_url
+    link_to_page {
+      id
+      slug
+      url
+    }
+    menu
+    menu_children {
+      pages_id {
+        id
+        title
+        url
+      }
+    }
+    menu_icon
+    menu_label
+  }
+}

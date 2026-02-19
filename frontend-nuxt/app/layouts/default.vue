@@ -1,36 +1,37 @@
 <template>
-  <div class="usa-layout-docs">
+  <div class="my-app">
     <header class="usa-header usa-header--basic">
       <div class="usa-nav-container">
         <div class="usa-navbar">
           <div class="usa-logo">
-            <em class="usa-logo__text">
-              <NuxtLink to="/">ONRR</NuxtLink>
-            </em>
+            <NuxtLink to="/" class="usa-logo__link">
+              <img src="/img/onrr_seal_logo.svg" alt="ONRR seal" class="usa-logo__img" />
+              <em class="usa-logo__text">Office of Natural Resources Revenue</em>
+            </NuxtLink>
           </div>
         </div>
       </div>
     </header>
+    
+    <NavigationMenu />
 
     <main id="main-content">
       <slot />
     </main>
 
-    <footer class="usa-footer usa-footer--slim">
-      <div class="grid-container usa-footer__return-to-top">
-        <a href="#">Return to top</a>
-      </div>
-      <div class="usa-footer__primary-section">
-        <div class="grid-container">
-          <div class="usa-footer__primary-container grid-row">
-            <div class="grid-col-12">
-              <span class="usa-footer__logo-heading">
-                Office of Natural Resources Revenue
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.usa-logo__link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.usa-logo__img {
+  height: 8rem;
+  width: auto;
+}
+</style>

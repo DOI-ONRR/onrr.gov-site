@@ -6,11 +6,20 @@ USWDS with settings overrides
 
 @use "uswds-core" with (
   $theme-show-notifications: false,
+  $theme-typeface-tokens: (
+    'plus-jakarta-sans': (
+      'display-name': 'Plus Jakarta Sans',
+      'cap-height': 352px,
+      'stack': '"Plus Jakarta Sans", Helvetica, Arial, sans-serif',
+    ),
+  ),
+  $theme-font-type-sans: 'plus-jakarta-sans',
   $theme-utility-breakpoints: (
     'desktop-lg': true,
     'widescreen': true,
   ),
-  $theme-grid-container-max-width: 'full',
-  $theme-footer-max-width: 'full',
+  $theme-grid-container-max-width: 'none',
+  $theme-header-max-width: 'none',
+  $theme-footer-max-width: 'none',
   $utilities-use-important: true
 );
