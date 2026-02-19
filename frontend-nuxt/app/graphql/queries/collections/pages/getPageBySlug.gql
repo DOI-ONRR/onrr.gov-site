@@ -1,4 +1,4 @@
-#import "../../../../fragments/pageFields.gql"
+#import "../../../fragments/pageFields.gql"
 
 query GetPageBySlug($slug: String) {
     page: pages(
