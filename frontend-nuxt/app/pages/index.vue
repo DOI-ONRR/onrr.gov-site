@@ -18,6 +18,10 @@ const page = computed(() => data.value?.page?.[0])
             v-if="block.item?.__typename === 'content_blocks'"
             v-html="block.item.block_content_html || block.item.block_content"
           />
+          <ExpansionPanelBlock
+            v-else-if="block.item?.__typename === 'expansion_panels'"
+            :block="block.item"
+          />
           <CardBlock
             v-else-if="block.item?.__typename === 'card_blocks'"
             :block="block.item"

@@ -1,6 +1,6 @@
 <template>
   <div class="my-app">
-    <header class="usa-header usa-header--basic">
+    <header class="usa-header usa-header--extended">
       <div class="usa-nav-container">
         <div class="usa-navbar">
           <div class="usa-logo">
@@ -11,9 +11,8 @@
           </div>
         </div>
       </div>
+      <NavigationMenu />
     </header>
-    
-    <NavigationMenu />
 
     <main id="main-content">
       <slot />

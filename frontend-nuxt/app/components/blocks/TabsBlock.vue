@@ -48,6 +48,14 @@ const tabs = computed(() => {
               v-else-if="block.item?.__typename === 'tab_blocks'"
               :block="block.item"
             />
+            <ExpansionPanelBlock
+              v-else-if="block.item?.__typename === 'expansion_panels'"
+              :block="block.item"
+            />
+            <CardBlock
+              v-else-if="block.item?.__typename === 'card_blocks'"
+              :block="block.item"
+            />
           </div>
         </div>
       </TabPanel>

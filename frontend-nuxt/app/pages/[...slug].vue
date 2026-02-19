@@ -9,11 +9,21 @@ const { resolveImages } = useCmsContent()
 const { data } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
 const page = computed(() => data.value?.page?.[0])
 
+const pageTitle = computed(() => page.value?.title || null)
 const parentTitle = computed(() => page.value?.parent?.title || null)
 
-const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
+const { data: menuByPageTitle } = await useAsyncQuery(getMenuByLabel, {
+  menuLabel: pageTitle.value,
+}, { enabled: !!pageTitle.value })
+
+const { data: menuByParentTitle } = await useAsyncQuery(getMenuByLabel, {
   menuLabel: parentTitle.value,
-}, { enabled: !!parentTitle.value })
+}, { enabled: !!parentTitle.value && !menuByPageTitle.value?.menus?.length })
+
+const menuData = computed(() => {
+  if (menuByPageTitle.value?.menus?.length) return menuByPageTitle.value
+  return menuByParentTitle.value
+})
 
 const parentLink = computed(() => menuData.value?.menus?.[0]?.link_to_page || null)
 
@@ -72,6 +82,10 @@ const sidenavLinks = computed(() => {
             />
             <TabsBlock
               v-else-if="block.item?.__typename === 'tab_blocks'"
+              :block="block.item"
+            />
+            <ExpansionPanelBlock
+              v-else-if="block.item?.__typename === 'expansion_panels'"
               :block="block.item"
             />
             <CardBlock

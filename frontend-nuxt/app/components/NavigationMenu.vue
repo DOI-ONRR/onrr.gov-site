@@ -1,5 +1,5 @@
 <template>
-  <nav class="usa-nav onrr-nav sticky">
+  <nav class="usa-nav onrr-nav">
     <ul class="usa-nav__primary usa-accordion">
       <li
         v-for="item in mainMenuItems"
@@ -11,6 +11,7 @@
           <button
             type="button"
             class="usa-accordion__button usa-nav__link"
+            :class="{ 'usa-current': isCurrentItem(item) }"
             :aria-expanded="openMenuId === item.id"
             :aria-controls="`nav-section-${item.id}`"
             @click="toggle(item.id)"
@@ -38,6 +39,7 @@
         <template v-else>
           <NuxtLink
             class="usa-nav__link"
+            :class="{ 'usa-current': isCurrentItem(item) }"
             :to="itemUrl(item)"
           >
             <span>{{ item.menu_label }}</span>
@@ -65,6 +67,15 @@ function itemUrl(item) {
 
 function toggle(id) {
   openMenuId.value = openMenuId.value === id ? null : id
+}
+
+const route = useRoute()
+
+function isCurrentItem(item) {
+  const path = route.path
+  if (item.link_to_page?.url && path === item.link_to_page.url) return true
+  if (item.custom_url && path === item.custom_url) return true
+  return item.menu_children?.some((child) => child.pages_id?.url === path) || false
 }
 </script>
 
