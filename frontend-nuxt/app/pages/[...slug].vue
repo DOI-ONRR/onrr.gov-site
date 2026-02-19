@@ -16,10 +16,14 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
 }, { enabled: !!parentTitle.value })
 
 const sidenavLinks = computed(() => {
-  if (!menuData.value?.menus?.length) return []
-  return menuData.value.menus[0].menu_children
-    ?.map((child) => child.pages_id)
-    .filter(Boolean) || []
+  const menu = menuData.value?.menus?.[0]
+  if (!menu) return []
+  const links = []
+  if (menu.link_to_page) links.push(menu.link_to_page)
+  menu.menu_children?.forEach((child) => {
+    if (child.pages_id) links.push(child.pages_id)
+  })
+  return links
 })
 </script>
 
