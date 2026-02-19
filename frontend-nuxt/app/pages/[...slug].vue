@@ -5,7 +5,7 @@ import getMenuByLabel from '@/graphql/queries/collections/menus/getMenuByLabel.g
 const route = useRoute()
 const slug = computed(() => route.params.slug?.at(-1) || null)
 
-const { resolveImages } = useCmsContent()
+const { resolveImages, assetUrl } = useCmsContent()
 const { data } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
 const page = computed(() => data.value?.page?.[0])
 
@@ -40,6 +40,12 @@ const sidenavLinks = computed(() => {
 </script>
 
 <template>
+  <img
+    v-if="page?.hero_image?.id"
+    :src="assetUrl(page.hero_image.id)"
+    :alt="page.hero_image.description || ''"
+    class="width-full"
+  />
   <section class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
       <div class="grid-col-2">

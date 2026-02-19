@@ -6,5 +6,10 @@ export function useCmsContent() {
     return html.replace(/(<img\s[^>]*src=["'])\/(?!\/)/g, `$1${apiUrl}/`)
   }
 
-  return { resolveImages }
+  function assetUrl(id) {
+    if (!id) return null
+    return `${apiUrl}/assets/${id}`
+  }
+
+  return { resolveImages, assetUrl }
 }
