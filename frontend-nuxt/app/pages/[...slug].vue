@@ -1,5 +1,6 @@
 <script setup>
 import getPageBySlug from '@/graphql/queries/collections/pages/getPageBySlug.gql'
+import getMenuByLabel from '@/graphql/queries/collections/menus/getMenuByLabel.gql'
 
 const route = useRoute()
 const slug = computed(() => route.params.slug?.at(-1) || null)
@@ -7,12 +8,34 @@ const slug = computed(() => route.params.slug?.at(-1) || null)
 const { resolveImages } = useCmsContent()
 const { data } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
 const page = computed(() => data.value?.page?.[0])
+
+const parentTitle = computed(() => page.value?.parent?.title || null)
+
+const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
+  menuLabel: parentTitle.value,
+}, { enabled: !!parentTitle.value })
+
+const sidenavLinks = computed(() => {
+  if (!menuData.value?.menus?.length) return []
+  return menuData.value.menus[0].menu_children
+    ?.map((child) => child.pages_id)
+    .filter(Boolean) || []
+})
 </script>
 
 <template>
   <section class="grid-container usa-section">
     <div class="grid-row grid-gap">
       <div class="grid-col-2">
+        <nav v-if="sidenavLinks.length" aria-label="Side navigation">
+          <ul class="usa-sidenav">
+            <li class="usa-sidenav__item" v-for="link in sidenavLinks" :key="link.title">
+              <NuxtLink :to="link.url" :class="{ 'usa-current': link.url === route.path }">
+                {{ link.title }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </nav>
       </div>
       <div class="grid-col-10">
         <h1>{{ page?.hero_title || page?.title }}</h1>

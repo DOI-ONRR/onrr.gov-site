@@ -1,0 +1,10 @@
+query GetMenuByLabel($menuLabel: String) {
+    menus(filter: { menu_label: { _eq: $menuLabel } }) {
+        menu_children {
+            pages_id {
+                title
+                url
+            }
+        }
+    }
+}
