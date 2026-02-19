@@ -6,6 +6,7 @@ USWDS with settings overrides
 
 @use "uswds-core" with (
   $theme-show-notifications: false,
+  $theme-image-path: "/uswds/img",
   $theme-typeface-tokens: (
     'plus-jakarta-sans': (
       'display-name': 'Plus Jakarta Sans',

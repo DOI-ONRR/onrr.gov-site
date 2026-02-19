@@ -20,7 +20,6 @@ export default defineNuxtConfig({
   },
 
   css: [
-    '@fontsource-variable/plus-jakarta-sans',
     '@/assets/scss/styles.scss',
   ],
 
