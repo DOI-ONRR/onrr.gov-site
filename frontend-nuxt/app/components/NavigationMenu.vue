@@ -23,6 +23,11 @@
             class="usa-nav__submenu"
             :hidden="openMenuId !== item.id"
           >
+            <li class="usa-nav__submenu-item">
+              <NuxtLink :to="item.link_to_page.url">
+                {{ item.menu_label }} Home
+              </NuxtLink>
+            </li>
             <li
               v-for="child in item.menu_children"
               :key="child.pages_id?.id"
@@ -71,6 +76,10 @@ function toggle(id) {
 
 const route = useRoute()
 
+watch(() => route.path, () => {
+  openMenuId.value = null
+})
+
 function isCurrentItem(item) {
   const path = route.path
   if (item.link_to_page?.url && path === item.link_to_page.url) return true
@@ -79,11 +88,15 @@ function isCurrentItem(item) {
 }
 </script>
 
-<style lang="scss" scoped>                                                                                                                                                                                                                                   
-  @use "uswds-core" as *;                                                                                                                                                                                                                                      
-                                                                                                                                                                                                                                                               
-  .onrr-nav {                                                                      
-    @include grid-container('none'); 
+<style lang="scss" scoped>
+  @use "uswds-theme" as *;
+
+  .onrr-nav {
+    @include grid-container('none');
     float: none;
+  }
+
+  .usa-current::after {
+    background-color: $color-medium-green !important;
   }
 </style>

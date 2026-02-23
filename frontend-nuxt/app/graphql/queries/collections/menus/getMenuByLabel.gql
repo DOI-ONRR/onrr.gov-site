@@ -1,5 +1,12 @@
 query GetMenuByLabel($menuLabel: String) {
-    menus(filter: { menu_label: { _eq: $menuLabel } }) {
+    menus(filter: { 
+      menu_label: { 
+        _eq: $menuLabel 
+      }
+      menu: {
+        _eq: "main"
+      }
+    }) {
         link_to_page {
             title
             url
