@@ -7,12 +7,23 @@ const props = defineProps({
 
 const { resolveImages } = useCmsContent()
 
+const pressReleaseConfig = {
+  'Current Press Releases': { status: 'published', paginate: false },
+  'Press Release Archive': { status: 'archived', paginate: true },
+}
+
 const tabs = computed(() => {
   const items = []
   props.block.tab_blocks?.forEach((entry) => {
     if (!entry.item) return
     if (entry.item.__typename === 'tab_block_label') {
-      items.push({ label: entry.item.tab_block_label, blocks: [] })
+      const label = entry.item.tab_block_label
+      const config = pressReleaseConfig[label] || null
+      items.push({
+        label,
+        blocks: [],
+        pressRelease: config,
+      })
     } else if (items.length) {
       items[items.length - 1].blocks.push(entry)
     }
@@ -22,7 +33,7 @@ const tabs = computed(() => {
 </script>
 
 <template>
-  <TabGroup>
+  <TabGroup as="div">
     <TabList class="tabs-block__list">
       <Tab v-for="(tab, i) in tabs" :key="i" v-slot="{ selected }" as="template">
         <button
@@ -34,7 +45,7 @@ const tabs = computed(() => {
     </TabList>
     <TabPanels>
       <TabPanel v-for="(tab, i) in tabs" :key="i">
-        <div class="grid-row grid-gap">
+        <div class="grid-row grid-gap margin-top-4">
           <div
             v-for="block in tab.blocks"
             :key="block.id"
@@ -58,13 +69,14 @@ const tabs = computed(() => {
             />
           </div>
         </div>
+        <PressReleases v-if="tab.pressRelease" :status="tab.pressRelease.status" :paginate="tab.pressRelease.paginate" />
       </TabPanel>
     </TabPanels>
   </TabGroup>
 </template>
 
 <style lang="scss" scoped>
-@use "uswds-core" as *;
+@use "uswds-theme" as *;
 
 .tabs-block__list {
   display: flex;
