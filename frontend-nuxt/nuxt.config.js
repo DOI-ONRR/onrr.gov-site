@@ -31,6 +31,7 @@ export default defineNuxtConfig({
           api: 'legacy',
           loadPaths: [
             'node_modules/@uswds/uswds/packages',
+            'app/assets/scss',
           ],
           silenceDeprecations: ['legacy-js-api'],
         },

@@ -104,3 +104,11 @@ const sidenavLinks = computed(() => {
     </div>
   </section>
 </template>
+
+<style lang="scss" scoped>
+@use "uswds-theme" as *;
+
+.usa-sidenav .usa-current::before {
+  background-color: $color-medium-green !important;
+}
+</style>
