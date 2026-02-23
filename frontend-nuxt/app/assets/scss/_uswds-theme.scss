@@ -4,7 +4,7 @@ USWDS with settings overrides
 ----------------------------------------
 */
 
-@use "uswds-core" with (
+@forward "uswds-core" with (
   $theme-show-notifications: false,
   $theme-image-path: "/uswds/img",
   $theme-typeface-tokens: (
@@ -21,6 +21,7 @@ USWDS with settings overrides
   ),
   $theme-breadcrumb-padding-top: 0,
   $theme-grid-container-max-width: 'none',
+  $theme-banner-max-width: 'none',
   $theme-header-max-width: 'none',
   $theme-footer-max-width: 'none',
   $utilities-use-important: true
