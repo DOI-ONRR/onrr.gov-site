@@ -100,6 +100,7 @@ const sidenavLinks = computed(() => {
             />
           </div>
         </div>
+        <ReporterLetters v-if="slug === 'reporter-letters'" />
       </div>
     </div>
   </section>
