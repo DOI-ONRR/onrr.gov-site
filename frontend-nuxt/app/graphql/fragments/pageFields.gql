@@ -42,6 +42,20 @@ fragment pageFields on pages {
       }
     }
   }
+  sidebar_blocks {
+    id
+    item {
+      ... on content_blocks {
+        ...contentBlockFields
+        __typename
+      }
+      ... on collection_blocks {
+        ...collectionBlockFields
+        __typename
+      }
+    }
+    __typename
+  }
   meta_title
   meta_description
 }

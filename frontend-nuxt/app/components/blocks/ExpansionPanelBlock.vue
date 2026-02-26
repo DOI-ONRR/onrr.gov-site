@@ -69,6 +69,10 @@ function toggle(id) {
             v-else-if="child.item?.__typename === 'card_blocks'"
             :block="child.item"
           />
+          <CollectionBlock
+            v-else-if="child.item?.__typename === 'collection_blocks'"
+            :block="child.item"
+          />
         </div>
       </div>
     </template>

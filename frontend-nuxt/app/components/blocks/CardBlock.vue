@@ -23,11 +23,10 @@ const { resolveImages } = useCmsContent()
               v-if="child.item?.__typename === 'content_blocks'"
               v-html="resolveImages(child.item.block_content_html || child.item.block_content)"
             />
-            <div
+            <CollectionBlock
               v-else-if="child.item?.__typename === 'collection_blocks'"
-            >
-              <!-- collection block placeholder -->
-            </div>
+              :block="child.item"
+            />
           </div>
         </template>
       </div>

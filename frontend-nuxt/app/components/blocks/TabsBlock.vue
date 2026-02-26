@@ -67,6 +67,10 @@ const tabs = computed(() => {
               v-else-if="block.item?.__typename === 'card_blocks'"
               :block="block.item"
             />
+            <CollectionBlock
+              v-else-if="block.item?.__typename === 'collection_blocks'"
+              :block="block.item"
+            />
           </div>
         </div>
         <PressReleases v-if="tab.pressRelease" :status="tab.pressRelease.status" :paginate="tab.pressRelease.paginate" />
