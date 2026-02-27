@@ -1,23 +1,28 @@
 <script setup>
+import getContacts from '@/graphql/queries/collections/contacts/getContacts.gql'
 import getContactsByPage from '@/graphql/queries/collections/contacts/getContactsByPage.gql'
 import getContactsByPageAndTab from '@/graphql/queries/collections/contacts/getContactsByPageAndTab.gql'
 
 const props = defineProps({
-  page: { type: String, required: true },
+  page: { type: String, default: null },
   tab: { type: String, default: null },
 })
 
-const { data } = props.tab
+const { data } = props.page && props.tab
   ? await useAsyncQuery(getContactsByPageAndTab, { page: props.page, tab: props.tab })
-  : await useAsyncQuery(getContactsByPage, { page: props.page })
+  : props.page
+    ? await useAsyncQuery(getContactsByPage, { page: props.page })
+    : await useAsyncQuery(getContacts)
 const contacts = computed(() => data.value?.contacts ?? [])
+
+const requiresSearch = !props.page && !props.tab
 
 const PAGE_SIZE = 5
 const searchText = ref('')
 const currentPage = ref(1)
 
 const filteredContacts = computed(() => {
-  if (!searchText.value) return contacts.value
+  if (!searchText.value) return requiresSearch ? [] : contacts.value
   const query = searchText.value.toLowerCase()
   return contacts.value
     .map((contact) => {

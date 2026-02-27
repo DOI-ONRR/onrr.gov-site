@@ -11,8 +11,8 @@ const { resolveImages } = useCmsContent()
     <div class="usa-card__container">
       <div class="usa-card__body">
         <div
-          v-if="block.block_content_html || block.block_content"
-          v-html="resolveImages(block.block_content_html || block.block_content)"
+          v-if="block.block_content_html"
+          v-html="resolveImages(block.block_content_html)"
         />
         <template v-if="block.card_content_blocks?.length">
           <div
@@ -21,7 +21,7 @@ const { resolveImages } = useCmsContent()
           >
             <div
               v-if="child.item?.__typename === 'content_blocks'"
-              v-html="resolveImages(child.item.block_content_html || child.item.block_content)"
+              v-html="resolveImages(child.item.block_content_html)"
             />
             <CollectionBlock
               v-else-if="child.item?.__typename === 'collection_blocks'"

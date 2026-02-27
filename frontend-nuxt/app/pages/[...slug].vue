@@ -88,7 +88,7 @@ const sidenavLinks = computed(() => {
           >
             <div
               v-if="block.item?.__typename === 'content_blocks'"
-              v-html="resolveImages(block.item.block_content_html || block.item.block_content)"
+              v-html="resolveImages(block.item.block_content_html)"
             />
             <TabsBlock
               v-else-if="block.item?.__typename === 'tab_blocks'"
