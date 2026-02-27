@@ -2,6 +2,10 @@
 import getPageBySlug from '@/graphql/queries/collections/pages/getPageBySlug.gql'
 import getMenuByLabel from '@/graphql/queries/collections/menus/getMenuByLabel.gql'
 
+definePageMeta({
+  key: (route) => route.fullPath,
+})
+
 const route = useRoute()
 const slug = computed(() => route.params.slug?.at(-1) || null)
 
