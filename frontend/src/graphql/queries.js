@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import {
   pageFields,
   collectionBlockFields,
+  eventsFields
   // fileCollectionFields
   // sectionHeadingBlocks,
   // contentBlocks,
@@ -455,6 +456,32 @@ export const PLANT_SPECIFIC_UCAS_QUERY = gql`
       operator
       location 
       doc_date
+    }
+  }
+`
+
+export const EVENTS_AND_TRAINING_QUERY = gql`
+  ${eventsFields}
+  query {
+    events: events(
+        filter: {
+            status: { _eq: "published" }
+            event_end_date_time: { _gte: "$NOW" }
+            is_training: { _eq: false }
+        }
+        sort: ["-event_start_date_time"]
+    ) {
+        ...eventFields
+    }
+    training: events(
+        filter: {
+            status: { _eq: "published" }
+            event_end_date_time: { _gte: "$NOW" }
+            is_training: { _eq: true }
+        }
+        sort: ["-event_start_date_time"]
+    ) {
+        ...eventFields
     }
   }
 `
