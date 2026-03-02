@@ -10,8 +10,8 @@
       <v-tab href="#other-onrr-events">Other ONRR Events</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
-      <v-tab-item value="indian-outreach-and-events" transition="fade-transition" class="col">
-        <div v-if="events && events.length">
+      <v-tab-item value="indian-outreach-and-events" transition="fade-transition">
+        <div v-if="events && events.length" class="pa-1">
           <v-card
             v-for="event in events"
             :key="event.id"
@@ -57,7 +57,7 @@
           <v-card-text>No upcoming events at this time.</v-card-text>
         </v-card>
       </v-tab-item>
-      <v-tab-item value="other-onrr-events" transition="fade-transition" class="col">
+      <v-tab-item value="other-onrr-events" transition="fade-transition">
         <div v-if="training && training.length">
           <v-card
             v-for="event in training"
