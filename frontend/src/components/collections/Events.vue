@@ -6,7 +6,7 @@
       color="white"
       background-color="white"
       show-arrows>
-      <v-tab href="#indian-outreach-and-events">Indian Outreach and Events</v-tab>
+      <v-tab href="#indian-outreach-and-events">Indian Outreach & Events</v-tab>
       <v-tab href="#other-onrr-events">Other ONRR Events</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
