@@ -20,36 +20,13 @@
             <v-card-title class="text-h2 text-wrap text-uppercase">{{ event.title }}</v-card-title>
             <v-card-subtitle class="text-h3 black--text my-4">{{ formatDateRange(event) }}</v-card-subtitle>
             <v-card-text class="text--primary body-1">
-              <div v-if="event.event_start_date_time" class="mb-4">
-                <strong class="text-uppercase">Time:</strong>
-                <div>{{ formatTimeRange(event) }}</div>
-              </div>
-              <div v-if="event.location" class="mb-4">
-                <strong class="text-uppercase">Location:</strong>
-                <div>{{ event.location }}</div>
-              </div>
-              <div v-if="event.description" class="mb-4">
-                <strong class="text-uppercase">Description:</strong>
-                <div v-html="event.description"></div>
-              </div>
-              <div v-if="event.who_should_attend" class="mb-4">
-                <strong class="text-uppercase">Who Should Attend:</strong>
-                <div v-html="event.who_should_attend"></div>
-              </div>
-              <div v-if="event.other_information" class="mb-4">
-                <strong class="text-uppercase">Other Information:</strong>
-                <div v-html="event.other_information"></div>
-              </div>
-              <div v-if="event.contact" class="mb-4">
-                <strong class="text-uppercase">Contact:</strong>
-                <div v-html="event.contact" class="display-inline"></div>
-              </div>
-              <div v-if="event.email" class="mb-4">
-                <strong class="text-uppercase">Email:</strong>
-                <div>
-                  <a :href="`mailto:${event.email}`">{{ event.email }}</a>
-                </div>
-              </div>
+              <div v-if="event.event_start_date_time" class="mb-4" v-html="labeledField('Time', formatTimeRange(event))"></div>
+              <div v-if="event.location" class="mb-4" v-html="labeledField('Location', event.location)"></div>
+              <div v-if="event.description" class="mb-4" v-html="labeledField('Description', event.description)"></div>
+              <div v-if="event.who_should_attend" class="mb-4" v-html="labeledField('Who Should Attend', event.who_should_attend)"></div>
+              <div v-if="event.other_information" class="mb-4" v-html="labeledField('Other Information', event.other_information)"></div>
+              <div v-if="event.contact" class="mb-4" v-html="labeledField('Contact', event.contact)"></div>
+              <div v-if="event.email" class="mb-4" v-html="labeledField('Email', `<a href='mailto:${event.email}' class='usa-link usa-link--external'>${event.email}</a>`)"></div>
             </v-card-text>
           </v-card>
         </div>
@@ -67,36 +44,13 @@
             <v-card-title class="text-h2 text-wrap text-uppercase">{{ event.title }}</v-card-title>
             <v-card-subtitle class="text-h3 black--text my-4">{{ formatDateRange(event) }}</v-card-subtitle>
             <v-card-text class="text--primary body-1">
-              <div v-if="event.event_start_date_time" class="mb-4">
-                <strong class="text-uppercase">Time:</strong>
-                <div>{{ formatTimeRange(event) }}</div>
-              </div>
-              <div v-if="event.location" class="mb-4">
-                <strong class="text-uppercase">Location:</strong>
-                <div>{{ event.location }}</div>
-              </div>
-              <div v-if="event.description" class="mb-4">
-                <strong class="text-uppercase">Description:</strong>
-                <div v-html="event.description"></div>
-              </div>
-              <div v-if="event.who_should_attend" class="mb-4">
-                <strong class="text-uppercase">Who Should Attend:</strong>
-                <div v-html="event.who_should_attend"></div>
-              </div>
-              <div v-if="event.other_information" class="mb-4">
-                <strong class="text-uppercase">Other Information:</strong>
-                <div v-html="event.other_information"></div>
-              </div>
-              <div v-if="event.contact" class="mb-4">
-                <strong class="text-uppercase">Contact:</strong>
-                <div v-html="event.contact" class="display-inline"></div>
-              </div>
-              <div v-if="event.email" class="mb-4">
-                <strong class="text-uppercase">Email:</strong>
-                <div>
-                  <a :href="`mailto:${event.email}`">{{ event.email }}</a>
-                </div>
-              </div>
+              <div v-if="event.event_start_date_time" class="mb-4" v-html="labeledField('Time', formatTimeRange(event))"></div>
+              <div v-if="event.location" class="mb-4" v-html="labeledField('Location', event.location)"></div>
+              <div v-if="event.description" class="mb-4" v-html="labeledField('Description', event.description)"></div>
+              <div v-if="event.who_should_attend" class="mb-4" v-html="labeledField('Who Should Attend', event.who_should_attend)"></div>
+              <div v-if="event.other_information" class="mb-4" v-html="labeledField('Other Information', event.other_information)"></div>
+              <div v-if="event.contact" class="mb-4" v-html="labeledField('Contact', event.contact)"></div>
+              <div v-if="event.email" class="mb-4" v-html="labeledField('Email', `<a href='mailto:${event.email}'>${event.email}</a>`)"></div>
             </v-card-text>
           </v-card>
         </div>
@@ -131,6 +85,14 @@ export default {
     },
   },
   methods: {
+    labeledField(label, value) {
+      const strong = `<strong class="text-uppercase">${label}:</strong> `
+      const trimmed = value.trimStart()
+      if (trimmed.match(/^<p[\s>]/i)) {
+        return trimmed.replace(/^<p([^>]*)>/i, `<p$1>${strong}`)
+      }
+      return strong + value
+    },
     formatTime(date) {
       let hours = date.getHours()
       const minutes = date.getMinutes()
