@@ -1,6 +1,6 @@
 # Migrating Directus Flows Between Environments
 
-This guide covers how to copy flow configurations from one environment to another (e.g., preview → dev) using a direct PostgreSQL dump of the `directus_flows` and `directus_operations` tables.
+This guide covers how to copy flow configurations from one environment to another (e.g., dev → staging) using a direct PostgreSQL dump of the `directus_flows` and `directus_operations` tables.
 
 ---
 
@@ -42,6 +42,8 @@ pg_dump "postgres://<username>:<password>@localhost:<port>/<dbname>" \
 
 Replace `<username>`, `<password>`, `<port>`, and `<dbname>` with the values output in Step 1.
 
+> **Note:** You may see warnings about circular foreign-key constraints on `directus_operations`. This is expected — the table is self-referential (`resolve` and `reject` columns point to other rows in the same table). The import steps below handle this explicitly.
+
 ---
 
 ## Step 3: Review the Export for Environment-Specific Values
@@ -50,12 +52,13 @@ Before importing, open `flows_export.sql` and check for any hardcoded values tha
 
 - Internal URLs or API endpoints
 - Webhook URLs
+- Collection names that may differ
 - Access tokens or secrets embedded in operation options
 
 Use `sed` or a text editor to swap these out as needed. For example:
 
 ```bash
-sed -i 's/preview-onrr-cms.app.cloud.gov/dev-onrr-cms.app.cloud.gov/g' flows_export.sql
+sed -i 's/dev-onrr.app.cloud.gov/staging-onrr.app.cloud.gov/g' flows_export.sql
 ```
 
 ---
@@ -94,10 +97,53 @@ Exit `psql` with `\q`.
 
 ## Step 6: Import Flows into the Target Database
 
+`directus_operations` is self-referential — each operation's `resolve` and `reject` columns point to other rows in the same table. This creates a circular foreign key constraint that prevents a clean ordered insert. To work around it without superuser access, temporarily drop the circular constraints before importing and restore them afterward.
+
+**6a. Drop the circular constraints:**
+
+```bash
+psql "postgres://<username>:<password>@localhost:<port>/<dbname>"
+```
+
+```sql
+ALTER TABLE directus_operations DROP CONSTRAINT IF EXISTS directus_operations_resolve_foreign;
+ALTER TABLE directus_operations DROP CONSTRAINT IF EXISTS directus_operations_reject_foreign;
+```
+
+If you're unsure of the exact constraint names on your target, verify them first:
+
+```sql
+SELECT conname FROM pg_constraint
+WHERE conrelid = 'directus_operations'::regclass
+  AND confrelid = 'directus_operations'::regclass;
+```
+
+Exit `psql` with `\q`.
+
+**6b. Run the import:**
+
 ```bash
 psql "postgres://<username>:<password>@localhost:<port>/<dbname>" \
   < flows_export.sql
 ```
+
+**6c. Restore the constraints:**
+
+```bash
+psql "postgres://<username>:<password>@localhost:<port>/<dbname>"
+```
+
+```sql
+ALTER TABLE directus_operations
+  ADD CONSTRAINT directus_operations_resolve_foreign
+  FOREIGN KEY (resolve) REFERENCES directus_operations(id);
+
+ALTER TABLE directus_operations
+  ADD CONSTRAINT directus_operations_reject_foreign
+  FOREIGN KEY (reject) REFERENCES directus_operations(id);
+```
+
+Exit `psql` with `\q`.
 
 ---
 
