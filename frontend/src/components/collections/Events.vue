@@ -85,13 +85,27 @@ export default {
     },
   },
   methods: {
+    addExternalLinkClasses(html) {
+      return html.replace(/<a\s([^>]*href=['"]https?:\/\/[^>]*)>/gi, (match, attrs) => {
+        if (/class=/.test(attrs)) {
+          return match.replace(/class=['"]([^'"]*)['"]/,  (m, classes) => {
+            const added = []
+            if (!classes.includes('usa-link')) added.push('usa-link')
+            if (!classes.includes('usa-link--external')) added.push('usa-link--external')
+            return `class="${classes}${added.length ? ' ' + added.join(' ') : ''}"`
+          })
+        }
+        return `<a class="usa-link usa-link--external" ${attrs}>`
+      })
+    },
     labeledField(label, value) {
       const strong = `<strong class="text-uppercase">${label}:</strong> `
-      const trimmed = value.trimStart()
+      const processed = this.addExternalLinkClasses(value)
+      const trimmed = processed.trimStart()
       if (trimmed.match(/^<p[\s>]/i)) {
         return trimmed.replace(/^<p([^>]*)>/i, `<p$1>${strong}`)
       }
-      return strong + value
+      return strong + processed
     },
     formatTime(date) {
       let hours = date.getHours()
