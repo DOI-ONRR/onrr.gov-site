@@ -325,3 +325,20 @@ export const fileCollectionFields = gql`
     }
   }
 `
+
+export const eventsFields = gql`
+  fragment eventFields on events {
+    id
+    title
+    description
+    location
+    other_information
+    contact
+    event_start_date_time
+    event_end_date_time
+    who_should_attend
+    email
+    is_training
+    time_zone
+  }
+`
