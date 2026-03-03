@@ -2,17 +2,21 @@
 import getContacts from '@/graphql/queries/collections/contacts/getContacts.gql'
 import getContactsByPage from '@/graphql/queries/collections/contacts/getContactsByPage.gql'
 import getContactsByPageAndTab from '@/graphql/queries/collections/contacts/getContactsByPageAndTab.gql'
+import getContactsByPageTabAndAccordion from '@/graphql/queries/collections/contacts/getContactsByPageTabAndAccordion.gql'
 
 const props = defineProps({
   page: { type: String, default: null },
   tab: { type: String, default: null },
+  accordion: { type: String, default: null },
 })
 
-const { data } = props.page && props.tab
-  ? await useAsyncQuery(getContactsByPageAndTab, { page: props.page, tab: props.tab })
-  : props.page
-    ? await useAsyncQuery(getContactsByPage, { page: props.page })
-    : await useAsyncQuery(getContacts)
+const { data } = props.accordion
+  ? await useAsyncQuery(getContactsByPageTabAndAccordion, { page: props.page, tab: props.tab, accordion: props.accordion })
+  : props.page && props.tab
+    ? await useAsyncQuery(getContactsByPageAndTab, { page: props.page, tab: props.tab })
+    : props.page
+      ? await useAsyncQuery(getContactsByPage, { page: props.page })
+      : await useAsyncQuery(getContacts)
 const contacts = computed(() => data.value?.contacts ?? [])
 
 const requiresSearch = !props.page && !props.tab
