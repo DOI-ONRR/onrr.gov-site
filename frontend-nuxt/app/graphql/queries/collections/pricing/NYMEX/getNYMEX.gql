@@ -1,0 +1,11 @@
+query GetNYMEX {
+  NYMEX(sort: ["date"], limit: -1, filter: { status: { _eq: "published" } }) {
+    id
+    date
+    average
+    roll
+    excel_file: Spreadsheet {
+      filename_download
+    }
+  }
+}
