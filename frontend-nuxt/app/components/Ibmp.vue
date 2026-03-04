@@ -1,35 +1,40 @@
 <script setup>
-import getIndexZones from '@/graphql/queries/collections/pricing/index_zones/getIndexZones.gql'
+import getIBMP from '@/graphql/queries/collections/pricing/ibmp/getIBMP.gql'
 
-const { data } = await useAsyncQuery(getIndexZones)
+const { data } = await useAsyncQuery(getIBMP)
 
 const rows = computed(() => {
   const items = []
-  for (const record of data.value?.index_zones ?? []) {
+  for (const record of data.value?.ibmp ?? []) {
     const date = new Date(record.date)
     const year = date.getFullYear()
     const month = date.toLocaleDateString('en-US', { month: 'long' })
-    for (const zone of record.index_zones ?? []) {
+    for (const row of record.ibmp_line_items ?? []) {
       items.push({
-        indexZone: `${zone.index_zone} (${zone.abbreviation})`,
+        designatedArea: row.designatedArea,
         year,
         month,
-        price: zone.price,
+        condensate02: row.condensate02,
+        sweet61: row.sweet61,
+        sour62: row.sour62,
+        asphaltic63: row.asphaltic63,
+        blackWax64: row.blackWax64,
+        yellowWax65: row.yellowWax65,
       })
     }
   }
   return items
 })
 
-const selectedZone = ref('')
+const selectedArea = ref('')
 const selectedYears = ref([])
 const yearsOpen = ref(false)
 const yearsRef = ref(null)
 
-const allZones = computed(() => {
-  const zones = new Set()
-  rows.value.forEach((r) => zones.add(r.indexZone))
-  return [...zones].sort((a, b) => a.localeCompare(b))
+const allAreas = computed(() => {
+  const areas = new Set()
+  rows.value.forEach((r) => areas.add(r.designatedArea))
+  return [...areas].sort((a, b) => a.localeCompare(b))
 })
 
 const allYears = computed(() => {
@@ -40,7 +45,7 @@ const allYears = computed(() => {
 
 const filteredRows = computed(() => {
   return rows.value.filter((r) => {
-    if (selectedZone.value && r.indexZone !== selectedZone.value) return false
+    if (selectedArea.value && r.designatedArea !== selectedArea.value) return false
     if (selectedYears.value.length && !selectedYears.value.includes(r.year)) return false
     return true
   })
@@ -51,12 +56,13 @@ const {
   visiblePages, rangeStart, rangeEnd, totalItems, goToPage, resetPage,
 } = usePagination(filteredRows)
 
-watch([selectedZone, selectedYears], () => {
+watch([selectedArea, selectedYears], () => {
   resetPage()
 })
 
 function formatPrice(value) {
-  if (value == null) return ''
+  if (value == null || value === '') return ''
+  if (isNaN(value)) return value
   return Number(value).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
@@ -91,21 +97,21 @@ onUnmounted(() => {
 <template>
   <div class="grid-row grid-gap margin-bottom-3">
     <div class="grid-col-6">
-      <label class="usa-label" for="index-zones-zone">Index Zone</label>
+      <label class="usa-label" for="ibmp-area">Designated Area</label>
       <select
-        id="index-zones-zone"
-        v-model="selectedZone"
+        id="ibmp-area"
+        v-model="selectedArea"
         class="usa-select"
       >
-        <option value="">All Index Zones</option>
-        <option v-for="zone in allZones" :key="zone" :value="zone">{{ zone }}</option>
+        <option value="">All Areas</option>
+        <option v-for="area in allAreas" :key="area" :value="area">{{ area }}</option>
       </select>
     </div>
     <div class="grid-col-6">
-      <label class="usa-label" for="index-zones-years">Years</label>
+      <label class="usa-label" for="ibmp-years">Years</label>
       <div ref="yearsRef" class="multi-select">
         <button
-          id="index-zones-years"
+          id="ibmp-years"
           type="button"
           class="usa-select multi-select__trigger"
           @click="yearsOpen = !yearsOpen"
@@ -147,25 +153,40 @@ onUnmounted(() => {
   </div>
   <table class="usa-table usa-table--borderless width-full usa-table--fixed">
     <colgroup>
-      <col style="width: 50%" />
+      <col style="width: 25%" />
+      <col />
+      <col />
+      <col />
+      <col />
+      <col />
       <col />
       <col />
       <col />
     </colgroup>
     <thead>
       <tr>
-        <th scope="col">Index Zone</th>
+        <th scope="col">Designated Area</th>
         <th scope="col">Year</th>
         <th scope="col">Month</th>
-        <th scope="col" class="text-right">Price</th>
+        <th scope="col" class="text-right">Condensate (02)</th>
+        <th scope="col" class="text-right">Sweet (61)</th>
+        <th scope="col" class="text-right">Sour (62)</th>
+        <th scope="col" class="text-right">Asphaltic (63)</th>
+        <th scope="col" class="text-right">Black Wax (64)</th>
+        <th scope="col" class="text-right">Yellow Wax (65)</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(row, i) in displayedRows" :key="i">
-        <th scope="row">{{ row.indexZone }}</th>
+        <th scope="row">{{ row.designatedArea }}</th>
         <td>{{ row.year }}</td>
         <td>{{ row.month }}</td>
-        <td class="text-right">{{ formatPrice(row.price) }}</td>
+        <td class="text-right">{{ formatPrice(row.condensate02) }}</td>
+        <td class="text-right">{{ formatPrice(row.sweet61) }}</td>
+        <td class="text-right">{{ formatPrice(row.sour62) }}</td>
+        <td class="text-right">{{ formatPrice(row.asphaltic63) }}</td>
+        <td class="text-right">{{ formatPrice(row.blackWax64) }}</td>
+        <td class="text-right">{{ formatPrice(row.yellowWax65) }}</td>
       </tr>
     </tbody>
   </table>

@@ -1,7 +1,0 @@
-query GetIndexZones {
-  index_zones(sort: ["-date"], filter: { status: { _eq: "published" } }) {
-    id
-    date
-    index_zones
-  }
-}
