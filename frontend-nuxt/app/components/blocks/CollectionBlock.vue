@@ -44,12 +44,14 @@ const items = computed(() => {
 </script>
 
 <template>
+  <div v-if="block.header" v-html="block.header" class="margin-top-4"></div>
   <Contacts
     v-if="collection === 'contacts'"
     :page="block.page"
     :tab="block.tab"
     :accordion="block.accordion"
   />
+  <IndexZones v-else-if="collection === 'index_zones'" />
   <template v-else-if="collection === 'announcements'">
     <div v-for="item in items" :key="item.id" class="usa-card margin-bottom-3">
       <div class="usa-card__container">
