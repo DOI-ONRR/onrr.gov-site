@@ -56,6 +56,7 @@ const items = computed(() => {
   <IndianGasMajorPortion v-else-if="collection === 'indian_gas_major_portion'" />
   <Nymex v-else-if="collection === 'NYMEX'" />
   <PlantSpecificUcas v-else-if="collection === 'plant_specific_ucas'" />
+  <Rulemakings v-else-if="collection === 'rulemakings'" />
   <template v-else-if="collection === 'announcements'">
     <div v-for="item in items" :key="item.id" class="usa-card margin-bottom-3">
       <div class="usa-card__container">
