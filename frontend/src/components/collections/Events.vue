@@ -108,32 +108,34 @@ export default {
       return strong + processed
     },
     formatTime(date) {
-      let hours = date.getUTCHours()
-      const minutes = date.getUTCMinutes()
+      let hours = date.getHours()
+      const minutes = date.getMinutes()
       const period = hours >= 12 ? 'p.m.' : 'a.m.'
       hours = hours % 12 || 12
       const minuteStr = minutes > 0 ? `:${String(minutes).padStart(2, '0')}` : ':00'
       return `${hours}${minuteStr} ${period}`
     },
+    localTimezone() {
+      return Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
+        .formatToParts(new Date())
+        .find(p => p.type === 'timeZoneName')?.value || ''
+    },
     formatTimeRange(event) {
       const start = new Date(event.event_start_date_time)
       const end = new Date(event.event_end_date_time)
-      const isMultiDay = this.utcDateString(start) !== this.utcDateString(end)
-      const tz = event.time_zone || ''
+      const isMultiDay = start.toDateString() !== end.toDateString()
+      const tz = this.localTimezone()
       let result = `${this.formatTime(start)} - ${this.formatTime(end)}`
       if (tz) result += ` ${tz}`
       if (isMultiDay) result += ' daily'
       return result
     },
-    utcDateString(date) {
-      return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`
-    },
     formatDateRange(event) {
-      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
+      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
       const start = new Date(event.event_start_date_time)
       const end = new Date(event.event_end_date_time)
       const startStr = start.toLocaleDateString('en-US', opts)
-      if (this.utcDateString(start) === this.utcDateString(end)) {
+      if (start.toDateString() === end.toDateString()) {
         return startStr
       }
       return `${startStr} - ${end.toLocaleDateString('en-US', opts)}`
