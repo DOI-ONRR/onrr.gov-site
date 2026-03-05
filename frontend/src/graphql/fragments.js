@@ -336,6 +336,7 @@ export const eventsFields = gql`
     contact
     event_start_date_time
     event_end_date_time
+    time
     who_should_attend
     email
     is_training

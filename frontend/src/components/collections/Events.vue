@@ -20,7 +20,7 @@
             <v-card-title class="text-h2 text-wrap text-uppercase">{{ event.title }}</v-card-title>
             <v-card-subtitle class="text-h3 black--text my-4">{{ formatDateRange(event) }}</v-card-subtitle>
             <v-card-text class="text--primary body-1">
-              <div v-if="event.event_start_date_time" class="mb-4" v-html="labeledField('Time', formatTimeRange(event))"></div>
+              <div v-if="event.time" class="mb-4" v-html="labeledField('Time', event.time)"></div>
               <div v-if="event.location" class="mb-4" v-html="labeledField('Location', event.location)"></div>
               <div v-if="event.description" class="mb-4" v-html="labeledField('Description', event.description)"></div>
               <div v-if="event.who_should_attend" class="mb-4" v-html="labeledField('Who Should Attend', event.who_should_attend)"></div>
@@ -44,7 +44,7 @@
             <v-card-title class="text-h2 text-wrap text-uppercase">{{ event.title }}</v-card-title>
             <v-card-subtitle class="text-h3 black--text my-4">{{ formatDateRange(event) }}</v-card-subtitle>
             <v-card-text class="text--primary body-1">
-              <div v-if="event.event_start_date_time" class="mb-4" v-html="labeledField('Time', formatTimeRange(event))"></div>
+              <div v-if="event.time" class="mb-4" v-html="labeledField('Time', event.time)"></div>
               <div v-if="event.location" class="mb-4" v-html="labeledField('Location', event.location)"></div>
               <div v-if="event.description" class="mb-4" v-html="labeledField('Description', event.description)"></div>
               <div v-if="event.who_should_attend" class="mb-4" v-html="labeledField('Who Should Attend', event.who_should_attend)"></div>
@@ -106,29 +106,6 @@ export default {
         return trimmed.replace(/^<p([^>]*)>/i, `<p$1>${strong}`)
       }
       return strong + processed
-    },
-    formatTime(date) {
-      let hours = date.getHours()
-      const minutes = date.getMinutes()
-      const period = hours >= 12 ? 'p.m.' : 'a.m.'
-      hours = hours % 12 || 12
-      const minuteStr = minutes > 0 ? `:${String(minutes).padStart(2, '0')}` : ':00'
-      return `${hours}${minuteStr} ${period}`
-    },
-    localTimezone() {
-      return Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
-        .formatToParts(new Date())
-        .find(p => p.type === 'timeZoneName')?.value || ''
-    },
-    formatTimeRange(event) {
-      const start = new Date(event.event_start_date_time)
-      const end = new Date(event.event_end_date_time)
-      const isMultiDay = start.toDateString() !== end.toDateString()
-      const tz = this.localTimezone()
-      let result = `${this.formatTime(start)} - ${this.formatTime(end)}`
-      if (tz) result += ` ${tz}`
-      if (isMultiDay) result += ' daily'
-      return result
     },
     formatDateRange(event) {
       const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
