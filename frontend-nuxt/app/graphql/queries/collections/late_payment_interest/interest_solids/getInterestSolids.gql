@@ -1,0 +1,11 @@
+query GetInterestSolids {
+    Interest_Solids(
+        limit: -1
+        filter: { status: { _eq: "published" } }
+        sort: ["sort"]
+    ) {
+        id
+        Period
+        Federal_and_Indian_Late_and_Underpayments
+    }
+}
