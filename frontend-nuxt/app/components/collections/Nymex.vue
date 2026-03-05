@@ -52,7 +52,7 @@ function formatPrice(value) {
 </script>
 
 <template>
-  <div class="grid-row grid-gap margin-bottom-3">
+  <div class="grid-row grid-gap margin-bottom-5">
     <div class="grid-col-6">
       <label class="usa-label" for="nymex-year">Year</label>
       <select

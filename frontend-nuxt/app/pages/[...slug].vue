@@ -38,9 +38,11 @@ const menuData = computed(() => {
 const parentLink = computed(() => menuData.value?.menus?.[0]?.link_to_page || null)
 const parentUrl = computed(() => page.value?.parent?.url || null)
 
+const isGrandchild = computed(() => !!menuByGrandparentTitle.value?.menus?.length)
+
 function isSidenavCurrent(linkUrl) {
   if (linkUrl === route.path) return true
-  if (parentUrl.value && linkUrl === parentUrl.value) return true
+  if (isGrandchild.value && parentUrl.value && linkUrl === parentUrl.value) return true
   return false
 }
 

@@ -9,6 +9,7 @@ const props = defineProps({
 
 const { assetUrl, resolveImages } = useCmsContent()
 
+const route = useRoute()
 const collection = computed(() => props.block.collection)
 
 const viewAllConfig = {
@@ -16,7 +17,15 @@ const viewAllConfig = {
   press_releases: { label: 'View All Press Releases', url: '/about/public-affairs' },
 }
 
-const viewAll = computed(() => viewAllConfig[collection.value] || null)
+const isFullPage = computed(() => {
+  const config = viewAllConfig[collection.value]
+  return config && route.path === config.url
+})
+
+const viewAll = computed(() => {
+  if (isFullPage.value) return null
+  return viewAllConfig[collection.value] || null
+})
 
 const { data: pressData } = collection.value === 'press_releases'
   ? await useAsyncQuery(getPressReleasesByStatus, { status: 'published' })
@@ -60,6 +69,8 @@ const items = computed(() => {
   <Handbook v-else-if="collection === 'revenue_handbook' || collection === 'production_handbook' || collection === 'solid_minerals_handbook' || collection === 'geothermal_class_1' || collection === 'geothermal_class_2_3'" :collection="collection" />
   <InterestOilAndGas v-else-if="collection === 'Interest_Oil_and_Gas'" />
   <InterestSolids v-else-if="collection === 'Interest_Solids'" />
+  <ReporterLetters v-else-if="collection === 'reporter_letters' && isFullPage" />
+  <template v-else-if="isFullPage" />
   <template v-else-if="collection === 'announcements'">
     <div v-for="item in items" :key="item.id" class="usa-card margin-bottom-3">
       <div class="usa-card__container">
