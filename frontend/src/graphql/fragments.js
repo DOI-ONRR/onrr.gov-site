@@ -339,6 +339,5 @@ export const eventsFields = gql`
     who_should_attend
     email
     is_training
-    time_zone
   }
 `

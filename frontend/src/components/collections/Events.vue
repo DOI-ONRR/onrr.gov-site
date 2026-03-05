@@ -115,11 +115,16 @@ export default {
       const minuteStr = minutes > 0 ? `:${String(minutes).padStart(2, '0')}` : ':00'
       return `${hours}${minuteStr} ${period}`
     },
+    localTimezone() {
+      return Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
+        .formatToParts(new Date())
+        .find(p => p.type === 'timeZoneName')?.value || ''
+    },
     formatTimeRange(event) {
       const start = new Date(event.event_start_date_time)
       const end = new Date(event.event_end_date_time)
       const isMultiDay = start.toDateString() !== end.toDateString()
-      const tz = event.time_zone || ''
+      const tz = this.localTimezone()
       let result = `${this.formatTime(start)} - ${this.formatTime(end)}`
       if (tz) result += ` ${tz}`
       if (isMultiDay) result += ' daily'
