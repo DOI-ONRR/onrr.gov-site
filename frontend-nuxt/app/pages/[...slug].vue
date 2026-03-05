@@ -15,6 +15,7 @@ const page = computed(() => data.value?.page?.[0])
 
 const pageTitle = computed(() => page.value?.title || null)
 const parentTitle = computed(() => page.value?.parent?.title || null)
+const grandparentTitle = computed(() => page.value?.parent?.parent?.title || null)
 
 const { data: menuByPageTitle } = await useAsyncQuery(getMenuByLabel, {
   menuLabel: pageTitle.value,
@@ -24,12 +25,24 @@ const { data: menuByParentTitle } = await useAsyncQuery(getMenuByLabel, {
   menuLabel: parentTitle.value,
 }, { enabled: !!parentTitle.value && !menuByPageTitle.value?.menus?.length })
 
+const { data: menuByGrandparentTitle } = await useAsyncQuery(getMenuByLabel, {
+  menuLabel: grandparentTitle.value,
+}, { enabled: !!grandparentTitle.value && !menuByPageTitle.value?.menus?.length && !menuByParentTitle.value?.menus?.length })
+
 const menuData = computed(() => {
   if (menuByPageTitle.value?.menus?.length) return menuByPageTitle.value
-  return menuByParentTitle.value
+  if (menuByParentTitle.value?.menus?.length) return menuByParentTitle.value
+  return menuByGrandparentTitle.value
 })
 
 const parentLink = computed(() => menuData.value?.menus?.[0]?.link_to_page || null)
+const parentUrl = computed(() => page.value?.parent?.url || null)
+
+function isSidenavCurrent(linkUrl) {
+  if (linkUrl === route.path) return true
+  if (parentUrl.value && linkUrl === parentUrl.value) return true
+  return false
+}
 
 const sidenavLinks = computed(() => {
   const menu = menuData.value?.menus?.[0]
@@ -56,7 +69,7 @@ const sidenavLinks = computed(() => {
         <nav v-if="sidenavLinks.length" aria-label="Side navigation">
           <ul class="usa-sidenav">
             <li class="usa-sidenav__item" v-for="link in sidenavLinks" :key="link.title">
-              <NuxtLink :to="link.url" :class="{ 'usa-current': link.url === route.path }">
+              <NuxtLink :to="link.url" :class="{ 'usa-current': isSidenavCurrent(link.url) }">
                 {{ link.title }}
               </NuxtLink>
             </li>
@@ -72,6 +85,11 @@ const sidenavLinks = computed(() => {
             <li v-if="parentLink" class="usa-breadcrumb__list-item">
               <NuxtLink :to="parentLink.url" class="usa-breadcrumb__link">
                 {{ parentLink.title }}
+              </NuxtLink>
+            </li>
+            <li v-if="parentUrl && parentUrl !== parentLink?.url" class="usa-breadcrumb__list-item">
+              <NuxtLink :to="parentUrl" class="usa-breadcrumb__link">
+                {{ parentTitle }}
               </NuxtLink>
             </li>
             <li class="usa-breadcrumb__list-item usa-current" aria-current="page">

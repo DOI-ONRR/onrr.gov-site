@@ -1,10 +1,26 @@
 <script setup>
-import getRevenueHandbooks from '@/graphql/queries/collections/pricing/revenue_handbooks/getRevenueHandbooks.gql'
+import getRevenueHandbook from '@/graphql/queries/collections/handbooks/revenue_handbook/getRevenueHandbook.gql'
+import getProductionHandbook from '@/graphql/queries/collections/handbooks/production_handbook/getProductionHandbook.gql'
+import getSolidMineralsHandbook from '@/graphql/queries/collections/handbooks/solid_minerals_handbook/getSolidMineralsHandbook.gql'
+import getGeothermalClass1 from '@/graphql/queries/collections/handbooks/geothermal_class_1/getGeothermalClass1.gql'
+import getGeothermalClass23 from '@/graphql/queries/collections/handbooks/geothermal_class_2_3/getGeothermalClass23.gql'
 
-const { data } = await useAsyncQuery(getRevenueHandbooks)
+const props = defineProps({
+  collection: { type: String, required: true },
+})
+
+const queries = {
+  revenue_handbook: getRevenueHandbook,
+  production_handbook: getProductionHandbook,
+  solid_minerals_handbook: getSolidMineralsHandbook,
+  geothermal_class_1: getGeothermalClass1,
+  geothermal_class_2_3: getGeothermalClass23,
+}
+
+const { data } = await useAsyncQuery(queries[props.collection])
 
 const rows = computed(() =>
-  (data.value?.revenue_handbook ?? []).map((r) => ({
+  (data.value?.[props.collection] ?? []).map((r) => ({
     id: r.id,
     chapter: r.chapter,
     section: r.section,
@@ -35,9 +51,9 @@ watch(searchText, () => {
 <template>
   <div class="grid-row grid-gap margin-bottom-6">
     <div class="grid-col-6">
-      <label class="usa-label" for="revenue-handbooks-search">Search</label>
+      <label class="usa-label" :for="`${collection}-search`">Search</label>
       <input
-        id="revenue-handbooks-search"
+        :id="`${collection}-search`"
         v-model="searchText"
         class="usa-input"
         type="text"

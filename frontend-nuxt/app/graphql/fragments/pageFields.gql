@@ -12,6 +12,10 @@ fragment pageFields on pages {
   slug
   parent {
     title
+    url
+    parent {
+      title
+    }
   }
   hero_image {
     id

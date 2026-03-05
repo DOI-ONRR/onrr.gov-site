@@ -84,7 +84,12 @@ function isCurrentItem(item) {
   const path = route.path
   if (item.link_to_page?.url && path === item.link_to_page.url) return true
   if (item.custom_url && path === item.custom_url) return true
-  return item.menu_children?.some((child) => child.pages_id?.url === path) || false
+  if (item.menu_children?.some((child) => {
+    const childUrl = child.pages_id?.url
+    if (!childUrl) return false
+    return path === childUrl || path.startsWith(childUrl + '/')
+  })) return true
+  return false
 }
 </script>
 
