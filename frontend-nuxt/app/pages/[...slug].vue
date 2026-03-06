@@ -100,6 +100,7 @@ const sidenavLinks = computed(() => {
           </ol>
         </nav>
         <h1>{{ page?.hero_title || page?.title }}</h1>
+        <Events v-if="slug === 'events'" />
         <div class="grid-row grid-gap">
           <div
             v-for="block in page?.page_blocks"
