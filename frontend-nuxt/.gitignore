@@ -22,6 +22,11 @@ public/uswds
 .fleet
 .idea
 
+# Playwright
+e2e/.features-gen
+test-results
+playwright-report
+
 # Local env files
 .env
 .env.*

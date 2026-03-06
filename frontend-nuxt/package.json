@@ -9,7 +9,9 @@
     "copy:fonts": "rm -rf public/fonts && cp -r node_modules/@uswds/uswds/dist/fonts public/fonts",
     "postinstall": "nuxt prepare && npm run copy:fonts",
     "updateuswds": "npx gulp updateUswds",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "test:e2e": "npx bddgen && npx playwright test",
+    "test:e2e:ui": "npx bddgen && npx playwright test --ui"
   },
   "dependencies": {
     "@apollo/client": "^4.1.4",
@@ -25,5 +27,9 @@
   },
   "engines": {
     "node": "22.x"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "playwright-bdd": "^8.4.2"
   }
 }
