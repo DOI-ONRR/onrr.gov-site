@@ -84,12 +84,12 @@ const sidenavLinks = computed(() => {
             <li class="usa-breadcrumb__list-item">
               <NuxtLink to="/" class="usa-breadcrumb__link">Home</NuxtLink>
             </li>
-            <li v-if="parentLink" class="usa-breadcrumb__list-item">
+            <li v-if="parentLink && parentLink.url !== '/' && parentLink.url !== route.path" class="usa-breadcrumb__list-item">
               <NuxtLink :to="parentLink.url" class="usa-breadcrumb__link">
                 {{ parentLink.title }}
               </NuxtLink>
             </li>
-            <li v-if="parentUrl && parentUrl !== parentLink?.url" class="usa-breadcrumb__list-item">
+            <li v-if="parentUrl && parentUrl !== '/' && parentUrl !== parentLink?.url" class="usa-breadcrumb__list-item">
               <NuxtLink :to="parentUrl" class="usa-breadcrumb__link">
                 {{ parentTitle }}
               </NuxtLink>
