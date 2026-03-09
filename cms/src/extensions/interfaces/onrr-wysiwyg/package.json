@@ -24,32 +24,32 @@
 		"link": "directus-extension link"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.0.5",
-		"autoprefixer": "^10.4.23",
-		"postcss": "^8.5.6",
-		"sass": "^1.97.2",
+		"@directus/extensions-sdk": "^17.0.10",
+		"autoprefixer": "^10.4.27",
+		"postcss": "^8.5.8",
+		"sass": "^1.97.3",
 		"tailwindcss": "^3.4.19",
 		"tinymce": "^8.3.2",
 		"vite": "^7.3.1",
-		"vue": "^3.5.27"
+		"vue": "^3.5.30"
 	},
 	"dependencies": {
-		"@codemirror/commands": "6.10.1",
+		"@codemirror/commands": "6.10.2",
 		"@codemirror/lang-css": "^6.3.1",
 		"@codemirror/lang-html": "6.4.11",
-		"@codemirror/lang-javascript": "^6.2.4",
+		"@codemirror/lang-javascript": "^6.2.5",
 		"@codemirror/lang-sql": "^6.10.0",
 		"@codemirror/state": "6.5.4",
-		"@codemirror/view": "6.39.11",
-		"@directus/sdk": "^21.0.0",
+		"@codemirror/view": "6.39.16",
+		"@directus/sdk": "^21.2.0",
 		"@tarekraafat/autocomplete.js": "^10.2.9",
 		"@tinymce/tinymce-vue": "^6.3.0",
 		"jsonlint-mod": "^1.7.6"
 	},
 	"overrides": {
 		"@codemirror/state": "6.5.4",
-		"@codemirror/view": "6.39.11",
-		"@codemirror/commands": "6.10.1",
+		"@codemirror/view": "6.39.16",
+		"@codemirror/commands": "6.10.2",
 		"@codemirror/lang-html": "6.4.11"
 	}
 }
