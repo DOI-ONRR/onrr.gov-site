@@ -14,6 +14,7 @@ applications:
   services:
     - dev-onrr-psql
     - dev-onrr-s3
+    - dev-onrr-redis
   env:
     CONFIG_PATH: ./config.js
     UPSTREAM_URL: https://prod-onrr-cms.app.cloud.gov
