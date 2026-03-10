@@ -31,7 +31,7 @@ module.exports = function (env) {
     CACHE_ENABLED: true,
     CACHE_STORE: 'redis',
     CACHE_AUTO_PURGE: true,
-    CACHE_TTL: '5m',
+    CACHE_TTL: '30m',
     CACHE_STATUS_HEADER: 'X-Cache-Status',
 
     REDIS: redisUrl,
