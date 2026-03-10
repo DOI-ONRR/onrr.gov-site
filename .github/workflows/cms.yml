@@ -103,6 +103,22 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/operations/onrr-generate-uuid
 
+      - name: Install contacts-accordion-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-accordion-select
+
+      - name: Install contacts-page-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-page-select
+
+      - name: Install contacts-tab-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-tab-select
+
+      - name: Install topics-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/topics-select
+
       - name: Build extensions
         run: npm run build:all
         working-directory: cms
