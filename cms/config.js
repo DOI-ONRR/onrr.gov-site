@@ -32,6 +32,7 @@ module.exports = function (env) {
     CACHE_STORE: 'redis',
     CACHE_AUTO_PURGE: true,
     CACHE_TTL: '5m',
+    CACHE_STATUS_HEADER: 'X-Cache-Status',
 
     REDIS: redisUrl,
 
