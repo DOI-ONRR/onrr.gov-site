@@ -5,6 +5,7 @@ export const cardBlocksCardContentBlocks = [
             "id": "739",
             "collection": "content_blocks"
         },
+        "collection": "content_blocks",
         "Sort": 0
     },
     {
@@ -13,6 +14,7 @@ export const cardBlocksCardContentBlocks = [
             "id": "863",
             "collection": "collection_blocks"
         },
+        "collection": "collection_blocks",
         "Sort": 1
     },
     {
