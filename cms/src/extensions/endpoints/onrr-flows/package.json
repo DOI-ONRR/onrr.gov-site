@@ -16,7 +16,7 @@
 		"type": "endpoint",
 		"path": "dist/index.js",
 		"source": "src/index.js",
-		"host": "^10.10.0"
+		"host": "^11.0.0"
 	},
 	"scripts": {
 		"build": "node --experimental-vm-modules node_modules/jest/bin/jest.js; directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-flows/dist; cp package.json ../../../../extensions/directus-extension-onrr-flows; cp dist/index.js ../../../../extensions/directus-extension-onrr-flows/dist",

@@ -22,7 +22,7 @@
 			"app": "src/app.js",
 			"api": "src/api.js"
 		},
-		"host": "^10.10.0"
+		"host": "^11.0.0"
 	},
 	"scripts": {
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-generate-uuid/dist; cp package.json ../../../../extensions/directus-extension-onrr-generate-uuid; cp dist/*.js ../../../../extensions/directus-extension-onrr-generate-uuid/dist",
