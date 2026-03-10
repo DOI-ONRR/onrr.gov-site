@@ -13,6 +13,7 @@ applications:
   services:
     - preview-onrr-psql
     - preview-onrr-s3
+    - preview-onrr-redis
   env:
     CONFIG_PATH: ./config.js
     UPSTREAM_URL: https://dev-onrr-cms.app.cloud.gov
