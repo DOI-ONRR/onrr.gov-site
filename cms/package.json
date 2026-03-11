@@ -12,7 +12,6 @@
     "start:windows": "set CONFIG_PATH='../../.env' && npx directus start",
     "build:wysiwyg-static": "cd src/extensions/endpoints/wysiwyg-static; npm run build",
     "build:onrr-wysiwyg": "cd src/extensions/interfaces/onrr-wysiwyg; npm run build",
-    "build:onrr-editor": "cd src/extensions/interfaces/onrr-editor; npm run build",
     "build:contacts-accordion-select": "cd src/extensions/interfaces/contacts-accordion-select; npm run build",
     "build:contacts-page-select": "cd src/extensions/interfaces/contacts-page-select; npm run build",
     "build:contacts-tab-select": "cd src/extensions/interfaces/contacts-tab-select; npm run build",
@@ -29,20 +28,20 @@
     "build:nymex": "cd src/extensions/hooks/nymex; npm run build",
     "build:onrr-flows": "cd src/extensions/endpoints/onrr-flows; npm run build",
     "build:onrr-generate-uuid": "cd src/extensions/operations/onrr-generate-uuid; npm run build",
-    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:onrr-editor build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows"
+    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows"
   },
   "engines": {
     "node": "22.22.0"
   },
   "dependencies": {
-    "axios": "^1.13.2",
+    "axios": "^1.13.6",
     "debug": "^4.4.3",
-    "directus": "^11.14.1",
+    "directus": "^11.16.0",
     "human-signals": "^8.0.1",
     "jszip": "^3.10.1",
     "node-fetch": "^3.3.2",
-    "pg": "^8.17.1",
-    "read-excel-file": "^6.0.1"
+    "pg": "^8.20.0",
+    "read-excel-file": "^7.0.2"
   },
   "main": "index.js",
   "keywords": [],
