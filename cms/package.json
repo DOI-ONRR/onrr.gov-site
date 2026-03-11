@@ -28,7 +28,7 @@
     "build:nymex": "cd src/extensions/hooks/nymex; npm run build",
     "build:onrr-flows": "cd src/extensions/endpoints/onrr-flows; npm run build",
     "build:onrr-generate-uuid": "cd src/extensions/operations/onrr-generate-uuid; npm run build",
-    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:onrr-editor build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows"
+    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows"
   },
   "engines": {
     "node": "22.22.0"
