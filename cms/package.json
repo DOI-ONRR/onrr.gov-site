@@ -12,7 +12,6 @@
     "start:windows": "set CONFIG_PATH='../../.env' && npx directus start",
     "build:wysiwyg-static": "cd src/extensions/endpoints/wysiwyg-static; npm run build",
     "build:onrr-wysiwyg": "cd src/extensions/interfaces/onrr-wysiwyg; npm run build",
-    "build:onrr-editor": "cd src/extensions/interfaces/onrr-editor; npm run build",
     "build:contacts-accordion-select": "cd src/extensions/interfaces/contacts-accordion-select; npm run build",
     "build:contacts-page-select": "cd src/extensions/interfaces/contacts-page-select; npm run build",
     "build:contacts-tab-select": "cd src/extensions/interfaces/contacts-tab-select; npm run build",

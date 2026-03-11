@@ -87,10 +87,6 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/hooks/nymex
 
-      - name: Install onrr-editor dependencies
-        run: npm ci --legacy-peer-deps
-        working-directory: cms/src/extensions/interfaces/onrr-editor
-
       - name: Install wysiwyg-static dependencies
         run: npm ci
         working-directory: cms/src/extensions/endpoints/wysiwyg-static
