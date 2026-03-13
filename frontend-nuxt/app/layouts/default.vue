@@ -1,5 +1,5 @@
 <template>
-  <div class="my-app">
+  <div class="onrr-app">
     <GovBanner />
     <header class="usa-header usa-header--extended">
       <div class="usa-nav-container">
@@ -37,6 +37,16 @@
 </template>
 
 <style lang="scss" scoped>
+.onrr-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#main-content {
+  flex: 1;
+}
+
 .usa-logo__link {
   display: flex;
   align-items: center;

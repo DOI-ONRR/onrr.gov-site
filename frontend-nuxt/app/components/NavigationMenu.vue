@@ -1,57 +1,59 @@
 <template>
-  <nav class="usa-nav onrr-nav">
-    <ul class="usa-nav__primary usa-accordion">
-      <li
-        v-for="item in mainMenuItems"
-        :key="item.id"
-        class="usa-nav__primary-item"
-      >
-        <!-- Item with children: dropdown -->
-        <template v-if="item.menu_children?.length">
-          <button
-            type="button"
-            class="usa-accordion__button usa-nav__link"
-            :class="{ 'usa-current': isCurrentItem(item) }"
-            :aria-expanded="openMenuId === item.id"
-            :aria-controls="`nav-section-${item.id}`"
-            @click="toggle(item.id)"
-          >
-            <span>{{ item.menu_label }}</span>
-          </button>
-          <ul
-            :id="`nav-section-${item.id}`"
-            class="usa-nav__submenu"
-            :hidden="openMenuId !== item.id"
-          >
-            <li class="usa-nav__submenu-item">
-              <NuxtLink :to="item.link_to_page.url">
-                {{ item.menu_label }} Home
-              </NuxtLink>
-            </li>
-            <li
-              v-for="child in item.menu_children"
-              :key="child.pages_id?.id"
-              class="usa-nav__submenu-item"
+  <nav class="usa-nav">
+    <div class="usa-nav-container">
+      <ul class="usa-nav__primary usa-accordion" aria-label="Primary site navigation">
+        <li
+          v-for="item in mainMenuItems"
+          :key="item.id"
+          class="usa-nav__primary-item"
+        >
+          <!-- Item with children: dropdown -->
+          <template v-if="item.menu_children?.length">
+            <button
+              type="button"
+              class="usa-accordion__button usa-nav__link"
+              :class="{ 'usa-current': isCurrentItem(item) }"
+              :aria-expanded="openMenuId === item.id"
+              :aria-controls="`nav-section-${item.id}`"
+              @click="toggle(item.id)"
             >
-              <NuxtLink :to="child.pages_id?.url">
-                {{ child.pages_id?.title }}
-              </NuxtLink>
-            </li>
-          </ul>
-        </template>
+              <span>{{ item.menu_label }}</span>
+            </button>
+            <ul
+              :id="`nav-section-${item.id}`"
+              class="usa-nav__submenu"
+              :hidden="openMenuId !== item.id"
+            >
+              <li class="usa-nav__submenu-item">
+                <NuxtLink :to="item.link_to_page.url">
+                  {{ item.menu_label }} Home
+                </NuxtLink>
+              </li>
+              <li
+                v-for="child in item.menu_children"
+                :key="child.pages_id?.id"
+                class="usa-nav__submenu-item"
+              >
+                <NuxtLink :to="child.pages_id?.url">
+                  {{ child.pages_id?.title }}
+                </NuxtLink>
+              </li>
+            </ul>
+          </template>
 
-        <!-- Item without children: plain link -->
-        <template v-else>
-          <NuxtLink
-            class="usa-nav__link"
-            :class="{ 'usa-current': isCurrentItem(item) }"
-            :to="itemUrl(item)"
-          >
-            <span>{{ item.menu_label }}</span>
-          </NuxtLink>
-        </template>
-      </li>
-    </ul>
+          <!-- Item without children: plain link -->
+          <template v-else>
+            <NuxtLink
+              class="usa-nav__link"
+              :class="{ 'usa-current': isCurrentItem(item) }"
+              :to="itemUrl(item)"
+            >
+              <span>{{ item.menu_label }}</span>
+            </NuxtLink>
+          </template>
+        </li>
+      </ul>
+    </div>
   </nav>
 </template>
 
@@ -95,11 +97,6 @@ function isCurrentItem(item) {
 
 <style lang="scss" scoped>
   @use "uswds-theme" as *;
-
-  .onrr-nav {
-    @include grid-container('none');
-    float: none;
-  }
 
   .usa-current::after {
     background-color: $color-medium-green !important;

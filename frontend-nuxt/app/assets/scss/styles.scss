@@ -1,4 +1,4 @@
-@use "@fontsource-variable/plus-jakarta-sans/index.css";
+@use "@fontsource-variable/assistant/index.css";
 @forward "uswds-theme";
 @forward "uswds-global";
 @forward "uswds-utilities";
@@ -7,6 +7,7 @@
 @forward "usa-icon";
 @forward "usa-accordion";
 @forward "usa-button";
+@forward "usa-button-group";
 @forward "usa-link";
 @forward "usa-footer";
 @forward "usa-table";
@@ -23,3 +24,22 @@
 @forward "usa-pagination";
 @forward "icons";
 @forward "multi-select";
+
+@use "uswds-theme" as *;
+
+/*
+----------------------------------------
+Custom site max-width
+----------------------------------------
+*/
+
+$site-max-width: 1600px;
+
+.grid-container,
+.usa-banner__inner,
+.usa-banner__content,
+.usa-nav-container,
+.usa-footer__primary-container,
+.usa-footer__secondary-section > .grid-container {
+  max-width: $site-max-width;
+}
