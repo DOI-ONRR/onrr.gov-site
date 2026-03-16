@@ -4,14 +4,20 @@
       <div class="grid-col-9">
         <h1>Production Data</h1>
         <div class="grid-row grid-gap">
-          <div class="grid-col-6">
+          <div class="grid-col">
             <label class="usa-label" for="period-select">Period</label>
-            <select id="period-select" class="usa-select" v-model="selectedPeriod">
-              <option value="">All</option>
-              <option v-for="p in periods" :key="p" :value="p">{{ p }}</option>
-            </select>
+            <ul class="usa-button-group usa-button-group--segmented">
+              <li v-for="period in periodOptions" :key="period" class="usa-button-group__item">
+                <button
+                  type="button"
+                  class="usa-button"
+                  :class="{ 'usa-button--outline': selectedPeriod !== period }"
+                  @click="selectedPeriod = period"
+                >{{ period }}</button>
+              </li>
+            </ul>
           </div>
-          <div class="grid-col-6">
+          <div class="grid-col">
             <label class="usa-label" for="product-select">Product</label>
             <select id="product-select" class="usa-select" v-model="selectedProduct">
               <option value="">All</option>
@@ -21,7 +27,7 @@
         </div>
         <div class="grid-row margin-top-3">
           <div class="grid-col-12">
-            <div ref="chartEl" style="height: 400px;"></div>
+            <div ref="chartEl"></div>
           </div>
         </div>
       </div>
@@ -44,12 +50,11 @@ let Highcharts = null
 const { apiUrl } = useRuntimeConfig().public
 
 const chartEl = ref(null)
-const selectedPeriod = ref('')
+const periodOptions = ['Monthly', 'Calendar Year', 'Fiscal Year']
+const selectedPeriod = ref('Monthly')
 const selectedProduct = ref('')
-const periods = ref([])
-const products = ref([])
 const allData = ref([])
-const formats = ['json', 'csv', 'yaml', 'xml']
+const formats = ['json', 'csv', 'xlsx']
 const fields = ['period.period_date', 'location.land_class', 'location.land_category', 'commodity.name', 'volume']
 
 function download(content, filename) {
@@ -59,6 +64,16 @@ function download(content, filename) {
   a.download = filename
   a.click()
   URL.revokeObjectURL(url)
+}
+
+function flattenRows(data) {
+  return data.map(item => ({
+    'Date': item.period?.period_date,
+    'Land Class': item.location?.land_class,
+    'Land Category': item.location?.land_category,
+    'Commodity': item.commodity?.name,
+    'Volume': item.volume
+  }))
 }
 
 function buildCsv(data) {
@@ -75,8 +90,7 @@ function buildCsv(data) {
 }
 
 function buildChart(data) {
-  console.log('buildChart called', { chartEl: chartEl.value, Highcharts, dataLength: data?.length })
-  if (!chartEl.value) { console.log('chartEl is null, returning'); return }
+  if (!chartEl.value) return
 
   const grouped = {}
   for (const item of data) {
@@ -94,9 +108,8 @@ function buildChart(data) {
     commodities[name].push([new Date(date).getTime(), volume])
   }
 
-  console.log('series count:', Object.keys(commodities).length, 'grouped count:', Object.keys(grouped).length)
-  console.log('first item sample:', data?.[0])
   Highcharts.chart(chartEl.value, {
+    colors: ['#0D4D81', '#1C97BC', '#265E37', '#71915C', '#A8DEE8', '#143F1E', '#2A294E', '#7A8AAA'],
     chart: { type: 'line' },
     title: { text: 'Production Volume by Commodity' },
     xAxis: { type: 'datetime', title: { text: 'Fiscal Year' } },
@@ -125,29 +138,35 @@ onMounted(async () => {
     query: {
       limit: -1,
       fields: 'year(period.period_date),period.type,commodity.name,commodity.product,volume',
+      filter: {
+        "period": {
+          "period_date": {
+            "_gte": "2021-01-01"
+          }
+        }
+      },
       sort: 'period.period_date'
     }
   })
-
-  const periodSet = new Set()
-  const productSet = new Set()
-  for (const item of data) {
-    if (item.period?.type) periodSet.add(item.period.type)
-    if (item.commodity?.product) productSet.add(item.commodity.product)
-  }
-  periods.value = [...periodSet].sort()
-  products.value = [...productSet].sort()
 
   allData.value = data
   buildChart(data)
 })
 
 async function exportData(format) {
-  if (format === 'csv') {
+  if (format === 'csv' || format === 'xlsx') {
     const { data } = await $fetch(`${apiUrl}/items/production`, {
       query: { limit: -1, fields }
     })
-    download(buildCsv(data), `production.${format}`)
+    if (format === 'xlsx') {
+      const XLSX = await import('xlsx')
+      const ws = XLSX.utils.json_to_sheet(flattenRows(data))
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, 'Production')
+      XLSX.writeFile(wb, 'production.xlsx')
+    } else {
+      download(buildCsv(data), 'production.csv')
+    }
   } else {
     const blob = await $fetch(`${apiUrl}/items/production`, {
       query: { limit: -1, fields, export: format },
