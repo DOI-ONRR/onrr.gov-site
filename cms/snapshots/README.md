@@ -22,7 +22,7 @@ When connecting to a cloud.gov database through a tunnel (via `cf connect-to-ser
 
    The `DB_SSL__REJECT_UNAUTHORIZED=false` setting is required because cloud.gov RDS instances require SSL connections, but use AWS certificates that aren't in the default trust store.
 
-2. **Establish a tunnel** to the remote database:
+2. **Establish a tunnel** to the **source** remote database:
 
    ```bash
    cf connect-to-service --no-client <app-name> <service-name>
@@ -70,3 +70,11 @@ If you see errors like:
 - `no pg_hba.conf entry for host "10.x.x.x"` - SSL is not enabled; add `DB_SSL__REJECT_UNAUTHORIZED=false`
 - `self-signed certificate in certificate chain` - Add `DB_SSL__REJECT_UNAUTHORIZED=false`
 - Missing collections in snapshot - The command may have used the local database; ensure you're running from a directory without a `.env` file
+
+### Applying the Snapshot
+
+1. **Establish a tunnel** to the **target** remote database. See instructions above.
+
+2. `npx directus schema apply /path/to/onrr.gov-site/cms/snapshots/current.yaml`
+
+**Note:** If necessary, use the `--ignoreRules` flag and include comma separated value of fields, collections, or relations to skip.

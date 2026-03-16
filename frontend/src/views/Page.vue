@@ -31,6 +31,7 @@
         <Breadcrumbs />
       </div>
       <LayoutBlock :layoutBlocks="page.page_blocks" id="main-content"></LayoutBlock>
+      <EventsCollection v-if="isEventsPage" />
     </div>
   </div>
 </template>
@@ -49,6 +50,8 @@ const LayoutBlock = () =>
   )
 const SideMenu = () =>
   import(/* webpackChunkName: "SideMenu" */ '@/components/navigation/SideMenu')
+const EventsCollection = () =>
+  import(/* webpackChunkName: "EventsCollection" */ '@/components/collections/Events')
 const SITE = process.env.VUE_APP_SITE
 export default {
   mixins: [pageBlockMixin, editorBlockMixin, mobileMixin],
@@ -71,7 +74,8 @@ export default {
   components: {
     Breadcrumbs,
     LayoutBlock,
-    SideMenu
+    SideMenu,
+    EventsCollection,
   },
   data () {
     return {
@@ -134,6 +138,9 @@ export default {
       } else {
         return false
       }
+    },
+    isEventsPage () {
+      return this.$route.params.slug === 'events'
     }
   }
 }

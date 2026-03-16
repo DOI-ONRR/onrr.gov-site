@@ -36,7 +36,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install CMS dependencies
@@ -87,10 +87,6 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/hooks/nymex
 
-      - name: Install onrr-editor dependencies
-        run: npm ci --legacy-peer-deps
-        working-directory: cms/src/extensions/interfaces/onrr-editor
-
       - name: Install wysiwyg-static dependencies
         run: npm ci
         working-directory: cms/src/extensions/endpoints/wysiwyg-static
@@ -102,6 +98,22 @@ jobs:
       - name: Install onrr-generate-uuid dependencies
         run: npm ci
         working-directory: cms/src/extensions/operations/onrr-generate-uuid
+
+      - name: Install contacts-accordion-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-accordion-select
+
+      - name: Install contacts-page-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-page-select
+
+      - name: Install contacts-tab-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-tab-select
+
+      - name: Install topics-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/topics-select
 
       - name: Build extensions
         run: npm run build:all

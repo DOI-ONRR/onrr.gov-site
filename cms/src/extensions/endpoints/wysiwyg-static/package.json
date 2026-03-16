@@ -16,7 +16,7 @@
 		"type": "endpoint",
 		"path": "dist/index.js",
 		"source": "src/index.js",
-		"host": "^10.10.0"
+		"host": "^11.0.0"
 	},
 	"scripts": {
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-wysiwyg-static/dist; cp package.json ../../../../extensions/directus-extension-wysiwyg-static; cp dist/index.js ../../../../extensions/directus-extension-wysiwyg-static/dist",
@@ -25,9 +25,9 @@
 		"validate": "directus-extension validate"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.0.5"
+		"@directus/extensions-sdk": "^17.0.10"
 	},
 	"dependencies": {
-		"serve-static": "^2.2.0"
+		"serve-static": "^2.2.1"
 	}
 }
