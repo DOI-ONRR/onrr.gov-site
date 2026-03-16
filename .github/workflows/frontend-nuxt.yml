@@ -1,4 +1,4 @@
-name: Frontend Nuxt E2E Tests
+name: Frontend end-to-end tests
 
 on:
   push:
