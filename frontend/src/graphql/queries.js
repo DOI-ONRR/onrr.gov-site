@@ -89,8 +89,8 @@ query {
 // Page by id query
 export const PAGES_BY_ID_QUERY = gql`
 ${pageFields}
-query PagesById($ID: ID!) {
-  pages_by_id (id: $ID) {
+query PagesById($ID: ID!, $version: String) {
+  pages_by_id (id: $ID, version: $version) {
     ...pageFields
   }
 }`
@@ -99,8 +99,8 @@ query PagesById($ID: ID!) {
 export const HOME_PAGE_QUERY = gql`
 ${pageFields}
 ${collectionBlockFields}
-query HomePageQuery($ID: ID!) {
-  pages_by_id (id: $ID) {
+query HomePageQuery($ID: ID!, $version: String) {
+  pages_by_id (id: $ID, version: $version) {
     ...pageFields
     sidebar_blocks {
       id

@@ -1,0 +1,20 @@
+query GetPlantSpecificUCAs {
+  plant_specific_ucas(
+    limit: -1
+    filter: { status: { _eq: "published" } }
+    sort: ["transportation_system_or_gas_plant"]
+  ) {
+    id
+    transportation_system_or_gas_plant
+    file {
+      filename_download
+      folder {
+        name
+      }
+    }
+    type
+    operator
+    location
+    doc_date
+  }
+}

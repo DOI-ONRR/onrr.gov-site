@@ -1,0 +1,13 @@
+#import "../../../fragments/pageFields.gql"
+
+query GetPageBySlug($slug: String) {
+    page: pages(
+        filter: {
+            slug: {
+                _eq: $slug
+            }
+        }
+    ) {
+        ...pageFields
+    }
+}

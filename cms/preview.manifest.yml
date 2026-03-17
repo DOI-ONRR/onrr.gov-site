@@ -4,7 +4,7 @@ applications:
   command: npx directus start
   instances: 1
   disk_quota: 1G
-  memory: 2G
+  memory: 1536M
   routes:
   - route: preview-onrr-cms.apps.internal
   - route: preview-onrr-cms.app.cloud.gov

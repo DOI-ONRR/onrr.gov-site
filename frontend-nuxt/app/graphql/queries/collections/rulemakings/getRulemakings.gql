@@ -1,0 +1,14 @@
+query GetRulemakings {
+  rulemakings(
+    limit: -1
+    filter: { status: { _eq: "published" }, rin: { _nnull: true } }
+    sort: ["-rin"]
+  ) {
+    id
+    final_publication_date
+    rin
+    rule_title
+    commodity_subject_matter
+    webpage_link
+  }
+}

@@ -1,0 +1,38 @@
+#import "./tabBlockLabelFields.gql"
+#import "./contentBlockFields.gql"
+#import "./cardBlockFields.gql"
+#import "./expansionPanelBlockFields.gql"
+#import "./layoutColumnBlockFields.gql"
+#import "./formulaBlockFields.gql"
+#import "./collectionBlockFields.gql"
+
+fragment nestedNestedTabBlockFields on tab_blocks {
+  id
+  tab_blocks {
+    id
+    item {
+      __typename
+      ... on tab_block_label {
+        ...tabBlockLabelFields
+      }
+      ... on content_blocks {
+        ...contentBlockFields
+      }
+      ... on card_blocks {
+        ...cardBlockFields
+      }
+      ... on expansion_panels {
+        ...expansionPanelBlockFields
+      }
+      ... on layout_column_blocks {
+        ...layoutColumnBlockFields
+      }
+      ... on formula_blocks {
+        ...formulaBlockFields
+      }
+      ... on collection_blocks {
+        ...collectionBlockFields
+      }
+    }
+  }
+}

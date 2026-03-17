@@ -1,0 +1,30 @@
+#import "./expansionPanelBlockLabel.gql"
+#import "./contentBlockFields.gql"
+#import "./cardBlockFields.gql"
+#import "./collectionBlockFields.gql"
+
+fragment expansionPanelBlockFields on expansion_panels {
+  id
+  block_label
+  open_by_default {
+    id
+  }
+  expansion_panel_blocks {
+    id
+    item {
+      __typename
+      ... on expansion_panel_block_label {
+        ...expansionPanelBlockLabel
+      }
+      ... on content_blocks {
+        ...contentBlockFields
+      }
+      ... on card_blocks {
+        ...cardBlockFields
+      }
+      ... on collection_blocks {
+        ...collectionBlockFields
+      }
+    }
+  }
+}

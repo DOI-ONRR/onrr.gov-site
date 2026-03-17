@@ -1,0 +1,11 @@
+query GetIndianGasMajorPortion {
+  indian_gas_major_portion(
+    sort: ["-date"]
+    limit: -1
+    filter: { status: { _eq: "published" } }
+  ) {
+    id
+    date
+    index_zones
+  }
+}

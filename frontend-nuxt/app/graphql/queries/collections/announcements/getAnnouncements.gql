@@ -1,0 +1,11 @@
+query GetAnnouncements {
+  announcements(
+    filter: { status: { _eq: "published" } }
+    sort: ["-published_on"]
+  ) {
+    id
+    title
+    content
+    published_on
+  }
+}

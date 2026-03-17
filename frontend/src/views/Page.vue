@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-center" v-if="$apollo.loading">
+    <div class="text-center" v-if="!pageData || !pageData.id">
       <v-progress-circular :value="20"></v-progress-circular>
     </div>
     <div v-else class="page-wrap">
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { PAGES_QUERY, PAGES_BY_ID_QUERY } from '@/graphql/queries'
 import { pageBlockMixin, editorBlockMixin, mobileMixin } from '@/mixins'
 import { mapActions } from 'vuex';
 
@@ -80,67 +79,50 @@ export default {
   },
   data () {
     return {
-      pages: [],
-      pages_by_id: {},
       code: '',
       colCount: 1
-    }
-  },
-  apollo: {
-    pages: {
-      query: PAGES_QUERY,
-      loadingKey: 'loading...'
-    },
-    pages_by_id: {
-      query: PAGES_BY_ID_QUERY,
-      loadingKey: 'loading...',
-      variables () {
-        return {
-          ID: this.findPageByUrl.id
-        }
-      }
     }
   },
   methods: {
     ...mapActions([
       'updatePageLoaded'
-    ]),
-    async loadUsers () {
-      const response = await fetch('https://reqres.in/api/users')
-      const { data: users } = await response.json()
-      this.users = users
-    }
+    ])
   },
   props: {
-    slug: String
+    slug: String,
+    pageData: {
+      type: Object,
+      default: () => ({})
+    },
+    pages: {
+      type: Array,
+      default: () => []
+    }
   },
   watch: {
-    pages_by_id(newValue) {
+    pageData(newValue) {
       if (newValue) {
         this.updatePageLoaded(true);
       }
     },
   },
   computed: {
-    findPageByUrl () {
-      return this.pages.find(page => page.url === this.$route.path) || 1
-    },
     page () {
-      return this.pages_by_id
+      return this.pageData
     },
     metaTitle () {
-      return this.pages_by_id.meta_title
+      return this.pageData?.meta_title
     },
     metaDescription () {
-      return this.pages_by_id.meta_description
+      return this.pageData?.meta_description
     },
     pageTitle () {
-      return this.pages_by_id.title
+      return this.pageData?.title
     },
     pageCMSUrl () {
       return (
         'https://dev-onrr-cms.app.cloud.gov/admin/content/pages/' +
-        this.pages_by_id.id
+        this.pageData?.id
       )
     },
     isProd () {

@@ -1,0 +1,4 @@
+fragment sectionHeadingBlocks on section_heading_blocks {
+  section_heading
+  section_heading_type
+}

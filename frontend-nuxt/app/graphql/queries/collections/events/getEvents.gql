@@ -1,0 +1,24 @@
+#import "../../../fragments/eventFields.gql"
+
+query GetEvents {
+  outreach_events: events(
+    filter: {
+      status: { _eq: "published" }
+      event_end_date_time: { _gte: "$NOW" }
+      is_training: { _eq: false }
+    }
+    sort: ["event_start_date_time"]
+  ) {
+    ...eventFields
+  }
+  other_events: events(
+    filter: {
+      status: { _eq: "published" }
+      event_end_date_time: { _gte: "$NOW" }
+      is_training: { _eq: true }
+    }
+    sort: ["event_start_date_time"]
+  ) {
+    ...eventFields
+  }
+}

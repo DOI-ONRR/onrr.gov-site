@@ -1,0 +1,25 @@
+query GetReporterLetters {
+  reporter_letters(
+    limit: -1
+    sort: ["-date"]
+  ) {
+    id
+    title
+    date
+    file {
+      id
+      filename_download
+      title
+      type
+    }
+    accessible_file {
+      id
+      filename_download
+      title
+      type
+    }
+    link
+    status
+    topics
+  }
+}
