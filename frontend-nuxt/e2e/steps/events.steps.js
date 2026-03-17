@@ -1,38 +1,35 @@
 import { expect } from '@playwright/test'
 import { createBdd } from 'playwright-bdd'
-import eventsFixtures from '../fixtures/events.json' with { type: 'json' }
 
 const { Given, When, Then } = createBdd()
 
-function mockGraphQL(page, fixture) {
-  return page.route('**/graphql', (route, request) => {
-    const body = request.postDataJSON()
-    if (body?.query?.includes('events')) {
-      return route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify(fixture),
-      })
-    }
-    return route.fallback()
+const MOCK_API = 'http://localhost:5199'
+
+async function setFixture(name) {
+  await fetch(`${MOCK_API}/__set-fixture`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fixture: name }),
   })
 }
 
 // --- Given steps ---
 
-Given('the API returns events data', async ({ page }) => {
-  await mockGraphQL(page, eventsFixtures.withEvents)
+Given('the API returns events data', async () => {
+  await setFixture('withEvents')
 })
 
-Given('the API returns no events', async ({ page }) => {
-  await mockGraphQL(page, eventsFixtures.noEvents)
+Given('the API returns no events', async () => {
+  await setFixture('noEvents')
 })
 
-Given('the API returns outreach events only', async ({ page }) => {
-  await mockGraphQL(page, eventsFixtures.outreachOnly)
+Given('the API returns outreach events only', async () => {
+  await setFixture('outreachOnly')
 })
 
 Given('I navigate to the events page', async ({ page }) => {
   await page.goto('/events')
+  await page.waitForLoadState('networkidle')
 })
 
 // --- When steps ---
@@ -40,6 +37,8 @@ Given('I navigate to the events page', async ({ page }) => {
 When('I click the {string} tab', async ({ page }, tabName) => {
   const tab = page.locator('button.events-tab', { hasText: tabName })
   await tab.click()
+  // Wait for HeadlessUI to update the selected state
+  await expect(page.locator('button.events-tab--selected', { hasText: tabName })).toBeVisible()
 })
 
 // --- Then steps ---

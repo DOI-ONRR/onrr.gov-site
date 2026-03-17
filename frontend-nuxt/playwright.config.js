@@ -11,9 +11,10 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
+  workers: 1,
   reporter: isCI ? [['html', { open: 'never' }], ['github']] : 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3001',
     screenshot: 'only-on-failure',
     trace: 'on-first-retry',
   },
@@ -23,10 +24,20 @@ export default defineConfig({
       use: { browserName: 'chromium' },
     },
   ],
-  webServer: {
-    command: isCI ? 'npx nuxt preview' : 'npx nuxt dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !isCI,
-    timeout: 120_000,
-  },
+  webServer: [
+    {
+      command: 'node e2e/mock-api.js',
+      url: 'http://localhost:5199',
+      reuseExistingServer: !isCI,
+      timeout: 10_000,
+    },
+    {
+      command: isCI
+        ? 'NUXT_PUBLIC_API_URL=http://localhost:5199 npx nuxt preview --port 3001'
+        : 'NUXT_PUBLIC_API_URL=http://localhost:5199 npx nuxt dev --port 3001',
+      url: 'http://localhost:3001',
+      reuseExistingServer: false,
+      timeout: 120_000,
+    },
+  ],
 })

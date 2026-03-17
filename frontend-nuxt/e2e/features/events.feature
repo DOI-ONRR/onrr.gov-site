@@ -10,7 +10,7 @@ Feature: Events page
     Given the API returns events data
     And I navigate to the events page
     Then I see 2 event cards on the "Indian Outreach & Events" tab
-    And the first event card title is "INDIAN MINERALS TRAINING"
+    And the first event card title is "Indian Minerals Training"
     And the first event card date contains "April 15, 2026"
     And the first event card shows the field "Time" with "1:00 p.m. - 5:00 p.m. CT"
     And the first event card shows the field "Location" with "Tulsa, OK"
@@ -37,7 +37,7 @@ Feature: Events page
     Given the API returns events data
     And I navigate to the events page
     When I click the "Other ONRR Events" tab
-    Then the first event card title is "ONRR REPORTER TRAINING"
+    Then the first event card title is "ONRR Reporter Training"
     And the first event card shows the field "Location" with "Virtual (Microsoft Teams)"
 
   Scenario: External links in event fields get proper classes

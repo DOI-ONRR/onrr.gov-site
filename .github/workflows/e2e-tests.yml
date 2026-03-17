@@ -57,7 +57,7 @@ jobs:
         run: npm run build
         working-directory: frontend-nuxt
         env:
-          NUXT_PUBLIC_API_URL: ${{ vars.API_URL }}
+          NUXT_PUBLIC_API_URL: http://localhost:5199
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
@@ -72,7 +72,6 @@ jobs:
         working-directory: frontend-nuxt
         env:
           CI: true
-          NUXT_PUBLIC_API_URL: ${{ vars.API_URL }}
 
       - name: Upload test report
         uses: actions/upload-artifact@v4

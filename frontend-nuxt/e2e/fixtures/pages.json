@@ -1,0 +1,45 @@
+{
+  "events": {
+    "data": {
+      "page": [
+        {
+          "__typename": "pages",
+          "id": "1",
+          "title": "Events",
+          "slug": "events",
+          "hero_title": null,
+          "hero_image": null,
+          "parent": {
+            "__typename": "pages",
+            "title": "Home",
+            "url": "/",
+            "parent": null
+          },
+          "page_blocks": [],
+          "sidebar_blocks": [],
+          "meta_title": null,
+          "meta_description": null
+        }
+      ]
+    }
+  },
+  "home": {
+    "data": {
+      "page": [
+        {
+          "__typename": "pages",
+          "id": "2",
+          "title": "Home",
+          "slug": null,
+          "hero_title": null,
+          "hero_image": null,
+          "parent": null,
+          "page_blocks": [],
+          "sidebar_blocks": [],
+          "meta_title": null,
+          "meta_description": null
+        }
+      ]
+    }
+  }
+}
