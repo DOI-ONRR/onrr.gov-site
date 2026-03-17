@@ -1,9 +1,10 @@
-name: Frontend end-to-end tests
+name: End-to-end tests
 
 on:
   push:
     paths: 'frontend-nuxt/**'
     branches-ignore:
+      - dev
       - main
 
   pull_request:
@@ -13,17 +14,22 @@ on:
       - dev
       - main
 
+  schedule:
+    - cron: '0 6 * * *'
+
   workflow_dispatch:
 
 jobs:
   e2e-tests:
     if: |
       github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
       github.event_name == 'push' ||
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     environment: >-
       ${{
+        github.event_name == 'schedule' && 'prod' ||
         github.event_name == 'pull_request' && github.base_ref == 'main' && 'prod' ||
         github.event_name == 'pull_request' && github.base_ref == 'dev' && 'dev' ||
         'preview'
