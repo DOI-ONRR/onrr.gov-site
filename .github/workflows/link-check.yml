@@ -25,11 +25,11 @@ jobs:
 
       - name: Install Playwright Chromium
         run: npx playwright install chromium --with-deps
-          
+        working-directory: .github/site-crawl
+
       - name: Run crawler
-        run: |
-          cd .github/site-crawl
-          npm start
+        run: npm start
+        working-directory: .github/site-crawl
 
       - name: Export URLs for Lychee
         run: |
