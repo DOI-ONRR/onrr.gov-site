@@ -148,6 +148,11 @@ const EXTERNAL_REDIRECTS = new Map([
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
 
+  if (to.path === '/404') {
+    next();
+    return;
+  }
+
   const target = EXTERNAL_REDIRECTS.get(to.path);
   if (target) {
     const qs = Object.keys(to.query || {}).length
