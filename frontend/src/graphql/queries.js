@@ -46,7 +46,7 @@ export const ANNOUNCEMENTS_QUERY = gql`query {
 // Pages query 
 export const PAGES_QUERY = gql`
 query {
-  pages(limit: -1) {
+  pages(limit: -1, filter: { status: { _eq: "published" } }) {
     id
     slug
     title
@@ -72,7 +72,7 @@ query {
 // Pages and Redirects queries
 export const PAGES_REDIRECTS_QUERY = gql`
 query {
-  pages(limit: -1 ) {
+  pages(limit: -1, filter: { status: { _eq: "published" } }) {
     id
     slug
     title
