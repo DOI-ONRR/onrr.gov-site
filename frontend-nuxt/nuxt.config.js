@@ -9,7 +9,17 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxtjs/apollo',
+    '@nuxtjs/sitemap',
   ],
+
+  site: {
+    url: 'https://www.onrr.gov',
+  },
+
+  sitemap: {
+    sources: ['/api/__sitemap__/urls'],
+    xsl: false,
+  },
 
   apollo: {
     clients: {
