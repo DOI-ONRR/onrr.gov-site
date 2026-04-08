@@ -1,6 +1,6 @@
 {
 	"name": "directus-users",
-	"description": "Please enter a description for your extension",
+	"description": "Hook extension for creating and updating Directus users in upstream CMS instances",
 	"icon": "extension",
 	"version": "1.0.0",
 	"keywords": [
@@ -19,7 +19,7 @@
 		"host": "^11.0.0"
 	},
 	"scripts": {
-		"build": "directus-extension build",
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-directus-users/dist; cp package.json ../../../../extensions/directus-extension-directus-users; cp dist/index.js ../../../../extensions/directus-extension-directus-users/dist",
 		"dev": "directus-extension build -w --no-minify",
 		"link": "directus-extension link",
 		"validate": "directus-extension validate"
