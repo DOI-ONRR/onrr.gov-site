@@ -9,7 +9,7 @@
     "copy:fonts": "rm -rf public/fonts && cp -r node_modules/@uswds/uswds/dist/fonts public/fonts",
     "postinstall": "nuxt prepare && npm run copy:fonts",
     "updateuswds": "npx gulp updateUswds",
-    "heroku-postbuild": "npm run build",
+    "heroku-postbuild": "npm run updateuswds && npm run build",
     "test:e2e": "npx bddgen && npx playwright test",
     "test:e2e:ui": "npx bddgen && npx playwright test --ui"
   },
