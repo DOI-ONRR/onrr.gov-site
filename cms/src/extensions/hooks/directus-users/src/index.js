@@ -3,11 +3,13 @@ const UPSTREAM_TOKEN = process.env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_AUTH_TOKEN;
 
 export default ({ action }) => {
 	action('users.create', async ({ key, payload }) => {
-		
+
 		if (!UPSTREAM_URL || !UPSTREAM_TOKEN) {
 			console.warn('directus-users hook: UPSTREAM_URL or auth token not configured, skipping.');
 			return;
 		}
+
+		const { avatar, ...rest } = payload;
 
 		console.log(`directus-users hook: Creating user ${key} in upstream ${UPSTREAM_URL}`);
 
@@ -18,7 +20,7 @@ export default ({ action }) => {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${UPSTREAM_TOKEN}`,
 				},
-				body: JSON.stringify(payload),
+				body: JSON.stringify(rest),
 			});
 
 			if (!response.ok) {
@@ -38,6 +40,12 @@ export default ({ action }) => {
 			return;
 		}
 
+		const { avatar, ...rest } = payload;
+
+		if (Object.keys(rest).length === 0) {
+			return;
+		}
+
 		if (!UPSTREAM_URL || !UPSTREAM_TOKEN) {
 			console.warn('directus-users hook: UPSTREAM_URL or auth token not configured, skipping.');
 			return;
@@ -53,7 +61,7 @@ export default ({ action }) => {
 						'Content-Type': 'application/json',
 						Authorization: `Bearer ${UPSTREAM_TOKEN}`,
 					},
-					body: JSON.stringify(payload),
+					body: JSON.stringify(rest),
 				});
 
 				if (!response.ok) {
