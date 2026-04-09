@@ -4,7 +4,7 @@
   "author": "Mojo Nichols <mojo.nichols@onrr.gov>, Jeff Schwartz <jeffrey.schwartz@onrr.gov>",
   "description": "Directus CMS",
   "scripts": {
-    "update": "CONFIG_PATH='/../../.env' npx directus database migrate:latest",
+    "update": "CONFIG_PATH='../../.env' npx directus database migrate:latest",
     "downgrade": "npx directus database migrate:down",
     "bootstrap": "CONFIG_PATH='../../.env' directus bootstrap",
     "start": "CONFIG_PATH='../../.env' npx directus start",
@@ -36,9 +36,9 @@
     "node": "22.22.0"
   },
   "dependencies": {
-    "axios": "^1.13.6",
+    "axios": "^1.15.0",
     "debug": "^4.4.3",
-    "directus": "^11.16.0",
+    "directus": "^11.17.2",
     "human-signals": "^8.0.1",
     "jszip": "^3.10.1",
     "node-fetch": "^3.3.2",
