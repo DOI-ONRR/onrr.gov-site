@@ -2,9 +2,8 @@ const UPSTREAM_URL = process.env.UPSTREAM_URL;
 const UPSTREAM_TOKEN = process.env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_AUTH_TOKEN;
 
 export default ({ action }) => {
-	action('items.create', async ({ collection, key, payload }) => {
-		if (collection !== 'directus_users') return;
-
+	action('users.create', async ({ key, payload }) => {
+		
 		if (!UPSTREAM_URL || !UPSTREAM_TOKEN) {
 			console.warn('directus-users hook: UPSTREAM_URL or auth token not configured, skipping.');
 			return;
@@ -33,8 +32,11 @@ export default ({ action }) => {
 		}
 	});
 
-	action('items.update', async ({ collection, keys, payload }) => {
-		if (collection !== 'directus_users') return;
+	action('users.update', async ({ keys, payload }) => {
+		
+		if (Object.keys(payload).length === 1 && payload.last_page !== undefined) {
+			return;
+		}
 
 		if (!UPSTREAM_URL || !UPSTREAM_TOKEN) {
 			console.warn('directus-users hook: UPSTREAM_URL or auth token not configured, skipping.');
