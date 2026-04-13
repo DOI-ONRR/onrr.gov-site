@@ -27,7 +27,7 @@
 		"test:watch": "vitest"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.0.7",
+		"@directus/extensions-sdk": "^17.1.2",
 		"vitest": "^2.1.9"
 	}
 }

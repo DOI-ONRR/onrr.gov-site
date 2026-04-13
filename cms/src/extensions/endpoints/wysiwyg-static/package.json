@@ -25,7 +25,7 @@
 		"validate": "directus-extension validate"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.0.10"
+		"@directus/extensions-sdk": "^17.1.2"
 	},
 	"dependencies": {
 		"serve-static": "^2.2.1"
