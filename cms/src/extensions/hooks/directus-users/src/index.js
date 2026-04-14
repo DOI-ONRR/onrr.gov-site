@@ -20,7 +20,7 @@ export default ({ action }) => {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${UPSTREAM_TOKEN}`,
 				},
-				body: JSON.stringify(rest),
+				body: JSON.stringify({ id: key, ...rest }),
 			});
 
 			if (!response.ok) {
