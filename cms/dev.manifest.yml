@@ -3,7 +3,7 @@ applications:
 - name: dev-onrr-cms
   command: npx directus start
   instances: 1
-  disk_quota: 1G
+  disk_quota: 5G
   memory: 2G
   random-route: false
   routes:
