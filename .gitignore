@@ -7,6 +7,7 @@ cms/.env
 cms/Dockerfile
 cms/extensions/*
 cms/src/extensions/**/dist/
+cms/tmp
 
 editorjs/node_modules
 editorjs/editorjs

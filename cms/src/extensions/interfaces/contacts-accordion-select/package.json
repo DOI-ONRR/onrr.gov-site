@@ -25,7 +25,7 @@
 		"validate": "directus-extension validate"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.0.10",
-		"vue": "^3.5.30"
+		"@directus/extensions-sdk": "^17.1.2",
+		"vue": "^3.5.32"
 	}
 }

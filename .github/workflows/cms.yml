@@ -75,6 +75,18 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/hooks/index-zones
 
+      - name: Install directus-users dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/hooks/directus-users
+
+      - name: Install directus-roles dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/hooks/directus-roles
+
+      - name: Install directus-policies dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/hooks/directus-policies
+
       - name: Install indian-gas-major-portion dependencies
         run: npm ci
         working-directory: cms/src/extensions/hooks/indian-gas-major-portion

@@ -1,0 +1,30 @@
+query GetContactsByPage {
+  contacts(
+    sort: ["header", "letter"]
+    limit: -1
+    filter: { 
+      status: { _eq: "published" }
+    }
+  ) {
+    id
+    status
+    page
+    tab
+    accordion
+    company_yn
+    letter
+    header
+    company_name
+    operator_number
+    agency
+    people {
+      id
+      name
+      role
+      email
+      phone
+      is_primary
+      fax
+    }
+  }
+}

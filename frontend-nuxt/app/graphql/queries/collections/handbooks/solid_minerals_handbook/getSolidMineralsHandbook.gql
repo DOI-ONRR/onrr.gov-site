@@ -1,0 +1,15 @@
+query GetSolidMineralsHandbook {
+  solid_minerals_handbook(
+    limit: -1
+    filter: { status: { _eq: "published" } }
+    sort: ["sort"]
+  ) {
+    id
+    chapter
+    section
+    title
+    actual_page
+    toc_page
+    url
+  }
+}

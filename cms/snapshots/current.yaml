@@ -883,7 +883,7 @@ collections:
       icon: file_copy
       item_duplication_fields: null
       note: null
-      preview_url: null
+      preview_url: http://localhost:8055/page/{{id}}
       singleton: false
       sort: 1
       sort_field: sort
@@ -4706,31 +4706,50 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: collection_blocks
-    field: divider_contacts
-    type: alias
+    field: layout
+    type: string
     meta:
       collection: collection_blocks
       conditions: null
       display: null
       display_options: null
-      field: divider_contacts
+      field: layout
       group: null
       hidden: false
-      interface: presentation-divider
+      interface: select-dropdown
       note: null
       options:
-        title: Contacts
+        choices:
+          - text: Basic
+            value: basic
+          - text: Full
+            value: full
       readonly: false
       required: false
       searchable: true
-      sort: 15
-      special:
-        - alias
-        - no-data
+      sort: 9
+      special: null
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
+    schema:
+      name: layout
+      table: collection_blocks
+      data_type: character varying
+      default_value: basic
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: collection_blocks
     field: page
     type: string
@@ -4765,51 +4784,6 @@ fields:
       table: collection_blocks
       data_type: character varying
       default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: collection_blocks
-    field: layout
-    type: string
-    meta:
-      collection: collection_blocks
-      conditions: null
-      display: null
-      display_options: null
-      field: layout
-      group: null
-      hidden: false
-      interface: select-dropdown
-      note: null
-      options:
-        choices:
-          - text: Basic
-            value: basic
-          - text: Full
-            value: full
-      readonly: false
-      required: false
-      searchable: true
-      sort: 9
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: layout
-      table: collection_blocks
-      data_type: character varying
-      default_value: basic
       max_length: 255
       numeric_precision: null
       numeric_scale: null
@@ -4914,32 +4888,6 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
-  - collection: collection_blocks
-    field: divider_reporter_letters
-    type: alias
-    meta:
-      collection: collection_blocks
-      conditions: null
-      display: null
-      display_options: null
-      field: divider_reporter_letters
-      group: null
-      hidden: false
-      interface: presentation-divider
-      note: null
-      options:
-        title: Report Letters
-      readonly: false
-      required: false
-      searchable: true
-      sort: 20
-      special:
-        - alias
-        - no-data
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
   - collection: collection_blocks
     field: item_status
     type: string
@@ -5092,6 +5040,58 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: collection_blocks
+    field: divider_contacts
+    type: alias
+    meta:
+      collection: collection_blocks
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_contacts
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Contacts
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: collection_blocks
+    field: divider_reporter_letters
+    type: alias
+    meta:
+      collection: collection_blocks
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_reporter_letters
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Report Letters
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: commodity
     field: id
     type: uuid
@@ -18942,18 +18942,18 @@ fields:
     schema:
       name: id
       table: pages_sidebar_blocks
-      data_type: uuid
-      default_value: null
+      data_type: integer
+      default_value: nextval('pages_sidebar_blocks_id_seq'::regclass)
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: false
+      has_auto_increment: true
       foreign_key_table: null
       foreign_key_column: null
   - collection: pages_sidebar_blocks
@@ -26966,27 +26966,6 @@ relations:
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: collection_blocks
-    field: user_updated
-    related_collection: directus_users
-    meta:
-      junction_field: null
-      many_collection: collection_blocks
-      many_field: user_updated
-      one_allowed_collections: null
-      one_collection: directus_users
-      one_collection_field: null
-      one_deselect_action: nullify
-      one_field: null
-      sort_field: null
-    schema:
-      table: collection_blocks
-      column: user_updated
-      foreign_key_table: directus_users
-      foreign_key_column: id
-      constraint_name: collection_blocks_user_updated_foreign
-      on_update: NO ACTION
-      on_delete: NO ACTION
-  - collection: collection_blocks
     field: user_created
     related_collection: directus_users
     meta:
@@ -27005,6 +26984,27 @@ relations:
       foreign_key_table: directus_users
       foreign_key_column: id
       constraint_name: collection_blocks_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: collection_blocks
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: collection_blocks
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: collection_blocks
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: collection_blocks_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
   - collection: commodity

@@ -1,0 +1,32 @@
+query GetContactsByPageAndTab($page: String, $tab: String) {
+  contacts(
+    sort: ["header", "letter"]
+    limit: -1
+    filter: { 
+      status: { _eq: "published" }, 
+      page: { _eq: $page },
+      tab: { _eq: $tab }
+    }
+  ) {
+    id
+    status
+    page
+    tab
+    accordion
+    company_yn
+    letter
+    header
+    company_name
+    operator_number
+    agency
+    people {
+      id
+      name
+      role
+      email
+      phone
+      is_primary
+      fax
+    }
+  }
+}

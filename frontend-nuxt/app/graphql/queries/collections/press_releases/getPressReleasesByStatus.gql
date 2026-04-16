@@ -1,0 +1,20 @@
+query GetPressReleasesByStatus($status: String) {
+  press_releases(
+    limit: -1
+    sort: "-date"
+    filter: { status: { _eq: $status } }
+  ) {
+    id
+    status
+    title
+    date
+    file {
+      id
+      filename_download
+      title
+    }
+    link
+    excerpt
+    status
+  }
+}

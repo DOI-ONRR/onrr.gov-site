@@ -1,0 +1,11 @@
+query GetIndexZones {
+  index_zones(
+    sort: ["-date"]
+    limit: -1
+    filter: { status: { _eq: "published" } }
+  ) {
+    id
+    date
+    index_zones
+  }
+}

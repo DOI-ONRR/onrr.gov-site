@@ -1,0 +1,4 @@
+fragment tabBlockLabelFields on tab_block_label {
+  id
+  tab_block_label
+}
