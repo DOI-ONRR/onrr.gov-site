@@ -11,6 +11,13 @@ query LandingPageProduction {
                 commodity: {
                     product: { _in: ["Oil (bbl)", "Gas (mcf)", "Coal (tons)"] }
                 }
+            },
+            {
+                location: {
+                    land_type: {
+                        _in: ["Federal onshore", "Federal offshore", "Native American"]
+                    }
+                }
             }
         ] }
         limit: -1
@@ -42,6 +49,11 @@ query LandingPageProduction {
         product
     }
     location(
+        filter: { 
+            land_type: {
+                _in: ["Federal onshore", "Federal offshore", "Native American"]
+            }
+        }
         limit: -1
     ) {
         id
