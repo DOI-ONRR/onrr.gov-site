@@ -14,24 +14,31 @@ const { data: revenueData, refresh } = await useAsyncData(
   { watch: [breakoutParam] }
 )
 
+const knownCommodities = ['Oil', 'Gas', 'Coal', 'Not tied to a commodity']
+
 const revenue = computed(() => {
   const rows = revenueData.value?.data || []
-  return rows.map(row => ({
-    breakout_value: row.breakout_value,
-    total_amount: Number(row.total_amount),
-    month_long: row.month_long,
-    month_short: row.month_short,
-    period_date: row.period_date,
-    calendar_year: row.calendar_year,
-    fiscal_year: row.fiscal_year,
-    fiscal_month: row.fiscal_month,
-  })).sort((a, b) => a.fiscal_year - b.fiscal_year || a.fiscal_month - b.fiscal_month)
+  return rows.map(row => {
+    const breakout_value = selectedBreakout.value === 'Commodity' && !knownCommodities.includes(row.breakout_value)
+      ? 'Other commodities'
+      : row.breakout_value
+    return {
+      breakout_value,
+      total_amount: Number(row.total_amount),
+      month_long: row.month_long,
+      month_short: row.month_short,
+      period_date: row.period_date,
+      calendar_year: row.calendar_year,
+      fiscal_year: row.fiscal_year,
+      fiscal_month: row.fiscal_month,
+    }
+  }).sort((a, b) => a.fiscal_year - b.fiscal_year || a.fiscal_month - b.fiscal_month)
 })
 
 const breakoutConfig = {
   'Source': ['Native American', 'Federal offshore', 'Federal onshore', 'Federal - not tied to a lease'],
   'Revenue Type': ['Royalties', 'Bonus', 'Rents', 'Civil penalties', 'Inspection fees', 'Other revenues'],
-  'Commodity': ['Oil', 'Gas', 'Coal', 'Not tied to a commodity'],
+  'Commodity': ['Oil', 'Gas', 'Coal', 'Not tied to a commodity', 'Other commodities'],
 }
 
 const now = new Date()

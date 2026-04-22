@@ -16,7 +16,6 @@ export default (router, { database }) => {
 			join: 'commodity',
 			joinField: 'name',
 			alias: 'breakout_value',
-			filter: ['Oil', 'Gas', 'Coal', 'Not tied to a commodity'],
 		},
 	};
 
@@ -29,7 +28,7 @@ export default (router, { database }) => {
 		}
 
 		try {
-			const rows = await database
+			const query = database
 				.select(
 					database.raw(`"${config.join}"."${config.joinField}" as "${config.alias}"`),
 					'p.fiscal_year',
@@ -43,8 +42,13 @@ export default (router, { database }) => {
 				.from('revenue')
 				.join('period as p', 'revenue.period', 'p.id')
 				.join(`${config.join}`, `revenue.${config.join}`, `${config.join}.id`)
-				.where('p.type', 'Monthly')
-				.whereIn(`${config.join}.${config.joinField}`, config.filter)
+				.where('p.type', 'Monthly');
+
+			if (config.filter) {
+				query.whereIn(`${config.join}.${config.joinField}`, config.filter);
+			}
+
+			const rows = await query
 				.groupBy(
 					`${config.join}.${config.joinField}`,
 					'p.fiscal_year',
