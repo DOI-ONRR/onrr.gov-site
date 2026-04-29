@@ -71,8 +71,7 @@ const sidenavLinks = computed(() => {
               <RevenueTab />
             </TabPanel>
             <TabPanel>
-              <h3>Disbursements</h3>
-              <p>The amount of money paid to federal and local governments and Native Americans.</p>
+              <DisbursementsTab />
             </TabPanel>
           </TabPanels>
         </TabGroup>
