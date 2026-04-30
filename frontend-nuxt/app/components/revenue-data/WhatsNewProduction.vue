@@ -58,14 +58,18 @@ function formatPct(val) {
 </script>
 
 <template>
-  <div v-if="fiscalYear" class="border-1px padding-x-2 padding-bottom-2 margin-bottom-2">
-    <h3 class="text-center">Production</h3>
-    <p class="text-center font-ui-md">{{ fyLabel }}</p>
-    <p v-for="line in lines" :key="line.commodity" class="margin-y-1">
-      {{ line.commodity }}: {{ formatVolume(line.volume) }} {{ line.unit_abbr }}
-      <span v-if="line.pctChange !== null">
-        {{ formatPct(line.pctChange) }} from FY{{ String(previousFy).slice(-2) }}
-      </span>
-    </p>
+  <div v-if="fiscalYear" class="usa-card__container margin-bottom-2">
+    <div class="usa-card__header">
+      <h4 class="usa-card__heading text-center font-ui-lg">Production</h4>
+    </div>
+    <div class="usa-card__body">
+      <p class="text-center font-ui-md">{{ fyLabel }}</p>
+      <p v-for="line in lines" :key="line.commodity" class="margin-y-1">
+        {{ line.commodity }}: {{ formatVolume(line.volume) }} {{ line.unit_abbr }}
+        <span v-if="line.pctChange !== null">
+          {{ formatPct(line.pctChange) }} from FY{{ String(previousFy).slice(-2) }}
+        </span>
+      </p>
+    </div>
   </div>
 </template>

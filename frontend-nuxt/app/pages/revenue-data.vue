@@ -78,9 +78,31 @@ const sidenavLinks = computed(() => {
       </div>
       <div class="grid-col-3">
         <h2>What's New</h2>
-        <WhatsNewProduction />
-        <WhatsNewRevenue />
-        <WhatsNewDisbursements />
+        <ul class="usa-card-group">
+          <li class="usa-card grid-col-12">
+            <WhatsNewProduction />
+          </li>
+          <li class="usa-card grid-col-12">
+            <WhatsNewRevenue />
+          </li>
+          <li class="usa-card grid-col-12">
+            <WhatsNewDisbursements />
+          </li>
+          <li class="usa-card grid-col-12">
+            <div class="usa-card__container">
+              <div class="usa-card__header">
+                <h4 class="usa-card__heading text-center font-ui-lg">Monthly fact sheet</h4>
+              </div>
+              <div class="usa-card__body">
+                <p>Fact sheet summarizing disbursements, revenue, and production data by month on federal and Native American lands.</p>
+              </div>
+            </div>
+          </li>
+          <li class="usa-card grid-col-12">
+            <LatestReleaseDetails />
+          </li>
+        </ul>
+        
       </div>
     </div>
   </section>

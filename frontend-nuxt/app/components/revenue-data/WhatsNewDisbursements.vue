@@ -44,12 +44,16 @@ function formatPct(val) {
 </script>
 
 <template>
-  <div v-if="fiscalYear" class="border-1px padding-x-2 padding-bottom-2">
-    <h3 class="text-center">Disbursements</h3>
-    <p class="text-center font-ui-md">{{ fyLabel }}</p>
-    <p class="margin-y-1 text-center text-bold">{{ formatAmount(currentDisbursement) }}</p>
-    <p v-if="pctChange !== null" class="margin-y-1 text-center">
-      {{ formatPct(pctChange) }} from FY{{ String(previousFy).slice(-2) }}
-    </p>
+  <div v-if="fiscalYear" class="usa-card__container padding-bottom-2">
+    <div class="usa-card__header">
+      <h4 class="usa-card__heading text-center font-ui-lg">Disbursements</h4>
+    </div>
+    <div class="usa-card__body">
+      <p class="text-center font-ui-md">{{ fyLabel }}</p>
+      <p class="margin-y-1 text-center text-bold">{{ formatAmount(currentDisbursement) }}</p>
+      <p v-if="pctChange !== null" class="text-center">
+        {{ formatPct(pctChange) }} from FY{{ String(previousFy).slice(-2) }}
+      </p>
+    </div>
   </div>
 </template>
