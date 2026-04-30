@@ -78,6 +78,9 @@ const sidenavLinks = computed(() => {
       </div>
       <div class="grid-col-3">
         <h2>What's New</h2>
+        <WhatsNewProduction />
+        <WhatsNewRevenue />
+        <WhatsNewDisbursements />
       </div>
     </div>
   </section>
