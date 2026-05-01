@@ -135,9 +135,9 @@ const sidenavLinks = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-@use "uswds-theme" as *;
+@use "onrr-colors" as *;
 
 .usa-sidenav .usa-current::before {
-  background-color: $color-medium-green !important;
+  background-color: $onrr-green !important;
 }
 </style>

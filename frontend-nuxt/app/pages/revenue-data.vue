@@ -79,16 +79,16 @@ const sidenavLinks = computed(() => {
       <div class="grid-col-3">
         <h2>What's New</h2>
         <ul class="usa-card-group">
-          <li class="usa-card grid-col-12">
+          <li class="usa-card grid-col-12 card--accent-left accent-teal">
             <WhatsNewProduction />
           </li>
-          <li class="usa-card grid-col-12">
+          <li class="usa-card grid-col-12 card--accent-left accent-teal">
             <WhatsNewRevenue />
           </li>
-          <li class="usa-card grid-col-12">
+          <li class="usa-card grid-col-12 card--accent-left accent-teal">
             <WhatsNewDisbursements />
           </li>
-          <li class="usa-card grid-col-12">
+          <li class="usa-card grid-col-12 card--accent-left accent-teal">
             <div class="usa-card__container">
               <div class="usa-card__header">
                 <h4 class="usa-card__heading text-center font-ui-lg">Monthly fact sheet</h4>
@@ -98,7 +98,7 @@ const sidenavLinks = computed(() => {
               </div>
             </div>
           </li>
-          <li class="usa-card grid-col-12">
+          <li class="usa-card grid-col-12 card--accent-left accent-green">
             <LatestReleaseDetails />
           </li>
         </ul>
@@ -109,9 +109,9 @@ const sidenavLinks = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-@use "uswds-theme" as *;
+@use "onrr-colors" as *;
 
 .usa-sidenav .usa-current::before {
-  background-color: $color-medium-green !important;
+  background-color: $onrr-green !important;
 }
 </style>

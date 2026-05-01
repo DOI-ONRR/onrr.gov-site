@@ -1,0 +1,48 @@
+/*
+----------------------------------------
+ONRR custom color palette
+----------------------------------------
+Define once, use everywhere:
+  - As SCSS variables: $onrr-blue
+  - As CSS custom properties: var(--onrr-blue)
+  - As utility classes: .bg-onrr-blue, .text-onrr-blue
+----------------------------------------
+*/
+
+$onrr-forest-green: #143F1E;
+$onrr-navy: #2A294E;
+$onrr-blue: #0D4D81;
+$onrr-sky-blue: #A8DEE8;
+$onrr-green: #265E37;
+$onrr-sage: #71915C;
+$onrr-teal: #1C97BC;
+$onrr-blue-gray: #7A8AAA;
+
+$onrr-colors: (
+  "forest-green": $onrr-forest-green,
+  "navy": $onrr-navy,
+  "blue": $onrr-blue,
+  "sky-blue": $onrr-sky-blue,
+  "green": $onrr-green,
+  "sage": $onrr-sage,
+  "teal": $onrr-teal,
+  "blue-gray": $onrr-blue-gray,
+);
+
+:root {
+  @each $name, $value in $onrr-colors {
+    --onrr-#{$name}: #{$value};
+  }
+}
+
+@each $name, $value in $onrr-colors {
+  .bg-onrr-#{$name} {
+    background-color: #{$value} !important;
+  }
+  .text-onrr-#{$name} {
+    color: #{$value} !important;
+  }
+  .border-onrr-#{$name} {
+    border-color: #{$value} !important;
+  }
+}

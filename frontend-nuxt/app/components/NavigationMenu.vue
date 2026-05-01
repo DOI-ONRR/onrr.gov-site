@@ -96,9 +96,9 @@ function isCurrentItem(item) {
 </script>
 
 <style lang="scss" scoped>
-  @use "uswds-theme" as *;
+  @use "onrr-colors" as *;
 
   .usa-current::after {
-    background-color: $color-medium-green !important;
+    background-color: $onrr-green !important;
   }
 </style>

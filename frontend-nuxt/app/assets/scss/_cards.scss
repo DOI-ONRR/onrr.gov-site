@@ -1,0 +1,49 @@
+@use "onrr-colors" as *;
+
+.card--filled-header .usa-card__container {
+  overflow: hidden;
+}
+.card--filled-header .usa-card__header {
+  background: var(--card-accent, #005ea2);
+  margin: -1px -1px 0 -1px;  /* nudge over the border */
+  padding: .5rem;
+}
+.card--filled-header .usa-card__heading {
+  color: #fff;
+  margin: 0;
+}
+
+.card--accent-left .usa-card__container {
+  position: relative;
+  overflow: hidden;
+  padding-left: 0.5rem;
+}
+.card--accent-left .usa-card__container::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 6px;
+  background: var(--card-accent, #005ea2);
+}
+
+.card--accent-top .usa-card__container {
+  position: relative;
+  overflow: hidden;
+}
+.card--accent-top .usa-card__container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 8px;
+  background: var(--card-accent, #005ea2);
+}
+.card--accent-top .usa-card__header { padding-top: 1.5rem; }
+
+.accent-forest    { --card-accent: #{$onrr-forest-green}; }
+.accent-navy      { --card-accent: #{$onrr-navy}; }
+.accent-blue      { --card-accent: #{$onrr-blue}; }
+.accent-sky       { --card-accent: #{$onrr-sky-blue}; }
+.accent-green     { --card-accent: #{$onrr-green}; }
+.accent-sage      { --card-accent: #{$onrr-sage}; }
+.accent-teal      { --card-accent: #{$onrr-teal}; }
+.accent-bluegray  { --card-accent: #{$onrr-blue-gray}; }
