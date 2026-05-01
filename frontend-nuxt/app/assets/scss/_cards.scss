@@ -47,3 +47,7 @@
 .accent-sage      { --card-accent: #{$onrr-sage}; }
 .accent-teal      { --card-accent: #{$onrr-teal}; }
 .accent-bluegray  { --card-accent: #{$onrr-blue-gray}; }
+
+.usa-card__body:last-child {
+  padding-bottom: 0;
+}
