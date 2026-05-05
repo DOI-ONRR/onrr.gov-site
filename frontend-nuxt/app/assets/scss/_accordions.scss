@@ -5,20 +5,45 @@
     font-family: Merriweather Web, Georgia, Cambria, Times New Roman, Times, serif;
     @include u-text('primary-darker');
     @include u-padding-left(0);
+    background-color: #ffffff;
+    background-image: none !important;
+    border-top: 1px solid #dfe1e2;
+    border-bottom: 1px solid #dfe1e2;
+    position: relative;
 
     &:hover {
-      @include u-text('primary')
+      @include u-text('primary');
+      background-color: #ffffff;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      width: 1.5rem;
+      height: 1.5rem;
+      @include u-bg("primary");
+      -webkit-mask-image: url("#{$theme-image-path}/usa-icons/arrow_drop_up.svg");
+              mask-image: url("#{$theme-image-path}/usa-icons/arrow_drop_up.svg");
+      -webkit-mask-size: contain;
+              mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+              mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+              mask-position: center;
+      transform: translateY(-50%) rotate(0deg);
+      transition: transform 0.3s ease;
+    }
+
+    &[aria-expanded=false]::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    &:hover::after {
+      @include u-bg("primary-dark");
     }
   }
-}
-.usa-accordion__button {
-  background-color: #ffffff;
-  border-top: 1px solid #dfe1e2;
-  border-bottom: 1px solid #dfe1e2;
-}
-
-.usa-accordion__button:hover {
-  background-color: #ffffff;
 }
 
 .usa-accordion__content[hidden] + .usa-accordion__heading .usa-accordion__button {
@@ -27,40 +52,4 @@
 
 .usa-accordion__content {
   border: 0;
-}
-
-.usa-accordion__button {
-  background-color: #ffffff;
-  background-image: none !important;
-  border-top: 1px solid #dfe1e2;
-  border-bottom: 1px solid #dfe1e2;
-  position: relative;
-}
-
-.usa-accordion__button::after {
-  content: "";
-  position: absolute;
-  right: 1.25rem;
-  top: 50%;
-  width: 1.5rem;
-  height: 1.5rem;
-  @include u-bg("primary");
-  -webkit-mask-image: url("#{$theme-image-path}/usa-icons/arrow_drop_up.svg");
-          mask-image: url("#{$theme-image-path}/usa-icons/arrow_drop_up.svg");
-  -webkit-mask-size: contain;
-          mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-          mask-position: center;
-  transform: translateY(-50%) rotate(0deg);
-  transition: transform 0.3s ease;
-}
-
-.usa-accordion__button[aria-expanded=false]::after {
-  transform: translateY(-50%) rotate(180deg);
-}
-
-.usa-accordion__button:hover::after {
-  @include u-bg("primary-dark");
 }
