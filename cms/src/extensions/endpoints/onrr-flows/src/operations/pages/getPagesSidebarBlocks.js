@@ -17,6 +17,10 @@ export async function getPagesSidebarBlocks(pagesId, endpoint, authToken) {
         const data = await client.request(pagesSidebarBlocksQuery, variables);
         return data.pages_sidebar_blocks;
     } catch (error) {
+        if (error.response?.errors?.some(e => e.extensions?.code === 'FORBIDDEN')) {
+            logger.warn(`getPagesSidebarBlocks (${pagesId}): Permission denied`);
+            return [];
+        }
         logger.error("Error in getPagesSidebarBlocks:", error);
         throw new Error ('Error in getPagesSidebarBlocks');
     }

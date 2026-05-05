@@ -20,6 +20,10 @@ export async function getExpansionPanelsExpansionPanelBlocks(id, endpoint, authT
         return data.expansion_panels_expansion_panel_blocks;
     }
     catch(error) {
+        if (error.response?.errors?.some(e => e.extensions?.code === 'FORBIDDEN')) {
+            logger.warn(`getExpansionPanelsExpansionPanelBlocks (${id}): Permission denied`);
+            return [];
+        }
         logger.error(`Error in getExpansionPanelsExpansionPanelBlocks (${id}):`, error);
         throw new Error('Error in getExpansionPanelsExpansionPanelBlocks');
     }

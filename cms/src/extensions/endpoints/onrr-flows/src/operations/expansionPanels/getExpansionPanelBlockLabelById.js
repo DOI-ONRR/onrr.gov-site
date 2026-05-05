@@ -9,6 +9,10 @@ export async function getExpansionPanelBlockLabelById(id, endpoint) {
         return data.expansion_panel_block_label_by_id;
     }
     catch(error) {
+        if (error.response?.errors?.some(e => e.extensions?.code === 'FORBIDDEN')) {
+            logger.warn(`getExpansionPanelBlockLabelById (${id}): Permission denied`);
+            return null;
+        }
         logger.error(`Error in getExpansionPanelBlockLabelById (${id}):`, error);
         throw new Error('Error in getExpansionPanelBlockLabelById');
     }

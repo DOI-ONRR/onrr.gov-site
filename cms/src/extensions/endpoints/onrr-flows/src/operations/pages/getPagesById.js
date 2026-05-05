@@ -13,6 +13,10 @@ export async function getPagesById(pagesId, endpoint, authToken) {
         const data = await client.request(pagesByIdQuery, { id: pagesId });
         return data.pages_by_id;
     } catch (error) {
+        if (error.response?.errors?.some(e => e.extensions?.code === 'FORBIDDEN')) {
+            logger.warn(`getPagesById (${pagesId}): Permission denied`);
+            return null;
+        }
         logger.error("Error in getPagesById:", error);
         throw new Error('Error in getPagesById');
     }
