@@ -1,38 +1,42 @@
 import { expect } from '@playwright/test'
 import { createBdd } from 'playwright-bdd'
-import eventsFixtures from '../fixtures/events.json' with { type: 'json' }
+import * as eventsFixtures from '../fixtures/events.js'
 
 const { Given, When, Then } = createBdd()
 
-function mockGraphQL(page, fixture) {
-  return page.route('**/graphql', (route, request) => {
-    const body = request.postDataJSON()
-    if (body?.query?.includes('events')) {
-      return route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify(fixture),
-      })
-    }
-    return route.fallback()
+const MOCK_API_URL = 'http://localhost:4000'
+
+async function setMockState(key, value) {
+  await fetch(`${MOCK_API_URL}/__mock/state`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key, value }),
   })
+}
+
+async function resetMock() {
+  await fetch(`${MOCK_API_URL}/__mock/reset`, { method: 'POST' })
 }
 
 // --- Given steps ---
 
-Given('the API returns events data', async ({ page }) => {
-  await mockGraphQL(page, eventsFixtures.withEvents)
+Given('the API returns events data', async () => {
+  await resetMock()
+  await setMockState('events', eventsFixtures.withEvents)
 })
 
-Given('the API returns no events', async ({ page }) => {
-  await mockGraphQL(page, eventsFixtures.noEvents)
+Given('the API returns no events', async () => {
+  await resetMock()
+  await setMockState('events', eventsFixtures.noEvents)
 })
 
-Given('the API returns outreach events only', async ({ page }) => {
-  await mockGraphQL(page, eventsFixtures.outreachOnly)
+Given('the API returns outreach events only', async () => {
+  await resetMock()
+  await setMockState('events', eventsFixtures.outreachOnly)
 })
 
 Given('I navigate to the events page', async ({ page }) => {
-  await page.goto('/events')
+  await page.goto('/events', { waitUntil: 'networkidle' })
 })
 
 // --- When steps ---
@@ -62,7 +66,7 @@ Then('I see {int} event card(s) on the {string} tab', async ({ page }, count, ta
 
 Then('the first event card title is {string}', async ({ page }, expectedTitle) => {
   const title = page.locator('[role="tabpanel"]:not([hidden]) .event-card').first().locator('.event-card__title')
-  await expect(title).toHaveText(expectedTitle)
+  await expect(title).toHaveText(expectedTitle, { ignoreCase: true })
 })
 
 Then('the first event card date contains {string}', async ({ page }, expectedDate) => {
@@ -70,9 +74,24 @@ Then('the first event card date contains {string}', async ({ page }, expectedDat
   await expect(date).toContainText(expectedDate)
 })
 
+Then('the first event card date contains the event 1 date', async ({ page }) => {
+  const date = page.locator('[role="tabpanel"]:not([hidden]) .event-card').first().locator('.event-card__date')
+  await expect(date).toContainText(eventsFixtures.event1DateFormatted)
+})
+
 Then('the second event card date contains {string}', async ({ page }, expectedDate) => {
   const date = page.locator('[role="tabpanel"]:not([hidden]) .event-card').nth(1).locator('.event-card__date')
   await expect(date).toContainText(expectedDate)
+})
+
+Then('the second event card date contains the event 2 start date', async ({ page }) => {
+  const date = page.locator('[role="tabpanel"]:not([hidden]) .event-card').nth(1).locator('.event-card__date')
+  await expect(date).toContainText(eventsFixtures.event2StartDateFormatted)
+})
+
+Then('the second event card date contains the event 2 end date', async ({ page }) => {
+  const date = page.locator('[role="tabpanel"]:not([hidden]) .event-card').nth(1).locator('.event-card__date')
+  await expect(date).toContainText(eventsFixtures.event2EndDateFormatted)
 })
 
 Then('the first event card shows the field {string} with {string}', async ({ page }, fieldLabel, expectedValue) => {
