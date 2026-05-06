@@ -1,4 +1,5 @@
 import * as eventsFixtures from '../fixtures/events.js'
+import * as revenueDataFixtures from '../fixtures/revenue-data.js'
 
 /**
  * Each handler has:
@@ -25,23 +26,36 @@ export function resetState() {
 }
 
 export const handlers = [
+  // Events
   {
-    match: (query) => query?.includes('events'),
+    match: (query, op) => op === 'GetEvents',
     resolve: () => {
       const fixture = state.events || eventsFixtures.withEvents
       return fixture.data
     },
   },
 
-  // Menu queries
+  // Production aggregated (landingPageProduction query)
   {
-    match: (query) => query?.includes('menus') && !query?.includes('pages'),
-    resolve: () => ({ menus: [] }),
+    match: (query, op) => op === 'LandingPageProduction',
+    resolve: () => revenueDataFixtures.productionAggregated,
   },
 
-  // Page queries
+  // Content blocks by label
   {
-    match: (query) => query?.includes('pages'),
+    match: (query, op) => op === 'GetContentBlockByLabel',
+    resolve: () => revenueDataFixtures.contentBlock,
+  },
+
+  // Menu queries (GetMenuByLabel)
+  {
+    match: (query, op) => op === 'GetMenuByLabel',
+    resolve: () => revenueDataFixtures.menuData,
+  },
+
+  // Page queries (GetPageBySlug)
+  {
+    match: (query, op) => op === 'GetPageBySlug',
     resolve: () => ({
       page: [{
         __typename: 'pages',
@@ -55,5 +69,32 @@ export const handlers = [
         parent: null,
       }],
     }),
+  },
+]
+
+/**
+ * REST endpoint handlers.
+ * Matched by URL path in the server.
+ */
+export const restHandlers = [
+  {
+    match: (url) => url.startsWith('/revenue-summary'),
+    resolve: () => revenueDataFixtures.revenueSummary,
+  },
+  {
+    match: (url) => url.startsWith('/disbursement-summary'),
+    resolve: () => revenueDataFixtures.disbursementSummary,
+  },
+  {
+    match: (url) => url === '/fy-summary/production',
+    resolve: () => revenueDataFixtures.fySummaryProduction,
+  },
+  {
+    match: (url) => url === '/fy-summary/revenue',
+    resolve: () => revenueDataFixtures.fySummaryRevenue,
+  },
+  {
+    match: (url) => url === '/fy-summary/disbursements',
+    resolve: () => revenueDataFixtures.fySummaryDisbursements,
   },
 ]

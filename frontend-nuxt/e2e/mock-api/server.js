@@ -1,11 +1,20 @@
 import http from 'node:http'
-import { handlers, setState, resetState } from './handlers.js'
+import { handlers, restHandlers, setState, resetState } from './handlers.js'
 
 const PORT = process.env.MOCK_API_PORT || 4000
 
-function matchHandler(query) {
+function matchHandler(query, operationName) {
   for (const handler of handlers) {
-    if (handler.match(query)) {
+    if (handler.match(query, operationName)) {
+      return handler.resolve
+    }
+  }
+  return null
+}
+
+function matchRestHandler(url) {
+  for (const handler of restHandlers) {
+    if (handler.match(url)) {
       return handler.resolve
     }
   }
@@ -29,8 +38,8 @@ const server = http.createServer((req, res) => {
     req.on('data', chunk => { body += chunk })
     req.on('end', () => {
       try {
-        const { query } = JSON.parse(body)
-        const resolve = matchHandler(query)
+        const { query, operationName } = JSON.parse(body)
+        const resolve = matchHandler(query, operationName)
 
         if (resolve) {
           const data = resolve(query)
@@ -88,6 +97,21 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({ status: 'ok' }))
     return
+  }
+
+  // REST endpoints (GET)
+  if (req.method === 'GET') {
+    const urlPath = req.url.split('?')[0]
+    const resolve = matchRestHandler(urlPath)
+    if (resolve) {
+      const data = resolve(urlPath)
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      })
+      res.end(JSON.stringify(data))
+      return
+    }
   }
 
   res.writeHead(404)
