@@ -19,12 +19,22 @@ export async function runCardBlocksCardContentBlocks(id) {
             if (!previous.find(prev => prev.id === latestContentBlock.id)) {
                 var newContentBlock = JSON.parse(JSON.stringify(latestContentBlock));
                 newContentBlock.item = latestContentBlock.item.id;
-                const createOperationId = await createCardBlocksCardContentBlocksItem(newContentBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
-                appliedChanges.push({
-                    id: createOperationId,
-                    collection: CollectionTypes.CARD_BLOCKS_CARD_CONTENT_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                });
+                try {
+                    const createOperationId = await createCardBlocksCardContentBlocksItem(newContentBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: createOperationId,
+                        collection: CollectionTypes.CARD_BLOCKS_CARD_CONTENT_BLOCKS,
+                        message: ApiMessages.ITEM_CREATED
+                    });
+                } catch (createError) {
+                    logger.warn(`createCardBlocksCardContentBlocksItem (${newContentBlock.id}): Record already exists, updating instead`);
+                    const updateId = await updateCardBlocksCardContentBlocksItem(newContentBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: updateId,
+                        collection: CollectionTypes.CARD_BLOCKS_CARD_CONTENT_BLOCKS,
+                        message: ApiMessages.ITEM_UPDATED
+                    });
+                }
             } else {
                 const previousBlock = JSON.parse(JSON.stringify(previous.find(prev => prev.id === latestContentBlock.id)));
                 const blockChanges = diff(previousBlock, latestContentBlock);

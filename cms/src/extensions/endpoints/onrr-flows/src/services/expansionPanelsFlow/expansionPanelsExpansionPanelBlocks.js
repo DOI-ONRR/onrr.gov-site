@@ -21,12 +21,22 @@ export async function runExpansionPanelsExpansionPanelBlocks(expansionPanelId) {
             if (!previousExpansionPanelBlocks.find(prevBlock => prevBlock.id === latestBlock.id)) {
                 const newBlock = JSON.parse(JSON.stringify(latestBlock));
                 newBlock.item = latestBlock.item.id;
-                const createdId = await createExpansionPanelsExpansionPanelBlocksItem(newBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
-                appliedChanges.push({
-                    id: createdId,
-                    collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                });
+                try {
+                    const createdId = await createExpansionPanelsExpansionPanelBlocksItem(newBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: createdId,
+                        collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,
+                        message: ApiMessages.ITEM_CREATED
+                    });
+                } catch (createError) {
+                    logger.warn(`createExpansionPanelsExpansionPanelBlocksItem (${newBlock.id}): Record already exists, updating instead`);
+                    const updatedId = await updateExpansionPanelsExpansionPanelBlocksItem(newBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: updatedId,
+                        collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,
+                        message: ApiMessages.ITEM_UPDATED
+                    });
+                }
             } else {
                 const previousBlock = JSON.parse(JSON.stringify(previousExpansionPanelBlocks.find(prevBlock => prevBlock.id === latestBlock.id)));
                 const blockChanges = diff(previousBlock, latestBlock);
