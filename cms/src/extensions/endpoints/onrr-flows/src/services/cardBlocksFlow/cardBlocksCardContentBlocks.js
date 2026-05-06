@@ -14,7 +14,7 @@ export async function runCardBlocksCardContentBlocks(id) {
     try {
         var appliedChanges = [];
         const latest = await getCardBlocksCardContentBlocks(id, Endpoints.LOCAL);
-        const previous = await getCardBlocksCardContentBlocks(id, Endpoints.UPSTREAM);
+        const previous = await getCardBlocksCardContentBlocks(id, Endpoints.UPSTREAM, UpstreamAuthToken);
         for (var latestContentBlock of latest) {
             if (!previous.find(prev => prev.id === latestContentBlock.id)) {
                 var newContentBlock = JSON.parse(JSON.stringify(latestContentBlock));
