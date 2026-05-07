@@ -17,6 +17,10 @@ export async function getPagesPageBlocks(pagesId, endpoint, authToken) {
         const data = await client.request(pagesPageBlocksQuery, variables);
         return data.pages_page_blocks;
     } catch (error) {
+        if (error.response?.errors?.some(e => e.extensions?.code === 'FORBIDDEN')) {
+            logger.warn(`getPagesPageBlocks (${pagesId}): Permission denied`);
+            return [];
+        }
         logger.error("Error in getPagesPageBlocks:", error);
         throw new Error ('Error in getPagesPageBlocks');
     }
