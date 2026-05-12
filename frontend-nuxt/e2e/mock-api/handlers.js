@@ -59,6 +59,7 @@ export const handlers = [
     resolve: () => ({
       page: [{
         __typename: 'pages',
+        id: 'mock-page-1',
         title: 'Events',
         slug: 'events',
         url: '/events',
@@ -67,6 +68,8 @@ export const handlers = [
         page_blocks: [],
         sidebar_blocks: [],
         parent: null,
+        meta_title: null,
+        meta_description: null,
       }],
     }),
   },
