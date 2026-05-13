@@ -466,20 +466,20 @@ export const EVENTS_AND_TRAINING_QUERY = gql`
     events: events(
         filter: {
             status: { _eq: "published" }
-            event_end_date_time: { _gte: "$NOW" }
+            event_end_date: { _gte: "$NOW" }
             is_training: { _eq: false }
         }
-        sort: ["event_start_date_time"]
+        sort: ["event_start_date"]
     ) {
         ...eventFields
     }
     training: events(
         filter: {
             status: { _eq: "published" }
-            event_end_date_time: { _gte: "$NOW" }
+            event_end_date: { _gte: "$NOW" }
             is_training: { _eq: true }
         }
-        sort: ["event_start_date_time"]
+        sort: ["event_start_date"]
     ) {
         ...eventFields
     }
