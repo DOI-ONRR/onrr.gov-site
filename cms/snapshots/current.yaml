@@ -1,5 +1,5 @@
 version: 1
-directus: 11.15.1
+directus: 11.17.2
 vendor: postgres
 collections:
   - collection: Components
@@ -883,7 +883,7 @@ collections:
       icon: file_copy
       item_duplication_fields: null
       note: null
-      preview_url: http://localhost:8055/page/{{id}}
+      preview_url: null
       singleton: false
       sort: 1
       sort_field: sort
@@ -4706,50 +4706,31 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: collection_blocks
-    field: layout
-    type: string
+    field: divider_contacts
+    type: alias
     meta:
       collection: collection_blocks
       conditions: null
       display: null
       display_options: null
-      field: layout
+      field: divider_contacts
       group: null
       hidden: false
-      interface: select-dropdown
+      interface: presentation-divider
       note: null
       options:
-        choices:
-          - text: Basic
-            value: basic
-          - text: Full
-            value: full
+        title: Contacts
       readonly: false
       required: false
       searchable: true
-      sort: 9
-      special: null
+      sort: 15
+      special:
+        - alias
+        - no-data
       translations: null
       validation: null
       validation_message: null
-      width: half
-    schema:
-      name: layout
-      table: collection_blocks
-      data_type: character varying
-      default_value: basic
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
+      width: full
   - collection: collection_blocks
     field: page
     type: string
@@ -4784,6 +4765,51 @@ fields:
       table: collection_blocks
       data_type: character varying
       default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: collection_blocks
+    field: layout
+    type: string
+    meta:
+      collection: collection_blocks
+      conditions: null
+      display: null
+      display_options: null
+      field: layout
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Basic
+            value: basic
+          - text: Full
+            value: full
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: layout
+      table: collection_blocks
+      data_type: character varying
+      default_value: basic
       max_length: 255
       numeric_precision: null
       numeric_scale: null
@@ -4888,6 +4914,32 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: collection_blocks
+    field: divider_reporter_letters
+    type: alias
+    meta:
+      collection: collection_blocks
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_reporter_letters
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        title: Report Letters
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: collection_blocks
     field: item_status
     type: string
@@ -5040,58 +5092,6 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
-  - collection: collection_blocks
-    field: divider_contacts
-    type: alias
-    meta:
-      collection: collection_blocks
-      conditions: null
-      display: null
-      display_options: null
-      field: divider_contacts
-      group: null
-      hidden: false
-      interface: presentation-divider
-      note: null
-      options:
-        title: Contacts
-      readonly: false
-      required: false
-      searchable: true
-      sort: 15
-      special:
-        - alias
-        - no-data
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-  - collection: collection_blocks
-    field: divider_reporter_letters
-    type: alias
-    meta:
-      collection: collection_blocks
-      conditions: null
-      display: null
-      display_options: null
-      field: divider_reporter_letters
-      group: null
-      hidden: false
-      interface: presentation-divider
-      note: null
-      options:
-        title: Report Letters
-      readonly: false
-      required: false
-      searchable: true
-      sort: 20
-      special:
-        - alias
-        - no-data
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
   - collection: commodity
     field: id
     type: uuid
@@ -9891,14 +9891,14 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
-    field: event_start_date_time
-    type: timestamp
+    field: event_start_date
+    type: date
     meta:
       collection: events
       conditions: null
       display: datetime
       display_options: {}
-      field: event_start_date_time
+      field: event_start_date
       group: null
       hidden: false
       interface: datetime
@@ -9915,9 +9915,9 @@ fields:
       validation_message: null
       width: half
     schema:
-      name: event_start_date_time
+      name: event_start_date
       table: events
-      data_type: timestamp with time zone
+      data_type: date
       default_value: null
       max_length: null
       numeric_precision: null
@@ -9932,14 +9932,14 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
-    field: event_end_date_time
-    type: timestamp
+    field: event_end_date
+    type: date
     meta:
       collection: events
       conditions: null
       display: datetime
       display_options: {}
-      field: event_end_date_time
+      field: event_end_date
       group: null
       hidden: false
       interface: datetime
@@ -9956,9 +9956,9 @@ fields:
       validation_message: null
       width: half
     schema:
-      name: event_end_date_time
+      name: event_end_date
       table: events
-      data_type: timestamp with time zone
+      data_type: date
       default_value: null
       max_length: null
       numeric_precision: null
@@ -10083,6 +10083,46 @@ fields:
       data_type: boolean
       default_value: false
       max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
+    field: time
+    type: string
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: time
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: time
+      table: events
+      data_type: character varying
+      default_value: null
+      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -13071,7 +13111,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: false
+      is_indexed: true
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -16695,7 +16735,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: false
+      is_indexed: true
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -18942,18 +18982,18 @@ fields:
     schema:
       name: id
       table: pages_sidebar_blocks
-      data_type: integer
-      default_value: nextval('pages_sidebar_blocks_id_seq'::regclass)
+      data_type: uuid
+      default_value: null
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: pages_sidebar_blocks
@@ -19358,7 +19398,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: false
+      is_indexed: true
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -26966,27 +27006,6 @@ relations:
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: collection_blocks
-    field: user_created
-    related_collection: directus_users
-    meta:
-      junction_field: null
-      many_collection: collection_blocks
-      many_field: user_created
-      one_allowed_collections: null
-      one_collection: directus_users
-      one_collection_field: null
-      one_deselect_action: nullify
-      one_field: null
-      sort_field: null
-    schema:
-      table: collection_blocks
-      column: user_created
-      foreign_key_table: directus_users
-      foreign_key_column: id
-      constraint_name: collection_blocks_user_created_foreign
-      on_update: NO ACTION
-      on_delete: NO ACTION
-  - collection: collection_blocks
     field: user_updated
     related_collection: directus_users
     meta:
@@ -27005,6 +27024,27 @@ relations:
       foreign_key_table: directus_users
       foreign_key_column: id
       constraint_name: collection_blocks_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: collection_blocks
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: collection_blocks
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: collection_blocks
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: collection_blocks_user_created_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
   - collection: commodity

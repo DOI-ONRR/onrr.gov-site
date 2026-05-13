@@ -109,8 +109,8 @@ export default {
     },
     formatDateRange(event) {
       const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-      const start = new Date(event.event_start_date_time)
-      const end = new Date(event.event_end_date_time)
+      const start = new Date(event.event_start_date)
+      const end = new Date(event.event_end_date)
       const startStr = start.toLocaleDateString('en-US', opts)
       if (start.toDateString() === end.toDateString()) {
         return startStr
