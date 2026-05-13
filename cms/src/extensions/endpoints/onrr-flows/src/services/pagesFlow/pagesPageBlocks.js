@@ -22,12 +22,23 @@ export async function runPagesPageBlocks(pageId) {
             if (!previousBlocks.find(block => block.id === latestPageBlock.id)) {
                 var newItem = JSON.parse(JSON.stringify(latestPageBlock));
                 newItem.item = latestPageBlock.item.id;
-                const createId = await createPagesPageBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
-                appliedChanges.push({
-                    id: createId,
-                    collection: CollectionTypes.PAGES_PAGE_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                });
+                try {
+                    const createId = await createPagesPageBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: createId,
+                        collection: CollectionTypes.PAGES_PAGE_BLOCKS,
+                        message: ApiMessages.ITEM_CREATED
+                    });
+                } catch (createError) {
+                    // If the record already exists (linked to a different page), update it instead
+                    logger.warn(`createPagesPageBlocksItem (${newItem.id}): Record already exists, updating instead`);
+                    const updateId = await updatePagesPageBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: updateId,
+                        collection: CollectionTypes.PAGES_PAGE_BLOCKS,
+                        message: ApiMessages.ITEM_UPDATED
+                    });
+                }
             } else {
                 const previousPageBlock = previousBlocks.find(block => block.id === latestPageBlock.id);
                 const blockChanges = diff(previousPageBlock, latestPageBlock);

@@ -19,12 +19,22 @@ export async function runPagesSidebarBlocks(pageId) {
             if (!previousBlocks.find(block => block.id === latestSidebarBlock.id)) {
                 var newItem = JSON.parse(JSON.stringify(latestSidebarBlock));
                 newItem.item = latestSidebarBlock.item.id;
-                const createId = await createPagesSidebarBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
-                appliedChanges.push({
-                    id: createId,
-                    collection: CollectionTypes.PAGES_PAGE_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                });
+                try {
+                    const createId = await createPagesSidebarBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: createId,
+                        collection: CollectionTypes.PAGES_PAGE_BLOCKS,
+                        message: ApiMessages.ITEM_CREATED
+                    });
+                } catch (createError) {
+                    logger.warn(`createPagesSidebarBlocksItem (${newItem.id}): Record already exists, updating instead`);
+                    const updateId = await updatePagesSidebarBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: updateId,
+                        collection: CollectionTypes.PAGES_PAGE_BLOCKS,
+                        message: ApiMessages.ITEM_UPDATED
+                    });
+                }
             } else {
                 const previousSidebarBlock = previousBlocks.find(block => block.id === latestSidebarBlock.id);
                 const blockChanges = diff(previousSidebarBlock, latestSidebarBlock);

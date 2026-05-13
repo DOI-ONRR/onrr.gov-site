@@ -24,12 +24,22 @@ export async function runTabBlocksTabBlocks(tabBlockId) {
                 let newItem = JSON.parse(JSON.stringify(latestTabBlock));
                 newItem.item = latestTabBlock.item.id;
                 newItem.collection = latestTabBlock.item.collection;
-                const createId = await createTabBlocksTabBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
-                appliedChanges.push({
-                    id: createId,
-                    collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                });
+                try {
+                    const createId = await createTabBlocksTabBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: createId,
+                        collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
+                        message: ApiMessages.ITEM_CREATED
+                    });
+                } catch (createError) {
+                    logger.warn(`createTabBlocksTabBlocksItem (${newItem.id}): Record already exists, updating instead`);
+                    const updateId = await updateTabBlocksTabBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: updateId,
+                        collection: CollectionTypes.TAB_BLOCKS_TAB_BLOCKS,
+                        message: ApiMessages.ITEM_UPDATED
+                    });
+                }
             } else {
                 const previousTabBlock = previousTabBlocks.find(block => block.id === latestTabBlock.id);
                 const blockChanges = diff(previousTabBlock, latestTabBlock);
