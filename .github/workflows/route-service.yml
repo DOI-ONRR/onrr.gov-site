@@ -5,6 +5,7 @@ on:
     paths: 'route-service/**'
     branches-ignore:
       - main
+      - dev
   
   pull_request:
     paths: 'route-service/**'

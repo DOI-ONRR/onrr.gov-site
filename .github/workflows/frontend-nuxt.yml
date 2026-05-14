@@ -5,6 +5,7 @@ on:
     paths: 'frontend-nuxt/**'
     branches-ignore:
       - main
+      - dev
 
   pull_request:
     paths: 'frontend-nuxt/**'
