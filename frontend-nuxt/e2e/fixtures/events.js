@@ -4,14 +4,12 @@ function futureDate(daysFromNow) {
   return date
 }
 
-function toISODateTime(date, hours, minutes) {
-  const d = new Date(date)
-  d.setHours(hours, minutes, 0, 0)
-  return d.toISOString().replace('Z', '').split('.')[0]
+function toDateString(date) {
+  return date.toISOString().split('T')[0]
 }
 
 function formatLongDate(date) {
-  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
 }
 
 // Event 1: 7 days from now (single day)
@@ -39,8 +37,8 @@ export const withEvents = {
         location: 'Tulsa, OK',
         other_information: '<p>Lunch will be provided. Please bring your laptop.</p>',
         contact: 'John Smith',
-        event_start_date_time: toISODateTime(event1Date, 13, 0),
-        event_end_date_time: toISODateTime(event1Date, 17, 0),
+        event_start_date: toDateString(event1Date),
+        event_end_date: toDateString(event1Date),
         time: '1:00 p.m. - 5:00 p.m. CT',
         who_should_attend: 'Tribal representatives and Indian mineral owners',
         email: 'john.smith@onrr.gov',
@@ -54,8 +52,8 @@ export const withEvents = {
         location: 'Window Rock, AZ',
         other_information: null,
         contact: 'Jane Doe',
-        event_start_date_time: toISODateTime(event2StartDate, 9, 0),
-        event_end_date_time: toISODateTime(event2EndDate, 16, 0),
+        event_start_date: toDateString(event2StartDate),
+        event_end_date: toDateString(event2EndDate),
         time: '9:00 a.m. - 4:00 p.m. MT daily',
         who_should_attend: 'Navajo Nation officials and ONRR staff',
         email: 'jane.doe@onrr.gov',
@@ -71,8 +69,8 @@ export const withEvents = {
         location: 'Virtual (Microsoft Teams)',
         other_information: '<p>Registration required. Visit <a href="https://example.com/register">the registration page</a> for details.</p>',
         contact: 'Bob Johnson',
-        event_start_date_time: toISODateTime(event3Date, 14, 0),
-        event_end_date_time: toISODateTime(event3Date, 16, 0),
+        event_start_date: toDateString(event3Date),
+        event_end_date: toDateString(event3Date),
         time: '2:00 p.m. - 4:00 p.m. ET',
         who_should_attend: 'All reporters',
         email: 'bob.johnson@onrr.gov',
@@ -100,8 +98,8 @@ export const outreachOnly = {
         location: 'Tulsa, OK',
         other_information: null,
         contact: 'John Smith',
-        event_start_date_time: toISODateTime(event1Date, 13, 0),
-        event_end_date_time: toISODateTime(event1Date, 17, 0),
+        event_start_date: toDateString(event1Date),
+        event_end_date: toDateString(event1Date),
         time: '1:00 p.m. - 5:00 p.m. CT',
         who_should_attend: 'Tribal representatives',
         email: 'john.smith@onrr.gov',
