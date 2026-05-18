@@ -5,6 +5,7 @@ on:
     paths: 'cms/**'
     branches-ignore:
       - main
+      - dev
   
   pull_request:
     paths: 'cms/**'

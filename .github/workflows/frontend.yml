@@ -5,6 +5,7 @@ on:
     paths: 'frontend/**'
     branches-ignore:
       - main
+      - dev
   
   pull_request:
     paths: 'frontend/**'
