@@ -469,7 +469,7 @@ export const EVENTS_AND_TRAINING_QUERY = gql`
             event_end_date: { _gte: "$NOW" }
             is_training: { _eq: false }
         }
-        sort: ["event_start_date"]
+        sort: ["event_start_date", "sort"]
     ) {
         ...eventFields
     }
@@ -479,7 +479,7 @@ export const EVENTS_AND_TRAINING_QUERY = gql`
             event_end_date: { _gte: "$NOW" }
             is_training: { _eq: true }
         }
-        sort: ["event_start_date"]
+        sort: ["event_start_date", "sort"]
     ) {
         ...eventFields
     }
