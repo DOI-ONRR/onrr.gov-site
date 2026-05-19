@@ -12,6 +12,9 @@ export async function runPages(id) {
     try {
         var appliedChanges = [];
         const latest = await getPagesById(id, Endpoints.LOCAL, LocalAuthToken);
+        // Flatten relational fields to IDs for the mutation
+        if (latest.hero_image?.id) latest.hero_image = latest.hero_image.id;
+        if (latest.parent?.id) latest.parent = latest.parent.id;
         const previous = await getPagesById(id, Endpoints.UPSTREAM, UpstreamAuthToken);
         if (!previousVersionExists(previous)) {
             const newId = await createPagesItem(latest, Endpoints.UPSTREAM, UpstreamAuthToken);
