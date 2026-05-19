@@ -15,6 +15,9 @@ query pages_by_id($id: ID!) {
         meta_description
         url
         hero_title
+        hero_image {
+            id
+        }
         parent {
             id
         }
