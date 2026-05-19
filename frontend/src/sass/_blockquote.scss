@@ -6,7 +6,7 @@ blockquote {
   @include u-padding-left(2);
   @include u-text('italic');
   @include u-text('normal');
-  @include u-text(base-light);
+  @include u-text(base);
   @include u-line-height('serif', 5);
   @include u-font('serif', 'md');
   @include u-border-left(2px);
