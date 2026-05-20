@@ -63,14 +63,14 @@
 </template>
 
 <style lang="scss" scoped>
-@use "uswds-theme" as *; 
+@use "onrr-colors" as *;
 
 .usa-footer__primary-section {
-  background-color: $color-teal-cyan;
+  background-color: $onrr-teal;
 }
 
 .usa-footer__secondary-section {
-  background-color: $color-medium-blue;
+  background-color: $onrr-blue;
   color: #ffffff;
 }
 

@@ -11,7 +11,7 @@ Feature: Events page
     And I navigate to the events page
     Then I see 2 event cards on the "Indian Outreach & Events" tab
     And the first event card title is "INDIAN MINERALS TRAINING"
-    And the first event card date contains "April 15, 2026"
+    And the first event card date contains the event 1 date
     And the first event card shows the field "Time" with "1:00 p.m. - 5:00 p.m. CT"
     And the first event card shows the field "Location" with "Tulsa, OK"
     And the first event card shows the field "Description"
@@ -23,8 +23,8 @@ Feature: Events page
   Scenario: Multi-day event shows date range
     Given the API returns events data
     And I navigate to the events page
-    Then the second event card date contains "May 10, 2026"
-    And the second event card date contains "May 11, 2026"
+    Then the second event card date contains the event 2 start date
+    And the second event card date contains the event 2 end date
 
   Scenario: Switching to Other ONRR Events tab
     Given the API returns events data

@@ -22,6 +22,9 @@
     "build:press-releases": "cd src/extensions/endpoints/press-releases; npm run build",
     "build:reporter-letters": "cd src/extensions/endpoints/reporter-letters; npm run build",
     "build:unbundling": "cd src/extensions/endpoints/unbundling; npm run build",
+    "build:revenue-summary": "cd src/extensions/endpoints/revenue-summary; npm run build",
+    "build:disbursement-summary": "cd src/extensions/endpoints/disbursement-summary; npm run build",
+    "build:fy-summary": "cd src/extensions/endpoints/fy-summary; npm run build",
     "build:index-zones": "cd src/extensions/hooks/index-zones; npm run build",
     "build:directus-users": "cd src/extensions/hooks/directus-users; npm run build",
     "build:directus-roles": "cd src/extensions/hooks/directus-roles; npm run build",
@@ -32,7 +35,7 @@
     "build:onrr-flows": "cd src/extensions/endpoints/onrr-flows; npm run build",
     "build:onrr-generate-uuid": "cd src/extensions/operations/onrr-generate-uuid; npm run build",
     "build:revenue-data-update": "cd src/extensions/hooks/revenue-data-update; npm run build",
-    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:index-zones build:directus-users build:directus-roles build:directus-policies build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows build:revenue-data-update"
+    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:revenue-summary build:disbursement-summary build:fy-summary build:index-zones build:directus-users build:directus-roles build:directus-policies build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows build:revenue-data-update"
   },
   "engines": {
     "node": "22.22.0"

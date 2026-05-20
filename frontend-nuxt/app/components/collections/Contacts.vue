@@ -98,6 +98,7 @@ watch(searchText, () => {
 
 <style lang="scss" scoped>
 @use "uswds-theme" as *;
+@use "onrr-colors" as *;
 
 .search-input-wrapper {
   position: relative;
@@ -118,10 +119,10 @@ watch(searchText, () => {
 }
 
 .contact-header {
-  background-color: $color-muted-blue-gray;
+  background-color: $onrr-blue-gray;
   padding: units(1) units(2);
   @include u-margin-bottom(4);
-  border-top: 2px solid $color-medium-blue;
+  border-top: 2px solid $onrr-blue;
   @include u-text('white');
 }
 </style>

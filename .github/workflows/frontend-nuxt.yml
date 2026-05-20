@@ -48,11 +48,11 @@ jobs:
         run: npx gulp updateUswds                                                                                                                         
         working-directory: frontend-nuxt
 
-      - name: Build Nuxt app
+      - name: Build Nuxt app for E2E tests (mock API)
         run: npm run build
         working-directory: frontend-nuxt
         env:
-          NUXT_PUBLIC_API_URL: ${{ vars.API_URL }}
+          NUXT_PUBLIC_API_URL: http://localhost:4000
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
@@ -67,7 +67,7 @@ jobs:
         working-directory: frontend-nuxt
         env:
           CI: true
-          NUXT_PUBLIC_API_URL: ${{ vars.API_URL }}
+          NUXT_PUBLIC_API_URL: http://localhost:4000
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
