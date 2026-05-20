@@ -94,7 +94,7 @@ const sidenavLinks = computed(() => {
                 <h4 class="usa-card__heading text-center font-ui-lg">Monthly fact sheet</h4>
               </div>
               <div class="usa-card__body">
-                <p>Fact sheet summarizing disbursements, revenue, and production data by month on federal and Native American lands.</p>
+                <p class="margin-bottom-2">Fact sheet summarizing disbursements, revenue, and production data by month on federal and Native American lands.</p>
               </div>
             </div>
           </li>
