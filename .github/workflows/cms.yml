@@ -72,6 +72,18 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/endpoints/unbundling
 
+      - name: Install revenue-summary dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/endpoints/revenue-summary
+
+      - name: Install disbursement-summary dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/endpoints/disbursement-summary
+
+      - name: Install fy-summary dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/endpoints/fy-summary
+
       - name: Install index-zones dependencies
         run: npm ci
         working-directory: cms/src/extensions/hooks/index-zones

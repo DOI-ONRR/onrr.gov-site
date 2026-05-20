@@ -5821,7 +5821,7 @@ fields:
       field: page
       group: null
       hidden: false
-      interface: input
+      interface: contacts-page-select
       note: null
       options: null
       readonly: false
@@ -5861,7 +5861,7 @@ fields:
       field: tab
       group: null
       hidden: false
-      interface: input
+      interface: contacts-tab-select
       note: null
       options: null
       readonly: false
@@ -5901,7 +5901,7 @@ fields:
       field: accordion
       group: null
       hidden: false
-      interface: input
+      interface: contacts-accordion-select
       note: null
       options: null
       readonly: false

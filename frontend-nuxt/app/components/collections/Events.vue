@@ -32,11 +32,11 @@ function labeledField(label, value) {
 }
 
 function formatDateRange(event) {
-  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-  const start = new Date(event.event_start_date_time)
-  const end = new Date(event.event_end_date_time)
+  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }
+  const start = new Date(event.event_start_date)
+  const end = new Date(event.event_end_date)
   const startStr = start.toLocaleDateString('en-US', opts)
-  if (start.toDateString() === end.toDateString()) {
+  if (start.toUTCString().slice(0, 16) === end.toUTCString().slice(0, 16)) {
     return startStr
   }
   return `${startStr} - ${end.toLocaleDateString('en-US', opts)}`

@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   apollo: {
     clients: {
       default: {
-        httpEndpoint: (process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8056') + '/graphql',
+        httpEndpoint: (process.env.NUXT_PUBLIC_API_URL || 'https://preview-onrr-cms.app.cloud.gov') + '/graphql',
       },
     },
   },
