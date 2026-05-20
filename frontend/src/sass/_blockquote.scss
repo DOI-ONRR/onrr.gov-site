@@ -1,0 +1,14 @@
+@use "uswds-core" as *;
+
+blockquote {
+  @include u-margin-left(4);
+  @include u-maxw('desktop');
+  @include u-padding-left(2);
+  @include u-text('italic');
+  @include u-text('normal');
+  @include u-text(base);
+  @include u-line-height('serif', 5);
+  @include u-font('serif', 'md');
+  @include u-border-left(2px);
+  @include u-border-left(base-lightest);
+}
