@@ -39,7 +39,7 @@ function toggle(id) {
 </script>
 
 <template>
-  <div class="usa-accordion usa-accordion--bordered">
+  <div class="usa-accordion">
     <template v-for="panel in panels" :key="panel.id">
       <h4 class="usa-accordion__heading">
         <button
