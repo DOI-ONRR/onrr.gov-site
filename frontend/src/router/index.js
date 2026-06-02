@@ -30,6 +30,24 @@ const routes = [
     }
   },
   {
+    path: '/glossary',
+    component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "@/views/TwoColumnLeft"),
+    props: { slug: 'glossary' },
+    meta: {
+      breadcrumb: 'Glossary'
+    },
+    children: [
+      {
+        path: '',
+        name: 'Glossary',
+        component: () => import(/* webpackChunkName: "Glossary" */ "@/views/Glossary"),
+        meta: {
+          breadcrumb: 'Glossary'
+        },
+      },
+    ]
+  },
+  {
     path: '/:slug',
     name: 'TwoColumnLeft',
     component: () => import(/* webpackChunkName: "TwoColumnLeft" */ "@/views/TwoColumnLeft"),
@@ -39,7 +57,8 @@ const routes = [
     },
     children: [
       {
-        path: '/',
+        path: '',
+        name: 'PageDefault',
         component: () => import(/* webpackChunkName: "Page" */ "@/views/Page"),
       },
       {
@@ -148,7 +167,7 @@ const EXTERNAL_REDIRECTS = new Map([
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
 
-  if (to.path === '/404') {
+  if (to.path === '/404' || to.name === 'Glossary') {
     next();
     return;
   }

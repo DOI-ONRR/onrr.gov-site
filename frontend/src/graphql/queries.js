@@ -485,3 +485,12 @@ export const EVENTS_AND_TRAINING_QUERY = gql`
     }
   }
 `
+
+export const GLOSSARY_TERMS_QUERY = gql`
+  query {
+    glossary_terms(sort: ["term"], limit: -1) {
+      term
+      definition
+    }
+  }
+`

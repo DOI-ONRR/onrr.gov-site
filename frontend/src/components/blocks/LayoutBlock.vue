@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     layoutItems() {
-      const columnLayouBlockPresent = this.layoutBlocks && this.layoutBlocks.some(obj => obj.item.__typename === 'layout_column_blocks')
+      const columnLayouBlockPresent = this.layoutBlocks && this.layoutBlocks.some(obj => obj.item && obj.item.__typename === 'layout_column_blocks')
       const layoutBlocks = this.layoutBlocks
       const layoutItems = [{item: { block_v_col: "12" }, nestedBlocks: []}]
       

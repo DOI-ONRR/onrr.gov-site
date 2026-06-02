@@ -14611,7 +14611,7 @@ fields:
       foreign_key_column: null
   - collection: glossary_terms
     field: definition
-    type: string
+    type: text
     meta:
       collection: glossary_terms
       conditions: null
@@ -14620,7 +14620,7 @@ fields:
       field: definition
       group: null
       hidden: false
-      interface: input
+      interface: input-multiline
       note: null
       options: null
       readonly: false
@@ -14635,9 +14635,9 @@ fields:
     schema:
       name: definition
       table: glossary_terms
-      data_type: character varying
+      data_type: text
       default_value: null
-      max_length: 255
+      max_length: null
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
