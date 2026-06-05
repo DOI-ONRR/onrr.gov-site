@@ -24,6 +24,6 @@
 		"link": "directus-extension link"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.1.2"
+		"@directus/extensions-sdk": "^17.1.4"
 	}
 }
