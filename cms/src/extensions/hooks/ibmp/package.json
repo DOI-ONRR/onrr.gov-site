@@ -16,7 +16,7 @@
 		"type": "hook",
 		"path": "dist/index.js",
 		"source": "src/index.js",
-		"host": "^11.0.0"
+		"host": "^12.0.0"
 	},
 	"scripts": {
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-ibmp/dist; cp package.json ../../../../extensions/directus-extension-ibmp; cp dist/index.js ../../../../extensions/directus-extension-ibmp/dist",

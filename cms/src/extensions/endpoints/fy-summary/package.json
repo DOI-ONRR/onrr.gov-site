@@ -16,7 +16,7 @@
 		"type": "endpoint",
 		"path": "dist/index.js",
 		"source": "src/index.js",
-		"host": "^11.0.0"
+		"host": "^12.0.0"
 	},
 	"scripts": {
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-fy-summary/dist; cp package.json ../../../../extensions/directus-extension-fy-summary; cp dist/index.js ../../../../extensions/directus-extension-fy-summary/dist",
