@@ -139,8 +139,6 @@ const config = computed(() => {
         lastAppliedFromProps.value = sourceCode.value
       }))
 
-      sourceCode.value = editor.getContent({ format: 'html' })
-
       editor.ui.registry.addButton('onrrImage', {
         icon: 'image',
         tooltip: 'Insert / Edit Image',
