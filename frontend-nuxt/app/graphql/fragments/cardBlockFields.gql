@@ -1,0 +1,24 @@
+#import "./contentBlockFields.gql"
+#import "./collectionBlockFields.gql"
+
+fragment cardBlockFields on card_blocks {
+  id
+  block_color
+  block_label
+  block_v_col
+  block_icon
+  block_content
+  block_content_html
+  equal_col_height
+  card_content_blocks {
+    id
+    item {
+      ... on content_blocks {
+        ...contentBlockFields
+      }
+      ... on collection_blocks {
+        ...collectionBlockFields
+      }
+    }
+  }
+}

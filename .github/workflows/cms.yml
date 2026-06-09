@@ -5,6 +5,7 @@ on:
     paths: 'cms/**'
     branches-ignore:
       - main
+      - dev
   
   pull_request:
     paths: 'cms/**'
@@ -36,7 +37,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install CMS dependencies
@@ -71,9 +72,33 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/endpoints/unbundling
 
+      - name: Install revenue-summary dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/endpoints/revenue-summary
+
+      - name: Install disbursement-summary dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/endpoints/disbursement-summary
+
+      - name: Install fy-summary dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/endpoints/fy-summary
+
       - name: Install index-zones dependencies
         run: npm ci
         working-directory: cms/src/extensions/hooks/index-zones
+
+      - name: Install directus-users dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/hooks/directus-users
+
+      - name: Install directus-roles dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/hooks/directus-roles
+
+      - name: Install directus-policies dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/hooks/directus-policies
 
       - name: Install indian-gas-major-portion dependencies
         run: npm ci
@@ -87,10 +112,6 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/hooks/nymex
 
-      - name: Install onrr-editor dependencies
-        run: npm ci --legacy-peer-deps
-        working-directory: cms/src/extensions/interfaces/onrr-editor
-
       - name: Install wysiwyg-static dependencies
         run: npm ci
         working-directory: cms/src/extensions/endpoints/wysiwyg-static
@@ -102,6 +123,22 @@ jobs:
       - name: Install onrr-generate-uuid dependencies
         run: npm ci
         working-directory: cms/src/extensions/operations/onrr-generate-uuid
+
+      - name: Install contacts-accordion-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-accordion-select
+
+      - name: Install contacts-page-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-page-select
+
+      - name: Install contacts-tab-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/contacts-tab-select
+
+      - name: Install topics-select deps
+        run: npm ci
+        working-directory: cms/src/extensions/interfaces/topics-select
 
       - name: Build extensions
         run: npm run build:all

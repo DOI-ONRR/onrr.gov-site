@@ -3,8 +3,8 @@ applications:
 - name: preview-onrr-cms
   command: npx directus start
   instances: 1
-  disk_quota: 1G
-  memory: 1G
+  disk_quota: 5G
+  memory: 1536M
   routes:
   - route: preview-onrr-cms.apps.internal
   - route: preview-onrr-cms.app.cloud.gov
@@ -13,6 +13,7 @@ applications:
   services:
     - preview-onrr-psql
     - preview-onrr-s3
+    - preview-onrr-redis
   env:
     CONFIG_PATH: ./config.js
     UPSTREAM_URL: https://dev-onrr-cms.app.cloud.gov

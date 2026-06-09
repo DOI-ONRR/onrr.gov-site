@@ -2,6 +2,9 @@ module.exports = function (env) {
   const vcap_services = JSON.parse(env.VCAP_SERVICES)
   const vcap_application = JSON.parse(env.VCAP_APPLICATION)
 
+  const redis = vcap_services['aws-elasticache-redis'][0].credentials
+  const redisUrl = `rediss://:${encodeURIComponent(redis.password)}@${redis.host}:${redis.port}`
+
   return {
     PORT: process.env.PORT || 8055,
     PUBLIC_URL: `https://${ vcap_application.uris[0] }`,
@@ -25,7 +28,16 @@ module.exports = function (env) {
     STORAGE_AWS_BUCKET: vcap_services['s3'][0].credentials.bucket,
     STORAGE_AWS_REGION: vcap_services['s3'][0].credentials.region,
     
+    CACHE_ENABLED: true,
+    CACHE_STORE: 'redis',
     CACHE_AUTO_PURGE: true,
+    CACHE_TTL: '30m',
+    CACHE_STATUS_HEADER: 'X-Cache-Status',
+
+    REDIS: redisUrl,
+
+    SYNCHRONIZATION_STORE: 'redis',
+    SYNCHRONIZATION_NAMESPACE: 'directus-sync',
     
     ADMIN_EMAIL: `${vcap_application.organization_name}@onrr.gov`,
     ADMIN_PASSWORD: vcap_application.organization_id,

@@ -1,0 +1,27 @@
+@use "uswds-theme" as *;
+
+.tabs-block__list {
+  display: flex;
+  border-bottom: 1px solid color('base-lighter');
+  gap: units(1);
+}
+
+.tabs-block__tab {
+  @include typeset('sans', 'sm', 3);
+  padding: units(1) units(2);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  color: color('base-dark');
+
+  &:hover {
+    color: color('primary');
+  }
+
+  &--selected {
+    color: color('primary');
+    border-bottom-color: color('primary');
+    font-weight: fw('bold');
+  }
+}

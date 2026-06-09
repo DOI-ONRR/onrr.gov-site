@@ -18,7 +18,7 @@
           <span style="font-weight: bold;">{{ formatToDollarInt(totalYearlyGoMesaDisbursements) }}</span><v-icon color="secondary" class="ml-2">mdi-file-pdf-box</v-icon><a href="https://www.onrr.gov/PDFDocs/GOMESA.National.Release.pdf">Press release</a>
         </div>
         <div class="text-body-1">
-          <a href="https://revenuedata.doi.gov/">Explore Revenue Statistics</a><v-icon color="secondary" class="ml-2">mdi-launch</v-icon>
+          <a href="https://revenuedata.onrr.gov/">Explore Revenue Statistics</a><v-icon color="secondary" class="ml-2">mdi-launch</v-icon>
         </div>
       </v-col>
     </v-row>

@@ -136,17 +136,22 @@ function toAbsoluteUrl(baseUrl, url) {
 }
 
 const EXTERNAL_REDIRECTS = new Map([
-  ['/revenue-data', 'https://revenuedata.doi.gov'],
-  ['/explore-data', 'https://revenuedata.doi.gov/explore'],
-  ['/query-data', 'https://revenuedata.doi.gov/query-data'],
-  ['/download-data', 'https://revenuedata.doi.gov/downloads'],
-  ['/revenue-data-glossary', 'https://revenuedata.doi.gov/glossary'],
-  ['/how-revenue-works', 'https://revenuedata.doi.gov/how-revenue-works'],
+  ['/revenue-data', 'https://revenuedata.onrr.gov'],
+  ['/explore-data', 'https://revenuedata.onrr.gov/explore'],
+  ['/query-data', 'https://revenuedata.onrr.gov/query-data'],
+  ['/download-data', 'https://revenuedata.onrr.gov/downloads'],
+  ['/revenue-data-glossary', 'https://revenuedata.onrr.gov/glossary'],
+  ['/how-revenue-works', 'https://revenuedata.onrr.gov/how-revenue-works'],
 ]);
 
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(async (to, from, next) => {
+
+  if (to.path === '/404') {
+    next();
+    return;
+  }
 
   const target = EXTERNAL_REDIRECTS.get(to.path);
   if (target) {
@@ -190,14 +195,9 @@ router.beforeEach(async (to, from, next) => {
     // check if url has extension
     const fileExtension = redirectToUrl.includes('.') ? redirectToUrl.split('.').pop() : undefined;
 
-    console.log('redirectToUrl --------> ', redirectToUrl);
-    console.log('pageFound ------> ', pageFound);
-    console.log('fileExtension -------> ', fileExtension);
-
     if (!pageFound) {
       if (fileExtension) {
-        window.open(toAbsoluteUrl(baseUrl, redirectFound.new_url), '_blank', 'noopener noreferrer');
-        next(false);
+        window.location.replace(`${ baseUrl }${ redirectFound.new_url }`);
         return;
       } else {
         next('/404');

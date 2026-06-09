@@ -1,0 +1,12 @@
+#import "./contentBlocks.gql"
+
+fragment cardBlocks on card_blocks {
+  card_title
+  card_subtitle
+  card_content_block {
+    item {
+      __typename
+      ...contentBlocks
+    }
+  }
+}

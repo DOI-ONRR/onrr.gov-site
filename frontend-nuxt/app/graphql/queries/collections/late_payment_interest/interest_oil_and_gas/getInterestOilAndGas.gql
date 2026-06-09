@@ -1,0 +1,13 @@
+query GetInterestOilAndGas {
+  Interest_Oil_and_Gas(
+    limit: -1
+    filter: { status: { _eq: "published" } }
+    sort: ["sort"]
+  ) {
+    id
+    Period
+    Indian_Late_and_Underpayments
+    Federal_Late_and_Underpayments
+    Federal_Overpayments
+  }
+}

@@ -1,0 +1,51 @@
+@use "@fontsource-variable/assistant/index.css";
+@forward "uswds-theme";
+@forward "uswds-global";
+@forward "uswds-utilities";
+@forward "usa-layout-grid";
+@forward "uswds-fonts";
+@forward "usa-icon";
+@forward "usa-accordion";
+@forward "usa-button";
+@forward "usa-button-group";
+@forward "usa-link";
+@forward "usa-footer";
+@forward "usa-table";
+@forward "usa-header";
+@forward "usa-sidenav";
+@forward "usa-breadcrumb";
+@forward "usa-banner";
+@forward "usa-search";
+@forward "usa-card";
+@forward "usa-input";
+@forward "usa-select";
+@forward "usa-label";
+@forward "usa-form-group";
+@forward "usa-pagination";
+
+@forward "onrr-colors";
+@forward "icons";
+@forward "multi-select";
+@forward "blockquote";
+@forward "tabs";
+@forward "cards";
+@forward "accordions";
+
+@use "uswds-theme" as *;
+
+/*
+----------------------------------------
+Custom site max-width
+----------------------------------------
+*/
+
+$site-max-width: 1600px;
+
+.grid-container,
+.usa-banner__inner,
+.usa-banner__content,
+.usa-nav-container,
+.usa-footer__primary-container,
+.usa-footer__secondary-section > .grid-container {
+  max-width: $site-max-width;
+}

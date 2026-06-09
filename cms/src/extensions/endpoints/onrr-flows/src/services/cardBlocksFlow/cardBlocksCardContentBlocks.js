@@ -14,17 +14,27 @@ export async function runCardBlocksCardContentBlocks(id) {
     try {
         var appliedChanges = [];
         const latest = await getCardBlocksCardContentBlocks(id, Endpoints.LOCAL);
-        const previous = await getCardBlocksCardContentBlocks(id, Endpoints.UPSTREAM);
+        const previous = await getCardBlocksCardContentBlocks(id, Endpoints.UPSTREAM, UpstreamAuthToken);
         for (var latestContentBlock of latest) {
             if (!previous.find(prev => prev.id === latestContentBlock.id)) {
                 var newContentBlock = JSON.parse(JSON.stringify(latestContentBlock));
                 newContentBlock.item = latestContentBlock.item.id;
-                const createOperationId = await createCardBlocksCardContentBlocksItem(newContentBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
-                appliedChanges.push({
-                    id: createOperationId,
-                    collection: CollectionTypes.CARD_BLOCKS_CARD_CONTENT_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                });
+                try {
+                    const createOperationId = await createCardBlocksCardContentBlocksItem(newContentBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: createOperationId,
+                        collection: CollectionTypes.CARD_BLOCKS_CARD_CONTENT_BLOCKS,
+                        message: ApiMessages.ITEM_CREATED
+                    });
+                } catch (createError) {
+                    logger.warn(`createCardBlocksCardContentBlocksItem (${newContentBlock.id}): Record already exists, updating instead`);
+                    const updateId = await updateCardBlocksCardContentBlocksItem(newContentBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: updateId,
+                        collection: CollectionTypes.CARD_BLOCKS_CARD_CONTENT_BLOCKS,
+                        message: ApiMessages.ITEM_UPDATED
+                    });
+                }
             } else {
                 const previousBlock = JSON.parse(JSON.stringify(previous.find(prev => prev.id === latestContentBlock.id)));
                 const blockChanges = diff(previousBlock, latestContentBlock);
@@ -39,7 +49,7 @@ export async function runCardBlocksCardContentBlocks(id) {
                     });
                 }
             }
-            switch (latestContentBlock.item.collection) {
+            switch (latestContentBlock.collection) {
                 case (CollectionTypes.CONTENT_BLOCKS):
                     const contentBlockFlowResult = await runContentBlocks(latestContentBlock.item.id);
                     if (contentBlockFlowResult) {

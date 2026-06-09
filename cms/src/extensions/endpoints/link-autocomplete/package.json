@@ -16,7 +16,7 @@
 		"type": "endpoint",
 		"path": "dist/index.js",
 		"source": "src/index.js",
-		"host": "^10.10.0"
+		"host": "^12.0.0"
 	},
 	"scripts": {
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-link-autocomplete/dist; cp package.json ../../../../extensions/directus-extension-link-autocomplete; cp dist/index.js ../../../../extensions/directus-extension-link-autocomplete/dist",
@@ -25,6 +25,6 @@
 		"dist": "directus-extension build; cp ./dist/index.js ../../../../extensions/directus-extension-link-autocomplete/dist; docker restart directus"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.0.7"
+		"@directus/extensions-sdk": "^17.1.4"
 	}
 }

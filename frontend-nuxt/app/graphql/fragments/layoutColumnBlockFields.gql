@@ -1,0 +1,4 @@
+fragment layoutColumnBlockFields on layout_column_blocks {
+  id
+  layoutCol: block_v_col
+}

@@ -3,7 +3,7 @@ applications:
 - name: prod-onrr-cms
   command: npx directus start
   instances: 2
-  disk_quota: 2G
+  disk_quota: 5G
   memory: 2G
   random-route: false
   routes:
@@ -14,7 +14,8 @@ applications:
   services:
     - onrr-psql
     - dev-onrr-s3
+    - onrr-redis
   env:
     CONFIG_PATH: ./config.js
     CORS_ORIGIN: https://dev-onrr-cms.app.cloud.gov
-    PUBLIC_URL: https://prod-onr-cms.app.cloud.gov
+    PUBLIC_URL: https://prod-onrr-cms.app.cloud.gov

@@ -16,7 +16,7 @@
 		"type": "endpoint",
 		"path": "dist/index.js",
 		"source": "src/index.js",
-		"host": "^10.10.0"
+		"host": "^12.0.0"
 	},
 	"scripts": {
 		"build": "node --experimental-vm-modules node_modules/jest/bin/jest.js; directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-flows/dist; cp package.json ../../../../extensions/directus-extension-onrr-flows; cp dist/index.js ../../../../extensions/directus-extension-onrr-flows/dist",
@@ -25,16 +25,16 @@
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
 	},
 	"dependencies": {
-		"@directus/extensions-sdk": "^17.0.7",
-		"@directus/sdk": "^21.1.0",
+		"@directus/extensions-sdk": "^17.1.4",
+		"@directus/sdk": "^21.3.0",
 		"deep-diff": "^1.0.2",
 		"graphql-request": "^7.4.0",
 		"winston": "^3.19.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.29.0",
-		"@babel/preset-env": "^7.29.0",
-		"babel-jest": "^30.2.0",
-		"jest": "^30.2.0"
+		"@babel/core": "^7.29.7",
+		"@babel/preset-env": "^7.29.7",
+		"babel-jest": "^30.4.1",
+		"jest": "^30.4.2"
 	}
 }

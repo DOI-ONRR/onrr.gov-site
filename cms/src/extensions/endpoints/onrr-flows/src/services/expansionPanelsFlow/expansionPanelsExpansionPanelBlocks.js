@@ -4,7 +4,7 @@ import {
     deleteExpansionPanelsExpansionPanelBlocksItem,
     updateExpansionPanelsExpansionPanelBlocksItem
 } from '../../operations/expansionPanels';
-import { Endpoints, UpstreamAuthToken, CollectionTypes, ApiMessages } from "../../constants";
+import { Endpoints, LocalAuthToken, UpstreamAuthToken, CollectionTypes, ApiMessages } from "../../constants";
 import { runCardBlocks } from '../cardBlocksFlow';
 import { runContentBlocks } from '../contentBlocksFlow';
 import { runExpansionPanelBlockLabel } from './expansionPanelBlockLabel';
@@ -15,18 +15,28 @@ import { runCollectionBlocks } from '../collectionBlocksFlow';
 export async function runExpansionPanelsExpansionPanelBlocks(expansionPanelId) {
     try {
         var appliedChanges = [];
-        const latestExpansionPanelBlocks = await getExpansionPanelsExpansionPanelBlocks(expansionPanelId, Endpoints.LOCAL);
-        const previousExpansionPanelBlocks = await getExpansionPanelsExpansionPanelBlocks(expansionPanelId, Endpoints.UPSTREAM);
+        const latestExpansionPanelBlocks = await getExpansionPanelsExpansionPanelBlocks(expansionPanelId, Endpoints.LOCAL, LocalAuthToken);
+        const previousExpansionPanelBlocks = await getExpansionPanelsExpansionPanelBlocks(expansionPanelId, Endpoints.UPSTREAM, UpstreamAuthToken);
         for (var latestBlock of latestExpansionPanelBlocks) {
             if (!previousExpansionPanelBlocks.find(prevBlock => prevBlock.id === latestBlock.id)) {
                 const newBlock = JSON.parse(JSON.stringify(latestBlock));
                 newBlock.item = latestBlock.item.id;
-                const createdId = await createExpansionPanelsExpansionPanelBlocksItem(newBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
-                appliedChanges.push({
-                    id: createdId,
-                    collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                });
+                try {
+                    const createdId = await createExpansionPanelsExpansionPanelBlocksItem(newBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: createdId,
+                        collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,
+                        message: ApiMessages.ITEM_CREATED
+                    });
+                } catch (createError) {
+                    logger.warn(`createExpansionPanelsExpansionPanelBlocksItem (${newBlock.id}): Record already exists, updating instead`);
+                    const updatedId = await updateExpansionPanelsExpansionPanelBlocksItem(newBlock, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: updatedId,
+                        collection: CollectionTypes.EXPANSION_PANELS_EXPANSION_PANEL_BLOCKS,
+                        message: ApiMessages.ITEM_UPDATED
+                    });
+                }
             } else {
                 const previousBlock = JSON.parse(JSON.stringify(previousExpansionPanelBlocks.find(prevBlock => prevBlock.id === latestBlock.id)));
                 const blockChanges = diff(previousBlock, latestBlock);

@@ -1,0 +1,3 @@
+fragment contentBlocks on content_blocks {
+  content
+}

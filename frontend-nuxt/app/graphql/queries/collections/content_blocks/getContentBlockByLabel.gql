@@ -1,0 +1,13 @@
+query GetContentBlockByLabel($label: String!) {
+    content_blocks(
+        filter: {
+            block_label: {
+                _eq: $label
+            }
+        }
+        limit: 1
+    ) {
+        block_label
+        block_content_html
+    }
+}

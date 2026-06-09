@@ -26,7 +26,7 @@
             sm="12"
             md="9"
             col="12">
-              <router-view />
+              <router-view :pageData="pages_by_id" :pages="pages" />
           </v-col>
         </v-row>
       </v-container>
@@ -69,8 +69,21 @@ export default {
       loadingKey: 'loading...',
       variables () {
         return {
-          ID: this.pageId
+          ID: this.pageId,
+          version: this.$route.query.version || null
         }
+      },
+      context() {
+        const token = this.$route.query.token
+        
+        if (token) {
+          return {
+            headers: {
+              authorization: `Bearer ${token}`
+            }
+          }
+        }
+        return {}
       },
       skip() {
         return !this.pageId;

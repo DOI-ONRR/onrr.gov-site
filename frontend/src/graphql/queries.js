@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import {
   pageFields,
   collectionBlockFields,
+  eventsFields
   // fileCollectionFields
   // sectionHeadingBlocks,
   // contentBlocks,
@@ -45,7 +46,7 @@ export const ANNOUNCEMENTS_QUERY = gql`query {
 // Pages query 
 export const PAGES_QUERY = gql`
 query {
-  pages(limit: -1) {
+  pages(limit: -1, filter: { status: { _eq: "published" } }) {
     id
     slug
     title
@@ -71,7 +72,7 @@ query {
 // Pages and Redirects queries
 export const PAGES_REDIRECTS_QUERY = gql`
 query {
-  pages(limit: -1 ) {
+  pages(limit: -1, filter: { status: { _eq: "published" } }) {
     id
     slug
     title
@@ -88,8 +89,8 @@ query {
 // Page by id query
 export const PAGES_BY_ID_QUERY = gql`
 ${pageFields}
-query PagesById($ID: ID!) {
-  pages_by_id (id: $ID) {
+query PagesById($ID: ID!, $version: String) {
+  pages_by_id (id: $ID, version: $version) {
     ...pageFields
   }
 }`
@@ -98,8 +99,8 @@ query PagesById($ID: ID!) {
 export const HOME_PAGE_QUERY = gql`
 ${pageFields}
 ${collectionBlockFields}
-query HomePageQuery($ID: ID!) {
-  pages_by_id (id: $ID) {
+query HomePageQuery($ID: ID!, $version: String) {
+  pages_by_id (id: $ID, version: $version) {
     ...pageFields
     sidebar_blocks {
       id
@@ -455,6 +456,32 @@ export const PLANT_SPECIFIC_UCAS_QUERY = gql`
       operator
       location 
       doc_date
+    }
+  }
+`
+
+export const EVENTS_AND_TRAINING_QUERY = gql`
+  ${eventsFields}
+  query {
+    events: events(
+        filter: {
+            status: { _eq: "published" }
+            event_end_date: { _gte: "$NOW" }
+            is_training: { _eq: false }
+        }
+        sort: ["event_start_date", "sort"]
+    ) {
+        ...eventFields
+    }
+    training: events(
+        filter: {
+            status: { _eq: "published" }
+            event_end_date: { _gte: "$NOW" }
+            is_training: { _eq: true }
+        }
+        sort: ["event_start_date", "sort"]
+    ) {
+        ...eventFields
     }
   }
 `

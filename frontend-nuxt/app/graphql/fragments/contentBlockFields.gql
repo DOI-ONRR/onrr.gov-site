@@ -1,0 +1,8 @@
+fragment contentBlockFields on content_blocks {
+  id
+  block_label
+  block_v_col
+  block_content
+  block_content_html
+  equal_col_height
+}

@@ -21,7 +21,12 @@ function proxyRequest(req, res, options, isGraphQL = false) {
       return res.status(proxyRes.statusCode).send("Error from external server");
     }
 
-    res.writeHead(proxyRes.statusCode, proxyRes.headers);
+    // Override X-Frame-Options to allow embedding in CMS
+    const headers = { ...proxyRes.headers };
+    headers['x-frame-options'] = 'SAMEORIGIN';
+    headers['content-security-policy'] = "frame-ancestors 'self' https://preview-onrr-cms.app.cloud.gov";
+
+    res.writeHead(proxyRes.statusCode, headers);
 
     proxyRes.pipe(res);
 
@@ -66,15 +71,22 @@ app.all('*', (req, res) => {
         variables: req.body.variables || {},
       });
 
+      const headers = {
+        'Content-Type': 'application/json',
+        'Content-Length': postData.length,
+      };
+
+      // Forward authorization header if present
+      if (req.headers['authorization']) {
+        headers['Authorization'] = req.headers['authorization'];
+      }
+
       const options = {
         hostname: CMS_HOST,
         port: PORT,
         path: req.originalUrl,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': postData.length,
-        },
+        headers,
         body: postData,
       };
 

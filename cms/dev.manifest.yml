@@ -3,8 +3,8 @@ applications:
 - name: dev-onrr-cms
   command: npx directus start
   instances: 1
-  disk_quota: 1G
-  memory: 1G
+  disk_quota: 5G
+  memory: 2G
   random-route: false
   routes:
   - route: dev-onrr-cms.apps.internal
@@ -14,9 +14,10 @@ applications:
   services:
     - dev-onrr-psql
     - dev-onrr-s3
+    - dev-onrr-redis
   env:
     CONFIG_PATH: ./config.js
-    UPSTREAM_URL: https://prod-onr-cms.app.cloud.gov
+    UPSTREAM_URL: https://prod-onrr-cms.app.cloud.gov
     CORS_ORIGIN: https://preview-onrr-cms.app.cloud.gov
     DIRECTUS_PUBLIC_HOST: https://dev-onrr-cms.app.cloud.gov
     PUBLIC_URL: https://dev-onrr-cms.app.cloud.gov

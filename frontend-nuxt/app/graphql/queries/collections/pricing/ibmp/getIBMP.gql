@@ -1,0 +1,11 @@
+query GetIBMP {
+  ibmp(
+    sort: ["sort", "-date"]
+    limit: -1
+    filter: { status: { _eq: "published" } }
+  ) {
+    id
+    date
+    ibmp_line_items
+  }
+}

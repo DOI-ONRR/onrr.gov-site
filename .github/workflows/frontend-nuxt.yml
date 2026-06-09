@@ -1,0 +1,78 @@
+name: Frontend end-to-end tests
+
+on:
+  push:
+    paths: 'frontend-nuxt/**'
+    branches-ignore:
+      - main
+      - dev
+
+  pull_request:
+    paths: 'frontend-nuxt/**'
+    types: [closed]
+    branches:
+      - dev
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    environment: >-
+      ${{
+        github.event_name == 'pull_request' && github.base_ref == 'main' && 'prod' ||
+        github.event_name == 'pull_request' && github.base_ref == 'dev' && 'dev' ||
+        'preview'
+      }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: frontend-nuxt/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: frontend-nuxt
+
+      - name: Build USWDS
+        run: npx gulp updateUswds                                                                                                                         
+        working-directory: frontend-nuxt
+
+      - name: Build Nuxt app for E2E tests (mock API)
+        run: npm run build
+        working-directory: frontend-nuxt
+        env:
+          NUXT_PUBLIC_API_URL: http://localhost:4000
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+        working-directory: frontend-nuxt
+
+      - name: Generate BDD tests
+        run: npx bddgen
+        working-directory: frontend-nuxt
+
+      - name: Run E2E tests
+        run: npx playwright test
+        working-directory: frontend-nuxt
+        env:
+          CI: true
+          NUXT_PUBLIC_API_URL: http://localhost:4000
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: frontend-nuxt/playwright-report
+          retention-days: 14

@@ -9,25 +9,36 @@ import { runContentBlocks } from '../contentBlocksFlow';
 import { runCollectionBlocks } from '../collectionBlocksFlow';
 import { runExpansionPanels } from '../expansionPanelsFlow/expansionPanels';
 import { runTabBlocks } from '../tabBlocksFlow';
-import { ApiMessages, UpstreamAuthToken, CollectionTypes, Endpoints } from '../../constants';
+import { ApiMessages, LocalAuthToken, UpstreamAuthToken, CollectionTypes, Endpoints } from '../../constants';
 import diff from 'deep-diff';
 import { logger } from '../../utils/logger';
 
 export async function runPagesPageBlocks(pageId) {
     try {
         var appliedChanges = [];
-        const latestBlocks = await getPagesPageBlocks(pageId, Endpoints.LOCAL);
-        const previousBlocks = await getPagesPageBlocks(pageId, Endpoints.UPSTREAM);
+        const latestBlocks = await getPagesPageBlocks(pageId, Endpoints.LOCAL, LocalAuthToken);
+        const previousBlocks = await getPagesPageBlocks(pageId, Endpoints.UPSTREAM, UpstreamAuthToken);
         for (const latestPageBlock of latestBlocks) {
             if (!previousBlocks.find(block => block.id === latestPageBlock.id)) {
                 var newItem = JSON.parse(JSON.stringify(latestPageBlock));
                 newItem.item = latestPageBlock.item.id;
-                const createId = await createPagesPageBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
-                appliedChanges.push({
-                    id: createId,
-                    collection: CollectionTypes.PAGES_PAGE_BLOCKS,
-                    message: ApiMessages.ITEM_CREATED
-                });
+                try {
+                    const createId = await createPagesPageBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: createId,
+                        collection: CollectionTypes.PAGES_PAGE_BLOCKS,
+                        message: ApiMessages.ITEM_CREATED
+                    });
+                } catch (createError) {
+                    // If the record already exists (linked to a different page), update it instead
+                    logger.warn(`createPagesPageBlocksItem (${newItem.id}): Record already exists, updating instead`);
+                    const updateId = await updatePagesPageBlocksItem(newItem, Endpoints.UPSTREAM, UpstreamAuthToken);
+                    appliedChanges.push({
+                        id: updateId,
+                        collection: CollectionTypes.PAGES_PAGE_BLOCKS,
+                        message: ApiMessages.ITEM_UPDATED
+                    });
+                }
             } else {
                 const previousPageBlock = previousBlocks.find(block => block.id === latestPageBlock.id);
                 const blockChanges = diff(previousPageBlock, latestPageBlock);

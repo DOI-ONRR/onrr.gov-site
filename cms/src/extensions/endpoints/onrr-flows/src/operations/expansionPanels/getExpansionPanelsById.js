@@ -14,6 +14,10 @@ export async function getExpansionPanelsById(id, endpoint, authToken) {
         return data.expansion_panels_by_id;
     }
     catch(error) {
+        if (error.response?.errors?.some(e => e.extensions?.code === 'FORBIDDEN')) {
+            logger.warn(`getExpansionPanelsById (${id}): Permission denied`);
+            return null;
+        }
         logger.error(`Error in getExpansionPanelsById (${id}):`, error);
         throw new Error('Error in getExpansionPanelsById');
     }
