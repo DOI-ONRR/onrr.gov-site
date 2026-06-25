@@ -103,6 +103,12 @@ export default {
             return null;
         }
       },
+      context() {
+        // Forward the preview token so the API authorizes reading drafts when
+        // an editor is previewing (public read is published-only).
+        const token = this.$route.query.token
+        return token ? { headers: { authorization: `Bearer ${token}` } } : {}
+      },
       update: data => data
     }
   },
@@ -190,8 +196,16 @@ export default {
     categoryHeaderLevel() {
       return this.block.item.category_header_level || null
     },
+    isPreview() {
+      return !!this.$route.query.token
+    },
     items() {
-      const items = this.collectionItems && this.collectionItems[this.block.item.collection].filter(item => item.status === this.block.item.item_status)
+      // Live: show only the block's configured status (e.g. published).
+      // Preview (token present): also include drafts so editors can review them.
+      const allowed = this.isPreview
+        ? [this.block.item.item_status, 'draft']
+        : [this.block.item.item_status]
+      const items = this.collectionItems && this.collectionItems[this.block.item.collection].filter(item => allowed.includes(item.status))
       return items
     },
     topics() {
