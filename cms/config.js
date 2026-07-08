@@ -55,6 +55,10 @@ module.exports = function (env) {
     EMAIL_FROM: "no-reply@directus.io", 
     EMAIL_TRANSPORT: "sendmail",
     GITHUB_TOKEN: env.GITHUB_TOKEN,
+    // Directus v12 license key. Set the secret per-app via `cf set-env <app>
+    // LICENSE_KEY <key>` (not committed). Activates against this instance's
+    // PUBLIC_URL on first use. Do NOT also set LICENSE_TOKEN — one or the other.
+    LICENSE_KEY: env.LICENSE_KEY,
     MAX_RELATIONAL_DEPTH: 200,
     CORS_ENABLED: true,
     CMS_TOKEN: env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_AUTH_TOKEN,
