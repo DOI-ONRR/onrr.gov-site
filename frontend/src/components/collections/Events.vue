@@ -81,6 +81,19 @@ export default {
   apollo: {
     eventsData: {
       query: EVENTS_AND_TRAINING_QUERY,
+      variables () {
+        // In preview (a token is present on the events-page URL) include draft
+        // events so editors can review unpublished items; published-only on the
+        // live site.
+        return {
+          statuses: this.isPreview ? ['published', 'draft'] : ['published'],
+        }
+      },
+      context () {
+        // Forward the preview token so the API authorizes reading drafts.
+        const token = this.$route.query.token
+        return token ? { headers: { authorization: `Bearer ${token}` } } : {}
+      },
       update: data => data,
     },
   },
@@ -119,6 +132,9 @@ export default {
     },
   },
   computed: {
+    isPreview() {
+      return !!this.$route.query.token
+    },
     events() {
       return this.eventsData?.events ?? []
     },

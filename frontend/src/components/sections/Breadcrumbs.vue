@@ -37,7 +37,9 @@ export default {
     },
     getPageTitleBySlug (slug) {
       const page = this.pages.find(page => page.slug === slug)
-      return page.title
+      // A previewed create-as-draft page has no published row, so its slug
+      // won't be in `pages`; fall back to a readable label from the slug.
+      return page ? page.title : this.prettyBreadcrumb(slug)
     }
   },
   computed: {
