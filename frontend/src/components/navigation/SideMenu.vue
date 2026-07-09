@@ -1,10 +1,10 @@
 <template>
   <div class="side-menu-wrap" ref="sideMenu">
     <v-list class="pa-0" v-if="!isMobile && sideMenuItems.length > 0" role="menu">
-      <v-list-item 
+      <v-list-item
         role="menuitem"
         link
-        exact
+        exact-path
         :to="`${ parentUrl }`">
         {{ `${ parentTitle } Home` }}
       </v-list-item>
@@ -90,16 +90,13 @@ export default {
   },
   methods: {
     getParentSlug () {
-      const fullPath = this.$route.fullPath
-
-      // get first segement of full url path
-      fullPath.indexOf(1)
-      fullPath.toLowerCase()
-      const path = fullPath.split('/')[1]
-      this.parentSlug = path
+      // Use $route.path (not $route.fullPath) so the query string — e.g.
+      // ?version=… on preview URLs — doesn't get folded into the slug.
+      this.parentSlug = this.$route.path.split('/')[1]
     },
     getParentPageTitleBySlug () {
       const page = this.pages.find(page => page.slug === this.parentSlug)
+      if (!page) return
       this.parentTitle = page.title
       this.parentUrl = page.url
     },

@@ -16,7 +16,7 @@
 		"type": "interface",
 		"path": "dist/index.js",
 		"source": "src/index.js",
-		"host": "^11.0.0"
+		"host": "^12.0.0"
 	},
 	"scripts": {
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/dist; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins; mkdir -p ../../../../extensions/directus-extension-onrr-wysiwyg/public/tinymce; cp -R node_modules/tinymce/* ../../../../extensions/directus-extension-onrr-wysiwyg/public/tinymce; cp package.json ../../../../extensions/directus-extension-onrr-wysiwyg; cp dist/index.js ../../../../extensions/directus-extension-onrr-wysiwyg/dist; cp src/tinymce/plugins/link.js ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins; cp src/tinymce/plugins/table.js ../../../../extensions/directus-extension-onrr-wysiwyg/public/plugins",
@@ -24,14 +24,14 @@
 		"link": "directus-extension link"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.1.2",
-		"autoprefixer": "^10.4.27",
-		"postcss": "^8.5.9",
-		"sass": "^1.99.0",
+		"@directus/extensions-sdk": "^17.1.4",
+		"autoprefixer": "^10.5.0",
+		"postcss": "^8.5.15",
+		"sass": "^1.100.0",
 		"tailwindcss": "^3.4.19",
-		"tinymce": "^8.4.0",
-		"vite": "^7.3.2",
-		"vue": "^3.5.32"
+		"tinymce": "^8.6.0",
+		"vite": "^7.3.5",
+		"vue": "^3.5.35"
 	},
 	"dependencies": {
 		"@codemirror/commands": "6.10.3",
@@ -40,15 +40,15 @@
 		"@codemirror/lang-javascript": "^6.2.5",
 		"@codemirror/lang-sql": "^6.10.0",
 		"@codemirror/state": "6.6.0",
-		"@codemirror/view": "6.41.0",
-		"@directus/sdk": "^21.2.2",
-		"@tarekraafat/autocomplete.js": "^10.2.9",
+		"@codemirror/view": "6.43.0",
+		"@directus/sdk": "^21.3.0",
+		"@tarekraafat/autocomplete.js": "^10.2.10",
 		"@tinymce/tinymce-vue": "^6.3.0",
 		"jsonlint-mod": "^1.7.6"
 	},
 	"overrides": {
 		"@codemirror/state": "6.6.0",
-		"@codemirror/view": "6.41.0",
+		"@codemirror/view": "6.43.0",
 		"@codemirror/commands": "6.10.3",
 		"@codemirror/lang-html": "6.4.11"
 	}

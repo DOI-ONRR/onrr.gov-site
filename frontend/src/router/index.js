@@ -146,7 +146,15 @@ const EXTERNAL_REDIRECTS = new Map([
 
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
+const PREVIEW_TOKEN_KEY = 'previewToken';
+
 router.beforeEach(async (to, from, next) => {
+
+  // Remember a preview token (Directus Live Preview) for the session so it can be
+  // re-attached as the editor navigates. Auth only — NOT `version`, which is per-page.
+  if (to.query.token) {
+    sessionStorage.setItem(PREVIEW_TOKEN_KEY, to.query.token);
+  }
 
   if (to.path === '/404') {
     next();
@@ -212,6 +220,14 @@ router.beforeEach(async (to, from, next) => {
 
     if (!pageFound) {
       next('/404');
+      return;
+    }
+
+    // Re-attach the preview token so preview mode survives internal navigation
+    // (links carry only the path, so the token would otherwise be dropped).
+    const previewToken = sessionStorage.getItem(PREVIEW_TOKEN_KEY);
+    if (previewToken && to.query.token !== previewToken) {
+      next({ path: to.path, query: { ...to.query, token: previewToken }, hash: to.hash });
       return;
     }
 

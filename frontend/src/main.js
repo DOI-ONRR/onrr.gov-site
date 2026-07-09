@@ -62,10 +62,12 @@ Vue.config.productionTip = false
 
 Vue.use(VueApollo)
 Vue.use(VueMeta)
-Vue.use(VueGtm, {
-  id: GTM_ID,
-  vueRouter: router
-})
+if (GTM_ID) {
+  Vue.use(VueGtm, {
+    id: GTM_ID,
+    vueRouter: router
+  })
+}
 new Vue({
   vuetify,
   apolloProvider,

@@ -2,8 +2,7 @@ module.exports = function (env) {
   const vcap_services = JSON.parse(env.VCAP_SERVICES)
   const vcap_application = JSON.parse(env.VCAP_APPLICATION)
 
-  const redis = vcap_services['aws-elasticache-redis'][0].credentials
-  const redisUrl = `rediss://:${encodeURIComponent(redis.password)}@${redis.host}:${redis.port}`
+  const redis = vcap_services['aws-elasticache-redis']?.[0]?.credentials
 
   return {
     PORT: process.env.PORT || 8055,
@@ -28,17 +27,26 @@ module.exports = function (env) {
     STORAGE_AWS_BUCKET: vcap_services['s3'][0].credentials.bucket,
     STORAGE_AWS_REGION: vcap_services['s3'][0].credentials.region,
     
-    CACHE_ENABLED: true,
-    CACHE_STORE: 'redis',
-    CACHE_AUTO_PURGE: true,
-    CACHE_TTL: '30m',
-    CACHE_STATUS_HEADER: 'X-Cache-Status',
+    // Redis-backed cache + synchronization only when an elasticache service is
+    // bound. Instances without Redis (e.g. the single-instance upgrade box) run
+    // with caching disabled and the default in-memory synchronization store.
+    ...(redis
+      ? {
+          CACHE_ENABLED: true,
+          CACHE_STORE: 'redis',
+          CACHE_AUTO_PURGE: true,
+          CACHE_TTL: '30m',
+          CACHE_STATUS_HEADER: 'X-Cache-Status',
 
-    REDIS: redisUrl,
+          REDIS: `rediss://:${encodeURIComponent(redis.password)}@${redis.host}:${redis.port}`,
 
-    SYNCHRONIZATION_STORE: 'redis',
-    SYNCHRONIZATION_NAMESPACE: 'directus-sync',
-    
+          SYNCHRONIZATION_STORE: 'redis',
+          SYNCHRONIZATION_NAMESPACE: 'directus-sync',
+        }
+      : {
+          CACHE_ENABLED: false,
+        }),
+
     ADMIN_EMAIL: `${vcap_application.organization_name}@onrr.gov`,
     ADMIN_PASSWORD: vcap_application.organization_id,
 
@@ -47,6 +55,10 @@ module.exports = function (env) {
     EMAIL_FROM: "no-reply@directus.io", 
     EMAIL_TRANSPORT: "sendmail",
     GITHUB_TOKEN: env.GITHUB_TOKEN,
+    // Directus v12 license key. Set the secret per-app via `cf set-env <app>
+    // LICENSE_KEY <key>` (not committed). Activates against this instance's
+    // PUBLIC_URL on first use. Do NOT also set LICENSE_TOKEN — one or the other.
+    LICENSE_KEY: env.LICENSE_KEY,
     MAX_RELATIONAL_DEPTH: 200,
     CORS_ENABLED: true,
     CMS_TOKEN: env.DIRECTUS_EXTENSION_FLOWS_UPSTREAM_AUTH_TOKEN,
