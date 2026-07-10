@@ -10,13 +10,17 @@ const props = defineProps({
   accordion: { type: String, default: null },
 })
 
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const s = statuses.value
+
 const { data } = props.accordion
-  ? await useAsyncQuery(getContactsByPageTabAndAccordion, { page: props.page, tab: props.tab, accordion: props.accordion })
+  ? await useAsyncQuery(getContactsByPageTabAndAccordion, { page: props.page, tab: props.tab, accordion: props.accordion, statuses: s })
   : props.page && props.tab
-    ? await useAsyncQuery(getContactsByPageAndTab, { page: props.page, tab: props.tab })
+    ? await useAsyncQuery(getContactsByPageAndTab, { page: props.page, tab: props.tab, statuses: s })
     : props.page
-      ? await useAsyncQuery(getContactsByPage, { page: props.page })
-      : await useAsyncQuery(getContacts)
+      ? await useAsyncQuery(getContactsByPage, { page: props.page, statuses: s })
+      : await useAsyncQuery(getContacts, { statuses: s })
 const contacts = computed(() => data.value?.contacts ?? [])
 
 const requiresSearch = !props.page && !props.tab

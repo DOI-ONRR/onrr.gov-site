@@ -17,7 +17,9 @@ const queries = {
   geothermal_class_2_3: getGeothermalClass23,
 }
 
-const { data } = await useAsyncQuery(queries[props.collection])
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(queries[props.collection], { statuses: statuses.value })
 
 const rows = computed(() =>
   (data.value?.[props.collection] ?? []).map((r) => ({

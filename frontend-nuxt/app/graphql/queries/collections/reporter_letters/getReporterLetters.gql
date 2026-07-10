@@ -1,7 +1,8 @@
-query GetReporterLetters {
+query GetReporterLetters($statuses: [String]) {
   reporter_letters(
     limit: -1
     sort: ["-date"]
+    filter: { status: { _in: $statuses } }
   ) {
     id
     title

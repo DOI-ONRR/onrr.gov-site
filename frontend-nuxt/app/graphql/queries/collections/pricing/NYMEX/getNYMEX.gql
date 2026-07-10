@@ -1,5 +1,5 @@
-query GetNYMEX {
-  NYMEX(sort: ["date"], limit: -1, filter: { status: { _eq: "published" } }) {
+query GetNYMEX($statuses: [String]) {
+  NYMEX(sort: ["date"], limit: -1, filter: { status: { _in: $statuses } }) {
     id
     date
     average

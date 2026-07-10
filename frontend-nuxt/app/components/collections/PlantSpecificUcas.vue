@@ -1,7 +1,9 @@
 <script setup>
 import getPlantSpecificUCAs from '@/graphql/queries/collections/plant_specific_ucas/getPlantSpecificUCAs.gql'
 
-const { data } = await useAsyncQuery(getPlantSpecificUCAs)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getPlantSpecificUCAs, { statuses: statuses.value })
 
 const rows = computed(() =>
   (data.value?.plant_specific_ucas ?? []).map((r) => ({

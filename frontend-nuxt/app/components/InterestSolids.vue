@@ -1,7 +1,9 @@
 <script setup>
 import getInterestSolids from '@/graphql/queries/collections/late_payment_interest/interest_solids/getInterestSolids.gql'
 
-const { data } = await useAsyncQuery(getInterestSolids)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getInterestSolids, { statuses: statuses.value })
 
 const rows = computed(() => data.value?.Interest_Solids ?? [])
 

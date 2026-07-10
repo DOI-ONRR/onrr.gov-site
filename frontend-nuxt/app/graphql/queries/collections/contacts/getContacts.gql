@@ -1,9 +1,9 @@
-query GetContactsByPage {
+query GetContacts($statuses: [String]) {
   contacts(
     sort: ["header", "letter"]
     limit: -1
-    filter: { 
-      status: { _eq: "published" }
+    filter: {
+      status: { _in: $statuses }
     }
   ) {
     id

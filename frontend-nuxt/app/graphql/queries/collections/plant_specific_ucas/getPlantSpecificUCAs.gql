@@ -1,7 +1,7 @@
-query GetPlantSpecificUCAs {
+query GetPlantSpecificUCAs($statuses: [String]) {
   plant_specific_ucas(
     limit: -1
-    filter: { status: { _eq: "published" } }
+    filter: { status: { _in: $statuses } }
     sort: ["transportation_system_or_gas_plant"]
   ) {
     id

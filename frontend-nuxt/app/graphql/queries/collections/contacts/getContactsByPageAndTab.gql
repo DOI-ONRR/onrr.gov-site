@@ -1,9 +1,9 @@
-query GetContactsByPageAndTab($page: String, $tab: String) {
+query GetContactsByPageAndTab($page: String, $tab: String, $statuses: [String]) {
   contacts(
     sort: ["header", "letter"]
     limit: -1
-    filter: { 
-      status: { _eq: "published" }, 
+    filter: {
+      status: { _in: $statuses },
       page: { _eq: $page },
       tab: { _eq: $tab }
     }

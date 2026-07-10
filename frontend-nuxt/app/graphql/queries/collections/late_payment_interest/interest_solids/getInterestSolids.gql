@@ -1,7 +1,7 @@
-query GetInterestSolids {
+query GetInterestSolids($statuses: [String]) {
     Interest_Solids(
         limit: -1
-        filter: { status: { _eq: "published" } }
+        filter: { status: { _in: $statuses } }
         sort: ["sort"]
     ) {
         id

@@ -1,6 +1,6 @@
-query GetAnnouncements {
+query GetAnnouncements($statuses: [String]) {
   announcements(
-    filter: { status: { _eq: "published" } }
+    filter: { status: { _in: $statuses } }
     sort: ["-published_on"]
   ) {
     id

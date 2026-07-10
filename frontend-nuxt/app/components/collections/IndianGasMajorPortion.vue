@@ -1,7 +1,9 @@
 <script setup>
 import getIndianGasMajorPortion from '@/graphql/queries/collections/pricing/indian_gas_major_portion/getIndianGasMajorPortion.gql'
 
-const { data } = await useAsyncQuery(getIndianGasMajorPortion)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getIndianGasMajorPortion, { statuses: statuses.value })
 
 const rows = computed(() => {
   const items = []

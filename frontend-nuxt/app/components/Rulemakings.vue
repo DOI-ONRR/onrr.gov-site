@@ -1,7 +1,9 @@
 <script setup>
 import getRulemakings from '@/graphql/queries/collections/rulemakings/getRulemakings.gql'
 
-const { data } = await useAsyncQuery(getRulemakings)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getRulemakings, { statuses: statuses.value })
 
 const rows = computed(() =>
   (data.value?.rulemakings ?? []).map((r) => ({

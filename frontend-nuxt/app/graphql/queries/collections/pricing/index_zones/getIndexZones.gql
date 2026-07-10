@@ -1,8 +1,8 @@
-query GetIndexZones {
+query GetIndexZones($statuses: [String]) {
   index_zones(
     sort: ["-date"]
     limit: -1
-    filter: { status: { _eq: "published" } }
+    filter: { status: { _in: $statuses } }
   ) {
     id
     date

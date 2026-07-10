@@ -12,6 +12,10 @@ const { assetUrl, resolveImages } = useCmsContent()
 const route = useRoute()
 const collection = computed(() => props.block.collection)
 
+// Preview-aware status filter: published-only on the live site, published + draft
+// when a preview token is active (the apollo-auth plugin sends the matching token).
+const { statuses } = usePreview()
+
 const viewAllConfig = {
   reporter_letters: { label: 'View All Reporter Letters', url: '/references/reporter-letters' },
   press_releases: { label: 'View All Press Releases', url: '/about/public-affairs' },
@@ -28,15 +32,15 @@ const viewAll = computed(() => {
 })
 
 const { data: pressData } = collection.value === 'press_releases'
-  ? await useAsyncQuery(getPressReleasesByStatus, { status: 'published' })
+  ? await useAsyncQuery(getPressReleasesByStatus, { statuses: statuses.value })
   : { data: ref(null) }
 
 const { data: lettersData } = collection.value === 'reporter_letters'
-  ? await useAsyncQuery(getReporterLetters)
+  ? await useAsyncQuery(getReporterLetters, { statuses: statuses.value })
   : { data: ref(null) }
 
 const { data: announcementsData } = collection.value === 'announcements'
-  ? await useAsyncQuery(getAnnouncements)
+  ? await useAsyncQuery(getAnnouncements, { statuses: statuses.value })
   : { data: ref(null) }
 
 const items = computed(() => {

@@ -1,7 +1,9 @@
 <script setup>
 import getNYMEX from '@/graphql/queries/collections/pricing/NYMEX/getNYMEX.gql'
 
-const { data } = await useAsyncQuery(getNYMEX)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getNYMEX, { statuses: statuses.value })
 
 const rows = computed(() => {
   return (data.value?.NYMEX ?? []).map((record) => {

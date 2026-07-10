@@ -1,7 +1,9 @@
 <script setup>
 import getIBMP from '@/graphql/queries/collections/pricing/ibmp/getIBMP.gql'
 
-const { data } = await useAsyncQuery(getIBMP)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getIBMP, { statuses: statuses.value })
 
 const rows = computed(() => {
   const items = []

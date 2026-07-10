@@ -1,7 +1,7 @@
-query GetRulemakings {
+query GetRulemakings($statuses: [String]) {
   rulemakings(
     limit: -1
-    filter: { status: { _eq: "published" }, rin: { _nnull: true } }
+    filter: { status: { _in: $statuses }, rin: { _nnull: true } }
     sort: ["-rin"]
   ) {
     id

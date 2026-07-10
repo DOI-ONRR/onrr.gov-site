@@ -1,8 +1,8 @@
-query GetIBMP {
+query GetIBMP($statuses: [String]) {
   ibmp(
     sort: ["sort", "-date"]
     limit: -1
-    filter: { status: { _eq: "published" } }
+    filter: { status: { _in: $statuses } }
   ) {
     id
     date

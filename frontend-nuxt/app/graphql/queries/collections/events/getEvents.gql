@@ -1,9 +1,9 @@
 #import "../../../fragments/eventFields.gql"
 
-query GetEvents {
+query GetEvents($statuses: [String]) {
   outreach_events: events(
     filter: {
-      status: { _eq: "published" }
+      status: { _in: $statuses }
       event_end_date: { _gte: "$NOW" }
       is_training: { _eq: false }
     }
@@ -13,7 +13,7 @@ query GetEvents {
   }
   other_events: events(
     filter: {
-      status: { _eq: "published" }
+      status: { _in: $statuses }
       event_end_date: { _gte: "$NOW" }
       is_training: { _eq: true }
     }

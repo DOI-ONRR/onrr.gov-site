@@ -1,7 +1,9 @@
 <script setup>
 import getIndexZones from '@/graphql/queries/collections/pricing/index_zones/getIndexZones.gql'
 
-const { data } = await useAsyncQuery(getIndexZones)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getIndexZones, { statuses: statuses.value })
 
 const rows = computed(() => {
   const items = []

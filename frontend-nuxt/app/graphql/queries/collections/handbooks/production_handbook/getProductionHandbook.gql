@@ -1,7 +1,7 @@
-query GetProductionHandbook {
+query GetProductionHandbook($statuses: [String]) {
   production_handbook(
     limit: -1
-    filter: { status: { _eq: "published" } }
+    filter: { status: { _in: $statuses } }
     sort: ["sort"]
   ) {
     id

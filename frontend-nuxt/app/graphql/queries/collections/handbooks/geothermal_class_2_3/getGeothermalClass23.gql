@@ -1,7 +1,7 @@
-query GetGeothermalClass23 {
+query GetGeothermalClass23($statuses: [String]) {
   geothermal_class_2_3(
     limit: -1
-    filter: { status: { _eq: "published" } }
+    filter: { status: { _in: $statuses } }
     sort: ["sort"]
   ) {
     id

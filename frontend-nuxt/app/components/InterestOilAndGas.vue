@@ -1,7 +1,9 @@
 <script setup>
 import getInterestOilAndGas from '@/graphql/queries/collections/late_payment_interest/interest_oil_and_gas/getInterestOilAndGas.gql'
 
-const { data } = await useAsyncQuery(getInterestOilAndGas)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getInterestOilAndGas, { statuses: statuses.value })
 
 const rows = computed(() => data.value?.Interest_Oil_and_Gas ?? [])
 

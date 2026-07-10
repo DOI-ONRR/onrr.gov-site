@@ -1,7 +1,7 @@
-query GetRevenueHandbook {
+query GetRevenueHandbook($statuses: [String]) {
   revenue_handbook(
     limit: -1
-    filter: { status: { _eq: "published" } }
+    filter: { status: { _in: $statuses } }
     sort: ["sort"]
   ) {
     id

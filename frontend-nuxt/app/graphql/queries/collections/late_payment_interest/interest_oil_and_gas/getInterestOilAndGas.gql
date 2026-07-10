@@ -1,7 +1,7 @@
-query GetInterestOilAndGas {
+query GetInterestOilAndGas($statuses: [String]) {
   Interest_Oil_and_Gas(
     limit: -1
-    filter: { status: { _eq: "published" } }
+    filter: { status: { _in: $statuses } }
     sort: ["sort"]
   ) {
     id

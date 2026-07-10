@@ -2,7 +2,9 @@
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 import getEvents from '@/graphql/queries/collections/events/getEvents.gql'
 
-const { data } = await useAsyncQuery(getEvents)
+// Preview-aware: published-only live, published + draft when previewing.
+const { statuses } = usePreview()
+const { data } = await useAsyncQuery(getEvents, { statuses: statuses.value })
 
 const outreachEvents = computed(() => data.value?.outreach_events ?? [])
 const otherEvents = computed(() => data.value?.other_events ?? [])
