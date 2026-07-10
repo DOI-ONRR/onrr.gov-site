@@ -462,10 +462,10 @@ export const PLANT_SPECIFIC_UCAS_QUERY = gql`
 
 export const EVENTS_AND_TRAINING_QUERY = gql`
   ${eventsFields}
-  query {
+  query ($statuses: [String]) {
     events: events(
         filter: {
-            status: { _eq: "published" }
+            status: { _in: $statuses }
             event_end_date: { _gte: "$NOW" }
             is_training: { _eq: false }
         }
@@ -475,7 +475,7 @@ export const EVENTS_AND_TRAINING_QUERY = gql`
     }
     training: events(
         filter: {
-            status: { _eq: "published" }
+            status: { _in: $statuses }
             event_end_date: { _gte: "$NOW" }
             is_training: { _eq: true }
         }

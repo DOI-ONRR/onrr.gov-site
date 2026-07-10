@@ -8,7 +8,7 @@ cf push upgrade-onrr-cms -f upgrade.manifest.yml --no-start
 
 ```bash
 cf run-task upgrade-onrr-cms \
-  --command "node -p \"require('directus/package.json').version\""
+  --command "node -p \"require('directus/package.json').version\"" \
   --name verify-droplet
 ```
 
@@ -16,7 +16,7 @@ cf run-task upgrade-onrr-cms \
 
 ```bash
 cf run-task upgrade-onrr-cms \
-  --name migrate-directus-11.11.0 \
+  --name migrate-directus-12.0.0 \
   --command "./node_modules/.bin/directus database migrate:latest"
 ```
 

@@ -2,8 +2,8 @@ export function createTinyConfig() {
   const base = {
     base_url: '/wysiwyg-static/tinymce',
     suffix: '.min',
-    skin_url: '/wysiwyg-static/tinymce/skins/ui/default',
-    content_css: ['/wysiwyg-static/tinymce/skins/ui/default/content.min.css'],
+    skin_url: '/wysiwyg-static/tinymce/skins/ui/oxide',
+    content_css: ['/wysiwyg-static/tinymce/skins/content/default/content.min.css'],
     toolbar: 'bold italic underline blocks forecolor | alignleft aligncenter alignright | onrr-table numlist bullist hr removeformat blockquote onrr-link image code',
     plugins: 'lists image code onrr-link onrr-table table',
     external_plugins: {

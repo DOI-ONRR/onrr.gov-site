@@ -36,6 +36,9 @@ describe('Test pages flow', () => {
     });
 
     test('getPagesById is called 2x', async () => {
+        // Arrange
+        getPagesById.mockResolvedValue(pagesById);
+
         // Act
         await sut(pageId);
 

@@ -273,7 +273,6 @@ export const pageFields = gql`
     }
     hero_title
     page_blocks {
-      id
       item {
         __typename
         ... on content_blocks {
