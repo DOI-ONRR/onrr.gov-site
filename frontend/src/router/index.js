@@ -146,7 +146,7 @@ const EXTERNAL_REDIRECTS = new Map([
 
 // If url path doesn't exist lets redirect to the 404 page
 // Vue Router navigation guards - https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
-const PREVIEW_TOKEN_KEY = 'previewToken';
+export const PREVIEW_TOKEN_KEY = 'previewToken';
 
 router.beforeEach(async (to, from, next) => {
 

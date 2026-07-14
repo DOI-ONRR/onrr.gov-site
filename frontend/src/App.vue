@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <PreviewBanner />
     <AppToolbar />
     <v-main>
       <router-view :key="$route.path" />
@@ -14,6 +15,7 @@
 import AppToolbar from '@/components/toolbars/AppToolbar'
 import Footer from '@/components/navigation/Footer'
 import SiteFeedback from './components/sections/SiteFeedback';
+import PreviewBanner from './components/sections/PreviewBanner';
 
 export default {
   name: 'App',
@@ -35,7 +37,8 @@ export default {
   components: {
     AppToolbar,
     Footer,
-    SiteFeedback
+    SiteFeedback,
+    PreviewBanner
   },
 
   data: function() {
