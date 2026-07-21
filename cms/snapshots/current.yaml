@@ -1,5 +1,5 @@
 version: 1
-directus: 11.17.2
+directus: 12.1.1
 vendor: postgres
 collections:
   - collection: Components
@@ -8,6 +8,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: Components
       color: null
@@ -21,6 +22,7 @@ collections:
       singleton: false
       sort: 12
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -30,6 +32,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: Handbooks
       color: null
@@ -43,6 +46,7 @@ collections:
       singleton: false
       sort: 8
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -52,6 +56,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: Interest_Oil_and_Gas
       color: null
@@ -65,6 +70,7 @@ collections:
       singleton: false
       sort: 1
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -76,6 +82,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: Interest_Solids
       color: null
@@ -89,6 +96,7 @@ collections:
       singleton: false
       sort: 2
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -100,6 +108,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: Late_Payment_Interest
       color: null
@@ -113,6 +122,7 @@ collections:
       singleton: false
       sort: 11
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -122,6 +132,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: Links
       color: null
@@ -135,6 +146,7 @@ collections:
       singleton: false
       sort: 13
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -144,6 +156,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: NYMEX
       color: null
@@ -157,6 +170,7 @@ collections:
       singleton: false
       sort: 4
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -168,6 +182,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: Pricing
       color: null
@@ -181,6 +196,7 @@ collections:
       singleton: false
       sort: 7
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -190,6 +206,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: announcements
       color: null
@@ -203,6 +220,7 @@ collections:
       singleton: false
       sort: 4
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -214,6 +232,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: card_blocks
       color: null
@@ -227,6 +246,7 @@ collections:
       singleton: false
       sort: 2
       sort_field: sort
+      status: active
       translations:
         - language: en-US
           plural: Card Blocks
@@ -242,6 +262,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: card_blocks_card_content_blocks
       color: null
@@ -255,6 +276,7 @@ collections:
       singleton: false
       sort: 24
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -266,6 +288,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: collection_blocks
       color: null
@@ -279,6 +302,7 @@ collections:
       singleton: false
       sort: 5
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -286,10 +310,11 @@ collections:
       name: collection_blocks
   - collection: commodity
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: commodity
       color: null
@@ -303,6 +328,7 @@ collections:
       singleton: false
       sort: 7
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -314,6 +340,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: contacts
       color: null
@@ -327,41 +354,19 @@ collections:
       singleton: false
       sort: 2
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
     schema:
       name: contacts
-  - collection: contacts_person
-    meta:
-      accountability: null
-      archive_app_filter: true
-      archive_field: null
-      archive_value: null
-      collapse: open
-      collection: contacts_person
-      color: null
-      display_template: null
-      group: null
-      hidden: true
-      icon: person
-      item_duplication_fields: null
-      note: null
-      preview_url: null
-      singleton: false
-      sort: null
-      sort_field: null
-      translations: null
-      unarchive_value: null
-      versioning: false
-    schema:
-      name: contacts_person
   - collection: content_blocks
     meta:
       accountability: all
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: content_blocks
       color: null
@@ -375,6 +380,7 @@ collections:
       singleton: false
       sort: 1
       sort_field: sort
+      status: active
       translations:
         - language: en-US
           translation: Content Block
@@ -384,10 +390,11 @@ collections:
       name: content_blocks
   - collection: county_lookup
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: county_lookup
       color: null
@@ -401,6 +408,7 @@ collections:
       singleton: false
       sort: 8
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -408,10 +416,11 @@ collections:
       name: county_lookup
   - collection: disbursement
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: disbursement
       color: null
@@ -425,6 +434,7 @@ collections:
       singleton: false
       sort: 3
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -436,6 +446,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: events
       color: null
@@ -449,9 +460,10 @@ collections:
       singleton: false
       sort: 3
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
-      versioning: false
+      versioning: true
     schema:
       name: events
   - collection: expansion_panel_block_label
@@ -460,6 +472,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: expansion_panel_block_label
       color: null
@@ -473,6 +486,7 @@ collections:
       singleton: false
       sort: 25
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -484,6 +498,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: expansion_panels
       color: null
@@ -497,6 +512,7 @@ collections:
       singleton: false
       sort: 15
       sort_field: sort
+      status: active
       translations:
         - language: en-US
           translation: Expansion Panel
@@ -510,6 +526,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: expansion_panels_expansion_panel_blocks
       color: null
@@ -523,6 +540,7 @@ collections:
       singleton: false
       sort: 20
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -530,10 +548,11 @@ collections:
       name: expansion_panels_expansion_panel_blocks
   - collection: federal_revenue_by_company
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: federal_revenue_by_company
       color: null
@@ -547,6 +566,7 @@ collections:
       singleton: false
       sort: 1
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -554,10 +574,11 @@ collections:
       name: federal_revenue_by_company
   - collection: federal_sales
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: federal_sales
       color: null
@@ -571,6 +592,7 @@ collections:
       singleton: false
       sort: 2
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -582,6 +604,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: formula_blocks
       color: null
@@ -595,6 +618,7 @@ collections:
       singleton: false
       sort: 4
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -602,10 +626,11 @@ collections:
       name: formula_blocks
   - collection: fund
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: fund
       color: null
@@ -619,6 +644,7 @@ collections:
       singleton: false
       sort: 9
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -630,6 +656,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: geothermal_class_1
       color: null
@@ -643,6 +670,7 @@ collections:
       singleton: false
       sort: 4
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -654,6 +682,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: geothermal_class_2_3
       color: null
@@ -667,6 +696,7 @@ collections:
       singleton: false
       sort: 5
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -678,6 +708,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: ibmp
       color: null
@@ -691,6 +722,7 @@ collections:
       singleton: false
       sort: 2
       sort_field: sort
+      status: active
       translations:
         - language: en-US
           translation: IBMP
@@ -704,6 +736,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: index_zones
       color: null
@@ -717,6 +750,7 @@ collections:
       singleton: false
       sort: 1
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -728,6 +762,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: indian_gas_major_portion
       color: null
@@ -741,6 +776,7 @@ collections:
       singleton: false
       sort: 3
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -748,10 +784,11 @@ collections:
       name: indian_gas_major_portion
   - collection: land_stats
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: land_stats
       color: null
@@ -765,6 +802,7 @@ collections:
       singleton: false
       sort: 4
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -776,6 +814,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: layout_column_blocks
       color: null
@@ -789,6 +828,7 @@ collections:
       singleton: false
       sort: 16
       sort_field: sort
+      status: active
       translations:
         - language: en-US
           translation: Layout Column Block
@@ -798,10 +838,11 @@ collections:
       name: layout_column_blocks
   - collection: location
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: location
       color: null
@@ -815,6 +856,7 @@ collections:
       singleton: false
       sort: 10
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -826,6 +868,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: menus
       color: null
@@ -839,6 +882,7 @@ collections:
       singleton: false
       sort: 14
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -850,6 +894,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: menus_pages
       color: null
@@ -863,6 +908,7 @@ collections:
       singleton: false
       sort: 18
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -874,6 +920,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: pages
       color: null
@@ -887,6 +934,7 @@ collections:
       singleton: false
       sort: 1
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: true
@@ -898,6 +946,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: pages_back
       color: null
@@ -911,6 +960,7 @@ collections:
       singleton: false
       sort: 21
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -922,6 +972,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: pages_files
       color: null
@@ -935,6 +986,7 @@ collections:
       singleton: false
       sort: 26
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -946,6 +998,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: pages_page_blocks
       color: null
@@ -959,6 +1012,7 @@ collections:
       singleton: false
       sort: 17
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -970,6 +1024,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: pages_sidebar_blocks
       color: null
@@ -983,6 +1038,7 @@ collections:
       singleton: false
       sort: 28
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -994,6 +1050,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: pages_test
       color: null
@@ -1007,6 +1064,7 @@ collections:
       singleton: false
       sort: 19
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -1016,6 +1074,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: parent_url
       color: null
@@ -1029,6 +1088,7 @@ collections:
       singleton: false
       sort: 27
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -1036,10 +1096,11 @@ collections:
       name: parent_url
   - collection: period
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: period
       color: null
@@ -1053,6 +1114,7 @@ collections:
       singleton: false
       sort: 11
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -1064,6 +1126,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: plant_specific_ucas
       color: null
@@ -1077,6 +1140,7 @@ collections:
       singleton: false
       sort: 10
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -1088,6 +1152,7 @@ collections:
       archive_app_filter: false
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: press_releases
       color: null
@@ -1101,6 +1166,7 @@ collections:
       singleton: false
       sort: 5
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -1108,10 +1174,11 @@ collections:
       name: press_releases
   - collection: production
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: production
       color: null
@@ -1125,6 +1192,7 @@ collections:
       singleton: false
       sort: 5
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -1136,6 +1204,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: production_handbook
       color: null
@@ -1149,6 +1218,7 @@ collections:
       singleton: false
       sort: 2
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -1160,6 +1230,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: redirects
       color: null
@@ -1173,6 +1244,7 @@ collections:
       singleton: false
       sort: 2
       sort_field: null
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -1184,6 +1256,7 @@ collections:
       archive_app_filter: false
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: reporter_letters
       color: null
@@ -1197,6 +1270,7 @@ collections:
       singleton: false
       sort: 6
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -1204,10 +1278,11 @@ collections:
       name: reporter_letters
   - collection: revenue
     meta:
-      accountability: null
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: revenue
       color: null
@@ -1221,6 +1296,7 @@ collections:
       singleton: false
       sort: 6
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -1232,6 +1308,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: revenue_data
       color: null
@@ -1245,15 +1322,17 @@ collections:
       singleton: false
       sort: 29
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
   - collection: revenue_data_update
     meta:
-      accountability: activity
+      accountability: all
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: revenue_data_update
       color: null
@@ -1267,6 +1346,7 @@ collections:
       singleton: false
       sort: null
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -1278,6 +1358,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: revenue_handbook
       color: null
@@ -1291,6 +1372,7 @@ collections:
       singleton: false
       sort: 1
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -1302,6 +1384,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: rulemakings
       color: null
@@ -1315,6 +1398,7 @@ collections:
       singleton: false
       sort: 9
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -1326,6 +1410,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: solid_minerals_handbook
       color: null
@@ -1339,6 +1424,7 @@ collections:
       singleton: false
       sort: 3
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: draft
       versioning: false
@@ -1350,6 +1436,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: tab_block_label
       color: '#F7971C'
@@ -1363,6 +1450,7 @@ collections:
       singleton: false
       sort: 22
       sort_field: sort
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -1374,6 +1462,7 @@ collections:
       archive_app_filter: true
       archive_field: status
       archive_value: archived
+      autosave_revision_interval: null
       collapse: open
       collection: tab_blocks
       color: null
@@ -1387,6 +1476,7 @@ collections:
       singleton: false
       sort: 3
       sort_field: sort
+      status: active
       translations:
         - language: en-US
           translation: Tab Block
@@ -1400,6 +1490,7 @@ collections:
       archive_app_filter: true
       archive_field: null
       archive_value: null
+      autosave_revision_interval: null
       collapse: open
       collection: tab_blocks_tab_blocks
       color: null
@@ -1413,6 +1504,7 @@ collections:
       singleton: false
       sort: 23
       sort_field: null
+      status: active
       translations: null
       unarchive_value: null
       versioning: false
@@ -5821,7 +5913,7 @@ fields:
       field: page
       group: null
       hidden: false
-      interface: contacts-page-select
+      interface: input
       note: null
       options: null
       readonly: false
@@ -5861,7 +5953,7 @@ fields:
       field: tab
       group: null
       hidden: false
-      interface: contacts-tab-select
+      interface: input
       note: null
       options: null
       readonly: false
@@ -5901,7 +5993,7 @@ fields:
       field: accordion
       group: null
       hidden: false
-      interface: contacts-accordion-select
+      interface: input
       note: null
       options: null
       readonly: false
@@ -7171,438 +7263,6 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
-  - collection: contacts
-    field: people
-    type: alias
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: people
-      group: null
-      hidden: false
-      interface: list-o2m
-      note: null
-      options:
-        template: '{{name}}, {{email}}, {{role}}'
-      readonly: false
-      required: false
-      searchable: true
-      sort: 1
-      special:
-        - o2m
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-  - collection: contacts_person
-    field: id
-    type: uuid
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: null
-      display_options: null
-      field: id
-      group: null
-      hidden: true
-      interface: input
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 1
-      special:
-        - uuid
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: id
-      table: contacts_person
-      data_type: uuid
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: false
-      is_unique: true
-      is_indexed: false
-      is_primary_key: true
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts_person
-    field: user_created
-    type: uuid
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: user
-      display_options: null
-      field: user_created
-      group: null
-      hidden: true
-      interface: select-dropdown-m2o
-      note: null
-      options:
-        template: '{{avatar}} {{first_name}} {{last_name}}'
-      readonly: true
-      required: false
-      searchable: true
-      sort: 2
-      special:
-        - user-created
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: user_created
-      table: contacts_person
-      data_type: uuid
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: directus_users
-      foreign_key_column: id
-  - collection: contacts_person
-    field: date_created
-    type: timestamp
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: datetime
-      display_options:
-        relative: true
-      field: date_created
-      group: null
-      hidden: true
-      interface: datetime
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 3
-      special:
-        - date-created
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: date_created
-      table: contacts_person
-      data_type: timestamp with time zone
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts_person
-    field: name
-    type: string
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: null
-      display_options: null
-      field: name
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 4
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: name
-      table: contacts_person
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts_person
-    field: role
-    type: string
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: null
-      display_options: null
-      field: role
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 5
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: role
-      table: contacts_person
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts_person
-    field: email
-    type: string
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: null
-      display_options: null
-      field: email
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 6
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: email
-      table: contacts_person
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts_person
-    field: phone
-    type: string
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: null
-      display_options: null
-      field: phone
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 7
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: phone
-      table: contacts_person
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts_person
-    field: fax
-    type: string
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: null
-      display_options: null
-      field: fax
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 8
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: fax
-      table: contacts_person
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts_person
-    field: is_primary
-    type: boolean
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: null
-      display_options: null
-      field: is_primary
-      group: null
-      hidden: false
-      interface: boolean
-      note: null
-      options:
-        label: Is Primary
-      readonly: false
-      required: false
-      searchable: true
-      sort: 9
-      special:
-        - cast-boolean
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: is_primary
-      table: contacts_person
-      data_type: boolean
-      default_value: false
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts_person
-    field: contacts_id
-    type: integer
-    meta:
-      collection: contacts_person
-      conditions: null
-      display: null
-      display_options: null
-      field: contacts_id
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 10
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: contacts_id
-      table: contacts_person
-      data_type: integer
-      default_value: null
-      max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: contacts
-      foreign_key_column: id
   - collection: content_blocks
     field: id
     type: uuid
@@ -9666,7 +9326,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -9747,7 +9407,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -9787,7 +9447,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -9827,7 +9487,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -9867,7 +9527,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -9891,14 +9551,14 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
-    field: event_start_date
-    type: date
+    field: event_start_date_time
+    type: timestamp
     meta:
       collection: events
       conditions: null
       display: datetime
       display_options: {}
-      field: event_start_date
+      field: event_start_date_time
       group: null
       hidden: false
       interface: datetime
@@ -9915,9 +9575,9 @@ fields:
       validation_message: null
       width: half
     schema:
-      name: event_start_date
+      name: event_start_date_time
       table: events
-      data_type: date
+      data_type: timestamp with time zone
       default_value: null
       max_length: null
       numeric_precision: null
@@ -9932,14 +9592,14 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
-    field: event_end_date
-    type: date
+    field: event_end_date_time
+    type: timestamp
     meta:
       collection: events
       conditions: null
       display: datetime
       display_options: {}
-      field: event_end_date
+      field: event_end_date_time
       group: null
       hidden: false
       interface: datetime
@@ -9956,9 +9616,9 @@ fields:
       validation_message: null
       width: half
     schema:
-      name: event_end_date
+      name: event_end_date_time
       table: events
-      data_type: date
+      data_type: timestamp with time zone
       default_value: null
       max_length: null
       numeric_precision: null
@@ -9989,7 +9649,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -10001,128 +9661,6 @@ fields:
       data_type: text
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: events
-    field: email
-    type: string
-    meta:
-      collection: events
-      conditions: null
-      display: null
-      display_options: null
-      field: email
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 18
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: email
-      table: events
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: events
-    field: is_training
-    type: boolean
-    meta:
-      collection: events
-      conditions: null
-      display: null
-      display_options: null
-      field: is_training
-      group: null
-      hidden: false
-      interface: boolean
-      note: null
-      options:
-        label: Training
-      readonly: false
-      required: false
-      searchable: true
-      sort: 19
-      special:
-        - cast-boolean
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: is_training
-      table: events
-      data_type: boolean
-      default_value: false
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: events
-    field: time
-    type: string
-    meta:
-      collection: events
-      conditions: null
-      display: null
-      display_options: null
-      field: time
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 11
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: time
-      table: events
-      data_type: character varying
-      default_value: null
-      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -13111,7 +12649,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: true
+      is_indexed: false
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -16735,7 +16273,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: true
+      is_indexed: false
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -18161,6 +17699,24 @@ fields:
             value: contact
           - text: Page Not Found
             value: page_not_found
+          - text: Homepage
+            value: home
+          - text: Journey landing
+            value: journey-landing
+          - text: Audience hub
+            value: audience-hub
+          - text: Learn / topic
+            value: learn-topic
+          - text: Dataset
+            value: dataset
+          - text: Explore dashboard
+            value: explore-dashboard
+          - text: Reference
+            value: reference
+          - text: Contact topic
+            value: contact-topic
+          - text: Utility
+            value: utility
       readonly: false
       required: false
       searchable: true
@@ -19398,7 +18954,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: true
+      is_indexed: false
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -23788,34 +23344,12 @@ fields:
     meta:
       collection: revenue_data_update
       conditions:
-        - name: Revenue period choice
-          options:
-            choices:
-              - text: Monthly
-                value: monthly
-              - text: True Up
-                value: true-up
-          readonly: false
-          required: true
+        - name: Disabled for disbursement
+          readonly: true
           rule:
             _and:
               - dataset:
-                  _eq: revenue
-        - name: Production period choice
-          options:
-            choices:
-              - text: Monthly
-                value: monthly
-              - text: Calendar Year
-                value: calendar-year
-              - text: Fiscal Year
-                value: fiscal-year
-          readonly: false
-          required: true
-          rule:
-            _and:
-              - dataset:
-                  _eq: production
+                  _eq: disbursement
       display: null
       display_options: null
       field: period
@@ -23824,8 +23358,14 @@ fields:
       interface: select-dropdown
       note: null
       options:
-        choices: null
-      readonly: true
+        choices:
+          - text: Calendar Year
+            value: calendar-year
+          - text: Fiscal Year
+            value: fiscal-year
+          - text: Monthly
+            value: monthly
+      readonly: false
       required: false
       searchable: true
       sort: 6
@@ -23865,7 +23405,7 @@ fields:
       interface: file
       note: null
       options:
-        folder: e548af97-261c-4517-ab37-e5b12f95a8b3
+        folder: 6157e772-1927-4a4d-8ea0-d14b26714e0c
       readonly: false
       required: false
       searchable: true
@@ -23893,6 +23433,46 @@ fields:
       has_auto_increment: false
       foreign_key_table: directus_files
       foreign_key_column: id
+  - collection: revenue_data_update
+    field: status
+    type: string
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: status
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: status
+      table: revenue_data_update
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: revenue_data_update
     field: result
     type: json
@@ -23923,46 +23503,6 @@ fields:
       data_type: json
       default_value: null
       max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: revenue_data_update
-    field: status
-    type: string
-    meta:
-      collection: revenue_data_update
-      conditions: null
-      display: null
-      display_options: null
-      field: status
-      group: null
-      hidden: true
-      interface: input
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 8
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: status
-      table: revenue_data_update
-      data_type: character varying
-      default_value: running
-      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -26729,12 +26269,48 @@ systemFields:
     field: timestamp
     schema:
       is_indexed: true
+  - collection: directus_oauth_clients
+    field: date_created
+    schema:
+      is_indexed: true
+  - collection: directus_oauth_codes
+    field: expires_at
+    schema:
+      is_indexed: true
+  - collection: directus_oauth_codes
+    field: used_at
+    schema:
+      is_indexed: true
+  - collection: directus_oauth_consents
+    field: client
+    schema:
+      is_indexed: true
+  - collection: directus_oauth_tokens
+    field: code_hash
+    schema:
+      is_indexed: true
+  - collection: directus_oauth_tokens
+    field: expires_at
+    schema:
+      is_indexed: true
+  - collection: directus_oauth_tokens
+    field: previous_session
+    schema:
+      is_indexed: true
+  - collection: directus_oauth_tokens
+    field: session
+    schema:
+      is_indexed: true
   - collection: directus_revisions
     field: activity
     schema:
       is_indexed: true
   - collection: directus_revisions
     field: parent
+    schema:
+      is_indexed: true
+  - collection: directus_sessions
+    field: oauth_client
     schema:
       is_indexed: true
 relations:
@@ -27131,48 +26707,6 @@ relations:
       constraint_name: contacts_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
-  - collection: contacts_person
-    field: user_created
-    related_collection: directus_users
-    meta:
-      junction_field: null
-      many_collection: contacts_person
-      many_field: user_created
-      one_allowed_collections: null
-      one_collection: directus_users
-      one_collection_field: null
-      one_deselect_action: nullify
-      one_field: null
-      sort_field: null
-    schema:
-      table: contacts_person
-      column: user_created
-      foreign_key_table: directus_users
-      foreign_key_column: id
-      constraint_name: contacts_person_user_created_foreign
-      on_update: NO ACTION
-      on_delete: NO ACTION
-  - collection: contacts_person
-    field: contacts_id
-    related_collection: contacts
-    meta:
-      junction_field: null
-      many_collection: contacts_person
-      many_field: contacts_id
-      one_allowed_collections: null
-      one_collection: contacts
-      one_collection_field: null
-      one_deselect_action: nullify
-      one_field: people
-      sort_field: null
-    schema:
-      table: contacts_person
-      column: contacts_id
-      foreign_key_table: contacts
-      foreign_key_column: id
-      constraint_name: contacts_person_contacts_id_foreign
-      on_update: NO ACTION
-      on_delete: SET NULL
   - collection: content_blocks
     field: user_created
     related_collection: directus_users
