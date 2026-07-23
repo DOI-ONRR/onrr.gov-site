@@ -2,32 +2,30 @@ version: 1
 directus: 12.1.1
 vendor: postgres
 collections:
-  - collection: glossary_terms
+  - collection: Charts
     meta:
       accountability: all
       archive_app_filter: true
       archive_field: null
-      archive_value: archived
+      archive_value: null
       autosave_revision_interval: null
       collapse: open
-      collection: glossary_terms
+      collection: Charts
       color: null
       display_template: null
       group: null
       hidden: false
-      icon: book_2
+      icon: bar_chart
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 17
       sort_field: null
       status: active
       translations: null
-      unarchive_value: draft
+      unarchive_value: null
       versioning: false
-    schema:
-      name: glossary_terms
   - collection: Components
     meta:
       accountability: all
@@ -300,7 +298,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 24
+      sort: 27
       sort_field: null
       status: active
       translations: null
@@ -308,6 +306,58 @@ collections:
       versioning: false
     schema:
       name: card_blocks_card_content_blocks
+  - collection: chart_cards
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: chart_cards
+      color: null
+      display_template: null
+      group: Charts
+      hidden: false
+      icon: space_dashboard
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 1
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: chart_cards
+  - collection: chart_series
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: chart_series
+      color: null
+      display_template: null
+      group: Charts
+      hidden: false
+      icon: data_thresholding
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 2
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: chart_series
   - collection: collection_blocks
     meta:
       accountability: all
@@ -336,7 +386,7 @@ collections:
       name: collection_blocks
   - collection: commodity
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -386,6 +436,32 @@ collections:
       versioning: false
     schema:
       name: contacts
+  - collection: contacts_person
+    meta:
+      accountability: null
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: contacts_person
+      color: null
+      display_template: null
+      group: null
+      hidden: true
+      icon: person
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 32
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: contacts_person
   - collection: content_blocks
     meta:
       accountability: all
@@ -416,7 +492,7 @@ collections:
       name: content_blocks
   - collection: county_lookup
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -442,7 +518,7 @@ collections:
       name: county_lookup
   - collection: disbursement
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -489,7 +565,7 @@ collections:
       status: active
       translations: null
       unarchive_value: draft
-      versioning: true
+      versioning: false
     schema:
       name: events
   - collection: expansion_panel_block_label
@@ -510,7 +586,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 25
+      sort: 28
       sort_field: sort
       status: active
       translations: null
@@ -536,7 +612,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 15
+      sort: 18
       sort_field: sort
       status: active
       translations:
@@ -564,7 +640,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 20
+      sort: 23
       sort_field: null
       status: active
       translations: null
@@ -574,7 +650,7 @@ collections:
       name: expansion_panels_expansion_panel_blocks
   - collection: federal_revenue_by_company
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -600,7 +676,7 @@ collections:
       name: federal_revenue_by_company
   - collection: federal_sales
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -652,7 +728,7 @@ collections:
       name: formula_blocks
   - collection: fund
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -728,6 +804,32 @@ collections:
       versioning: false
     schema:
       name: geothermal_class_2_3
+  - collection: glossary_terms
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: archived
+      autosave_revision_interval: null
+      collapse: open
+      collection: glossary_terms
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: book_2
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 16
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: draft
+      versioning: false
+    schema:
+      name: glossary_terms
   - collection: ibmp
     meta:
       accountability: all
@@ -810,7 +912,7 @@ collections:
       name: indian_gas_major_portion
   - collection: land_stats
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -852,7 +954,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 16
+      sort: 19
       sort_field: sort
       status: active
       translations:
@@ -864,7 +966,7 @@ collections:
       name: layout_column_blocks
   - collection: location
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -932,7 +1034,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 18
+      sort: 21
       sort_field: null
       status: active
       translations: null
@@ -984,7 +1086,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 21
+      sort: 24
       sort_field: null
       status: active
       translations: null
@@ -1010,7 +1112,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 26
+      sort: 29
       sort_field: null
       status: active
       translations: null
@@ -1036,7 +1138,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 17
+      sort: 20
       sort_field: null
       status: active
       translations: null
@@ -1062,7 +1164,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 28
+      sort: 31
       sort_field: null
       status: active
       translations: null
@@ -1088,7 +1190,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 19
+      sort: 22
       sort_field: null
       status: active
       translations: null
@@ -1112,7 +1214,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 27
+      sort: 30
       sort_field: null
       status: active
       translations: null
@@ -1122,7 +1224,7 @@ collections:
       name: parent_url
   - collection: period
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -1200,7 +1302,7 @@ collections:
       name: press_releases
   - collection: production
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -1304,7 +1406,7 @@ collections:
       name: reporter_letters
   - collection: revenue
     meta:
-      accountability: all
+      accountability: null
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -1346,7 +1448,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 29
+      sort: 15
       sort_field: null
       status: active
       translations: null
@@ -1354,7 +1456,7 @@ collections:
       versioning: false
   - collection: revenue_data_update
     meta:
-      accountability: all
+      accountability: activity
       archive_app_filter: true
       archive_field: null
       archive_value: null
@@ -1363,14 +1465,14 @@ collections:
       collection: revenue_data_update
       color: null
       display_template: null
-      group: null
+      group: revenue_data
       hidden: false
       icon: insights
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 12
       sort_field: null
       status: active
       translations: null
@@ -1474,7 +1576,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 22
+      sort: 25
       sort_field: sort
       status: active
       translations: null
@@ -1528,7 +1630,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 23
+      sort: 26
       sort_field: null
       status: active
       translations: null
@@ -1537,295 +1639,6 @@ collections:
     schema:
       name: tab_blocks_tab_blocks
 fields:
-  - collection: glossary_terms
-    field: id
-    type: uuid
-    meta:
-      collection: glossary_terms
-      conditions: null
-      display: null
-      display_options: null
-      field: id
-      group: null
-      hidden: true
-      interface: input
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 1
-      special:
-        - uuid
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: id
-      table: glossary_terms
-      data_type: uuid
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: false
-      is_unique: true
-      is_indexed: false
-      is_primary_key: true
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: glossary_terms
-    field: user_created
-    type: uuid
-    meta:
-      collection: glossary_terms
-      conditions: null
-      display: user
-      display_options: null
-      field: user_created
-      group: null
-      hidden: true
-      interface: select-dropdown-m2o
-      note: null
-      options:
-        template: '{{avatar}} {{first_name}} {{last_name}}'
-      readonly: true
-      required: false
-      searchable: true
-      sort: 4
-      special:
-        - user-created
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: user_created
-      table: glossary_terms
-      data_type: uuid
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: directus_users
-      foreign_key_column: id
-  - collection: glossary_terms
-    field: date_created
-    type: timestamp
-    meta:
-      collection: glossary_terms
-      conditions: null
-      display: datetime
-      display_options:
-        relative: true
-      field: date_created
-      group: null
-      hidden: true
-      interface: datetime
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 5
-      special:
-        - date-created
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: date_created
-      table: glossary_terms
-      data_type: timestamp with time zone
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: glossary_terms
-    field: user_updated
-    type: uuid
-    meta:
-      collection: glossary_terms
-      conditions: null
-      display: user
-      display_options: null
-      field: user_updated
-      group: null
-      hidden: true
-      interface: select-dropdown-m2o
-      note: null
-      options:
-        template: '{{avatar}} {{first_name}} {{last_name}}'
-      readonly: true
-      required: false
-      searchable: true
-      sort: 6
-      special:
-        - user-updated
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: user_updated
-      table: glossary_terms
-      data_type: uuid
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: directus_users
-      foreign_key_column: id
-  - collection: glossary_terms
-    field: date_updated
-    type: timestamp
-    meta:
-      collection: glossary_terms
-      conditions: null
-      display: datetime
-      display_options:
-        relative: true
-      field: date_updated
-      group: null
-      hidden: true
-      interface: datetime
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 7
-      special:
-        - date-updated
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: date_updated
-      table: glossary_terms
-      data_type: timestamp with time zone
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: glossary_terms
-    field: term
-    type: string
-    meta:
-      collection: glossary_terms
-      conditions: null
-      display: null
-      display_options: null
-      field: term
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: true
-      searchable: true
-      sort: 8
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: term
-      table: glossary_terms
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: false
-      is_unique: true
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: glossary_terms
-    field: definition
-    type: text
-    meta:
-      collection: glossary_terms
-      conditions: null
-      display: null
-      display_options: null
-      field: definition
-      group: null
-      hidden: false
-      interface: input-multiline
-      note: null
-      options: null
-      readonly: false
-      required: true
-      searchable: true
-      sort: 9
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: definition
-      table: glossary_terms
-      data_type: text
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: false
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
   - collection: Interest_Oil_and_Gas
     field: id
     type: integer
@@ -4618,6 +4431,2974 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: chart_cards
+    field: id
+    type: uuid
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: chart_cards
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: user_created
+    type: uuid
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: chart_cards
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: chart_cards
+    field: date_created
+    type: timestamp
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: chart_cards
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: user_updated
+    type: uuid
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: chart_cards
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: chart_cards
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: chart_cards
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: header_identity_housekeeping
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: header_identity_housekeeping
+      group: null
+      hidden: false
+      interface: header
+      note: null
+      options:
+        icon: holiday_village
+        title: Identity & housekeeping
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_cards
+    field: title
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: title
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: key
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: key
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation:
+        _and:
+          - key:
+              _regex: ^[a-z0-9-]+$
+      validation_message: null
+      width: half
+    schema:
+      name: key
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: source
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: source
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: source
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: divider_chart_configuration
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_chart_configuration
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: insert_chart
+        title: Chart configuration
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_cards
+    field: chart_type
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: chart_type
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Line
+            value: line
+          - text: Spline
+            value: spline
+          - text: Area
+            value: area
+          - text: Areaspline
+            value: areaspline
+          - text: Column
+            value: column
+          - text: Bar
+            value: bar
+          - text: Pie
+            value: pie
+          - text: Scatter
+            value: scatter
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: chart_type
+      table: chart_cards
+      data_type: character varying
+      default_value: bar
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: render_mode
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: render_mode
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Chart
+            value: chart
+          - text: Table
+            value: table
+          - text: Both
+            value: both
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: render_mode
+      table: chart_cards
+      data_type: character varying
+      default_value: chart
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: stacking
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: stacking
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: None
+            value: none
+          - text: Normal
+            value: normal
+          - text: Percent
+            value: percent
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: stacking
+      table: chart_cards
+      data_type: character varying
+      default_value: none
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: takeaway
+    type: text
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: takeaway
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: takeaway
+      table: chart_cards
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: divider_data_source
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_data_source
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: data_object
+        title: Data source
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_cards
+    field: data_source_type
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: data_source_type
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Collection
+            value: collection
+          - text: Static
+            value: static
+          - text: Endpoint
+            value: endpoint
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: data_source_type
+      table: chart_cards
+      data_type: character varying
+      default_value: collection
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: source_collection
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled and required when data source is collection
+          readonly: false
+          required: true
+          rule:
+            _and:
+              - data_source_type:
+                  _eq: collection
+      display: null
+      display_options: null
+      field: source_collection
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: production
+            value: production
+          - text: disbursement
+            value: disbursement
+          - text: revenue
+            value: revenue
+          - text: federal_revenue_by_company
+            value: federal_revenue_by_company
+          - text: federal_sales
+            value: federal_sales
+      readonly: true
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: source_collection
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: aggregate_function
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when data source is collection
+          readonly: false
+          rule:
+            _and:
+              - data_source_type:
+                  _eq: collection
+      display: null
+      display_options: null
+      field: aggregate_function
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: count
+            value: count
+          - text: countDistinct
+            value: countDistinct
+          - text: sum
+            value: sum
+          - text: avg
+            value: avg
+          - text: min
+            value: min
+          - text: max
+            value: max
+      readonly: true
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: aggregate_function
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: agregate_field
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: >-
+            Enabled when data source is collection and aggregate function is not
+            count
+          readonly: false
+          rule:
+            _and:
+              - _and:
+                  - data_source_type:
+                      _eq: collection
+                  - aggregate_function:
+                      _neq: count
+      display: null
+      display_options: null
+      field: agregate_field
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: agregate_field
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: group_by_field
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when data source is collection
+          readonly: false
+          rule:
+            _and:
+              - data_source_type:
+                  _eq: collection
+      display: null
+      display_options: null
+      field: group_by_field
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: group_by_field
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: filter
+    type: json
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when data source is collection
+          readonly: false
+          rule:
+            _and:
+              - data_source_type:
+                  _eq: collection
+      display: null
+      display_options: null
+      field: filter
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 21
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: filter
+      table: chart_cards
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: endpoint_url
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when data source is endpoint
+          readonly: false
+          rule:
+            _and:
+              - data_source_type:
+                  _eq: endpoint
+      display: null
+      display_options: null
+      field: endpoint_url
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 22
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: endpoint_url
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: static_data
+    type: json
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when data source is static
+          readonly: false
+          rule:
+            _and:
+              - data_source_type:
+                  _eq: static
+      display: null
+      display_options: null
+      field: static_data
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 23
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: static_data
+      table: chart_cards
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: divider_axes
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_axes
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: token
+        title: Axes
+      readonly: false
+      required: false
+      searchable: true
+      sort: 24
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_cards
+    field: x_axis_label
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render_mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: x_axis_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: x_axis_label
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: y_axis_label
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render_mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: y_axis_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 27
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: y_axis_label
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: x_axis_type
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: x_axis_type
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: category
+            value: category
+          - text: datetime
+            value: datetime
+          - text: linear
+            value: linear
+          - text: logarithmic
+            value: logarithmic
+      readonly: true
+      required: false
+      searchable: true
+      sort: 26
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: x_axis_type
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: y_axis_min
+    type: float
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: y_axis_min
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 28
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: y_axis_min
+      table: chart_cards
+      data_type: real
+      default_value: null
+      max_length: null
+      numeric_precision: 24
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: y_axis_max
+    type: float
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: y_axis_max
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 29
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: y_axis_max
+      table: chart_cards
+      data_type: real
+      default_value: null
+      max_length: null
+      numeric_precision: 24
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: y_axis_secondary_label
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render_mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: y_axis_secondary_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 30
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: y_axis_secondary_label
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: divider_styling_interaction
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_styling_interaction
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: line_style
+        title: Styling & interaction
+      readonly: false
+      required: false
+      searchable: true
+      sort: 31
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_cards
+    field: color_palette
+    type: json
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: color_palette
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 32
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: color_palette
+      table: chart_cards
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: height
+    type: integer
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: height
+      group: null
+      hidden: false
+      interface: input
+      note: Chart height in px
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 33
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: height
+      table: chart_cards
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: show_legend
+    type: boolean
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: show_legend
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Show legend
+      readonly: true
+      required: false
+      searchable: true
+      sort: 34
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: show_legend
+      table: chart_cards
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: legend_position
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both and show_legend is true
+          readonly: false
+          rule:
+            _and:
+              - _and:
+                  - render_mode:
+                      _in:
+                        - chart
+                        - both
+                  - show_legend:
+                      _eq: true
+      display: null
+      display_options: null
+      field: legend_position
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: top
+            value: top
+          - text: right
+            value: right
+          - text: bottom
+            value: bottom
+          - text: left
+            value: left
+      readonly: true
+      required: false
+      searchable: true
+      sort: 35
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: legend_position
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: show_data_labels
+    type: boolean
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: show_data_labels
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Show data labels
+      readonly: true
+      required: false
+      searchable: true
+      sort: 36
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: show_data_labels
+      table: chart_cards
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: show_tooltip
+    type: boolean
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: show_tooltip
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Show tooltip
+      readonly: true
+      required: false
+      searchable: true
+      sort: 37
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: show_tooltip
+      table: chart_cards
+      data_type: boolean
+      default_value: true
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: enable_export
+    type: boolean
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: enable_export
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Enable export
+      readonly: false
+      required: false
+      searchable: true
+      sort: 38
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: enable_export
+      table: chart_cards
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: enable_zoom
+    type: boolean
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when render mode is chart or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - chart
+                    - both
+      display: null
+      display_options: null
+      field: enable_zoom
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Enable export
+      readonly: false
+      required: false
+      searchable: true
+      sort: 39
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: enable_zoom
+      table: chart_cards
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: divider_table_options
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_table_options
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: table_chart
+        title: Table options
+      readonly: false
+      required: false
+      searchable: true
+      sort: 40
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_cards
+    field: table_include_category
+    type: boolean
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled for render mode table or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - table
+                    - both
+      display: null
+      display_options: null
+      field: table_include_category
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Include category
+      readonly: true
+      required: false
+      searchable: true
+      sort: 41
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: table_include_category
+      table: chart_cards
+      data_type: boolean
+      default_value: true
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: table_show_totals
+    type: boolean
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled for render mode table or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - table
+                    - both
+      display: null
+      display_options: null
+      field: table_show_totals
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Show totals
+      readonly: true
+      required: false
+      searchable: true
+      sort: 42
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: table_show_totals
+      table: chart_cards
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: table_default_sort
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled for render mode table or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - table
+                    - both
+      display: null
+      display_options: null
+      field: table_default_sort
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 43
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: table_default_sort
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: table_sort_direction
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled for render mode table or both
+          readonly: false
+          rule:
+            _and:
+              - render_mode:
+                  _in:
+                    - table
+                    - both
+      display: null
+      display_options: null
+      field: table_sort_direction
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: asc
+            value: asc
+          - text: desc
+            value: desc
+      readonly: true
+      required: false
+      searchable: true
+      sort: 44
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: table_sort_direction
+      table: chart_cards
+      data_type: character varying
+      default_value: asc
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: divider_advanced
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_advanced
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: hotel_class
+        title: Advanced
+      readonly: false
+      required: false
+      searchable: true
+      sort: 45
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_cards
+    field: highcharts_config
+    type: json
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: highcharts_config
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 46
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: highcharts_config
+      table: chart_cards
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: divider_relashionships
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: divider_relashionships
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: escalator_warning
+        title: Relationships
+      readonly: false
+      required: false
+      searchable: true
+      sort: 47
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_cards
+    field: series
+    type: alias
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: series
+      group: null
+      hidden: false
+      interface: list-o2m
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 48
+      special:
+        - o2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: chart_series
+    field: id
+    type: uuid
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: chart_series
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: user_created
+    type: uuid
+    meta:
+      collection: chart_series
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: chart_series
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: chart_series
+    field: date_created
+    type: timestamp
+    meta:
+      collection: chart_series
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: chart_series
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: user_updated
+    type: uuid
+    meta:
+      collection: chart_series
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: chart_series
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: chart_series
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: chart_series
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: chart_series
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: chart_card
+    type: uuid
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: chart_card
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{title}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: chart_card
+      table: chart_series
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: chart_cards
+      foreign_key_column: id
+  - collection: chart_series
+    field: sort
+    type: integer
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: sort
+      table: chart_series
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: name
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: name
+      group: null
+      hidden: false
+      interface: input
+      note: Legend and tooltip label as well as table column header
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: name
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: type
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: type
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: inherit
+            value: inherit
+          - text: line
+            value: line
+          - text: spline
+            value: spline
+          - text: column
+            value: column
+          - text: bar
+            value: bar
+          - text: area
+            value: area
+          - text: areaspline
+            value: areaspline
+          - text: scatter
+            value: scatter
+          - text: inherit
+            value: inherit
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: type
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: color
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: color
+      group: null
+      hidden: false
+      interface: select-color
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: color
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: y_axis
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: y_axis
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: primary
+            value: primary
+          - text: secondary
+            value: secondary
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: y_axis
+      table: chart_series
+      data_type: character varying
+      default_value: primary
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: data_field
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: data_field
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: data_field
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: stack_group
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: stack_group
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: stack_group
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: value_format
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: value_format
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Number
+            value: number
+          - text: Currency
+            value: currency
+          - text: Percent
+            value: percent
+          - text: Date
+            value: date
+          - text: Text
+            value: text
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: value_format
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: prefix
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: prefix
+      group: null
+      hidden: false
+      interface: input
+      note: e.g. `$`
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: prefix
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: suffix
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: suffix
+      group: null
+      hidden: false
+      interface: input
+      note: e.g. `$`, ` units`
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: suffix
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: dash_style
+    type: string
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: dash_style
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Solid
+            value: Solid
+          - text: Dash
+            value: Dash
+          - text: Dot
+            value: Dot
+          - text: DashDot
+            value: DashDot
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: dash_style
+      table: chart_series
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: marker_enabled
+    type: boolean
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: marker_enabled
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: marker_enabled
+      table: chart_series
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: visible
+    type: boolean
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: visible
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: visible
+      table: chart_series
+      data_type: boolean
+      default_value: true
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_series
+    field: static_data
+    type: json
+    meta:
+      collection: chart_series
+      conditions: null
+      display: null
+      display_options: null
+      field: static_data
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: static_data
+      table: chart_series
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: collection_blocks
     field: id
     type: uuid
@@ -6228,7 +9009,7 @@ fields:
       field: page
       group: null
       hidden: false
-      interface: input
+      interface: contacts-page-select
       note: null
       options: null
       readonly: false
@@ -6268,7 +9049,7 @@ fields:
       field: tab
       group: null
       hidden: false
-      interface: input
+      interface: contacts-tab-select
       note: null
       options: null
       readonly: false
@@ -6308,7 +9089,7 @@ fields:
       field: accordion
       group: null
       hidden: false
-      interface: input
+      interface: contacts-accordion-select
       note: null
       options: null
       readonly: false
@@ -7578,6 +10359,438 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: contacts
+    field: people
+    type: alias
+    meta:
+      collection: contacts
+      conditions: null
+      display: null
+      display_options: null
+      field: people
+      group: null
+      hidden: false
+      interface: list-o2m
+      note: null
+      options:
+        template: '{{name}}, {{email}}, {{role}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - o2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: contacts_person
+    field: id
+    type: uuid
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: contacts_person
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: user_created
+    type: uuid
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: contacts_person
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: contacts_person
+    field: date_created
+    type: timestamp
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: contacts_person
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: name
+    type: string
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: name
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: name
+      table: contacts_person
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: role
+    type: string
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: role
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: role
+      table: contacts_person
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: email
+    type: string
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: email
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: email
+      table: contacts_person
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: phone
+    type: string
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: phone
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: phone
+      table: contacts_person
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: fax
+    type: string
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: fax
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: fax
+      table: contacts_person
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: is_primary
+    type: boolean
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: is_primary
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Is Primary
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: is_primary
+      table: contacts_person
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: contacts_id
+    type: integer
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: contacts_id
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contacts_id
+      table: contacts_person
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: contacts
+      foreign_key_column: id
   - collection: content_blocks
     field: id
     type: uuid
@@ -9499,48 +12712,6 @@ fields:
       foreign_key_table: directus_users
       foreign_key_column: id
   - collection: events
-    field: date_created
-    type: timestamp
-    meta:
-      collection: events
-      conditions: null
-      display: datetime
-      display_options:
-        relative: true
-      field: date_created
-      group: null
-      hidden: true
-      interface: datetime
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 6
-      special:
-        - date-created
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: date_created
-      table: events
-      data_type: timestamp with time zone
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: events
     field: user_updated
     type: uuid
     meta:
@@ -9641,7 +12812,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -9722,7 +12893,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -9762,7 +12933,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -9802,7 +12973,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -9842,7 +13013,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -9866,14 +13037,14 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
-    field: event_start_date_time
-    type: timestamp
+    field: event_start_date
+    type: date
     meta:
       collection: events
       conditions: null
       display: datetime
       display_options: {}
-      field: event_start_date_time
+      field: event_start_date
       group: null
       hidden: false
       interface: datetime
@@ -9890,9 +13061,9 @@ fields:
       validation_message: null
       width: half
     schema:
-      name: event_start_date_time
+      name: event_start_date
       table: events
-      data_type: timestamp with time zone
+      data_type: date
       default_value: null
       max_length: null
       numeric_precision: null
@@ -9907,14 +13078,14 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
-    field: event_end_date_time
-    type: timestamp
+    field: event_end_date
+    type: date
     meta:
       collection: events
       conditions: null
       display: datetime
       display_options: {}
-      field: event_end_date_time
+      field: event_end_date
       group: null
       hidden: false
       interface: datetime
@@ -9931,9 +13102,9 @@ fields:
       validation_message: null
       width: half
     schema:
-      name: event_end_date_time
+      name: event_end_date
       table: events
-      data_type: timestamp with time zone
+      data_type: date
       default_value: null
       max_length: null
       numeric_precision: null
@@ -9964,7 +13135,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -9974,6 +13145,169 @@ fields:
       name: who_should_attend
       table: events
       data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
+    field: email
+    type: string
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: email
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: email
+      table: events
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
+    field: is_training
+    type: boolean
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: is_training
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Training
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: is_training
+      table: events
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
+    field: time
+    type: string
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: time
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: time
+      table: events
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
+    field: date_created
+    type: dateTime
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: date_created
+      group: null
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: events
+      data_type: timestamp without time zone
       default_value: null
       max_length: null
       numeric_precision: null
@@ -12964,7 +16298,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: false
+      is_indexed: true
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -14181,6 +17515,295 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: glossary_terms
+    field: id
+    type: uuid
+    meta:
+      collection: glossary_terms
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: glossary_terms
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: glossary_terms
+    field: user_created
+    type: uuid
+    meta:
+      collection: glossary_terms
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: glossary_terms
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: glossary_terms
+    field: date_created
+    type: timestamp
+    meta:
+      collection: glossary_terms
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: glossary_terms
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: glossary_terms
+    field: user_updated
+    type: uuid
+    meta:
+      collection: glossary_terms
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: glossary_terms
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: glossary_terms
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: glossary_terms
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: glossary_terms
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: glossary_terms
+    field: term
+    type: string
+    meta:
+      collection: glossary_terms
+      conditions: null
+      display: null
+      display_options: null
+      field: term
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: term
+      table: glossary_terms
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: glossary_terms
+    field: definition
+    type: text
+    meta:
+      collection: glossary_terms
+      conditions: null
+      display: null
+      display_options: null
+      field: definition
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: definition
+      table: glossary_terms
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -16588,7 +20211,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: false
+      is_indexed: true
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -18014,24 +21637,6 @@ fields:
             value: contact
           - text: Page Not Found
             value: page_not_found
-          - text: Homepage
-            value: home
-          - text: Journey landing
-            value: journey-landing
-          - text: Audience hub
-            value: audience-hub
-          - text: Learn / topic
-            value: learn-topic
-          - text: Dataset
-            value: dataset
-          - text: Explore dashboard
-            value: explore-dashboard
-          - text: Reference
-            value: reference
-          - text: Contact topic
-            value: contact-topic
-          - text: Utility
-            value: utility
       readonly: false
       required: false
       searchable: true
@@ -19269,7 +22874,7 @@ fields:
       numeric_scale: null
       is_nullable: true
       is_unique: false
-      is_indexed: false
+      is_indexed: true
       is_primary_key: false
       is_generated: false
       generation_expression: null
@@ -23659,12 +27264,34 @@ fields:
     meta:
       collection: revenue_data_update
       conditions:
-        - name: Disabled for disbursement
-          readonly: true
+        - name: Revenue period choice
+          options:
+            choices:
+              - text: Monthly
+                value: monthly
+              - text: True Up
+                value: true-up
+          readonly: false
+          required: true
           rule:
             _and:
               - dataset:
-                  _eq: disbursement
+                  _eq: revenue
+        - name: Production period choice
+          options:
+            choices:
+              - text: Monthly
+                value: monthly
+              - text: Calendar Year
+                value: calendar-year
+              - text: Fiscal Year
+                value: fiscal-year
+          readonly: false
+          required: true
+          rule:
+            _and:
+              - dataset:
+                  _eq: production
       display: null
       display_options: null
       field: period
@@ -23673,14 +27300,8 @@ fields:
       interface: select-dropdown
       note: null
       options:
-        choices:
-          - text: Calendar Year
-            value: calendar-year
-          - text: Fiscal Year
-            value: fiscal-year
-          - text: Monthly
-            value: monthly
-      readonly: false
+        choices: null
+      readonly: true
       required: false
       searchable: true
       sort: 6
@@ -23720,7 +27341,7 @@ fields:
       interface: file
       note: null
       options:
-        folder: 6157e772-1927-4a4d-8ea0-d14b26714e0c
+        folder: e548af97-261c-4517-ab37-e5b12f95a8b3
       readonly: false
       required: false
       searchable: true
@@ -23748,46 +27369,6 @@ fields:
       has_auto_increment: false
       foreign_key_table: directus_files
       foreign_key_column: id
-  - collection: revenue_data_update
-    field: status
-    type: string
-    meta:
-      collection: revenue_data_update
-      conditions: null
-      display: null
-      display_options: null
-      field: status
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 8
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: status
-      table: revenue_data_update
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
   - collection: revenue_data_update
     field: result
     type: json
@@ -23818,6 +27399,46 @@ fields:
       data_type: json
       default_value: null
       max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: status
+    type: string
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: status
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: status
+      table: revenue_data_update
+      data_type: character varying
+      default_value: running
+      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -26629,48 +30250,6 @@ systemFields:
     schema:
       is_indexed: true
 relations:
-  - collection: glossary_terms
-    field: user_created
-    related_collection: directus_users
-    meta:
-      junction_field: null
-      many_collection: glossary_terms
-      many_field: user_created
-      one_allowed_collections: null
-      one_collection: directus_users
-      one_collection_field: null
-      one_deselect_action: nullify
-      one_field: null
-      sort_field: null
-    schema:
-      table: glossary_terms
-      column: user_created
-      foreign_key_table: directus_users
-      foreign_key_column: id
-      constraint_name: glossary_terms_user_created_foreign
-      on_update: NO ACTION
-      on_delete: NO ACTION
-  - collection: glossary_terms
-    field: user_updated
-    related_collection: directus_users
-    meta:
-      junction_field: null
-      many_collection: glossary_terms
-      many_field: user_updated
-      one_allowed_collections: null
-      one_collection: directus_users
-      one_collection_field: null
-      one_deselect_action: nullify
-      one_field: null
-      sort_field: null
-    schema:
-      table: glossary_terms
-      column: user_updated
-      foreign_key_table: directus_users
-      foreign_key_column: id
-      constraint_name: glossary_terms_user_updated_foreign
-      on_update: NO ACTION
-      on_delete: NO ACTION
   - collection: Interest_Oil_and_Gas
     field: user_created
     related_collection: directus_users
@@ -26938,6 +30517,111 @@ relations:
       constraint_name: card_blocks_card_content_blocks_card_blocks_id_foreign
       on_update: NO ACTION
       on_delete: SET NULL
+  - collection: chart_cards
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: chart_cards
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: chart_cards
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: chart_cards_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: chart_cards
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: chart_cards
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: chart_cards
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: chart_cards_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: chart_series
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: chart_series
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: chart_series
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: chart_series_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: chart_series
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: chart_series
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: chart_series
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: chart_series_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: chart_series
+    field: chart_card
+    related_collection: chart_cards
+    meta:
+      junction_field: null
+      many_collection: chart_series
+      many_field: chart_card
+      one_allowed_collections: null
+      one_collection: chart_cards
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: series
+      sort_field: null
+    schema:
+      table: chart_series
+      column: chart_card
+      foreign_key_table: chart_cards
+      foreign_key_column: id
+      constraint_name: chart_series_chart_card_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: collection_blocks
     field: user_updated
     related_collection: directus_users
@@ -27064,6 +30748,48 @@ relations:
       constraint_name: contacts_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: contacts_person
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: contacts_person
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: contacts_person
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: contacts_person_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: contacts_person
+    field: contacts_id
+    related_collection: contacts
+    meta:
+      junction_field: null
+      many_collection: contacts_person
+      many_field: contacts_id
+      one_allowed_collections: null
+      one_collection: contacts
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: people
+      sort_field: null
+    schema:
+      table: contacts_person
+      column: contacts_id
+      foreign_key_table: contacts
+      foreign_key_column: id
+      constraint_name: contacts_person_contacts_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: content_blocks
     field: user_created
     related_collection: directus_users
@@ -27667,6 +31393,48 @@ relations:
       foreign_key_table: directus_users
       foreign_key_column: id
       constraint_name: geothermal_class_2_3_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: glossary_terms
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: glossary_terms
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: glossary_terms
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: glossary_terms_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: glossary_terms
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: glossary_terms
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: glossary_terms
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: glossary_terms_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
   - collection: ibmp
