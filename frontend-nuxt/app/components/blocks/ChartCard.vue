@@ -551,7 +551,7 @@ onBeforeUnmount(() => {
          markup from the editor is valid; a leading <p> is forced inline so it flows
          after the "Source:" label. -->
     <div v-if="card.source" class="chart-card__source font-body-2xs text-base margin-top-1">
-      Source: <span v-html="resolveImages(card.source)"></span>
+      <span v-html="resolveImages(card.source)"></span>
     </div>
   </section>
 </template>
@@ -573,5 +573,6 @@ onBeforeUnmount(() => {
 .chart-card__source :deep(p) {
   display: inline;
   margin: 0;
+  font-size: 0.8rem;
 }
 </style>
