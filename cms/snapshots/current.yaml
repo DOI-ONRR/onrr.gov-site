@@ -316,7 +316,7 @@ collections:
       collapse: open
       collection: chart_cards
       color: null
-      display_template: null
+      display_template: '{{title}}'
       group: Charts
       hidden: false
       icon: space_dashboard
@@ -342,7 +342,7 @@ collections:
       collapse: open
       collection: chart_series
       color: null
-      display_template: null
+      display_template: '{{name}} - {{chart_card.title}} - {{chart_card.key}}'
       group: Charts
       hidden: false
       icon: data_thresholding
@@ -4751,46 +4751,6 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: chart_cards
-    field: source
-    type: string
-    meta:
-      collection: chart_cards
-      conditions: null
-      display: null
-      display_options: null
-      field: source
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 10
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: source
-      table: chart_cards
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: chart_cards
     field: divider_chart_configuration
     type: alias
     meta:
@@ -4809,7 +4769,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special:
         - alias
         - no-data
@@ -4851,7 +4811,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -4898,7 +4858,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -4945,7 +4905,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -5027,7 +4987,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 16
       special:
         - alias
         - no-data
@@ -5059,7 +5019,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -5117,7 +5077,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 17
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -5176,7 +5136,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 18
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -5200,7 +5160,7 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: chart_cards
-    field: agregate_field
+    field: aggregate_field
     type: string
     meta:
       collection: chart_cards
@@ -5218,7 +5178,7 @@ fields:
                       _neq: count
       display: null
       display_options: null
-      field: agregate_field
+      field: aggregate_field
       group: null
       hidden: false
       interface: input
@@ -5227,14 +5187,14 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 19
+      sort: 20
       special: null
       translations: null
       validation: null
       validation_message: null
       width: half
     schema:
-      name: agregate_field
+      name: aggregate_field
       table: chart_cards
       data_type: character varying
       default_value: null
@@ -5273,7 +5233,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 20
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -5319,7 +5279,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 21
+      sort: 22
       special:
         - cast-json
       translations: null
@@ -5366,12 +5326,12 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 22
+      sort: 23
       special: null
       translations: null
       validation: null
       validation_message: null
-      width: half
+      width: full
     schema:
       name: endpoint_url
       table: chart_cards
@@ -5412,7 +5372,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 23
+      sort: 24
       special:
         - cast-json
       translations: null
@@ -5455,7 +5415,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 25
       special:
         - alias
         - no-data
@@ -5488,7 +5448,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 25
+      sort: 26
       special: null
       translations: null
       validation: null
@@ -5536,7 +5496,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 27
+      sort: 31
       special: null
       translations: null
       validation: null
@@ -5593,7 +5553,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 26
+      sort: 27
       special: null
       translations: null
       validation: null
@@ -5641,7 +5601,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 28
+      sort: 32
       special: null
       translations: null
       validation: null
@@ -5689,7 +5649,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 29
+      sort: 33
       special: null
       translations: null
       validation: null
@@ -5737,7 +5697,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 30
+      sort: 34
       special: null
       translations: null
       validation: null
@@ -5779,7 +5739,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 31
+      sort: 35
       special:
         - alias
         - no-data
@@ -5812,7 +5772,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 32
+      sort: 36
       special:
         - cast-json
       translations: null
@@ -5861,7 +5821,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 33
+      sort: 37
       special: null
       translations: null
       validation: null
@@ -5910,7 +5870,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 34
+      sort: 39
       special:
         - cast-boolean
       translations: null
@@ -5971,12 +5931,12 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 35
+      sort: 40
       special: null
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
     schema:
       name: legend_position
       table: chart_cards
@@ -6020,7 +5980,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 36
+      sort: 41
       special:
         - cast-boolean
       translations: null
@@ -6070,7 +6030,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 37
+      sort: 42
       special:
         - cast-boolean
       translations: null
@@ -6120,7 +6080,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 38
+      sort: 43
       special:
         - cast-boolean
       translations: null
@@ -6170,7 +6130,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 39
+      sort: 44
       special:
         - cast-boolean
       translations: null
@@ -6213,7 +6173,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 40
+      sort: 45
       special:
         - alias
         - no-data
@@ -6247,7 +6207,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 41
+      sort: 46
       special:
         - cast-boolean
       translations: null
@@ -6297,7 +6257,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 42
+      sort: 47
       special:
         - cast-boolean
       translations: null
@@ -6346,7 +6306,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 43
+      sort: 48
       special: null
       translations: null
       validation: null
@@ -6399,7 +6359,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 44
+      sort: 49
       special: null
       translations: null
       validation: null
@@ -6441,7 +6401,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 45
+      sort: 50
       special:
         - alias
         - no-data
@@ -6466,7 +6426,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 46
+      sort: 51
       special:
         - cast-json
       translations: null
@@ -6509,7 +6469,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 47
+      sort: 52
       special:
         - alias
         - no-data
@@ -6534,13 +6494,359 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 48
+      sort: 53
       special:
         - o2m
       translations: null
       validation: null
       validation_message: null
       width: full
+  - collection: chart_cards
+    field: source
+    type: text
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: source
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: source
+      table: chart_cards
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: x_axis_field
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when data source is endpoint
+          readonly: false
+          rule:
+            _and:
+              - data_source_type:
+                  _eq: endpoint
+      display: null
+      display_options: null
+      field: x_axis_field
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Response field to use for the x-axis / category labels (endpoint
+        source).
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 28
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: x_axis_field
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: grid_columns
+    type: integer
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: grid_columns
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        max: 12
+        min: 1
+      readonly: false
+      required: false
+      searchable: true
+      sort: 38
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: grid_columns
+      table: chart_cards
+      data_type: integer
+      default_value: 12
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: takeaway_variables
+    type: json
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: takeaway_variables
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        editMode: drawer
+        fields:
+          - field: token
+            meta:
+              field: token
+              interface: input
+              type: string
+              width: half
+            name: token
+            type: string
+          - field: field
+            meta:
+              field: field
+              interface: input
+              type: string
+              width: half
+            name: field
+            type: string
+          - field: aggregate
+            meta:
+              field: aggregate
+              interface: select-dropdown
+              options:
+                choices:
+                  - text: Sum
+                    value: sum
+                  - text: Average
+                    value: average
+                  - text: Median
+                    value: median
+                  - text: Minimum
+                    value: min
+                  - text: Maximum
+                    value: max
+                  - text: Count
+                    value: count
+                  - text: Distinct count
+                    value: count_distinct
+                  - text: First
+                    value: first
+                  - text: Latest
+                    value: latest
+                  - text: Share of total
+                    value: share_pct
+                  - text: Top category
+                    value: top_category
+              type: string
+              width: half
+            name: aggregate
+            type: string
+          - field: format
+            meta:
+              field: format
+              interface: select-dropdown
+              options:
+                choices:
+                  - text: Currency, compact
+                    value: currency_compact
+                  - text: Currency, full
+                    value: currency_full
+                  - text: Number
+                    value: number
+                  - text: Number, abbreviated
+                    value: number_abbrev
+                  - text: Percent
+                    value: percent
+                  - text: Percent, 1 decimal
+                    value: percent_1dp
+                  - text: Month + year
+                    value: date_month_year
+                  - text: Full date
+                    value: date_full
+                  - text: Plain text
+                    value: text
+              type: string
+              width: half
+            name: format
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: takeaway_variables
+      table: chart_cards
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: x_axis_format
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: x_axis_format
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Month Year (MON YYYY)
+            value: month_year
+          - text: Date (MON D, YYYY)
+            value: date
+          - text: Number
+            value: number
+          - text: Currency
+            value: currency
+          - text: Currency compact
+            value: currency_compact
+          - text: Percent
+            value: percent
+          - text: Text
+            value: text
+      readonly: false
+      required: false
+      searchable: true
+      sort: 29
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: x_axis_format
+      table: chart_cards
+      data_type: character varying
+      default_value: text
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: tick_interval
+    type: integer
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: tick_interval
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        max: 24
+        min: 1
+      readonly: false
+      required: false
+      searchable: true
+      sort: 30
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: tick_interval
+      table: chart_cards
+      data_type: integer
+      default_value: 1
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: chart_series
     field: id
     type: uuid
@@ -31955,6 +32261,7 @@ relations:
         - expansion_panels
         - layout_column_blocks
         - collection_blocks
+        - chart_cards
       one_collection: null
       one_collection_field: collection
       one_deselect_action: nullify
