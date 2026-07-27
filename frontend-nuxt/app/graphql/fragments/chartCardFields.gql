@@ -1,0 +1,67 @@
+fragment chartCardFields on chart_cards {
+  id
+  title
+  key
+  source
+  # chart configuration
+  chart_type
+  render_mode
+  stacking
+  takeaway
+  takeaway_variables
+  # data source (collection aggregation)
+  data_source_type
+  source_collection
+  aggregate_function
+  aggregate_field
+  group_by_field
+  filter
+  endpoint_url
+  x_axis_field
+  static_data
+  # axes
+  x_axis_label
+  y_axis_label
+  x_axis_type
+  x_axis_format
+  tick_interval
+  y_axis_min
+  y_axis_max
+  y_axis_secondary_label
+  # styling / interaction
+  grid_columns
+  color_palette
+  height
+  show_legend
+  legend_position
+  show_data_labels
+  show_tooltip
+  enable_export
+  enable_zoom
+  # table options
+  table_include_category
+  table_show_totals
+  table_default_sort
+  table_sort_direction
+  # advanced escape hatch
+  highcharts_config
+  # per-series definitions
+  series {
+    id
+    sort
+    name
+    type
+    color
+    y_axis
+    data_field
+    stack_group
+    value_format
+    prefix
+    suffix
+    dash_style
+    marker_enabled
+    visible
+    static_data
+  }
+  __typename
+}

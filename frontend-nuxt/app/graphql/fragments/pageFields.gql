@@ -5,6 +5,7 @@
 #import "./layoutColumnBlockFields.gql"
 #import "./formulaBlockFields.gql"
 #import "./collectionBlockFields.gql"
+#import "./chartCardFields.gql"
 
 fragment pageFields on pages {
   id
@@ -43,6 +44,9 @@ fragment pageFields on pages {
       }
       ... on collection_blocks {
         ...collectionBlockFields
+      }
+      ... on chart_cards {
+        ...chartCardFields
       }
     }
   }

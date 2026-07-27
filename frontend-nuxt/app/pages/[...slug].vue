@@ -127,6 +127,10 @@ const sidenavLinks = computed(() => {
               v-else-if="block.item?.__typename === 'collection_blocks'"
               :block="block.item"
             />
+            <ChartCard
+              v-else-if="block.item?.__typename === 'chart_cards'"
+              :block="block.item"
+            />
           </div>
         </div>
       </div>
