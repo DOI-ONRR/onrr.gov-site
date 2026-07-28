@@ -1,0 +1,38 @@
+@use "onrr-colors" as *;
+
+.site-footer { background: $onrr-navy; color: #f1f3f6; padding: 2rem 0 1.75rem; }
+
+.site-footer h2 { color: #fff; font-size: 1.25rem; line-height: 1.2; margin: 0 0 0.3rem; }
+
+.site-footer p { margin: 0; font-size: 0.95rem; line-height: 1.6; }
+
+.site-footer a { color: #fff; text-decoration: underline; }
+
+.site-footer a:hover { text-decoration-thickness: 2px; }
+
+.site-footer a:focus { outline: 2px solid $onrr-gold; outline-offset: 2px; }
+
+.footer-row { display: flex; align-items: center; gap: 2.5rem; }
+
+.footer-seal__img { width: 150px; height: auto; flex: 0 0 auto; }
+
+.footer-body { flex: 1 1 auto; min-width: 0; }
+
+.footer-links { list-style: none; margin: 0 0 1.1rem; padding: 0; display: flex; flex-wrap: wrap;
+                  gap: 0.5rem 1.75rem; font-size: 0.95rem; line-height: 1.5; }
+
+.footer-links li { display: flex; align-items: center; }
+
+.footer-meta { text-align: center; font-size: 0.9rem; line-height: 1.6; margin-top: 1.15rem; }
+
+.footer-meta p { font-size: 0.9rem; }
+
+.ext { width: 0.72em; height: 0.72em; margin-left: 0.22em; fill: currentColor; }
+
+@media (max-width: 40em) {
+    .footer-row { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+    .footer-seal__img { width: 96px; }
+    .footer-meta { text-align: left; }
+  }
+
+.ext-ind { font-size: 0.75em; color: #565c65; white-space: nowrap; }
