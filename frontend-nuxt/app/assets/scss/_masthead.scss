@@ -1,0 +1,36 @@
+@use "onrr-colors" as *;
+
+.masthead { background: $onrr-navy; }
+
+.masthead .grid-container { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 0.9rem; padding-bottom: 0.9rem; flex-wrap: wrap; }
+
+.agency-logo { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+
+.agency-logo:hover .agency-logo__name { text-decoration: underline; }
+
+.masthead-utility { display: flex; align-items: center; gap: 0; list-style: none; margin: 0; padding: 0; }
+
+.masthead-utility li { display: flex; align-items: center; }
+
+.masthead-utility li + li::before { content: ""; width: 1px; height: 1rem; background: rgba(255,255,255,0.4); margin: 0 1rem; }
+
+.masthead-utility a { color: #fff; text-decoration: none; font-size: 1rem; }
+
+.masthead-utility a:hover { text-decoration: underline; }
+
+/* --- Collapsed header (below the megamenu breakpoint): SEARCH | MENU sit in
+     the navy masthead, IRS-style, instead of a left-aligned button below it. --- */
+.masthead-actions { display: none; align-items: center; }
+
+.masthead-btn { background: none; border: 0; color: #fff; font-size: 0.95rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.03em; padding: 0.6rem 0.9rem; cursor: pointer; line-height: 1.2; }
+
+.masthead-btn:hover { text-decoration: underline; }
+
+.masthead-btn:focus { outline: 2px solid $onrr-gold; outline-offset: 2px; }
+
+.masthead-sep { width: 1px; height: 1rem; background: rgba(255,255,255,0.4); }
+
+.agency-logo__seal { height: 62px; width: auto; flex: 0 0 auto; }
+
+.agency-logo__name { font-weight: 700; font-size: 1.3rem; line-height: 1.15; color: #fff; }

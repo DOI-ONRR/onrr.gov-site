@@ -1,8 +1,13 @@
+<script setup lang="ts">
+import MastHead from '~/components/MastHead.vue';
+
+</script>
+
 <template>
   <div class="onrr-app">
     <GovBanner />
     <header class="usa-header usa-header--extended">
-      <div class="usa-nav-container">
+      <!-- <div class="usa-nav-container">
         <div class="usa-navbar">
           <div class="usa-logo">
             <NuxtLink to="/" class="usa-logo__link">
@@ -24,7 +29,8 @@
             </form>
           </section>
         </div>
-      </div>
+      </div> -->
+      <MastHead />
       <NavigationMenu />
     </header>
 

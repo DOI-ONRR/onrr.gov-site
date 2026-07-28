@@ -19,26 +19,31 @@
             >
               <span>{{ item.menu_label }}</span>
             </button>
-            <ul
+            <div
               :id="`nav-section-${item.id}`"
-              class="usa-nav__submenu"
+              class="usa-nav__submenu usa-megamenu"
               :hidden="openMenuId !== item.id"
             >
-              <li class="usa-nav__submenu-item">
-                <NuxtLink :to="item.link_to_page.url">
-                  {{ item.menu_label }} Home
-                </NuxtLink>
-              </li>
-              <li
-                v-for="child in item.menu_children"
-                :key="child.pages_id?.id"
-                class="usa-nav__submenu-item"
-              >
-                <NuxtLink :to="child.pages_id?.url">
-                  {{ child.pages_id?.title }}
-                </NuxtLink>
-              </li>
-            </ul>
+              <div class="grid-container">
+                <div class="grid-row grid-gap">
+                  <div
+                    v-for="(column, colIndex) in sectionColumns(item)"
+                    :key="colIndex"
+                    class="usa-col"
+                  >
+                    <ul class="usa-nav__submenu-list">
+                      <li
+                        v-for="link in column"
+                        :key="link.url"
+                        class="usa-nav__submenu-item"
+                      >
+                        <NuxtLink :to="link.url">{{ link.title }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </template>
 
           <!-- Item without children: plain link -->
@@ -72,6 +77,25 @@ function itemUrl(item) {
   return item.custom_url || item.link_to_page?.url || '#'
 }
 
+// Megamenu columns for a section: the section "Home" link first, then each child
+// page, chunked into columns of three links each.
+function sectionColumns(item) {
+  const links = []
+  if (item.link_to_page?.url) {
+    links.push({ url: item.link_to_page.url, title: `${item.menu_label} Home` })
+  }
+  for (const child of item.menu_children ?? []) {
+    if (child.pages_id?.url) {
+      links.push({ url: child.pages_id.url, title: child.pages_id.title })
+    }
+  }
+  const columns = []
+  for (let i = 0; i < links.length; i += 3) {
+    columns.push(links.slice(i, i + 3))
+  }
+  return columns
+}
+
 function toggle(id) {
   openMenuId.value = openMenuId.value === id ? null : id
 }
@@ -99,6 +123,26 @@ function isCurrentItem(item) {
   @use "onrr-colors" as *;
 
   .usa-current::after {
-    background-color: $onrr-green !important;
+    background-color: $onrr-navy !important;
+  }
+
+  // Full-bleed megamenu: anchor the panel to the full-width .usa-nav (its offset
+  // parent) with left/right: 0 so its background spans the whole page — cleaner
+  // than USWDS's -33% breakout. The inner .grid-container (in the template)
+  // constrains the links to the navbar width.
+  .usa-nav {
+    position: relative;
+  }
+
+  .usa-megamenu.usa-nav__submenu {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+
+  // Columns hug their content and pack next to each other, rather than each
+  // stretching to fill the row (USWDS default is flex: 4 1 0%).
+  .usa-megamenu .usa-col {
+    flex: 0 1 auto;
   }
 </style>
