@@ -142,6 +142,6 @@ const sidenavLinks = computed(() => {
 @use "onrr-colors" as *;
 
 .usa-sidenav .usa-current::before {
-  background-color: $onrr-green !important;
+  background-color: $onrr-violet !important;
 }
 </style>

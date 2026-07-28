@@ -66,11 +66,11 @@
 @use "onrr-colors" as *;
 
 .usa-footer__primary-section {
-  background-color: $onrr-teal;
+  background-color: $onrr-navy;
 }
 
 .usa-footer__secondary-section {
-  background-color: $onrr-blue;
+  background-color: $onrr-navy;
   color: #ffffff;
 }
 

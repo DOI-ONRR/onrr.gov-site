@@ -119,10 +119,10 @@ watch(searchText, () => {
 }
 
 .contact-header {
-  background-color: $onrr-blue-gray;
+  background-color: $onrr-violet;
   padding: units(1) units(2);
   @include u-margin-bottom(4);
-  border-top: 2px solid $onrr-blue;
+  border-top: 2px solid $onrr-navy;
   @include u-text('white');
 }
 </style>
