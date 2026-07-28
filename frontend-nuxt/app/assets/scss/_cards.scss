@@ -39,14 +39,10 @@
 }
 .card--accent-top .usa-card__header { padding-top: 1.5rem; }
 
-.accent-forest    { --card-accent: #{$onrr-forest-green}; }
 .accent-navy      { --card-accent: #{$onrr-navy}; }
-.accent-blue      { --card-accent: #{$onrr-blue}; }
-.accent-sky       { --card-accent: #{$onrr-sky-blue}; }
-.accent-green     { --card-accent: #{$onrr-green}; }
-.accent-sage      { --card-accent: #{$onrr-sage}; }
-.accent-teal      { --card-accent: #{$onrr-teal}; }
-.accent-bluegray  { --card-accent: #{$onrr-blue-gray}; }
+.accent-navy-2      { --card-accent: #{$onrr-navy-2}; }
+.accent-violet      { --card-accent: #{$onrr-violet}; }
+.accent-gold      { --card-accent: #{$onrr-gold}; }
 
 .usa-card__body:last-child {
   padding-bottom: 0;

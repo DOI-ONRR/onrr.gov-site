@@ -9,24 +9,16 @@ Define once, use everywhere:
 ----------------------------------------
 */
 
-$onrr-forest-green: #143F1E;
-$onrr-navy: #2A294E;
-$onrr-blue: #0D4D81;
-$onrr-sky-blue: #A8DEE8;
-$onrr-green: #265E37;
-$onrr-sage: #71915C;
-$onrr-teal: #1C97BC;
-$onrr-blue-gray: #7A8AAA;
+$onrr-navy:   #1a2a52;  // masthead + footer band
+$onrr-navy-2: #121d38;  // drawer utility strip
+$onrr-violet: #8168b3;  // entity-pinned Native American / Indian
+$onrr-gold:   #ffbe2e;  // focus ring / supervisor role
 
 $onrr-colors: (
-  "forest-green": $onrr-forest-green,
   "navy": $onrr-navy,
-  "blue": $onrr-blue,
-  "sky-blue": $onrr-sky-blue,
-  "green": $onrr-green,
-  "sage": $onrr-sage,
-  "teal": $onrr-teal,
-  "blue-gray": $onrr-blue-gray,
+  "navy-2": $onrr-navy-2,
+  "violet": $onrr-violet,
+  "gold": $onrr-gold,
 );
 
 :root {
