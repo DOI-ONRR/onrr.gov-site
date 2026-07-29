@@ -22,6 +22,7 @@
 @forward "usa-label";
 @forward "usa-form-group";
 @forward "usa-pagination";
+@forward "usa-intro";
 
 @forward "onrr-colors";
 @forward "icons";
@@ -51,3 +52,11 @@ $site-max-width: 1600px;
 .usa-footer__secondary-section > .grid-container {
   max-width: $site-max-width;
 }
+
+.usa-intro { max-width: 62ch; }
+
+.lede { max-width: 66ch; }
+
+.section-lede { max-width: 68ch; }
+
+.about-band { background: #f9fafb; border-top: 1px solid #dfe1e2; }

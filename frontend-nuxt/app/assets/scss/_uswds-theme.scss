@@ -7,14 +7,6 @@ USWDS with settings overrides
 @forward "uswds-core" with (
   $theme-show-notifications: false,
   $theme-image-path: "/uswds/img",
-  $theme-typeface-tokens: (
-    'assistant': (
-      'display-name': 'Assistant',
-      'cap-height': 340px,
-      'stack': '"Assistant Variable", Helvetica, Arial, sans-serif',
-    ),
-  ),
-  $theme-font-type-sans: 'assistant',
   $theme-utility-breakpoints: (
     'desktop-lg': true,
     'widescreen': true,
