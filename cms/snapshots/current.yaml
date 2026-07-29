@@ -5697,7 +5697,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 34
+      sort: 35
       special: null
       translations: null
       validation: null
@@ -5739,7 +5739,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 35
+      sort: 36
       special:
         - alias
         - no-data
@@ -5772,7 +5772,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 36
+      sort: 37
       special:
         - cast-json
       translations: null
@@ -5821,7 +5821,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 37
+      sort: 38
       special: null
       translations: null
       validation: null
@@ -5870,7 +5870,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 39
+      sort: 40
       special:
         - cast-boolean
       translations: null
@@ -5931,7 +5931,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 40
+      sort: 41
       special: null
       translations: null
       validation: null
@@ -5980,7 +5980,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 41
+      sort: 42
       special:
         - cast-boolean
       translations: null
@@ -6030,7 +6030,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 42
+      sort: 43
       special:
         - cast-boolean
       translations: null
@@ -6080,7 +6080,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 43
+      sort: 44
       special:
         - cast-boolean
       translations: null
@@ -6130,7 +6130,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 44
+      sort: 45
       special:
         - cast-boolean
       translations: null
@@ -6173,7 +6173,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 45
+      sort: 46
       special:
         - alias
         - no-data
@@ -6207,7 +6207,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 46
+      sort: 47
       special:
         - cast-boolean
       translations: null
@@ -6257,7 +6257,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 47
+      sort: 48
       special:
         - cast-boolean
       translations: null
@@ -6306,7 +6306,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 48
+      sort: 49
       special: null
       translations: null
       validation: null
@@ -6359,7 +6359,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 49
+      sort: 50
       special: null
       translations: null
       validation: null
@@ -6401,7 +6401,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 50
+      sort: 51
       special:
         - alias
         - no-data
@@ -6426,7 +6426,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 51
+      sort: 52
       special:
         - cast-json
       translations: null
@@ -6469,7 +6469,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 52
+      sort: 53
       special:
         - alias
         - no-data
@@ -6494,7 +6494,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 53
+      sort: 54
       special:
         - o2m
       translations: null
@@ -6608,7 +6608,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 38
+      sort: 39
       special: null
       translations: null
       validation: null
@@ -6685,12 +6685,18 @@ fields:
                     value: count_distinct
                   - text: First
                     value: first
-                  - text: Latest
-                    value: latest
+                  - text: Last
+                    value: last
+                  - text: Previous
+                    value: previous
                   - text: Share of total
                     value: share_pct
                   - text: Top category
                     value: top_category
+                  - text: Absolute delta
+                    value: abs_delta
+                  - text: Direction
+                    value: direction
               type: string
               width: half
             name: aggregate
@@ -6714,7 +6720,7 @@ fields:
                   - text: Percent, 1 decimal
                     value: percent_1dp
                   - text: Month + year
-                    value: date_month_year
+                    value: month_year
                   - text: Full date
                     value: date_full
                   - text: Plain text
@@ -6838,6 +6844,46 @@ fields:
       max_length: null
       numeric_precision: 32
       numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: y_tick_interval
+    type: float
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: y_tick_interval
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 34
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: y_tick_interval
+      table: chart_cards
+      data_type: real
+      default_value: null
+      max_length: null
+      numeric_precision: 24
+      numeric_scale: null
       is_nullable: true
       is_unique: false
       is_indexed: false
