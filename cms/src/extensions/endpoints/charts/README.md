@@ -16,6 +16,7 @@ Directus mounts each entry of the array export (`src/index.js`) at its `id`. An
 | `disbursement` | `/summary`                       | `/charts/disbursement/summary`                 |
 | `disbursement` | `/total-monthly-disbursements`   | `/charts/disbursement/total-monthly-disbursements` |
 | `disbursement` | `/calendar-year-totals`          | `/charts/disbursement/calendar-year-totals`    |
+| `disbursement` | `/top-states`                    | `/charts/disbursement/top-states`              |
 
 - `/charts/disbursement/total-monthly-disbursements?months=24` — total disbursement
   amount per month for the most recent N months (default 24, max 120), chronological,

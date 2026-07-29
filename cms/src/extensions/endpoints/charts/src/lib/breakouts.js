@@ -136,6 +136,45 @@ export async function calendarYearTotals(database, { table, amountColumn = 'amou
 	return rows.reverse();
 }
 
+// Top `limit` states by total of `amountColumn` over the most recent `months`
+// monthly periods. State comes from location.state_name. Returned ASCENDING by
+// total (smallest first) so a horizontal bar chart renders the top state at the
+// top (Highcharts places category[0] at the bottom).
+export async function topStates(database, { table, amountColumn = 'amount', months = 12, limit = 10 }) {
+	// Resolve the most recent `months` monthly periods that have data (newest first),
+	// so we can both filter by them and stamp the window bounds onto each row.
+	const recentRows = await database
+		.distinct('p2.period_date')
+		.from(`${table} as d2`)
+		.join('period as p2', 'd2.period', 'p2.id')
+		.where('p2.type', 'Monthly')
+		.orderBy('p2.period_date', 'desc')
+		.limit(months);
+	const dates = recentRows.map((r) => r.period_date);
+	const windowEnd = dates[0] ?? null; // newest
+	const windowStart = dates[dates.length - 1] ?? null; // oldest
+
+	const rows = await database
+		.select(
+			'l.state_name as state',
+			database.raw(`SUM("d"."${amountColumn}") as "total_amount"`)
+		)
+		.from(`${table} as d`)
+		.join('period as p', 'd.period', 'p.id')
+		.join('location as l', 'd.location', 'l.id')
+		.where('p.type', 'Monthly')
+		.whereNotNull('l.state_name')
+		.whereIn('p.period_date', dates)
+		.groupBy('l.state_name')
+		.orderBy('total_amount', 'desc')
+		.limit(limit);
+
+	// Stamp the window's first/last month on every row so a takeaway can reference
+	// them. Rows stay in descending order (top state first): Highcharts renders
+	// category[0] at the top of a horizontal bar.
+	return rows.map((r) => ({ ...r, window_start: windowStart, window_end: windowEnd }));
+}
+
 // Latest fiscal year with monthly data for a fact table, plus the latest fiscal
 // month within that year. Useful for current-vs-previous-FY comparisons.
 export async function maxFiscalPeriod(database, table) {

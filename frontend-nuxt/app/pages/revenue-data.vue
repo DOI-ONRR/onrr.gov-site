@@ -53,14 +53,7 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
         <ChartCardByKey chart-key="disbursements-by-year" />
       </div>
       <div class="tablet:grid-col-6 margin-bottom-2">
-        <div class="chart-card padding-3">
-          <h3 class="margin-top-0 margin-bottom-1 font-heading-md">Top states, last 12 months</h3>
-          <p class="chart-takeaway margin-top-0" id="tk-state">Loading data…</p>
-          <div id="viz-state" class="viz-box" role="img" aria-label="Bar chart of the ten states receiving the most disbursements in the most recent twelve months. Filter the dataset page by state for full figures."></div>
-          <p class="chart-source margin-bottom-0 margin-top-2">
-            Source: <a class="usa-link" href="../dataset-page/index.html">Monthly disbursements dataset</a> · state and local recipients
-          </p>
-        </div>
+        <ChartCardByKey chart-key="disbursements-top-states" />
       </div>
     </div>
     <p class="margin-top-1">Want the story behind these numbers? <a class="usa-link" href="../learn-page/index.html">How revenue works</a>

@@ -27,6 +27,7 @@ fragment chartCardFields on chart_cards {
   tick_interval
   y_axis_min
   y_axis_max
+  y_tick_interval
   y_axis_secondary_label
   # styling / interaction
   grid_columns

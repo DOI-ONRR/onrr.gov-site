@@ -299,19 +299,26 @@ const chartOptions = computed(() => {
   const tickInterval = parseInt(card.value.tick_interval, 10)
   if (Number.isFinite(tickInterval) && tickInterval > 0) xAxis.tickInterval = tickInterval
 
+  // Primary value axis (rendered horizontally on a bar chart). Only set
+  // tickInterval when a positive number is configured, so Highcharts auto-spaces
+  // otherwise (never null/undefined — that clobbers the default).
+  const yAxisPrimary = {
+    title: { text: card.value.y_axis_label || null },
+    min: card.value.y_axis_min ?? null,
+    max: card.value.y_axis_max ?? null,
+    gridLineColor: "#eef0f1",
+    labels: { formatter() { return formatVar(this.value, 'currency_compact'); }, style: { color: "#565c65", fontSize: "11px" } }
+  }
+  const yTick = Number(card.value.y_tick_interval)
+  if (Number.isFinite(yTick) && yTick > 0) yAxisPrimary.tickInterval = yTick
+
   const options = {
     chart,
     title: { text: null },
     credits: { enabled: false },
     xAxis,
     yAxis: [
-      {
-        title: { text: card.value.y_axis_label || null },
-        min: card.value.y_axis_min ?? null,
-        max: card.value.y_axis_max ?? null,
-        gridLineColor: "#eef0f1",
-        labels: { formatter() { return formatVar(this.value, 'currency_compact'); }, style: { color: "#565c65", fontSize: "11px" } }
-      },
+      yAxisPrimary,
       {
         title: { text: card.value.y_axis_secondary_label || null },
         opposite: true,
