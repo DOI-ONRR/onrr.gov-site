@@ -9,4 +9,4 @@ applications:
     command: node .output/server/index.mjs
     env:
       NODE_ENV: production
-      NUXT_PUBLIC_API_URL: https://preview-onrr-cms.app.cloud.gov
+      NUXT_PUBLIC_API_URL: https://upgrade-onrr-cms.app.cloud.gov
