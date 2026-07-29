@@ -12,13 +12,17 @@ Directus mounts each entry of the array export (`src/index.js`) at its `id`. An
 
 | Handler entry              | Route in handler | Full URL                         |
 | -------------------------- | ---------------- | -------------------------------- |
-| `charts/revenue`           | `/summary`       | `/charts/revenue/summary`        |
-| `charts/disbursement`      | `/summary`       | `/charts/disbursement/summary`   |
-| `charts/disbursement`      | `/monthly`       | `/charts/disbursement/monthly`   |
+| `revenue`      | `/summary`                       | `/charts/revenue/summary`                      |
+| `disbursement` | `/summary`                       | `/charts/disbursement/summary`                 |
+| `disbursement` | `/total-monthly-disbursements`   | `/charts/disbursement/total-monthly-disbursements` |
+| `disbursement` | `/calendar-year-totals`          | `/charts/disbursement/calendar-year-totals`    |
 
-`/charts/disbursement/monthly?months=24` returns the total disbursement amount per
-month for the most recent N months (default 24, max 120), chronological, with month
-detail joined from `period`.
+- `/charts/disbursement/total-monthly-disbursements?months=24` — total disbursement
+  amount per month for the most recent N months (default 24, max 120), chronological,
+  with month detail joined from `period`.
+- `/charts/disbursement/calendar-year-totals?years=5` — total disbursement amount per full
+  calendar year for the most recent N years (default 5, max 50), oldest → newest. A
+  year counts only when all 12 months are present, so any in-progress year is excluded.
 
 ## Layout
 

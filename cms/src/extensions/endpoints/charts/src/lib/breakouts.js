@@ -115,6 +115,27 @@ export async function recentMonthlyTotals(database, { table, amountColumn = 'amo
 	return rows.reverse();
 }
 
+// Total of `amountColumn` per calendar year, for the most recent `years` FULL
+// calendar years — a year counts as full only when all 12 monthly periods are
+// present (so an in-progress year is excluded). Returned oldest → newest, ready to
+// plot as yearly columns.
+export async function calendarYearTotals(database, { table, amountColumn = 'amount', years = 5 }) {
+	const rows = await database
+		.select(
+			'p.calendar_year',
+			database.raw(`SUM("${table}"."${amountColumn}") as "total_amount"`)
+		)
+		.from(table)
+		.join('period as p', `${table}.period`, 'p.id')
+		.where('p.type', 'Monthly')
+		.groupBy('p.calendar_year')
+		.havingRaw('COUNT(DISTINCT "p"."period_date") = 12')
+		.orderBy('p.calendar_year', 'desc')
+		.limit(years);
+
+	return rows.reverse();
+}
+
 // Latest fiscal year with monthly data for a fact table, plus the latest fiscal
 // month within that year. Useful for current-vs-previous-FY comparisons.
 export async function maxFiscalPeriod(database, table) {

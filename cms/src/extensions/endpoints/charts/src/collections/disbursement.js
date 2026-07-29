@@ -1,4 +1,4 @@
-import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals } from '../lib/breakouts.js';
+import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals } from '../lib/breakouts.js';
 
 // Registers disbursement chart routes under `base` (mounted by index.js as
 // /disbursement, so the full prefix is /charts/disbursement).
@@ -16,6 +16,22 @@ export default (router, { database }, base = '') => {
 		} catch (error) {
 			console.error('charts/disbursement/monthly error:', error);
 			res.status(500).json({ error: 'Failed to fetch monthly disbursements' });
+		}
+	});
+
+	// GET /charts/disbursement/calendar-year-totals?years=5
+	// Total disbursement amount per full calendar year, most recent N years
+	// (default 5), oldest → newest. Excludes any in-progress calendar year.
+	router.get(`${base}/calendar-year-totals`, async (req, res) => {
+		const requested = parseInt(req.query.years, 10);
+		const years = Math.min(50, Math.max(1, Number.isNaN(requested) ? 5 : requested));
+
+		try {
+			const data = await calendarYearTotals(database, { table: 'disbursement', years });
+			res.json({ data });
+		} catch (error) {
+			console.error('charts/disbursement/calendar-year-totals error:', error);
+			res.status(500).json({ error: 'Failed to fetch calendar-year disbursements' });
 		}
 	});
 
