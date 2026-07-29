@@ -384,6 +384,17 @@ function aggregateVar(data, v) {
   if (v.aggregate === 'count') return data.length
   if (v.aggregate === 'first') return data[0]?.[v.field]
   if (v.aggregate === 'last') return data[data.length - 1]?.[v.field]
+  // second-to-last row's value (e.g. previous year)
+  if (v.aggregate === 'previous') return data[data.length - 2]?.[v.field]
+  // change between the last and previous rows: signed (`delta`), magnitude
+  // (`abs_delta`), or a direction word (`direction` → up/down/unchanged).
+  if (v.aggregate === 'delta' || v.aggregate === 'abs_delta' || v.aggregate === 'direction') {
+    const last = Number(data[data.length - 1]?.[v.field])
+    const prev = Number(data[data.length - 2]?.[v.field])
+    if (!Number.isFinite(last) || !Number.isFinite(prev)) return null
+    if (v.aggregate === 'direction') return last > prev ? 'up' : last < prev ? 'down' : 'unchanged'
+    return v.aggregate === 'abs_delta' ? Math.abs(last - prev) : last - prev
+  }
   const nums = data.map((r) => Number(r[v.field])).filter(Number.isFinite)
   if (!nums.length) return null
   switch (v.aggregate) {
@@ -410,10 +421,10 @@ const renderedTakeaway = computed(() => {
   const t = card.value.takeaway
   if (!t) return ''
   const vars = takeawayVars.value
-  return t.replace(/{(\w+)}/g, (m, tok) => (tok in vars ? vars[tok] : m))
+  return t.replace(/{([\w-]+)}/g, (m, tok) => (tok in vars ? vars[tok] : m))
 })
 
-const hasTakeawayTokens = computed(() => /{\w+}/.test(card.value.takeaway || ''))
+const hasTakeawayTokens = computed(() => /{[\w-]+}/.test(card.value.takeaway || ''))
 // Hide when tokens can't resolve (no data) so we never render a raw `{token}`.
 const showTakeaway = computed(
   () => !!card.value.takeaway && (!hasTakeawayTokens.value || hasData.value)
@@ -469,7 +480,7 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="chart-card margin-bottom-4" :class="`grid-col-${gridColumns}`">
-    <h3 v-if="card.title" class="margin-bottom-1">{{ card.title }}</h3>
+    <h3 v-if="card.title" class="margin-bottom-1 margin-top-0">{{ card.title }}</h3>
     <p v-if="showTakeaway" class="chart-card__takeaway">
       {{ renderedTakeaway }}
     </p>
