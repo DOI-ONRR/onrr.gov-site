@@ -50,14 +50,7 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
       behind it, where you can filter to exactly the records you need.</p>
     <div class="grid-row grid-gap">
       <div class="tablet:grid-col-6 margin-bottom-2">
-        <div class="chart-card padding-3">
-          <h3 class="margin-top-0 margin-bottom-1 font-heading-md">Disbursements by year</h3>
-          <p class="chart-takeaway margin-top-0" id="tk-year">Loading data…</p>
-          <div id="viz-year" class="viz-box" role="img" aria-label="Column chart of total disbursements by calendar year. A table with the same figures is available on the dataset page."></div>
-          <p class="chart-source margin-bottom-0 margin-top-2">
-            Source: <a class="usa-link" href="../dataset-page/index.html">Monthly disbursements dataset</a> · full calendar years only
-          </p>
-        </div>
+        <ChartCardByKey chart-key="disbursements-by-year" />
       </div>
       <div class="tablet:grid-col-6 margin-bottom-2">
         <div class="chart-card padding-3">

@@ -1,0 +1,7 @@
+#import "../../../fragments/chartCardFields.gql"
+
+query GetChartCardByKey($key: String!) {
+  chart_cards(filter: { key: { _eq: $key } }, limit: 1) {
+    ...chartCardFields
+  }
+}
