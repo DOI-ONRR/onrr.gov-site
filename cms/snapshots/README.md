@@ -73,8 +73,45 @@ If you see errors like:
 
 ### Applying the Snapshot
 
-1. **Establish a tunnel** to the **target** remote database. See instructions above.
+Apply through the **running, licensed Directus server** with `./schema-apply-http.sh`
+(in this directory) — **not** the `directus schema apply` CLI.
 
-2. `npx directus schema apply /path/to/onrr.gov-site/cms/snapshots/current.yaml`
+> **Why not the CLI?** `directus schema apply` runs in a standalone process that never
+> loads the Directus license, so it falls back to free-tier ("core") entitlements and
+> rejects schema changes with `collections limit exceeded` (HTTP 403) — even when the
+> target instance has a valid unlimited license. Adding `LICENSE_KEY` to the CLI env
+> does **not** help; the command never reads it. The HTTP endpoints (`/schema/diff`,
+> `/schema/apply`) execute in the running server process, which is licensed.
 
-**Note:** If necessary, use the `--ignoreRules` flag and include comma separated value of fields, collections, or relations to skip.
+Unlike taking a snapshot, applying via HTTP talks to the **app URL** (not the database),
+so **no DB tunnel is needed**.
+
+1. Get an **admin token** for the target instance (a static token on an admin user, or
+   an access token from logging in).
+
+2. Preview the changes, then apply:
+
+   ```bash
+   # Dry run — diff + summary, applies nothing
+   DIRECTUS_URL=https://<env>-onrr-cms.app.cloud.gov \
+   DIRECTUS_TOKEN=<admin-token> \
+   ./schema-apply-http.sh --dry-run
+
+   # Apply (drop --dry-run)
+   DIRECTUS_URL=https://<env>-onrr-cms.app.cloud.gov \
+   DIRECTUS_TOKEN=<admin-token> \
+   ./schema-apply-http.sh
+   ```
+
+   The script diffs `current.yaml` against the live schema, prints a summary
+   (collections/fields/relations counts, plus each collection change as add/delete/edit),
+   and then POSTs the computed `{ hash, diff }` to `/schema/apply`. It exits cleanly if
+   there are no changes.
+
+**Options:**
+
+- `[snapshot.yaml]` — snapshot to apply (default: `current.yaml` next to the script).
+- `--dry-run` — compute and summarize the diff without applying.
+- `--force` — adds `?force=true`, skipping the vendor/version and drift-hash guards.
+
+Requires `curl` and `jq`. Run `./schema-apply-http.sh --help` for the full usage.
