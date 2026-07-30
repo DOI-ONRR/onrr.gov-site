@@ -38,7 +38,7 @@
     "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:revenue-summary build:disbursement-summary build:fy-summary build:index-zones build:directus-users build:directus-roles build:directus-policies build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows build:revenue-data-update"
   },
   "engines": {
-    "node": "22.22.2"
+    "node": "^22.23.1"
   },
   "dependencies": {
     "axios": "^1.18.1",
