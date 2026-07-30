@@ -486,7 +486,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="chart-card margin-bottom-4" :class="`grid-col-${gridColumns}`">
+  <section class="chart-card" :class="`grid-col-${gridColumns}`">
     <h3 v-if="card.title" class="margin-bottom-1 margin-top-0">{{ card.title }}</h3>
     <p v-if="showTakeaway" class="chart-card__takeaway">
       {{ renderedTakeaway }}
