@@ -1,6 +1,8 @@
-<script setup lang="ts">
+<script setup>
 import MastHead from '~/components/MastHead.vue';
-
+// The mobile nav drawer (open/close, overlay, Esc, aria/button-text sync) is handled
+// by the `uswds-nav.client.js` plugin via delegated listeners — route-safe and scoped
+// to the drawer controls so it never touches the Vue-managed megamenu buttons.
 </script>
 
 <template>
@@ -10,6 +12,8 @@ import MastHead from '~/components/MastHead.vue';
       <MastHead />
       <NavigationMenu />
     </header>
+
+    <div class="usa-overlay"></div>
 
     <main id="main-content">
       <slot />

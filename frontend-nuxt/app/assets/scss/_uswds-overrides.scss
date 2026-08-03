@@ -1,0 +1,113 @@
+.usa-tag { white-space: nowrap; }
+
+/* Cap the reading measure so the wider container doesn't stretch prose. */
+.usa-intro { max-width: 62ch; }
+
+.usa-prose p, .usa-prose li { max-width: 68ch; }
+
+@media (min-width: 64em) {
+  .usa-header--extended .usa-nav__inner { max-width: 87.5rem; margin: 0 auto; padding-left: 1rem; padding-right: 1rem; }
+  .navrow { display: flex; align-items: center; justify-content: flex-start; gap: 1rem; }
+  .navrow .usa-search { margin: 0.75rem 0; }
+  /* Tabs hug their labels (width:auto so flex-basis:auto doesn't inherit USWDS's
+      list width:100%); the search box then fills the space out to the right edge. */
+  .usa-header--extended .usa-nav__primary { flex: 0 0 auto; width: auto; }
+  .navrow > section { flex: 1 1 auto; display: flex; min-width: 0; }
+  .navrow > section .usa-search { flex: 1 1 auto; width: 100%; max-width: 34rem; }
+  .navrow > section .usa-search .usa-input { flex: 1 1 auto; width: auto; min-width: 8rem; max-width: none; }
+}
+
+.usa-megamenu .usa-col a { font-size: 0.95rem; }
+
+/* Keep megamenu columns a fixed width so they sit next to each other on the
+     left instead of stretching to fill the row (which spreads two columns to
+     opposite edges). Three-column menus still fit within the container. */
+@media (min-width: 64em) {
+  .usa-megamenu .usa-col { flex: 0 1 16rem; }
+}
+
+/* --- Dropdown affordance: an inline chevron after each megamenu label signals the
+     button opens a menu rather than navigating. currentColor makes it dark on the white
+     bar and white with the label when open; it flips up when expanded. inline-flex keeps
+     the caret beside the label with even padding on both sides, and compact padding lets
+     the 8 sections + search sit on one line on wide screens. --- */
+@media (min-width: 64em) {
+  /* Bottom rule under the nav row. USWDS's extended header only ships a border-top
+     (the masthead/nav divider); this mirrors it on the bottom edge. */
+  .usa-header--extended .usa-nav { border-bottom: 1px solid #dfe1e2; }
+
+  .usa-header--extended .usa-nav__primary .usa-nav__link {
+    display: inline-flex; align-items: center; padding-left: 0.4rem; padding-right: 0.4rem;
+  }
+  /* Cancel USWDS's -1rem list margin down to just the tab's own left padding, so
+      the first label starts flush at the content edge -- matching the search box's
+      right edge on the other side (symmetric gaps). */
+  .usa-header--extended .usa-nav__primary { margin-left: -0.4rem; }
+  .usa-header--extended .usa-nav__primary .nav-caret {
+    flex: none; width: 0.7em; height: 0.7em; margin-left: 0.2rem;
+    fill: currentColor; transition: transform 0.15s ease;
+  }
+  .usa-header--extended .usa-nav__primary .usa-nav__link[aria-expanded="true"] .nav-caret { transform: rotate(180deg); }
+  /* Keep the current/hover underline aligned under the label text (not the caret):
+      USWDS insets its ::after by a fixed 1rem, but the link padding is now tighter. */
+  .usa-header--extended .usa-nav__primary-item > .usa-current::after,
+  .usa-header--extended .usa-nav__primary-item > .usa-nav__link:hover::after { left: 0.4rem; right: calc(0.6rem + 0.7em); }
+  /* USWDS's extended megamenu ships its own chevron on the label span (span::after)
+      plus 1rem of span padding-right to reserve its space. That chevron is black
+      (invisible on the open navy tab) and the padding makes each tab far wider than
+      its text, floating the caret away from the label. Suppress both at desktop so
+      every tab hugs its label and our currentColor caret sits right beside the text.
+      (The mobile drawer keeps USWDS's native +/- toggle, below 64em.) */
+  .usa-header--extended .usa-nav__primary .usa-accordion__button span { padding-right: 0; }
+  .usa-header--extended .usa-nav__primary .usa-accordion__button span::after { display: none; }
+}
+
+/* --- Nav row fit: tabs hug their labels and the search fills the rest of the row.
+     From the megamenu breakpoint up to where the container maxes out (87.5em) the
+     8 sections + search need a smaller label to share one line. --- */
+@media (min-width: 64em) and (max-width: 87.5em) {
+  .usa-header--extended .usa-nav__primary .usa-nav__link { font-size: 0.9rem; padding-left: 0.3rem; padding-right: 0.3rem; }
+  .usa-header--extended .usa-nav__primary { margin-left: -0.3rem; }
+  .usa-header--extended .usa-nav__primary-item > .usa-current::after,
+  .usa-header--extended .usa-nav__primary-item > .usa-nav__link:hover::after { left: 0.3rem; right: calc(0.5rem + 0.7em); }
+}
+
+/* Narrowest desktop band (just above the hamburger breakpoint): at 0.9rem the 8
+     sections + a usable search don't fit one line, so tighten the label further and
+     let the search shrink -- keeping a single row instead of wrapping or overflowing. */
+@media (min-width: 64em) and (max-width: 72em) {
+  .usa-header--extended .usa-nav__primary .usa-nav__link { font-size: 0.8rem; padding-left: 0.25rem; padding-right: 0.25rem; }
+  .usa-header--extended .usa-nav__primary { margin-left: -0.25rem; }
+  .usa-header--extended .usa-nav__primary-item > .usa-current::after,
+  .usa-header--extended .usa-nav__primary-item > .usa-nav__link:hover::after { left: 0.25rem; right: calc(0.45rem + 0.7em); }
+  .navrow > section .usa-search .usa-input { min-width: 6rem; }
+}
+
+.mobile-search .usa-input { flex: 1 1 auto; width: auto; height: 2.75rem; font-size: 1.05rem; max-width: none; }
+
+@media (max-width: 63.99em) {
+  .masthead-utility { display: none; }
+  .masthead-actions { display: flex; }
+  /* Drawer opens BELOW the header (IRS behavior) so SEARCH and CLOSE stay visible.
+     z-index lifts the header (and the nav + masthead controls inside it) above the
+     .usa-overlay (z-index 400), so the overlay dims only the content behind the menu
+     rather than covering the menu itself. */
+  .usa-header--extended { position: relative; z-index: 500; }
+  .usa-nav { position: absolute; top: 100%; bottom: auto; left: 0; right: auto; width: 100%; max-width: none;
+    height: auto; max-height: 75vh; overflow-y: auto; z-index: 400; padding: 0 1rem; border-left: 0;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15); animation: none; }
+  .usa-nav__close { display: none; }
+  /* The custom .nav-caret is a desktop-only affordance (sized/styled at >=64em);
+     the mobile drawer uses USWDS's native +/- toggle, so hide the caret here or its
+     unsized SVG renders full-size in the drawer. */
+  .usa-header--extended .usa-nav__primary .nav-caret { display: none; }
+  /* The current-section indicator (::after bar) is inset 1rem left/right by default,
+     so under the highlighted row it stops short of the edges. Span it full width in
+     the drawer to match the row's full-width background and dividers. */
+  .usa-header--extended .usa-nav__primary-item > .usa-current::after { left: 0; right: 0; }
+  .usa-navbar { border-bottom: 0; height: auto; min-height: 0; padding: 0; }
+  .usa-navbar .usa-menu-btn { position: static; margin: 0; background: none; color: #fff;
+    font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+    padding: 0.6rem 0.9rem; height: auto; min-height: 0; }
+  .navrow .usa-search { display: none; }
+}

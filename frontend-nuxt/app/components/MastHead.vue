@@ -10,6 +10,13 @@
           <NuxtLink :to="itemUrl(item)">{{ item.menu_label }}</NuxtLink>
         </li>
       </ul>
+      <div class="masthead-actions">
+        <button type="button" class="masthead-btn" id="search-toggle" aria-expanded="false" aria-controls="mobile-search">Search</button>
+        <span class="masthead-sep" aria-hidden="true"></span>
+        <div class="usa-navbar">
+          <button type="button" class="usa-menu-btn">Menu</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

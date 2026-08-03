@@ -18,6 +18,9 @@
               @click="toggle(item.id)"
             >
               <span>{{ item.menu_label }}</span>
+              <svg class="nav-caret" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+                <path d="M2 4l4 4 4-4z" />
+              </svg>
             </button>
             <div
               :id="`nav-section-${item.id}`"
@@ -126,23 +129,28 @@ function isCurrentItem(item) {
     background-color: $onrr-navy !important;
   }
 
-  // Full-bleed megamenu: anchor the panel to the full-width .usa-nav (its offset
-  // parent) with left/right: 0 so its background spans the whole page — cleaner
-  // than USWDS's -33% breakout. The inner .grid-container (in the template)
-  // constrains the links to the navbar width.
-  .usa-nav {
-    position: relative;
-  }
+  // Desktop only: below 64em the `.usa-nav` is USWDS's fixed off-canvas mobile drawer.
+  // These megamenu overrides must NOT apply there — `position: relative` in particular
+  // cancels the drawer's `position: fixed`, dropping it beneath the full-screen overlay.
+  @media (min-width: 64em) {
+    // Full-bleed megamenu: anchor the panel to the full-width .usa-nav (its offset
+    // parent) with left/right: 0 so its background spans the whole page — cleaner
+    // than USWDS's -33% breakout. The inner .grid-container (in the template)
+    // constrains the links to the navbar width.
+    .usa-nav {
+      position: relative;
+    }
 
-  .usa-megamenu.usa-nav__submenu {
-    left: 0;
-    right: 0;
-    width: auto;
-  }
+    .usa-megamenu.usa-nav__submenu {
+      left: 0;
+      right: 0;
+      width: auto;
+    }
 
-  // Columns hug their content and pack next to each other, rather than each
-  // stretching to fill the row (USWDS default is flex: 4 1 0%).
-  .usa-megamenu .usa-col {
-    flex: 0 1 auto;
+    // Columns hug their content and pack next to each other, rather than each
+    // stretching to fill the row (USWDS default is flex: 4 1 0%).
+    .usa-megamenu .usa-col {
+      flex: 0 1 auto;
+    }
   }
 </style>

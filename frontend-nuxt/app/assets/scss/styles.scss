@@ -33,6 +33,7 @@
 @forward "accordions";
 @forward "masthead";
 @forward "site-footer";
+@forward "uswds-overrides";
 
 @use "uswds-theme" as *;
 
@@ -52,8 +53,6 @@ $site-max-width: 1600px;
 .usa-footer__secondary-section > .grid-container {
   max-width: $site-max-width;
 }
-
-.usa-intro { max-width: 62ch; }
 
 .lede { max-width: 66ch; }
 

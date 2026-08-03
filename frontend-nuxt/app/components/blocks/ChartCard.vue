@@ -349,6 +349,16 @@ const chartOptions = computed(() => {
     options.colors = card.value.color_palette
   }
 
+  // Responsive Y ticks: a fixed tickInterval overrides Highcharts' pixel-based auto
+  // calc, so on small screens the value-axis labels don't thin out. Below 600px,
+  // relax the Y (value) axis back to auto ticks; Highcharts restores the fixed
+  // interval above the breakpoint.
+  if (Number.isFinite(yTick) && yTick > 0) {
+    options.responsive = {
+      rules: [{ condition: { maxWidth: 600 }, chartOptions: { yAxis: [{ tickInterval: null }] } }]
+    }
+  }
+
   return isPlainObject(card.value.highcharts_config)
     ? deepMerge(options, card.value.highcharts_config)
     : options
@@ -487,7 +497,7 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="chart-card" :class="`grid-col-${gridColumns}`">
-    <h3 v-if="card.title" class="margin-bottom-1 margin-top-0">{{ card.title }}</h3>
+    <h3 v-if="card.title" class="margin-bottom-1 margin-top-0 font-heading-md">{{ card.title }}</h3>
     <p v-if="showTakeaway" class="chart-card__takeaway">
       {{ renderedTakeaway }}
     </p>
