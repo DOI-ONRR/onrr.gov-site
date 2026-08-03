@@ -1,6 +1,6 @@
 <template>
   <nav class="usa-nav">
-    <div class="usa-nav-container">
+    <div class="navrow">
       <ul class="usa-nav__primary usa-accordion" aria-label="Primary site navigation">
         <li
           v-for="item in mainMenuItems"
@@ -27,23 +27,21 @@
               class="usa-nav__submenu usa-megamenu"
               :hidden="openMenuId !== item.id"
             >
-              <div class="grid-container">
-                <div class="grid-row grid-gap">
-                  <div
-                    v-for="(column, colIndex) in sectionColumns(item)"
-                    :key="colIndex"
-                    class="usa-col"
-                  >
-                    <ul class="usa-nav__submenu-list">
-                      <li
-                        v-for="link in column"
-                        :key="link.url"
-                        class="usa-nav__submenu-item"
-                      >
-                        <NuxtLink :to="link.url">{{ link.title }}</NuxtLink>
-                      </li>
-                    </ul>
-                  </div>
+              <div class="grid-row grid-gap">
+                <div
+                  v-for="(column, colIndex) in sectionColumns(item)"
+                  :key="colIndex"
+                  class="usa-col"
+                >
+                  <ul class="usa-nav__submenu-list">
+                    <li
+                      v-for="link in column"
+                      :key="link.url"
+                      class="usa-nav__submenu-item"
+                    >
+                      <NuxtLink :to="link.url">{{ link.title }}</NuxtLink>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>

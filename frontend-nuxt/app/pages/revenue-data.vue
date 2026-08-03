@@ -37,7 +37,7 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
           comes from, and where the money goes — explorable, downloadable, and updated monthly.
         </p>
         <p>
-          <a class="usa-button" href="#explore">Explore the data</a>
+          <a class="usa-button margin-bottom-2 tablet:margin-bottom-0" href="#explore">Explore the data</a>
           <a class="usa-button usa-button--outline" href="#datasets">Find a dataset</a>
         </p>
       </div>

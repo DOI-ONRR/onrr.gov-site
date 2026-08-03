@@ -37,7 +37,7 @@
   .usa-header--extended .usa-nav { border-bottom: 1px solid #dfe1e2; }
 
   .usa-header--extended .usa-nav__primary .usa-nav__link {
-    display: inline-flex; align-items: center; padding-left: 0.4rem; padding-right: 0.4rem;
+    display: inline-flex; align-items: center; padding-left: 1rem; padding-right: 1rem;
   }
   /* Cancel USWDS's -1rem list margin down to just the tab's own left padding, so
       the first label starts flush at the content edge -- matching the search box's
@@ -105,6 +105,9 @@
      so under the highlighted row it stops short of the edges. Span it full width in
      the drawer to match the row's full-width background and dividers. */
   .usa-header--extended .usa-nav__primary-item > .usa-current::after { left: 0; right: 0; }
+  /* In the drawer, stack the megamenu's multi-column groups into a single column
+     (desktop chunks links into columns of 3; they'd otherwise sit side-by-side here). */
+  .usa-megamenu .usa-col { flex: 0 0 100%; }
   .usa-navbar { border-bottom: 0; height: auto; min-height: 0; padding: 0; }
   .usa-navbar .usa-menu-btn { position: static; margin: 0; background: none; color: #fff;
     font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
