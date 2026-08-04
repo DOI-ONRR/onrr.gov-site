@@ -23,6 +23,28 @@ fragment pageFields on pages {
     description
   }
   hero_title
+  dataset_metadata {
+    id
+    name
+    description
+    update_frequency
+    formats
+    coverage_start
+    coverage_end
+    publisher
+    related_links
+    about
+    terms {
+      glossary_terms_id {
+        id
+        term
+        definition
+      }
+    }
+    charts(sort: ["sort"]) {
+      ...chartCardFields
+    }
+  }
   page_blocks {
     id
     item {

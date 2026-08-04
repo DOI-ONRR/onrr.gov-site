@@ -13,6 +13,10 @@ const { resolveImages, assetUrl } = useCmsContent()
 const { data } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
 const page = computed(() => data.value?.page?.[0])
 
+// A page with an associated dataset_metadata record renders as a dataset page
+// (DatasetView) instead of the standard page_blocks layout — and drops the sidenav.
+const isDataset = computed(() => !!page.value?.dataset_metadata)
+
 const pageTitle = computed(() => page.value?.title || null)
 const parentTitle = computed(() => page.value?.parent?.title || null)
 const grandparentTitle = computed(() => page.value?.parent?.parent?.title || null)
@@ -67,7 +71,7 @@ const sidenavLinks = computed(() => {
   />
   <section class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
-      <div class="grid-col-2">
+      <div v-if="!isDataset" class="grid-col-2">
         <nav v-if="sidenavLinks.length" aria-label="Side navigation">
           <ul class="usa-sidenav">
             <li class="usa-sidenav__item" v-for="link in sidenavLinks" :key="link.title">
@@ -78,7 +82,7 @@ const sidenavLinks = computed(() => {
           </ul>
         </nav>
       </div>
-      <div class="grid-col-10">
+      <div :class="isDataset ? 'grid-col-12' : 'grid-col-10'">
         <nav class="usa-breadcrumb" aria-label="Breadcrumbs">
           <ol class="usa-breadcrumb__list">
             <li class="usa-breadcrumb__list-item">
@@ -99,7 +103,9 @@ const sidenavLinks = computed(() => {
             </li>
           </ol>
         </nav>
-        <h1>{{ page?.hero_title || page?.title }}</h1>
+        <h1 v-if="!isDataset">{{ page?.hero_title || page?.title }}</h1>
+        <DatasetView v-if="isDataset" :dataset="page.dataset_metadata" />
+        <template v-else>
         <Events v-if="slug === 'events'" />
         <div class="grid-row grid-gap">
           <div
@@ -133,6 +139,7 @@ const sidenavLinks = computed(() => {
             />
           </div>
         </div>
+        </template>
       </div>
     </div>
   </section>
