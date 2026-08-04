@@ -27,21 +27,26 @@
               class="usa-nav__submenu usa-megamenu"
               :hidden="openMenuId !== item.id"
             >
-              <div class="grid-row grid-gap">
-                <div
-                  v-for="(column, colIndex) in sectionColumns(item)"
-                  :key="colIndex"
-                  class="usa-col"
-                >
-                  <ul class="usa-nav__submenu-list">
-                    <li
-                      v-for="link in column"
-                      :key="link.url"
-                      class="usa-nav__submenu-item"
-                    >
-                      <NuxtLink :to="link.url">{{ link.title }}</NuxtLink>
-                    </li>
-                  </ul>
+              <!-- The panel background is full-bleed (position:absolute left/right:0 on
+                   .usa-nav); this inner .grid-container re-constrains the link columns to
+                   the site width so they line up under the nav labels, masthead, and body. -->
+              <div class="grid-container">
+                <div class="grid-row grid-gap">
+                  <div
+                    v-for="(column, colIndex) in sectionColumns(item)"
+                    :key="colIndex"
+                    class="usa-col"
+                  >
+                    <ul class="usa-nav__submenu-list">
+                      <li
+                        v-for="link in column"
+                        :key="link.url"
+                        class="usa-nav__submenu-item"
+                      >
+                        <NuxtLink :to="link.url">{{ link.title }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

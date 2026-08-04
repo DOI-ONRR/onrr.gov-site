@@ -6,8 +6,17 @@
 .usa-prose p, .usa-prose li { max-width: 68ch; }
 
 @media (min-width: 64em) {
-  .usa-header--extended .usa-nav__inner { max-width: 87.5rem; margin: 0 auto; padding-left: 1rem; padding-right: 1rem; }
-  .navrow { display: flex; align-items: center; justify-content: flex-start; gap: 1rem; }
+  /* Center the nav row and align it with the rest of the page. `.navrow` replaced
+     USWDS's `.usa-nav-container`, which had supplied the site max-width + centered
+     gutters; restore them here so the nav lines up with the masthead, body, and
+     footer `.grid-container`s (1600px cap = $site-max-width in styles.scss; 2rem
+     gutter = USWDS's desktop site-margin). Desktop-only: below 64em `.usa-nav` is
+     the full-width mobile drawer and must not be capped/centered. */
+  .navrow {
+    display: flex; align-items: center; justify-content: flex-start; gap: 1rem;
+    max-width: 1600px; margin-left: auto; margin-right: auto;
+    padding-left: 2rem; padding-right: 2rem;
+  }
   .navrow .usa-search { margin: 0.75rem 0; }
   /* Tabs hug their labels (width:auto so flex-basis:auto doesn't inherit USWDS's
       list width:100%); the search box then fills the space out to the right edge. */
@@ -108,6 +117,10 @@
   /* In the drawer, stack the megamenu's multi-column groups into a single column
      (desktop chunks links into columns of 3; they'd otherwise sit side-by-side here). */
   .usa-megamenu .usa-col { flex: 0 0 100%; }
+  /* The submenu's inner .grid-container centers/constrains the columns on desktop;
+     inside the full-width drawer it must not add its own cap or gutter (the drawer
+     already supplies the 1rem padding), so links stay flush with the drawer. */
+  .usa-megamenu .grid-container { max-width: none; padding-left: 0; padding-right: 0; }
   .usa-navbar { border-bottom: 0; height: auto; min-height: 0; padding: 0; }
   .usa-navbar .usa-menu-btn { position: static; margin: 0; background: none; color: #fff;
     font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
