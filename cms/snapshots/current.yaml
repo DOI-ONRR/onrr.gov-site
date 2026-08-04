@@ -20,7 +20,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 17
+      sort: 18
       sort_field: null
       status: active
       translations: null
@@ -298,7 +298,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 27
+      sort: 28
       sort_field: null
       status: active
       translations: null
@@ -454,7 +454,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 32
+      sort: 33
       sort_field: null
       status: active
       translations: null
@@ -516,6 +516,58 @@ collections:
       versioning: false
     schema:
       name: county_lookup
+  - collection: dataset_metadata
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: dataset_metadata
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 17
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: dataset_metadata
+  - collection: dataset_metadata_glossary_terms
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: dataset_metadata_glossary_terms
+      color: null
+      display_template: null
+      group: null
+      hidden: true
+      icon: import_export
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: dataset_metadata_glossary_terms
   - collection: disbursement
     meta:
       accountability: null
@@ -586,7 +638,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 28
+      sort: 29
       sort_field: sort
       status: active
       translations: null
@@ -612,7 +664,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 18
+      sort: 19
       sort_field: sort
       status: active
       translations:
@@ -640,7 +692,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 23
+      sort: 24
       sort_field: null
       status: active
       translations: null
@@ -954,7 +1006,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 19
+      sort: 20
       sort_field: sort
       status: active
       translations:
@@ -1034,7 +1086,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 21
+      sort: 22
       sort_field: null
       status: active
       translations: null
@@ -1086,7 +1138,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 24
+      sort: 25
       sort_field: null
       status: active
       translations: null
@@ -1112,7 +1164,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 29
+      sort: 30
       sort_field: null
       status: active
       translations: null
@@ -1138,7 +1190,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 20
+      sort: 21
       sort_field: null
       status: active
       translations: null
@@ -1164,7 +1216,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 31
+      sort: 32
       sort_field: null
       status: active
       translations: null
@@ -1190,7 +1242,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 22
+      sort: 23
       sort_field: null
       status: active
       translations: null
@@ -1214,7 +1266,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 30
+      sort: 31
       sort_field: null
       status: active
       translations: null
@@ -1576,7 +1628,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 25
+      sort: 26
       sort_field: sort
       status: active
       translations: null
@@ -1630,7 +1682,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 26
+      sort: 27
       sort_field: null
       status: active
       translations: null
@@ -6884,6 +6936,93 @@ fields:
       max_length: null
       numeric_precision: 24
       numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: dataset_metadata
+    type: uuid
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: dataset_metadata
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 55
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: dataset_metadata
+      table: chart_cards
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: dataset_metadata
+      foreign_key_column: id
+  - collection: chart_cards
+    field: sort
+    type: integer
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enabled when dataset_metadata not null
+          readonly: false
+          rule:
+            _and:
+              - dataset_metadata:
+                  _nnull: true
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 56
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: chart_cards
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -12193,6 +12332,774 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: dataset_metadata
+    field: id
+    type: uuid
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: dataset_metadata
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: user_created
+    type: uuid
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: dataset_metadata
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: dataset_metadata
+    field: date_created
+    type: timestamp
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: dataset_metadata
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: user_updated
+    type: uuid
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: dataset_metadata
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: dataset_metadata
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: dataset_metadata
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: name
+    type: string
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: name
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: name
+      table: dataset_metadata
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: description
+    type: text
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: description
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: description
+      table: dataset_metadata
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: update_frequency
+    type: string
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: update_frequency
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: update_frequency
+      table: dataset_metadata
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: formats
+    type: json
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: formats
+      group: null
+      hidden: false
+      interface: select-multiple-dropdown
+      note: null
+      options:
+        choices:
+          - text: CSV
+            value: CSV
+          - text: XLSX
+            value: XLSX
+          - text: JSON
+            value: JSON
+          - text: API
+            value: API
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: formats
+      table: dataset_metadata
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: coverage_start
+    type: date
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: coverage_start
+      group: null
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: coverage_start
+      table: dataset_metadata
+      data_type: date
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: coverage_end
+    type: date
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: coverage_end
+      group: null
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: coverage_end
+      table: dataset_metadata
+      data_type: date
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: publisher
+    type: string
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: publisher
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: publisher
+      table: dataset_metadata
+      data_type: character varying
+      default_value: Office of Natural Resources Revenue
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: related_links
+    type: json
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: related_links
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: Text
+            meta:
+              field: Text
+              interface: input
+              required: true
+              type: string
+              width: full
+            name: Text
+            type: string
+          - field: URL
+            meta:
+              field: URL
+              interface: input
+              required: true
+              type: string
+              width: full
+            name: URL
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: related_links
+      table: dataset_metadata
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: about
+    type: text
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: about
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: about
+      table: dataset_metadata
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: terms
+    type: alias
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: terms
+      group: null
+      hidden: false
+      interface: list-m2m
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: dataset_metadata
+    field: charts
+    type: alias
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: charts
+      group: null
+      hidden: false
+      interface: list-o2m
+      note: null
+      options:
+        sort: sort
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - o2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: dataset_metadata_glossary_terms
+    field: id
+    type: integer
+    meta:
+      collection: dataset_metadata_glossary_terms
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: dataset_metadata_glossary_terms
+      data_type: integer
+      default_value: nextval('dataset_metadata_glossary_terms_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata_glossary_terms
+    field: dataset_metadata_id
+    type: uuid
+    meta:
+      collection: dataset_metadata_glossary_terms
+      conditions: null
+      display: null
+      display_options: null
+      field: dataset_metadata_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: dataset_metadata_id
+      table: dataset_metadata_glossary_terms
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: dataset_metadata
+      foreign_key_column: id
+  - collection: dataset_metadata_glossary_terms
+    field: glossary_terms_id
+    type: uuid
+    meta:
+      collection: dataset_metadata_glossary_terms
+      conditions: null
+      display: null
+      display_options: null
+      field: glossary_terms_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: glossary_terms_id
+      table: dataset_metadata_glossary_terms
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: glossary_terms
+      foreign_key_column: id
   - collection: disbursement
     field: id
     type: uuid
@@ -22463,6 +23370,47 @@ fields:
       validation: null
       validation_message: null
       width: full
+  - collection: pages
+    field: dataset_metadata
+    type: uuid
+    meta:
+      collection: pages
+      conditions: null
+      display: null
+      display_options: null
+      field: dataset_metadata
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 23
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: dataset_metadata
+      table: pages
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: dataset_metadata
+      foreign_key_column: id
   - collection: pages_files
     field: id
     type: integer
@@ -30911,6 +31859,27 @@ relations:
       constraint_name: chart_cards_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: chart_cards
+    field: dataset_metadata
+    related_collection: dataset_metadata
+    meta:
+      junction_field: null
+      many_collection: chart_cards
+      many_field: dataset_metadata
+      one_allowed_collections: null
+      one_collection: dataset_metadata
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: charts
+      sort_field: null
+    schema:
+      table: chart_cards
+      column: dataset_metadata
+      foreign_key_table: dataset_metadata
+      foreign_key_column: id
+      constraint_name: chart_cards_dataset_metadata_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: chart_series
     field: user_created
     related_collection: directus_users
@@ -31226,6 +32195,90 @@ relations:
       constraint_name: county_lookup_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: dataset_metadata
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: dataset_metadata
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: dataset_metadata
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: dataset_metadata_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: dataset_metadata
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: dataset_metadata
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: dataset_metadata
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: dataset_metadata_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: dataset_metadata_glossary_terms
+    field: glossary_terms_id
+    related_collection: glossary_terms
+    meta:
+      junction_field: dataset_metadata_id
+      many_collection: dataset_metadata_glossary_terms
+      many_field: glossary_terms_id
+      one_allowed_collections: null
+      one_collection: glossary_terms
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: dataset_metadata_glossary_terms
+      column: glossary_terms_id
+      foreign_key_table: glossary_terms
+      foreign_key_column: id
+      constraint_name: dataset_metadata_glossary_terms_glossary_terms_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: dataset_metadata_glossary_terms
+    field: dataset_metadata_id
+    related_collection: dataset_metadata
+    meta:
+      junction_field: glossary_terms_id
+      many_collection: dataset_metadata_glossary_terms
+      many_field: dataset_metadata_id
+      one_allowed_collections: null
+      one_collection: dataset_metadata
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: terms
+      sort_field: null
+    schema:
+      table: dataset_metadata_glossary_terms
+      column: dataset_metadata_id
+      foreign_key_table: dataset_metadata
+      foreign_key_column: id
+      constraint_name: dataset_metadata_glossary_terms_dataset_metadata_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: disbursement
     field: user_created
     related_collection: directus_users
@@ -32251,6 +33304,27 @@ relations:
       constraint_name: pages_hero_image_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: pages
+    field: dataset_metadata
+    related_collection: dataset_metadata
+    meta:
+      junction_field: null
+      many_collection: pages
+      many_field: dataset_metadata
+      one_allowed_collections: null
+      one_collection: dataset_metadata
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: pages
+      column: dataset_metadata
+      foreign_key_table: dataset_metadata
+      foreign_key_column: id
+      constraint_name: pages_dataset_metadata_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: pages_files
     field: directus_files_id
     related_collection: directus_files
