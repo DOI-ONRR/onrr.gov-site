@@ -239,16 +239,20 @@ function formatValue(val, series) {
   const suffix = series?._suffix || (fmt === 'percent' ? '%' : '')
   const n = Number(val)
   if (!Number.isFinite(n)) return String(val)
-  const body = fmt === 'currency'
-    ? n.toLocaleString('en-US', { maximumFractionDigits: 0 })
-    : n.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  return `${prefix}${body}${suffix}`
+  // Format the magnitude, then put any minus sign *before* the prefix so a
+  // negative currency reads "-$393" rather than "$-393".
+  const body = Math.abs(n).toLocaleString('en-US', {
+    maximumFractionDigits: fmt === 'currency' ? 0 : 2,
+  })
+  return `${n < 0 ? '-' : ''}${prefix}${body}${suffix}`
 }
 
 // --- Highcharts options -------------------------------------------------------
 const legendPos = computed(() => {
   const p = card.value.legend_position || 'bottom'
   if (p === 'top') return { align: 'center', verticalAlign: 'top', layout: 'horizontal' }
+  if (p === 'top-left') return { align: 'left', verticalAlign: 'top', layout: 'horizontal' }
+  if (p === 'top-right') return { align: 'right', verticalAlign: 'top', layout: 'horizontal' }
   if (p === 'left') return { align: 'left', verticalAlign: 'middle', layout: 'vertical' }
   if (p === 'right') return { align: 'right', verticalAlign: 'middle', layout: 'vertical' }
   return { align: 'center', verticalAlign: 'bottom', layout: 'horizontal' }
@@ -368,6 +372,10 @@ const chartOptions = computed(() => {
 const renderMode = computed(() => card.value.render_mode || 'chart')
 const showChart = computed(() => renderMode.value !== 'table')
 const showTable = computed(() => renderMode.value !== 'chart')
+
+// The data table is an accessible alternative to the chart, collapsed by default
+// in a USWDS accordion (Vue-managed toggle, matching ExpansionPanelBlock).
+const tableOpen = ref(false)
 const hasData = computed(() => chartData.value.series.length > 0 && chartData.value.categories.length > 0)
 
 // --- takeaway interpolation ---------------------------------------------------
@@ -386,9 +394,12 @@ function fmtDate(value, opts) {
 function formatVar(value, format) {
   if (value == null) return ''
   const n = Number(value)
+  // Minus sign before the "$" so negatives read "-$2B", not "$-2B".
+  const sign = Number.isFinite(n) && n < 0 ? '-' : ''
+  const abs = Math.abs(n)
   switch (format) {
-    case 'currency': return Number.isFinite(n) ? '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 }) : String(value)
-    case 'currency_compact': return Number.isFinite(n) ? '$' + n.toLocaleString('en-US', { notation: 'compact', maximumFractionDigits: 1 }) : String(value)
+    case 'currency': return Number.isFinite(n) ? sign + '$' + abs.toLocaleString('en-US', { maximumFractionDigits: 0 }) : String(value)
+    case 'currency_compact': return Number.isFinite(n) ? sign + '$' + abs.toLocaleString('en-US', { notation: 'compact', maximumFractionDigits: 1 }) : String(value)
     case 'percent': return Number.isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits: 1 }) + '%' : String(value)
     case 'number': return Number.isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits: 0 }) : String(value)
     case 'month_year': return fmtDate(value, { month: 'short', year: 'numeric' })
@@ -451,18 +462,33 @@ const showTakeaway = computed(
 const tableModel = computed(() => {
   const { categories, series } = chartData.value
   const includeCategory = card.value.table_include_category !== false
-  const rowsOut = categories.map((cat, i) => ({
-    category: cat,
-    values: series.map((s) => ({ value: s.data[i], series: s })),
-  }))
-  let totals = null
-  if (card.value.table_show_totals) {
-    totals = series.map((s) => ({
-      value: s.data.reduce((sum, v) => sum + (Number(v) || 0), 0),
-      series: s,
-    }))
+
+  // Totals can run down each series column (a footer row) and/or across each row
+  // (a "Total" column). Direction: column (default, back-compatible) | row | both.
+  const wantTotals = !!card.value.table_show_totals
+  const direction = card.value.table_totals_direction || 'column'
+  const showColumnTotals = wantTotals && (direction === 'column' || direction === 'both')
+  const showRowTotals = wantTotals && (direction === 'row' || direction === 'both')
+  // Row/grand totals sum across series; a table's series are normally one measure,
+  // so format those aggregates with the first series' format.
+  const totalSeries = series[0] || null
+  const sum = (nums) => nums.reduce((acc, v) => acc + (Number(v) || 0), 0)
+
+  const rows = categories.map((cat, i) => {
+    const values = series.map((s) => ({ value: s.data[i], series: s }))
+    const row = { category: cat, values }
+    if (showRowTotals) row.total = { value: sum(values.map((c) => c.value)), series: totalSeries }
+    return row
+  })
+
+  let columnTotals = null
+  let grandTotal = null
+  if (showColumnTotals) {
+    columnTotals = series.map((s) => ({ value: sum(s.data), series: s }))
+    if (showRowTotals) grandTotal = { value: sum(columnTotals.map((c) => c.value)), series: totalSeries }
   }
-  return { includeCategory, columns: series, rows: rowsOut, totals }
+
+  return { includeCategory, columns: series, rows, columnTotals, grandTotal, showColumnTotals, showRowTotals }
 })
 
 // --- Highcharts (client only) -------------------------------------------------
@@ -541,37 +567,62 @@ onBeforeUnmount(() => {
       <template v-else>
         <div v-show="showChart" ref="chartEl" class="chart-card__chart" :style="{ minHeight: chartMinHeight }"></div>
 
-        <table
-          v-if="showTable"
-          class="usa-table usa-table--borderless width-full margin-top-2"
-        >
-          <thead>
-            <tr>
-              <th v-if="tableModel.includeCategory" scope="col">
-                {{ card.x_axis_label || 'Category' }}
-              </th>
-              <th v-for="col in tableModel.columns" :key="col.name" scope="col" class="text-right">
-                {{ col.name }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in tableModel.rows" :key="row.category">
-              <th v-if="tableModel.includeCategory" scope="row">{{ row.category }}</th>
-              <td v-for="(cell, i) in row.values" :key="i" class="text-right">
-                {{ formatValue(cell.value, cell.series) }}
-              </td>
-            </tr>
-          </tbody>
-          <tfoot v-if="tableModel.totals">
-            <tr class="text-bold">
-              <th v-if="tableModel.includeCategory" scope="row">Total</th>
-              <td v-for="(cell, i) in tableModel.totals" :key="i" class="text-right">
-                {{ formatValue(cell.value, cell.series) }}
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+        <div v-if="showTable" class="usa-accordion usa-accordion--bordered margin-top-2">
+          <h4 class="usa-accordion__heading">
+            <button
+              type="button"
+              class="usa-accordion__button"
+              :aria-expanded="tableOpen"
+              :aria-controls="`chart-table-${card.id}`"
+              @click="tableOpen = !tableOpen"
+            >
+              View this chart as a table
+            </button>
+          </h4>
+          <div
+            :id="`chart-table-${card.id}`"
+            class="usa-accordion__content"
+            :hidden="!tableOpen"
+          >
+            <div class="data-table-wrap">
+              <table class="usa-table usa-table--compact usa-table--striped width-full margin-top-0">
+                <thead>
+                  <tr>
+                    <th v-if="tableModel.includeCategory" scope="col">
+                      {{ card.table_category_label || card.x_axis_label || 'Category' }}
+                    </th>
+                    <th v-for="col in tableModel.columns" :key="col.name" scope="col" class="text-right">
+                      {{ col.name }}
+                    </th>
+                    <th v-if="tableModel.showRowTotals" scope="col" class="text-right">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in tableModel.rows" :key="row.category">
+                    <th v-if="tableModel.includeCategory" scope="row">{{ row.category }}</th>
+                    <td v-for="(cell, i) in row.values" :key="i" class="text-right">
+                      {{ formatValue(cell.value, cell.series) }}
+                    </td>
+                    <td v-if="tableModel.showRowTotals" class="text-right text-bold">
+                      {{ formatValue(row.total.value, row.total.series) }}
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot v-if="tableModel.showColumnTotals">
+                  <tr class="text-bold">
+                    <th v-if="tableModel.includeCategory" scope="row">Total</th>
+                    <td v-for="(cell, i) in tableModel.columnTotals" :key="i" class="text-right">
+                      {{ formatValue(cell.value, cell.series) }}
+                    </td>
+                    <td v-if="tableModel.showRowTotals" class="text-right">
+                      {{ formatValue(tableModel.grandTotal.value, tableModel.grandTotal.series) }}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
       </template>
     </template>
 
@@ -602,5 +653,34 @@ onBeforeUnmount(() => {
   display: inline;
   margin: 0;
   font-size: 0.8rem;
+}
+
+.data-table-wrap {
+  max-height: 20rem;
+  overflow: auto;
+  border: 1px solid #dfe1e2;
+
+  table {
+    margin: 0;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #f0f0f0;
+    z-index: 2;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background: #e6e6e6;
+    }
+  }
+
+  td.amt,
+  th.amt {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
 }
 </style>

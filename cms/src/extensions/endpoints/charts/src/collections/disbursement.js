@@ -54,15 +54,20 @@ export default (router, { database }, base = '') => {
 		}
 	});
 
-	// GET /charts/disbursement/monthly-by-recipient?months=60
+	// GET /charts/disbursement/monthly-by-recipient?months=60  (or ?years=5)
 	// Monthly disbursement totals pivoted into 5 recipient groups — one wide row per
 	// month ({ period_date, month labels, state_local, us_treasury, native_american,
 	// reclamation_fund, other_funds }), chronological — for the dataset-page stacked
-	// column chart. `months` limits to the most recent N months with data (default:
-	// all). Response also carries a `summary` for the chart takeaway.
+	// column chart. `months` limits to the most recent N months with data; `years` is
+	// the same window in years (years × 12 months) and takes precedence. Default: all.
+	// Response also carries a `summary` for the chart takeaway.
 	router.get(`${base}/monthly-by-recipient`, async (req, res) => {
+		const y = parseInt(req.query.years, 10);
 		const m = parseInt(req.query.months, 10);
-		const months = Number.isNaN(m) ? null : Math.min(240, Math.max(1, m));
+		// `years` wins when provided (12 months per year); both windows are clamped.
+		let months = null;
+		if (!Number.isNaN(y)) months = Math.min(20, Math.max(1, y)) * 12;
+		else if (!Number.isNaN(m)) months = Math.min(240, Math.max(1, m));
 
 		try {
 			const result = await monthlyByRecipientGroup(database, { table: 'disbursement', months });

@@ -40,8 +40,10 @@ fragment chartCardFields on chart_cards {
   enable_export
   enable_zoom
   # table options
+  table_category_label
   table_include_category
   table_show_totals
+  table_totals_direction
   table_default_sort
   table_sort_direction
   # advanced escape hatch

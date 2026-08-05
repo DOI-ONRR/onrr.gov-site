@@ -58,7 +58,7 @@ const terms = computed(() => {
 
 <template>
   <div class="dataset">
-    <div class="grid-row grid-gap">
+    <div class="grid-row grid-gap margin-bottom-4">
       <div v-if="dataset.description" class="tablet:grid-col-8">
         <!-- Reading-measure cap lives on the text, not the grid column, so the
              column keeps its full 8-col width and the meta panel fills its 4. -->
@@ -71,36 +71,41 @@ const terms = computed(() => {
         </div>
       </div>
 
-      <div class="dataset-meta grid-col-4">
-        <dl class="usa-list usa-list--unstyled">
-          <template v-if="dataset.update_frequency">
-            <dt>Update frequency</dt>
-            <dd>{{ dataset.update_frequency }}</dd>
-          </template>
-          <template v-if="coverage">
-            <dt>Coverage</dt>
-            <dd>{{ coverage }}</dd>
-          </template>
-          <template v-if="formats.length">
-            <dt>Formats</dt>
-            <dd>{{ formats.join(' · ') }}</dd>
-          </template>
-          <template v-if="dataset.publisher">
-            <dt>Publisher</dt>
-            <dd>{{ dataset.publisher }}</dd>
-          </template>
-          <template v-if="relatedLinks.length">
-            <dt>Related</dt>
-            <dd>
-              <a
-                v-for="(link, i) in relatedLinks"
-                :key="i"
-                :href="link.url"
-                class="usa-link margin-bottom-1"
-              >{{ link.text || link.url }}</a>
-            </dd>
-          </template>
-        </dl>
+      <!-- The panel styling lives on an inner wrapper, not the grid column: a
+           bordered/filled box on a .grid-gap column paints into the gutter and
+           bleeds past the container edge. The inner box stays in the content area. -->
+      <div class="tablet:grid-col-4">
+        <div class="dataset-meta">
+          <dl class="usa-list usa-list--unstyled">
+            <template v-if="dataset.update_frequency">
+              <dt>Update frequency</dt>
+              <dd>{{ dataset.update_frequency }}</dd>
+            </template>
+            <template v-if="coverage">
+              <dt>Coverage</dt>
+              <dd>{{ coverage }}</dd>
+            </template>
+            <template v-if="formats.length">
+              <dt>Formats</dt>
+              <dd>{{ formats.join(' · ') }}</dd>
+            </template>
+            <template v-if="dataset.publisher">
+              <dt>Publisher</dt>
+              <dd>{{ dataset.publisher }}</dd>
+            </template>
+            <template v-if="relatedLinks.length">
+              <dt>Related</dt>
+              <dd>
+                <a
+                  v-for="(link, i) in relatedLinks"
+                  :key="i"
+                  :href="link.url"
+                  class="usa-link margin-bottom-1"
+                >{{ link.text || link.url }}</a>
+              </dd>
+            </template>
+          </dl>
+        </div>
       </div>
     </div>
     
