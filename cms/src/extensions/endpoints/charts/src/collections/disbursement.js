@@ -1,4 +1,4 @@
-import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals, topStates } from '../lib/breakouts.js';
+import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals, topStates, monthlyByRecipientGroup } from '../lib/breakouts.js';
 
 // Registers disbursement chart routes under `base` (mounted by index.js as
 // /disbursement, so the full prefix is /charts/disbursement).
@@ -51,6 +51,25 @@ export default (router, { database }, base = '') => {
 		} catch (error) {
 			console.error('charts/disbursement/top-states error:', error);
 			res.status(500).json({ error: 'Failed to fetch top states' });
+		}
+	});
+
+	// GET /charts/disbursement/monthly-by-recipient?months=60
+	// Monthly disbursement totals pivoted into 5 recipient groups — one wide row per
+	// month ({ period_date, month labels, state_local, us_treasury, native_american,
+	// reclamation_fund, other_funds }), chronological — for the dataset-page stacked
+	// column chart. `months` limits to the most recent N months with data (default:
+	// all). Response also carries a `summary` for the chart takeaway.
+	router.get(`${base}/monthly-by-recipient`, async (req, res) => {
+		const m = parseInt(req.query.months, 10);
+		const months = Number.isNaN(m) ? null : Math.min(240, Math.max(1, m));
+
+		try {
+			const result = await monthlyByRecipientGroup(database, { table: 'disbursement', months });
+			res.json(result);
+		} catch (error) {
+			console.error('charts/disbursement/monthly-by-recipient error:', error);
+			res.status(500).json({ error: 'Failed to fetch monthly disbursements by recipient' });
 		}
 	});
 

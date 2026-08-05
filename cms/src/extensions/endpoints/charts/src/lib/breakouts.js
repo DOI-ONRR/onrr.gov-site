@@ -7,10 +7,36 @@
 // logic that the standalone `revenue-summary` / `disbursement-summary` endpoints
 // each hand-rolled, so per-collection handlers stay thin.
 
+// Recipient groups for the disbursements-by-recipient charts. `fund.recipient`
+// carries ~19 granular labels; these collapse them into the 5 groups the dataset-
+// page chart shows. Matching is by prefix/substring (mirrors the mockup's regex
+// bucketing) so label variants group correctly — e.g. `State`/`County` → State &
+// local, and both `U.S. Treasury` and `U.S. Treasury - OCS Gulf` → U.S. Treasury.
+// `key` is the wide-row column / `chart_series.data_field`; array order sets the
+// stack order, and `other_funds` (catch-all) MUST stay last.
+export const RECIPIENT_GROUPS = [
+	{ key: 'state_local', label: 'State & local', match: /^(State|County)/i },
+	{ key: 'us_treasury', label: 'U.S. Treasury', match: /Treasury/i },
+	{ key: 'native_american', label: 'Native American', match: /Native American/i },
+	{ key: 'reclamation_fund', label: 'Reclamation Fund', match: /^Reclamation/i },
+	{ key: 'other_funds', label: 'Other funds', match: /.*/ }, // catch-all — keep last
+];
+
+// Resolve a raw fund.recipient label to its group object. First matcher wins;
+// other_funds (/.*/ ) is the catch-all, so it only wins when nothing above matched.
+function recipientGroup(recipient) {
+	const r = recipient || '';
+	return RECIPIENT_GROUPS.find((g) => g.match.test(r)) ?? RECIPIENT_GROUPS[RECIPIENT_GROUPS.length - 1];
+}
+const recipientGroupKey = (recipient) => recipientGroup(recipient).key;
+const recipientGroupLabel = (recipient) => recipientGroup(recipient).label;
+
 // Breakout definitions keyed by collection → breakout name.
 //   join      : related table to join (and the FK column on the fact table)
 //   joinField : column on the related table that holds the breakout label
 //   filter    : optional allow-list of label values to include
+//   mapValue  : optional (raw label) → group label fn; buckets rows into higher-
+//               level groups instead of an exact-match filter (see `recipient`).
 export const BREAKOUTS = {
 	revenue: {
 		source: {
@@ -37,7 +63,10 @@ export const BREAKOUTS = {
 		recipient: {
 			join: 'fund',
 			joinField: 'recipient',
-			filter: ['Other funds', 'Historic Preservation Fund', 'Land and Water Conservation Fund', 'Native American tribes and individuals', 'Reclamation Fund', 'State and local governments', 'U.S. Treasury'],
+			// Bucket the ~19 raw recipient labels into the 5 chart groups (RECIPIENT_GROUPS)
+			// rather than an exact-match allow-list, which had drifted from the data
+			// (`State`, `County`, and the OCS-Gulf variants were silently dropped).
+			mapValue: recipientGroupLabel,
 		},
 	},
 };
@@ -52,11 +81,13 @@ export function breakoutNames(collection) {
 	return Object.keys(BREAKOUTS[collection] ?? {});
 }
 
-// Build a monthly breakout-summary query for a fact table: SUM(amountColumn)
-// grouped by the breakout dimension and the standard period fields, filtered to
-// Monthly periods and (optionally) the breakout's allow-list. Returns a Knex
-// query builder — await it, or chain further before awaiting.
-export function monthlyBreakoutSummary(database, { table, amountColumn = 'amount', breakout }) {
+// Monthly breakout summary for a fact table: SUM(amountColumn) grouped by the
+// breakout dimension and the standard period fields, filtered to Monthly periods
+// and (optionally) the breakout's allow-list. Returns rows sorted by period_date.
+// If the breakout defines `mapValue`, raw dimension values are bucketed into
+// higher-level groups (e.g. recipient → 5 groups) and rows mapping to the same
+// (month, group) are re-summed.
+export async function monthlyBreakoutSummary(database, { table, amountColumn = 'amount', breakout }) {
 	const query = database
 		.select(
 			database.raw(`"${breakout.join}"."${breakout.joinField}" as "breakout_value"`),
@@ -77,7 +108,7 @@ export function monthlyBreakoutSummary(database, { table, amountColumn = 'amount
 		query.whereIn(`${breakout.join}.${breakout.joinField}`, breakout.filter);
 	}
 
-	return query
+	query
 		.groupBy(
 			`${breakout.join}.${breakout.joinField}`,
 			'p.fiscal_year',
@@ -88,6 +119,26 @@ export function monthlyBreakoutSummary(database, { table, amountColumn = 'amount
 			'p.month_long'
 		)
 		.orderBy('p.period_date', 'asc');
+
+	const rows = await query;
+
+	// No bucketing → raw per-label rows, unchanged.
+	if (!breakout.mapValue) return rows;
+
+	// Collapse raw breakout_value into groups, re-summing per (month, group).
+	const merged = new Map();
+	for (const r of rows) {
+		const label = breakout.mapValue(r.breakout_value);
+		const pd = r.period_date instanceof Date ? r.period_date.toISOString() : r.period_date;
+		const key = `${pd}||${label}`;
+		let row = merged.get(key);
+		if (!row) {
+			row = { ...r, breakout_value: label, total_amount: 0 };
+			merged.set(key, row);
+		}
+		row.total_amount += Number(r.total_amount) || 0;
+	}
+	return [...merged.values()];
 }
 
 // Total of `amountColumn` per month for the most recent `months` months, with the
@@ -173,6 +224,90 @@ export async function topStates(database, { table, amountColumn = 'amount', mont
 	// them. Rows stay in descending order (top state first): Highcharts renders
 	// category[0] at the top of a horizontal bar.
 	return rows.map((r) => ({ ...r, window_start: windowStart, window_end: windowEnd }));
+}
+
+// Monthly disbursement totals pivoted into the 5 recipient groups: one wide row per
+// month — { period_date, fiscal_year, calendar_year, month_short, month_long, and a
+// column per group key } — in chronological order, each group column summing its
+// member recipients. When `months` is set, only the most recent N months with data
+// are included (else all). Also returns a `summary` (window total, month count, and
+// the leading group) for the chart takeaway.
+export async function monthlyByRecipientGroup(database, { table, amountColumn = 'amount', months = null }) {
+	// Optionally restrict to the most recent N monthly periods that have data.
+	let dates = null;
+	if (months) {
+		const recentRows = await database
+			.distinct('p2.period_date')
+			.from(`${table} as d2`)
+			.join('period as p2', 'd2.period', 'p2.id')
+			.where('p2.type', 'Monthly')
+			.orderBy('p2.period_date', 'desc')
+			.limit(months);
+		dates = recentRows.map((r) => r.period_date);
+	}
+
+	const query = database
+		.select(
+			'p.period_date',
+			'p.fiscal_year',
+			'p.calendar_year',
+			'p.month_short',
+			'p.month_long',
+			'f.recipient as recipient',
+			database.raw(`SUM("${table}"."${amountColumn}") as "total_amount"`)
+		)
+		.from(table)
+		.join('period as p', `${table}.period`, 'p.id')
+		.join('fund as f', `${table}.fund`, 'f.id')
+		.where('p.type', 'Monthly')
+		.groupBy('p.period_date', 'p.fiscal_year', 'p.calendar_year', 'p.month_short', 'p.month_long', 'f.recipient')
+		.orderBy('p.period_date', 'asc');
+
+	if (dates) query.whereIn('p.period_date', dates);
+
+	const rows = await query;
+
+	// Pivot (month × recipient) rows into one wide row per month with a column per group.
+	const zeros = () => Object.fromEntries(RECIPIENT_GROUPS.map((g) => [g.key, 0]));
+	const byMonth = new Map();
+	for (const r of rows) {
+		// period_date comes back from pg as a Date object; key the Map by a primitive
+		// so rows for the same month merge (distinct Date instances never match as keys).
+		const key = r.period_date instanceof Date ? r.period_date.toISOString() : r.period_date;
+		let month = byMonth.get(key);
+		if (!month) {
+			month = {
+				period_date: r.period_date,
+				fiscal_year: r.fiscal_year,
+				calendar_year: r.calendar_year,
+				month_short: r.month_short,
+				month_long: r.month_long,
+				...zeros(),
+			};
+			byMonth.set(key, month);
+		}
+		month[recipientGroupKey(r.recipient)] += Number(r.total_amount) || 0;
+	}
+	const data = [...byMonth.values()];
+
+	// Window summary for the takeaway: total, month count, and the leading group.
+	const groupTotals = zeros();
+	for (const m of data) for (const g of RECIPIENT_GROUPS) groupTotals[g.key] += m[g.key];
+	const total = Object.values(groupTotals).reduce((a, v) => a + v, 0);
+	const topGroup = RECIPIENT_GROUPS
+		.map((g) => ({ label: g.label, amount: groupTotals[g.key] }))
+		.sort((a, b) => b.amount - a.amount)[0] ?? null;
+
+	return {
+		data,
+		summary: {
+			total,
+			months: data.length,
+			top_group: topGroup?.label ?? null,
+			top_amount: topGroup?.amount ?? 0,
+			top_share: total > 0 && topGroup ? topGroup.amount / total : 0,
+		},
+	};
 }
 
 // Latest fiscal year with monthly data for a fact table, plus the latest fiscal
