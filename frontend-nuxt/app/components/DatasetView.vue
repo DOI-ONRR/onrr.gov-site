@@ -6,6 +6,8 @@
   its ordered `chart_cards` (reusing the standard <ChartCard> renderer) and an
   "About this data" section. Breadcrumb/H1/layout chrome stay in [...slug].vue.
 */
+import DisbursementPreview from '~/components/previews/DisbursementPreview.vue'
+
 const props = defineProps({
   dataset: { type: Object, required: true },
 })
@@ -54,6 +56,14 @@ const terms = computed(() => {
     .map((row) => row?.glossary_terms_id)
     .filter((t) => t && t.term)
 })
+
+// "Preview and filter" is a static component per dataset, chosen by
+// dataset_metadata.preview_component. Register new datasets here as their preview
+// components are built; unset → the section is hidden.
+const PREVIEW_COMPONENTS = {
+  disbursements: DisbursementPreview,
+}
+const previewComponent = computed(() => PREVIEW_COMPONENTS[props.dataset.preview_component] || null)
 </script>
 
 <template>
@@ -109,15 +119,17 @@ const terms = computed(() => {
       </div>
     </div>
     
-    <div class="grid-row grid-gap" id="chart">
+    <div class="grid-row grid-gap margin-bottom-4" id="chart">
       <div class="grid-col-12">
         <ChartCard :block="dataset.charts[0]" />
       </div>
     </div>
 
-    <div class="grid-row grid-gap" id="preview">
-      <h2 class="font-heading-lg">Preview and filter</h2>
-      <div class="grid-col-12"></div>
+    <div v-if="previewComponent" class="grid-row grid-gap" id="preview">
+      <div class="grid-col-12">
+        <h2 class="font-heading-lg">Preview and filter</h2>
+        <component :is="previewComponent" :dataset="dataset" />
+      </div>
     </div>
 
     <div class="grid-row grid-gap" id="download">

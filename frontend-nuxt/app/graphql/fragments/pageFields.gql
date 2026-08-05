@@ -34,6 +34,7 @@ fragment pageFields on pages {
     publisher
     related_links
     about
+    preview_component
     terms {
       glossary_terms_id {
         id
