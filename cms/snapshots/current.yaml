@@ -5972,14 +5972,18 @@ fields:
       note: null
       options:
         choices:
-          - text: top
+          - text: Top
             value: top
-          - text: right
+          - text: Right
             value: right
-          - text: bottom
+          - text: Bottom
             value: bottom
-          - text: left
+          - text: Left
             value: left
+          - text: Top-left
+            value: top-left
+          - text: Top-right
+            value: top-right
       readonly: true
       required: false
       searchable: true
@@ -6309,7 +6313,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 48
+      sort: 49
       special:
         - cast-boolean
       translations: null
@@ -6358,7 +6362,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 49
+      sort: 51
       special: null
       translations: null
       validation: null
@@ -6404,14 +6408,14 @@ fields:
       note: null
       options:
         choices:
-          - text: asc
+          - text: Ascending
             value: asc
-          - text: desc
+          - text: Descending
             value: desc
       readonly: true
       required: false
       searchable: true
-      sort: 50
+      sort: 52
       special: null
       translations: null
       validation: null
@@ -6453,7 +6457,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 51
+      sort: 53
       special:
         - alias
         - no-data
@@ -6478,7 +6482,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 52
+      sort: 54
       special:
         - cast-json
       translations: null
@@ -6521,7 +6525,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 53
+      sort: 55
       special:
         - alias
         - no-data
@@ -6546,7 +6550,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 54
+      sort: 56
       special:
         - o2m
       translations: null
@@ -6962,7 +6966,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 55
+      sort: 57
       special:
         - m2o
       translations: null
@@ -7009,7 +7013,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 56
+      sort: 58
       special: null
       translations: null
       validation: null
@@ -7023,6 +7027,105 @@ fields:
       max_length: null
       numeric_precision: 32
       numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: table_category_label
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enable for table include category
+          readonly: false
+          rule:
+            _and:
+              - table_include_category:
+                  _eq: true
+      display: null
+      display_options: null
+      field: table_category_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 48
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: table_category_label
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: table_totals_direction
+    type: string
+    meta:
+      collection: chart_cards
+      conditions:
+        - name: Enable when table_show_totals is true
+          readonly: false
+          rule:
+            _and:
+              - table_show_totals:
+                  _eq: true
+      display: null
+      display_options: null
+      field: table_totals_direction
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Column
+            value: column
+          - text: Row
+            value: row
+          - text: Both
+            value: both
+      readonly: true
+      required: false
+      searchable: true
+      sort: 50
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: table_totals_direction
+      table: chart_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -12698,7 +12801,9 @@ fields:
       name: formats
       table: dataset_metadata
       data_type: json
-      default_value: null
+      default_value:
+        - CSV
+        - XLSX
       max_length: null
       numeric_precision: null
       numeric_scale: null
@@ -12944,7 +13049,8 @@ fields:
       hidden: false
       interface: list-m2m
       note: null
-      options: null
+      options:
+        template: '{{glossary_terms_id.term}}'
       readonly: false
       required: false
       searchable: true
@@ -12980,6 +13086,53 @@ fields:
       validation: null
       validation_message: null
       width: full
+  - collection: dataset_metadata
+    field: preview_component
+    type: string
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: preview_component
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Disbursements
+            value: disbursements
+          - text: Production
+            value: production
+          - text: Revenue
+            value: revenue
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: preview_component
+      table: dataset_metadata
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: dataset_metadata_glossary_terms
     field: id
     type: integer
@@ -23074,7 +23227,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 22
       special:
         - alias
         - no-data
@@ -23180,7 +23333,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -23333,7 +23486,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 23
       special:
         - files
       translations: null
@@ -23383,11 +23536,12 @@ fields:
       hidden: false
       interface: select-dropdown-m2o
       note: null
-      options: null
+      options:
+        template: '{{name}}'
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 20
       special:
         - m2o
       translations: null
@@ -31934,7 +32088,7 @@ relations:
       one_collection_field: null
       one_deselect_action: nullify
       one_field: series
-      sort_field: null
+      sort_field: sort
     schema:
       table: chart_series
       column: chart_card
