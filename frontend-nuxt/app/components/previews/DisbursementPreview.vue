@@ -9,6 +9,24 @@
 */
 const { apiUrl } = useRuntimeConfig().public
 
+const props = defineProps({
+  dataset: { type: Object, required: true },
+})
+
+// The dataset's first chart_card renders top-right, in place of the table.
+const chart = computed(() => props.dataset?.charts?.[0] || null)
+
+// Mirror the chart card's time window (its endpoint_url ?months=/?years=) so the
+// filter options match the chart's range rather than the whole dataset.
+const chartWindow = computed(() => {
+  const qs = (chart.value?.endpoint_url || '').split('?')[1]
+  if (!qs) return {}
+  const p = new URLSearchParams(qs)
+  if (p.get('years')) return { years: p.get('years') }
+  if (p.get('months')) return { months: p.get('months') }
+  return {}
+})
+
 const PAGE_SIZE = 20
 
 // Static column config (field path on `disbursement`, label, display format).
@@ -66,27 +84,21 @@ function buildFilter() {
   return { _and: and }
 }
 
-// --- filter dropdown options (loaded once; distinct values per dimension) ------
+// --- filter dropdown options (loaded once) ------------------------------------
+// Sourced from the charts endpoint extension, which returns only values that
+// actually appear in Monthly disbursement rows — so the dropdowns never offer a
+// value that would return no records.
 const { data: options } = await useAsyncData('disb-preview-options', async () => {
-  const distinct = (coll, field, extra = {}) =>
-    $fetch(`${apiUrl}/items/${coll}`, {
-      query: { groupBy: field, aggregate: JSON.stringify({ count: ['id'] }), sort: field, limit: -1, ...extra },
-    }).then((r) => (r.data || []).map((x) => x[field]).filter((v) => v != null && v !== ''))
-
-  const [months, fundTypes, landCats, states, categories, commodities] = await Promise.all([
-    $fetch(`${apiUrl}/items/period`, {
-      query: {
-        filter: JSON.stringify({ type: { _eq: 'Monthly' } }),
-        fields: 'period_date', sort: 'period_date', limit: -1,
-      },
-    }).then((r) => (r.data || []).map((x) => x.period_date).filter(Boolean)),
-    distinct('fund', 'type'),
-    distinct('location', 'land_category'),
-    distinct('location', 'state_name'),
-    distinct('fund', 'disbursement_type'),
-    distinct('commodity', 'name'),
-  ])
-  return { months, fundTypes, landCats, states, categories, commodities }
+  const res = await $fetch(`${apiUrl}/charts/disbursement/filter-options`, { query: chartWindow.value })
+  const d = res?.data || {}
+  return {
+    months: d.months || [],
+    fundTypes: d.fund_types || [],
+    landCats: d.land_categories || [],
+    states: d.states || [],
+    categories: d.categories || [],
+    commodities: d.commodities || [],
+  }
 })
 
 // Default the month range to the full span once options load.
@@ -210,8 +222,15 @@ function clearFilters() {
       </div>
     </div>
 
-    <!-- Results -->
+    <!-- Chart, top-right in place of the table -->
     <div class="tablet:grid-col-9">
+      <ChartCard v-if="chart" :block="chart" />
+    </div>
+  </div>
+
+  <!-- Records table: full width, below the filters and chart -->
+  <div class="grid-row grid-gap margin-top-4">
+    <div class="grid-col-12">
       <p class="results-line" aria-live="polite">
         <template v-if="pending">Loading…</template>
         <template v-else>

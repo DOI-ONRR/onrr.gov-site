@@ -310,6 +310,68 @@ export async function monthlyByRecipientGroup(database, { table, amountColumn = 
 	};
 }
 
+// Distinct available values for the disbursement preview filters — only values that
+// actually appear in Monthly disbursement rows (joined through the dimension tables),
+// so the dropdowns never offer a value that would return no records.
+export async function disbursementFilterOptions(database, { table = 'disbursement', months = null } = {}) {
+	// Optionally restrict to the most recent N months with data, so the options match
+	// a chart's time window (its endpoint_url ?months=/?years=).
+	let dates = null;
+	if (months) {
+		const recent = await database
+			.distinct('p2.period_date')
+			.from(`${table} as d2`)
+			.join('period as p2', 'd2.period', 'p2.id')
+			.where('p2.type', 'Monthly')
+			.orderBy('p2.period_date', 'desc')
+			.limit(months);
+		dates = recent.map((r) => r.period_date);
+	}
+
+	const distinctVals = async (join, joinField) => {
+		const q = database
+			.distinct(`${join}.${joinField} as value`)
+			.from(table)
+			.join('period as p', `${table}.period`, 'p.id')
+			.join(join, `${table}.${join}`, `${join}.id`)
+			.where('p.type', 'Monthly')
+			.whereNotNull(`${join}.${joinField}`)
+			.orderBy(`${join}.${joinField}`, 'asc');
+		if (dates) q.whereIn('p.period_date', dates);
+		const rows = await q;
+		return rows.map((r) => r.value).filter((v) => v !== '');
+	};
+
+	// Return period_date as a plain YYYY-MM-DD string (not a tz-stamped timestamp) so
+	// the preview's From/To range filter compares cleanly against the date column.
+	const monthQuery = database
+		.distinct(database.raw(`to_char("p"."period_date", 'YYYY-MM-DD') as "value"`))
+		.from(table)
+		.join('period as p', `${table}.period`, 'p.id')
+		.where('p.type', 'Monthly')
+		.whereNotNull('p.period_date')
+		.orderBy('value', 'asc');
+	if (dates) monthQuery.whereIn('p.period_date', dates);
+	const monthRows = await monthQuery;
+
+	const [fund_types, land_categories, states, categories, commodities] = await Promise.all([
+		distinctVals('fund', 'type'),
+		distinctVals('location', 'land_category'),
+		distinctVals('location', 'state_name'),
+		distinctVals('fund', 'disbursement_type'),
+		distinctVals('commodity', 'name'),
+	]);
+
+	return {
+		months: monthRows.map((r) => r.value),
+		fund_types,
+		land_categories,
+		states,
+		categories,
+		commodities,
+	};
+}
+
 // Latest fiscal year with monthly data for a fact table, plus the latest fiscal
 // month within that year. Useful for current-vs-previous-FY comparisons.
 export async function maxFiscalPeriod(database, table) {

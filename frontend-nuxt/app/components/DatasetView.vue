@@ -119,7 +119,13 @@ const previewComponent = computed(() => PREVIEW_COMPONENTS[props.dataset.preview
       </div>
     </div>
     
-    <div class="grid-row grid-gap margin-bottom-4" id="chart">
+    <!-- Standalone chart only when no preview owns it; a preview (e.g. disbursements)
+         renders the chart inside itself, next to the filters. -->
+    <div
+      v-if="!previewComponent && dataset.charts?.length"
+      class="grid-row grid-gap margin-bottom-4"
+      id="chart"
+    >
       <div class="grid-col-12">
         <ChartCard :block="dataset.charts[0]" />
       </div>

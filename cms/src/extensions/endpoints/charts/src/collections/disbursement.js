@@ -1,4 +1,4 @@
-import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals, topStates, monthlyByRecipientGroup } from '../lib/breakouts.js';
+import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals, topStates, monthlyByRecipientGroup, disbursementFilterOptions } from '../lib/breakouts.js';
 
 // Registers disbursement chart routes under `base` (mounted by index.js as
 // /disbursement, so the full prefix is /charts/disbursement).
@@ -75,6 +75,27 @@ export default (router, { database }, base = '') => {
 		} catch (error) {
 			console.error('charts/disbursement/monthly-by-recipient error:', error);
 			res.status(500).json({ error: 'Failed to fetch monthly disbursements by recipient' });
+		}
+	});
+
+	// GET /charts/disbursement/filter-options?months=12 (or ?years=1)
+	// Distinct available values (present in Monthly disbursement rows) for each filter
+	// dimension, so the dataset-page preview dropdowns only offer values that return
+	// records: { months, fund_types, land_categories, states, categories, commodities }.
+	// `months`/`years` restrict to a recent window (matching the chart's endpoint_url).
+	router.get(`${base}/filter-options`, async (req, res) => {
+		const y = parseInt(req.query.years, 10);
+		const m = parseInt(req.query.months, 10);
+		let months = null;
+		if (!Number.isNaN(y)) months = Math.min(20, Math.max(1, y)) * 12;
+		else if (!Number.isNaN(m)) months = Math.min(240, Math.max(1, m));
+
+		try {
+			const data = await disbursementFilterOptions(database, { table: 'disbursement', months });
+			res.json({ data });
+		} catch (error) {
+			console.error('charts/disbursement/filter-options error:', error);
+			res.status(500).json({ error: 'Failed to fetch filter options' });
 		}
 	});
 
