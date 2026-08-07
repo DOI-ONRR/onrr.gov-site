@@ -71,7 +71,7 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
           <p class="ds-desc">Money paid each month to states, counties, Tribes and individual Indian
             mineral owners, and federal funds.</p>
           <p class="ds-meta">Updated monthly · Oct 2016 – Oct 2022 · CSV, XLSX, API</p>
-          <a class="usa-button usa-button--outline ds-cta" href="../dataset-page/index.html">Preview, filter &amp; download</a>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/monthly-disbursements">Preview, filter &amp; download</a>
         </div>
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">

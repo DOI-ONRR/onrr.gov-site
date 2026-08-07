@@ -11,6 +11,7 @@ fragment pageFields on pages {
   id
   title
   slug
+  template
   parent {
     title
     url
@@ -23,6 +24,7 @@ fragment pageFields on pages {
     description
   }
   hero_title
+  related_content
   dataset_metadata {
     id
     name

@@ -17,6 +17,13 @@ const page = computed(() => data.value?.page?.[0])
 // (DatasetView) instead of the standard page_blocks layout — and drops the sidenav.
 const isDataset = computed(() => !!page.value?.dataset_metadata)
 
+// pages.template selects an alternate layout. 'topic' → TopicView (3/9 grid with an
+// "On this page" rail); like the dataset case, it drops the standard sidenav.
+const isTopic = computed(() => page.value?.template === 'topic')
+
+// Layouts that own their own heading + column structure (no standard sidenav/h1).
+const isCustomLayout = computed(() => isDataset.value || isTopic.value)
+
 const pageTitle = computed(() => page.value?.title || null)
 const parentTitle = computed(() => page.value?.parent?.title || null)
 const grandparentTitle = computed(() => page.value?.parent?.parent?.title || null)
@@ -71,7 +78,7 @@ const sidenavLinks = computed(() => {
   />
   <section class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
-      <div v-if="!isDataset" class="grid-col-2">
+      <div v-if="!isCustomLayout" class="grid-col-2">
         <nav v-if="sidenavLinks.length" aria-label="Side navigation">
           <ul class="usa-sidenav">
             <li class="usa-sidenav__item" v-for="link in sidenavLinks" :key="link.title">
@@ -82,7 +89,7 @@ const sidenavLinks = computed(() => {
           </ul>
         </nav>
       </div>
-      <div :class="isDataset ? 'grid-col-12' : 'grid-col-10'">
+      <div :class="isCustomLayout ? 'grid-col-12' : 'grid-col-10'">
         <nav class="usa-breadcrumb" aria-label="Breadcrumbs">
           <ol class="usa-breadcrumb__list">
             <li class="usa-breadcrumb__list-item">
@@ -103,8 +110,9 @@ const sidenavLinks = computed(() => {
             </li>
           </ol>
         </nav>
-        <h1 v-if="!isDataset">{{ page?.hero_title || page?.title }}</h1>
+        <h1 v-if="!isCustomLayout">{{ page?.hero_title || page?.title }}</h1>
         <DatasetView v-if="isDataset" :dataset="page.dataset_metadata" />
+        <TopicView v-else-if="isTopic" :page="page" />
         <template v-else>
         <Events v-if="slug === 'events'" />
         <div class="grid-row grid-gap">
