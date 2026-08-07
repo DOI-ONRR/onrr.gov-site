@@ -288,6 +288,10 @@ const chartOptions = computed(() => {
   const chart = {
     type: card.value.chart_type || 'bar',
     height: card.value.height || null,
+    // Transparent canvas so the chart shows the card wrapper's background through
+    // (default white, or `background_color`). Keeps the whole card one uniform color
+    // instead of a white chart rectangle sitting on a tinted card.
+    backgroundColor: 'transparent',
   }
   if (card.value.enable_zoom) chart.zooming = { type: 'xy' }
 
@@ -522,7 +526,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="chart-card" :class="`grid-col-${gridColumns}`">
+  <section
+    class="chart-card"
+    :class="`grid-col-${gridColumns}`"
+    :style="card.background_color ? { backgroundColor: card.background_color } : null"
+  >
     <h3 v-if="card.title" class="margin-bottom-1 margin-top-0 font-heading-md">{{ card.title }}</h3>
     <p v-if="showTakeaway" class="chart-card__takeaway">
       {{ renderedTakeaway }}

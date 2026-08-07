@@ -32,6 +32,7 @@ fragment chartCardFields on chart_cards {
   # styling / interaction
   grid_columns
   color_palette
+  background_color
   height
   show_legend
   legend_position
