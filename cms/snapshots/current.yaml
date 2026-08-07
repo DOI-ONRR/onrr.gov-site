@@ -5594,13 +5594,13 @@ fields:
       note: null
       options:
         choices:
-          - text: category
+          - text: Category
             value: category
-          - text: datetime
+          - text: Datetime
             value: datetime
-          - text: linear
+          - text: Linear
             value: linear
-          - text: logarithmic
+          - text: Logarithmic
             value: logarithmic
       readonly: true
       required: false
@@ -6229,7 +6229,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 46
+      sort: 47
       special:
         - alias
         - no-data
@@ -6263,7 +6263,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 47
+      sort: 48
       special:
         - cast-boolean
       translations: null
@@ -6313,7 +6313,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 49
+      sort: 50
       special:
         - cast-boolean
       translations: null
@@ -6362,7 +6362,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 51
+      sort: 52
       special: null
       translations: null
       validation: null
@@ -6415,7 +6415,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 52
+      sort: 53
       special: null
       translations: null
       validation: null
@@ -6457,7 +6457,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 53
+      sort: 54
       special:
         - alias
         - no-data
@@ -6482,7 +6482,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 54
+      sort: 55
       special:
         - cast-json
       translations: null
@@ -6525,7 +6525,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 55
+      sort: 56
       special:
         - alias
         - no-data
@@ -6550,7 +6550,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 56
+      sort: 57
       special:
         - o2m
       translations: null
@@ -6966,7 +6966,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 57
+      sort: 58
       special:
         - m2o
       translations: null
@@ -7013,7 +7013,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 58
+      sort: 59
       special: null
       translations: null
       validation: null
@@ -7059,7 +7059,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 48
+      sort: 49
       special: null
       translations: null
       validation: null
@@ -7112,7 +7112,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 50
+      sort: 51
       special: null
       translations: null
       validation: null
@@ -7123,6 +7123,51 @@ fields:
       table: chart_cards
       data_type: character varying
       default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: background_color
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: background_color
+      group: null
+      hidden: false
+      interface: select-color
+      note: null
+      options:
+        presets:
+          - color: '#FFFFFF'
+            name: White
+          - color: '#F9FAFB'
+            name: Light gray
+      readonly: false
+      required: false
+      searchable: true
+      sort: 46
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: background_color
+      table: chart_cards
+      data_type: character varying
+      default_value: '#FFFFFF'
       max_length: 255
       numeric_precision: null
       numeric_scale: null
@@ -15041,7 +15086,8 @@ fields:
       required: false
       searchable: true
       sort: 1
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -15050,7 +15096,7 @@ fields:
       name: id
       table: expansion_panels
       data_type: uuid
-      default_value: null
+      default_value: uuid_generate_v4()
       max_length: null
       numeric_precision: null
       numeric_scale: null
@@ -23043,6 +23089,8 @@ fields:
         choices:
           - text: Default
             value: default
+          - text: Topic
+            value: topic
           - text: Home
             value: home
           - text: Contact
@@ -23227,7 +23275,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 23
       special:
         - alias
         - no-data
@@ -23333,7 +23381,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -23486,7 +23534,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 24
       special:
         - files
       translations: null
@@ -23565,6 +23613,46 @@ fields:
       has_auto_increment: false
       foreign_key_table: dataset_metadata
       foreign_key_column: id
+  - collection: pages
+    field: related_content
+    type: text
+    meta:
+      collection: pages
+      conditions: null
+      display: null
+      display_options: null
+      field: related_content
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: related_content
+      table: pages
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: pages_files
     field: id
     type: integer
