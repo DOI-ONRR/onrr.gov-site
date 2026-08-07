@@ -7,6 +7,10 @@ USWDS with settings overrides
 @forward "uswds-core" with (
   $theme-show-notifications: false,
   $theme-image-path: "/uswds/img",
+  // Absolute so USWDS's @font-face URLs work when the CSS is inlined into the
+  // document head (SSR). The default "../fonts" is document-relative, so it breaks
+  // on nested routes (e.g. /revenue-data/… → /revenue-data/fonts/… → 404/HTML).
+  $theme-font-path: "/uswds/fonts",
   $theme-utility-breakpoints: (
     'desktop-lg': true,
     'widescreen': true,
