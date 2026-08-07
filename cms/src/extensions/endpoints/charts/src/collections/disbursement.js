@@ -19,15 +19,18 @@ export default (router, { database }, base = '') => {
 		}
 	});
 
-	// GET /charts/disbursement/calendar-year-totals?years=5
+	// GET /charts/disbursement/calendar-year-totals?years=5&recipient=native_american
 	// Total disbursement amount per full calendar year, most recent N years
-	// (default 5), oldest → newest. Excludes any in-progress calendar year.
+	// (default 5), oldest -> newest. Excludes any in-progress calendar year. Optional
+	// `recipient` restricts the sum to a RECIPIENT_GROUPS key (e.g. native_american);
+	// the full-year set is still computed from all data, so filtered years line up.
 	router.get(`${base}/calendar-year-totals`, async (req, res) => {
 		const requested = parseInt(req.query.years, 10);
 		const years = Math.min(50, Math.max(1, Number.isNaN(requested) ? 5 : requested));
+		const recipient = req.query.recipient || null;
 
 		try {
-			const data = await calendarYearTotals(database, { table: 'disbursement', years });
+			const data = await calendarYearTotals(database, { table: 'disbursement', years, recipient });
 			res.json({ data });
 		} catch (error) {
 			console.error('charts/disbursement/calendar-year-totals error:', error);
@@ -55,11 +58,11 @@ export default (router, { database }, base = '') => {
 	});
 
 	// GET /charts/disbursement/monthly-by-recipient?months=60  (or ?years=5)
-	// Monthly disbursement totals pivoted into 5 recipient groups — one wide row per
+	// Monthly disbursement totals pivoted into 5 recipient groups - one wide row per
 	// month ({ period_date, month labels, state_local, us_treasury, native_american,
-	// reclamation_fund, other_funds }), chronological — for the dataset-page stacked
+	// reclamation_fund, other_funds }), chronological - for the dataset-page stacked
 	// column chart. `months` limits to the most recent N months with data; `years` is
-	// the same window in years (years × 12 months) and takes precedence. Default: all.
+	// the same window in years (years x 12 months) and takes precedence. Default: all.
 	// Response also carries a `summary` for the chart takeaway.
 	router.get(`${base}/monthly-by-recipient`, async (req, res) => {
 		const y = parseInt(req.query.years, 10);

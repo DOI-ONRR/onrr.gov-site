@@ -1,17 +1,17 @@
 // Shared query helpers for the charts endpoints.
 //
-// The source collections (revenue, disbursement, production, …) are normalized:
+// The source collections (revenue, disbursement, production, ...) are normalized:
 // dimension columns like `commodity`, `location`, `fund` are foreign keys, and the
 // human-readable/derived breakout label lives on the related table. So a chart
-// grouping needs a JOIN — this module generalizes the join/aggregate/breakout
+// grouping needs a JOIN - this module generalizes the join/aggregate/breakout
 // logic that the standalone `revenue-summary` / `disbursement-summary` endpoints
 // each hand-rolled, so per-collection handlers stay thin.
 
 // Recipient groups for the disbursements-by-recipient charts. `fund.recipient`
 // carries ~19 granular labels; these collapse them into the 5 groups the dataset-
 // page chart shows. Matching is by prefix/substring (mirrors the mockup's regex
-// bucketing) so label variants group correctly — e.g. `State`/`County` → State &
-// local, and both `U.S. Treasury` and `U.S. Treasury - OCS Gulf` → U.S. Treasury.
+// bucketing) so label variants group correctly - e.g. `State`/`County` -> State &
+// local, and both `U.S. Treasury` and `U.S. Treasury - OCS Gulf` -> U.S. Treasury.
 // `key` is the wide-row column / `chart_series.data_field`; array order sets the
 // stack order, and `other_funds` (catch-all) MUST stay last.
 export const RECIPIENT_GROUPS = [
@@ -19,7 +19,7 @@ export const RECIPIENT_GROUPS = [
 	{ key: 'us_treasury', label: 'U.S. Treasury', match: /Treasury/i },
 	{ key: 'native_american', label: 'Native American', match: /Native American/i },
 	{ key: 'reclamation_fund', label: 'Reclamation Fund', match: /^Reclamation/i },
-	{ key: 'other_funds', label: 'Other funds', match: /.*/ }, // catch-all — keep last
+	{ key: 'other_funds', label: 'Other funds', match: /.*/ }, // catch-all - keep last
 ];
 
 // Resolve a raw fund.recipient label to its group object. First matcher wins;
@@ -31,11 +31,19 @@ function recipientGroup(recipient) {
 const recipientGroupKey = (recipient) => recipientGroup(recipient).key;
 const recipientGroupLabel = (recipient) => recipientGroup(recipient).label;
 
-// Breakout definitions keyed by collection → breakout name.
+// The set of raw fund.recipient labels belonging to a RECIPIENT_GROUPS key, using
+// the same bucketing as everything else (single source of truth). Empty for an
+// unknown key.
+async function recipientsForGroup(database, groupKey) {
+	const rows = await database.distinct('recipient').from('fund').whereNotNull('recipient');
+	return rows.map((r) => r.recipient).filter((rec) => recipientGroupKey(rec) === groupKey);
+}
+
+// Breakout definitions keyed by collection -> breakout name.
 //   join      : related table to join (and the FK column on the fact table)
 //   joinField : column on the related table that holds the breakout label
 //   filter    : optional allow-list of label values to include
-//   mapValue  : optional (raw label) → group label fn; buckets rows into higher-
+//   mapValue  : optional (raw label) -> group label fn; buckets rows into higher-
 //               level groups instead of an exact-match filter (see `recipient`).
 export const BREAKOUTS = {
 	revenue: {
@@ -85,7 +93,7 @@ export function breakoutNames(collection) {
 // breakout dimension and the standard period fields, filtered to Monthly periods
 // and (optionally) the breakout's allow-list. Returns rows sorted by period_date.
 // If the breakout defines `mapValue`, raw dimension values are bucketed into
-// higher-level groups (e.g. recipient → 5 groups) and rows mapping to the same
+// higher-level groups (e.g. recipient -> 5 groups) and rows mapping to the same
 // (month, group) are re-summed.
 export async function monthlyBreakoutSummary(database, { table, amountColumn = 'amount', breakout }) {
 	const query = database
@@ -122,7 +130,7 @@ export async function monthlyBreakoutSummary(database, { table, amountColumn = '
 
 	const rows = await query;
 
-	// No bucketing → raw per-label rows, unchanged.
+	// No bucketing -> raw per-label rows, unchanged.
 	if (!breakout.mapValue) return rows;
 
 	// Collapse raw breakout_value into groups, re-summing per (month, group).
@@ -144,7 +152,7 @@ export async function monthlyBreakoutSummary(database, { table, amountColumn = '
 // Total of `amountColumn` per month for the most recent `months` months, with the
 // month detail (date, fiscal/calendar year, month labels) joined from `period`.
 // Rows are pulled newest-first to grab the most recent N, then returned in
-// chronological (ascending) order — ready to plot left-to-right.
+// chronological (ascending) order - ready to plot left-to-right.
 export async function recentMonthlyTotals(database, { table, amountColumn = 'amount', months = 24 }) {
 	const rows = await database
 		.select(
@@ -167,15 +175,15 @@ export async function recentMonthlyTotals(database, { table, amountColumn = 'amo
 }
 
 // Total of `amountColumn` per calendar year, for the most recent `years` FULL
-// calendar years — a year counts as full only when all 12 monthly periods are
-// present (so an in-progress year is excluded). Returned oldest → newest, ready to
+// calendar years - a year counts as full only when all 12 monthly periods are
+// present (so an in-progress year is excluded). Returned oldest -> newest, ready to
 // plot as yearly columns.
-export async function calendarYearTotals(database, { table, amountColumn = 'amount', years = 5 }) {
-	const rows = await database
-		.select(
-			'p.calendar_year',
-			database.raw(`SUM("${table}"."${amountColumn}") as "total_amount"`)
-		)
+export async function calendarYearTotals(database, { table, amountColumn = 'amount', years = 5, recipient = null }) {
+	// Step 1: the most recent N *full* calendar years, determined from ALL Monthly
+	// data (12 distinct monthly periods). Kept independent of any recipient filter so
+	// "is this a full year?" reflects the dataset, not one recipient's coverage.
+	const fullYearRows = await database
+		.select('p.calendar_year')
 		.from(table)
 		.join('period as p', `${table}.period`, 'p.id')
 		.where('p.type', 'Monthly')
@@ -183,8 +191,30 @@ export async function calendarYearTotals(database, { table, amountColumn = 'amou
 		.havingRaw('COUNT(DISTINCT "p"."period_date") = 12')
 		.orderBy('p.calendar_year', 'desc')
 		.limit(years);
+	const fullYears = fullYearRows.map((r) => r.calendar_year);
+	if (!fullYears.length) return [];
 
-	return rows.reverse();
+	// Step 2: sum the (optionally recipient-filtered) amount within those full years.
+	const query = database
+		.select(
+			'p.calendar_year',
+			database.raw(`SUM("${table}"."${amountColumn}") as "total_amount"`)
+		)
+		.from(table)
+		.join('period as p', `${table}.period`, 'p.id')
+		.where('p.type', 'Monthly')
+		.whereIn('p.calendar_year', fullYears)
+		.groupBy('p.calendar_year')
+		.orderBy('p.calendar_year', 'asc');
+
+	if (recipient) {
+		const labels = await recipientsForGroup(database, recipient);
+		// Unknown group / no matching labels -> no data (rather than silently summing all).
+		if (!labels.length) return [];
+		query.join('fund as f', `${table}.fund`, 'f.id').whereIn('f.recipient', labels);
+	}
+
+	return query;
 }
 
 // Top `limit` states by total of `amountColumn` over the most recent `months`
@@ -227,8 +257,8 @@ export async function topStates(database, { table, amountColumn = 'amount', mont
 }
 
 // Monthly disbursement totals pivoted into the 5 recipient groups: one wide row per
-// month — { period_date, fiscal_year, calendar_year, month_short, month_long, and a
-// column per group key } — in chronological order, each group column summing its
+// month - { period_date, fiscal_year, calendar_year, month_short, month_long, and a
+// column per group key } - in chronological order, each group column summing its
 // member recipients. When `months` is set, only the most recent N months with data
 // are included (else all). Also returns a `summary` (window total, month count, and
 // the leading group) for the chart takeaway.
@@ -267,7 +297,7 @@ export async function monthlyByRecipientGroup(database, { table, amountColumn = 
 
 	const rows = await query;
 
-	// Pivot (month × recipient) rows into one wide row per month with a column per group.
+	// Pivot (month x recipient) rows into one wide row per month with a column per group.
 	const zeros = () => Object.fromEntries(RECIPIENT_GROUPS.map((g) => [g.key, 0]));
 	const byMonth = new Map();
 	for (const r of rows) {
