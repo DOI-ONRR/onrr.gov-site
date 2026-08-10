@@ -102,7 +102,7 @@ function goToSection(id) {
     </div>
 
     <!-- Content -->
-    <div class="tablet:grid-col-71">
+    <div class="tablet:grid-col-7">
       <p v-if="eyebrow" class="topic-eyebrow margin-bottom-0">{{ eyebrow }}</p>
       <h1 class="margin-top-05 margin-bottom-2">{{ page?.hero_title || page?.title }}</h1>
 
