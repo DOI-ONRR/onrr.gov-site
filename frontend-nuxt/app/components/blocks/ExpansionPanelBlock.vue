@@ -10,7 +10,9 @@ const panels = computed(() => {
   props.block.expansion_panel_blocks?.forEach((entry) => {
     if (!entry.item) return
     if (entry.item.__typename === 'expansion_panel_block_label') {
-      items.push({ id: entry.id, label: entry.item.block_label, blocks: [] })
+      // `id` is the junction-row id (used for the panel's aria-controls/toggle key);
+      // `labelId` is the label item's id, which `open_by_default` references.
+      items.push({ id: entry.id, labelId: entry.item.id, label: entry.item.block_label, blocks: [] })
     } else if (items.length) {
       items[items.length - 1].blocks.push(entry)
     }
@@ -25,7 +27,13 @@ const openByDefaultIds = computed(() => {
   return val.id ? [val.id] : []
 })
 
-const expandedPanels = ref(new Set(openByDefaultIds.value))
+// `open_by_default` stores label ids; map them to the matching panels' junction ids
+// (what the template toggles/checks), so the selected panel starts expanded.
+const expandedPanels = ref(new Set(
+  panels.value
+    .filter((p) => openByDefaultIds.value.includes(p.labelId))
+    .map((p) => p.id)
+))
 
 function toggle(id) {
   const next = new Set(expandedPanels.value)
@@ -39,7 +47,7 @@ function toggle(id) {
 </script>
 
 <template>
-  <div class="usa-accordion">
+  <div class="usa-accordion usa-accordion--bordered">
     <template v-for="panel in panels" :key="panel.id">
       <h4 class="usa-accordion__heading">
         <button

@@ -13,12 +13,14 @@ $onrr-navy:   #1a2a52;  // masthead + footer band
 $onrr-navy-2: #121d38;  // drawer utility strip
 $onrr-violet: #8168b3;  // entity-pinned Native American / Indian
 $onrr-gold:   #ffbe2e;  // focus ring / supervisor role
+$onrr-blue: #005ea2;
 
 $onrr-colors: (
   "navy": $onrr-navy,
   "navy-2": $onrr-navy-2,
   "violet": $onrr-violet,
   "gold": $onrr-gold,
+  "blue": $onrr-blue
 );
 
 :root {

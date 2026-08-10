@@ -3,8 +3,6 @@
 /* Cap the reading measure so the wider container doesn't stretch prose. */
 .usa-intro { max-width: 62ch; }
 
-.usa-prose p, .usa-prose li { max-width: 68ch; }
-
 @media (min-width: 64em) {
   /* Center the nav row and align it with the rest of the page. `.navrow` replaced
      USWDS's `.usa-nav-container`, which had supplied the site max-width + centered

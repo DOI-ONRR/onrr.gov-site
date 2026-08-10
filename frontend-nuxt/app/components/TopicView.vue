@@ -51,8 +51,25 @@ function buildSections() {
   sections.value = out
 }
 
-onMounted(buildSections)
-watch(blocks, () => nextTick(buildSections))
+// Active-section indicator (scroll spy): the active section is the last heading that
+// has scrolled to within ~120px of the top, matching the mockup's behavior.
+const activeId = ref(null)
+function spy() {
+  let current = sections.value[0]?.id ?? null
+  for (const s of sections.value) {
+    const el = document.getElementById(s.id)
+    if (el && el.getBoundingClientRect().top < 120) current = s.id
+  }
+  activeId.value = current
+}
+
+onMounted(() => {
+  buildSections()
+  spy()
+  window.addEventListener('scroll', spy, { passive: true })
+})
+onBeforeUnmount(() => window.removeEventListener('scroll', spy))
+watch(blocks, () => nextTick(() => { buildSections(); spy() }))
 
 // Smooth-scroll to a section (and update the hash) ourselves, so the scroll works
 // regardless of the client-assigned heading ids. scrollIntoView scrolls as far as it
@@ -70,18 +87,22 @@ function goToSection(id) {
   <div class="grid-row grid-gap">
     <!-- On this page (left rail) — hidden below tablet -->
     <div class="tablet:grid-col-3 display-none tablet:display-block">
-      <nav v-if="sections.length" class="topic-onpage" aria-label="On this page">
-        <p class="topic-onpage__title">On this page</p>
-        <ul class="usa-list usa-list--unstyled">
+      <nav v-if="sections.length" class="onpage" aria-label="On this page">
+        <p class="onpage-title">On this page</p>
+        <ul>
           <li v-for="s in sections" :key="s.id">
-            <a :href="`#${s.id}`" class="usa-link" @click.prevent="goToSection(s.id)">{{ s.text }}</a>
+            <a
+              :href="`#${s.id}`"
+              :class="{ active: activeId === s.id }"
+              @click.prevent="goToSection(s.id)"
+            >{{ s.text }}</a>
           </li>
         </ul>
       </nav>
     </div>
 
     <!-- Content -->
-    <div class="tablet:grid-col-9">
+    <div class="tablet:grid-col-71">
       <p v-if="eyebrow" class="topic-eyebrow margin-bottom-0">{{ eyebrow }}</p>
       <h1 class="margin-top-05 margin-bottom-2">{{ page?.hero_title || page?.title }}</h1>
 
@@ -131,6 +152,7 @@ function goToSection(id) {
 
 <style lang="scss" scoped>
 @use "onrr-colors" as *;
+@use "uswds" as *;
 
 .topic-eyebrow {
   text-transform: uppercase;
@@ -140,22 +162,48 @@ function goToSection(id) {
   color: #565c65;
 }
 
-// Left rail: sticks alongside the content while scrolling on wide screens.
-.topic-onpage {
+// "On this page" left rail (adopted from the learn-page mockup): sticky, with a gray
+// left rail whose active-section segment turns blue via each link's own left border.
+.onpage {
   position: sticky;
   top: 1rem;
-  border-left: 4px solid #dfe1e2;
-  padding-left: 1rem;
+  font-size: 0.9rem;
+}
 
-  &__title {
-    font-weight: 700;
-    margin: 0 0 0.5rem;
-  }
+.onpage-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #565c65;
+  margin: 0 0 0.5rem;
+}
 
-  li {
-    margin-bottom: 0.4rem;
-    line-height: 1.3;
-  }
+.onpage ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 3px solid #dfe1e2;
+}
+
+.onpage a {
+  display: block;
+  padding: 0.35rem 0.9rem;
+  color: #565c65;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  margin-left: -3px; // overlap the ul's rail so the active border replaces it
+}
+
+.onpage a:hover {
+  @include u-text('primary');
+  text-decoration: underline;
+}
+
+.onpage a.active {
+  color: #1b1b1b;
+  font-weight: 700;
+  border-left-color: $onrr-blue;
 }
 
 // Related box: bordered card with a violet left accent (matches the mockup). The
