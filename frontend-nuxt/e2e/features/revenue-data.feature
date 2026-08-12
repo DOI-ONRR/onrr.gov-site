@@ -3,65 +3,30 @@ Feature: Revenue Data landing page
   Scenario: Page structure loads correctly
     Given I navigate to the revenue data page
     Then the revenue data breadcrumbs show "Home" and "Revenue Data"
-    And the heading "About natural resources revenue data" is visible
-    And the "Production" data tab is visible
-    And the "Revenue" data tab is visible
-    And the "Disbursements" data tab is visible
-    And the "Production" data tab is selected by default
+    And the revenue data heading "Revenue Data" is visible
+    And the "Explore the data" button is visible
+    And the "Find a dataset" button is visible
 
-  Scenario: Side navigation is visible
+  Scenario: Explore the data section renders both charts
     Given I navigate to the revenue data page
-    Then the side navigation is visible
-    And the side navigation contains "Revenue Data"
+    Then the revenue data section heading "Explore the data" is visible
+    And the chart card "Disbursements by year" is visible
+    And the chart card "Top states by disbursements" is visible
 
-  Scenario: Production tab displays filters and chart
+  Scenario: Find a dataset section lists the datasets
     Given I navigate to the revenue data page
-    Then the "Yearly" frequency button is active
-    And the "Period" select is visible
-    And the "Product" select is visible
-    And the production chart is visible
+    Then the revenue data section heading "Find a dataset" is visible
+    And the dataset card "Monthly disbursements" is visible
+    And the dataset card "Production" is visible
+    And the dataset card "Revenue" is visible
+    And the dataset card "Federal sales" is visible
+    And the dataset card "Revenue by company" is visible
+    And the dataset card "Reference data" is visible
 
-  Scenario: Production tab displays comparison table
+  Scenario: Monthly disbursements card links to its dataset page
     Given I navigate to the revenue data page
-    Then the comparison heading "Comparison" is visible
-    And the comparison table is visible
-    And the comparison table has a "Total" row
+    Then the dataset card "Monthly disbursements" links to "/revenue-data/monthly-disbursements"
 
-  Scenario: Switching to Revenue tab
+  Scenario: About this data section is visible
     Given I navigate to the revenue data page
-    When I click the "Revenue" data tab
-    Then the "Revenue" data tab is selected
-    And the "Period" select is visible
-    And the "Breakout" select is visible
-
-  Scenario: Switching to Disbursements tab
-    Given I navigate to the revenue data page
-    When I click the "Disbursements" data tab
-    Then the "Disbursements" data tab is selected
-    And the "Period" select is visible
-    And the "Breakout" select is visible
-
-  Scenario: What's New sidebar displays production card
-    Given I navigate to the revenue data page
-    Then the What's New section is visible
-    And the "Production" card is visible in the sidebar
-    And the "Production" card contains "FY 2025"
-
-  Scenario: What's New sidebar displays revenue card
-    Given I navigate to the revenue data page
-    Then the "Revenue" card is visible in the sidebar
-    And the "Revenue" card contains "FY 2025"
-
-  Scenario: What's New sidebar displays disbursements card
-    Given I navigate to the revenue data page
-    Then the "Disbursements" card is visible in the sidebar
-    And the "Disbursements" card contains "FY 2025"
-
-  Scenario: Latest release details card is visible
-    Given I navigate to the revenue data page
-    Then the "Latest release details" card is visible in the sidebar
-
-  Scenario: Monthly frequency changes period options
-    Given I navigate to the revenue data page
-    When I click the "Monthly" frequency button
-    Then the "Period" select contains "Most Recent 12 Months"
+    Then the revenue data section heading "About this data" is visible

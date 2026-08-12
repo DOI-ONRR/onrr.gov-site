@@ -1,5 +1,6 @@
 import * as eventsFixtures from '../fixtures/events.js'
 import * as revenueDataFixtures from '../fixtures/revenue-data.js'
+import { chartCardsByKey, chartEndpointData } from '../fixtures/chart-cards.js'
 
 /**
  * Each handler has:
@@ -53,6 +54,16 @@ export const handlers = [
     resolve: () => revenueDataFixtures.menuData,
   },
 
+  // Chart card by key (ChartCardByKey on the Revenue Data landing page). Returns the
+  // card matching the `key` variable, or an empty list for an unknown key.
+  {
+    match: (query, op) => op === 'GetChartCardByKey',
+    resolve: (query, variables) => {
+      const card = chartCardsByKey[variables?.key]
+      return { chart_cards: card ? [card] : [] }
+    },
+  },
+
   // Page queries (GetPageBySlug)
   {
     match: (query, op) => op === 'GetPageBySlug',
@@ -99,5 +110,14 @@ export const restHandlers = [
   {
     match: (url) => url === '/fy-summary/disbursements',
     resolve: () => revenueDataFixtures.fySummaryDisbursements,
+  },
+  // Chart endpoints backing the ChartCardByKey charts (data source: endpoint).
+  {
+    match: (url) => url === '/charts/disbursement/calendar-year-totals',
+    resolve: () => chartEndpointData['/charts/disbursement/calendar-year-totals'],
+  },
+  {
+    match: (url) => url === '/charts/disbursement/top-states',
+    resolve: () => chartEndpointData['/charts/disbursement/top-states'],
   },
 ]

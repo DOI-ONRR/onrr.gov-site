@@ -38,11 +38,11 @@ const server = http.createServer((req, res) => {
     req.on('data', chunk => { body += chunk })
     req.on('end', () => {
       try {
-        const { query, operationName } = JSON.parse(body)
+        const { query, operationName, variables } = JSON.parse(body)
         const resolve = matchHandler(query, operationName)
 
         if (resolve) {
-          const data = resolve(query)
+          const data = resolve(query, variables)
           res.writeHead(200, {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
