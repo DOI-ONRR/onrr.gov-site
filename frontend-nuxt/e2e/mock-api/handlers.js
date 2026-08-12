@@ -1,6 +1,7 @@
 import * as eventsFixtures from '../fixtures/events.js'
 import * as revenueDataFixtures from '../fixtures/revenue-data.js'
 import { chartCardsByKey, chartEndpointData } from '../fixtures/chart-cards.js'
+import { journeyPage } from '../fixtures/journey.js'
 
 /**
  * Each handler has:
@@ -64,25 +65,29 @@ export const handlers = [
     },
   },
 
-  // Page queries (GetPageBySlug)
+  // Page queries (GetPageBySlug) — slug-aware: journey-landing page for
+  // 'getting-started', the default (Events) page otherwise.
   {
     match: (query, op) => op === 'GetPageBySlug',
-    resolve: () => ({
-      page: [{
-        __typename: 'pages',
-        id: 'mock-page-1',
-        title: 'Events',
-        slug: 'events',
-        url: '/events',
-        hero_image: null,
-        hero_title: null,
-        page_blocks: [],
-        sidebar_blocks: [],
-        parent: null,
-        meta_title: null,
-        meta_description: null,
-      }],
-    }),
+    resolve: (query, variables) => {
+      if (variables?.slug === 'getting-started') return { page: [journeyPage] }
+      return {
+        page: [{
+          __typename: 'pages',
+          id: 'mock-page-1',
+          title: 'Events',
+          slug: 'events',
+          url: '/events',
+          hero_image: null,
+          hero_title: null,
+          page_blocks: [],
+          sidebar_blocks: [],
+          parent: null,
+          meta_title: null,
+          meta_description: null,
+        }],
+      }
+    },
   },
 ]
 
