@@ -1,0 +1,869 @@
+{
+  "info": {
+    "name": "ONRR CMS — GraphQL Queries",
+    "description": "All top-level GraphQL queries used by the Nuxt frontend, with fragments inlined so each is runnable.\n\nSet the `baseUrl` collection variable to the target Directus instance:\n- Local: http://localhost:8056\n- Upgrade: https://upgrade-onrr-cms.app.cloud.gov\n\nRequests POST to `{{baseUrl}}/graphql`. Public (unauthenticated) read is assumed; add an Authorization: Bearer <token> header on the collection if you need private data.\n\nGenerated from app/graphql/queries/**.gql.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "announcements",
+      "item": [
+        {
+          "name": "GetAnnouncements",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetAnnouncements {\n  announcements(\n    filter: { status: { _eq: \"published\" } }\n    sort: [\"-published_on\"]\n  ) {\n    id\n    title\n    content\n    published_on\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/announcements/getAnnouncements.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "chart_cards",
+      "item": [
+        {
+          "name": "GetChartCardByKey",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetChartCardByKey($key: String!) {\n  chart_cards(filter: { key: { _eq: $key } }, limit: 1) {\n    ...chartCardFields\n  }\n}\n\nfragment chartCardFields on chart_cards {\n  id\n  title\n  key\n  source\n  # chart configuration\n  chart_type\n  render_mode\n  stacking\n  takeaway\n  takeaway_variables\n  # data source (collection aggregation)\n  data_source_type\n  source_collection\n  aggregate_function\n  aggregate_field\n  group_by_field\n  filter\n  endpoint_url\n  x_axis_field\n  static_data\n  # axes\n  x_axis_label\n  y_axis_label\n  x_axis_type\n  x_axis_format\n  tick_interval\n  y_axis_min\n  y_axis_max\n  y_tick_interval\n  y_axis_secondary_label\n  # styling / interaction\n  grid_columns\n  color_palette\n  background_color\n  height\n  show_legend\n  legend_position\n  show_data_labels\n  show_tooltip\n  enable_export\n  enable_zoom\n  # table options\n  table_category_label\n  table_include_category\n  table_show_totals\n  table_totals_direction\n  table_default_sort\n  table_sort_direction\n  # advanced escape hatch\n  highcharts_config\n  # per-series definitions\n  series {\n    id\n    sort\n    name\n    type\n    color\n    y_axis\n    data_field\n    stack_group\n    value_format\n    prefix\n    suffix\n    dash_style\n    marker_enabled\n    visible\n    static_data\n  }\n  __typename\n}",
+                "variables": "{\n  \"key\": \"disbursements-monthly-by-recipient\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/chart_cards/getChartCardByKey.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "contacts",
+      "item": [
+        {
+          "name": "GetContactsByPage",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetContactsByPage {\n  contacts(\n    sort: [\"header\", \"letter\"]\n    limit: -1\n    filter: { \n      status: { _eq: \"published\" }\n    }\n  ) {\n    id\n    status\n    page\n    tab\n    accordion\n    company_yn\n    letter\n    header\n    company_name\n    operator_number\n    agency\n    people {\n      id\n      name\n      role\n      email\n      phone\n      is_primary\n      fax\n    }\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/contacts/getContacts.gql"
+          }
+        },
+        {
+          "name": "GetContactsByPage",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetContactsByPage($page: String) {\n  contacts(\n    sort: [\"header\", \"letter\"]\n    limit: -1\n    filter: { \n      status: { _eq: \"published\" }, \n      page: { _eq: $page } \n    }\n  ) {\n    id\n    status\n    page\n    tab\n    accordion\n    company_yn\n    letter\n    header\n    company_name\n    operator_number\n    agency\n    people {\n      id\n      name\n      role\n      email\n      phone\n      is_primary\n      fax\n    }\n  }\n}",
+                "variables": "{\n  \"page\": \"\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/contacts/getContactsByPage.gql"
+          }
+        },
+        {
+          "name": "GetContactsByPageAndTab",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetContactsByPageAndTab($page: String, $tab: String) {\n  contacts(\n    sort: [\"header\", \"letter\"]\n    limit: -1\n    filter: { \n      status: { _eq: \"published\" }, \n      page: { _eq: $page },\n      tab: { _eq: $tab }\n    }\n  ) {\n    id\n    status\n    page\n    tab\n    accordion\n    company_yn\n    letter\n    header\n    company_name\n    operator_number\n    agency\n    people {\n      id\n      name\n      role\n      email\n      phone\n      is_primary\n      fax\n    }\n  }\n}",
+                "variables": "{\n  \"page\": \"\",\n  \"tab\": \"\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/contacts/getContactsByPageAndTab.gql"
+          }
+        },
+        {
+          "name": "GetContactsByPageAndTab",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetContactsByPageAndTab($page: String, $tab: String, $accordion: String) {\n  contacts(\n    sort: [\"header\", \"letter\"]\n    limit: -1\n    filter: { \n      status: { _eq: \"published\" }, \n      page: { _eq: $page },\n      tab: { _eq: $tab },\n      accordion: { _eq: $accordion }\n    }\n  ) {\n    id\n    status\n    page\n    tab\n    accordion\n    company_yn\n    letter\n    header\n    company_name\n    operator_number\n    agency\n    people {\n      id\n      name\n      role\n      email\n      phone\n      is_primary\n      fax\n    }\n  }\n}",
+                "variables": "{\n  \"page\": \"\",\n  \"tab\": \"\",\n  \"accordion\": \"\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/contacts/getContactsByPageTabAndAccordion.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "content_blocks",
+      "item": [
+        {
+          "name": "GetContentBlockByLabel",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetContentBlockByLabel($label: String!) {\n    content_blocks(\n        filter: {\n            block_label: {\n                _eq: $label\n            }\n        }\n        limit: 1\n    ) {\n        block_label\n        block_content_html\n    }\n}",
+                "variables": "{\n  \"label\": \"Getting Started\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/content_blocks/getContentBlockByLabel.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "events",
+      "item": [
+        {
+          "name": "GetEvents",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetEvents {\n  outreach_events: events(\n    filter: {\n      status: { _eq: \"published\" }\n      event_end_date: { _gte: \"$NOW\" }\n      is_training: { _eq: false }\n    }\n    sort: [\"event_start_date\"]\n  ) {\n    ...eventFields\n  }\n  other_events: events(\n    filter: {\n      status: { _eq: \"published\" }\n      event_end_date: { _gte: \"$NOW\" }\n      is_training: { _eq: true }\n    }\n    sort: [\"event_start_date\"]\n  ) {\n    ...eventFields\n  }\n}\n\nfragment eventFields on events {\n  id\n  title\n  description\n  location\n  other_information\n  contact\n  event_start_date\n  event_end_date\n  time\n  who_should_attend\n  email\n  is_training\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/events/getEvents.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "handbooks",
+      "item": [
+        {
+          "name": "GetGeothermalClass1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetGeothermalClass1 {\n  geothermal_class_1(\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n    sort: [\"sort\"]\n  ) {\n    id\n    chapter\n    section\n    title\n    actual_page\n    toc_page\n    url\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/handbooks/geothermal_class_1/getGeothermalClass1.gql"
+          }
+        },
+        {
+          "name": "GetGeothermalClass23",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetGeothermalClass23 {\n  geothermal_class_2_3(\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n    sort: [\"sort\"]\n  ) {\n    id\n    chapter\n    section\n    title\n    actual_page\n    toc_page\n    url\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/handbooks/geothermal_class_2_3/getGeothermalClass23.gql"
+          }
+        },
+        {
+          "name": "GetProductionHandbook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetProductionHandbook {\n  production_handbook(\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n    sort: [\"sort\"]\n  ) {\n    id\n    chapter\n    section\n    title\n    actual_page\n    toc_page\n    url\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/handbooks/production_handbook/getProductionHandbook.gql"
+          }
+        },
+        {
+          "name": "GetRevenueHandbook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetRevenueHandbook {\n  revenue_handbook(\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n    sort: [\"sort\"]\n  ) {\n    id\n    chapter\n    section\n    title\n    actual_page\n    toc_page\n    url\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/handbooks/revenue_handbook/getRevenueHandbook.gql"
+          }
+        },
+        {
+          "name": "GetSolidMineralsHandbook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetSolidMineralsHandbook {\n  solid_minerals_handbook(\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n    sort: [\"sort\"]\n  ) {\n    id\n    chapter\n    section\n    title\n    actual_page\n    toc_page\n    url\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/handbooks/solid_minerals_handbook/getSolidMineralsHandbook.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "late_payment_interest",
+      "item": [
+        {
+          "name": "GetInterestOilAndGas",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetInterestOilAndGas {\n  Interest_Oil_and_Gas(\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n    sort: [\"sort\"]\n  ) {\n    id\n    Period\n    Indian_Late_and_Underpayments\n    Federal_Late_and_Underpayments\n    Federal_Overpayments\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/late_payment_interest/interest_oil_and_gas/getInterestOilAndGas.gql"
+          }
+        },
+        {
+          "name": "GetInterestSolids",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetInterestSolids {\n    Interest_Solids(\n        limit: -1\n        filter: { status: { _eq: \"published\" } }\n        sort: [\"sort\"]\n    ) {\n        id\n        Period\n        Federal_and_Indian_Late_and_Underpayments\n    }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/late_payment_interest/interest_solids/getInterestSolids.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "menus",
+      "item": [
+        {
+          "name": "GetMenuByLabel",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetMenuByLabel($menuLabel: String) {\n    menus(filter: { \n      menu_label: { \n        _eq: $menuLabel \n      }\n      menu: {\n        _eq: \"main\"\n      }\n    }) {\n        link_to_page {\n            title\n            url\n        }\n        menu_children {\n            pages_id {\n                title\n                url\n            }\n        }\n    }\n}",
+                "variables": "{\n  \"menuLabel\": \"Revenue Data\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/menus/getMenuByLabel.gql"
+          }
+        },
+        {
+          "name": "GetMenus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetMenus($menu: String!) {\n  menus(filter: { menu: { _eq: $menu } }) {\n    id\n    custom_url\n    link_to_page {\n      id\n      slug\n      url\n    }\n    menu\n    menu_children {\n      pages_id {\n        id\n        title\n        url\n      }\n    }\n    menu_icon\n    menu_label\n  }\n}",
+                "variables": "{\n  \"menu\": \"main\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/menus/getMenus.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pages",
+      "item": [
+        {
+          "name": "GetPageBySlug",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetPageBySlug($slug: String) {\n    page: pages(\n        filter: {\n            slug: {\n                _eq: $slug\n            }\n        }\n    ) {\n        ...pageFields\n    }\n}\n\nfragment pageFields on pages {\n  id\n  title\n  slug\n  template\n  parent {\n    title\n    url\n    parent {\n      title\n    }\n  }\n  hero_image {\n    id\n    description\n  }\n  hero_title\n  related_content\n  dataset_metadata {\n    id\n    name\n    description\n    update_frequency\n    formats\n    coverage_start\n    coverage_end\n    publisher\n    related_links\n    about\n    preview_component\n    terms {\n      glossary_terms_id {\n        id\n        term\n        definition\n      }\n    }\n    charts(sort: [\"sort\"]) {\n      ...chartCardFields\n    }\n  }\n  page_blocks {\n    id\n    item {\n      __typename\n      ... on content_blocks {\n        ...contentBlockFields\n      }\n      ... on tab_blocks {\n        ...tabBlockFields\n      }\n      ... on card_blocks {\n        ...cardBlockFields\n      }\n      ... on expansion_panels {\n        ...expansionPanelBlockFields\n      }\n      ... on layout_column_blocks {\n        ...layoutColumnBlockFields\n      }\n      ... on collection_blocks {\n        ...collectionBlockFields\n      }\n      ... on chart_cards {\n        ...chartCardFields\n      }\n    }\n  }\n  sidebar_blocks {\n    id\n    item {\n      ... on content_blocks {\n        ...contentBlockFields\n        __typename\n      }\n      ... on collection_blocks {\n        ...collectionBlockFields\n        __typename\n      }\n    }\n    __typename\n  }\n  meta_title\n  meta_description\n}\n\nfragment chartCardFields on chart_cards {\n  id\n  title\n  key\n  source\n  # chart configuration\n  chart_type\n  render_mode\n  stacking\n  takeaway\n  takeaway_variables\n  # data source (collection aggregation)\n  data_source_type\n  source_collection\n  aggregate_function\n  aggregate_field\n  group_by_field\n  filter\n  endpoint_url\n  x_axis_field\n  static_data\n  # axes\n  x_axis_label\n  y_axis_label\n  x_axis_type\n  x_axis_format\n  tick_interval\n  y_axis_min\n  y_axis_max\n  y_tick_interval\n  y_axis_secondary_label\n  # styling / interaction\n  grid_columns\n  color_palette\n  background_color\n  height\n  show_legend\n  legend_position\n  show_data_labels\n  show_tooltip\n  enable_export\n  enable_zoom\n  # table options\n  table_category_label\n  table_include_category\n  table_show_totals\n  table_totals_direction\n  table_default_sort\n  table_sort_direction\n  # advanced escape hatch\n  highcharts_config\n  # per-series definitions\n  series {\n    id\n    sort\n    name\n    type\n    color\n    y_axis\n    data_field\n    stack_group\n    value_format\n    prefix\n    suffix\n    dash_style\n    marker_enabled\n    visible\n    static_data\n  }\n  __typename\n}\n\nfragment contentBlockFields on content_blocks {\n  id\n  block_label\n  block_v_col\n  block_content\n  block_content_html\n  equal_col_height\n}\n\nfragment tabBlockFields on tab_blocks {\n  id\n  tab_blocks {\n    id\n    item {\n      __typename\n      ... on tab_block_label {\n        ...tabBlockLabelFields\n      }\n      ... on content_blocks {\n        ...contentBlockFields\n      }\n      ... on card_blocks {\n        ...cardBlockFields\n      }\n      ... on tab_blocks {\n        ...nestedTabBlockFields\n      }\n      ... on expansion_panels {\n        ...expansionPanelBlockFields\n      }\n      ... on layout_column_blocks {\n        ...layoutColumnBlockFields\n      }\n      ... on formula_blocks {\n        ...formulaBlockFields\n      }\n      ... on collection_blocks {\n        ...collectionBlockFields\n      }\n    }\n  }\n}\n\nfragment cardBlockFields on card_blocks {\n  id\n  block_color\n  block_label\n  block_v_col\n  block_icon\n  block_content\n  block_content_html\n  equal_col_height\n  card_content_blocks {\n    id\n    item {\n      ... on content_blocks {\n        ...contentBlockFields\n      }\n      ... on collection_blocks {\n        ...collectionBlockFields\n      }\n    }\n  }\n}\n\nfragment expansionPanelBlockFields on expansion_panels {\n  id\n  block_label\n  open_by_default {\n    id\n  }\n  expansion_panel_blocks {\n    id\n    item {\n      __typename\n      ... on expansion_panel_block_label {\n        ...expansionPanelBlockLabel\n      }\n      ... on content_blocks {\n        ...contentBlockFields\n      }\n      ... on card_blocks {\n        ...cardBlockFields\n      }\n      ... on collection_blocks {\n        ...collectionBlockFields\n      }\n    }\n  }\n}\n\nfragment layoutColumnBlockFields on layout_column_blocks {\n  id\n  layoutCol: block_v_col\n}\n\nfragment collectionBlockFields on collection_blocks {\n  id\n  collection\n  header\n  description\n  accordion\n  page\n  tab\n  items_per_page\n  status\n  layout\n  item_status\n  category_header_level\n  topics\n  __typename\n}\n\nfragment tabBlockLabelFields on tab_block_label {\n  id\n  tab_block_label\n}\n\nfragment nestedTabBlockFields on tab_blocks {\n  id\n  tab_blocks {\n    id\n    item {\n      __typename\n      ... on tab_block_label {\n        ...tabBlockLabelFields\n      }\n      ... on content_blocks {\n        ...contentBlockFields\n      }\n      ... on card_blocks {\n        ...cardBlockFields\n      }\n      ... on tab_blocks {\n        ...nestedNestedTabBlockFields\n      }\n      ... on expansion_panels {\n        ...expansionPanelBlockFields\n      }\n      ... on layout_column_blocks {\n        ...layoutColumnBlockFields\n      }\n      ... on formula_blocks {\n        ...formulaBlockFields\n      }\n      ... on collection_blocks {\n        ...collectionBlockFields\n      }\n    }\n  }\n}\n\nfragment formulaBlockFields on formula_blocks {\n  id\n  title\n  formula_tex\n}\n\nfragment expansionPanelBlockLabel on expansion_panel_block_label {\n  id\n  block_label\n}\n\nfragment nestedNestedTabBlockFields on tab_blocks {\n  id\n  tab_blocks {\n    id\n    item {\n      __typename\n      ... on tab_block_label {\n        ...tabBlockLabelFields\n      }\n      ... on content_blocks {\n        ...contentBlockFields\n      }\n      ... on card_blocks {\n        ...cardBlockFields\n      }\n      ... on expansion_panels {\n        ...expansionPanelBlockFields\n      }\n      ... on layout_column_blocks {\n        ...layoutColumnBlockFields\n      }\n      ... on formula_blocks {\n        ...formulaBlockFields\n      }\n      ... on collection_blocks {\n        ...collectionBlockFields\n      }\n    }\n  }\n}",
+                "variables": "{\n  \"slug\": \"getting-started\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/pages/getPageBySlug.gql"
+          }
+        },
+        {
+          "name": "LandingPageProduction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query LandingPageProduction {\n    production_totals: production_aggregated(\n        groupBy: [\"period\", \"commodity\", \"location\"]\n        filter: { _and: [\n            {\n                period: {\n                    type: { _eq: \"Monthly\"}\n                }\n            },\n            {\n                commodity: {\n                    product: { _in: [\"Oil (bbl)\", \"Gas (mcf)\", \"Coal (tons)\"] }\n                }\n            },\n            {\n                location: {\n                    land_type: {\n                        _in: [\"Federal onshore\", \"Federal offshore\", \"Native American\"]\n                    }\n                }\n            }\n        ] }\n        limit: -1\n    ) {\n        group\n        sum {\n            volume\n        }\n    }\n\n    period(\n        filter: { type: { _eq: \"Monthly\" } }\n        sort: [\"fiscal_year\", \"fiscal_month\"]\n        limit: -1\n    ) {\n        id\n        fiscal_year\n        fiscal_month\n        month_short\n        month_long\n        calendar_year\n        period_date\n    }\n    commodity(\n        filter: { product: { _in: [\"Oil (bbl)\", \"Gas (mcf)\", \"Coal (tons)\"] } }\n        limit: -1\n    ) {\n        id\n        product\n    }\n    location(\n        filter: { \n            land_type: {\n                _in: [\"Federal onshore\", \"Federal offshore\", \"Native American\"]\n            }\n        }\n        limit: -1\n    ) {\n        id\n        source: land_type\n    }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/pages/revenue-data/landingPageProduction.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "plant_specific_ucas",
+      "item": [
+        {
+          "name": "GetPlantSpecificUCAs",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetPlantSpecificUCAs {\n  plant_specific_ucas(\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n    sort: [\"transportation_system_or_gas_plant\"]\n  ) {\n    id\n    transportation_system_or_gas_plant\n    file {\n      filename_download\n      folder {\n        name\n      }\n    }\n    type\n    operator\n    location\n    doc_date\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/plant_specific_ucas/getPlantSpecificUCAs.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "press_releases",
+      "item": [
+        {
+          "name": "GetPressReleasesByStatus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetPressReleasesByStatus($status: String) {\n  press_releases(\n    limit: -1\n    sort: \"-date\"\n    filter: { status: { _eq: $status } }\n  ) {\n    id\n    status\n    title\n    date\n    file {\n      id\n      filename_download\n      title\n    }\n    link\n    excerpt\n    status\n  }\n}",
+                "variables": "{\n  \"status\": \"published\"\n}"
+              }
+            },
+            "description": "Source: app/graphql/collections/press_releases/getPressReleasesByStatus.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pricing",
+      "item": [
+        {
+          "name": "GetIBMP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetIBMP {\n  ibmp(\n    sort: [\"sort\", \"-date\"]\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n  ) {\n    id\n    date\n    ibmp_line_items\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/pricing/ibmp/getIBMP.gql"
+          }
+        },
+        {
+          "name": "GetIndexZones",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetIndexZones {\n  index_zones(\n    sort: [\"-date\"]\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n  ) {\n    id\n    date\n    index_zones\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/pricing/index_zones/getIndexZones.gql"
+          }
+        },
+        {
+          "name": "GetIndianGasMajorPortion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetIndianGasMajorPortion {\n  indian_gas_major_portion(\n    sort: [\"-date\"]\n    limit: -1\n    filter: { status: { _eq: \"published\" } }\n  ) {\n    id\n    date\n    index_zones\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/pricing/indian_gas_major_portion/getIndianGasMajorPortion.gql"
+          }
+        },
+        {
+          "name": "GetNYMEX",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetNYMEX {\n  NYMEX(sort: [\"date\"], limit: -1, filter: { status: { _eq: \"published\" } }) {\n    id\n    date\n    average\n    roll\n    excel_file: Spreadsheet {\n      filename_download\n    }\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/pricing/NYMEX/getNYMEX.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reporter_letters",
+      "item": [
+        {
+          "name": "GetReporterLetters",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetReporterLetters {\n  reporter_letters(\n    limit: -1\n    sort: [\"-date\"]\n  ) {\n    id\n    title\n    date\n    file {\n      id\n      filename_download\n      title\n      type\n    }\n    accessible_file {\n      id\n      filename_download\n      title\n      type\n    }\n    link\n    status\n    topics\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/reporter_letters/getReporterLetters.gql"
+          }
+        }
+      ]
+    },
+    {
+      "name": "rulemakings",
+      "item": [
+        {
+          "name": "GetRulemakings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetRulemakings {\n  rulemakings(\n    limit: -1\n    filter: { status: { _eq: \"published\" }, rin: { _nnull: true } }\n    sort: [\"-rin\"]\n  ) {\n    id\n    final_publication_date\n    rin\n    rule_title\n    commodity_subject_matter\n    webpage_link\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Source: app/graphql/collections/rulemakings/getRulemakings.gql"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8056",
+      "type": "string"
+    }
+  ]
+}
