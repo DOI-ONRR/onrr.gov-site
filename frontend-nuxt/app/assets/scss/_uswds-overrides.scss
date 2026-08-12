@@ -7,12 +7,12 @@
   /* Center the nav row and align it with the rest of the page. `.navrow` replaced
      USWDS's `.usa-nav-container`, which had supplied the site max-width + centered
      gutters; restore them here so the nav lines up with the masthead, body, and
-     footer `.grid-container`s (1600px cap = $site-max-width in styles.scss; 2rem
+     footer `.grid-container`s (1400px cap = $site-max-width in styles.scss; 2rem
      gutter = USWDS's desktop site-margin). Desktop-only: below 64em `.usa-nav` is
      the full-width mobile drawer and must not be capped/centered. */
   .navrow {
     display: flex; align-items: center; justify-content: flex-start; gap: 1rem;
-    max-width: 1600px; margin-left: auto; margin-right: auto;
+    max-width: 1400px; margin-left: auto; margin-right: auto;
     padding-left: 2rem; padding-right: 2rem;
   }
   .navrow .usa-search { margin: 0.75rem 0; }
