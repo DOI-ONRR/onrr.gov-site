@@ -36,8 +36,9 @@ export const journeyPage = {
     { id: 'r1', section: 'related', title: 'Report', description: 'Submit your production and royalty reports.', link_label: 'Reporting', link_url: '/reporting' },
     { id: 'r2', section: 'related', title: 'Pay', description: 'Make payments and manage what you owe.', link_label: 'Paying', link_url: '/paying' },
     { id: 'r3', section: 'related', title: 'See where the money goes', description: 'Explore disbursements and revenue data.', link_label: 'Revenue Data', link_url: '/revenue-data' },
-    // aside callout box (single)
-    { id: 'c1', section: 'callout', title: 'Stuck, or not sure this applies to you?', description: 'ONRR staff can help you get set up.', link_label: 'Contact ONRR', link_url: '/contact' },
+    // aside callout box (single). variant 'default' = navy help box + outline-button CTA;
+    // 'alert' would render red + a plain-link CTA (reporting/paying deadline box).
+    { id: 'c1', section: 'callout', variant: 'default', title: 'Stuck, or not sure this applies to you?', description: 'ONRR staff can help you get set up.', link_label: 'Contact ONRR', link_url: '/contact' },
     // aside references list
     { id: 'ref1', section: 'reference', title: 'Reporter handbooks', description: 'production, revenue, and solid minerals', link_label: null, link_url: '#' },
     { id: 'ref2', section: 'reference', title: 'Forms', description: 'every reporting and payment form in one place', link_label: null, link_url: '#' },

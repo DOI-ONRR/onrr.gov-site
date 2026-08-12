@@ -11,6 +11,7 @@ Feature: Journey landing page
     Then the journey callout is visible
     And the journey callout contains "Stuck, or not sure this applies to you?"
     And the journey callout has a CTA "Contact ONRR"
+    And the journey callout CTA is a button
 
   Scenario: Aside references list
     Given I navigate to the journey landing page
