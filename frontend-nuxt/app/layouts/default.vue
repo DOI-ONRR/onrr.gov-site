@@ -28,6 +28,11 @@ import MastHead from '~/components/MastHead.vue';
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  // Contain full-bleed sections (e.g. JourneyLandingView's related band uses a 100vw
+  // breakout) so their viewport width can't trigger a horizontal scrollbar. `clip`
+  // (not `hidden`) avoids creating a scroll container, so sticky/absolute descendants
+  // (TopicView rail, mobile nav drawer) are unaffected.
+  overflow-x: clip;
 }
 
 #main-content {

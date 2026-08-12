@@ -21,8 +21,12 @@ const isDataset = computed(() => !!page.value?.dataset_metadata)
 // "On this page" rail); like the dataset case, it drops the standard sidenav.
 const isTopic = computed(() => page.value?.template === 'topic')
 
+// 'journey-landing' → JourneyLandingView (a hero + process-list of steps, like the
+// Getting Started / Reporting / Paying mockups); also drops the standard sidenav.
+const isJourneyLanding = computed(() => page.value?.template === 'journey-landing')
+
 // Layouts that own their own heading + column structure (no standard sidenav/h1).
-const isCustomLayout = computed(() => isDataset.value || isTopic.value)
+const isCustomLayout = computed(() => isDataset.value || isTopic.value || isJourneyLanding.value)
 
 const pageTitle = computed(() => page.value?.title || null)
 const parentTitle = computed(() => page.value?.parent?.title || null)
@@ -113,6 +117,7 @@ const sidenavLinks = computed(() => {
         <h1 v-if="!isCustomLayout">{{ page?.hero_title || page?.title }}</h1>
         <DatasetView v-if="isDataset" :dataset="page.dataset_metadata" />
         <TopicView v-else-if="isTopic" :page="page" />
+        <JourneyLandingView v-else-if="isJourneyLanding" :page="page" />
         <template v-else>
         <Events v-if="slug === 'events'" />
         <div class="grid-row grid-gap">

@@ -25,6 +25,24 @@ fragment pageFields on pages {
   }
   hero_title
   related_content
+  journey_steps(sort: ["sort"]) {
+    id
+    label
+    url
+    body
+    meta
+  }
+  journey_paths_heading
+  journey_related_heading
+  journey_references_heading
+  journey_links(sort: ["sort"]) {
+    id
+    section
+    title
+    description
+    link_label
+    link_url
+  }
   dataset_metadata {
     id
     name
