@@ -38,6 +38,7 @@ fragment pageFields on pages {
   journey_links(sort: ["sort"]) {
     id
     section
+    variant
     title
     description
     link_label

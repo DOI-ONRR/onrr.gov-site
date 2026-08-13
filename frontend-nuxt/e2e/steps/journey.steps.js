@@ -38,6 +38,12 @@ Then('the journey callout has a CTA {string}', async ({ page }, label) => {
   await expect(page.locator('.journey-callout a', { hasText: label })).toBeVisible()
 })
 
+// The default variant renders its CTA as an outline button; the 'alert' variant
+// would render it as a plain usa-link instead.
+Then('the journey callout CTA is a button', async ({ page }) => {
+  await expect(page.locator('.journey-callout a.usa-button')).toBeVisible()
+})
+
 // --- aside: references ---
 
 Then('the journey references heading {string} is visible', async ({ page }, heading) => {
