@@ -13,14 +13,20 @@ $onrr-navy:   #1a2a52;  // masthead + footer band
 $onrr-navy-2: #121d38;  // drawer utility strip
 $onrr-violet: #8168b3;  // entity-pinned Native American / Indian
 $onrr-gold:   #ffbe2e;  // focus ring / supervisor role
-$onrr-blue: #005ea2;
+$onrr-blue:       #005ea2;  // primary link / info accent (help box, highlight path card)
+$onrr-blue-light: #e1eefa;  // info accent background tint
+$onrr-red:        #b50909;  // alert / deadline accent (red callout)
+$onrr-red-light:  #f8e1de;  // alert accent background tint
 
 $onrr-colors: (
   "navy": $onrr-navy,
   "navy-2": $onrr-navy-2,
   "violet": $onrr-violet,
   "gold": $onrr-gold,
-  "blue": $onrr-blue
+  "blue": $onrr-blue,
+  "blue-light": $onrr-blue-light,
+  "red": $onrr-red,
+  "red-light": $onrr-red-light
 );
 
 :root {

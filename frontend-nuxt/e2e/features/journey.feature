@@ -21,6 +21,7 @@ Feature: Journey landing page
     Given I navigate to the journey landing page
     Then the journey path heading "What are you reporting?" is visible
     And the journey has 2 path cards
+    And the journey has 1 highlighted path card
 
   Scenario: Related band above the footer
     Given I navigate to the journey landing page

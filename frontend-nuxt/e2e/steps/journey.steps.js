@@ -58,6 +58,11 @@ Then('the journey has {int} path cards', async ({ page }, count) => {
   await expect(page.locator('.journey-paths .jl-card')).toHaveCount(count)
 })
 
+// The 'highlight' variant path card carries the jl-card--highlight accent class.
+Then('the journey has {int} highlighted path card', async ({ page }, count) => {
+  await expect(page.locator('.journey-paths .jl-card--highlight')).toHaveCount(count)
+})
+
 // --- related band ---
 
 Then('the journey related heading {string} is visible', async ({ page }, heading) => {

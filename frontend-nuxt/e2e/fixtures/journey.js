@@ -29,9 +29,10 @@ export const journeyPage = {
   ],
 
   journey_links: [
-    // path cards (primary parallel-path content)
+    // path cards (primary parallel-path content). One 'highlight' variant = the blue
+    // info accent contact card (paying page's "Questions about a payment?").
     { id: 'p1', section: 'path', title: 'Oil & gas production', description: 'Report production volumes.', link_label: 'Oil & Gas Production', link_url: '#' },
-    { id: 'p2', section: 'path', title: 'Solid minerals', description: 'Report coal and other solid minerals.', link_label: 'Solid Minerals', link_url: '#' },
+    { id: 'p2', section: 'path', variant: 'highlight', title: 'Questions about a payment?', description: 'Payment analysts can help.', link_label: 'Contacts for paying', link_url: '#' },
     // related band (closing "next steps")
     { id: 'r1', section: 'related', title: 'Report', description: 'Submit your production and royalty reports.', link_label: 'Reporting', link_url: '/reporting' },
     { id: 'r2', section: 'related', title: 'Pay', description: 'Make payments and manage what you owe.', link_label: 'Paying', link_url: '/paying' },

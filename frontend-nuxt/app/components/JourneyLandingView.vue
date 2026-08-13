@@ -32,6 +32,9 @@ const links = computed(() => props.page?.journey_links ?? [])
 const pathCards = computed(() => links.value.filter((l) => l.section === 'path'))
 const relatedCards = computed(() => links.value.filter((l) => l.section === 'related'))
 const callout = computed(() => links.value.find((l) => l.section === 'callout') || null)
+// 'alert' variant = the red deadline box with a plain-link CTA (reporting/paying);
+// anything else (incl. blank) = the default navy help box with an outline-button CTA.
+const calloutIsAlert = computed(() => callout.value?.variant === 'alert')
 const references = computed(() => links.value.filter((l) => l.section === 'reference'))
 const pathsHeading = computed(() => props.page?.journey_paths_heading || null)
 const relatedHeading = computed(() => props.page?.journey_related_heading || null)
@@ -93,12 +96,18 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
 
       <!-- Aside (right column): a help/deadline callout box + a "Key references" list. -->
       <aside v-if="callout || references.length" class="tablet:grid-col-4 journey-aside">
-        <div v-if="callout" class="journey-callout padding-3 margin-bottom-3">
+        <div
+          v-if="callout"
+          class="journey-callout padding-3 margin-bottom-3"
+          :class="`journey-callout--${callout.variant || 'default'}`"
+        >
           <h2 class="margin-top-0 font-heading-sm">{{ callout.title }}</h2>
-          <p v-if="callout.description" class="font-body-2xs margin-bottom-1">{{ callout.description }}</p>
+          <div v-if="callout.description" class="journey-callout__desc font-body-2xs margin-bottom-1" v-html="resolveImages(callout.description)" />
+          <!-- 'alert' variant renders the CTA as a plain link (per the reporting/paying
+               deadline box); the default renders it as an outline button. -->
           <a
             v-if="callout.link_url"
-            class="usa-button usa-button--outline"
+            :class="calloutIsAlert ? 'usa-link' : 'usa-button usa-button--outline'"
             :href="callout.link_url"
           >{{ callout.link_label || callout.title }}</a>
         </div>
@@ -107,7 +116,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
           <h2 v-if="referencesHeading" class="font-heading-sm margin-bottom-1">{{ referencesHeading }}</h2>
           <ul class="journey-refs">
             <li v-for="ref in references" :key="ref.id">
-              <a v-if="ref.link_url" class="usa-link" :href="ref.link_url">{{ ref.title }}</a><template v-else>{{ ref.title }}</template><span v-if="ref.description"> — {{ ref.description }}</span>
+              <a v-if="ref.link_url" class="usa-link" :href="ref.link_url">{{ ref.title }}</a><template v-else>{{ ref.title }}</template><span v-if="ref.description" class="journey-ref-desc"> — <span v-html="resolveImages(ref.description)"></span></span>
             </li>
           </ul>
         </div>
@@ -118,14 +127,17 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
     <section v-if="pathCards.length" class="journey-paths margin-top-4">
       <h2 v-if="pathsHeading" class="font-heading-lg margin-bottom-2">{{ pathsHeading }}</h2>
       <div class="grid-row grid-gap">
+        <!-- 4-up (grid-col-3) to match the mockup: reporting/paying have four paths. -->
         <div
           v-for="card in pathCards"
           :key="card.id"
-          class="tablet:grid-col-4 margin-bottom-2"
+          class="tablet:grid-col-3 margin-bottom-2"
         >
-          <div class="jl-card padding-3">
+          <!-- 'highlight' variant = the blue info accent card (e.g. the paying page's
+               "Questions about a payment?" contact card); default = plain white. -->
+          <div class="jl-card padding-3" :class="card.variant ? `jl-card--${card.variant}` : null">
             <h3 class="font-heading-md margin-top-0">{{ card.title }}</h3>
-            <p v-if="card.description" class="jl-card__desc">{{ card.description }}</p>
+            <div v-if="card.description" class="jl-card__desc" v-html="resolveImages(card.description)" />
             <a
               v-if="card.link_url"
               class="usa-button usa-button--outline jl-card__cta"
@@ -152,7 +164,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
           >
             <div class="jl-card padding-3">
               <h3 class="font-heading-md margin-top-0">{{ card.title }}</h3>
-              <p v-if="card.description" class="jl-card__desc">{{ card.description }}</p>
+              <div v-if="card.description" class="jl-card__desc" v-html="resolveImages(card.description)" />
               <a
                 v-if="card.link_url"
                 class="usa-button usa-button--outline jl-card__cta"
@@ -168,6 +180,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
 
 <style lang="scss" scoped>
 @use "onrr-colors" as *;
+@use "uswds" as *;
 
 .journey-eyebrow {
   text-transform: uppercase;
@@ -204,10 +217,36 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
   flex-direction: column;
 }
 
+// 'highlight' variant — the blue info accent card (paying page's "Questions about a
+// payment?" contact card). Sits among plain white path cards to draw the eye.
+.jl-card--highlight {
+  @include u-border('primary');
+  @include u-border-left('05');
+  background: $onrr-blue-light;
+}
+
 .jl-card__desc {
   font-size: 0.95rem;
   color: #1b1b1b;
+  margin-bottom: 1rem;
+
+  // `description` is WYSIWYG: tidy paragraphs and link lists from the editor.
+  :deep(p) { margin: 0 0 0.5rem; }
+  :deep(p:last-child) { margin-bottom: 0; }
+  :deep(ul) { margin: 0.25rem 0; padding-left: 1.1rem; }
 }
+
+// Callout description (WYSIWYG) — same tidy-up as the cards.
+.journey-callout__desc {
+  :deep(p) { margin: 0 0 0.5rem; }
+  :deep(p:last-child) { margin-bottom: 0; }
+  :deep(ul) { margin: 0.25rem 0; padding-left: 1.1rem; }
+}
+
+// Reference description (WYSIWYG) — keep short prose inline after the "— ", but let a
+// link list break to its own lines under the reference.
+.journey-ref-desc :deep(p) { display: inline; margin: 0; }
+.journey-ref-desc :deep(ul) { margin: 0.25rem 0 0; padding-left: 1.1rem; }
 
 .jl-card__cta {
   margin-top: auto;
@@ -219,6 +258,13 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
   border-left: 4px solid $onrr-navy;
   border-radius: 0 4px 4px 0;
   background: #f9fafb;
+}
+
+// 'alert' variant — the red deadline box from the reporting/paying mockups. Pairs
+// with the plain-link CTA (see the template's variant switch).
+.journey-callout--alert {
+  border-left-color: $onrr-red;
+  background: $onrr-red-light;
 }
 
 .journey-refs {
