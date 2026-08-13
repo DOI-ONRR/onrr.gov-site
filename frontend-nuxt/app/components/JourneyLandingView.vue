@@ -180,7 +180,12 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
 
 <style lang="scss" scoped>
 @use "onrr-colors" as *;
-@use "uswds" as *;
+// uswds-theme forwards uswds-core (functions, mixins like u-border, and the project's
+// theme settings) WITHOUT emitting USWDS component CSS. Using the full "uswds" bundle
+// here would compile every USWDS rule into this component's scoped styles — including
+// `.grid-container { max-width: 64rem }` — which overrode the global 1400px site width
+// and narrowed/misaligned the full-bleed related band. Match the rest of the codebase.
+@use "uswds-theme" as *;
 
 .journey-eyebrow {
   text-transform: uppercase;
