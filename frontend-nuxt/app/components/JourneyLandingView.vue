@@ -164,7 +164,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
           >
             <div class="jl-card padding-3">
               <h3 class="font-heading-md margin-top-0">{{ card.title }}</h3>
-              <div v-if="card.description" class="jl-card__desc" v-html="resolveImages(card.description)" />
+              <div v-if="card.description" class="jl-card__desc margin-top-2" v-html="resolveImages(card.description)" />
               <a
                 v-if="card.link_url"
                 class="usa-button usa-button--outline jl-card__cta"
