@@ -152,7 +152,11 @@ function goToSection(id) {
 
 <style lang="scss" scoped>
 @use "onrr-colors" as *;
-@use "uswds" as *;
+// uswds-theme forwards uswds-core (functions, mixins, and the project's theme settings)
+// WITHOUT emitting USWDS component CSS. The full "uswds" bundle would compile every USWDS
+// rule into this component's scoped styles — including `.grid-container { max-width: 64rem }`,
+// which narrows/misaligns any grid-container inside a topic page. Match the rest of the codebase.
+@use "uswds-theme" as *;
 
 .topic-eyebrow {
   text-transform: uppercase;
