@@ -2,6 +2,7 @@ import * as eventsFixtures from '../fixtures/events.js'
 import * as revenueDataFixtures from '../fixtures/revenue-data.js'
 import { chartCardsByKey, chartEndpointData } from '../fixtures/chart-cards.js'
 import { journeyPage } from '../fixtures/journey.js'
+import { audienceHubPage } from '../fixtures/audience-hub.js'
 
 /**
  * Each handler has:
@@ -66,11 +67,13 @@ export const handlers = [
   },
 
   // Page queries (GetPageBySlug) — slug-aware: journey-landing page for
-  // 'getting-started', the default (Events) page otherwise.
+  // 'getting-started', audience-hub page for 'indian-resources', the default
+  // (Events) page otherwise.
   {
     match: (query, op) => op === 'GetPageBySlug',
     resolve: (query, variables) => {
       if (variables?.slug === 'getting-started') return { page: [journeyPage] }
+      if (variables?.slug === 'indian-resources') return { page: [audienceHubPage] }
       return {
         page: [{
           __typename: 'pages',
@@ -117,9 +120,14 @@ export const restHandlers = [
     resolve: () => revenueDataFixtures.fySummaryDisbursements,
   },
   // Chart endpoints backing the ChartCardByKey charts (data source: endpoint).
+  // calendar-year-totals varies by recipient: the audience-hub chart requests
+  // ?recipient=native_american and gets the Native-American-scoped totals.
   {
     match: (url) => url === '/charts/disbursement/calendar-year-totals',
-    resolve: () => chartEndpointData['/charts/disbursement/calendar-year-totals'],
+    resolve: (urlPath, fullUrl = '') =>
+      (fullUrl.includes('recipient=native_american')
+        ? chartEndpointData['/charts/disbursement/calendar-year-totals?recipient=native_american']
+        : chartEndpointData['/charts/disbursement/calendar-year-totals']),
   },
   {
     match: (url) => url === '/charts/disbursement/top-states',

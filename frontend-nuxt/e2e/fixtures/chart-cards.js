@@ -134,6 +134,17 @@ export const chartEndpointData = {
       { calendar_year: 2025, total_amount: 14100000000 },
     ],
   },
+  // Native-American-scoped totals (audience-hub hub_chart, ?recipient=native_american).
+  // Realistic NA magnitudes (~$0.9-1.7B/yr) rather than the all-recipient totals above.
+  '/charts/disbursement/calendar-year-totals?recipient=native_american': {
+    data: [
+      { calendar_year: 2021, total_amount: 1130371506 },
+      { calendar_year: 2022, total_amount: 1656054971 },
+      { calendar_year: 2023, total_amount: 1334758139 },
+      { calendar_year: 2024, total_amount: 1143964681 },
+      { calendar_year: 2025, total_amount: 911377035 },
+    ],
+  },
   '/charts/disbursement/top-states': {
     data: [
       { state: 'New Mexico', total_amount: 5200000000 },

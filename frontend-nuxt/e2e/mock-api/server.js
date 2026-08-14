@@ -104,7 +104,9 @@ const server = http.createServer((req, res) => {
     const urlPath = req.url.split('?')[0]
     const resolve = matchRestHandler(urlPath)
     if (resolve) {
-      const data = resolve(urlPath)
+      // Match on the path, but hand the resolver the full URL so it can vary the
+      // response by query params (e.g. calendar-year-totals?recipient=native_american).
+      const data = resolve(urlPath, req.url)
       res.writeHead(200, {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
