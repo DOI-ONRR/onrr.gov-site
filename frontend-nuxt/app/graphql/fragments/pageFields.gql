@@ -44,6 +44,31 @@ fragment pageFields on pages {
     link_label
     link_url
   }
+  audience_heading
+  services_heading
+  data_heading
+  audience_cards(sort: ["sort"]) {
+    id
+    title
+    body
+  }
+  hub_services(sort: ["sort"]) {
+    id
+    title
+    url
+    description
+  }
+  hub_links(sort: ["sort"]) {
+    id
+    section
+    title
+    description
+    link_label
+    link_url
+  }
+  hub_chart {
+    ...chartCardFields
+  }
   dataset_metadata {
     id
     name

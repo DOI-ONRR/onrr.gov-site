@@ -25,8 +25,16 @@ const isTopic = computed(() => page.value?.template === 'topic')
 // Getting Started / Reporting / Paying mockups); also drops the standard sidenav.
 const isJourneyLanding = computed(() => page.value?.template === 'journey-landing')
 
+// 'audience-hub' → AudienceHubView (Indian Resources mockup): an audience-routing hub of
+// alternating full-width bands + constrained containers. Unlike the other custom layouts
+// it renders at the page TOP LEVEL (outside the shared .grid-container) so its header and
+// data bands are genuinely full-width, and it owns its own breadcrumb inside the header.
+const isAudienceHub = computed(() => page.value?.template === 'audience-hub')
+
 // Layouts that own their own heading + column structure (no standard sidenav/h1).
-const isCustomLayout = computed(() => isDataset.value || isTopic.value || isJourneyLanding.value)
+const isCustomLayout = computed(
+  () => isDataset.value || isTopic.value || isJourneyLanding.value || isAudienceHub.value,
+)
 
 const pageTitle = computed(() => page.value?.title || null)
 const parentTitle = computed(() => page.value?.parent?.title || null)
@@ -80,7 +88,16 @@ const sidenavLinks = computed(() => {
     :alt="page.hero_image.description || ''"
     class="width-full"
   />
-  <section class="grid-container usa-section margin-top-4">
+  <!-- audience-hub renders at the top level (full-width bands own their own container +
+       breadcrumb); every other template renders inside the shared constrained section. -->
+  <AudienceHubView
+    v-if="isAudienceHub"
+    :page="page"
+    :parent-link="parentLink"
+    :parent-url="parentUrl"
+    :parent-title="parentTitle"
+  />
+  <section v-else class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
       <div v-if="!isCustomLayout" class="grid-col-2">
         <nav v-if="sidenavLinks.length" aria-label="Side navigation">
@@ -94,26 +111,12 @@ const sidenavLinks = computed(() => {
         </nav>
       </div>
       <div :class="isCustomLayout ? 'grid-col-12' : 'grid-col-10'">
-        <nav class="usa-breadcrumb" aria-label="Breadcrumbs">
-          <ol class="usa-breadcrumb__list">
-            <li class="usa-breadcrumb__list-item">
-              <NuxtLink to="/" class="usa-breadcrumb__link">Home</NuxtLink>
-            </li>
-            <li v-if="parentLink && parentLink.url !== '/' && parentLink.url !== route.path" class="usa-breadcrumb__list-item">
-              <NuxtLink :to="parentLink.url" class="usa-breadcrumb__link">
-                {{ parentLink.title }}
-              </NuxtLink>
-            </li>
-            <li v-if="parentUrl && parentUrl !== '/' && parentUrl !== parentLink?.url" class="usa-breadcrumb__list-item">
-              <NuxtLink :to="parentUrl" class="usa-breadcrumb__link">
-                {{ parentTitle }}
-              </NuxtLink>
-            </li>
-            <li class="usa-breadcrumb__list-item usa-current" aria-current="page">
-              <span>{{ page?.title }}</span>
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumbs
+          :page="page"
+          :parent-link="parentLink"
+          :parent-url="parentUrl"
+          :parent-title="parentTitle"
+        />
         <h1 v-if="!isCustomLayout">{{ page?.hero_title || page?.title }}</h1>
         <DatasetView v-if="isDataset" :dataset="page.dataset_metadata" />
         <TopicView v-else-if="isTopic" :page="page" />

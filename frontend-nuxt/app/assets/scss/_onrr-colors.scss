@@ -11,7 +11,8 @@ Define once, use everywhere:
 
 $onrr-navy:   #1a2a52;  // masthead + footer band
 $onrr-navy-2: #121d38;  // drawer utility strip
-$onrr-violet: #8168b3;  // entity-pinned Native American / Indian
+$onrr-violet:       #8168b3;  // entity-pinned Native American / Indian (audience-hub accent)
+$onrr-violet-light: #eee7f9;  // violet accent background tint (audience-hub help box)
 $onrr-gold:   #ffbe2e;  // focus ring / supervisor role
 $onrr-blue:       #005ea2;  // primary link / info accent (help box, highlight path card)
 $onrr-blue-light: #e1eefa;  // info accent background tint
@@ -22,6 +23,7 @@ $onrr-colors: (
   "navy": $onrr-navy,
   "navy-2": $onrr-navy-2,
   "violet": $onrr-violet,
+  "violet-light": $onrr-violet-light,
   "gold": $onrr-gold,
   "blue": $onrr-blue,
   "blue-light": $onrr-blue-light,
