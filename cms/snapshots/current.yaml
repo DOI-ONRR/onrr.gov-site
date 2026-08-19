@@ -1224,6 +1224,84 @@ collections:
       versioning: false
     schema:
       name: menus_pages
+  - collection: page_bands
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: page_bands
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: sort
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: page_bands
+  - collection: page_cards
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: page_cards
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: sort
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: page_cards
+  - collection: page_steps
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: page_steps
+      color: null
+      display_template: null
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: sort
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: page_steps
   - collection: pages
     meta:
       accountability: all
@@ -7900,7 +7978,7 @@ fields:
       display_options: null
       field: chart_card
       group: null
-      hidden: false
+      hidden: true
       interface: select-dropdown-m2o
       note: null
       options:
@@ -24954,6 +25032,1510 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: page_bands
+    field: id
+    type: uuid
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: page_bands
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: sort
+    type: integer
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: page_bands
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: user_created
+    type: uuid
+    meta:
+      collection: page_bands
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: page_bands
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: page_bands
+    field: date_created
+    type: timestamp
+    meta:
+      collection: page_bands
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: page_bands
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: user_updated
+    type: uuid
+    meta:
+      collection: page_bands
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: page_bands
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: page_bands
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: page_bands
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: page_bands
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: page
+    type: uuid
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: page
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{title}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: page
+      table: page_bands
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: pages
+      foreign_key_column: id
+  - collection: page_bands
+    field: heading
+    type: string
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: heading
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: heading
+      table: page_bands
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: body
+    type: text
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: body
+      table: page_bands
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: aside
+    type: text
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: aside
+      group: null
+      hidden: false
+      interface: onrr-wysiwyg
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: aside
+      table: page_bands
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: cta_label
+    type: string
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_label
+      table: page_bands
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: cta_url
+    type: string
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_url
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_url
+      table: page_bands
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: body_columns
+    type: integer
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: body_columns
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: '8'
+            value: 8
+          - text: '9'
+            value: 9
+          - text: '12'
+            value: 12
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: body_columns
+      table: page_bands
+      data_type: integer
+      default_value: 8
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: background
+    type: string
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: background
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Default
+            value: default
+          - color: '#F9FAFB'
+            text: Subtle
+            value: subtle
+          - color: '#F0F0F0'
+            text: Muted
+            value: muted
+          - color: '#1A2A52'
+            text: Navy
+            value: navy
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: background
+      table: page_bands
+      data_type: character varying
+      default_value: default
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: chart
+    type: uuid
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: chart
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: chart
+      table: page_bands
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: chart_cards
+      foreign_key_column: id
+  - collection: page_bands
+    field: steps
+    type: alias
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: steps
+      group: null
+      hidden: false
+      interface: list-o2m
+      note: null
+      options:
+        sort: sort
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special:
+        - o2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: page_bands
+    field: cards
+    type: alias
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: cards
+      group: null
+      hidden: false
+      interface: list-o2m
+      note: null
+      options:
+        sort: sort
+        template: '{{title}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special:
+        - o2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: page_cards
+    field: id
+    type: uuid
+    meta:
+      collection: page_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: page_cards
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_cards
+    field: sort
+    type: integer
+    meta:
+      collection: page_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: page_cards
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_cards
+    field: user_created
+    type: uuid
+    meta:
+      collection: page_cards
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: page_cards
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: page_cards
+    field: date_created
+    type: timestamp
+    meta:
+      collection: page_cards
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: page_cards
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_cards
+    field: user_updated
+    type: uuid
+    meta:
+      collection: page_cards
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: page_cards
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: page_cards
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: page_cards
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: page_cards
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_cards
+    field: page_band
+    type: uuid
+    meta:
+      collection: page_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: page_band
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{heading}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: page_band
+      table: page_cards
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: page_bands
+      foreign_key_column: id
+  - collection: page_cards
+    field: title
+    type: string
+    meta:
+      collection: page_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: page_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_cards
+    field: body
+    type: text
+    meta:
+      collection: page_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: body
+      table: page_cards
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_cards
+    field: cta_label
+    type: string
+    meta:
+      collection: page_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_label
+      table: page_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_cards
+    field: cta_url
+    type: string
+    meta:
+      collection: page_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: cta_url
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: cta_url
+      table: page_cards
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_steps
+    field: id
+    type: uuid
+    meta:
+      collection: page_steps
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: page_steps
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_steps
+    field: sort
+    type: integer
+    meta:
+      collection: page_steps
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: page_steps
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_steps
+    field: user_created
+    type: uuid
+    meta:
+      collection: page_steps
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: page_steps
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: page_steps
+    field: date_created
+    type: timestamp
+    meta:
+      collection: page_steps
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: page_steps
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_steps
+    field: user_updated
+    type: uuid
+    meta:
+      collection: page_steps
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: page_steps
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: page_steps
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: page_steps
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: page_steps
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_steps
+    field: page_band
+    type: uuid
+    meta:
+      collection: page_steps
+      conditions: null
+      display: null
+      display_options: null
+      field: page_band
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{heading}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: page_band
+      table: page_steps
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: page_bands
+      foreign_key_column: id
+  - collection: page_steps
+    field: title
+    type: string
+    meta:
+      collection: page_steps
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: page_steps
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_steps
+    field: body
+    type: text
+    meta:
+      collection: page_steps
+      conditions: null
+      display: null
+      display_options: null
+      field: body
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: body
+      table: page_steps
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: pages
     field: id
     type: uuid
@@ -25376,7 +26958,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -25478,7 +27060,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -25520,7 +27102,7 @@ fields:
       readonly: false
       required: true
       searchable: true
-      sort: 15
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -25612,7 +27194,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 19
       special:
         - cast-json
       translations: null
@@ -25653,7 +27235,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 27
       special:
         - alias
         - no-data
@@ -25759,7 +27341,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -25847,7 +27429,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 20
       special:
         - m2a
       translations: null
@@ -25912,7 +27494,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 28
       special:
         - files
       translations: null
@@ -25942,7 +27524,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 30
       special:
         - m2a
       translations: null
@@ -25967,7 +27549,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 23
       special:
         - m2o
       translations: null
@@ -25996,7 +27578,13 @@ fields:
     type: text
     meta:
       collection: pages
-      conditions: null
+      conditions:
+        - name: Enabled when template is topic
+          readonly: false
+          rule:
+            _and:
+              - template:
+                  _eq: topic
       display: null
       display_options: null
       field: related_content
@@ -26005,7 +27593,7 @@ fields:
       interface: input-rich-text-html
       note: null
       options: null
-      readonly: false
+      readonly: true
       required: false
       searchable: true
       sort: 1
@@ -26538,7 +28126,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 26
       special:
         - alias
         - no-data
@@ -26572,7 +28160,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 25
       special:
         - alias
         - no-data
@@ -26606,11 +28194,134 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 24
       special:
         - alias
         - no-data
         - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: pages
+    field: hero_description
+    type: text
+    meta:
+      collection: pages
+      conditions: null
+      display: null
+      display_options: null
+      field: hero_description
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: hero_description
+      table: pages
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: pages
+    field: hero_cta
+    type: json
+    meta:
+      collection: pages
+      conditions: null
+      display: null
+      display_options: null
+      field: hero_cta
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: label
+            meta:
+              field: label
+              interface: input
+              type: string
+            name: label
+            type: string
+          - field: url
+            meta:
+              field: url
+              interface: input
+              type: string
+            name: url
+            type: string
+        template: '{{ label }}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: hero_cta
+      table: pages
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: pages
+    field: page_bands
+    type: alias
+    meta:
+      collection: pages
+      conditions: null
+      display: null
+      display_options: null
+      field: page_bands
+      group: null
+      hidden: false
+      interface: list-o2m
+      note: null
+      options:
+        sort: sort
+        template: '{{heading}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special:
+        - o2m
       translations: null
       validation: null
       validation_message: null
@@ -36716,6 +38427,216 @@ relations:
       foreign_key_table: menus
       foreign_key_column: id
       constraint_name: menus_pages_menus_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: page_bands
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_bands
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_bands
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_bands_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_bands
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_bands
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_bands
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_bands_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_bands
+    field: page
+    related_collection: pages
+    meta:
+      junction_field: null
+      many_collection: page_bands
+      many_field: page
+      one_allowed_collections: null
+      one_collection: pages
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: page_bands
+      sort_field: sort
+    schema:
+      table: page_bands
+      column: page
+      foreign_key_table: pages
+      foreign_key_column: id
+      constraint_name: page_bands_page_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: page_bands
+    field: chart
+    related_collection: chart_cards
+    meta:
+      junction_field: null
+      many_collection: page_bands
+      many_field: chart
+      one_allowed_collections: null
+      one_collection: chart_cards
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_bands
+      column: chart
+      foreign_key_table: chart_cards
+      foreign_key_column: id
+      constraint_name: page_bands_chart_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: page_cards
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_cards
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_cards
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_cards_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_cards
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_cards
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_cards
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_cards_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_cards
+    field: page_band
+    related_collection: page_bands
+    meta:
+      junction_field: null
+      many_collection: page_cards
+      many_field: page_band
+      one_allowed_collections: null
+      one_collection: page_bands
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: cards
+      sort_field: sort
+    schema:
+      table: page_cards
+      column: page_band
+      foreign_key_table: page_bands
+      foreign_key_column: id
+      constraint_name: page_cards_page_band_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: page_steps
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_steps
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_steps
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_steps_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_steps
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_steps
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_steps
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_steps_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_steps
+    field: page_band
+    related_collection: page_bands
+    meta:
+      junction_field: null
+      many_collection: page_steps
+      many_field: page_band
+      one_allowed_collections: null
+      one_collection: page_bands
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: steps
+      sort_field: null
+    schema:
+      table: page_steps
+      column: page_band
+      foreign_key_table: page_bands
+      foreign_key_column: id
+      constraint_name: page_steps_page_band_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: pages
