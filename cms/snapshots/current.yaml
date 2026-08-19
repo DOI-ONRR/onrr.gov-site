@@ -31689,7 +31689,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 23
       special:
         - m2o
       translations: null
@@ -43607,6 +43607,216 @@ relations:
       one_deselect_action: nullify
       one_field: steps
       sort_field: sort
+    schema:
+      table: page_steps
+      column: page_band
+      foreign_key_table: page_bands
+      foreign_key_column: id
+      constraint_name: page_steps_page_band_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: page_bands
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_bands
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_bands
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_bands_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_bands
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_bands
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_bands
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_bands_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_bands
+    field: page
+    related_collection: pages
+    meta:
+      junction_field: null
+      many_collection: page_bands
+      many_field: page
+      one_allowed_collections: null
+      one_collection: pages
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: page_bands
+      sort_field: sort
+    schema:
+      table: page_bands
+      column: page
+      foreign_key_table: pages
+      foreign_key_column: id
+      constraint_name: page_bands_page_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: page_bands
+    field: chart
+    related_collection: chart_cards
+    meta:
+      junction_field: null
+      many_collection: page_bands
+      many_field: chart
+      one_allowed_collections: null
+      one_collection: chart_cards
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_bands
+      column: chart
+      foreign_key_table: chart_cards
+      foreign_key_column: id
+      constraint_name: page_bands_chart_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: page_cards
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_cards
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_cards
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_cards_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_cards
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_cards
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_cards
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_cards_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_cards
+    field: page_band
+    related_collection: page_bands
+    meta:
+      junction_field: null
+      many_collection: page_cards
+      many_field: page_band
+      one_allowed_collections: null
+      one_collection: page_bands
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: cards
+      sort_field: sort
+    schema:
+      table: page_cards
+      column: page_band
+      foreign_key_table: page_bands
+      foreign_key_column: id
+      constraint_name: page_cards_page_band_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: page_steps
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_steps
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_steps
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_steps_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_steps
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: page_steps
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: page_steps
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: page_steps_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: page_steps
+    field: page_band
+    related_collection: page_bands
+    meta:
+      junction_field: null
+      many_collection: page_steps
+      many_field: page_band
+      one_allowed_collections: null
+      one_collection: page_bands
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: steps
+      sort_field: null
     schema:
       table: page_steps
       column: page_band
