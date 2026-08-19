@@ -24,6 +24,33 @@ fragment pageFields on pages {
     description
   }
   hero_title
+  hero_description
+  hero_cta
+  page_bands(sort: ["sort"]) {
+    id
+    heading
+    body
+    aside
+    cta_label
+    cta_url
+    body_columns
+    background
+    chart {
+      ...chartCardFields
+    }
+    steps(sort: ["sort"]) {
+      id
+      title
+      body
+    }
+    cards(sort: ["sort"]) {
+      id
+      title
+      body
+      cta_label
+      cta_url
+    }
+  }
   related_content
   journey_steps(sort: ["sort"]) {
     id

@@ -60,3 +60,44 @@ $site-max-width: 1400px;
 .section-lede { max-width: 68ch; }
 
 .about-band { background: #f9fafb; border-top: 1px solid #dfe1e2; }
+
+// Override styling of WYSIWYG-required paragraph tag in list items
+li > p:only-child { 
+  margin: 0; 
+}
+
+/*
+----------------------------------------
+Content utility classes
+----------------------------------------
+Presentational classes meant to be applied by hand in WYSIWYG (body / aside)
+content. Keep names presentational — not content-specific — and never use the
+`usa-` prefix (USWDS's namespace). Ideally surface these in the editor's Formats
+menu so authors pick them instead of typing class names in source view.
+----------------------------------------
+*/
+
+// A bulletless list with hairline-divided rows. Add a trailing `.meta` element per
+// row (muted, pushed right by the row's space-between) for a date / size / status.
+.meta-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #dfe1e2;
+    font-size: 0.95rem;
+
+    &:last-child { border-bottom: 0; }
+  }
+
+  .meta {
+    color: #565c65;
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+}
