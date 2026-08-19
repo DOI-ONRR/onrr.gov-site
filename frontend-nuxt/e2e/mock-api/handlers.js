@@ -3,6 +3,7 @@ import * as revenueDataFixtures from '../fixtures/revenue-data.js'
 import { chartCardsByKey, chartEndpointData } from '../fixtures/chart-cards.js'
 import { journeyPage } from '../fixtures/journey.js'
 import { audienceHubPage } from '../fixtures/audience-hub.js'
+import { homePage, homeChartData } from '../fixtures/home.js'
 
 /**
  * Each handler has:
@@ -66,12 +67,13 @@ export const handlers = [
     },
   },
 
-  // Page queries (GetPageBySlug) — slug-aware: journey-landing page for
-  // 'getting-started', audience-hub page for 'indian-resources', the default
-  // (Events) page otherwise.
+  // Page queries (GetPageBySlug) — slug-aware: homepage for the null slug (index.vue),
+  // journey-landing for 'getting-started', audience-hub for 'indian-resources', the
+  // default (Events) page otherwise.
   {
     match: (query, op) => op === 'GetPageBySlug',
     resolve: (query, variables) => {
+      if (variables?.slug == null) return { page: [homePage] }
       if (variables?.slug === 'getting-started') return { page: [journeyPage] }
       if (variables?.slug === 'indian-resources') return { page: [audienceHubPage] }
       return {
@@ -132,5 +134,10 @@ export const restHandlers = [
   {
     match: (url) => url === '/charts/disbursement/top-states',
     resolve: () => chartEndpointData['/charts/disbursement/top-states'],
+  },
+  // Homepage chart band (total monthly disbursements).
+  {
+    match: (url) => url === '/charts/disbursement/total-monthly-disbursements',
+    resolve: () => homeChartData,
   },
 ]
