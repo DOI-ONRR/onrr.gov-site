@@ -263,12 +263,12 @@ collections:
       display_template: null
       group: null
       hidden: false
-      icon: null
+      icon: event_seat
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 37
       sort_field: sort
       status: active
       translations: null
@@ -921,12 +921,12 @@ collections:
       display_template: null
       group: null
       hidden: false
-      icon: null
+      icon: hub
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 38
       sort_field: sort
       status: active
       translations: null
@@ -947,12 +947,12 @@ collections:
       display_template: null
       group: null
       hidden: false
-      icon: null
+      icon: hub
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 39
       sort_field: sort
       status: active
       translations: null
@@ -1237,12 +1237,12 @@ collections:
       display_template: null
       group: null
       hidden: false
-      icon: null
+      icon: two_pager
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 40
       sort_field: sort
       status: active
       translations: null
@@ -1263,12 +1263,12 @@ collections:
       display_template: null
       group: null
       hidden: false
-      icon: null
+      icon: two_pager
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 42
       sort_field: sort
       status: active
       translations: null
@@ -1289,12 +1289,12 @@ collections:
       display_template: null
       group: null
       hidden: false
-      icon: null
+      icon: two_pager
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: null
+      sort: 41
       sort_field: sort
       status: active
       translations: null
