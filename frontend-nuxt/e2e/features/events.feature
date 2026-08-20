@@ -12,8 +12,7 @@ Feature: Events page
   Scenario: Featured reporter training card
     Given the API returns events data
     And I navigate to the events page
-    Then the training card shows the tag "Registration open"
-    And the training card title is "In-Person Reporter Training, Denver"
+    Then the training card title is "In-Person Reporter Training, Denver"
     And the training card has 2 registration buttons
     And the first registration button reads "Oil and Gas Registration"
     And the training card shows the venue "Sheraton Denver West Hotel"

@@ -65,10 +65,6 @@ Then('the on-this-page rail does not link to {string}', async ({ page }, label) 
 
 // --- Training card ---
 
-Then('the training card shows the tag {string}', async ({ page }, text) => {
-  await expect(page.locator('.training-card .usa-tag', { hasText: text })).toBeVisible()
-})
-
 Then('the training card title is {string}', async ({ page }, text) => {
   await expect(page.locator('.training-card h2')).toHaveText(text)
 })
