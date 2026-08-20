@@ -15381,6 +15381,119 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: events
+    field: event_category
+    type: string
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: event_category
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Reporter training
+            value: reporter_training
+          - text: Indian outreach & events
+            value: indian_outreach
+          - text: Other ONRR events
+            value: other
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: event_category
+      table: events
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
+    field: registration
+    type: json
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: registration
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: label
+            meta:
+              field: label
+              interface: null
+              type: string
+              width: full
+            name: label
+            type: string
+          - field: href
+            meta:
+              field: href
+              interface: null
+              type: string
+              width: full
+            name: href
+            type: string
+          - field: note
+            meta:
+              field: note
+              interface: null
+              type: string
+              width: full
+            name: note
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: registration
+      table: events
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: expansion_panel_block_label
     field: id
     type: uuid
