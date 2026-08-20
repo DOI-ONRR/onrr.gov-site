@@ -1,5 +1,5 @@
 version: 1
-directus: 12.2.0
+directus: 12.3.0
 vendor: postgres
 collections:
   - collection: Charts
@@ -19865,6 +19865,62 @@ fields:
       numeric_precision: null
       numeric_scale: null
       is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: glossary_terms
+    field: categories
+    type: json
+    meta:
+      collection: glossary_terms
+      conditions: null
+      display: null
+      display_options: null
+      field: categories
+      group: null
+      hidden: false
+      interface: select-multiple-dropdown
+      note: null
+      options:
+        choices:
+          - text: Disbursement
+            value: Disbursement
+          - text: Federal Sales
+            value: Federal Sales
+          - text: Land and Ownership
+            value: Land and Ownership
+          - text: Offices and Regulations
+            value: Offices and Regulations
+          - text: Production and Commodities
+            value: Production and Commodities
+          - text: Revenue
+            value: Revenue
+          - text: Units and Measurements
+            value: Units and Measurements
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: categories
+      table: glossary_terms
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
       is_unique: false
       is_indexed: false
       is_primary_key: false
