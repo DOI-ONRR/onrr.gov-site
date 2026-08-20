@@ -122,7 +122,6 @@ const sidenavLinks = computed(() => {
         <TopicView v-else-if="isTopic" :page="page" />
         <JourneyLandingView v-else-if="isJourneyLanding" :page="page" />
         <template v-else>
-        <Events v-if="slug === 'events'" />
         <div class="grid-row grid-gap">
           <div
             v-for="block in page?.page_blocks"

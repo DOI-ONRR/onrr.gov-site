@@ -31,13 +31,10 @@ export function resetState() {
 }
 
 export const handlers = [
-  // Events
+  // Events (single list; the events page groups by event_category client-side)
   {
     match: (query, op) => op === 'GetEvents',
-    resolve: () => {
-      const fixture = state.events || eventsFixtures.withEvents
-      return fixture.data
-    },
+    resolve: () => state.events || eventsFixtures.withEvents,
   },
 
   // Production aggregated (landingPageProduction query)

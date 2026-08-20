@@ -22,3 +22,4 @@ frontend/public/uswds/fonts/*
 frontend/public/uswds/img/*
 frontend/public/uswds/js/*
 /cms/test-results
+/cms/seed
