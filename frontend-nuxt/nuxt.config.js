@@ -14,6 +14,9 @@ export default defineNuxtConfig({
   apollo: {
     clients: {
       default: {
+        // Build-time default only. The effective endpoint is set at RUNTIME from
+        // runtimeConfig.public.apiUrl by app/plugins/apollo-endpoint.js, so it shares
+        // one source (NUXT_PUBLIC_API_URL) with the REST/asset calls and needs no rebuild.
         httpEndpoint: (process.env.NUXT_PUBLIC_API_URL || 'https://preview-onrr-cms.app.cloud.gov') + '/graphql',
       },
     },

@@ -7,9 +7,8 @@ const { assetUrl, resolveImages } = useCmsContent()
 const { data } = await useAsyncQuery(getPageBySlug, { slug: null })
 const page = computed(() => data.value?.page?.[0])
 
-// TODO(cms): hero intro + CTA labels could come from the homepage record.
 const heroTitle = computed(
-  () => page.value?.hero_title || 'Natural resources revenue, collected and returned to the public',
+  () => page.value?.hero_title || '',
 )
 
 const heroDescription = computed(
@@ -20,24 +19,8 @@ const heroDescription = computed(
 // primary big button; every one after it gets the outline/inverse treatment.
 const heroCtas = computed(() => page.value?.hero_cta ?? [])
 
-// Content bands (the `page_bands` collection): a flexible band with heading + body +
-// optional aside, a configurable body/aside column split (`body_columns`: 8/9/12), and a
-// `background` token. `pageBands` prefers the CMS records and falls back to the hardcoded
-// Indian Resources band until the collection is populated.
-const pageBandsFallback = [
-  {
-    heading: 'Indian mineral owners and Tribes',
-    body: '<p>Resources for individual Indian mineral owners, Tribes, and allottees — understand ownership, find payment information, and see how revenue from Indian lands is collected and returned.</p>',
-    aside: '<ul class="usa-list usa-list--unstyled"><li><a class="usa-link" href="#">Indian references &amp; regulations</a></li><li><a class="usa-link" href="/references-pricing#index-zones">Indian gas index zone prices</a></li><li><a class="usa-link" href="#">Native American ownership &amp; governance</a></li></ul>',
-    cta_label: 'Visit Indian Resources',
-    cta_url: '/indian-resources',
-    body_columns: 8,
-    background: 'muted',
-  },
-]
-
 const pageBands = computed(() =>
-  (page.value?.page_bands?.length ? page.value.page_bands : pageBandsFallback),
+  (page.value?.page_bands?.length ? page.value.page_bands : []),
 )
 
 // Body/aside split. `body_columns` (8/9/12) drives the body span; the aside takes the
@@ -49,8 +32,6 @@ const bandAsideCols = (band) => 12 - bandBodyCols(band)
 
 <template>
   <div class="homepage">
-    <!-- Hero: full-width navy band. TODO(cms): optional background image from
-         page.hero_image; intro + CTA copy from the homepage record. -->
     <section
       class="hero padding-y-6"
       :class="{ 'hero--has-image': page?.hero_image?.id }"
@@ -72,8 +53,6 @@ const bandAsideCols = (band) => 12 - bandBodyCols(band)
       </div>
     </section>
 
-    <!-- Content bands (page_bands): flexible heading + body/chart/steps/cards, with a
-         configurable column split and background token. -->
     <section
       v-for="(band, i) in pageBands"
       :key="band.id || i"

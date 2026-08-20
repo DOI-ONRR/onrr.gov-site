@@ -4,6 +4,7 @@ import { chartCardsByKey, chartEndpointData } from '../fixtures/chart-cards.js'
 import { journeyPage } from '../fixtures/journey.js'
 import { audienceHubPage } from '../fixtures/audience-hub.js'
 import { homePage, homeChartData } from '../fixtures/home.js'
+import { glossaryTerms } from '../fixtures/glossary.js'
 
 /**
  * Each handler has:
@@ -55,6 +56,12 @@ export const handlers = [
   {
     match: (query, op) => op === 'GetMenuByLabel',
     resolve: () => revenueDataFixtures.menuData,
+  },
+
+  // Glossary terms (glossary page)
+  {
+    match: (query, op) => op === 'GetGlossaryTerms',
+    resolve: () => ({ glossary_terms: glossaryTerms }),
   },
 
   // Chart card by key (ChartCardByKey on the Revenue Data landing page). Returns the
