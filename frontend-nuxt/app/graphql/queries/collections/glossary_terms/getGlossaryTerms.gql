@@ -1,0 +1,8 @@
+query GetGlossaryTerms {
+  glossary_terms(sort: ["term"]) {
+    id
+    term
+    definition
+    categories
+  }
+}
