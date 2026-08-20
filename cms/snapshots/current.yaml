@@ -848,7 +848,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 5
+      sort: 6
       sort_field: sort
       status: active
       translations: null
@@ -874,7 +874,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 6
+      sort: 7
       sort_field: sort
       status: active
       translations: null
@@ -908,6 +908,32 @@ collections:
       versioning: false
     schema:
       name: glossary_terms
+  - collection: handbook_toc
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: handbook_toc
+      color: null
+      display_template: null
+      group: Handbooks
+      hidden: false
+      icon: book
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 2
+      sort_field: sort
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: handbook_toc
   - collection: handbooks
     meta:
       accountability: all
@@ -1654,7 +1680,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 3
+      sort: 4
       sort_field: sort
       status: active
       translations: null
@@ -1808,7 +1834,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 2
+      sort: 3
       sort_field: sort
       status: active
       translations: null
@@ -1860,7 +1886,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 4
+      sort: 5
       sort_field: sort
       status: active
       translations: null
@@ -20070,6 +20096,538 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: handbook_toc
+    field: id
+    type: uuid
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: handbook_toc
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: sort
+    type: integer
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: handbook_toc
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: user_created
+    type: uuid
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: handbook_toc
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: handbook_toc
+    field: date_created
+    type: timestamp
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: handbook_toc
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: user_updated
+    type: uuid
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: handbook_toc
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: handbook_toc
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: handbook_toc
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: handbook
+    type: uuid
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: handbook
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        enableCreate: false
+        template: '{{title}}'
+      readonly: false
+      required: false
+      searchable: true
+      sort: 7
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: handbook
+      table: handbook_toc
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: handbooks
+      foreign_key_column: id
+  - collection: handbook_toc
+    field: chapter
+    type: string
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: chapter
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: chapter
+      table: handbook_toc
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: section
+    type: string
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: section
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: section
+      table: handbook_toc
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: title
+    type: string
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: title
+      table: handbook_toc
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: actual_page
+    type: string
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: actual_page
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: actual_page
+      table: handbook_toc
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: toc_page
+    type: string
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: toc_page
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: toc_page
+      table: handbook_toc
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbook_toc
+    field: url
+    type: string
+    meta:
+      collection: handbook_toc
+      conditions: null
+      display: null
+      display_options: null
+      field: url
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: url
+      table: handbook_toc
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: handbooks
     field: id
     type: uuid
@@ -20528,6 +21086,514 @@ fields:
       has_auto_increment: false
       foreign_key_table: pages
       foreign_key_column: id
+  - collection: handbooks
+    field: intro
+    type: text
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: intro
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: intro
+      table: handbooks
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: note
+    type: text
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: note
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: note
+      table: handbooks
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: contact_group
+    type: string
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_group
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contact_group
+      table: handbooks
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: contact_name
+    type: string
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_name
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contact_name
+      table: handbooks
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: contact_email
+    type: string
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_email
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contact_email
+      table: handbooks
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: contact_phone
+    type: string
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_phone
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contact_phone
+      table: handbooks
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: chapters
+    type: json
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: chapters
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: label
+            meta:
+              field: label
+              interface: null
+              required: true
+              type: string
+            name: label
+            type: string
+          - field: href
+            meta:
+              field: href
+              interface: null
+              required: true
+              translations: null
+              type: string
+            name: href
+            type: string
+          - field: format
+            meta:
+              field: format
+              interface: null
+              required: false
+              type: string
+            name: format
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: chapters
+      table: handbooks
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: appendices
+    type: json
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: appendices
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: label
+            meta:
+              field: label
+              interface: null
+              required: true
+              type: string
+            name: label
+            type: string
+          - field: href
+            meta:
+              field: href
+              interface: null
+              required: true
+              translations: null
+              type: string
+            name: href
+            type: string
+          - field: format
+            meta:
+              field: format
+              interface: null
+              required: false
+              type: string
+            name: format
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: appendices
+      table: handbooks
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: guidance
+    type: json
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: guidance
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: label
+            meta:
+              field: label
+              interface: null
+              required: true
+              type: string
+            name: label
+            type: string
+          - field: href
+            meta:
+              field: href
+              interface: null
+              required: true
+              translations: null
+              type: string
+            name: href
+            type: string
+          - field: format
+            meta:
+              field: format
+              interface: null
+              required: false
+              type: string
+            name: format
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 21
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: guidance
+      table: handbooks
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: handbooks
+    field: related
+    type: json
+    meta:
+      collection: handbooks
+      conditions: null
+      display: null
+      display_options: null
+      field: related
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: label
+            meta:
+              field: label
+              interface: null
+              required: true
+              type: string
+            name: label
+            type: string
+          - field: href
+            meta:
+              field: href
+              interface: null
+              required: true
+              translations: null
+              type: string
+            name: href
+            type: string
+          - field: format
+            meta:
+              field: format
+              interface: null
+              required: false
+              type: string
+            name: format
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 22
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: related
+      table: handbooks
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: hub_links
     field: id
     type: uuid
@@ -27738,6 +28804,8 @@ fields:
             value: contact
           - text: Page Not Found
             value: page_not_found
+          - text: Handbook
+            value: handbook
       readonly: false
       required: false
       searchable: true
@@ -27916,7 +28984,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 24
       special:
         - alias
         - no-data
@@ -28022,7 +29090,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 26
       special: null
       translations: null
       validation: null
@@ -28175,7 +29243,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 25
       special:
         - files
       translations: null
@@ -28205,7 +29273,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 27
       special:
         - m2a
       translations: null
@@ -28807,7 +29875,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 23
       special:
         - alias
         - no-data
@@ -28841,7 +29909,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 22
       special:
         - alias
         - no-data
@@ -28875,7 +29943,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 21
       special:
         - alias
         - no-data
@@ -29035,6 +30103,54 @@ fields:
       validation: null
       validation_message: null
       width: full
+  - collection: pages
+    field: handbook
+    type: uuid
+    meta:
+      collection: pages
+      conditions:
+        - name: Enabled when template is handbook
+          readonly: false
+          rule:
+            _and:
+              - template:
+                  _eq: handbook
+      display: null
+      display_options: null
+      field: handbook
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{title}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 20
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: handbook
+      table: pages
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: handbooks
+      foreign_key_column: id
   - collection: pages_files
     field: id
     type: integer
@@ -38529,6 +39645,69 @@ relations:
       constraint_name: glossary_terms_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: handbook_toc
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: handbook_toc
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: handbook_toc
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: handbook_toc_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: handbook_toc
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: handbook_toc
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: handbook_toc
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: handbook_toc_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: handbook_toc
+    field: handbook
+    related_collection: handbooks
+    meta:
+      junction_field: null
+      many_collection: handbook_toc
+      many_field: handbook
+      one_allowed_collections: null
+      one_collection: handbooks
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: handbook_toc
+      column: handbook
+      foreign_key_table: handbooks
+      foreign_key_column: id
+      constraint_name: handbook_toc_handbook_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: handbooks
     field: user_updated
     related_collection: directus_users
@@ -39535,6 +40714,27 @@ relations:
       foreign_key_table: chart_cards
       foreign_key_column: id
       constraint_name: pages_hub_chart_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: pages
+    field: handbook
+    related_collection: handbooks
+    meta:
+      junction_field: null
+      many_collection: pages
+      many_field: handbook
+      one_allowed_collections: null
+      one_collection: handbooks
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: pages
+      column: handbook
+      foreign_key_table: handbooks
+      foreign_key_column: id
+      constraint_name: pages_handbook_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: pages_files

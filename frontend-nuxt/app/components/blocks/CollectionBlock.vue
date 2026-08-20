@@ -66,7 +66,6 @@ const items = computed(() => {
   <Nymex v-else-if="collection === 'NYMEX'" />
   <PlantSpecificUcas v-else-if="collection === 'plant_specific_ucas'" />
   <Rulemakings v-else-if="collection === 'rulemakings'" />
-  <Handbook v-else-if="collection === 'revenue_handbook' || collection === 'production_handbook' || collection === 'solid_minerals_handbook' || collection === 'geothermal_class_1' || collection === 'geothermal_class_2_3'" :collection="collection" />
   <Handbooks v-else-if="collection === 'handbooks'" />
   <InterestOilAndGas v-else-if="collection === 'Interest_Oil_and_Gas'" />
   <InterestSolids v-else-if="collection === 'Interest_Solids'" />

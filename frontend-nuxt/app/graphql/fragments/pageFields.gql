@@ -12,6 +12,23 @@ fragment pageFields on pages {
   title
   slug
   template
+  handbook {
+    id
+    title
+    release
+    download_url
+    format
+    intro
+    note
+    contact_group
+    contact_name
+    contact_email
+    contact_phone
+    chapters
+    appendices
+    guidance
+    related
+  }
   parent {
     title
     url

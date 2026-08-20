@@ -31,9 +31,14 @@ const isJourneyLanding = computed(() => page.value?.template === 'journey-landin
 // data bands are genuinely full-width, and it owns its own breadcrumb inside the header.
 const isAudienceHub = computed(() => page.value?.template === 'audience-hub')
 
+// 'handbook' → HandbookDetailView (interactive handbook: rail + TOC/chapters/
+// supplemental/contact sections). Like DatasetView it reads a M2O off the page
+// (page.handbook) and owns its own heading + 3/9 column structure.
+const isHandbook = computed(() => page.value?.template === 'handbook')
+
 // Layouts that own their own heading + column structure (no standard sidenav/h1).
 const isCustomLayout = computed(
-  () => isDataset.value || isTopic.value || isJourneyLanding.value || isAudienceHub.value,
+  () => isDataset.value || isTopic.value || isJourneyLanding.value || isAudienceHub.value || isHandbook.value,
 )
 
 const isFullWidth = computed(() => page.value?.template === 'full-width')
@@ -123,6 +128,7 @@ const sidenavLinks = computed(() => {
         <DatasetView v-if="isDataset" :dataset="page.dataset_metadata" />
         <TopicView v-else-if="isTopic" :page="page" />
         <JourneyLandingView v-else-if="isJourneyLanding" :page="page" />
+        <HandbookDetailView v-else-if="isHandbook" :page="page" />
         <template v-else>
         <div class="grid-row grid-gap">
           <div

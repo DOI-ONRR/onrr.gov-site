@@ -6,6 +6,7 @@ import { audienceHubPage } from '../fixtures/audience-hub.js'
 import { homePage, homeChartData } from '../fixtures/home.js'
 import { glossaryTerms } from '../fixtures/glossary.js'
 import { handbooks as handbooksItems, handbooksPage } from '../fixtures/handbooks.js'
+import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
 
 /**
  * Each handler has:
@@ -68,6 +69,12 @@ export const handlers = [
     resolve: () => ({ handbooks: state.handbooks ?? handbooksItems }),
   },
 
+  // Handbook detail TOC rows (HandbookDetailView)
+  {
+    match: (query, op) => op === 'GetHandbookToc',
+    resolve: () => ({ handbook_toc: state.handbookToc ?? handbookToc }),
+  },
+
   // Chart card by key (ChartCardByKey on the Revenue Data landing page). Returns the
   // card matching the `key` variable, or an empty list for an unknown key.
   {
@@ -88,6 +95,7 @@ export const handlers = [
       if (variables?.slug === 'getting-started') return { page: [journeyPage] }
       if (variables?.slug === 'indian-resources') return { page: [audienceHubPage] }
       if (variables?.slug === 'handbooks') return { page: [handbooksPage] }
+      if (variables?.slug === 'minerals-revenue-reporter-handbook') return { page: [handbookPage] }
       return {
         page: [{
           __typename: 'pages',
