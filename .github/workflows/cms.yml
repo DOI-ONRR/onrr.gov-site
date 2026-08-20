@@ -44,101 +44,14 @@ jobs:
         run: npm ci
         working-directory: cms
 
-      - name: Install document dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/document
-
-      - name: Install image-uploader dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/image-uploader
-
-      - name: Install link-autocomplete dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/link-autocomplete
-
-      - name: Install onrr-flows dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/onrr-flows
-
-      - name: Install press-releases dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/press-releases
-
-      - name: Install reporter-letters dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/reporter-letters
-
-      - name: Install unbundling dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/unbundling
-
-      - name: Install revenue-summary dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/revenue-summary
-
-      - name: Install disbursement-summary dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/disbursement-summary
-
-      - name: Install fy-summary dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/fy-summary
-
-      - name: Install index-zones dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/index-zones
-
-      - name: Install directus-users dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/directus-users
-
-      - name: Install directus-roles dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/directus-roles
-
-      - name: Install directus-policies dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/directus-policies
-
-      - name: Install indian-gas-major-portion dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/indian-gas-major-portion
-
-      - name: Install ibmp dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/ibmp
-
-      - name: Install nymex dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/nymex
-
-      - name: Install wysiwyg-static dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/wysiwyg-static
-
-      - name: Install onrr-wysiwyg dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/onrr-wysiwyg
-
-      - name: Install onrr-generate-uuid dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/operations/onrr-generate-uuid
-
-      - name: Install contacts-accordion-select deps
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/contacts-accordion-select
-
-      - name: Install contacts-page-select deps
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/contacts-page-select
-
-      - name: Install contacts-tab-select deps
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/contacts-tab-select
-
-      - name: Install topics-select deps
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/topics-select
+      - name: Install extension dependencies
+        run: |
+          for d in src/extensions/*/*/; do
+            if [ -f "$d/package.json" ]; then
+              (cd "$d" && npm ci)
+            fi
+          done
+        working-directory: cms
 
       - name: Build extensions
         run: npm run build:all
