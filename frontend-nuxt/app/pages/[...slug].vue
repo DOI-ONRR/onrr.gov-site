@@ -36,6 +36,8 @@ const isCustomLayout = computed(
   () => isDataset.value || isTopic.value || isJourneyLanding.value || isAudienceHub.value,
 )
 
+const isFullWidth = computed(() => page.value?.template === 'full-width')
+
 const pageTitle = computed(() => page.value?.title || null)
 const parentTitle = computed(() => page.value?.parent?.title || null)
 const grandparentTitle = computed(() => page.value?.parent?.parent?.title || null)
@@ -99,7 +101,7 @@ const sidenavLinks = computed(() => {
   />
   <section v-else class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
-      <div v-if="!isCustomLayout" class="grid-col-2">
+      <div v-if="!isCustomLayout && !isFullWidth" class="grid-col-2">
         <nav v-if="sidenavLinks.length" aria-label="Side navigation">
           <ul class="usa-sidenav">
             <li class="usa-sidenav__item" v-for="link in sidenavLinks" :key="link.title">
@@ -110,7 +112,7 @@ const sidenavLinks = computed(() => {
           </ul>
         </nav>
       </div>
-      <div :class="isCustomLayout ? 'grid-col-12' : 'grid-col-10'">
+      <div :class="isCustomLayout || isFullWidth ? 'grid-col-12' : 'grid-col-10'">
         <Breadcrumbs
           :page="page"
           :parent-link="parentLink"
