@@ -130,6 +130,9 @@ const sidenavLinks = computed(() => {
         <JourneyLandingView v-else-if="isJourneyLanding" :page="page" />
         <HandbookDetailView v-else-if="isHandbook" :page="page" />
         <template v-else>
+        <!-- page_bands render (constrained) above any page_blocks; full-width pages
+             like Payment options are built entirely from bands. -->
+        <PageBands v-if="page?.page_bands?.length" :bands="page.page_bands" :bleed="false" />
         <div class="grid-row grid-gap">
           <div
             v-for="block in page?.page_blocks"

@@ -27459,6 +27459,51 @@ fields:
       validation: null
       validation_message: null
       width: full
+  - collection: page_bands
+    field: card_variant
+    type: string
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: card_variant
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Button
+            value: button
+          - text: Link
+            value: link
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: card_variant
+      table: page_bands
+      data_type: character varying
+      default_value: button
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: page_cards
     field: id
     type: uuid

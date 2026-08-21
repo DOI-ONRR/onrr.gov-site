@@ -52,6 +52,7 @@ fragment pageFields on pages {
     cta_url
     body_columns
     background
+    card_variant
     chart {
       ...chartCardFields
     }

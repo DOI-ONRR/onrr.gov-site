@@ -7,6 +7,7 @@ import { homePage, homeChartData } from '../fixtures/home.js'
 import { glossaryTerms } from '../fixtures/glossary.js'
 import { handbooks as handbooksItems, handbooksPage } from '../fixtures/handbooks.js'
 import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
+import { paymentOptionsPage } from '../fixtures/payment-options.js'
 
 /**
  * Each handler has:
@@ -96,6 +97,7 @@ export const handlers = [
       if (variables?.slug === 'indian-resources') return { page: [audienceHubPage] }
       if (variables?.slug === 'handbooks') return { page: [handbooksPage] }
       if (variables?.slug === 'minerals-revenue-reporter-handbook') return { page: [handbookPage] }
+      if (variables?.slug === 'payment-options') return { page: [paymentOptionsPage] }
       return {
         page: [{
           __typename: 'pages',
