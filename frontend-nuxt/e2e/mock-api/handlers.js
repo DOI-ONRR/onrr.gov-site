@@ -8,6 +8,7 @@ import { glossaryTerms } from '../fixtures/glossary.js'
 import { handbooks as handbooksItems, handbooksPage } from '../fixtures/handbooks.js'
 import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
 import { paymentOptionsPage } from '../fixtures/payment-options.js'
+import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 
 /**
  * Each handler has:
@@ -98,6 +99,7 @@ export const handlers = [
       if (variables?.slug === 'handbooks') return { page: [handbooksPage] }
       if (variables?.slug === 'minerals-revenue-reporter-handbook') return { page: [handbookPage] }
       if (variables?.slug === 'payment-options') return { page: [paymentOptionsPage] }
+      if (variables?.slug === 'renewable-energy') return { page: [renewableEnergyPage] }
       return {
         page: [{
           __typename: 'pages',
