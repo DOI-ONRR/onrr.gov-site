@@ -137,6 +137,14 @@ function goToSection(id) {
             v-else-if="block.item?.__typename === 'chart_cards'"
             :block="block.item"
           />
+          <PayGovForm
+            v-else-if="block.item?.__typename === 'pay_gov_forms'"
+            :block="block.item"
+          />
+          <ContactBox
+            v-else-if="block.item?.__typename === 'contact_boxes'"
+            :block="block.item"
+          />
         </div>
 
         <!-- Related box: component owns the heading + styling; editor supplies the

@@ -101,3 +101,14 @@ menu so authors pick them instead of typing class names in source view.
     font-size: 0.85rem;
   }
 }
+
+// Inline mono chip for an identifier called out in prose (e.g. an Agency ID a payor
+// gives their bank). Wrap the value: <span class="agency-id">1417000106</span>.
+.agency-id {
+  display: inline-block;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.95rem;
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 0.1rem 0.4rem;
+}

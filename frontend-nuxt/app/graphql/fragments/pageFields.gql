@@ -162,6 +162,18 @@ fragment pageFields on pages {
       ... on chart_cards {
         ...chartCardFields
       }
+      ... on pay_gov_forms {
+        id
+        title
+        description
+        form_number
+        pay_gov_url
+      }
+      ... on contact_boxes {
+        id
+        heading
+        body
+      }
     }
   }
   sidebar_blocks {

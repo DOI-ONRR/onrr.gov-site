@@ -163,6 +163,14 @@ const sidenavLinks = computed(() => {
               v-else-if="block.item?.__typename === 'chart_cards'"
               :block="block.item"
             />
+            <PayGovForm
+              v-else-if="block.item?.__typename === 'pay_gov_forms'"
+              :block="block.item"
+            />
+            <ContactBox
+              v-else-if="block.item?.__typename === 'contact_boxes'"
+              :block="block.item"
+            />
           </div>
         </div>
         </template>
