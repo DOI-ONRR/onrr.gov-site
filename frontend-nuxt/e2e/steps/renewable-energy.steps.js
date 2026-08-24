@@ -13,6 +13,10 @@ Then('the renewable heading {string} is visible', async ({ page }, text) => {
   await expect(page.locator('main h1', { hasText: text })).toBeVisible()
 })
 
+Then('the topic eyebrow is not shown', async ({ page }) => {
+  await expect(page.locator('.topic-eyebrow')).toHaveCount(0)
+})
+
 Then('the renewable rail links to {string}', async ({ page }, label) => {
   await expect(page.locator('.onpage a', { hasText: label })).toBeVisible()
 })

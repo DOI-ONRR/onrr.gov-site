@@ -3,6 +3,7 @@ Feature: Renewable energy payments (topic page with Pay.gov + contact blocks)
   Scenario: Rail, Pay.gov form, and contact box render
     Given I navigate to the renewable energy page
     Then the renewable heading "Renewable energy payments" is visible
+    And the topic eyebrow is not shown
     And the renewable rail links to "Bid deposits"
     And the renewable rail links to "Contact"
     And a Pay.gov form card titled "ONRR Renewable Energy Bid Deposit" is visible

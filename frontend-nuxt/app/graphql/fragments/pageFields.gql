@@ -12,6 +12,7 @@ fragment pageFields on pages {
   title
   slug
   template
+  topic_variant
   handbook {
     id
     title

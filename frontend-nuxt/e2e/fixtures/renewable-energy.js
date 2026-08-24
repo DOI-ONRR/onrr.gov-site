@@ -19,6 +19,7 @@ export const renewableEnergyPage = {
   hero_image: null,
   hero_title: null,
   template: 'topic',
+  topic_variant: 'sections',
   parent: { title: 'Payment Options', url: '/paying/payment-options' },
   related_content: null,
   meta_title: null,
