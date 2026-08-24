@@ -9,6 +9,7 @@ import { handbooks as handbooksItems, handbooksPage } from '../fixtures/handbook
 import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
 import { paymentOptionsPage } from '../fixtures/payment-options.js'
 import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
+import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
 
 /**
  * Each handler has:
@@ -100,6 +101,7 @@ export const handlers = [
       if (variables?.slug === 'minerals-revenue-reporter-handbook') return { page: [handbookPage] }
       if (variables?.slug === 'payment-options') return { page: [paymentOptionsPage] }
       if (variables?.slug === 'renewable-energy') return { page: [renewableEnergyPage] }
+      if (variables?.slug === 'valuation') return { page: [valuationPage] }
       return {
         page: [{
           __typename: 'pages',
@@ -163,5 +165,15 @@ export const restHandlers = [
   {
     match: (url) => url === '/charts/disbursement/total-monthly-disbursements',
     resolve: () => homeChartData,
+  },
+  // data_tables collection read (DataTable) — a plain /items/<collection> fetch.
+  {
+    match: (url) => url === '/items/NYMEX',
+    resolve: () => ({ data: nymexRows }),
+  },
+  // Embedded-array source: index_zones returns dated snapshots (rows nested in a field).
+  {
+    match: (url) => url === '/items/index_zones',
+    resolve: () => ({ data: indexZonesRows }),
   },
 ]
