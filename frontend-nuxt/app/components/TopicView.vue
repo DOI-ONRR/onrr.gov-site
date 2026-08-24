@@ -20,6 +20,10 @@ const eyebrow = computed(() => props.page?.parent?.title || null)
 // compact sans section headings with extra separation between sections. Scoped so
 // default topic pages (learn-page, etc.) are unchanged.
 const isSections = computed(() => props.page?.topic_variant === 'sections')
+
+// Content column width beside the fixed 3-col rail. Default 7 (learn-page reading
+// measure); up to 9 (full row, no right gutter) for wide/data pages like references.
+const contentCols = computed(() => props.page?.content_columns || 7)
 // Optional "Related" box (WYSIWYG). The component owns the box + "Related" heading;
 // the editor just writes the list of links, so every topic's box looks the same.
 const relatedContent = computed(() => props.page?.related_content || null)
@@ -107,7 +111,7 @@ function goToSection(id) {
     </div>
 
     <!-- Content -->
-    <div class="tablet:grid-col-7">
+    <div :class="`tablet:grid-col-${contentCols}`">
       <p v-if="eyebrow && !isSections" class="topic-eyebrow margin-bottom-0">{{ eyebrow }}</p>
       <h1 class="margin-top-05 margin-bottom-2">{{ page?.hero_title || page?.title }}</h1>
 

@@ -1,6 +1,8 @@
 fragment chartCardFields on chart_cards {
   id
   title
+  hide_title
+  variant
   key
   source
   # chart configuration

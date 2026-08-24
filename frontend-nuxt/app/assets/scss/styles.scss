@@ -112,3 +112,21 @@ menu so authors pick them instead of typing class names in source view.
   border-radius: 3px;
   padding: 0.1rem 0.4rem;
 }
+
+// Highlight / info callout — a tinted box with a bold lead-in + a short list, for
+// "where this applies" style asides in body content. Wrap the content:
+// <div class="callout"><p><strong>Heading</strong></p><ul>…</ul></div>
+// Colors are $onrr-blue / $onrr-blue-light (onrr-colors is only @forward'd here).
+.callout {
+  border-left: 4px solid #005ea2;
+  background: #e1eefa;
+  border-radius: 0 4px 4px 0;
+  padding: 1rem 1.25rem;
+  max-width: 66ch;
+
+  > :first-child { margin-top: 0; }
+  > :last-child { margin-bottom: 0; }
+
+  ul { margin: 0; padding-left: 1.1rem; font-size: 0.93rem; }
+  li { margin-bottom: 0.4rem; }
+}

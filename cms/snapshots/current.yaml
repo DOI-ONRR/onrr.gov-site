@@ -5459,7 +5459,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 9
       special: null
       translations: null
       validation:
@@ -5467,7 +5467,7 @@ fields:
           - key:
               _regex: ^[a-z0-9-]+$
       validation_message: null
-      width: half
+      width: fill
     schema:
       name: key
       table: chart_cards
@@ -5504,7 +5504,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 13
       special:
         - alias
         - no-data
@@ -5546,7 +5546,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -5593,7 +5593,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -5640,7 +5640,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -5680,7 +5680,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 10
       special: null
       translations: null
       validation: null
@@ -5722,7 +5722,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 17
       special:
         - alias
         - no-data
@@ -5754,7 +5754,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -5809,10 +5809,12 @@ fields:
             value: federal_revenue_by_company
           - text: federal_sales
             value: federal_sales
+          - text: nymex
+            value: NYMEX
       readonly: true
       required: false
       searchable: true
-      sort: 18
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -5871,7 +5873,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 19
+      sort: 20
       special: null
       translations: null
       validation: null
@@ -5922,7 +5924,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 20
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -5968,7 +5970,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 21
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -6014,7 +6016,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 22
+      sort: 23
       special:
         - cast-json
       translations: null
@@ -6061,7 +6063,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 23
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -6107,7 +6109,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 24
+      sort: 25
       special:
         - cast-json
       translations: null
@@ -6150,7 +6152,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 26
       special:
         - alias
         - no-data
@@ -6183,7 +6185,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 26
+      sort: 27
       special: null
       translations: null
       validation: null
@@ -6231,7 +6233,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 31
+      sort: 32
       special: null
       translations: null
       validation: null
@@ -6288,7 +6290,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 27
+      sort: 28
       special: null
       translations: null
       validation: null
@@ -6336,7 +6338,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 32
+      sort: 33
       special: null
       translations: null
       validation: null
@@ -6384,7 +6386,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 33
+      sort: 34
       special: null
       translations: null
       validation: null
@@ -6432,7 +6434,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 35
+      sort: 36
       special: null
       translations: null
       validation: null
@@ -6474,7 +6476,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 36
+      sort: 37
       special:
         - alias
         - no-data
@@ -6507,7 +6509,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 37
+      sort: 38
       special:
         - cast-json
       translations: null
@@ -6556,7 +6558,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 38
+      sort: 39
       special: null
       translations: null
       validation: null
@@ -6605,7 +6607,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 40
+      sort: 41
       special:
         - cast-boolean
       translations: null
@@ -6670,7 +6672,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 41
+      sort: 42
       special: null
       translations: null
       validation: null
@@ -6719,7 +6721,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 42
+      sort: 43
       special:
         - cast-boolean
       translations: null
@@ -6769,7 +6771,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 43
+      sort: 44
       special:
         - cast-boolean
       translations: null
@@ -6819,7 +6821,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 44
+      sort: 45
       special:
         - cast-boolean
       translations: null
@@ -6869,7 +6871,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 45
+      sort: 46
       special:
         - cast-boolean
       translations: null
@@ -6912,7 +6914,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 47
+      sort: 49
       special:
         - alias
         - no-data
@@ -6946,7 +6948,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 48
+      sort: 50
       special:
         - cast-boolean
       translations: null
@@ -6996,7 +6998,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 50
+      sort: 52
       special:
         - cast-boolean
       translations: null
@@ -7045,7 +7047,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 52
+      sort: 54
       special: null
       translations: null
       validation: null
@@ -7098,7 +7100,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 53
+      sort: 55
       special: null
       translations: null
       validation: null
@@ -7140,7 +7142,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 54
+      sort: 56
       special:
         - alias
         - no-data
@@ -7165,7 +7167,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 55
+      sort: 57
       special:
         - cast-json
       translations: null
@@ -7208,7 +7210,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 56
+      sort: 58
       special:
         - alias
         - no-data
@@ -7233,7 +7235,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 57
+      sort: 59
       special:
         - o2m
       translations: null
@@ -7257,7 +7259,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -7285,13 +7287,7 @@ fields:
     type: string
     meta:
       collection: chart_cards
-      conditions:
-        - name: Enabled when data source is endpoint
-          readonly: false
-          rule:
-            _and:
-              - data_source_type:
-                  _eq: endpoint
+      conditions: null
       display: null
       display_options: null
       field: x_axis_field
@@ -7302,10 +7298,10 @@ fields:
         Response field to use for the x-axis / category labels (endpoint
         source).
       options: null
-      readonly: true
+      readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 29
       special: null
       translations: null
       validation: null
@@ -7347,7 +7343,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 39
+      sort: 40
       special: null
       translations: null
       validation: null
@@ -7471,7 +7467,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 11
       special:
         - cast-json
       translations: null
@@ -7527,7 +7523,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 29
+      sort: 30
       special: null
       translations: null
       validation: null
@@ -7569,7 +7565,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 30
+      sort: 31
       special: null
       translations: null
       validation: null
@@ -7609,7 +7605,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 34
+      sort: 35
       special: null
       translations: null
       validation: null
@@ -7649,7 +7645,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 58
+      sort: 60
       special:
         - m2o
       translations: null
@@ -7696,7 +7692,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 59
+      sort: 61
       special: null
       translations: null
       validation: null
@@ -7742,7 +7738,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 49
+      sort: 51
       special: null
       translations: null
       validation: null
@@ -7795,7 +7791,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 51
+      sort: 53
       special: null
       translations: null
       validation: null
@@ -7840,17 +7836,104 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 46
+      sort: 47
       special: null
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
     schema:
       name: background_color
       table: chart_cards
       data_type: character varying
       default_value: '#FFFFFF'
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: hide_title
+    type: boolean
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: hide_title
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Hide
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: hide_title
+      table: chart_cards
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: chart_cards
+    field: variant
+    type: string
+    meta:
+      collection: chart_cards
+      conditions: null
+      display: null
+      display_options: null
+      field: variant
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Default
+            value: default
+          - text: Framed
+            value: framed
+      readonly: false
+      required: false
+      searchable: true
+      sort: 48
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: variant
+      table: chart_cards
+      data_type: character varying
+      default_value: default
       max_length: 255
       numeric_precision: null
       numeric_scale: null
@@ -29747,7 +29830,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 2
+      sort: 3
       special: null
       translations: null
       validation: null
@@ -30595,6 +30678,59 @@ fields:
       max_length: 255
       numeric_precision: null
       numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: pages
+    field: content_columns
+    type: integer
+    meta:
+      collection: pages
+      conditions:
+        - name: Enabled when template is Topic
+          readonly: false
+          rule:
+            _and:
+              - template:
+                  _eq: topic
+      display: null
+      display_options: null
+      field: content_columns
+      group: topic
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: '7'
+            value: 7
+          - text: '8'
+            value: 8
+          - text: '9'
+            value: 9
+      readonly: true
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: content_columns
+      table: pages
+      data_type: integer
+      default_value: 7
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
       is_nullable: true
       is_unique: false
       is_indexed: false

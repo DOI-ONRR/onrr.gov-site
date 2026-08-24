@@ -114,7 +114,9 @@ const { data: rows, error, pending } = await useAsyncData(
     }
     const query = {
       aggregate: JSON.stringify({ [fn.value]: measureFields.value }),
-      groupBy: JSON.stringify(groupByFields.value),
+      // groupBy is a comma-separated field list — Directus does NOT JSON-parse it,
+      // so a JSON array like `["date"]` is read as a literal (missing) field name.
+      groupBy: groupByFields.value.join(','),
       sort: groupByFields.value[0],
       limit: -1,
     }
@@ -289,9 +291,10 @@ const chartOptions = computed(() => {
     type: card.value.chart_type || 'bar',
     height: card.value.height || null,
     // Transparent canvas so the chart shows the card wrapper's background through
-    // (default white, or `background_color`). Keeps the whole card one uniform color
-    // instead of a white chart rectangle sitting on a tinted card.
-    backgroundColor: 'transparent',
+    // (default white, or `background_color`) — one uniform card color. The 'framed'
+    // variant is the exception: a gray mat (.chart-card--framed) around a WHITE chart,
+    // so its canvas is opaque white instead of transparent.
+    backgroundColor: card.value.variant === 'framed' ? '#ffffff' : 'transparent',
   }
   if (card.value.enable_zoom) chart.zooming = { type: 'xy' }
 
@@ -528,10 +531,10 @@ onBeforeUnmount(() => {
 <template>
   <section
     class="chart-card"
-    :class="`grid-col-${gridColumns}`"
-    :style="card.background_color ? { backgroundColor: card.background_color } : null"
+    :class="[`grid-col-${gridColumns}`, { 'chart-card--framed': card.variant === 'framed' }]"
+    :style="card.variant !== 'framed' && card.background_color ? { backgroundColor: card.background_color } : null"
   >
-    <h3 v-if="card.title" class="margin-bottom-1 margin-top-0 font-heading-md">{{ card.title }}</h3>
+    <h3 v-if="card.title && !card.hide_title" class="margin-bottom-1 margin-top-0 font-heading-md">{{ card.title }}</h3>
     <p v-if="showTakeaway" class="chart-card__takeaway">
       {{ renderedTakeaway }}
     </p>
@@ -650,6 +653,11 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   background: #fff;
   @include u-padding(3);
+}
+// 'framed' variant: a gray mat around a white chart (the mockup's .chart-wrap). The
+// card fill is gray; the chart canvas is forced opaque white in the Highcharts config.
+.chart-card--framed {
+  background: #f9fafb;
 }
 .chart-card__takeaway {
   font-size: 0.95rem;
