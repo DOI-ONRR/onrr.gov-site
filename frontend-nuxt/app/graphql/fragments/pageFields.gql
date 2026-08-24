@@ -176,6 +176,24 @@ fragment pageFields on pages {
         heading
         body
       }
+      ... on data_tables {
+        id
+        source_collection
+        source_field
+        columns
+        sort_field
+        sort_direction
+        # aliased: data_tables.filter (String) would otherwise collide with
+        # chart_cards.filter (JSON) in the shared page_blocks.item selection.
+        table_filter: filter
+        row_limit
+        caption
+        show_caption
+        striped
+        compact
+        as_of_label
+        footnote
+      }
     }
   }
   sidebar_blocks {

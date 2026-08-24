@@ -568,6 +568,32 @@ collections:
       versioning: false
     schema:
       name: county_lookup
+  - collection: data_tables
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: data_tables
+      color: null
+      display_template: Collection ({{source_collection}})
+      group: Components
+      hidden: false
+      icon: table_view
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 8
+      sort_field: sort
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: data_tables
   - collection: dataset_metadata
     meta:
       accountability: all
@@ -13563,6 +13589,850 @@ fields:
     schema:
       name: state
       table: county_lookup
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: id
+    type: uuid
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: data_tables
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: sort
+    type: integer
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: data_tables
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: user_created
+    type: uuid
+    meta:
+      collection: data_tables
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: data_tables
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: data_tables
+    field: date_created
+    type: timestamp
+    meta:
+      collection: data_tables
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: data_tables
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: user_updated
+    type: uuid
+    meta:
+      collection: data_tables
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: data_tables
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: data_tables
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: data_tables
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: data_tables
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: source_collection
+    type: string
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: source_collection
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: nymex
+            value: NYMEX
+          - text: index_zones
+            value: index_zones
+          - text: ibmp
+            value: ibmp
+          - text: indian_gas_major_portion
+            value: indian_gas_major_portion
+          - text: plant_specific_ucas
+            value: plant_specific_ucas
+      readonly: false
+      required: true
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: source_collection
+      table: data_tables
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: columns
+    type: json
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: columns
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: field
+            meta:
+              field: field
+              interface: input
+              type: string
+            name: field
+            type: string
+          - field: label
+            meta:
+              field: label
+              interface: input
+              type: string
+            name: label
+            type: string
+          - field: format
+            meta:
+              field: format
+              interface: select-dropdown
+              options:
+                choices:
+                  - text: Text
+                    value: text
+                  - text: Currency
+                    value: currency
+                  - text: Currency (compact)
+                    value: currency_compact
+                  - text: Number
+                    value: number
+                  - text: Date
+                    value: date
+                  - text: Month/year
+                    value: month_year
+                  - text: Percent
+                    value: percent
+              type: string
+            name: format
+            type: string
+          - field: align
+            meta:
+              field: align
+              interface: select-dropdown
+              options:
+                choices:
+                  - text: Left
+                    value: left
+                  - text: Right
+                    value: right
+                  - text: Center
+                    value: center
+              type: string
+            name: align
+            type: string
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: columns
+      table: data_tables
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: sort_field
+    type: string
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: sort_field
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort_field
+      table: data_tables
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: sort_direction
+    type: string
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: sort_direction
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Ascending
+            value: asc
+          - text: Descending
+            value: desc
+      readonly: false
+      required: false
+      searchable: true
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort_direction
+      table: data_tables
+      data_type: character varying
+      default_value: asc
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: filter
+    type: string
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: filter
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options:
+        language: JSON
+      readonly: false
+      required: false
+      searchable: true
+      sort: 12
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: filter
+      table: data_tables
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: row_limit
+    type: integer
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: row_limit
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        min: -1
+      readonly: false
+      required: false
+      searchable: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: row_limit
+      table: data_tables
+      data_type: integer
+      default_value: -1
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: caption
+    type: string
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: caption
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: caption
+      table: data_tables
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: show_caption
+    type: boolean
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: show_caption
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 16
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: show_caption
+      table: data_tables
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: striped
+    type: boolean
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: striped
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 17
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: striped
+      table: data_tables
+      data_type: boolean
+      default_value: true
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: compact
+    type: boolean
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: compact
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: compact
+      table: data_tables
+      data_type: boolean
+      default_value: true
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: footnote
+    type: text
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: footnote
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: footnote
+      table: data_tables
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: source_field
+    type: string
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: source_field
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: source_field
+      table: data_tables
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: data_tables
+    field: as_of_label
+    type: string
+    meta:
+      collection: data_tables
+      conditions: null
+      display: null
+      display_options: null
+      field: as_of_label
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 14
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: as_of_label
+      table: data_tables
       data_type: character varying
       default_value: null
       max_length: 255
@@ -40038,6 +40908,48 @@ relations:
       constraint_name: county_lookup_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: data_tables
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: data_tables
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: data_tables
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: data_tables_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: data_tables
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: data_tables
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: data_tables
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: data_tables_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: dataset_metadata
     field: user_created
     related_collection: directus_users
@@ -41836,6 +42748,7 @@ relations:
         - chart_cards
         - pay_gov_forms
         - contact_boxes
+        - data_tables
       one_collection: null
       one_collection_field: collection
       one_deselect_action: nullify

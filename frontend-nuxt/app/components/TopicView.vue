@@ -154,6 +154,10 @@ function goToSection(id) {
             v-else-if="block.item?.__typename === 'contact_boxes'"
             :block="block.item"
           />
+          <DataTable
+            v-else-if="block.item?.__typename === 'data_tables'"
+            :block="block.item"
+          />
         </div>
 
         <!-- Related box: component owns the heading + styling; editor supplies the

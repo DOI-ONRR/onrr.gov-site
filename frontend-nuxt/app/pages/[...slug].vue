@@ -171,6 +171,10 @@ const sidenavLinks = computed(() => {
               v-else-if="block.item?.__typename === 'contact_boxes'"
               :block="block.item"
             />
+            <DataTable
+              v-else-if="block.item?.__typename === 'data_tables'"
+              :block="block.item"
+            />
           </div>
         </div>
         </template>
