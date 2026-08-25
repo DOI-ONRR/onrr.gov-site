@@ -60,6 +60,35 @@ export const oilGasContacts = [
   },
 ]
 
+// All-contacts index for the hub finder. Maria Foster spans two letter-groups (A,B and
+// C) to exercise collapse-to-unique-person + contiguous coverage ("A–C").
+export const searchContacts = [
+  {
+    id: 201,
+    letter: 'A, B',
+    company_name: null,
+    operator_number: null,
+    agency: null,
+    topics: [{ contact_topics_id: { slug: 'oil-gas-reporting', title: 'Oil & Gas Reporting' } }],
+    people: [
+      { id: 'sp1', name: 'Maria Foster', role: 'Primary Contact Federal', role_type: 'federal', email: 'maria.foster@onrr.gov', phone: '214-640-9048' },
+      { id: 'sp2', name: 'Katie Connor', role: 'Primary Contact Indian', role_type: 'indian', email: 'kathryn.connor@onrr.gov', phone: '303-231-3937' },
+    ],
+  },
+  {
+    id: 202,
+    letter: 'C',
+    company_name: null,
+    operator_number: null,
+    agency: null,
+    topics: [{ contact_topics_id: { slug: 'oil-gas-reporting', title: 'Oil & Gas Reporting' } }],
+    people: [
+      // Same person, different email casing — must still collapse to one result.
+      { id: 'sp1b', name: 'Maria Foster', role: 'Primary Contact Federal', role_type: 'federal', email: 'Maria.Foster@onrr.gov', phone: '214-640-9048' },
+    ],
+  },
+]
+
 export const contactHubPage = {
   __typename: 'pages',
   id: 'contact-hub-page',

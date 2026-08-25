@@ -10,7 +10,7 @@ import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
 import { paymentOptionsPage } from '../fixtures/payment-options.js'
 import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
-import { contactHubPage, contactTopics, oilGasContacts } from '../fixtures/contact-hub.js'
+import { contactHubPage, contactTopics, oilGasContacts, searchContacts } from '../fixtures/contact-hub.js'
 
 /**
  * Each handler has:
@@ -83,6 +83,12 @@ export const handlers = [
   {
     match: (query, op) => op === 'GetContactTopics',
     resolve: () => ({ contact_topics: state.contactTopics ?? contactTopics }),
+  },
+
+  // Contact hub finder — all contacts flattened + searched client-side (ContactHub)
+  {
+    match: (query, op) => op === 'GetContactsForSearch',
+    resolve: () => ({ contacts: state.searchContacts ?? searchContacts }),
   },
 
   // Per-topic contacts directory (ContactDirectory) — filtered by topic slug.
