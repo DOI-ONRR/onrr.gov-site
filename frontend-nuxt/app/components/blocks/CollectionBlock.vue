@@ -55,12 +55,7 @@ const items = computed(() => {
 <template>
   <div v-if="block.header" v-html="block.header" class="margin-top-4"></div>
   <ContactHub v-if="collection === 'contact_topics'" />
-  <Contacts
-    v-else-if="collection === 'contacts'"
-    :page="block.page"
-    :tab="block.tab"
-    :accordion="block.accordion"
-  />
+  <Contacts v-else-if="collection === 'contacts'" :page="block.page" />
   <IndexZones v-else-if="collection === 'index_zones'" />
   <Ibmp v-else-if="collection === 'ibmp'" />
   <IndianGasMajorPortion v-else-if="collection === 'indian_gas_major_portion'" />

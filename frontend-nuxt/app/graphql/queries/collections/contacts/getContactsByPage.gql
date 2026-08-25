@@ -10,8 +10,6 @@ query GetContactsByPage($page: String) {
     id
     status
     page
-    tab
-    accordion
     company_yn
     letter
     header
