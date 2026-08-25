@@ -324,7 +324,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 28
+      sort: 27
       sort_field: null
       status: active
       translations: null
@@ -462,6 +462,32 @@ collections:
       versioning: false
     schema:
       name: contact_boxes
+  - collection: contact_topics
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: contact_topics
+      color: null
+      display_template: '{{slug}} / {{title}}'
+      group: contacts
+      hidden: false
+      icon: topic
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 2
+      sort_field: sort
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: contact_topics
   - collection: contacts
     meta:
       accountability: all
@@ -488,6 +514,32 @@ collections:
       versioning: false
     schema:
       name: contacts
+  - collection: contacts_contact_topics
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: contacts_contact_topics
+      color: null
+      display_template: null
+      group: contacts
+      hidden: true
+      icon: import_export
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: 3
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: contacts_contact_topics
   - collection: contacts_person
     meta:
       accountability: null
@@ -631,14 +683,14 @@ collections:
       collection: dataset_metadata_glossary_terms
       color: null
       display_template: null
-      group: null
+      group: dataset_metadata
       hidden: true
       icon: import_export
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: 33
+      sort: 1
       sort_field: null
       status: active
       translations: null
@@ -709,14 +761,14 @@ collections:
       collection: expansion_panel_block_label
       color: null
       display_template: '{{block_label}}'
-      group: null
+      group: expansion_panels
       hidden: true
       icon: null
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: 29
+      sort: 1
       sort_field: sort
       status: active
       translations: null
@@ -763,14 +815,14 @@ collections:
       collection: expansion_panels_expansion_panel_blocks
       color: null
       display_template: null
-      group: null
+      group: expansion_panels
       hidden: true
       icon: import_export
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: 24
+      sort: 2
       sort_field: null
       status: active
       translations: null
@@ -1450,7 +1502,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 25
+      sort: 24
       sort_field: null
       status: active
       translations: null
@@ -1476,7 +1528,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 30
+      sort: 28
       sort_field: null
       status: active
       translations: null
@@ -1528,7 +1580,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 32
+      sort: 30
       sort_field: null
       status: active
       translations: null
@@ -1578,7 +1630,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 31
+      sort: 29
       sort_field: null
       status: active
       translations: null
@@ -1966,7 +2018,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 26
+      sort: 25
       sort_field: sort
       status: active
       translations: null
@@ -2020,7 +2072,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 27
+      sort: 26
       sort_field: null
       status: active
       translations: null
@@ -10451,6 +10503,375 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: contact_topics
+    field: id
+    type: uuid
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 1
+      special:
+        - uuid
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: contact_topics
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_topics
+    field: sort
+    type: integer
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: contact_topics
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_topics
+    field: user_created
+    type: uuid
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: user
+      display_options: null
+      field: user_created
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_created
+      table: contact_topics
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: contact_topics
+    field: date_created
+    type: timestamp
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: contact_topics
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_topics
+    field: user_updated
+    type: uuid
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: user
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{avatar}} {{first_name}} {{last_name}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: contact_topics
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: contact_topics
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: contact_topics
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_topics
+    field: slug
+    type: string
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: slug
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: slug
+      table: contact_topics
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_topics
+    field: title
+    type: string
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: contact_topics
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_topics
+    field: description
+    type: text
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: description
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: description
+      table: contact_topics
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contacts
     field: id
     type: integer
@@ -11122,1006 +11543,6 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: contacts
-    field: primary_contact
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: primary_contact
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: primary_contact
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: primary_role
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: primary_role
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: primary_role
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: email
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: email
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: email
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: phone
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: phone
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: phone
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: fax
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: fax
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: fax
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: contact_2
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: contact_2
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: contact_2
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: role_2
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: role_2
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: role_2
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: email_2
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: email_2
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: email_2
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: phone_2
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: phone_2
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: phone_2
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: contact_3
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: contact_3
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: contact_3
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: role_3
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: role_3
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: role_3
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: email_3
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: email_3
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: email_3
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: phone_3
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: phone_3
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: phone_3
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: contact_4
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: contact_4
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: contact_4
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: role_4
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: role_4
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: role_4
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: email_4
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: email_4
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: email_4
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: phone_4
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: phone_4
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: phone_4
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: contact_5
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: contact_5
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: contact_5
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: role_5
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: role_5
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: role_5
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: email_5
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: email_5
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: email_5
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: phone_5
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: phone_5
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: phone_5
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: contact_6
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: contact_6
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: contact_6
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: role_6
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: role_6
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: role_6
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: email_6
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: email_6
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: email_6
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
-    field: phone_6
-    type: string
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: phone_6
-      group: null
-      hidden: false
-      interface: input
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: null
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: phone_6
-      table: contacts
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: contacts
     field: people
     type: alias
     meta:
@@ -12146,6 +11567,150 @@ fields:
       validation: null
       validation_message: null
       width: full
+  - collection: contacts
+    field: topics
+    type: alias
+    meta:
+      collection: contacts
+      conditions: null
+      display: null
+      display_options: null
+      field: topics
+      group: null
+      hidden: false
+      interface: list-m2m
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: contacts_contact_topics
+    field: id
+    type: integer
+    meta:
+      collection: contacts_contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: contacts_contact_topics
+      data_type: integer
+      default_value: nextval('contacts_contact_topics_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_contact_topics
+    field: contacts_id
+    type: integer
+    meta:
+      collection: contacts_contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: contacts_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contacts_id
+      table: contacts_contact_topics
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: contacts
+      foreign_key_column: id
+  - collection: contacts_contact_topics
+    field: contact_topics_id
+    type: uuid
+    meta:
+      collection: contacts_contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: contact_topics_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contact_topics_id
+      table: contacts_contact_topics
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: contact_topics
+      foreign_key_column: id
   - collection: contacts_person
     field: id
     type: uuid
@@ -12288,7 +11853,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 4
+      sort: 7
       special: null
       translations: null
       validation: null
@@ -12328,7 +11893,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 5
+      sort: 8
       special: null
       translations: null
       validation: null
@@ -12368,7 +11933,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 6
+      sort: 9
       special: null
       translations: null
       validation: null
@@ -12408,7 +11973,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 7
+      sort: 10
       special: null
       translations: null
       validation: null
@@ -12448,7 +12013,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 8
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -12489,7 +12054,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 12
       special:
         - cast-boolean
       translations: null
@@ -12523,14 +12088,14 @@ fields:
       display_options: null
       field: contacts_id
       group: null
-      hidden: false
-      interface: input
+      hidden: true
+      interface: null
       note: null
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -12552,6 +12117,130 @@ fields:
       generation_expression: null
       has_auto_increment: false
       foreign_key_table: contacts
+      foreign_key_column: id
+  - collection: contacts_person
+    field: sort
+    type: integer
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: contacts_person
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 5
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: contacts_person
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contacts_person
+    field: user_updated
+    type: uuid
+    meta:
+      collection: contacts_person
+      conditions: null
+      display: null
+      display_options: null
+      field: user_updated
+      group: null
+      hidden: true
+      interface: select-dropdown-m2o
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 4
+      special:
+        - m2o
+        - user-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: user_updated
+      table: contacts_person
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
       foreign_key_column: id
   - collection: content_blocks
     field: id
@@ -40740,6 +40429,48 @@ relations:
       constraint_name: contact_boxes_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: contact_topics
+    field: user_created
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: contact_topics
+      many_field: user_created
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: contact_topics
+      column: user_created
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: contact_topics_user_created_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
+  - collection: contact_topics
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: contact_topics
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: contact_topics
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: contact_topics_user_updated_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: contacts
     field: user_created
     related_collection: directus_users
@@ -40782,6 +40513,48 @@ relations:
       constraint_name: contacts_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: contacts_contact_topics
+    field: contact_topics_id
+    related_collection: contact_topics
+    meta:
+      junction_field: contacts_id
+      many_collection: contacts_contact_topics
+      many_field: contact_topics_id
+      one_allowed_collections: null
+      one_collection: contact_topics
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: contacts_contact_topics
+      column: contact_topics_id
+      foreign_key_table: contact_topics
+      foreign_key_column: id
+      constraint_name: contacts_contact_topics_contact_topics_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: contacts_contact_topics
+    field: contacts_id
+    related_collection: contacts
+    meta:
+      junction_field: contact_topics_id
+      many_collection: contacts_contact_topics
+      many_field: contacts_id
+      one_allowed_collections: null
+      one_collection: contacts
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: topics
+      sort_field: null
+    schema:
+      table: contacts_contact_topics
+      column: contacts_id
+      foreign_key_table: contacts
+      foreign_key_column: id
+      constraint_name: contacts_contact_topics_contacts_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: contacts_person
     field: user_created
     related_collection: directus_users
@@ -40822,6 +40595,27 @@ relations:
       foreign_key_table: contacts
       foreign_key_column: id
       constraint_name: contacts_person_contacts_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: contacts_person
+    field: user_updated
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: contacts_person
+      many_field: user_updated
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: contacts_person
+      column: user_updated
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: contacts_person_user_updated_foreign
       on_update: NO ACTION
       on_delete: SET NULL
   - collection: content_blocks
