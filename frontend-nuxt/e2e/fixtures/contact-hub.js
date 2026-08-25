@@ -24,6 +24,39 @@ export const contactTopics = [
   },
 ]
 
+// Contacts for the oil-gas-reporting topic page: two header groups, people spanning
+// federal / supervisor / indian roles (exercises the role-colour derivation).
+export const oilGasContacts = [
+  {
+    id: 101,
+    status: 'published',
+    header: 'Companies starting with: A–E',
+    letter: 'A, B, C, D, E',
+    company_yn: true,
+    company_name: null,
+    operator_number: null,
+    agency: null,
+    people: [
+      { id: 'p1', name: 'Maria Foster', role: 'Primary Contact Federal', email: 'maria.foster@onrr.gov', phone: '214-640-9048', is_primary: true, fax: null },
+      { id: 'p2', name: 'Michael Anspach', role: 'Supervisor Federal', email: 'michael.anspach@onrr.gov', phone: '303-231-3618', is_primary: false, fax: null },
+      { id: 'p3', name: 'Katie Connor', role: 'Primary Contact Indian', email: 'kathryn.connor@onrr.gov', phone: '303-231-3937', is_primary: false, fax: null },
+    ],
+  },
+  {
+    id: 102,
+    status: 'published',
+    header: 'Companies starting with: F–K',
+    letter: 'F, G, H, I, J, K',
+    company_yn: true,
+    company_name: null,
+    operator_number: null,
+    agency: null,
+    people: [
+      { id: 'p4', name: 'Dana Reyes', role: 'Primary Contact Federal', email: 'dana.reyes@onrr.gov', phone: '303-231-3100', is_primary: true, fax: null },
+    ],
+  },
+]
+
 export const contactHubPage = {
   __typename: 'pages',
   id: 'contact-hub-page',

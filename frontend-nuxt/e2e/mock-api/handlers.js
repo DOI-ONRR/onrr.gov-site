@@ -10,7 +10,7 @@ import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
 import { paymentOptionsPage } from '../fixtures/payment-options.js'
 import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
-import { contactHubPage, contactTopics } from '../fixtures/contact-hub.js'
+import { contactHubPage, contactTopics, oilGasContacts } from '../fixtures/contact-hub.js'
 
 /**
  * Each handler has:
@@ -83,6 +83,14 @@ export const handlers = [
   {
     match: (query, op) => op === 'GetContactTopics',
     resolve: () => ({ contact_topics: state.contactTopics ?? contactTopics }),
+  },
+
+  // Per-topic contacts directory (ContactDirectory) — filtered by topic slug.
+  {
+    match: (query, op) => op === 'GetContactsByTopic',
+    resolve: (query, variables) => ({
+      contacts: variables?.slug === 'oil-gas-reporting' ? (state.contactsByTopic ?? oilGasContacts) : [],
+    }),
   },
 
   // Chart card by key (ChartCardByKey on the Revenue Data landing page). Returns the
