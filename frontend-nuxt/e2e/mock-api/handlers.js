@@ -10,7 +10,7 @@ import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
 import { paymentOptionsPage } from '../fixtures/payment-options.js'
 import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
-import { contactHubPage, contactTopics, oilGasContacts, searchContacts } from '../fixtures/contact-hub.js'
+import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactTopicPage } from '../fixtures/contact-hub.js'
 
 /**
  * Each handler has:
@@ -124,6 +124,10 @@ export const handlers = [
       if (variables?.slug === 'renewable-energy') return { page: [renewableEnergyPage] }
       if (variables?.slug === 'valuation') return { page: [valuationPage] }
       if (variables?.slug === 'contact') return { page: [contactHubPage] }
+      // No authored CMS page for this topic → catch-all renders the directory fallback.
+      if (variables?.slug === 'oil-gas-reporting') return { page: [] }
+      // An authored topic page whose contacts block is scoped by contact_topic.
+      if (variables?.slug === 'oil-gas-reporting-topic') return { page: [contactTopicPage] }
       return {
         page: [{
           __typename: 'pages',

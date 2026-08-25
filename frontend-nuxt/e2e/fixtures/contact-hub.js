@@ -89,6 +89,48 @@ export const searchContacts = [
   },
 ]
 
+// A topic-template CMS page whose contacts section is a collection_block scoped to a
+// contact_topic → CollectionBlock renders <ContactDirectory :topic>.
+export const contactTopicPage = {
+  __typename: 'pages',
+  id: 'ct-page',
+  title: 'Oil & Gas Reporting',
+  slug: 'oil-gas-reporting-topic',
+  url: '/about/contact/oil-gas-reporting-topic',
+  template: 'topic',
+  topic_variant: null,
+  content_columns: null,
+  hero_image: null,
+  hero_title: null,
+  parent: { title: 'Contact', url: '/about/contact', parent: null },
+  meta_title: null,
+  meta_description: null,
+  page_bands: [],
+  sidebar_blocks: [],
+  page_blocks: [
+    {
+      id: 'ctpb1',
+      item: {
+        __typename: 'collection_blocks',
+        id: 'ctcb1',
+        collection: 'contacts',
+        contact_topic: { slug: 'oil-gas-reporting', title: 'Oil & Gas Reporting' },
+        header: null,
+        description: null,
+        accordion: null,
+        page: null,
+        tab: null,
+        items_per_page: null,
+        status: 'published',
+        layout: null,
+        item_status: null,
+        category_header_level: null,
+        topics: null,
+      },
+    },
+  ],
+}
+
 export const contactHubPage = {
   __typename: 'pages',
   id: 'contact-hub-page',
