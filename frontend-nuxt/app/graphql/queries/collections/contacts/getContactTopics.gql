@@ -1,0 +1,8 @@
+query GetContactTopics {
+  contact_topics(sort: ["sort"]) {
+    id
+    slug
+    title
+    description
+  }
+}

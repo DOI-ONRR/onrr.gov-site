@@ -54,8 +54,9 @@ const items = computed(() => {
 
 <template>
   <div v-if="block.header" v-html="block.header" class="margin-top-4"></div>
+  <ContactHub v-if="collection === 'contact_topics'" />
   <Contacts
-    v-if="collection === 'contacts'"
+    v-else-if="collection === 'contacts'"
     :page="block.page"
     :tab="block.tab"
     :accordion="block.accordion"

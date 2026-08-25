@@ -1,0 +1,28 @@
+query GetContactsByTopic($slug: String) {
+  contacts(
+    sort: ["header", "letter"]
+    limit: -1
+    filter: {
+      status: { _eq: "published" }
+      topics: { contact_topics_id: { slug: { _eq: $slug } } }
+    }
+  ) {
+    id
+    status
+    header
+    letter
+    company_yn
+    company_name
+    operator_number
+    agency
+    people {
+      id
+      name
+      role
+      email
+      phone
+      is_primary
+      fax
+    }
+  }
+}

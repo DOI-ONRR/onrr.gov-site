@@ -10,6 +10,7 @@ import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
 import { paymentOptionsPage } from '../fixtures/payment-options.js'
 import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
+import { contactHubPage, contactTopics } from '../fixtures/contact-hub.js'
 
 /**
  * Each handler has:
@@ -78,6 +79,12 @@ export const handlers = [
     resolve: () => ({ handbook_toc: state.handbookToc ?? handbookToc }),
   },
 
+  // Contact hub topic router (ContactHub)
+  {
+    match: (query, op) => op === 'GetContactTopics',
+    resolve: () => ({ contact_topics: state.contactTopics ?? contactTopics }),
+  },
+
   // Chart card by key (ChartCardByKey on the Revenue Data landing page). Returns the
   // card matching the `key` variable, or an empty list for an unknown key.
   {
@@ -102,6 +109,7 @@ export const handlers = [
       if (variables?.slug === 'payment-options') return { page: [paymentOptionsPage] }
       if (variables?.slug === 'renewable-energy') return { page: [renewableEnergyPage] }
       if (variables?.slug === 'valuation') return { page: [valuationPage] }
+      if (variables?.slug === 'contact') return { page: [contactHubPage] }
       return {
         page: [{
           __typename: 'pages',
