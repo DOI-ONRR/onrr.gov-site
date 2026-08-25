@@ -9232,6 +9232,8 @@ fields:
             value: rulemakings
           - text: Solid Minerals Handbook
             value: solid_minerals_handbook
+          - text: Contact Topics
+            value: contact_topics
       readonly: false
       required: false
       searchable: true
