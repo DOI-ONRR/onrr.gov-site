@@ -30,6 +30,7 @@ export const oilGasContacts = [
   {
     id: 101,
     status: 'published',
+    section: 'Onshore & Offshore',
     header: 'Companies starting with: A–E',
     letter: 'A, B, C, D, E',
     company_yn: true,
@@ -46,6 +47,7 @@ export const oilGasContacts = [
   {
     id: 102,
     status: 'published',
+    section: null,
     header: 'Companies starting with: F–K',
     letter: 'F, G, H, I, J, K',
     company_yn: true,

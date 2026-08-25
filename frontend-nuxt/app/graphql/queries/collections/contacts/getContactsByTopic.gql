@@ -1,6 +1,6 @@
 query GetContactsByTopic($slug: String) {
   contacts(
-    sort: ["header", "letter"]
+    sort: ["section", "header", "letter"]
     limit: -1
     filter: {
       status: { _eq: "published" }
@@ -9,6 +9,7 @@ query GetContactsByTopic($slug: String) {
   ) {
     id
     status
+    section
     header
     letter
     company_yn

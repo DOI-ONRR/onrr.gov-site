@@ -30,7 +30,7 @@ const filteredGroups = computed(() => {
   if (!q) return props.groups
   return props.groups
     .map((g) => {
-      const groupHay = [g.header, g.letter, g.company_name, g.operator_number, g.agency]
+      const groupHay = [g.header, g.section, g.letter, g.company_name, g.operator_number, g.agency]
         .filter(Boolean).join(' ').toLowerCase()
       if (groupHay.includes(q)) return g // whole group matches
       const people = (g.people || []).filter((p) =>
@@ -39,6 +39,24 @@ const filteredGroups = computed(() => {
       return people.length ? { ...g, people } : null
     })
     .filter(Boolean)
+})
+
+// Bucket the header-level groups into their sections, preserving order. A null
+// section renders its groups with no section heading (flat, as today).
+const sectionedGroups = computed(() => {
+  const out = []
+  const index = new Map()
+  for (const g of filteredGroups.value) {
+    const name = g.section || null
+    let bucket = index.get(name)
+    if (!bucket) {
+      bucket = { name, groups: [] }
+      index.set(name, bucket)
+      out.push(bucket)
+    }
+    bucket.groups.push(g)
+  }
+  return out
 })
 
 const totalPeople = computed(() =>
@@ -67,9 +85,11 @@ const totalPeople = computed(() =>
 
   <p v-if="!filteredGroups.length" class="no-results">No contacts match that search.</p>
 
-  <div v-for="group in filteredGroups" :key="group.id" class="contact-group">
-    <h2 v-if="group.header" class="group-head">{{ group.header }}</h2>
-    <div class="contact-grid">
+  <template v-for="sec in sectionedGroups" :key="sec.name ?? '__none'">
+    <h2 v-if="sec.name" class="section-head">{{ sec.name }}</h2>
+    <div v-for="group in sec.groups" :key="group.id" class="contact-group">
+      <component :is="sec.name ? 'h3' : 'h2'" v-if="group.header" class="group-head">{{ group.header }}</component>
+      <div class="contact-grid">
       <div v-for="person in group.people" :key="person.id" class="contact-card">
         <div class="contact-card__role" :class="`contact-card__role--${roleType(person)}`">
           {{ person.role }}
@@ -86,8 +106,9 @@ const totalPeople = computed(() =>
           </p>
         </div>
       </div>
+      </div>
     </div>
-  </div>
+  </template>
 </template>
 
 <style lang="scss" scoped>
@@ -110,6 +131,16 @@ const totalPeople = computed(() =>
   border-radius: 4px;
   padding: 1.5rem;
   color: #565c65;
+}
+
+.section-head {
+  font-size: 1.35rem;
+  line-height: 1.2;
+  margin: 2rem 0 1rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid #aeb9c2;
+
+  &:first-child { margin-top: 0; }
 }
 
 .group-head {

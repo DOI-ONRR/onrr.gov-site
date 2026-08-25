@@ -8,6 +8,7 @@ Feature: Per-topic contacts directory
     And the card for "Michael Anspach" has the "supervisor" role style
     And the card for "Katie Connor" has the "indian" role style
     And the card for "Maria Foster" has the "federal" role style
+    And the directory shows the section "Onshore & Offshore"
 
   Scenario: The filter narrows the directory
     Given I open the "oil-gas-reporting" contacts page
