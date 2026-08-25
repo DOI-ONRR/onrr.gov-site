@@ -37,9 +37,10 @@ export const oilGasContacts = [
     operator_number: null,
     agency: null,
     people: [
-      { id: 'p1', name: 'Maria Foster', role: 'Primary Contact Federal', email: 'maria.foster@onrr.gov', phone: '214-640-9048', is_primary: true, fax: null },
-      { id: 'p2', name: 'Michael Anspach', role: 'Supervisor Federal', email: 'michael.anspach@onrr.gov', phone: '303-231-3618', is_primary: false, fax: null },
-      { id: 'p3', name: 'Katie Connor', role: 'Primary Contact Indian', email: 'kathryn.connor@onrr.gov', phone: '303-231-3937', is_primary: false, fax: null },
+      { id: 'p1', name: 'Maria Foster', role: 'Primary Contact Federal', role_type: 'federal', email: 'maria.foster@onrr.gov', phone: '214-640-9048', is_primary: true, fax: null },
+      { id: 'p2', name: 'Michael Anspach', role: 'Supervisor Federal', role_type: 'supervisor', email: 'michael.anspach@onrr.gov', phone: '303-231-3618', is_primary: false, fax: null },
+      // role_type intentionally null: exercises ContactDirectory's string fallback.
+      { id: 'p3', name: 'Katie Connor', role: 'Primary Contact Indian', role_type: null, email: 'kathryn.connor@onrr.gov', phone: '303-231-3937', is_primary: false, fax: null },
     ],
   },
   {
@@ -52,7 +53,7 @@ export const oilGasContacts = [
     operator_number: null,
     agency: null,
     people: [
-      { id: 'p4', name: 'Dana Reyes', role: 'Primary Contact Federal', email: 'dana.reyes@onrr.gov', phone: '303-231-3100', is_primary: true, fax: null },
+      { id: 'p4', name: 'Dana Reyes', role: 'Primary Contact Federal', role_type: 'federal', email: 'dana.reyes@onrr.gov', phone: '303-231-3100', is_primary: true, fax: null },
     ],
   },
 ]

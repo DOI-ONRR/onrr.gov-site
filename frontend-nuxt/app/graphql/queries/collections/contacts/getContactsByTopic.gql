@@ -19,6 +19,7 @@ query GetContactsByTopic($slug: String) {
       id
       name
       role
+      role_type
       email
       phone
       is_primary
