@@ -9398,7 +9398,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 14
       special:
         - alias
         - no-data
@@ -9406,52 +9406,6 @@ fields:
       validation: null
       validation_message: null
       width: full
-  - collection: collection_blocks
-    field: page
-    type: string
-    meta:
-      collection: collection_blocks
-      conditions:
-        - name: Enable if Collection is contacts
-          readonly: false
-          rule:
-            _and:
-              - collection:
-                  _eq: contacts
-      display: null
-      display_options: null
-      field: page
-      group: null
-      hidden: false
-      interface: contacts-page-select
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 16
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: page
-      table: collection_blocks
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
   - collection: collection_blocks
     field: layout
     type: string
@@ -9498,98 +9452,6 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: collection_blocks
-    field: tab
-    type: string
-    meta:
-      collection: collection_blocks
-      conditions:
-        - name: Enable if Collection is Contacts
-          readonly: false
-          rule:
-            _and:
-              - collection:
-                  _eq: contacts
-      display: null
-      display_options: null
-      field: tab
-      group: null
-      hidden: false
-      interface: contacts-tab-select
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 17
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: tab
-      table: collection_blocks
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: collection_blocks
-    field: accordion
-    type: string
-    meta:
-      collection: collection_blocks
-      conditions:
-        - name: Enable if Collection is Contacts
-          readonly: false
-          rule:
-            _and:
-              - collection:
-                  _eq: contacts
-      display: null
-      display_options: null
-      field: accordion
-      group: null
-      hidden: false
-      interface: contacts-accordion-select
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 18
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: accordion
-      table: collection_blocks
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: collection_blocks
     field: divider_reporter_letters
     type: alias
     meta:
@@ -9607,7 +9469,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 18
       special:
         - alias
         - no-data
@@ -9661,66 +9523,6 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: collection_blocks
-    field: category_header_level
-    type: string
-    meta:
-      collection: collection_blocks
-      conditions:
-        - name: Enable and require when collection is contacts
-          readonly: false
-          required: true
-          rule:
-            _and:
-              - collection:
-                  _eq: contacts
-      display: null
-      display_options: null
-      field: category_header_level
-      group: null
-      hidden: false
-      interface: select-dropdown
-      note: null
-      options:
-        choices:
-          - text: H1
-            value: h1
-          - text: H2
-            value: h2
-          - text: H3
-            value: h3
-          - text: H4
-            value: h4
-          - text: H5
-            value: h5
-          - text: H6
-            value: h6
-      readonly: true
-      required: false
-      searchable: true
-      sort: 19
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: category_header_level
-      table: collection_blocks
-      data_type: character varying
-      default_value: null
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: collection_blocks
     field: topics
     type: json
     meta:
@@ -9743,7 +9545,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 21
+      sort: 19
       special:
         - cast-json
       translations: null
@@ -9767,6 +9569,54 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: collection_blocks
+    field: contact_topic
+    type: uuid
+    meta:
+      collection: collection_blocks
+      conditions:
+        - name: Enable if Collection is contacts
+          readonly: false
+          rule:
+            _and:
+              - collection:
+                  _eq: contacts
+      display: null
+      display_options: null
+      field: contact_topic
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{title}}'
+      readonly: true
+      required: false
+      searchable: true
+      sort: 17
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: contact_topic
+      table: collection_blocks
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: contact_topics
+      foreign_key_column: id
   - collection: commodity
     field: id
     type: uuid
@@ -40358,6 +40208,27 @@ relations:
       constraint_name: collection_blocks_user_created_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: collection_blocks
+    field: contact_topic
+    related_collection: contact_topics
+    meta:
+      junction_field: null
+      many_collection: collection_blocks
+      many_field: contact_topic
+      one_allowed_collections: null
+      one_collection: contact_topics
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: collection_blocks
+      column: contact_topic
+      foreign_key_table: contact_topics
+      foreign_key_column: id
+      constraint_name: collection_blocks_contact_topic_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: commodity
     field: user_created
     related_collection: directus_users
