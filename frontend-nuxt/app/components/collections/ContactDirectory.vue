@@ -5,18 +5,28 @@
   a client-side filter narrows by company letter, name, role, email, or phone.
   Card header colour comes from the person's role type.
 */
+import getContactsByTopic from '@/graphql/queries/collections/contacts/getContactsByTopic.gql'
+
 const props = defineProps({
-  groups: { type: Array, default: () => [] },
+  // Either pass `groups` directly, or a `topic` slug to fetch them here (block use).
+  groups: { type: Array, default: null },
+  topic: { type: String, default: null },
 })
+
+// When given a topic slug, fetch the directory ourselves; otherwise use the prop.
+const { data: fetched } = props.topic
+  ? await useAsyncQuery(getContactsByTopic, { slug: props.topic })
+  : { data: ref(null) }
+const sourceGroups = computed(() => (props.topic ? (fetched.value?.contacts ?? []) : (props.groups ?? [])))
 
 const search = ref('')
 
 const filteredGroups = computed(() => {
   const q = search.value.trim().toLowerCase()
-  if (!q) return props.groups
-  return props.groups
+  if (!q) return sourceGroups.value
+  return sourceGroups.value
     .map((g) => {
-      const groupHay = [g.header, g.section, g.letter, g.company_name, g.operator_number, g.agency]
+      const groupHay = [g.header, g.letter, g.company_name, g.operator_number, g.agency]
         .filter(Boolean).join(' ').toLowerCase()
       if (groupHay.includes(q)) return g // whole group matches
       const people = (g.people || []).filter((p) =>
@@ -27,27 +37,28 @@ const filteredGroups = computed(() => {
     .filter(Boolean)
 })
 
-// Bucket the header-level groups into their sections, preserving order. A null
-// section renders its groups with no section heading (flat, as today).
-const sectionedGroups = computed(() => {
-  const out = []
-  const index = new Map()
-  for (const g of filteredGroups.value) {
-    const name = g.section || null
-    let bucket = index.get(name)
-    if (!bucket) {
-      bucket = { name, groups: [] }
-      index.set(name, bucket)
-      out.push(bucket)
-    }
-    bucket.groups.push(g)
-  }
-  return out
-})
-
 const totalPeople = computed(() =>
   filteredGroups.value.reduce((n, g) => n + (g.people?.length || 0), 0),
 )
+
+// Paginate by group (keeps each group's cards together). Reset on filter change.
+const GROUPS_PER_PAGE = 5
+const {
+  currentPage, totalPages, displayedItems: pagedGroups,
+  visiblePages, goToPage, resetPage,
+} = usePagination(filteredGroups, GROUPS_PER_PAGE)
+watch(search, () => resetPage())
+
+// The pager reads in CONTACTS, not the grouping mechanic: map the current page of
+// groups to the span of people it covers.
+const peopleBefore = computed(() =>
+  filteredGroups.value
+    .slice(0, (currentPage.value - 1) * GROUPS_PER_PAGE)
+    .reduce((n, g) => n + (g.people?.length || 0), 0),
+)
+const pagePeople = computed(() => pagedGroups.value.reduce((n, g) => n + (g.people?.length || 0), 0))
+const contactRangeStart = computed(() => (totalPeople.value ? peopleBefore.value + 1 : 0))
+const contactRangeEnd = computed(() => peopleBefore.value + pagePeople.value)
 </script>
 
 <template>
@@ -71,15 +82,28 @@ const totalPeople = computed(() =>
 
   <p v-if="!filteredGroups.length" class="no-results">No contacts match that search.</p>
 
-  <template v-for="sec in sectionedGroups" :key="sec.name ?? '__none'">
-    <h2 v-if="sec.name" class="section-head">{{ sec.name }}</h2>
-    <div v-for="group in sec.groups" :key="group.id" class="contact-group">
-      <component :is="sec.name ? 'h3' : 'h2'" v-if="group.header" class="group-head">{{ group.header }}</component>
-      <div class="contact-grid">
-        <ContactCard v-for="person in group.people" :key="person.id" :person="person" />
-      </div>
+  <!-- group-head is a styled role="heading" div (not a real h2) so it stays out of the
+       topic template's "On this page" rail, which scans <h2>. Section grouping is
+       intentionally ignored for now (see the section data cleanup). -->
+  <div v-for="group in pagedGroups" :key="group.id" class="contact-group">
+    <div v-if="group.header" class="group-head" role="heading" aria-level="2">{{ group.header }}</div>
+    <div class="contact-grid">
+      <ContactCard v-for="person in group.people" :key="person.id" :person="person" />
     </div>
-  </template>
+  </div>
+
+  <PaginationBar
+    v-if="totalPages > 1"
+    class="margin-top-2"
+    :current-page="currentPage"
+    :total-pages="totalPages"
+    :visible-pages="visiblePages"
+    :range-start="contactRangeStart"
+    :range-end="contactRangeEnd"
+    :total-items="totalPeople"
+    label="contacts"
+    @page-change="goToPage"
+  />
 </template>
 
 <style lang="scss" scoped>
@@ -102,16 +126,6 @@ const totalPeople = computed(() =>
   border-radius: 4px;
   padding: 1.5rem;
   color: #565c65;
-}
-
-.section-head {
-  font-size: 1.35rem;
-  line-height: 1.2;
-  margin: 2rem 0 1rem;
-  padding-bottom: 0.25rem;
-  border-bottom: 2px solid #aeb9c2;
-
-  &:first-child { margin-top: 0; }
 }
 
 .group-head {

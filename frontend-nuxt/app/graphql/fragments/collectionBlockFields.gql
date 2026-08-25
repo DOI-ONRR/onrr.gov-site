@@ -3,14 +3,14 @@ fragment collectionBlockFields on collection_blocks {
   collection
   header
   description
-  accordion
-  page
-  tab
   items_per_page
   status
   layout
   item_status
-  category_header_level
   topics
+  contact_topic {
+    slug
+    title
+  }
   __typename
 }

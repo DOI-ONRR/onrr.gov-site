@@ -1,6 +1,7 @@
 <script setup>
 import getPageBySlug from '@/graphql/queries/collections/pages/getPageBySlug.gql'
 import getMenuByLabel from '@/graphql/queries/collections/menus/getMenuByLabel.gql'
+import getContactTopics from '@/graphql/queries/collections/contacts/getContactTopics.gql'
 
 definePageMeta({
   key: (route) => route.fullPath,
@@ -12,6 +13,16 @@ const slug = computed(() => route.params.slug?.at(-1) || null)
 const { resolveImages, assetUrl } = useCmsContent()
 const { data } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
 const page = computed(() => data.value?.page?.[0])
+
+// Contact-topic fallback: /about/contact/<slug> with no authored CMS page → render the
+// topic's contacts directory directly, so every hub topic works before its page exists.
+const contactFallbackWanted = !page.value && route.path.startsWith('/about/contact/')
+const { data: contactTopicsData } = await useAsyncQuery(getContactTopics, {}, { enabled: contactFallbackWanted })
+const fallbackTopic = computed(() =>
+  contactFallbackWanted
+    ? ((contactTopicsData.value?.contact_topics ?? []).find((t) => t.slug === slug.value) ?? null)
+    : null,
+)
 
 // A page with an associated dataset_metadata record renders as a dataset page
 // (DatasetView) instead of the standard page_blocks layout — and drops the sidenav.
@@ -104,6 +115,16 @@ const sidenavLinks = computed(() => {
     :parent-url="parentUrl"
     :parent-title="parentTitle"
   />
+  <!-- contact-topic fallback (no CMS page authored for this topic yet) -->
+  <section v-else-if="fallbackTopic" class="grid-container usa-section margin-top-4">
+    <Breadcrumbs
+      :page="{ title: `${fallbackTopic.title} contacts` }"
+      :parent-link="{ title: 'Contact', url: '/about/contact' }"
+    />
+    <h1 class="margin-bottom-1">{{ fallbackTopic.title }} contacts</h1>
+    <p v-if="fallbackTopic.description" class="usa-intro">{{ fallbackTopic.description }}</p>
+    <ContactDirectory :topic="fallbackTopic.slug" />
+  </section>
   <section v-else class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
       <div v-if="!isCustomLayout && !isFullWidth" class="grid-col-2">

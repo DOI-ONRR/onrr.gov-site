@@ -55,6 +55,11 @@ const items = computed(() => {
 <template>
   <div v-if="block.header" v-html="block.header" class="margin-top-4"></div>
   <ContactHub v-if="collection === 'contact_topics'" />
+  <!-- contacts scoped to a contact_topic → the per-topic directory; else legacy page-level -->
+  <ContactDirectory
+    v-else-if="collection === 'contacts' && block.contact_topic?.slug"
+    :topic="block.contact_topic.slug"
+  />
   <Contacts v-else-if="collection === 'contacts'" :page="block.page" />
   <IndexZones v-else-if="collection === 'index_zones'" />
   <Ibmp v-else-if="collection === 'ibmp'" />
