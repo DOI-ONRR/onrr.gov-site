@@ -11460,7 +11460,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 2
+      sort: 3
       special: null
       translations: null
       validation: null
@@ -11500,7 +11500,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 3
+      sort: 4
       special: null
       translations: null
       validation: null
@@ -11523,6 +11523,46 @@ fields:
       has_auto_increment: false
       foreign_key_table: contact_topics
       foreign_key_column: id
+  - collection: contacts_contact_topics
+    field: sort
+    type: integer
+    meta:
+      collection: contacts_contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: contacts_contact_topics
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: contacts_person
     field: id
     type: uuid
@@ -40430,7 +40470,7 @@ relations:
       one_collection_field: null
       one_deselect_action: nullify
       one_field: topics
-      sort_field: null
+      sort_field: sort
     schema:
       table: contacts_contact_topics
       column: contacts_id
@@ -40472,7 +40512,7 @@ relations:
       one_collection_field: null
       one_deselect_action: nullify
       one_field: people
-      sort_field: null
+      sort_field: sort
     schema:
       table: contacts_person
       column: contacts_id
