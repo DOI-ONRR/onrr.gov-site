@@ -19,3 +19,8 @@ Feature: Per-topic contacts directory
     Then the directory shows 2 groups
     And the directory shows 4 contact cards
     And the card for "Katie Connor" has the "indian" role style
+
+  Scenario: The block paginates by items_per_page (contacts per page)
+    Given I open the "oil-gas-reporting-paged" contacts page
+    Then the directory shows 3 contact cards
+    And the pager shows "1 - 3 of 4 contacts"

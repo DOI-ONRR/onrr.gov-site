@@ -131,6 +131,21 @@ export const contactTopicPage = {
   ],
 }
 
+// Same topic page but with a small items_per_page to exercise pagination: the two
+// groups (3 people + 1 person) split across two pages at 3 contacts/page.
+export const contactTopicPagePaged = {
+  ...contactTopicPage,
+  id: 'ct-page-paged',
+  slug: 'oil-gas-reporting-paged',
+  url: '/about/contact/oil-gas-reporting-paged',
+  page_blocks: [
+    {
+      id: 'ctpb2',
+      item: { ...contactTopicPage.page_blocks[0].item, id: 'ctcb2', items_per_page: 3 },
+    },
+  ],
+}
+
 export const contactHubPage = {
   __typename: 'pages',
   id: 'contact-hub-page',

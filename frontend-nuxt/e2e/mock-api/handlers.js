@@ -10,7 +10,7 @@ import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
 import { paymentOptionsPage } from '../fixtures/payment-options.js'
 import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
-import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactTopicPage } from '../fixtures/contact-hub.js'
+import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactTopicPage, contactTopicPagePaged } from '../fixtures/contact-hub.js'
 
 /**
  * Each handler has:
@@ -128,6 +128,7 @@ export const handlers = [
       if (variables?.slug === 'oil-gas-reporting') return { page: [] }
       // An authored topic page whose contacts block is scoped by contact_topic.
       if (variables?.slug === 'oil-gas-reporting-topic') return { page: [contactTopicPage] }
+      if (variables?.slug === 'oil-gas-reporting-paged') return { page: [contactTopicPagePaged] }
       return {
         page: [{
           __typename: 'pages',

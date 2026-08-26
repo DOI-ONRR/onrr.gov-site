@@ -32,3 +32,7 @@ Then('the card for {string} has the {string} role style', async ({ page }, name,
 When('I filter contacts by {string}', async ({ page }, text) => {
   await page.locator('#contact-filter').fill(text)
 })
+
+Then('the pager shows {string}', async ({ page }, text) => {
+  await expect(page.getByText(text)).toBeVisible()
+})

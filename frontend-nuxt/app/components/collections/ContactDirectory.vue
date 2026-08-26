@@ -11,6 +11,8 @@ const props = defineProps({
   // Either pass `groups` directly, or a `topic` slug to fetch them here (block use).
   groups: { type: Array, default: null },
   topic: { type: String, default: null },
+  // Contacts per page (from collection_blocks.items_per_page); groups stay whole.
+  itemsPerPage: { type: Number, default: null },
 })
 
 // When given a topic slug, fetch the directory ourselves; otherwise use the prop.
@@ -41,20 +43,40 @@ const totalPeople = computed(() =>
   filteredGroups.value.reduce((n, g) => n + (g.people?.length || 0), 0),
 )
 
-// Paginate by group (keeps each group's cards together). Reset on filter change.
-const GROUPS_PER_PAGE = 5
-const {
-  currentPage, totalPages, displayedItems: pagedGroups,
-  visiblePages, goToPage, resetPage,
-} = usePagination(filteredGroups, GROUPS_PER_PAGE)
-watch(search, () => resetPage())
+// Page size = contacts per page (block field), default 20. Groups are kept whole, so
+// each page packs groups until it reaches ~perPage contacts (a single oversized group
+// still gets its own page).
+const perPage = computed(() => Number(props.itemsPerPage) || 20)
 
-// The pager reads in CONTACTS, not the grouping mechanic: map the current page of
-// groups to the span of people it covers.
+const pages = computed(() => {
+  const out = []
+  let cur = []
+  let count = 0
+  for (const g of filteredGroups.value) {
+    const n = g.people?.length || 0
+    if (cur.length && count + n > perPage.value) {
+      out.push(cur)
+      cur = []
+      count = 0
+    }
+    cur.push(g)
+    count += n
+  }
+  if (cur.length) out.push(cur)
+  return out
+})
+
+// Reuse the pager machinery by paging the pre-built pages one at a time.
+const {
+  currentPage, totalPages, displayedItems, visiblePages, goToPage, resetPage,
+} = usePagination(pages, 1)
+const pagedGroups = computed(() => displayedItems.value[0] ?? [])
+watch([search, perPage], () => resetPage())
+
+// The pager reads in CONTACTS: the span of people the current page covers.
 const peopleBefore = computed(() =>
-  filteredGroups.value
-    .slice(0, (currentPage.value - 1) * GROUPS_PER_PAGE)
-    .reduce((n, g) => n + (g.people?.length || 0), 0),
+  pages.value.slice(0, currentPage.value - 1)
+    .reduce((n, pg) => n + pg.reduce((m, g) => m + (g.people?.length || 0), 0), 0),
 )
 const pagePeople = computed(() => pagedGroups.value.reduce((n, g) => n + (g.people?.length || 0), 0))
 const contactRangeStart = computed(() => (totalPeople.value ? peopleBefore.value + 1 : 0))

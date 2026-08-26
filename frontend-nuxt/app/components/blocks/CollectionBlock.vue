@@ -59,6 +59,7 @@ const items = computed(() => {
   <ContactDirectory
     v-else-if="collection === 'contacts' && block.contact_topic?.slug"
     :topic="block.contact_topic.slug"
+    :items-per-page="block.items_per_page"
   />
   <Contacts v-else-if="collection === 'contacts'" :page="block.page" />
   <IndexZones v-else-if="collection === 'index_zones'" />
