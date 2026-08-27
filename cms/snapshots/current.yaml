@@ -3406,7 +3406,7 @@ fields:
       foreign_key_column: id
   - collection: announcements
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: announcements
       conditions: null
@@ -3422,7 +3422,8 @@ fields:
       required: false
       searchable: true
       sort: 1
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -3430,18 +3431,18 @@ fields:
     schema:
       name: id
       table: announcements
-      data_type: integer
-      default_value: nextval('announcements_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: announcements
@@ -10726,7 +10727,7 @@ fields:
       foreign_key_column: null
   - collection: contacts
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: contacts
       conditions: null
@@ -10742,7 +10743,8 @@ fields:
       required: false
       searchable: true
       sort: 1
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -10750,18 +10752,18 @@ fields:
     schema:
       name: id
       table: contacts
-      data_type: integer
-      default_value: nextval('contacts_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: contacts
@@ -11340,30 +11342,6 @@ fields:
       validation_message: null
       width: full
   - collection: contacts
-    field: topics
-    type: alias
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: topics
-      group: null
-      hidden: false
-      interface: list-m2m
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 19
-      special:
-        - m2m
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-  - collection: contacts
     field: section
     type: string
     meta:
@@ -11403,6 +11381,30 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: contacts
+    field: topics
+    type: alias
+    meta:
+      collection: contacts
+      conditions: null
+      display: null
+      display_options: null
+      field: topics
+      group: null
+      hidden: false
+      interface: list-m2m
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: contacts_contact_topics
     field: id
     type: integer
@@ -11445,7 +11447,7 @@ fields:
       foreign_key_column: null
   - collection: contacts_contact_topics
     field: contacts_id
-    type: integer
+    type: uuid
     meta:
       collection: contacts_contact_topics
       conditions: null
@@ -11469,12 +11471,12 @@ fields:
     schema:
       name: contacts_id
       table: contacts_contact_topics
-      data_type: integer
+      data_type: uuid
       default_value: null
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
-      is_nullable: true
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
       is_unique: false
       is_indexed: false
       is_primary_key: false
@@ -11932,7 +11934,7 @@ fields:
       foreign_key_column: null
   - collection: contacts_person
     field: contacts_id
-    type: integer
+    type: uuid
     meta:
       collection: contacts_person
       conditions: null
@@ -11956,11 +11958,11 @@ fields:
     schema:
       name: contacts_id
       table: contacts_person
-      data_type: integer
+      data_type: uuid
       default_value: null
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -15552,7 +15554,7 @@ fields:
       foreign_key_column: null
   - collection: events
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: events
       conditions: null
@@ -15568,7 +15570,8 @@ fields:
       required: false
       searchable: true
       sort: 1
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -15576,18 +15579,18 @@ fields:
     schema:
       name: id
       table: events
-      data_type: integer
-      default_value: nextval('events_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
@@ -15727,6 +15730,47 @@ fields:
       has_auto_increment: false
       foreign_key_table: directus_users
       foreign_key_column: id
+  - collection: events
+    field: date_created
+    type: dateTime
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: date_created
+      group: null
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: events
+      data_type: timestamp without time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: events
     field: user_updated
     type: uuid
@@ -16053,6 +16097,46 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
+    field: who_should_attend
+    type: text
+    meta:
+      collection: events
+      conditions: null
+      display: raw
+      display_options: null
+      field: who_should_attend
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: who_should_attend
+      table: events
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
     field: event_start_date
     type: date
     meta:
@@ -16121,46 +16205,6 @@ fields:
       name: event_end_date
       table: events
       data_type: date
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: events
-    field: who_should_attend
-    type: text
-    meta:
-      collection: events
-      conditions: null
-      display: raw
-      display_options: null
-      field: who_should_attend
-      group: null
-      hidden: false
-      interface: input-rich-text-html
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 15
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: who_should_attend
-      table: events
-      data_type: text
       default_value: null
       max_length: null
       numeric_precision: null
@@ -16285,47 +16329,6 @@ fields:
       data_type: character varying
       default_value: null
       max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: events
-    field: date_created
-    type: dateTime
-    meta:
-      collection: events
-      conditions: null
-      display: null
-      display_options: null
-      field: date_created
-      group: null
-      hidden: false
-      interface: datetime
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 6
-      special:
-        - date-created
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: date_created
-      table: events
-      data_type: timestamp without time zone
-      default_value: null
-      max_length: null
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -16768,7 +16771,7 @@ fields:
       name: id
       table: expansion_panels
       data_type: uuid
-      default_value: uuid_generate_v4()
+      default_value: null
       max_length: null
       numeric_precision: null
       numeric_scale: null
@@ -26119,7 +26122,7 @@ fields:
       foreign_key_column: null
   - collection: layout_column_blocks
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: layout_column_blocks
       conditions: null
@@ -26135,7 +26138,8 @@ fields:
       required: false
       searchable: true
       sort: null
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -26143,18 +26147,18 @@ fields:
     schema:
       name: id
       table: layout_column_blocks
-      data_type: integer
-      default_value: nextval('layout_column_blocks_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: layout_column_blocks
@@ -26977,7 +26981,7 @@ fields:
       foreign_key_column: null
   - collection: menus
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: menus
       conditions: null
@@ -26993,7 +26997,8 @@ fields:
       required: false
       searchable: true
       sort: null
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -27001,18 +27006,18 @@ fields:
     schema:
       name: id
       table: menus
-      data_type: integer
-      default_value: nextval('menus_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: menus
@@ -27561,7 +27566,7 @@ fields:
       foreign_key_column: null
   - collection: menus_pages
     field: menus_id
-    type: integer
+    type: uuid
     meta:
       collection: menus_pages
       conditions: null
@@ -27585,11 +27590,11 @@ fields:
     schema:
       name: menus_id
       table: menus_pages
-      data_type: integer
+      data_type: uuid
       default_value: null
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: true
       is_unique: false
       is_indexed: false
@@ -33299,7 +33304,7 @@ fields:
       foreign_key_column: null
   - collection: press_releases
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: press_releases
       conditions: null
@@ -33315,7 +33320,8 @@ fields:
       required: false
       searchable: true
       sort: null
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -33323,18 +33329,18 @@ fields:
     schema:
       name: id
       table: press_releases
-      data_type: integer
-      default_value: nextval('press_releases_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: press_releases
@@ -34416,7 +34422,7 @@ fields:
       foreign_key_column: null
   - collection: production_handbook
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: production_handbook
       conditions: null
@@ -34432,7 +34438,8 @@ fields:
       required: false
       searchable: true
       sort: null
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -34440,18 +34447,18 @@ fields:
     schema:
       name: id
       table: production_handbook
-      data_type: integer
-      default_value: nextval('production_handbook_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: production_handbook
@@ -34965,7 +34972,7 @@ fields:
       foreign_key_column: null
   - collection: redirects
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: redirects
       conditions: null
@@ -34981,7 +34988,8 @@ fields:
       required: false
       searchable: true
       sort: null
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -34989,18 +34997,18 @@ fields:
     schema:
       name: id
       table: redirects
-      data_type: integer
-      default_value: nextval('redirects_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: redirects
@@ -35308,7 +35316,7 @@ fields:
       foreign_key_column: null
   - collection: reporter_letters
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: reporter_letters
       conditions: null
@@ -35324,7 +35332,8 @@ fields:
       required: false
       searchable: true
       sort: 1
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -35332,18 +35341,18 @@ fields:
     schema:
       name: id
       table: reporter_letters
-      data_type: integer
-      default_value: nextval('reporter_letters_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: reporter_letters
@@ -36870,6 +36879,46 @@ fields:
       foreign_key_table: directus_files
       foreign_key_column: id
   - collection: revenue_data_update
+    field: status
+    type: string
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: status
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: status
+      table: revenue_data_update
+      data_type: character varying
+      default_value: running
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
     field: result
     type: json
     meta:
@@ -36910,49 +36959,9 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
-  - collection: revenue_data_update
-    field: status
-    type: string
-    meta:
-      collection: revenue_data_update
-      conditions: null
-      display: null
-      display_options: null
-      field: status
-      group: null
-      hidden: true
-      interface: input
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 8
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: status
-      table: revenue_data_update
-      data_type: character varying
-      default_value: running
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
   - collection: revenue_handbook
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: revenue_handbook
       conditions: null
@@ -36968,7 +36977,8 @@ fields:
       required: false
       searchable: true
       sort: null
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -36976,18 +36986,18 @@ fields:
     schema:
       name: id
       table: revenue_handbook
-      data_type: integer
-      default_value: nextval('revenue_handbook_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: revenue_handbook
@@ -37501,7 +37511,7 @@ fields:
       foreign_key_column: null
   - collection: rulemakings
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: rulemakings
       conditions: null
@@ -37517,7 +37527,8 @@ fields:
       required: false
       searchable: true
       sort: null
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -37525,18 +37536,18 @@ fields:
     schema:
       name: id
       table: rulemakings
-      data_type: integer
-      default_value: nextval('rulemakings_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: rulemakings
@@ -38065,7 +38076,7 @@ fields:
       foreign_key_column: null
   - collection: solid_minerals_handbook
     field: id
-    type: integer
+    type: uuid
     meta:
       collection: solid_minerals_handbook
       conditions: null
@@ -38081,7 +38092,8 @@ fields:
       required: false
       searchable: true
       sort: null
-      special: null
+      special:
+        - uuid
       translations: null
       validation: null
       validation_message: null
@@ -38089,18 +38101,18 @@ fields:
     schema:
       name: id
       table: solid_minerals_handbook
-      data_type: integer
-      default_value: nextval('solid_minerals_handbook_id_seq'::regclass)
+      data_type: uuid
+      default_value: gen_random_uuid()
       max_length: null
-      numeric_precision: 32
-      numeric_scale: 0
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: false
       is_unique: true
       is_indexed: false
       is_primary_key: true
       is_generated: false
       generation_expression: null
-      has_auto_increment: true
+      has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
   - collection: solid_minerals_handbook
@@ -40478,7 +40490,7 @@ relations:
       foreign_key_column: id
       constraint_name: contacts_contact_topics_contacts_id_foreign
       on_update: NO ACTION
-      on_delete: SET NULL
+      on_delete: CASCADE
   - collection: contacts_person
     field: user_created
     related_collection: directus_users
@@ -42049,7 +42061,7 @@ relations:
       foreign_key_column: id
       constraint_name: menus_pages_menus_id_foreign
       on_update: NO ACTION
-      on_delete: SET NULL
+      on_delete: CASCADE
   - collection: page_bands
     field: user_created
     related_collection: directus_users
