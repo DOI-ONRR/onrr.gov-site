@@ -22,4 +22,6 @@ frontend/public/uswds/fonts/*
 frontend/public/uswds/img/*
 frontend/public/uswds/js/*
 /cms/test-results
-/cms/seed
+# cms/seed: track the migration tooling; ignore transient content exports
+/cms/seed/*.json
+/cms/seed/contacts-migration/
