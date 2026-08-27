@@ -22,6 +22,7 @@ Most take a Directus admin/static token via `DIRECTUS_TOKEN` (or `SRC_TOKEN` /
 | `fix-contacts-section.py` | One-off: fix the `Onshore& Offshore` typo and label the Royalty half of the `oil-gas-reporting` topic. Dry-run / `--apply`. |
 | `migrate-page.py` | Move one CMS page + its full block tree between Directus instances, id-preserving. Discovers M2A block junctions from `/relations` at runtime, so it works for any page/block type. `--wipe` clears the tree first (safe re-runs); `--apply` writes. |
 | `convert-pk-to-uuid.sql` | Convert the group-1 content collections from serial (integer) PKs to UUID PKs, preserving data + field config. **Rehearse on local first, then upgrade** (procedure in the file header). |
+| `drop-orphan-collections.sql` | Remove the PK-less orphan collections `pages_back` (an old pages backup) and `parent_url` — table + `directus_fields`/`directus_collections` metadata. Run on both instances after confirming the backup is disposable. |
 | `backup-local-db.sh` | Timestamped `pg_dump` of the local Directus Postgres (Docker) → `~/Developer/ONRR/db-backups`. Verifies the dump completed cleanly. |
 
 ## Gitignore convention
