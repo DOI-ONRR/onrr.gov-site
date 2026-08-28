@@ -90,7 +90,7 @@ const isNum = (c) => c.align === 'right'
     <div class="data-table__wrap">
       <table
         class="usa-table width-full"
-        :class="{ 'usa-table--striped': block.striped, 'usa-table--compact': block.compact }"
+        :class="{ 'usa-table--compact': block.compact }"
       >
         <caption v-if="block.caption" :class="{ 'usa-sr-only': !block.show_caption }">{{ block.caption }}</caption>
         <thead>
@@ -122,12 +122,10 @@ const isNum = (c) => c.align === 'right'
 
 // Scrollable bordered wrapper (mockup .price-table-wrap).
 .data-table__wrap {
-  overflow-x: auto;
-  border: 1px solid #dfe1e2;
-  border-radius: 4px;
+  overflow-x: auto; // keeps wide tables scrollable; no frame (borderless style)
 
   table { margin: 0; }
-  thead th { background: #f0f0f0; white-space: nowrap; }
+  thead th { white-space: nowrap; }
   // right-aligned numeric cells, tabular figures (mockup td.num / th.num)
   .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 }

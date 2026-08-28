@@ -129,7 +129,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
           />
         </div>
         <div class="toc-table-wrap margin-top-2">
-          <table class="usa-table usa-table--compact usa-table--striped width-full">
+          <table class="usa-table width-full">
             <caption class="usa-sr-only">Handbook table of contents</caption>
             <thead>
               <tr>
@@ -285,11 +285,9 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
 // TOC table.
 .toc-table-wrap {
   overflow-x: auto;
-  border: 1px solid #dfe1e2;
-  border-radius: 4px;
-
+  
   table { margin: 0; }
-  thead th { background: #f0f0f0; white-space: nowrap; }
+  thead th { white-space: nowrap; }
   td.sec, td.pg { white-space: nowrap; font-variant-numeric: tabular-nums; }
 }
 .toc-chapter { font-weight: 700; }

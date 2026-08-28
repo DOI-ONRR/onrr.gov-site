@@ -596,7 +596,7 @@ onBeforeUnmount(() => {
             :hidden="!tableOpen"
           >
             <div class="data-table-wrap">
-              <table class="usa-table usa-table--compact usa-table--striped width-full margin-top-0">
+              <table class="usa-table width-full margin-top-0">
                 <thead>
                   <tr>
                     <th v-if="tableModel.includeCategory" scope="col">
@@ -674,7 +674,6 @@ onBeforeUnmount(() => {
 .data-table-wrap {
   max-height: 20rem;
   overflow: auto;
-  border: 1px solid #dfe1e2;
 
   table {
     margin: 0;
@@ -683,7 +682,7 @@ onBeforeUnmount(() => {
   thead th {
     position: sticky;
     top: 0;
-    background: #f0f0f0;
+    background: #ffffff;
     z-index: 2;
     cursor: pointer;
     white-space: nowrap;
