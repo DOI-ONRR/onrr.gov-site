@@ -11342,6 +11342,30 @@ fields:
       validation_message: null
       width: full
   - collection: contacts
+    field: topics
+    type: alias
+    meta:
+      collection: contacts
+      conditions: null
+      display: null
+      display_options: null
+      field: topics
+      group: null
+      hidden: false
+      interface: list-m2m
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: contacts
     field: section
     type: string
     meta:
@@ -11381,30 +11405,6 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
-  - collection: contacts
-    field: topics
-    type: alias
-    meta:
-      collection: contacts
-      conditions: null
-      display: null
-      display_options: null
-      field: topics
-      group: null
-      hidden: false
-      interface: list-m2m
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 19
-      special:
-        - m2m
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
   - collection: contacts_contact_topics
     field: id
     type: integer
@@ -15731,47 +15731,6 @@ fields:
       foreign_key_table: directus_users
       foreign_key_column: id
   - collection: events
-    field: date_created
-    type: dateTime
-    meta:
-      collection: events
-      conditions: null
-      display: null
-      display_options: null
-      field: date_created
-      group: null
-      hidden: false
-      interface: datetime
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 6
-      special:
-        - date-created
-      translations: null
-      validation: null
-      validation_message: null
-      width: half
-    schema:
-      name: date_created
-      table: events
-      data_type: timestamp without time zone
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: events
     field: user_updated
     type: uuid
     meta:
@@ -16097,46 +16056,6 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: events
-    field: who_should_attend
-    type: text
-    meta:
-      collection: events
-      conditions: null
-      display: raw
-      display_options: null
-      field: who_should_attend
-      group: null
-      hidden: false
-      interface: input-rich-text-html
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 15
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: who_should_attend
-      table: events
-      data_type: text
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: events
     field: event_start_date
     type: date
     meta:
@@ -16205,6 +16124,46 @@ fields:
       name: event_end_date
       table: events
       data_type: date
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
+    field: who_should_attend
+    type: text
+    meta:
+      collection: events
+      conditions: null
+      display: raw
+      display_options: null
+      field: who_should_attend
+      group: null
+      hidden: false
+      interface: input-rich-text-html
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: who_should_attend
+      table: events
+      data_type: text
       default_value: null
       max_length: null
       numeric_precision: null
@@ -16329,6 +16288,47 @@ fields:
       data_type: character varying
       default_value: null
       max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: events
+    field: date_created
+    type: dateTime
+    meta:
+      collection: events
+      conditions: null
+      display: null
+      display_options: null
+      field: date_created
+      group: null
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 6
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: events
+      data_type: timestamp without time zone
+      default_value: null
+      max_length: null
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -16771,7 +16771,7 @@ fields:
       name: id
       table: expansion_panels
       data_type: uuid
-      default_value: null
+      default_value: uuid_generate_v4()
       max_length: null
       numeric_precision: null
       numeric_scale: null
@@ -28330,6 +28330,7 @@ fields:
       note: null
       options:
         sort: sort
+        template: '{{title}}'
       readonly: false
       required: false
       searchable: true
@@ -36879,46 +36880,6 @@ fields:
       foreign_key_table: directus_files
       foreign_key_column: id
   - collection: revenue_data_update
-    field: status
-    type: string
-    meta:
-      collection: revenue_data_update
-      conditions: null
-      display: null
-      display_options: null
-      field: status
-      group: null
-      hidden: true
-      interface: input
-      note: null
-      options: null
-      readonly: true
-      required: false
-      searchable: true
-      sort: 8
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: status
-      table: revenue_data_update
-      data_type: character varying
-      default_value: running
-      max_length: 255
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: revenue_data_update
     field: result
     type: json
     meta:
@@ -36948,6 +36909,46 @@ fields:
       data_type: json
       default_value: null
       max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: revenue_data_update
+    field: status
+    type: string
+    meta:
+      collection: revenue_data_update
+      conditions: null
+      display: null
+      display_options: null
+      field: status
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      searchable: true
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: status
+      table: revenue_data_update
+      data_type: character varying
+      default_value: running
+      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
@@ -42263,7 +42264,7 @@ relations:
       one_collection_field: null
       one_deselect_action: nullify
       one_field: steps
-      sort_field: null
+      sort_field: sort
     schema:
       table: page_steps
       column: page_band
