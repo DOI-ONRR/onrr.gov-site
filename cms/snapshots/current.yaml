@@ -25044,7 +25044,7 @@ fields:
       display_options: null
       field: page
       group: null
-      hidden: false
+      hidden: true
       interface: select-dropdown-m2o
       note: null
       options:
@@ -25176,7 +25176,7 @@ fields:
       field: description
       group: null
       hidden: false
-      interface: input-rich-text-html
+      interface: onrr-wysiwyg
       note: null
       options: null
       readonly: false
