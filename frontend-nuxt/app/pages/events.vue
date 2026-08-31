@@ -240,7 +240,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
   h2 { margin: 0 0 0.35rem; font-size: 1.3rem; line-height: 1.25; }
   .usa-button { margin: 0.5rem 0.5rem 0 0; }
 }
-.training-desc { margin-top: 0; max-width: 66ch; }
+.training-desc { margin-top: 0; }
 .reg-note { font-size: 0.85rem; color: #565c65; margin: 0.75rem 0 0; }
 
 // Event cards (violet = the outreach section identity).
