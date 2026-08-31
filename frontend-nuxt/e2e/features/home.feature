@@ -34,8 +34,8 @@ Feature: Home page
     Then the band "How revenue works" is a steps band with 3 steps
     And the first step is numbered "1" titled "Companies produce"
 
-  Scenario: Announcements section renders the three most recent as cards
+  Scenario: Announcements section renders the three most recent stacked
     Given I navigate to the home page
     Then the announcements section heading "Announcements" is visible
-    And the announcements section shows 3 cards
-    And the first announcement card is titled "Q1 reporting deadline extended"
+    And the announcements section shows 3 announcements
+    And the first announcement is titled "Q1 reporting deadline extended"

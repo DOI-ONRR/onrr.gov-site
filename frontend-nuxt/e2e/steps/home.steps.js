@@ -106,10 +106,10 @@ Then('the announcements section heading {string} is visible', async ({ page }, t
   await expect(announcements(page).getByRole('heading', { level: 2, name: text, exact: true })).toBeVisible()
 })
 
-Then('the announcements section shows {int} cards', async ({ page }, n) => {
-  await expect(announcements(page).locator('.usa-card__container')).toHaveCount(n)
+Then('the announcements section shows {int} announcements', async ({ page }, n) => {
+  await expect(announcements(page).locator('.announcement')).toHaveCount(n)
 })
 
-Then('the first announcement card is titled {string}', async ({ page }, title) => {
+Then('the first announcement is titled {string}', async ({ page }, title) => {
   await expect(announcements(page).locator('.usa-card__heading').first()).toHaveText(title)
 })
