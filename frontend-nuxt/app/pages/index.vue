@@ -49,6 +49,8 @@ const pageBands = computed(() =>
     </section>
 
     <PageBands :bands="pageBands" />
+
+    <HomeAnnouncements />
   </div>
 </template>
 

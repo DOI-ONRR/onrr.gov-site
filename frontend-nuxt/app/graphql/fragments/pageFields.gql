@@ -189,7 +189,6 @@ fragment pageFields on pages {
         row_limit
         caption
         show_caption
-        striped
         compact
         as_of_label
         footnote

@@ -3,7 +3,7 @@ import * as revenueDataFixtures from '../fixtures/revenue-data.js'
 import { chartCardsByKey, chartEndpointData } from '../fixtures/chart-cards.js'
 import { journeyPage } from '../fixtures/journey.js'
 import { audienceHubPage } from '../fixtures/audience-hub.js'
-import { homePage, homeChartData } from '../fixtures/home.js'
+import { homePage, homeChartData, recentAnnouncements } from '../fixtures/home.js'
 import { glossaryTerms } from '../fixtures/glossary.js'
 import { handbooks as handbooksItems, handbooksPage } from '../fixtures/handbooks.js'
 import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
@@ -107,6 +107,13 @@ export const handlers = [
       const card = chartCardsByKey[variables?.key]
       return { chart_cards: card ? [card] : [] }
     },
+  },
+
+  // Recent announcements (HomeAnnouncements on the homepage) — three most recent
+  // published announcements as a 3-up card grid.
+  {
+    match: (query, op) => op === 'GetRecentAnnouncements',
+    resolve: () => ({ announcements: recentAnnouncements }),
   },
 
   // Page queries (GetPageBySlug) — slug-aware: homepage for the null slug (index.vue),
