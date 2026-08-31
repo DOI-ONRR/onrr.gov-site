@@ -280,7 +280,6 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
     margin: 0.15rem 0 0;
     color: #1b1b1b;
     line-height: 1.55;
-    max-width: 72ch;
   }
 }
 .empty-state {
