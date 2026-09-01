@@ -15,6 +15,15 @@ const { resolveImages } = useCmsContent()
 const blocks = computed(() => props.page?.page_blocks ?? [])
 // Eyebrow = parent topic name (e.g. "How revenue works"); optional.
 const eyebrow = computed(() => props.page?.parent?.title || null)
+
+// 'sections' variant (payment-method / stacked-reference pages): no eyebrow, and
+// compact sans section headings with extra separation between sections. Scoped so
+// default topic pages (learn-page, etc.) are unchanged.
+const isSections = computed(() => props.page?.topic_variant === 'sections')
+
+// Content column width beside the fixed 3-col rail. Default 7 (learn-page reading
+// measure); up to 9 (full row, no right gutter) for wide/data pages like references.
+const contentCols = computed(() => props.page?.content_columns || 7)
 // Optional "Related" box (WYSIWYG). The component owns the box + "Related" heading;
 // the editor just writes the list of links, so every topic's box looks the same.
 const relatedContent = computed(() => props.page?.related_content || null)
@@ -102,11 +111,11 @@ function goToSection(id) {
     </div>
 
     <!-- Content -->
-    <div class="tablet:grid-col-7">
-      <p v-if="eyebrow" class="topic-eyebrow margin-bottom-0">{{ eyebrow }}</p>
+    <div :class="`tablet:grid-col-${contentCols}`">
+      <p v-if="eyebrow && !isSections" class="topic-eyebrow margin-bottom-0">{{ eyebrow }}</p>
       <h1 class="margin-top-05 margin-bottom-2">{{ page?.hero_title || page?.title }}</h1>
 
-      <div ref="contentEl" class="topic-content">
+      <div ref="contentEl" class="topic-content" :class="{ 'topic-content--sections': isSections }">
         <div
           v-for="block in blocks"
           :key="block.id"
@@ -137,6 +146,18 @@ function goToSection(id) {
             v-else-if="block.item?.__typename === 'chart_cards'"
             :block="block.item"
           />
+          <PayGovForm
+            v-else-if="block.item?.__typename === 'pay_gov_forms'"
+            :block="block.item"
+          />
+          <ContactBox
+            v-else-if="block.item?.__typename === 'contact_boxes'"
+            :block="block.item"
+          />
+          <DataTable
+            v-else-if="block.item?.__typename === 'data_tables'"
+            :block="block.item"
+          />
         </div>
 
         <!-- Related box: component owns the heading + styling; editor supplies the
@@ -164,6 +185,19 @@ function goToSection(id) {
   font-size: 0.82rem;
   font-weight: 700;
   color: #565c65;
+}
+
+// 'sections' variant: compact sans section headings (the payment-method mockup's
+// .re-section h2 — 24px sans, vs the default serif .usa-prose h2), with padding-top
+// to separate the stacked sections. padding (not margin) avoids margin-collapse with
+// the previous block. Scoped to .usa-prose h2 so the Related box heading is untouched.
+.topic-content--sections :deep(.usa-prose h2) {
+  font-family: family('sans');
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 0.25rem;
+  padding-top: 1.75rem;
 }
 
 // "On this page" left rail (adopted from the learn-page mockup): sticky, with a gray

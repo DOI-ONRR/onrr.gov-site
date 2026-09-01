@@ -1,0 +1,34 @@
+// _tables.scss — site table styling. Borderless + striped, with $onrr-violet
+// horizontal rules under the header and each data row. Overrides the USWDS
+// usa-table component (which is @forward'd before this in styles.scss).
+@use "uswds-theme" as *;
+@use "onrr-colors" as *;
+
+.usa-table {
+  border: 0;
+  background-color: transparent;
+
+  // Borderless, and every cell starts transparent — this clears USWDS's header
+  // background (which it applies to the thead AND the row-header column) so the
+  // header and unstriped rows read as transparent. Only the violet rule remains.
+  th,
+  td {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    border-bottom: 1px solid $onrr-violet;
+    background-color: transparent;
+  }
+
+  // Heavier rule beneath the header.
+  thead th {
+    border-bottom-width: 2px;
+  }
+
+  // Striped rows: every other data row gets the gray; the header and the alternate
+  // rows stay transparent.
+  tbody tr:nth-child(even) th,
+  tbody tr:nth-child(even) td {
+    background-color: color("base-lightest");
+  }
+}

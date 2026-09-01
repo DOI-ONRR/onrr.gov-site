@@ -1,0 +1,16 @@
+# Table-of-contents entries for one handbook (by handbooks id), in document order.
+query GetHandbookToc($handbookId: ID) {
+  handbook_toc(
+    filter: { handbook: { id: { _eq: $handbookId } } }
+    sort: ["sort"]
+    limit: -1
+  ) {
+    id
+    chapter
+    section
+    title
+    actual_page
+    toc_page
+    url
+  }
+}

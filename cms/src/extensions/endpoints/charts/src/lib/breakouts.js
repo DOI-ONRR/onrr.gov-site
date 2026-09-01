@@ -8,10 +8,11 @@
 // each hand-rolled, so per-collection handlers stay thin.
 
 // Recipient groups for the disbursements-by-recipient charts. `fund.recipient`
-// carries ~19 granular labels; these collapse them into the 5 groups the dataset-
-// page chart shows. Matching is by prefix/substring (mirrors the mockup's regex
+// carries ~19 granular labels; these collapse them into the 7 groups the dataset-
+// page chart/pivot shows. Matching is by prefix/substring (mirrors the mockup's regex
 // bucketing) so label variants group correctly - e.g. `State`/`County` -> State &
-// local, and both `U.S. Treasury` and `U.S. Treasury - OCS Gulf` -> U.S. Treasury.
+// local, both `U.S. Treasury` and `U.S. Treasury - OCS Gulf` -> U.S. Treasury, and the
+// `- OCS Gulf` / `- GoMesa` variants of Land & Water Conservation -> that group.
 // `key` is the wide-row column / `chart_series.data_field`; array order sets the
 // stack order, and `other_funds` (catch-all) MUST stay last.
 export const RECIPIENT_GROUPS = [
@@ -19,6 +20,8 @@ export const RECIPIENT_GROUPS = [
 	{ key: 'us_treasury', label: 'U.S. Treasury', match: /Treasury/i },
 	{ key: 'native_american', label: 'Native American', match: /Native American/i },
 	{ key: 'reclamation_fund', label: 'Reclamation Fund', match: /^Reclamation/i },
+	{ key: 'land_water', label: 'Land and Water Conservation Fund', match: /Land.*Water Conservation/i },
+	{ key: 'historic_preservation', label: 'Historic Preservation Fund', match: /Historic Preservation/i },
 	{ key: 'other_funds', label: 'Other funds', match: /.*/ }, // catch-all - keep last
 ];
 
@@ -362,4 +365,163 @@ export async function maxFiscalPeriod(database, table) {
 		.first();
 
 	return { fiscalYear, fiscalMonth: maxMonthResult?.max_month ?? null };
+}
+
+// Long month names by 1-based calendar month, for the pivot's month rows.
+const PIVOT_MONTHS = [null, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+// The group-by dimensions the disbursement pivot supports. `recipient` is special-
+// cased (raw fund.recipient bucketed via RECIPIENT_GROUPS); the rest group directly
+// on a raw joined column. Values are the quoted SQL column expressions.
+const PIVOT_DIMENSIONS = {
+	recipient: '"f"."recipient"',
+	source: '"f"."source"',
+	state: '"l"."state_name"',
+	commodity: '"c"."name"',
+};
+
+export function pivotDimensions() {
+	return Object.keys(PIVOT_DIMENSIONS);
+}
+
+// Distinct raw fund.recipient labels belonging to any of the given group keys, using
+// the shared bucketing. Used to translate a recipients filter (group keys) into the
+// raw labels to match in SQL. Also reports whether `other_funds` is among the groups,
+// so the caller can additionally admit NULL/blank-recipient rows.
+async function rawRecipientsForGroups(database, groupKeys) {
+	const set = new Set(groupKeys);
+	const rows = await database.distinct('recipient').from('fund');
+	const labels = rows
+		.map((r) => r.recipient)
+		.filter((rec) => rec != null && rec !== '' && set.has(recipientGroupKey(rec)));
+	return { labels, includesOther: set.has('other_funds') };
+}
+
+// Apply the shared filter set to a disbursement query builder (joins aliased
+// p/f/l/c). Mutates the builder IN PLACE and returns nothing on purpose: returning
+// the (thenable) builder from an async fn would let `await` execute the query early,
+// before the caller adds its GROUP BY. `recipients` is a list of RECIPIENT_GROUPS
+// keys; empty/omitted means "no recipient filter".
+async function applyPivotFilters(database, q, { from, to, recipients, sources, state, commodity }) {
+	q.where('p.type', 'Monthly');
+	if (from) q.where('p.period_date', '>=', from);
+	if (to) q.where('p.period_date', '<=', to);
+	if (state) q.where('l.state_name', state);
+	if (commodity) q.where('c.name', commodity);
+	if (Array.isArray(sources) && sources.length) q.whereIn('f.source', sources);
+	if (Array.isArray(recipients) && recipients.length) {
+		const { labels, includesOther } = await rawRecipientsForGroups(database, recipients);
+		q.where((b) => {
+			if (labels.length) b.whereIn('f.recipient', labels);
+			else b.whereRaw('1 = 0'); // selected groups have no raw members
+			// `Other funds` also owns the un-labeled (NULL/blank) recipients.
+			if (includesOther) b.orWhereNull('f.recipient').orWhere('f.recipient', '');
+		});
+	}
+}
+
+// Server-side pivot for the dataset-page "Preview and filter" table. Groups the
+// filtered disbursement rows by the chosen dimension, then by CALENDAR year and
+// calendar month, summing `amount`. Recipient is bucketed into RECIPIENT_GROUPS;
+// other dimensions group on their raw label. Returns the fully-shaped pivot the
+// table renders - no client-side row crunching (the mockup's freeze was exactly
+// that). Shape: { groupBy, years[], groups[{ key, total, byYear, months[] }],
+// grandTotal, recordCount }.
+export async function disbursementPivot(database, opts = {}) {
+	const groupBy = PIVOT_DIMENSIONS[opts.groupBy] ? opts.groupBy : 'recipient';
+	const isRecipient = groupBy === 'recipient';
+	const dimExpr = PIVOT_DIMENSIONS[groupBy];
+	const table = 'disbursement';
+
+	const base = () =>
+		database
+			.from(table)
+			.join('period as p', `${table}.period`, 'p.id')
+			.leftJoin('fund as f', `${table}.fund`, 'f.id')
+			.leftJoin('location as l', `${table}.location`, 'l.id')
+			.leftJoin('commodity as c', `${table}.commodity`, 'c.id');
+
+	// Aggregated rows: (dimension, calendar year, calendar month) -> sum.
+	const aggQ = base().select(
+		database.raw(`${dimExpr} as "dim"`),
+		database.raw('EXTRACT(YEAR FROM "p"."period_date")::int as "yr"'),
+		database.raw('EXTRACT(MONTH FROM "p"."period_date")::int as "mo"'),
+		database.raw(`SUM("${table}"."amount") as "amt"`)
+	);
+	await applyPivotFilters(database, aggQ, opts);
+	aggQ.groupByRaw(`${dimExpr}, EXTRACT(YEAR FROM "p"."period_date"), EXTRACT(MONTH FROM "p"."period_date")`);
+
+	// Record count over the same filter set (raw disbursement rows, not aggregated).
+	const countQ = base().count(`${table}.id as n`);
+	await applyPivotFilters(database, countQ, opts);
+
+	const [rows, countRow] = await Promise.all([aggQ, countQ.first()]);
+
+	// Assemble: group label -> { total, byYear, months: Map(mo -> {monthName, byYear, total}) }.
+	const yearSet = new Set();
+	const groups = new Map();
+	let grandTotal = 0;
+
+	for (const r of rows) {
+		const label = isRecipient ? recipientGroupLabel(r.dim) : (r.dim == null || r.dim === '' ? '(none)' : r.dim);
+		const yr = Number(r.yr);
+		const mo = Number(r.mo);
+		const amt = Number(r.amt) || 0;
+		yearSet.add(yr);
+		grandTotal += amt;
+
+		let g = groups.get(label);
+		if (!g) {
+			g = { key: label, total: 0, byYear: {}, months: new Map() };
+			groups.set(label, g);
+		}
+		g.total += amt;
+		g.byYear[yr] = (g.byYear[yr] || 0) + amt;
+
+		let m = g.months.get(mo);
+		if (!m) {
+			m = { month: mo, monthName: PIVOT_MONTHS[mo] || String(mo), byYear: {}, total: 0 };
+			g.months.set(mo, m);
+		}
+		m.byYear[yr] = (m.byYear[yr] || 0) + amt;
+		m.total += amt;
+	}
+
+	const years = [...yearSet].sort((a, b) => a - b);
+	// Recipient groups keep RECIPIENT_GROUPS (stack) order; other dimensions sort by
+	// grand total descending (largest first), matching the mockup's default.
+	const recipientOrder = new Map(RECIPIENT_GROUPS.map((grp, i) => [grp.label, i]));
+	const groupList = [...groups.values()]
+		.map((g) => ({
+			key: g.key,
+			total: g.total,
+			byYear: g.byYear,
+			months: [...g.months.values()].sort((a, b) => a.month - b.month),
+		}))
+		.sort((a, b) =>
+			isRecipient
+				? (recipientOrder.get(a.key) ?? 99) - (recipientOrder.get(b.key) ?? 99)
+				: b.total - a.total
+		);
+
+	return {
+		groupBy,
+		years,
+		groups: groupList,
+		grandTotal,
+		recordCount: Number(countRow?.n) || 0,
+	};
+}
+
+// Distinct filter-dropdown values for the pivot UI, in one round-trip: month periods,
+// states, commodities, fund sources, plus the recipient GROUP labels (stack order).
+export async function disbursementPivotOptions(database) {
+	const monthly = (q) => q.from('disbursement').join('period as p', 'disbursement.period', 'p.id').where('p.type', 'Monthly');
+	const [months, states, commodities, sources] = await Promise.all([
+		monthly(database.distinct('p.period_date')).orderBy('p.period_date', 'asc').then((r) => r.map((x) => x.period_date)),
+		monthly(database.distinct('l.state_name')).join('location as l', 'disbursement.location', 'l.id').whereNotNull('l.state_name').orderBy('l.state_name', 'asc').then((r) => r.map((x) => x.state_name)),
+		monthly(database.distinct('c.name')).join('commodity as c', 'disbursement.commodity', 'c.id').whereNotNull('c.name').orderBy('c.name', 'asc').then((r) => r.map((x) => x.name)),
+		monthly(database.distinct('f.source')).join('fund as f', 'disbursement.fund', 'f.id').whereNotNull('f.source').orderBy('f.source', 'asc').then((r) => r.map((x) => x.source)),
+	]);
+	return { months, states, commodities, sources, recipients: RECIPIENT_GROUPS.map((g) => ({ key: g.key, label: g.label })) };
 }

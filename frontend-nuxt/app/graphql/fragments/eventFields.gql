@@ -11,4 +11,6 @@ fragment eventFields on events {
   who_should_attend
   email
   is_training
+  event_category
+  registration
 }

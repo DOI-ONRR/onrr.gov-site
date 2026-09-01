@@ -94,3 +94,22 @@ Then('the first step is numbered {string} titled {string}', async ({ page }, num
   await expect(first.locator('.page-band__step-num')).toHaveText(num)
   await expect(first.locator('h3')).toHaveText(title)
 })
+
+// --- announcements ---
+
+// The announcements section, located by its labelling h2.
+function announcements(page) {
+  return page.locator('section[aria-labelledby="announcements-heading"]')
+}
+
+Then('the announcements section heading {string} is visible', async ({ page }, text) => {
+  await expect(announcements(page).getByRole('heading', { level: 2, name: text, exact: true })).toBeVisible()
+})
+
+Then('the announcements section shows {int} announcements', async ({ page }, n) => {
+  await expect(announcements(page).locator('.announcement')).toHaveCount(n)
+})
+
+Then('the first announcement is titled {string}', async ({ page }, title) => {
+  await expect(announcements(page).locator('.usa-card__heading').first()).toHaveText(title)
+})

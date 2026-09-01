@@ -12,6 +12,25 @@ fragment pageFields on pages {
   title
   slug
   template
+  topic_variant
+  content_columns
+  handbook {
+    id
+    title
+    release
+    download_url
+    format
+    intro
+    note
+    contact_group
+    contact_name
+    contact_email
+    contact_phone
+    chapters
+    appendices
+    guidance
+    related
+  }
   parent {
     title
     url
@@ -35,6 +54,7 @@ fragment pageFields on pages {
     cta_url
     body_columns
     background
+    card_variant
     chart {
       ...chartCardFields
     }
@@ -143,6 +163,35 @@ fragment pageFields on pages {
       }
       ... on chart_cards {
         ...chartCardFields
+      }
+      ... on pay_gov_forms {
+        id
+        title
+        description
+        form_number
+        pay_gov_url
+      }
+      ... on contact_boxes {
+        id
+        heading
+        body
+      }
+      ... on data_tables {
+        id
+        source_collection
+        source_field
+        columns
+        sort_field
+        sort_direction
+        # aliased: data_tables.filter (String) would otherwise collide with
+        # chart_cards.filter (JSON) in the shared page_blocks.item selection.
+        table_filter: filter
+        row_limit
+        caption
+        show_caption
+        compact
+        as_of_label
+        footnote
       }
     }
   }

@@ -20,6 +20,7 @@
 @forward "usa-input";
 @forward "usa-select";
 @forward "usa-label";
+@forward "usa-hint";
 @forward "usa-form-group";
 @forward "usa-pagination";
 @forward "usa-process-list";
@@ -32,6 +33,7 @@
 @forward "blockquote";
 @forward "tabs";
 @forward "cards";
+@forward "tables";
 @forward "masthead";
 @forward "site-footer";
 @forward "uswds-overrides";
@@ -100,4 +102,33 @@ menu so authors pick them instead of typing class names in source view.
     white-space: nowrap;
     font-size: 0.85rem;
   }
+}
+
+// Inline mono chip for an identifier called out in prose (e.g. an Agency ID a payor
+// gives their bank). Wrap the value: <span class="agency-id">1417000106</span>.
+.agency-id {
+  display: inline-block;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.95rem;
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 0.1rem 0.4rem;
+}
+
+// Highlight / info callout — a tinted box with a bold lead-in + a short list, for
+// "where this applies" style asides in body content. Wrap the content:
+// <div class="callout"><p><strong>Heading</strong></p><ul>…</ul></div>
+// Colors are $onrr-blue / $onrr-blue-light (onrr-colors is only @forward'd here).
+.callout {
+  border-left: 4px solid #005ea2;
+  background: #e1eefa;
+  border-radius: 0 4px 4px 0;
+  padding: 1rem 1.25rem;
+  max-width: 66ch;
+
+  > :first-child { margin-top: 0; }
+  > :last-child { margin-bottom: 0; }
+
+  ul { margin: 0; padding-left: 1.1rem; font-size: 0.93rem; }
+  li { margin-bottom: 0.4rem; }
 }

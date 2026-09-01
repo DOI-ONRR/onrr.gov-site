@@ -54,19 +54,21 @@ const items = computed(() => {
 
 <template>
   <div v-if="block.header" v-html="block.header" class="margin-top-4"></div>
-  <Contacts
-    v-if="collection === 'contacts'"
-    :page="block.page"
-    :tab="block.tab"
-    :accordion="block.accordion"
+  <ContactHub v-if="collection === 'contact_topics'" />
+  <!-- contacts scoped to a contact_topic → the per-topic directory; else legacy page-level -->
+  <ContactDirectory
+    v-else-if="collection === 'contacts' && block.contact_topic?.slug"
+    :topic="block.contact_topic.slug"
+    :items-per-page="block.items_per_page"
   />
+  <Contacts v-else-if="collection === 'contacts'" :page="block.page" />
   <IndexZones v-else-if="collection === 'index_zones'" />
   <Ibmp v-else-if="collection === 'ibmp'" />
   <IndianGasMajorPortion v-else-if="collection === 'indian_gas_major_portion'" />
   <Nymex v-else-if="collection === 'NYMEX'" />
   <PlantSpecificUcas v-else-if="collection === 'plant_specific_ucas'" />
   <Rulemakings v-else-if="collection === 'rulemakings'" />
-  <Handbook v-else-if="collection === 'revenue_handbook' || collection === 'production_handbook' || collection === 'solid_minerals_handbook' || collection === 'geothermal_class_1' || collection === 'geothermal_class_2_3'" :collection="collection" />
+  <Handbooks v-else-if="collection === 'handbooks'" />
   <InterestOilAndGas v-else-if="collection === 'Interest_Oil_and_Gas'" />
   <InterestSolids v-else-if="collection === 'Interest_Solids'" />
   <ReporterLetters v-else-if="collection === 'reporter_letters' && isFullPage" />

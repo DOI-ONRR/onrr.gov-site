@@ -1,0 +1,11 @@
+query GetRecentAnnouncements {
+  announcements(
+    filter: { status: { _eq: "published" } }
+    sort: ["sort"]
+    limit: 3
+  ) {
+    id
+    title
+    content
+  }
+}

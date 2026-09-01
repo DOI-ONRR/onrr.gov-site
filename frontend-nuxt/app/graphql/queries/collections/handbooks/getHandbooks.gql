@@ -1,0 +1,14 @@
+# Handbooks index — the References › Handbooks landing list
+query GetHandbooks {
+  handbooks(sort: ["sort"]) {
+    id
+    title
+    release
+    download_url
+    format
+    interactive_page {
+      url
+      title
+    }
+  }
+}

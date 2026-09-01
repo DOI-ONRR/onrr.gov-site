@@ -1,0 +1,23 @@
+query GetContactsForSearch {
+  contacts(limit: -1, filter: { status: { _eq: "published" } }) {
+    id
+    letter
+    company_name
+    operator_number
+    agency
+    topics {
+      contact_topics_id {
+        slug
+        title
+      }
+    }
+    people {
+      id
+      name
+      role
+      role_type
+      email
+      phone
+    }
+  }
+}

@@ -118,6 +118,14 @@ export const homePage = {
   ],
 }
 
+// The three most recent published announcements, rendered as a 3-up card grid below
+// the page bands (HomeAnnouncements + GetRecentAnnouncements). content is WYSIWYG.
+export const recentAnnouncements = [
+  { id: 'a1', title: 'Q1 reporting deadline extended', content: '<p>The deadline has moved to March 31.</p>' },
+  { id: 'a2', title: 'New valuation guidance published', content: '<p>Revised oil and gas valuation guidance is now available.</p>' },
+  { id: 'a3', title: 'System maintenance window', content: '<p>eCommerce will be offline Sunday 2–4am ET.</p>' },
+]
+
 // Endpoint data for the chart band. Last row (Dec 2025) drives the takeaway:
 // currency_compact($1,149,450,226) = "$1.1B", month_year(period_date) = "Dec 2025".
 export const homeChartData = {

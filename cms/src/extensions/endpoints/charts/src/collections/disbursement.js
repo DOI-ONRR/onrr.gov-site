@@ -1,4 +1,8 @@
-import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals, topStates, monthlyByRecipientGroup } from '../lib/breakouts.js';
+import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals, topStates, monthlyByRecipientGroup, disbursementPivot, disbursementPivotOptions, pivotDimensions } from '../lib/breakouts.js';
+
+// Split a query param that may arrive as a repeated param (array) or a single
+// comma-separated string into a clean array of trimmed, non-empty values.
+const csvParam = (v) => (Array.isArray(v) ? v : v == null || v === '' ? [] : String(v).split(',')).map((s) => String(s).trim()).filter(Boolean);
 
 // Registers disbursement chart routes under `base` (mounted by index.js as
 // /disbursement, so the full prefix is /charts/disbursement).
@@ -78,6 +82,47 @@ export default (router, { database }, base = '') => {
 		} catch (error) {
 			console.error('charts/disbursement/monthly-by-recipient error:', error);
 			res.status(500).json({ error: 'Failed to fetch monthly disbursements by recipient' });
+		}
+	});
+
+	// GET /charts/disbursement/pivot/options
+	// Distinct filter-dropdown values for the pivot UI (months, states, commodities,
+	// fund sources, and the recipient group {key,label} list) in one round-trip.
+	// Registered before /pivot so the more specific path matches first.
+	router.get(`${base}/pivot/options`, async (req, res) => {
+		try {
+			res.json(await disbursementPivotOptions(database));
+		} catch (error) {
+			console.error('charts/disbursement/pivot/options error:', error);
+			res.status(500).json({ error: 'Failed to fetch pivot options' });
+		}
+	});
+
+	// GET /charts/disbursement/pivot?groupBy=recipient&from=YYYY-MM-DD&to=YYYY-MM-DD
+	//     &recipients=state_local,us_treasury&sources=Onshore,Offshore&state=&commodity=
+	// Server-side pivot for the dataset-page "Preview and filter" table: filtered
+	// disbursement totals grouped by the chosen dimension, then calendar year + month.
+	// recipients = RECIPIENT_GROUPS keys; sources = raw fund.source values. See
+	// disbursementPivot() for the response shape.
+	router.get(`${base}/pivot`, async (req, res) => {
+		const { groupBy, from, to, state, commodity } = req.query;
+		if (groupBy && !pivotDimensions().includes(groupBy)) {
+			return res.status(400).json({ error: `Invalid groupBy: ${groupBy}. Valid options: ${pivotDimensions().join(', ')}` });
+		}
+		try {
+			const data = await disbursementPivot(database, {
+				groupBy,
+				from: from || null,
+				to: to || null,
+				state: state || null,
+				commodity: commodity || null,
+				recipients: csvParam(req.query.recipients),
+				sources: csvParam(req.query.sources),
+			});
+			res.json(data);
+		} catch (error) {
+			console.error('charts/disbursement/pivot error:', error);
+			res.status(500).json({ error: 'Failed to fetch disbursement pivot' });
 		}
 	});
 

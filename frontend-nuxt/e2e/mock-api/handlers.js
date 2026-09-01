@@ -3,8 +3,14 @@ import * as revenueDataFixtures from '../fixtures/revenue-data.js'
 import { chartCardsByKey, chartEndpointData } from '../fixtures/chart-cards.js'
 import { journeyPage } from '../fixtures/journey.js'
 import { audienceHubPage } from '../fixtures/audience-hub.js'
-import { homePage, homeChartData } from '../fixtures/home.js'
+import { homePage, homeChartData, recentAnnouncements } from '../fixtures/home.js'
 import { glossaryTerms } from '../fixtures/glossary.js'
+import { handbooks as handbooksItems, handbooksPage } from '../fixtures/handbooks.js'
+import { handbookPage, handbookToc } from '../fixtures/handbook-detail.js'
+import { paymentOptionsPage } from '../fixtures/payment-options.js'
+import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
+import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
+import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactTopicPage, contactTopicPagePaged } from '../fixtures/contact-hub.js'
 
 /**
  * Each handler has:
@@ -31,13 +37,10 @@ export function resetState() {
 }
 
 export const handlers = [
-  // Events
+  // Events (single list; the events page groups by event_category client-side)
   {
     match: (query, op) => op === 'GetEvents',
-    resolve: () => {
-      const fixture = state.events || eventsFixtures.withEvents
-      return fixture.data
-    },
+    resolve: () => state.events || eventsFixtures.withEvents,
   },
 
   // Production aggregated (landingPageProduction query)
@@ -64,6 +67,38 @@ export const handlers = [
     resolve: () => ({ glossary_terms: glossaryTerms }),
   },
 
+  // Handbooks index (References › Handbooks, via CollectionBlock → <Handbooks>)
+  {
+    match: (query, op) => op === 'GetHandbooks',
+    resolve: () => ({ handbooks: state.handbooks ?? handbooksItems }),
+  },
+
+  // Handbook detail TOC rows (HandbookDetailView)
+  {
+    match: (query, op) => op === 'GetHandbookToc',
+    resolve: () => ({ handbook_toc: state.handbookToc ?? handbookToc }),
+  },
+
+  // Contact hub topic router (ContactHub)
+  {
+    match: (query, op) => op === 'GetContactTopics',
+    resolve: () => ({ contact_topics: state.contactTopics ?? contactTopics }),
+  },
+
+  // Contact hub finder — all contacts flattened + searched client-side (ContactHub)
+  {
+    match: (query, op) => op === 'GetContactsForSearch',
+    resolve: () => ({ contacts: state.searchContacts ?? searchContacts }),
+  },
+
+  // Per-topic contacts directory (ContactDirectory) — filtered by topic slug.
+  {
+    match: (query, op) => op === 'GetContactsByTopic',
+    resolve: (query, variables) => ({
+      contacts: variables?.slug === 'oil-gas-reporting' ? (state.contactsByTopic ?? oilGasContacts) : [],
+    }),
+  },
+
   // Chart card by key (ChartCardByKey on the Revenue Data landing page). Returns the
   // card matching the `key` variable, or an empty list for an unknown key.
   {
@@ -72,6 +107,13 @@ export const handlers = [
       const card = chartCardsByKey[variables?.key]
       return { chart_cards: card ? [card] : [] }
     },
+  },
+
+  // Recent announcements (HomeAnnouncements on the homepage) — three most recent
+  // published announcements as a 3-up card grid.
+  {
+    match: (query, op) => op === 'GetRecentAnnouncements',
+    resolve: () => ({ announcements: recentAnnouncements }),
   },
 
   // Page queries (GetPageBySlug) — slug-aware: homepage for the null slug (index.vue),
@@ -83,6 +125,17 @@ export const handlers = [
       if (variables?.slug == null) return { page: [homePage] }
       if (variables?.slug === 'getting-started') return { page: [journeyPage] }
       if (variables?.slug === 'indian-resources') return { page: [audienceHubPage] }
+      if (variables?.slug === 'handbooks') return { page: [handbooksPage] }
+      if (variables?.slug === 'minerals-revenue-reporter-handbook') return { page: [handbookPage] }
+      if (variables?.slug === 'payment-options') return { page: [paymentOptionsPage] }
+      if (variables?.slug === 'renewable-energy') return { page: [renewableEnergyPage] }
+      if (variables?.slug === 'valuation') return { page: [valuationPage] }
+      if (variables?.slug === 'contact') return { page: [contactHubPage] }
+      // No authored CMS page for this topic → catch-all renders the directory fallback.
+      if (variables?.slug === 'oil-gas-reporting') return { page: [] }
+      // An authored topic page whose contacts block is scoped by contact_topic.
+      if (variables?.slug === 'oil-gas-reporting-topic') return { page: [contactTopicPage] }
+      if (variables?.slug === 'oil-gas-reporting-paged') return { page: [contactTopicPagePaged] }
       return {
         page: [{
           __typename: 'pages',
@@ -146,5 +199,15 @@ export const restHandlers = [
   {
     match: (url) => url === '/charts/disbursement/total-monthly-disbursements',
     resolve: () => homeChartData,
+  },
+  // data_tables collection read (DataTable) — a plain /items/<collection> fetch.
+  {
+    match: (url) => url === '/items/NYMEX',
+    resolve: () => ({ data: nymexRows }),
+  },
+  // Embedded-array source: index_zones returns dated snapshots (rows nested in a field).
+  {
+    match: (url) => url === '/items/index_zones',
+    resolve: () => ({ data: indexZonesRows }),
   },
 ]
