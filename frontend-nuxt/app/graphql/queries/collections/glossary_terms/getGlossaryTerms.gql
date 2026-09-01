@@ -1,5 +1,5 @@
 query GetGlossaryTerms {
-  glossary_terms(sort: ["term"]) {
+  glossary_terms(sort: ["term"], limit: -1) {
     id
     term
     definition
