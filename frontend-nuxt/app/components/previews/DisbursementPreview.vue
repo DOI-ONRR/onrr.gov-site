@@ -10,9 +10,10 @@
   extension) — the browser never crunches raw rows. Recipient labels are bucketed into
   the shared RECIPIENT_GROUPS; `source` is fund.source; state/commodity group directly.
 
-  Multi-select semantics: an empty recipients/sources selection means ALL (no filter);
-  picking values narrows to them. The recipient/source dropdowns follow the app's shared
-  `.multi-select` pattern (usa-select trigger + listbox of checkboxes).
+  Multi-select semantics: every option starts selected (= all, no filter); a partial
+  selection narrows, and clearing all shows nothing. Each recipient/source dropdown
+  follows the app's shared `.multi-select` pattern — a usa-select trigger (showing
+  "All X", the single label, or "N selected") over a listbox with a "Select all" toggle.
 */
 const { apiUrl } = useRuntimeConfig().public
 
@@ -36,6 +37,8 @@ function currency(v) {
   if (n === 0) return '$0'
   return `${n < 0 ? '-' : ''}$${Math.abs(n).toLocaleString('en-US', { maximumFractionDigits: 0 })}`
 }
+// Negative amounts get the USWDS `text-secondary` color treatment.
+const isNegative = (v) => Number(v) < 0
 
 // --- filter dropdown options (loaded once from the endpoint) -------------------
 const { data: options } = await useAsyncData('disb-pivot-options', () =>
@@ -45,7 +48,7 @@ const recipientOptions = computed(() => options.value?.recipients || []) // [{ k
 const sourceOptions = computed(() => options.value?.sources || []) // [string]
 const recipientLabel = (key) => recipientOptions.value.find((r) => r.key === key)?.label || key
 
-// --- filter state (recipients/sources: empty = all) ---------------------------
+// --- filter state (recipients/sources seeded to all-selected once options load) --
 const filters = reactive({
   groupBy: 'recipient',
   from: '',
@@ -56,12 +59,36 @@ const filters = reactive({
   sources: [],
 })
 
+// Selection helpers: "all selected" = every option checked (the default). recipients
+// hold RECIPIENT_GROUPS keys; sources hold raw fund.source values.
+const allRecipientKeys = computed(() => recipientOptions.value.map((r) => r.key))
+const recipAllSelected = computed(() => allRecipientKeys.value.length > 0 && filters.recipients.length === allRecipientKeys.value.length)
+const sourceAllSelected = computed(() => sourceOptions.value.length > 0 && filters.sources.length === sourceOptions.value.length)
+// Trigger summary: all -> "All X"; none -> "None selected"; one -> that label; else "N selected".
+const recipSummary = computed(() => {
+  const n = filters.recipients.length
+  if (recipAllSelected.value) return 'All recipients'
+  if (n === 0) return 'None selected'
+  if (n === 1) return recipientLabel(filters.recipients[0])
+  return `${n} selected`
+})
+const sourceSummary = computed(() => {
+  const n = filters.sources.length
+  if (sourceAllSelected.value) return 'All sources'
+  if (n === 0) return 'None selected'
+  if (n === 1) return filters.sources[0]
+  return `${n} selected`
+})
+
 // One-shot: seed the month range once options load.
 const ready = ref(false)
 watchEffect(() => {
   if (ready.value || !options.value) return
   filters.from = options.value.months?.[0] || ''
   filters.to = options.value.months?.[options.value.months.length - 1] || ''
+  // Default to everything selected (all boxes checked).
+  filters.recipients = recipientOptions.value.map((r) => r.key)
+  filters.sources = [...sourceOptions.value]
   ready.value = true
 })
 
@@ -73,6 +100,9 @@ const sourceRef = ref(null)
 const toggleIn = (arr, v) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v])
 function toggleRecipient(key) { filters.recipients = toggleIn(filters.recipients, key) }
 function toggleSource(val) { filters.sources = toggleIn(filters.sources, val) }
+// Select-all toggle: check every option, or clear when already all-selected.
+function toggleAllRecipients() { filters.recipients = recipAllSelected.value ? [] : allRecipientKeys.value }
+function toggleAllSources() { filters.sources = sourceAllSelected.value ? [] : [...sourceOptions.value] }
 function handleClickOutside(e) {
   if (recipRef.value && !recipRef.value.contains(e.target)) recipOpen.value = false
   if (sourceRef.value && !sourceRef.value.contains(e.target)) sourceOpen.value = false
@@ -124,6 +154,14 @@ function toggle(key) {
   collapsed.value = s
 }
 
+// Expand/collapse-all button. "All collapsed" only when every group is collapsed, so
+// the default (all expanded) offers "Collapse all"; once all are collapsed it flips to
+// "Expand all". Acts on the current groups.
+const allCollapsed = computed(() => groups.value.length > 0 && groups.value.every((g) => collapsed.value.has(g.key)))
+function toggleAll() {
+  collapsed.value = allCollapsed.value ? new Set() : new Set(groups.value.map((g) => g.key))
+}
+
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(
   'disb-pivot',
@@ -134,9 +172,12 @@ const { data: pivot, pending } = await useAsyncData(
     if (filters.to) query.to = String(filters.to).slice(0, 10)
     if (filters.state) query.state = filters.state
     if (filters.commodity) query.commodity = filters.commodity
-    // Empty = all (no filter); a non-empty selection narrows.
-    if (filters.recipients.length) query.recipients = filters.recipients.join(',')
-    if (filters.sources.length) query.sources = filters.sources.join(',')
+    // None selected -> empty result. All selected -> no filter (omit). Partial -> narrow.
+    if (!filters.recipients.length || !filters.sources.length) {
+      return { groupBy: filters.groupBy, years: [], groups: [], grandTotal: 0, recordCount: 0 }
+    }
+    if (filters.recipients.length < allRecipientKeys.value.length) query.recipients = filters.recipients.join(',')
+    if (filters.sources.length < sourceOptions.value.length) query.sources = filters.sources.join(',')
     return $fetch(`${apiUrl}/charts/disbursement/pivot`, { query })
   },
   { watch: [() => JSON.stringify(filters), ready] },
@@ -159,8 +200,8 @@ function clearFilters() {
   filters.groupBy = 'recipient'
   filters.state = ''
   filters.commodity = ''
-  filters.recipients = []
-  filters.sources = []
+  filters.recipients = recipientOptions.value.map((r) => r.key)
+  filters.sources = [...sourceOptions.value]
   filters.from = options.value?.months?.[0] || ''
   filters.to = options.value?.months?.[options.value.months.length - 1] || ''
 }
@@ -217,20 +258,19 @@ function downloadCsv() {
               :aria-expanded="recipOpen"
               @click="recipOpen = !recipOpen"
             >
-              <span v-if="!filters.recipients.length" class="multi-select__placeholder">All recipients</span>
-              <span v-else class="multi-select__pills">
-                <span
-                  v-for="key in filters.recipients"
-                  :key="key"
-                  class="multi-select__pill"
-                  @click.stop="toggleRecipient(key)"
-                >
-                  {{ recipientLabel(key) }}
-                  <span class="multi-select__pill-remove" aria-hidden="true">&times;</span>
-                </span>
-              </span>
+              <span :class="{ 'multi-select__placeholder': recipAllSelected }">{{ recipSummary }}</span>
             </button>
             <ul v-show="recipOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
+              <li
+                role="option"
+                :aria-selected="recipAllSelected"
+                class="multi-select__option multi-select__option--all"
+                :class="{ 'multi-select__option--selected': recipAllSelected }"
+                @click="toggleAllRecipients"
+              >
+                <input type="checkbox" :checked="recipAllSelected" tabindex="-1" class="multi-select__checkbox">
+                Select all
+              </li>
               <li
                 v-for="r in recipientOptions"
                 :key="r.key"
@@ -258,20 +298,19 @@ function downloadCsv() {
               :aria-expanded="sourceOpen"
               @click="sourceOpen = !sourceOpen"
             >
-              <span v-if="!filters.sources.length" class="multi-select__placeholder">All sources</span>
-              <span v-else class="multi-select__pills">
-                <span
-                  v-for="val in filters.sources"
-                  :key="val"
-                  class="multi-select__pill"
-                  @click.stop="toggleSource(val)"
-                >
-                  {{ val }}
-                  <span class="multi-select__pill-remove" aria-hidden="true">&times;</span>
-                </span>
-              </span>
+              <span :class="{ 'multi-select__placeholder': sourceAllSelected }">{{ sourceSummary }}</span>
             </button>
             <ul v-show="sourceOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
+              <li
+                role="option"
+                :aria-selected="sourceAllSelected"
+                class="multi-select__option multi-select__option--all"
+                :class="{ 'multi-select__option--selected': sourceAllSelected }"
+                @click="toggleAllSources"
+              >
+                <input type="checkbox" :checked="sourceAllSelected" tabindex="-1" class="multi-select__checkbox">
+                Select all
+              </li>
               <li
                 v-for="s in sourceOptions"
                 :key="s"
@@ -314,18 +353,26 @@ function downloadCsv() {
 
     <!-- Toolbar just above the table: unlabeled group-by + results/total -->
     <div class="table-toolbar">
-      <select
-        v-model="filters.groupBy"
-        class="usa-select group-select"
-        aria-label="Group results by"
-      >
-        <option v-for="o in GROUP_OPTIONS" :key="o.key" :value="o.key">{{ o.label }}</option>
-      </select>
+      <div class="table-toolbar__group">
+        <select
+          v-model="filters.groupBy"
+          class="usa-select group-select"
+          aria-label="Group results by"
+        >
+          <option v-for="o in GROUP_OPTIONS" :key="o.key" :value="o.key">{{ o.label }}</option>
+        </select>
+        <button
+          type="button"
+          class="usa-button usa-button--outline"
+          :disabled="!groups.length"
+          @click="toggleAll"
+        >{{ allCollapsed ? 'Expand all' : 'Collapse all' }}</button>
+      </div>
       <p class="results-line margin-0" aria-live="polite">
         <template v-if="pending">Loading…</template>
         <template v-else>
           <strong>{{ (pivot?.recordCount || 0).toLocaleString() }}</strong> records ·
-          <strong>{{ currency(pivot?.grandTotal) }}</strong> total disbursed
+          <strong>{{ currency(pivot?.grandTotal) }}</strong> total disbursed, grouped by {{ groupByLabel }}
           <button
             type="button"
             class="usa-button usa-button--unstyled margin-left-2"
@@ -380,15 +427,15 @@ function downloadCsv() {
               <tr v-for="m in g.months" :key="`${g.key}-${m.month}`" class="month-row">
                 <td class="dim-cell"></td>
                 <td class="month-cell">{{ m.monthName }}</td>
-                <td v-for="y in years" :key="y" class="text-right">{{ m.byYear[y] ? currency(m.byYear[y]) : '—' }}</td>
-                <td class="text-right">{{ currency(m.total) }}</td>
+                <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(m.byYear[y]) }">{{ m.byYear[y] ? currency(m.byYear[y]) : '—' }}</td>
+                <td class="text-right" :class="{ 'text-secondary': isNegative(m.total) }">{{ currency(m.total) }}</td>
               </tr>
               <!-- Group subtotal: "Subtotal:" in the month column; highlighted values. -->
               <tr class="subtotal-row">
                 <td class="dim-cell"></td>
                 <th scope="row" class="month-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
-                <td v-for="y in years" :key="y" class="text-right">{{ currency(g.byYear[y]) }}</td>
-                <td class="text-right">{{ currency(g.total) }}</td>
+                <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(g.byYear[y]) }">{{ currency(g.byYear[y]) }}</td>
+                <td class="text-right" :class="{ 'text-secondary': isNegative(g.total) }">{{ currency(g.total) }}</td>
               </tr>
             </template>
           </template>
@@ -396,8 +443,8 @@ function downloadCsv() {
         <tfoot v-if="groups.length">
           <tr class="total-row">
             <th scope="row" colspan="2">Total</th>
-            <td v-for="y in years" :key="y" class="text-right">{{ currency(yearTotals[y]) }}</td>
-            <td class="text-right">{{ currency(pivot?.grandTotal) }}</td>
+            <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(yearTotals[y]) }">{{ currency(yearTotals[y]) }}</td>
+            <td class="text-right" :class="{ 'text-secondary': isNegative(pivot?.grandTotal) }">{{ currency(pivot?.grandTotal) }}</td>
           </tr>
         </tfoot>
       </table>
@@ -429,6 +476,9 @@ function downloadCsv() {
 .field--wide { flex: 2 1 15rem; }
 .field--action { flex: 0 0 auto; display: flex; align-items: flex-end; }
 
+// "Select all" row atop each multi-select dropdown, ruled off from the options.
+.multi-select__option--all { font-weight: 700; border-bottom: 1px solid #dfe1e2; }
+
 // Toolbar row above the table: group-by select (left) + results line (right).
 .table-toolbar {
   display: flex;
@@ -438,6 +488,9 @@ function downloadCsv() {
   gap: 0.5rem 1rem;
   margin-bottom: 0.5rem;
 }
+// Left cluster: group-by select + expand/collapse-all button.
+.table-toolbar__group { display: flex; align-items: center; gap: 0.5rem; }
+.table-toolbar__group .usa-button { margin: 0; }
 .group-select { width: auto; min-width: 12rem; margin: 0; }
 .results-line { font-size: 0.95rem; }
 
