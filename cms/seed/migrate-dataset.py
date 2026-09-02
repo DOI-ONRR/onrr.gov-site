@@ -32,9 +32,19 @@ Usage:
 """
 import json
 import os
+import ssl
 import sys
 import urllib.request
 import urllib.parse
+
+# python.org's macOS Python ships without a CA bundle, so HTTPS to cloud.gov fails with
+# CERTIFICATE_VERIFY_FAILED. Use certifi's bundle when available (falls back to the system
+# default) — avoids needing SSL_CERT_FILE=$(python3 -m certifi) on every run.
+try:
+    import certifi
+    _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
+except Exception:
+    _SSL_CTX = ssl.create_default_context()
 
 SRC_URL = os.environ.get("SRC_URL", "http://localhost:8056").rstrip("/")
 SRC_TOKEN = os.environ.get("SRC_TOKEN")
@@ -58,7 +68,7 @@ def api(base, token, path, method="GET", body=None):
         headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
     )
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, context=_SSL_CTX) as r:
             raw = r.read()
             return json.loads(raw) if raw else None
     except urllib.error.HTTPError as e:
@@ -106,7 +116,7 @@ def post(collection, rows):
 
 def fetch_bytes(url, token):
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
-    with urllib.request.urlopen(req) as r:
+    with urllib.request.urlopen(req, context=_SSL_CTX) as r:
         return r.read()
 
 
@@ -138,7 +148,7 @@ def dest_upload_file(meta):
                  "Content-Type": f"multipart/form-data; boundary={boundary}"},
     )
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, context=_SSL_CTX) as r:
             return json.loads(r.read())["data"]["id"]
     except urllib.error.HTTPError as e:
         sys.exit(f"File upload failed ({e.code}): {e.read().decode(errors='replace')[:200]}")
