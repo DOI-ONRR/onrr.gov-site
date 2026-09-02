@@ -46,6 +46,18 @@ export default ({ filter, action }, { services, database, getSchema }) => {
 				break;
 		}
 
+		// Rebuild the denormalized flat table backing the public dataset API (only the
+		// three datasets that have one). Best-effort: a refresh failure is logged, not fatal.
+		const FLAT_DATASETS = new Set(['disbursement', 'revenue', 'production']);
+		if (result?.success && FLAT_DATASETS.has(meta.payload.dataset)) {
+			try {
+				await database.raw('SELECT refresh_dataset_flat(?)', [meta.payload.dataset]);
+				console.log(`[Revenue Data Update] refreshed ${meta.payload.dataset}_flat`);
+			} catch (error) {
+				console.error('[Revenue Data Update] flat refresh failed:', error.message);
+			}
+		}
+
 		// Store the result in the revenue_data_update item
 		if (result !== null) {
 			try {
