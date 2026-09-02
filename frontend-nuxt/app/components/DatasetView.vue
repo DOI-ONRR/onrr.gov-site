@@ -141,28 +141,41 @@ provide('datasetPreviewExport', previewExport)
       </div>
     </div>
 
-    <div class="grid-row grid-gap" id="download">
-      <div class="grid-col-12">
+    <div class="grid-row grid-gap margin-bottom-2" id="download">
+      <div class="grid-col-12 border-bottom-05 padding-bottom-4 border-onrr-blue">
         <h2 class="font-heading-lg">Download</h2>
         <DatasetDownloads :dataset="dataset" :source-table="sourceCollection" />
       </div>
     </div>
 
-    <div class="grid-row grid-gap" id="api">
+    <div class="grid-row grid-gap display-none" id="api">
       <h2 class="font-heading-lg">API access</h2>
       <div class="grid-col-12"></div>
     </div>
 
-    <div class="grid-row grid-gap" id="about">
-      <h2 class="font-heading-lg">About this dataset</h2>
+    <div class="grid-row grid-gap" id="scope">
+      <h2 class="font-heading-lg">Scope</h2>
       <div class="grid-col-12">
-        <div class="usa-prose measure-5"
-          v-html="resolveImages(dataset.about)">
+        <div class="line-height-sans-5"
+          v-html="resolveImages(dataset.scope)">
         </div>
       </div>
     </div>
 
-    <div v-if="terms.length" class="grid-row grid-gap margin-bottom-2">
+    <div class="grid-row grid-gap" id="publication">
+      <h2 class="font-heading-lg">Data publication</h2>
+      <div class="grid-col-12">
+        <div class="line-height-sans-5"
+          v-html="resolveImages(dataset.publication)">
+        </div>
+      </div>
+    </div>
+
+    <DatasetDictionary :dataset="dataset" />
+
+    <ContactBox v-if="dataset.contact_box" :block="dataset.contact_box" class="margin-bottom-4" />
+
+    <div v-if="terms.length" class="grid-row grid-gap margin-bottom-4">
       <div>Key terms:
         <template v-for="(t, i) in terms" :key="t.id"><a class="usa-link ":href="`/glossary-terms#${t.term}`">{{ t.term }}</a><span v-if="i < terms.length - 1"> · </span></template>
       </div>
