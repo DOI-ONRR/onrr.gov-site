@@ -672,6 +672,32 @@ collections:
       versioning: false
     schema:
       name: dataset_metadata
+  - collection: dataset_metadata_files
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      autosave_revision_interval: null
+      collapse: open
+      collection: dataset_metadata_files
+      color: null
+      display_template: null
+      group: null
+      hidden: true
+      icon: import_export
+      item_duplication_fields: null
+      note: null
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: null
+      status: active
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: dataset_metadata_files
   - collection: dataset_metadata_glossary_terms
     meta:
       accountability: all
@@ -14558,6 +14584,241 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: dataset_metadata
+    field: files
+    type: alias
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: files
+      group: null
+      hidden: false
+      interface: files
+      note: null
+      options:
+        allowedMimeTypes:
+          - application/*
+        folder: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 19
+      special:
+        - files
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: dataset_metadata
+    field: source_collection
+    type: string
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: source_collection
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Disbursements
+            value: disbursement
+          - text: Production
+            value: production
+          - text: Revenue
+            value: revenue
+      readonly: false
+      required: false
+      searchable: true
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: source_collection
+      table: dataset_metadata
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: export_filter
+    type: json
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: export_filter
+      group: null
+      hidden: false
+      interface: input-code
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: export_filter
+      table: dataset_metadata
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata_files
+    field: id
+    type: integer
+    meta:
+      collection: dataset_metadata_files
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: dataset_metadata_files
+      data_type: integer
+      default_value: nextval('dataset_metadata_files_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata_files
+    field: dataset_metadata_id
+    type: uuid
+    meta:
+      collection: dataset_metadata_files
+      conditions: null
+      display: null
+      display_options: null
+      field: dataset_metadata_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: dataset_metadata_id
+      table: dataset_metadata_files
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: dataset_metadata
+      foreign_key_column: id
+  - collection: dataset_metadata_files
+    field: directus_files_id
+    type: uuid
+    meta:
+      collection: dataset_metadata_files
+      conditions: null
+      display: null
+      display_options: null
+      field: directus_files_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: directus_files_id
+      table: dataset_metadata_files
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
   - collection: dataset_metadata_glossary_terms
     field: id
     type: integer
@@ -37794,6 +38055,48 @@ relations:
       constraint_name: dataset_metadata_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: dataset_metadata_files
+    field: directus_files_id
+    related_collection: directus_files
+    meta:
+      junction_field: dataset_metadata_id
+      many_collection: dataset_metadata_files
+      many_field: directus_files_id
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: dataset_metadata_files
+      column: directus_files_id
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: dataset_metadata_files_directus_files_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: dataset_metadata_files
+    field: dataset_metadata_id
+    related_collection: dataset_metadata
+    meta:
+      junction_field: directus_files_id
+      many_collection: dataset_metadata_files
+      many_field: dataset_metadata_id
+      one_allowed_collections: null
+      one_collection: dataset_metadata
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: files
+      sort_field: null
+    schema:
+      table: dataset_metadata_files
+      column: dataset_metadata_id
+      foreign_key_table: dataset_metadata
+      foreign_key_column: id
+      constraint_name: dataset_metadata_files_dataset_metadata_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: dataset_metadata_glossary_terms
     field: glossary_terms_id
     related_collection: glossary_terms

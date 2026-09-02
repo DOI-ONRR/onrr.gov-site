@@ -57,13 +57,22 @@ const terms = computed(() => {
     .filter((t) => t && t.term)
 })
 
-// "Preview and filter" is a static component per dataset, chosen by
-// dataset_metadata.preview_component. Register new datasets here as their preview
-// components are built; unset → the section is hidden.
+// `source_collection` holds the real Directus collection name, so it drives both the
+// preview component (init-capped + "Preview", e.g. disbursement -> DisbursementPreview)
+// and DatasetDownloads' live count + native CSV export directly — no mapping needed.
+// Register each preview here as it's built.
+const initCap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '')
+const sourceCollection = computed(() => props.dataset.source_collection || null)
 const PREVIEW_COMPONENTS = {
-  disbursements: DisbursementPreview,
+  DisbursementPreview,
+  // RevenuePreview, ProductionPreview — add when built
 }
-const previewComponent = computed(() => PREVIEW_COMPONENTS[props.dataset.preview_component] || null)
+const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceCollection.value)}Preview`] || null)
+
+// The active preview publishes a "filtered selection" export descriptor here; the
+// Download section's third card consumes it (works for any *Preview component).
+const previewExport = ref(null)
+provide('datasetPreviewExport', previewExport)
 </script>
 
 <template>
@@ -133,8 +142,10 @@ const previewComponent = computed(() => PREVIEW_COMPONENTS[props.dataset.preview
     </div>
 
     <div class="grid-row grid-gap" id="download">
-      <h2 class="font-heading-lg">Download</h2>
-      <div class="grid-col-12"></div>
+      <div class="grid-col-12">
+        <h2 class="font-heading-lg">Download</h2>
+        <DatasetDownloads :dataset="dataset" :source-table="sourceCollection" />
+      </div>
     </div>
 
     <div class="grid-row grid-gap" id="api">

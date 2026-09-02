@@ -128,6 +128,17 @@ fragment pageFields on pages {
     related_links
     about
     preview_component
+    source_collection
+    export_filter
+    files {
+      directus_files_id {
+        id
+        title
+        type
+        filesize
+        filename_download
+      }
+    }
     terms {
       glossary_terms_id {
         id

@@ -226,10 +226,41 @@ function downloadCsv() {
   a.click()
   URL.revokeObjectURL(a.href)
 }
+
+// Publish the current filtered selection to the dataset Download section (DatasetView
+// provides the ref; DatasetDownloads' "filtered" card consumes it). The href points at
+// the /charts/disbursement/export route — the same filter params as the pivot query, so
+// it streams the raw records matching what the preview shows.
+const datasetExport = inject('datasetPreviewExport', null)
+if (datasetExport) {
+  const exportHref = computed(() => {
+    // Nothing selected → no export (matches the empty-result short-circuit).
+    if (!filters.recipients.length || !filters.sources.length) return null
+    const q = new URLSearchParams()
+    if (filters.from) q.set('from', String(filters.from).slice(0, 10))
+    if (filters.to) q.set('to', String(filters.to).slice(0, 10))
+    if (filters.state) q.set('state', filters.state)
+    if (filters.commodity) q.set('commodity', filters.commodity)
+    if (filters.recipients.length < allRecipientKeys.value.length) q.set('recipients', filters.recipients.join(','))
+    if (filters.sources.length < sourceOptions.value.length) q.set('sources', filters.sources.join(','))
+    const qs = q.toString()
+    return `${apiUrl}/charts/disbursement/export${qs ? `?${qs}` : ''}`
+  })
+  watchEffect(() => {
+    const n = pivot.value?.recordCount ?? 0
+    datasetExport.value = {
+      ready: !!(pivot.value && groups.value.length) && !!exportHref.value,
+      recordCount: n,
+      note: `${n.toLocaleString()} records in current selection`,
+      href: exportHref.value,
+    }
+  })
+  onUnmounted(() => { datasetExport.value = null })
+}
 </script>
 
 <template>
-  <div>
+  <div class="margin-bottom-4">
     <!-- Horizontal filter bar (full width, above the table) -->
     <div class="filter-bar padding-2 margin-bottom-2">
       <div class="filter-bar__fields">
