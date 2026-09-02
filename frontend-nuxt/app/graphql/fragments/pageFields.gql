@@ -139,6 +139,25 @@ fragment pageFields on pages {
         filename_download
       }
     }
+    scope
+    publication
+    data_dictionary_intro
+    contact_box {
+      id
+      heading
+      body
+    }
+    data_dictionary(sort: ["sort"]) {
+      id
+      field_name
+      definition
+      value_style
+      values(sort: ["sort"]) {
+        id
+        term
+        definition
+      }
+    }
     terms {
       glossary_terms_id {
         id

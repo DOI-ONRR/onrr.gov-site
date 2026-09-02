@@ -420,7 +420,7 @@ if (datasetExport) {
       class="data-table-wrap"
       :style="{ '--thead-h': theadH ? `${theadH}px` : undefined, '--dim-w': dimW ? `${dimW}px` : undefined }"
     >
-      <table class="usa-table usa-table--compact width-full margin-top-0 pivot">
+      <table class="usa-table usa-table--compact width-full margin-y-0 pivot">
         <caption class="usa-sr-only">
           Disbursement totals grouped by {{ groupByLabel }}, with calendar-year columns and
           collapsible monthly detail. Reflects the current filters.
@@ -528,6 +528,9 @@ if (datasetExport) {
 .data-table-wrap {
   max-height: 36rem;
   overflow: auto;
+  // Isolate the scroll container's layout: without this, a pivot taller than max-height
+  // leaks its full (scrolled) height into the document, adding blank space past the footer.
+  contain: layout;
   border: 1px solid #dfe1e2;
 
   thead th {

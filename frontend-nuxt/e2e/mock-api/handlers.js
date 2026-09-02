@@ -11,6 +11,7 @@ import { paymentOptionsPage } from '../fixtures/payment-options.js'
 import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
 import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactTopicPage, contactTopicPagePaged } from '../fixtures/contact-hub.js'
+import { datasetPage, pivotOptions, pivotResponse, disbursementCount } from '../fixtures/dataset-preview.js'
 
 /**
  * Each handler has:
@@ -136,6 +137,8 @@ export const handlers = [
       // An authored topic page whose contacts block is scoped by contact_topic.
       if (variables?.slug === 'oil-gas-reporting-topic') return { page: [contactTopicPage] }
       if (variables?.slug === 'oil-gas-reporting-paged') return { page: [contactTopicPagePaged] }
+      // Dataset page: has dataset_metadata → renders DatasetView (preview + downloads).
+      if (variables?.slug === 'monthly-disbursements') return { page: [datasetPage] }
       return {
         page: [{
           __typename: 'pages',
@@ -209,5 +212,20 @@ export const restHandlers = [
   {
     match: (url) => url === '/items/index_zones',
     resolve: () => ({ data: indexZonesRows }),
+  },
+  // Dataset preview (DisbursementPreview) pivot endpoints.
+  {
+    match: (url) => url === '/charts/disbursement/pivot/options',
+    resolve: () => pivotOptions,
+  },
+  {
+    match: (url) => url === '/charts/disbursement/pivot',
+    // Vary the groups by the requested group-by dimension.
+    resolve: (urlPath, fullUrl = '') => pivotResponse(new URL(fullUrl, 'http://x').searchParams.get('groupBy') || 'recipient'),
+  },
+  // Full-dataset record count for the Download section's native-export card.
+  {
+    match: (url) => url === '/items/disbursement',
+    resolve: () => disbursementCount,
   },
 ]
