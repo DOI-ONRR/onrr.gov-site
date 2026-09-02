@@ -525,3 +525,32 @@ export async function disbursementPivotOptions(database) {
 	]);
 	return { months, states, commodities, sources, recipients: RECIPIENT_GROUPS.map((g) => ({ key: g.key, label: g.label })) };
 }
+
+// Raw disbursement records matching the pivot filters (Monthly-enforced), for the
+// dataset Download section's "filtered selection" CSV. Readable columns come from the
+// joined dimension tables, and applyPivotFilters gives the recipient-group / source /
+// date / state / commodity filters identical behavior to the pivot table.
+export async function disbursementRecords(database, opts = {}) {
+	const table = 'disbursement';
+	const q = database
+		.select(
+			'p.period_date',
+			'f.type as fund_type',
+			'l.land_category',
+			'f.disbursement_type',
+			'l.state_name',
+			'l.county',
+			'f.recipient',
+			'f.source',
+			'c.name as commodity',
+			`${table}.amount`
+		)
+		.from(table)
+		.join('period as p', `${table}.period`, 'p.id')
+		.leftJoin('fund as f', `${table}.fund`, 'f.id')
+		.leftJoin('location as l', `${table}.location`, 'l.id')
+		.leftJoin('commodity as c', `${table}.commodity`, 'c.id')
+		.orderBy('p.period_date', 'asc');
+	await applyPivotFilters(database, q, opts);
+	return q;
+}

@@ -1,4 +1,4 @@
-import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals, topStates, monthlyByRecipientGroup, disbursementPivot, disbursementPivotOptions, pivotDimensions } from '../lib/breakouts.js';
+import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTotals, calendarYearTotals, topStates, monthlyByRecipientGroup, disbursementPivot, disbursementPivotOptions, disbursementRecords, pivotDimensions } from '../lib/breakouts.js';
 
 // Split a query param that may arrive as a repeated param (array) or a single
 // comma-separated string into a clean array of trimmed, non-empty values.
@@ -123,6 +123,41 @@ export default (router, { database }, base = '') => {
 		} catch (error) {
 			console.error('charts/disbursement/pivot error:', error);
 			res.status(500).json({ error: 'Failed to fetch disbursement pivot' });
+		}
+	});
+
+	// GET /charts/disbursement/export?from=&to=&recipients=&sources=&state=&commodity=
+	// Streams the raw disbursement records matching the current preview filters as CSV
+	// (Monthly-enforced), for the dataset Download section's "filtered selection" card.
+	// Same filter params as /pivot; recipients = RECIPIENT_GROUPS keys, sources = raw
+	// fund.source values.
+	router.get(`${base}/export`, async (req, res) => {
+		const { from, to, state, commodity } = req.query;
+		try {
+			const rows = await disbursementRecords(database, {
+				from: from || null,
+				to: to || null,
+				state: state || null,
+				commodity: commodity || null,
+				recipients: csvParam(req.query.recipients),
+				sources: csvParam(req.query.sources),
+			});
+			const head = ['Date', 'Fund Type', 'Land Category', 'Disbursement Type', 'State', 'County', 'Recipient', 'Source', 'Commodity', 'Disbursement'];
+			const esc = (v) => {
+				const s = v == null ? '' : String(v);
+				return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+			};
+			const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? '').slice(0, 10));
+			const lines = [head.join(',')];
+			for (const r of rows) {
+				lines.push([ymd(r.period_date), r.fund_type, r.land_category, r.disbursement_type, r.state_name, r.county, r.recipient, r.source, r.commodity, r.amount].map(esc).join(','));
+			}
+			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+			res.setHeader('Content-Disposition', 'attachment; filename="disbursements_filtered.csv"');
+			res.send(lines.join('\n'));
+		} catch (error) {
+			console.error('charts/disbursement/export error:', error);
+			res.status(500).json({ error: 'Failed to export disbursements' });
 		}
 	});
 
