@@ -34,12 +34,8 @@ function ensureTooltip() {
 function showTip(el, entry) {
   const tip = ensureTooltip()
   if (!tip) return
-  tip.textContent = ''
-  const head = document.createElement('span')
-  head.className = 'glossary-tooltip__term'
-  head.textContent = entry.term
-  tip.appendChild(head)
-  tip.appendChild(document.createTextNode(entry.definition || ''))
+  // Definition only — the user is already hovering the term, so repeating it is redundant.
+  tip.textContent = entry.definition || ''
   tip.classList.add('is-visible')
 
   const r = el.getBoundingClientRect()

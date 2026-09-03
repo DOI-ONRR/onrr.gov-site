@@ -14,6 +14,12 @@ const props = defineProps({
 
 const { resolveImages } = useCmsContent()
 
+// Glossary-term tooltips for any tagged spans in this view's content.
+const { enhance: enhanceGlossary } = useGlossary()
+const glossaryRoot = ref(null)
+onMounted(() => enhanceGlossary(glossaryRoot.value))
+watch(() => props.dataset, () => nextTick(() => enhanceGlossary(glossaryRoot.value)))
+
 const charts = computed(() => props.dataset.charts ?? [])
 
 // `formats` is a select-multiple-dropdown -> array of strings (["CSV","XLSX",...]).
@@ -76,7 +82,7 @@ provide('datasetPreviewExport', previewExport)
 </script>
 
 <template>
-  <div class="dataset">
+  <div class="dataset" ref="glossaryRoot">
     <div class="grid-row grid-gap margin-bottom-4">
       <div v-if="dataset.description" class="tablet:grid-col-8">
         <!-- Reading-measure cap lives on the text, not the grid column, so the

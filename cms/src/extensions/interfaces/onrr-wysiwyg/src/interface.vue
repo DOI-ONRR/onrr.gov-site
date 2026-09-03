@@ -546,8 +546,8 @@ function generateTable() {
 <style scoped>
   .onrr-editor {
     background-color: var(--background-page);
-    border: var(--border-width) solid var(--border-normal);
-    border-radius: var(--border-radius);
+    border: var(--theme--border-width) solid var(--theme--form--field--input--border-color);
+    border-radius: var(--theme--border-radius);
   }
   
   .onrr-editor:focus-within {
@@ -558,4 +558,25 @@ function generateTable() {
 
 <style>
 @import "./styles/tailwind.css";
+
+/* Match the native Directus WYSIWYG (Tiptap) toolbar: subdued background + subtle divider.
+   Non-scoped so the rules reach TinyMCE's dynamically-created .tox toolbar elements. */
+.onrr-editor .tox .tox-editor-header,
+.onrr-editor .tox .tox-toolbar-overlord,
+.onrr-editor .tox .tox-toolbar__primary {
+  background-color: var(--theme--background-subdued, #f7fafc);
+}
+.onrr-editor .tox .tox-editor-header {
+  border-bottom: 1px solid var(--theme--border-color, #e4eaf1) !important;
+  padding: 0px !important;
+  box-shadow: none !important;
+}
+
+.onrr-editor .tox .tox-tbtn {
+  background: none !important;
+}
+
+.onrr-editor .tox-tinymce {
+  border: none;
+}
 </style>

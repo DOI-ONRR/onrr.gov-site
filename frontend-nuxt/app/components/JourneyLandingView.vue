@@ -15,6 +15,12 @@ const props = defineProps({
 
 const { resolveImages } = useCmsContent()
 
+// Glossary-term tooltips for any tagged spans in this view's content.
+const { enhance: enhanceGlossary } = useGlossary()
+const glossaryRoot = ref(null)
+onMounted(() => enhanceGlossary(glossaryRoot.value))
+watch(() => props.page, () => nextTick(() => enhanceGlossary(glossaryRoot.value)))
+
 const blocks = computed(() => props.page?.page_blocks ?? [])
 // Eyebrow = parent section name (e.g. the hub this journey belongs to); optional.
 const eyebrow = computed(() => props.page?.parent?.title || null)
@@ -42,7 +48,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
 </script>
 
 <template>
-  <div class="journey-landing">
+  <div class="journey-landing" ref="glossaryRoot">
     <div class="grid-row grid-gap">
       <!-- Journey content (hero + steps / body) -->
       <div class="tablet:grid-col-8">
