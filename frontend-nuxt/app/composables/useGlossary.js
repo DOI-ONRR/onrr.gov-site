@@ -34,8 +34,18 @@ function ensureTooltip() {
 function showTip(el, entry) {
   const tip = ensureTooltip()
   if (!tip) return
-  // Definition only — the user is already hovering the term, so repeating it is redundant.
-  tip.textContent = entry.definition || ''
+  tip.textContent = ''
+  // Show the canonical term as a heading only when the tagged text differs from it beyond
+  // case — e.g. a plural ("trust lands") or a different phrasing. A mere case difference
+  // ("Trust land" vs "Trust Land") is treated as the same word, so the heading is omitted.
+  const tagged = (el.textContent || '').trim()
+  if (tagged.toLowerCase() !== entry.term.toLowerCase()) {
+    const head = document.createElement('span')
+    head.className = 'glossary-tooltip__term'
+    head.textContent = entry.term
+    tip.appendChild(head)
+  }
+  tip.appendChild(document.createTextNode(entry.definition || ''))
   tip.classList.add('is-visible')
 
   const r = el.getBoundingClientRect()
