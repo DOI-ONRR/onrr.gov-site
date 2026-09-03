@@ -15,7 +15,14 @@ export default {
       'public'
     );
 
-    router.use('/', express.static(rootDir, { index: false, maxAge: '7d', immutable: true }));
+    // Plugin files (link.js, table.js, glossary.js, …) are served at stable URLs but their
+    // contents change on every rebuild, so they must revalidate — otherwise the browser pins
+    // a stale build. maxAge:0 keeps etag/last-modified, so unchanged files still 304.
+    router.use('/plugins', express.static(path.join(rootDir, 'plugins'), { index: false, maxAge: 0 }));
+
+    // TinyMCE core assets are version-stable — safe to cache long (no `immutable`, so they can
+    // still revalidate after expiry).
+    router.use('/', express.static(rootDir, { index: false, maxAge: '7d' }));
 
     // sanity checks
     router.get('/_ping', (_req, res) => res.send('ok'));

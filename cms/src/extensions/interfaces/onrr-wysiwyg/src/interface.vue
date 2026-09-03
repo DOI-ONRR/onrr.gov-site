@@ -217,8 +217,12 @@ const config = computed(() => {
         else if (e.command === 'mceOnrrGlossary') {
           if (typeof e.preventDefault === 'function') e.preventDefault()
           // Capture the current selection (text + a restorable bookmark) before the drawer
-          // takes focus, so we can wrap exactly what the editor highlighted.
-          glossarySelectionText.value = editor.selection.getContent({ format: 'text' }) || ''
+          // takes focus, so we can wrap exactly what the editor highlighted. When the caret
+          // is already inside a tagged term (Change term), seed the search with its text.
+          const existingTerm = editor.dom.getParent(editor.selection.getNode(), 'span.term')
+          glossarySelectionText.value = existingTerm
+            ? (existingTerm.textContent || '')
+            : (editor.selection.getContent({ format: 'text' }) || '')
           glossaryBookmark = editor.selection.getBookmark?.(2, true)
           glossaryDrawerOpen.value = true
         }
@@ -512,10 +516,18 @@ function onGlossarySave(term) {
   editor.undoManager.transact(() => {
     if (glossaryBookmark) editor.selection.moveToBookmark(glossaryBookmark)
     const slug = glossarySlug(term.term)
-    const text = editor.selection.getContent({ format: 'text' }) || term.term
-    const span = `<span class="term" data-term="${slug}">${editor.dom.encode(text)}</span>`
-    editor.insertContent(span)
+    const existing = editor.dom.getParent(editor.selection.getNode(), 'span.term')
+    if (existing) {
+      // Already tagged (Change term) — re-point this span instead of nesting a new one.
+      editor.dom.setAttrib(existing, 'data-term', slug)
+      editor.selection.select(existing)
+    } else {
+      const text = editor.selection.getContent({ format: 'text' }) || term.term
+      const span = `<span class="term" data-term="${slug}">${editor.dom.encode(text)}</span>`
+      editor.insertContent(span)
+    }
   })
+  editor.dispatch?.('change')
   glossaryBookmark = null
   glossarySelectionText.value = ''
   glossaryDrawerOpen.value = false
