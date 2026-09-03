@@ -42,6 +42,19 @@ module.exports = function (env) {
 
           SYNCHRONIZATION_STORE: 'redis',
           SYNCHRONIZATION_NAMESPACE: 'directus-sync',
+
+          // Origin rate-limit backstop for the public data API. GLOBAL (not per-IP):
+          // behind CloudFront -> route-service the client IP arrives only inside a
+          // multi-hop X-Forwarded-For chain (with rotating CloudFront edge IPs), so a
+          // per-IP limiter here can't key reliably. Per-IP throttling belongs at the
+          // edge (CloudFront/WAF, which sees the real client IP); this is just a shared
+          // (Redis-backed, counted across both prod instances) ceiling that protects the
+          // DB from a runaway. Most repeat traffic is absorbed by the 30m response cache,
+          // so this should rarely trip — tune POINTS/DURATION once there's real load data.
+          RATE_LIMITER_GLOBAL_ENABLED: true,
+          RATE_LIMITER_GLOBAL_STORE: 'redis',
+          RATE_LIMITER_GLOBAL_POINTS: 1000,
+          RATE_LIMITER_GLOBAL_DURATION: 1,
         }
       : {
           CACHE_ENABLED: false,
