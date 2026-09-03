@@ -26,6 +26,12 @@ const props = defineProps({
 
 const { resolveImages } = useCmsContent()
 
+// Glossary-term tooltips for any tagged spans in this view's content.
+const { enhance: enhanceGlossary } = useGlossary()
+const glossaryRoot = ref(null)
+onMounted(() => enhanceGlossary(glossaryRoot.value))
+watch(() => props.page, () => nextTick(() => enhanceGlossary(glossaryRoot.value)))
+
 const introBlocks = computed(
   () => (props.page?.page_blocks ?? []).filter((b) => b.item?.__typename === 'content_blocks'),
 )
@@ -45,7 +51,7 @@ const dataHeading = computed(() => props.page?.data_heading || null)
 </script>
 
 <template>
-  <div class="audience-hub">
+  <div class="audience-hub" ref="glossaryRoot">
     <!-- Full-width tinted header band: breadcrumb + h1 + intro. The band spans the
          viewport; the inner .grid-container re-constrains its content to the site width. -->
     <div class="hub-header">

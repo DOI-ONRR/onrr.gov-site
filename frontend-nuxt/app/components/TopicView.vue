@@ -11,6 +11,7 @@ const props = defineProps({
 })
 
 const { resolveImages } = useCmsContent()
+const { enhance: enhanceGlossary } = useGlossary()
 
 const blocks = computed(() => props.page?.page_blocks ?? [])
 // Eyebrow = parent topic name (e.g. "How revenue works"); optional.
@@ -75,10 +76,11 @@ function spy() {
 onMounted(() => {
   buildSections()
   spy()
+  enhanceGlossary(contentEl.value)
   window.addEventListener('scroll', spy, { passive: true })
 })
 onBeforeUnmount(() => window.removeEventListener('scroll', spy))
-watch(blocks, () => nextTick(() => { buildSections(); spy() }))
+watch(blocks, () => nextTick(() => { buildSections(); spy(); enhanceGlossary(contentEl.value) }))
 
 // Smooth-scroll to a section (and update the hash) ourselves, so the scroll works
 // regardless of the client-assigned heading ids. scrollIntoView scrolls as far as it

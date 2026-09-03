@@ -29,6 +29,13 @@
       @cancel="cancelImage"
     />
 
+    <glossary-drawer
+      v-model="glossaryDrawerOpen"
+      :selection-text="glossarySelectionText"
+      @select="onGlossarySave"
+      @cancel="() => (glossaryDrawerOpen = false)"
+    />
+
     <Editor
       :key="editorKey"
       api-key="no-api-key"
@@ -49,6 +56,7 @@ import { createTinyConfig } from './tinymce/config'
 import CodeEditorDrawer from './CodeEditorDrawer.vue'
 import LinkDrawer from './LinkDrawer.vue';
 import ImageDrawer from './ImageDrawer.vue'
+import GlossaryDrawer from './GlossaryDrawer.vue'
 
 const props = defineProps({
   value: {
@@ -62,6 +70,9 @@ const emit = defineEmits(['input'])
 const codeEditorDrawerOpen = ref(false)
 const imageDrawerOpen = ref(false)
 const linkDrawerOpen = ref(false)
+const glossaryDrawerOpen = ref(false)
+const glossarySelectionText = ref('')
+let glossaryBookmark = null
 const sourceCode = ref('')
 const tinyRef = ref(null)
 const lastAppliedFromProps = ref(null)
@@ -195,6 +206,14 @@ const config = computed(() => {
         else if (e.command === 'mceOnrrLink') {
           if (typeof e.preventDefault === 'function') e.preventDefault()
           linkDrawerOpen.value = true
+        }
+        else if (e.command === 'mceOnrrGlossary') {
+          if (typeof e.preventDefault === 'function') e.preventDefault()
+          // Capture the current selection (text + a restorable bookmark) before the drawer
+          // takes focus, so we can wrap exactly what the editor highlighted.
+          glossarySelectionText.value = editor.selection.getContent({ format: 'text' }) || ''
+          glossaryBookmark = editor.selection.getBookmark?.(2, true)
+          glossaryDrawerOpen.value = true
         }
         else if (e.command === 'mceOnrrTable') {
           editor.insertContent(generateTable(), { format: 'html' })
@@ -465,6 +484,36 @@ function onLinkSave(linkForm) {
   })
 }
 
+// Slug scheme must match the frontend (glossary.vue / useGlossary.js) so data-term
+// resolves to the right glossary entry at render time.
+function glossarySlug(s) {
+  return String(s)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+// Wrap the highlighted text in <span class="term" data-term="slug">…</span>. The definition
+// is NOT stored here — it's resolved from glossary_terms on the frontend. If nothing was
+// selected, the term's own name is inserted.
+function onGlossarySave(term) {
+  const editor = getTinyEditorInstance()
+  if (!editor) {
+    glossaryDrawerOpen.value = false
+    return
+  }
+  editor.undoManager.transact(() => {
+    if (glossaryBookmark) editor.selection.moveToBookmark(glossaryBookmark)
+    const slug = glossarySlug(term.term)
+    const text = editor.selection.getContent({ format: 'text' }) || term.term
+    const span = `<span class="term" data-term="${slug}">${editor.dom.encode(text)}</span>`
+    editor.insertContent(span)
+  })
+  glossaryBookmark = null
+  glossarySelectionText.value = ''
+  glossaryDrawerOpen.value = false
+}
+
 function assetUrl(filenameDisk) {
   return `/assets/${filenameDisk}`
 }
@@ -497,8 +546,8 @@ function generateTable() {
 <style scoped>
   .onrr-editor {
     background-color: var(--background-page);
-    border: var(--border-width) solid var(--border-normal);
-    border-radius: var(--border-radius);
+    border: var(--theme--border-width) solid var(--theme--form--field--input--border-color);
+    border-radius: var(--theme--border-radius);
   }
   
   .onrr-editor:focus-within {
@@ -509,4 +558,25 @@ function generateTable() {
 
 <style>
 @import "./styles/tailwind.css";
+
+/* Match the native Directus WYSIWYG (Tiptap) toolbar: subdued background + subtle divider.
+   Non-scoped so the rules reach TinyMCE's dynamically-created .tox toolbar elements. */
+.onrr-editor .tox .tox-editor-header,
+.onrr-editor .tox .tox-toolbar-overlord,
+.onrr-editor .tox .tox-toolbar__primary {
+  background-color: var(--theme--background-subdued, #f7fafc);
+}
+.onrr-editor .tox .tox-editor-header {
+  border-bottom: 1px solid var(--theme--border-color, #e4eaf1) !important;
+  padding: 0px !important;
+  box-shadow: none !important;
+}
+
+.onrr-editor .tox .tox-tbtn {
+  background: none !important;
+}
+
+.onrr-editor .tox-tinymce {
+  border: none;
+}
 </style>
