@@ -20,14 +20,16 @@
       </div>
     </template>
 
-    <InputCodeMirror
-      v-model="localCode"
-      language="html"
-      :height="height"
-      :tabSize="tabSize"
-      :softWrap="softWrap"
-      :disabled="disabled"
-    />
+    <div class="code-drawer-body">
+      <InputCodeMirror
+        v-model="localCode"
+        language="html"
+        :height="height"
+        :tabSize="tabSize"
+        :softWrap="softWrap"
+        :disabled="disabled"
+      />
+    </div>
   </v-drawer>
 </template>
 
@@ -53,3 +55,9 @@ const localCode = computed({
   set: (v) => emit('update:code', v),
 })
 </script>
+
+<style scoped>
+.code-drawer-body {
+  padding: 2rem;
+}
+</style>

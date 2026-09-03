@@ -57,6 +57,7 @@ import CodeEditorDrawer from './CodeEditorDrawer.vue'
 import LinkDrawer from './LinkDrawer.vue';
 import ImageDrawer from './ImageDrawer.vue'
 import GlossaryDrawer from './GlossaryDrawer.vue'
+import beautify from 'js-beautify'
 
 const props = defineProps({
   value: {
@@ -200,7 +201,13 @@ const config = computed(() => {
       editor.on('BeforeExecCommand', onlyIfAlive((e) => {
         if (e.command === 'mceCodeEditor') {
           if (typeof e.preventDefault === 'function') e.preventDefault()
-          sourceCode.value = editor.getContent({ format: 'html' })
+          // Pretty-print with 2-space indent for the source view. TinyMCE re-normalizes
+          // the whitespace on save (applyCodeToEditor -> setContent), so this is display-only.
+          sourceCode.value = beautify.html(editor.getContent({ format: 'html' }), {
+            indent_size: 2,
+            wrap_line_length: 0,
+            preserve_newlines: true,
+          })
           codeEditorDrawerOpen.value = true
         }
         else if (e.command === 'mceOnrrLink') {

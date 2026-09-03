@@ -1,22 +1,24 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { EditorState, Compartment } from '@codemirror/state';
-import { EditorView, lineNumbers } from '@codemirror/view';
+import { EditorView, lineNumbers, keymap } from '@codemirror/view';
 import {
-  defaultHighlightStyle, syntaxHighlighting, indentOnInput,
+  defaultHighlightStyle, syntaxHighlighting, indentOnInput, indentUnit,
   bracketMatching, foldGutter, foldKeymap
 } from "@codemirror/language"
 import {
   autocompletion, completionKeymap, closeBrackets,
   closeBracketsKeymap
 } from "@codemirror/autocomplete"
-import { history } from '@codemirror/commands';
+import { history, historyKeymap, defaultKeymap, indentWithTab } from '@codemirror/commands';
 import { html } from '@codemirror/lang-html';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
   disabled: { type: Boolean, default: false },
   height: { type: [Number, String], default: 220 },
+  tabSize: { type: Number, default: 2 },
+  softWrap: { type: Boolean, default: false },
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -70,6 +72,10 @@ onMounted(() => {
       closeBrackets(),
       autocompletion(),
       indentOnInput(),
+      indentUnit.of(' '.repeat(props.tabSize)),
+      EditorState.tabSize.of(props.tabSize),
+      keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
+      ...(props.softWrap ? [EditorView.lineWrapping] : []),
       history(),
       language.of(html()),
       editorTheme(props.height),
@@ -103,8 +109,9 @@ onBeforeUnmount(() => view?.destroy());
 </template>
 
 <style scoped lang="scss">
+  /* Spacing is owned by the drawer (.code-drawer-body padding), so the editor itself
+     stays flush and reusable. */
   .input-code-mirror {
-    margin-left: 2rem;
-    margin-right: 2rem;
+    width: 100%;
   }
 </style>
