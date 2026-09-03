@@ -1,0 +1,42 @@
+@use "onrr-colors" as *;
+
+// Glossary terms tagged in CMS content as <span class="term" data-term="slug">…</span>.
+// The definition is resolved from the glossary_terms collection at render time by the
+// useGlossary() composable — this partial only styles the inline trigger and the shared
+// tooltip. Global (not scoped): the trigger lives inside v-html content, and the tooltip
+// is appended to <body>.
+
+.term {
+  border-bottom: 1px dotted $onrr-blue;
+  cursor: help;
+}
+
+.term:focus,
+.term:focus-visible {
+  outline: 2px solid $onrr-blue;
+  outline-offset: 2px;
+}
+
+.glossary-tooltip {
+  position: absolute;
+  z-index: 1000;
+  max-width: 320px;
+  background: #1b1b1b;
+  color: #f0f0f0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  padding: 0.6rem 0.8rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  display: none;
+}
+
+.glossary-tooltip.is-visible {
+  display: block;
+}
+
+.glossary-tooltip__term {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
