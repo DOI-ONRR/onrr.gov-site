@@ -1,5 +1,5 @@
 <template>
-  <main class="onrr-editor">
+  <main class="onrr-editor" :class="{ 'is-focused': editorFocused }">
     
     <link-drawer 
       v-model="linkDrawerOpen" 
@@ -73,6 +73,9 @@ const imageDrawerOpen = ref(false)
 const linkDrawerOpen = ref(false)
 const glossaryDrawerOpen = ref(false)
 const glossarySelectionText = ref('')
+// TinyMCE runs the editable body in an iframe; when that iframe is the activeElement,
+// `:focus-within` does NOT match the outer container. Track focus via editor events instead.
+const editorFocused = ref(false)
 let glossaryBookmark = null
 const sourceCode = ref('')
 const tinyRef = ref(null)
@@ -180,6 +183,9 @@ const config = computed(() => {
           imageDrawerOpen.value = true
         },
       })
+
+      editor.on('focus', onlyIfAlive(() => { editorFocused.value = true }))
+      editor.on('blur', onlyIfAlive(() => { editorFocused.value = false }))
 
       editor.on('input change Undo Redo KeyUp', onlyIfAlive(() => {
         const html = editor.getContent({ format: 'html' })
@@ -569,8 +575,13 @@ function generateTable() {
     border-radius: var(--theme--border-radius);
   }
   
+  /* Match the focus styling of the standard Directus inputs (border + focus ring).
+     `.is-focused` covers editing (iframe focus, where :focus-within fails); :focus-within
+     covers focus on the toolbar buttons. */
+  .onrr-editor.is-focused,
   .onrr-editor:focus-within {
-    border-color: var(--primary);
+    border-color: var(--v-input-border-color-focus, var(--theme--form--field--input--border-color-focus));
+    outline: var(--focus-ring-width) solid var(--v-input-focus-ring-color, var(--theme--form--field--input--focus-ring-color));
   }
 
 </style>
@@ -582,7 +593,8 @@ function generateTable() {
    Non-scoped so the rules reach TinyMCE's dynamically-created .tox toolbar elements. */
 .onrr-editor .tox .tox-editor-header,
 .onrr-editor .tox .tox-toolbar-overlord,
-.onrr-editor .tox .tox-toolbar__primary {
+.onrr-editor .tox .tox-toolbar__primary,
+.onrr-editor .tox.tox-tinymce-aux .tox-toolbar__overflow {
   background-color: var(--theme--background-subdued, #f7fafc);
 }
 .onrr-editor .tox .tox-editor-header {
@@ -597,5 +609,11 @@ function generateTable() {
 
 .onrr-editor .tox-tinymce {
   border: none;
+}
+
+/* Drop oxide's own blue focus border on the edit area — redundant now that the container
+   shows the Directus focus ring. */
+.onrr-editor .tox .tox-edit-area::before {
+  border: 0 !important;
 }
 </style>
