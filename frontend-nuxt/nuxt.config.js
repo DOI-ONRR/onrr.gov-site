@@ -46,6 +46,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8056',
+      // Public data API base (the data.onrr.gov subdomain), used by the /developers docs
+      // for the documented base URL and the "Run" example links. Override per-env with
+      // NUXT_PUBLIC_DATA_API_BASE if the subdomain differs before DNS is live.
+      dataApiBase: process.env.NUXT_PUBLIC_DATA_API_BASE || 'https://data.onrr.gov',
     },
   },
 })
