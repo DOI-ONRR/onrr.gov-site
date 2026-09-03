@@ -34,3 +34,10 @@
 .glossary-tooltip.is-visible {
   display: block;
 }
+
+// Canonical term heading, shown only when the tagged text differs from the term.
+.glossary-tooltip__term {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 2px;
+}

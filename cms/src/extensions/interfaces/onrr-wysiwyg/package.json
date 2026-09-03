@@ -44,6 +44,7 @@
 		"@directus/sdk": "^21.3.0",
 		"@tarekraafat/autocomplete.js": "^10.2.10",
 		"@tinymce/tinymce-vue": "^6.3.0",
+		"js-beautify": "^2.0.3",
 		"jsonlint-mod": "^1.7.6"
 	},
 	"overrides": {

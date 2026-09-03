@@ -1,5 +1,5 @@
 <template>
-  <main class="onrr-editor">
+  <main class="onrr-editor" :class="{ 'is-focused': editorFocused }">
     
     <link-drawer 
       v-model="linkDrawerOpen" 
@@ -57,6 +57,7 @@ import CodeEditorDrawer from './CodeEditorDrawer.vue'
 import LinkDrawer from './LinkDrawer.vue';
 import ImageDrawer from './ImageDrawer.vue'
 import GlossaryDrawer from './GlossaryDrawer.vue'
+import beautify from 'js-beautify'
 
 const props = defineProps({
   value: {
@@ -72,6 +73,9 @@ const imageDrawerOpen = ref(false)
 const linkDrawerOpen = ref(false)
 const glossaryDrawerOpen = ref(false)
 const glossarySelectionText = ref('')
+// TinyMCE runs the editable body in an iframe; when that iframe is the activeElement,
+// `:focus-within` does NOT match the outer container. Track focus via editor events instead.
+const editorFocused = ref(false)
 let glossaryBookmark = null
 const sourceCode = ref('')
 const tinyRef = ref(null)
@@ -180,6 +184,9 @@ const config = computed(() => {
         },
       })
 
+      editor.on('focus', onlyIfAlive(() => { editorFocused.value = true }))
+      editor.on('blur', onlyIfAlive(() => { editorFocused.value = false }))
+
       editor.on('input change Undo Redo KeyUp', onlyIfAlive(() => {
         const html = editor.getContent({ format: 'html' })
         sourceCode.value = html
@@ -200,7 +207,13 @@ const config = computed(() => {
       editor.on('BeforeExecCommand', onlyIfAlive((e) => {
         if (e.command === 'mceCodeEditor') {
           if (typeof e.preventDefault === 'function') e.preventDefault()
-          sourceCode.value = editor.getContent({ format: 'html' })
+          // Pretty-print with 2-space indent for the source view. TinyMCE re-normalizes
+          // the whitespace on save (applyCodeToEditor -> setContent), so this is display-only.
+          sourceCode.value = beautify.html(editor.getContent({ format: 'html' }), {
+            indent_size: 2,
+            wrap_line_length: 0,
+            preserve_newlines: true,
+          })
           codeEditorDrawerOpen.value = true
         }
         else if (e.command === 'mceOnrrLink') {
@@ -210,8 +223,12 @@ const config = computed(() => {
         else if (e.command === 'mceOnrrGlossary') {
           if (typeof e.preventDefault === 'function') e.preventDefault()
           // Capture the current selection (text + a restorable bookmark) before the drawer
-          // takes focus, so we can wrap exactly what the editor highlighted.
-          glossarySelectionText.value = editor.selection.getContent({ format: 'text' }) || ''
+          // takes focus, so we can wrap exactly what the editor highlighted. When the caret
+          // is already inside a tagged term (Change term), seed the search with its text.
+          const existingTerm = editor.dom.getParent(editor.selection.getNode(), 'span.term')
+          glossarySelectionText.value = existingTerm
+            ? (existingTerm.textContent || '')
+            : (editor.selection.getContent({ format: 'text' }) || '')
           glossaryBookmark = editor.selection.getBookmark?.(2, true)
           glossaryDrawerOpen.value = true
         }
@@ -505,10 +522,18 @@ function onGlossarySave(term) {
   editor.undoManager.transact(() => {
     if (glossaryBookmark) editor.selection.moveToBookmark(glossaryBookmark)
     const slug = glossarySlug(term.term)
-    const text = editor.selection.getContent({ format: 'text' }) || term.term
-    const span = `<span class="term" data-term="${slug}">${editor.dom.encode(text)}</span>`
-    editor.insertContent(span)
+    const existing = editor.dom.getParent(editor.selection.getNode(), 'span.term')
+    if (existing) {
+      // Already tagged (Change term) — re-point this span instead of nesting a new one.
+      editor.dom.setAttrib(existing, 'data-term', slug)
+      editor.selection.select(existing)
+    } else {
+      const text = editor.selection.getContent({ format: 'text' }) || term.term
+      const span = `<span class="term" data-term="${slug}">${editor.dom.encode(text)}</span>`
+      editor.insertContent(span)
+    }
   })
+  editor.dispatch?.('change')
   glossaryBookmark = null
   glossarySelectionText.value = ''
   glossaryDrawerOpen.value = false
@@ -550,8 +575,13 @@ function generateTable() {
     border-radius: var(--theme--border-radius);
   }
   
+  /* Match the focus styling of the standard Directus inputs (border + focus ring).
+     `.is-focused` covers editing (iframe focus, where :focus-within fails); :focus-within
+     covers focus on the toolbar buttons. */
+  .onrr-editor.is-focused,
   .onrr-editor:focus-within {
-    border-color: var(--primary);
+    border-color: var(--v-input-border-color-focus, var(--theme--form--field--input--border-color-focus));
+    outline: var(--focus-ring-width) solid var(--v-input-focus-ring-color, var(--theme--form--field--input--focus-ring-color));
   }
 
 </style>
@@ -563,7 +593,8 @@ function generateTable() {
    Non-scoped so the rules reach TinyMCE's dynamically-created .tox toolbar elements. */
 .onrr-editor .tox .tox-editor-header,
 .onrr-editor .tox .tox-toolbar-overlord,
-.onrr-editor .tox .tox-toolbar__primary {
+.onrr-editor .tox .tox-toolbar__primary,
+.onrr-editor .tox.tox-tinymce-aux .tox-toolbar__overflow {
   background-color: var(--theme--background-subdued, #f7fafc);
 }
 .onrr-editor .tox .tox-editor-header {
@@ -578,5 +609,11 @@ function generateTable() {
 
 .onrr-editor .tox-tinymce {
   border: none;
+}
+
+/* Drop oxide's own blue focus border on the edit area — redundant now that the container
+   shows the Directus focus ring. */
+.onrr-editor .tox .tox-edit-area::before {
+  border: 0 !important;
 }
 </style>
