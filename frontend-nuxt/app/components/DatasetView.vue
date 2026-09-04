@@ -79,6 +79,25 @@ const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceColl
 // Download section's third card consumes it (works for any *Preview component).
 const previewExport = ref(null)
 provide('datasetPreviewExport', previewExport)
+
+// Public data API (data.onrr.gov), consistent with the /developers reference. Only the
+// flat-backed datasets are exposed; source_collection maps to the friendly endpoint name.
+// The section stays hidden for datasets without a public endpoint.
+const dataApiBase = useRuntimeConfig().public.dataApiBase
+const API_ENDPOINTS = { disbursement: 'disbursements', revenue: 'revenue', production: 'production' }
+const apiEndpoint = computed(() => API_ENDPOINTS[sourceCollection.value] || null)
+const hasApi = computed(() => !!apiEndpoint.value)
+const apiUrl = computed(() => (apiEndpoint.value ? `${dataApiBase}/${apiEndpoint.value}` : null))
+const apiCopied = ref(false)
+async function copyApiUrl() {
+  try {
+    await navigator.clipboard.writeText(apiUrl.value)
+    apiCopied.value = true
+    setTimeout(() => { apiCopied.value = false }, 1500)
+  } catch (e) {
+    /* clipboard unavailable — the URL stays visible for manual copy */
+  }
+}
 </script>
 
 <template>
@@ -92,7 +111,7 @@ provide('datasetPreviewExport', previewExport)
         <div class="margin-top-2">
           <a class="usa-button" href="#preview">Preview &amp; filter data</a>
           <a class="usa-button usa-button--outline" href="#download">Download files</a>
-          <a class="usa-button usa-button--outline" href="#api">API access</a>
+          <a v-if="hasApi" class="usa-button usa-button--outline" href="#api">API access</a>
         </div>
       </div>
 
@@ -148,15 +167,35 @@ provide('datasetPreviewExport', previewExport)
     </div>
 
     <div class="grid-row grid-gap margin-bottom-2" id="download">
-      <div class="grid-col-12 border-bottom-05 padding-bottom-4 border-onrr-blue">
+      <div class="grid-col-12">
         <h2 class="font-heading-lg">Download</h2>
         <DatasetDownloads :dataset="dataset" :source-table="sourceCollection" />
       </div>
     </div>
 
-    <div class="grid-row grid-gap display-none" id="api">
+    <div v-if="hasApi" class="grid-row grid-gap margin-bottom-2" id="api">
       <h2 class="font-heading-lg">API access</h2>
-      <div class="grid-col-12"></div>
+      <div class="grid-col-12  border-bottom-05 padding-bottom-4 border-onrr-blue">
+        <div>
+          <p>
+            This dataset is available through ONRR's open, read-only data API — no account or
+            API key required. Query it with the standard filters, sorting, and pagination, or
+            download a filtered slice as CSV.
+          </p>
+        </div>
+        <p class="api-endpoint-label">Endpoint</p>
+        <div class="api-block">
+          <code>GET {{ apiUrl }}</code>
+          <button type="button" class="api-copy" @click="copyApiUrl">
+            {{ apiCopied ? 'Copied' : 'Copy' }}
+          </button>
+        </div>
+        <p class="margin-top-2 line-height-sans-3">
+          See the
+          <NuxtLink class="usa-link" to="/developers">Data API documentation</NuxtLink>
+          for the full column reference, query parameters, runnable examples, and bulk downloads.
+        </p>
+      </div>
     </div>
 
     <div class="grid-row grid-gap" id="scope">
@@ -226,5 +265,52 @@ provide('datasetPreviewExport', previewExport)
 .dataset-terms dd {
   margin-left: 0;
   color: #565c65;
+}
+
+// API access: dark endpoint block (matches the mockup's .api-block and the /developers
+// code style) with an inline copy control.
+.api-endpoint-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #565c65;
+  margin: 1rem 0 0.4rem;
+}
+
+.api-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #1b1b1b;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+
+  code {
+    font-family: "Roboto Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.9rem;
+    color: #eef2f7;
+    white-space: pre;
+  }
+}
+
+.api-copy {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #9ec7ff;
+  background: transparent;
+  border: 1px solid #4a5568;
+  border-radius: 3px;
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
 }
 </style>
