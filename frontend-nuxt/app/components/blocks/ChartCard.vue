@@ -88,6 +88,24 @@ const seriesMeasures = computed(() =>
 
 const isPivot = computed(() => groupByFields.value.length >= 2)
 
+// Filter reactivity: when this card opts in (reacts_to_filters) AND a dataset preview on
+// the page publishes its active filters, the (endpoint-backed) chart follows them. The
+// preview publishes { query, empty }; `empty` = nothing selected -> render no data.
+const previewFilters = inject('datasetPreviewFilters', null)
+const reactsToFilters = computed(() => !!card.value.reacts_to_filters && !!previewFilters && isEndpoint.value)
+const activeFilters = computed(() => (reactsToFilters.value ? previewFilters.value : null))
+
+// When a partial recipient selection is published, the chart drops the series (and thus
+// legend entries) for the unselected groups. `all` identifies which series measures are
+// recipient keys; a series whose measure isn't a recipient key is never dropped. null when
+// all (or none, handled by `empty`) are selected -> show every series.
+const recipientFilter = computed(() => {
+  const rf = activeFilters.value?.recipients
+  if (!rf || !Array.isArray(rf.all) || !Array.isArray(rf.selected)) return null
+  if (rf.selected.length >= rf.all.length) return null
+  return { all: new Set(rf.all), selected: new Set(rf.selected) }
+})
+
 const canQuery = computed(() => {
   if (isCollection.value) {
     return (
@@ -108,8 +126,17 @@ const { data: rows, error, pending } = await useAsyncData(
   async () => {
     if (!canQuery.value) return []
     if (isEndpoint.value) {
+      // When reacting to preview filters: `empty` (nothing selected) -> no data; otherwise
+      // merge the published filter params onto the endpoint's own query string.
+      let url = endpointUrl.value
+      if (activeFilters.value) {
+        if (activeFilters.value.empty) return []
+        const params = new URLSearchParams(activeFilters.value.query)
+        const sep = url.includes('?') ? '&' : '?'
+        if ([...params].length) url = `${url}${sep}${params.toString()}`
+      }
       // Endpoints return either a bare array or a Directus-style `{ data: [...] }`.
-      const res = await $fetch(endpointUrl.value)
+      const res = await $fetch(url)
       return Array.isArray(res) ? res : res?.data ?? []
     }
     const query = {
@@ -123,7 +150,9 @@ const { data: rows, error, pending } = await useAsyncData(
     if (card.value.filter) query.filter = JSON.stringify(card.value.filter)
     const res = await $fetch(`${apiUrl}/items/${card.value.source_collection}`, { query })
     return res?.data ?? []
-  }
+  },
+  // Refetch when the published preview filters change (only when this card reacts).
+  { watch: [() => (reactsToFilters.value ? JSON.stringify(activeFilters.value) : null)] }
 )
 
 // Read an aggregate value out of a Directus aggregate row. Field aggregates nest
@@ -213,9 +242,13 @@ function endpointChartData(data) {
   const rawCategories = distinct(data.map((r) => r[key]))
   const byX = {}
   for (const r of data) byX[r[key]] = r
+  // Drop series for unselected recipient groups so the legend follows the filter. Only
+  // recipient-key measures are affected; any other measure is always kept.
+  const rf = recipientFilter.value
+  const measures = rf ? seriesMeasures.value.filter((m) => !rf.all.has(m) || rf.selected.has(m)) : seriesMeasures.value
   return {
     categories: rawCategories.map(formatCategory),
-    series: seriesMeasures.value.map((measure) =>
+    series: measures.map((measure) =>
       buildSeries(
         measure,
         rawCategories.map((c) => {
@@ -518,11 +551,23 @@ async function buildChart() {
   chartInstance = Highcharts.chart(chartEl.value, chartOptions.value)
 }
 
-onMounted(buildChart)
-watch(chartOptions, () => {
-  if (chartInstance) chartInstance.update(chartOptions.value, true, true)
-  else buildChart()
-})
+// The chart <div> lives behind v-if="hasData"; a filter that yields no rows unmounts it
+// and orphans the Highcharts instance. Reconcile against the *current* element: update it
+// in place only when the instance is still attached to the live chartEl, otherwise (re)build.
+function syncChart() {
+  if (!showChart.value || !hasData.value || !chartEl.value) return
+  if (chartInstance && chartInstance.renderTo === chartEl.value) {
+    chartInstance.update(chartOptions.value, true, true)
+  } else {
+    if (chartInstance) chartInstance.destroy()
+    chartInstance = null
+    buildChart()
+  }
+}
+
+onMounted(syncChart)
+// Rebuild/update when the options change AND when the container remounts (hasData flip).
+watch([chartOptions, hasData], () => nextTick(syncChart))
 onBeforeUnmount(() => {
   if (chartInstance) chartInstance.destroy()
 })

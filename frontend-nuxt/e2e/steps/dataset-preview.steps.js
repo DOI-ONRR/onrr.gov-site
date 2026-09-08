@@ -86,3 +86,13 @@ Then('the download card {string} shows {string}', async ({ page }, heading, note
 Then('the {string} download card has a download link', async ({ page }, heading) => {
   await expect(downloadCard(page, heading).locator('a.usa-button')).toBeVisible()
 })
+
+// --- API access section ---
+
+Then('the API endpoint reads {string}', async ({ page }, url) => {
+  await expect(page.locator('#api .api-block code')).toContainText(url)
+})
+
+Then('the API section links to the developer docs at {string}', async ({ page }, href) => {
+  await expect(page.locator(`#api a[href="${href}"]`)).toBeVisible()
+})

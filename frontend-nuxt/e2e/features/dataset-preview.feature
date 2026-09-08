@@ -38,3 +38,8 @@ Feature: Monthly disbursements dataset page
     Then the download card "Full dataset (CSV)" shows "All 50,769 records"
     And the download card "Full dataset (XLSX)" shows "All records with data dictionary · 1.9 MB"
     And the "Your filtered selection" download card has a download link
+
+  Scenario: The API access section shows the endpoint and links to the docs
+    Given I navigate to the monthly disbursements dataset page
+    Then the API endpoint reads "https://data.onrr.gov/disbursements"
+    And the API section links to the developer docs at "/developers"

@@ -20,6 +20,7 @@ fragment chartCardFields on chart_cards {
   filter
   endpoint_url
   x_axis_field
+  reacts_to_filters
   static_data
   # axes
   x_axis_label

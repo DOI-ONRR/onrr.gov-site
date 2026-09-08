@@ -162,23 +162,50 @@ function toggleAll() {
   collapsed.value = allCollapsed.value ? new Set() : new Set(groups.value.map((g) => g.key))
 }
 
+// Normalized filter params shared by the pivot fetch and by the chart (via the
+// datasetPreviewFilters injection). `empty` marks "nothing selected" (no recipients or
+// no sources) so consumers can render an empty result instead of an unfiltered one.
+const filterQuery = computed(() => {
+  const query = {}
+  const months = options.value?.months || []
+  const fullFrom = months[0]
+  const fullTo = months[months.length - 1]
+  // Omit from/to when they span the full available range, so a reactive chart keeps its
+  // CMS default window until the user actually narrows the dates.
+  if (filters.from && filters.from !== fullFrom) query.from = String(filters.from).slice(0, 10)
+  if (filters.to && filters.to !== fullTo) query.to = String(filters.to).slice(0, 10)
+  if (filters.state) query.state = filters.state
+  if (filters.commodity) query.commodity = filters.commodity
+  const empty = !filters.recipients.length || !filters.sources.length
+  // None selected -> empty. All selected -> omit (no filter). Partial -> narrow.
+  if (!empty) {
+    if (filters.recipients.length < allRecipientKeys.value.length) query.recipients = filters.recipients.join(',')
+    if (filters.sources.length < sourceOptions.value.length) query.sources = filters.sources.join(',')
+  }
+  // `recipients` (all keys + the current selection) lets a reactive chart drop the
+  // series/legend entries for unselected recipient groups; the query above handles the data.
+  return { query, empty, recipients: { all: allRecipientKeys.value, selected: [...filters.recipients] } }
+})
+
+// Publish the active filters so a filter-reactive chart on the same page can follow them.
+// null until ready, so the chart uses its CMS default until the preview has options.
+const previewFilters = inject('datasetPreviewFilters', null)
+if (previewFilters) {
+  watchEffect(() => {
+    previewFilters.value = ready.value ? filterQuery.value : null
+  })
+}
+
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(
   'disb-pivot',
   async () => {
     if (!ready.value) return null
-    const query = { groupBy: filters.groupBy }
-    if (filters.from) query.from = String(filters.from).slice(0, 10)
-    if (filters.to) query.to = String(filters.to).slice(0, 10)
-    if (filters.state) query.state = filters.state
-    if (filters.commodity) query.commodity = filters.commodity
-    // None selected -> empty result. All selected -> no filter (omit). Partial -> narrow.
-    if (!filters.recipients.length || !filters.sources.length) {
+    const { query, empty } = filterQuery.value
+    if (empty) {
       return { groupBy: filters.groupBy, years: [], groups: [], grandTotal: 0, recordCount: 0 }
     }
-    if (filters.recipients.length < allRecipientKeys.value.length) query.recipients = filters.recipients.join(',')
-    if (filters.sources.length < sourceOptions.value.length) query.sources = filters.sources.join(',')
-    return $fetch(`${apiUrl}/charts/disbursement/pivot`, { query })
+    return $fetch(`${apiUrl}/charts/disbursement/pivot`, { query: { groupBy: filters.groupBy, ...query } })
   },
   { watch: [() => JSON.stringify(filters), ready] },
 )
