@@ -62,11 +62,15 @@ export default (router, { database }, base = '') => {
 	});
 
 	// GET /charts/disbursement/monthly-by-recipient?months=60  (or ?years=5)
+	//     [&from=&to=&recipients=&sources=&state=&commodity=]
 	// Monthly disbursement totals pivoted into 5 recipient groups - one wide row per
 	// month ({ period_date, month labels, state_local, us_treasury, native_american,
 	// reclamation_fund, other_funds }), chronological - for the dataset-page stacked
 	// column chart. `months` limits to the most recent N months with data; `years` is
 	// the same window in years (years x 12 months) and takes precedence. Default: all.
+	// The optional filter params (same vocabulary as /pivot) let the dataset-page chart
+	// react to the "Preview and filter" controls; when any are present they define the
+	// window and the `months`/`years` recent-cap is ignored.
 	// Response also carries a `summary` for the chart takeaway.
 	router.get(`${base}/monthly-by-recipient`, async (req, res) => {
 		const y = parseInt(req.query.years, 10);
@@ -76,8 +80,17 @@ export default (router, { database }, base = '') => {
 		if (!Number.isNaN(y)) months = Math.min(20, Math.max(1, y)) * 12;
 		else if (!Number.isNaN(m)) months = Math.min(240, Math.max(1, m));
 
+		const filters = {
+			from: req.query.from || null,
+			to: req.query.to || null,
+			state: req.query.state || null,
+			commodity: req.query.commodity || null,
+			recipients: csvParam(req.query.recipients),
+			sources: csvParam(req.query.sources),
+		};
+
 		try {
-			const result = await monthlyByRecipientGroup(database, { table: 'disbursement', months });
+			const result = await monthlyByRecipientGroup(database, { table: 'disbursement', months, filters });
 			res.json(result);
 		} catch (error) {
 			console.error('charts/disbursement/monthly-by-recipient error:', error);

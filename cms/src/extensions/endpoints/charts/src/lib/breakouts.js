@@ -265,10 +265,23 @@ export async function topStates(database, { table, amountColumn = 'amount', mont
 // member recipients. When `months` is set, only the most recent N months with data
 // are included (else all). Also returns a `summary` (window total, month count, and
 // the leading group) for the chart takeaway.
-export async function monthlyByRecipientGroup(database, { table, amountColumn = 'amount', months = null }) {
-	// Optionally restrict to the most recent N monthly periods that have data.
+export async function monthlyByRecipientGroup(database, { table, amountColumn = 'amount', months = null, filters = null }) {
+	// The same preview filters as /pivot (from/to/recipients/sources/state/commodity),
+	// applied via applyPivotFilters so the dataset-page chart can react to the preview.
+	const hasDateRange = !!(filters && (filters.from || filters.to));
+	const hasFilters =
+		filters &&
+		(hasDateRange ||
+			filters.state ||
+			filters.commodity ||
+			(Array.isArray(filters.recipients) && filters.recipients.length) ||
+			(Array.isArray(filters.sources) && filters.sources.length));
+
+	// Optionally restrict to the most recent N monthly periods that have data. Only an
+	// explicit date range replaces this window; other filters (recipients/sources/state/
+	// commodity) narrow *within* the recent-N window rather than blowing it open.
 	let dates = null;
-	if (months) {
+	if (months && !hasDateRange) {
 		const recentRows = await database
 			.distinct('p2.period_date')
 			.from(`${table} as d2`)
@@ -292,9 +305,17 @@ export async function monthlyByRecipientGroup(database, { table, amountColumn = 
 		.from(table)
 		.join('period as p', `${table}.period`, 'p.id')
 		.join('fund as f', `${table}.fund`, 'f.id')
-		.where('p.type', 'Monthly')
 		.groupBy('p.period_date', 'p.fiscal_year', 'p.calendar_year', 'p.month_short', 'p.month_long', 'f.recipient')
 		.orderBy('p.period_date', 'asc');
+
+	if (hasFilters) {
+		// applyPivotFilters references l.state_name / c.name; join those tables. It also
+		// enforces p.type = 'Monthly'.
+		query.leftJoin('location as l', `${table}.location`, 'l.id').leftJoin('commodity as c', `${table}.commodity`, 'c.id');
+		await applyPivotFilters(database, query, filters);
+	} else {
+		query.where('p.type', 'Monthly');
+	}
 
 	if (dates) query.whereIn('p.period_date', dates);
 
