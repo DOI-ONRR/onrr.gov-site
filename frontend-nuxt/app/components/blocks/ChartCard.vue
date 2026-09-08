@@ -89,24 +89,37 @@ const seriesMeasures = computed(() =>
 const isPivot = computed(() => groupByFields.value.length >= 2)
 
 // Filter reactivity: when this card opts in (reacts_to_filters) AND a dataset preview on
-// the page publishes its active filters, the (endpoint-backed) chart follows them. The
-// preview publishes { query, empty }; `empty` = nothing selected -> render no data.
-const previewFilters = inject('datasetPreviewFilters', null)
-const reactsToFilters = computed(() => !!card.value.reacts_to_filters && !!previewFilters && isEndpoint.value)
-const activeFilters = computed(() => (reactsToFilters.value ? previewFilters.value : null))
+// the page publishes its pivot result, the chart renders THAT data — a visual twin of the
+// preview table, following its group-by dimension and filters — instead of its own
+// endpoint fetch. The static chart_series config only supplies curated colors/labels for
+// the recipient dimension; every other dimension's series are derived from the data.
+const previewChart = inject('datasetPreviewChart', null)
+const reactsToFilters = computed(() => !!card.value.reacts_to_filters && !!previewChart)
+const pivotPayload = computed(() => (reactsToFilters.value ? previewChart.value : null))
+const pivotDriven = computed(() => !!pivotPayload.value)
 
-// When a partial recipient selection is published, the chart drops the series (and thus
-// legend entries) for the unselected groups. `all` identifies which series measures are
-// recipient keys; a series whose measure isn't a recipient key is never dropped. null when
-// all (or none, handled by `empty`) are selected -> show every series.
-const recipientFilter = computed(() => {
-  const rf = activeFilters.value?.recipients
-  if (!rf || !Array.isArray(rf.all) || !Array.isArray(rf.selected)) return null
-  if (rf.selected.length >= rf.all.length) return null
-  return { all: new Set(rf.all), selected: new Set(rf.selected) }
-})
+// High-cardinality dimensions (state, commodity) collapse to the top N groups by total
+// plus an "Other" bucket — but only when the dimension is fully selected. A partial
+// selection shows exactly the chosen groups.
+const TOP_N = 8
+const PIVOT_PALETTE = ['#005EA2', '#c05600', '#8168b3', '#008817', '#00a6d2', '#ab7000', '#71767a', '#e52207', '#5c1349', '#0f6460']
+// Stable, curated colors for the fixed recipient groups (keyed by the group label the
+// pivot returns) so a partial recipient selection never recolors the remaining groups.
+// Other dimensions are dynamic, so they fall back to the positional palette.
+const RECIPIENT_COLORS = {
+  'State & local': '#005EA2',
+  'U.S. Treasury': '#c05600',
+  'Native American': '#8168b3',
+  'Reclamation Fund': '#008817',
+  'Land and Water Conservation Fund': '#00a6d2',
+  'Historic Preservation Fund': '#ab7000',
+  'Other funds': '#71767a',
+}
+const OTHER_COLOR = '#71767a'
 
 const canQuery = computed(() => {
+  // Pivot-driven charts get their data from the preview, not a query/series config.
+  if (reactsToFilters.value) return true
   if (isCollection.value) {
     return (
       !!card.value.source_collection &&
@@ -124,19 +137,12 @@ const canQuery = computed(() => {
 const { data: rows, error, pending } = await useAsyncData(
   `chart-card-${card.value.id}`,
   async () => {
+    // Reactive charts get their data from the preview's published pivot, not a fetch.
+    if (reactsToFilters.value) return []
     if (!canQuery.value) return []
     if (isEndpoint.value) {
-      // When reacting to preview filters: `empty` (nothing selected) -> no data; otherwise
-      // merge the published filter params onto the endpoint's own query string.
-      let url = endpointUrl.value
-      if (activeFilters.value) {
-        if (activeFilters.value.empty) return []
-        const params = new URLSearchParams(activeFilters.value.query)
-        const sep = url.includes('?') ? '&' : '?'
-        if ([...params].length) url = `${url}${sep}${params.toString()}`
-      }
       // Endpoints return either a bare array or a Directus-style `{ data: [...] }`.
-      const res = await $fetch(url)
+      const res = await $fetch(endpointUrl.value)
       return Array.isArray(res) ? res : res?.data ?? []
     }
     const query = {
@@ -150,9 +156,7 @@ const { data: rows, error, pending } = await useAsyncData(
     if (card.value.filter) query.filter = JSON.stringify(card.value.filter)
     const res = await $fetch(`${apiUrl}/items/${card.value.source_collection}`, { query })
     return res?.data ?? []
-  },
-  // Refetch when the published preview filters change (only when this card reacts).
-  { watch: [() => (reactsToFilters.value ? JSON.stringify(activeFilters.value) : null)] }
+  }
 )
 
 // Read an aggregate value out of a Directus aggregate row. Field aggregates nest
@@ -242,13 +246,9 @@ function endpointChartData(data) {
   const rawCategories = distinct(data.map((r) => r[key]))
   const byX = {}
   for (const r of data) byX[r[key]] = r
-  // Drop series for unselected recipient groups so the legend follows the filter. Only
-  // recipient-key measures are affected; any other measure is always kept.
-  const rf = recipientFilter.value
-  const measures = rf ? seriesMeasures.value.filter((m) => !rf.all.has(m) || rf.selected.has(m)) : seriesMeasures.value
   return {
     categories: rawCategories.map(formatCategory),
-    series: measures.map((measure) =>
+    series: seriesMeasures.value.map((measure) =>
       buildSeries(
         measure,
         rawCategories.map((c) => {
@@ -260,7 +260,70 @@ function endpointChartData(data) {
   }
 }
 
+// Format a "YYYY-MM" pivot period key as a "Mon YYYY" category label.
+const PIVOT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+function pivotPeriodLabel(period) {
+  const [y, m] = period.split('-')
+  return `${PIVOT_MONTHS[Number(m) - 1] || m} ${y}`
+}
+
+// Build one series for a pivot group. The pivot group key is the label. Recipient groups
+// use the stable curated map; the "Other" bucket is grey; every other dimension value
+// takes a positional palette color. No dependency on the chart_series config.
+function buildPivotSeries(key, seriesData, groupBy, index) {
+  const color =
+    (groupBy === 'recipient' && RECIPIENT_COLORS[key]) ||
+    (key === 'Other' ? OTHER_COLOR : PIVOT_PALETTE[index % PIVOT_PALETTE.length])
+  return {
+    name: key,
+    data: seriesData,
+    type: card.value.chart_type || 'column',
+    color,
+    stack: 'disbursements',
+    _format: 'currency',
+  }
+}
+
+// Transform the preview's pivot payload into a monthly stacked series set — the chart as
+// a visual twin of the table. X = chronological months across all years present; one
+// series per group (top-N + "Other" when the fully-selected dimension is high-cardinality).
+function pivotChartData(p) {
+  if (!p || p.empty || !p.groups?.length) return { categories: [], series: [] }
+  const periodSet = new Set()
+  for (const g of p.groups) for (const m of g.months || []) for (const y of Object.keys(m.byYear || {})) {
+    periodSet.add(`${y}-${String(m.month).padStart(2, '0')}`)
+  }
+  const periods = [...periodSet].sort()
+  const valAt = (g, period) => {
+    const [y, mm] = period.split('-')
+    const m = (g.months || []).find((x) => x.month === Number(mm))
+    return m ? Number(m.byYear[y]) || 0 : 0
+  }
+
+  // Cap the number of series for readability: show up to TOP_N groups individually, and
+  // once more than that would display (whether the dimension is fully or partially
+  // selected), keep the top TOP_N by total and roll the rest into "Other".
+  let displayGroups = p.groups
+  if (p.groups.length > TOP_N) {
+    const sorted = [...p.groups].sort((a, b) => (b.total || 0) - (a.total || 0))
+    displayGroups = [...sorted.slice(0, TOP_N), { key: 'Other', _rest: sorted.slice(TOP_N) }]
+  }
+
+  return {
+    categories: periods.map(pivotPeriodLabel),
+    series: displayGroups.map((g, i) =>
+      buildPivotSeries(
+        g.key,
+        periods.map((period) => (g._rest ? g._rest.reduce((s, rg) => s + valAt(rg, period), 0) : valAt(g, period))),
+        p.groupBy,
+        i
+      )
+    ),
+  }
+}
+
 const chartData = computed(() => {
+  if (pivotDriven.value) return pivotChartData(pivotPayload.value)
   const data = rows.value || []
   if (!data.length) return { categories: [], series: [] }
   return isEndpoint.value ? endpointChartData(data) : collectionChartData(data)
@@ -409,6 +472,14 @@ const chartOptions = computed(() => {
 })
 
 // --- render mode --------------------------------------------------------------
+// When pivot-driven, reflect the active group-by in the title (the CMS title names a fixed
+// dimension, which is wrong once the chart follows the preview's group-by).
+const displayTitle = computed(() => {
+  const label = pivotPayload.value?.groupByLabel
+  if (pivotDriven.value && label) return `Disbursements by month and ${label.toLowerCase()}`
+  return card.value.title
+})
+
 const renderMode = computed(() => card.value.render_mode || 'chart')
 const showChart = computed(() => renderMode.value !== 'table')
 const showTable = computed(() => renderMode.value !== 'chart')
@@ -579,7 +650,7 @@ onBeforeUnmount(() => {
     :class="[`grid-col-${gridColumns}`, { 'chart-card--framed': card.variant === 'framed' }]"
     :style="card.variant !== 'framed' && card.background_color ? { backgroundColor: card.background_color } : null"
   >
-    <h3 v-if="card.title && !card.hide_title" class="margin-bottom-1 margin-top-0 font-heading-md">{{ card.title }}</h3>
+    <h3 v-if="displayTitle && !card.hide_title" class="margin-bottom-1 margin-top-0 font-heading-md">{{ displayTitle }}</h3>
     <p v-if="showTakeaway" class="chart-card__takeaway">
       {{ renderedTakeaway }}
     </p>

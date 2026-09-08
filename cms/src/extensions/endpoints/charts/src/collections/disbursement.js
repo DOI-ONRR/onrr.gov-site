@@ -83,8 +83,8 @@ export default (router, { database }, base = '') => {
 		const filters = {
 			from: req.query.from || null,
 			to: req.query.to || null,
-			state: req.query.state || null,
-			commodity: req.query.commodity || null,
+			states: csvParam(req.query.states),
+			commodities: csvParam(req.query.commodities),
 			recipients: csvParam(req.query.recipients),
 			sources: csvParam(req.query.sources),
 		};
@@ -118,7 +118,7 @@ export default (router, { database }, base = '') => {
 	// recipients = RECIPIENT_GROUPS keys; sources = raw fund.source values. See
 	// disbursementPivot() for the response shape.
 	router.get(`${base}/pivot`, async (req, res) => {
-		const { groupBy, from, to, state, commodity } = req.query;
+		const { groupBy, from, to } = req.query;
 		if (groupBy && !pivotDimensions().includes(groupBy)) {
 			return res.status(400).json({ error: `Invalid groupBy: ${groupBy}. Valid options: ${pivotDimensions().join(', ')}` });
 		}
@@ -127,8 +127,8 @@ export default (router, { database }, base = '') => {
 				groupBy,
 				from: from || null,
 				to: to || null,
-				state: state || null,
-				commodity: commodity || null,
+				states: csvParam(req.query.states),
+				commodities: csvParam(req.query.commodities),
 				recipients: csvParam(req.query.recipients),
 				sources: csvParam(req.query.sources),
 			});
@@ -145,13 +145,13 @@ export default (router, { database }, base = '') => {
 	// Same filter params as /pivot; recipients = RECIPIENT_GROUPS keys, sources = raw
 	// fund.source values.
 	router.get(`${base}/export`, async (req, res) => {
-		const { from, to, state, commodity } = req.query;
+		const { from, to } = req.query;
 		try {
 			const rows = await disbursementRecords(database, {
 				from: from || null,
 				to: to || null,
-				state: state || null,
-				commodity: commodity || null,
+				states: csvParam(req.query.states),
+				commodities: csvParam(req.query.commodities),
 				recipients: csvParam(req.query.recipients),
 				sources: csvParam(req.query.sources),
 			});
