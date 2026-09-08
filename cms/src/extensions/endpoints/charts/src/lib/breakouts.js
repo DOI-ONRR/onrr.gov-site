@@ -423,10 +423,13 @@ async function rawRecipientsForGroups(database, groupKeys) {
 // the (thenable) builder from an async fn would let `await` execute the query early,
 // before the caller adds its GROUP BY. `recipients` is a list of RECIPIENT_GROUPS
 // keys; empty/omitted means "no recipient filter".
-async function applyPivotFilters(database, q, { from, to, recipients, sources, states, commodities }) {
-	q.where('p.type', 'Monthly');
+async function applyPivotFilters(database, q, { periodType = 'Monthly', from, to, fromYear, toYear, recipients, sources, states, commodities }) {
+	q.where('p.type', periodType);
+	// Monthly narrows by a period_date range; fiscal-year narrows by a fiscal_year range.
 	if (from) q.where('p.period_date', '>=', from);
 	if (to) q.where('p.period_date', '<=', to);
+	if (fromYear) q.where('p.fiscal_year', '>=', fromYear);
+	if (toYear) q.where('p.fiscal_year', '<=', toYear);
 	if (Array.isArray(states) && states.length) q.whereIn('l.state_name', states);
 	if (Array.isArray(commodities) && commodities.length) q.whereIn('c.name', commodities);
 	if (Array.isArray(sources) && sources.length) q.whereIn('f.source', sources);
@@ -454,6 +457,11 @@ export async function disbursementPivot(database, opts = {}) {
 	const dimExpr = PIVOT_DIMENSIONS[groupBy];
 	const table = 'disbursement';
 
+	// Fiscal-year pivots are annual: group by dimension + fiscal_year, no month detail.
+	// Monthly pivots group by dimension + calendar year + calendar month (with sub-rows).
+	const isFy = opts.periodType === 'Fiscal Year';
+	const yearExpr = isFy ? '"p"."fiscal_year"' : 'EXTRACT(YEAR FROM "p"."period_date")::int';
+
 	const base = () =>
 		database
 			.from(table)
@@ -462,15 +470,13 @@ export async function disbursementPivot(database, opts = {}) {
 			.leftJoin('location as l', `${table}.location`, 'l.id')
 			.leftJoin('commodity as c', `${table}.commodity`, 'c.id');
 
-	// Aggregated rows: (dimension, calendar year, calendar month) -> sum.
-	const aggQ = base().select(
-		database.raw(`${dimExpr} as "dim"`),
-		database.raw('EXTRACT(YEAR FROM "p"."period_date")::int as "yr"'),
-		database.raw('EXTRACT(MONTH FROM "p"."period_date")::int as "mo"'),
-		database.raw(`SUM("${table}"."amount") as "amt"`)
-	);
+	// Aggregated rows: (dimension, year[, calendar month]) -> sum.
+	const cols = [database.raw(`${dimExpr} as "dim"`), database.raw(`${yearExpr} as "yr"`)];
+	if (!isFy) cols.push(database.raw('EXTRACT(MONTH FROM "p"."period_date")::int as "mo"'));
+	cols.push(database.raw(`SUM("${table}"."amount") as "amt"`));
+	const aggQ = base().select(...cols);
 	await applyPivotFilters(database, aggQ, opts);
-	aggQ.groupByRaw(`${dimExpr}, EXTRACT(YEAR FROM "p"."period_date"), EXTRACT(MONTH FROM "p"."period_date")`);
+	aggQ.groupByRaw(isFy ? `${dimExpr}, ${yearExpr}` : `${dimExpr}, EXTRACT(YEAR FROM "p"."period_date"), EXTRACT(MONTH FROM "p"."period_date")`);
 
 	// Record count over the same filter set (raw disbursement rows, not aggregated).
 	const countQ = base().count(`${table}.id as n`);
@@ -486,7 +492,6 @@ export async function disbursementPivot(database, opts = {}) {
 	for (const r of rows) {
 		const label = isRecipient ? recipientGroupLabel(r.dim) : (r.dim == null || r.dim === '' ? '(none)' : r.dim);
 		const yr = Number(r.yr);
-		const mo = Number(r.mo);
 		const amt = Number(r.amt) || 0;
 		yearSet.add(yr);
 		grandTotal += amt;
@@ -499,13 +504,17 @@ export async function disbursementPivot(database, opts = {}) {
 		g.total += amt;
 		g.byYear[yr] = (g.byYear[yr] || 0) + amt;
 
-		let m = g.months.get(mo);
-		if (!m) {
-			m = { month: mo, monthName: PIVOT_MONTHS[mo] || String(mo), byYear: {}, total: 0 };
-			g.months.set(mo, m);
+		// Monthly only: build the collapsible month sub-rows. Fiscal-year has no month grain.
+		if (!isFy) {
+			const mo = Number(r.mo);
+			let m = g.months.get(mo);
+			if (!m) {
+				m = { month: mo, monthName: PIVOT_MONTHS[mo] || String(mo), byYear: {}, total: 0 };
+				g.months.set(mo, m);
+			}
+			m.byYear[yr] = (m.byYear[yr] || 0) + amt;
+			m.total += amt;
 		}
-		m.byYear[yr] = (m.byYear[yr] || 0) + amt;
-		m.total += amt;
 	}
 
 	const years = [...yearSet].sort((a, b) => a - b);
@@ -527,6 +536,7 @@ export async function disbursementPivot(database, opts = {}) {
 
 	return {
 		groupBy,
+		periodType: isFy ? 'Fiscal Year' : 'Monthly',
 		years,
 		groups: groupList,
 		grandTotal,
@@ -536,15 +546,28 @@ export async function disbursementPivot(database, opts = {}) {
 
 // Distinct filter-dropdown values for the pivot UI, in one round-trip: month periods,
 // states, commodities, fund sources, plus the recipient GROUP labels (stack order).
-export async function disbursementPivotOptions(database) {
-	const monthly = (q) => q.from('disbursement').join('period as p', 'disbursement.period', 'p.id').where('p.type', 'Monthly');
-	const [months, states, commodities, sources] = await Promise.all([
-		monthly(database.distinct('p.period_date')).orderBy('p.period_date', 'asc').then((r) => r.map((x) => x.period_date)),
-		monthly(database.distinct('l.state_name')).join('location as l', 'disbursement.location', 'l.id').whereNotNull('l.state_name').orderBy('l.state_name', 'asc').then((r) => r.map((x) => x.state_name)),
-		monthly(database.distinct('c.name')).join('commodity as c', 'disbursement.commodity', 'c.id').whereNotNull('c.name').orderBy('c.name', 'asc').then((r) => r.map((x) => x.name)),
-		monthly(database.distinct('f.source')).join('fund as f', 'disbursement.fund', 'f.id').whereNotNull('f.source').orderBy('f.source', 'asc').then((r) => r.map((x) => x.source)),
+export async function disbursementPivotOptions(database, periodType = 'Monthly') {
+	const isFy = periodType === 'Fiscal Year';
+	const scoped = (q) => q.from('disbursement').join('period as p', 'disbursement.period', 'p.id').where('p.type', periodType);
+	// Monthly returns the list of month periods; fiscal-year returns the list of fiscal years.
+	const periodsPromise = isFy
+		? scoped(database.distinct('p.fiscal_year')).orderBy('p.fiscal_year', 'asc').then((r) => r.map((x) => x.fiscal_year))
+		: scoped(database.distinct('p.period_date')).orderBy('p.period_date', 'asc').then((r) => r.map((x) => x.period_date));
+	const [periods, states, commodities, sources] = await Promise.all([
+		periodsPromise,
+		scoped(database.distinct('l.state_name')).join('location as l', 'disbursement.location', 'l.id').whereNotNull('l.state_name').orderBy('l.state_name', 'asc').then((r) => r.map((x) => x.state_name)),
+		scoped(database.distinct('c.name')).join('commodity as c', 'disbursement.commodity', 'c.id').whereNotNull('c.name').orderBy('c.name', 'asc').then((r) => r.map((x) => x.name)),
+		scoped(database.distinct('f.source')).join('fund as f', 'disbursement.fund', 'f.id').whereNotNull('f.source').orderBy('f.source', 'asc').then((r) => r.map((x) => x.source)),
 	]);
-	return { months, states, commodities, sources, recipients: RECIPIENT_GROUPS.map((g) => ({ key: g.key, label: g.label })) };
+	return {
+		periodType,
+		months: isFy ? [] : periods,
+		fiscalYears: isFy ? periods : [],
+		states,
+		commodities,
+		sources,
+		recipients: RECIPIENT_GROUPS.map((g) => ({ key: g.key, label: g.label })),
+	};
 }
 
 // Raw disbursement records matching the pivot filters (Monthly-enforced), for the

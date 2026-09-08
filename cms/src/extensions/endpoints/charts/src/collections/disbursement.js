@@ -103,8 +103,9 @@ export default (router, { database }, base = '') => {
 	// fund sources, and the recipient group {key,label} list) in one round-trip.
 	// Registered before /pivot so the more specific path matches first.
 	router.get(`${base}/pivot/options`, async (req, res) => {
+		const periodType = req.query.period === 'fiscal-year' ? 'Fiscal Year' : 'Monthly';
 		try {
-			res.json(await disbursementPivotOptions(database));
+			res.json(await disbursementPivotOptions(database, periodType));
 		} catch (error) {
 			console.error('charts/disbursement/pivot/options error:', error);
 			res.status(500).json({ error: 'Failed to fetch pivot options' });
@@ -122,11 +123,17 @@ export default (router, { database }, base = '') => {
 		if (groupBy && !pivotDimensions().includes(groupBy)) {
 			return res.status(400).json({ error: `Invalid groupBy: ${groupBy}. Valid options: ${pivotDimensions().join(', ')}` });
 		}
+		const periodType = req.query.period === 'fiscal-year' ? 'Fiscal Year' : 'Monthly';
+		const fromYear = parseInt(req.query.fromYear, 10);
+		const toYear = parseInt(req.query.toYear, 10);
 		try {
 			const data = await disbursementPivot(database, {
 				groupBy,
+				periodType,
 				from: from || null,
 				to: to || null,
+				fromYear: Number.isNaN(fromYear) ? null : fromYear,
+				toYear: Number.isNaN(toYear) ? null : toYear,
 				states: csvParam(req.query.states),
 				commodities: csvParam(req.query.commodities),
 				recipients: csvParam(req.query.recipients),
@@ -146,10 +153,16 @@ export default (router, { database }, base = '') => {
 	// fund.source values.
 	router.get(`${base}/export`, async (req, res) => {
 		const { from, to } = req.query;
+		const periodType = req.query.period === 'fiscal-year' ? 'Fiscal Year' : 'Monthly';
+		const fromYear = parseInt(req.query.fromYear, 10);
+		const toYear = parseInt(req.query.toYear, 10);
 		try {
 			const rows = await disbursementRecords(database, {
+				periodType,
 				from: from || null,
 				to: to || null,
+				fromYear: Number.isNaN(fromYear) ? null : fromYear,
+				toYear: Number.isNaN(toYear) ? null : toYear,
 				states: csvParam(req.query.states),
 				commodities: csvParam(req.query.commodities),
 				recipients: csvParam(req.query.recipients),

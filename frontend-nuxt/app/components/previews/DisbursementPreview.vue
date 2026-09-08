@@ -17,12 +17,30 @@
 */
 const { apiUrl } = useRuntimeConfig().public
 
+// Period grain comes from the dataset's export_filter (Monthly vs Fiscal Year), so the
+// same component serves both the monthly and fiscal-year disbursement pages. Fiscal-year
+// is annual: no month-range control and no monthly sub-rows.
+const props = defineProps({
+  dataset: { type: Object, default: null },
+})
+// export_filter is a Directus filter object, e.g. { period: { type: { _eq: 'Fiscal Year' } } }.
+const periodType = computed(() => {
+  const t = props.dataset?.export_filter?.period?.type
+  const val = t && typeof t === 'object' ? t._eq : t
+  return val === 'Fiscal Year' ? 'Fiscal Year' : 'Monthly'
+})
+const isFy = computed(() => periodType.value === 'Fiscal Year')
+const periodParam = computed(() => (isFy.value ? 'fiscal-year' : 'monthly'))
+
 const GROUP_OPTIONS = [
   { key: 'recipient', label: 'Recipient' },
   { key: 'source', label: 'Source' },
   { key: 'state', label: 'State' },
   { key: 'commodity', label: 'Commodity' },
 ]
+// Fiscal-year disbursements don't break out by commodity, so that dimension is dropped
+// from the group-by choices (and its multi-select is hidden below).
+const groupOptions = computed(() => (isFy.value ? GROUP_OPTIONS.filter((o) => o.key !== 'commodity') : GROUP_OPTIONS))
 
 // --- formatting ---------------------------------------------------------------
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -41,8 +59,8 @@ function currency(v) {
 const isNegative = (v) => Number(v) < 0
 
 // --- filter dropdown options (loaded once from the endpoint) -------------------
-const { data: options } = await useAsyncData('disb-pivot-options', () =>
-  $fetch(`${apiUrl}/charts/disbursement/pivot/options`),
+const { data: options } = await useAsyncData(`disb-pivot-options-${periodParam.value}`, () =>
+  $fetch(`${apiUrl}/charts/disbursement/pivot/options`, { query: { period: periodParam.value } }),
 )
 const recipientOptions = computed(() => options.value?.recipients || []) // [{ key, label }]
 const sourceOptions = computed(() => options.value?.sources || []) // [string]
@@ -55,11 +73,16 @@ const filters = reactive({
   groupBy: 'recipient',
   from: '',
   to: '',
+  fromYear: null, // fiscal-year range (FY mode)
+  toYear: null,
   states: [],
   commodities: [],
   recipients: [],
   sources: [],
 })
+
+// Fiscal-year options for the FY range selects.
+const fiscalYearOptions = computed(() => options.value?.fiscalYears || [])
 
 // Selection helpers: "all selected" = every option checked (the default). recipients
 // hold RECIPIENT_GROUPS keys; sources hold raw fund.source values.
@@ -104,6 +127,9 @@ watchEffect(() => {
   if (ready.value || !options.value) return
   filters.from = options.value.months?.[0] || ''
   filters.to = options.value.months?.[options.value.months.length - 1] || ''
+  const fy = options.value.fiscalYears || []
+  filters.fromYear = fy[0] ?? null
+  filters.toYear = fy[fy.length - 1] ?? null
   // Default to everything selected (all boxes checked).
   filters.recipients = recipientOptions.value.map((r) => r.key)
   filters.sources = [...sourceOptions.value]
@@ -196,14 +222,21 @@ function toggleAll() {
 // datasetPreviewFilters injection). `empty` marks "nothing selected" (no recipients or
 // no sources) so consumers can render an empty result instead of an unfiltered one.
 const filterQuery = computed(() => {
-  const query = {}
-  const months = options.value?.months || []
-  const fullFrom = months[0]
-  const fullTo = months[months.length - 1]
-  // Omit from/to when they span the full available range, so a reactive chart keeps its
-  // CMS default window until the user actually narrows the dates.
-  if (filters.from && filters.from !== fullFrom) query.from = String(filters.from).slice(0, 10)
-  if (filters.to && filters.to !== fullTo) query.to = String(filters.to).slice(0, 10)
+  const query = { period: periodParam.value }
+  if (isFy.value) {
+    // Fiscal-year range; omit each end when it spans the full available range.
+    const fy = fiscalYearOptions.value
+    if (filters.fromYear != null && filters.fromYear !== fy[0]) query.fromYear = filters.fromYear
+    if (filters.toYear != null && filters.toYear !== fy[fy.length - 1]) query.toYear = filters.toYear
+  } else {
+    const months = options.value?.months || []
+    const fullFrom = months[0]
+    const fullTo = months[months.length - 1]
+    // Omit from/to when they span the full available range, so a reactive chart keeps its
+    // default window until the user actually narrows the dates.
+    if (filters.from && filters.from !== fullFrom) query.from = String(filters.from).slice(0, 10)
+    if (filters.to && filters.to !== fullTo) query.to = String(filters.to).slice(0, 10)
+  }
   // None selected in any multi-select -> empty. All selected -> omit (no filter).
   // Partial -> narrow (comma-joined keys/values).
   const empty =
@@ -256,6 +289,7 @@ if (previewChart) {
     previewChart.value = ready.value
       ? {
           empty: filterQuery.value.empty,
+          periodType: periodType.value,
           groupBy: filters.groupBy,
           groupByLabel: groupByLabel.value,
           dimensionAllSelected: dimensionAllSelected.value,
@@ -283,6 +317,9 @@ function clearFilters() {
   filters.commodities = [...commodityOptions.value]
   filters.from = options.value?.months?.[0] || ''
   filters.to = options.value?.months?.[options.value.months.length - 1] || ''
+  const fy = options.value?.fiscalYears || []
+  filters.fromYear = fy[0] ?? null
+  filters.toYear = fy[fy.length - 1] ?? null
 }
 
 function downloadCsv() {
@@ -316,8 +353,11 @@ if (datasetExport) {
     // Nothing selected in any multi-select → no export (matches the empty short-circuit).
     if (!filters.recipients.length || !filters.sources.length || !filters.states.length || !filters.commodities.length) return null
     const q = new URLSearchParams()
-    if (filters.from) q.set('from', String(filters.from).slice(0, 10))
-    if (filters.to) q.set('to', String(filters.to).slice(0, 10))
+    q.set('period', periodParam.value)
+    if (!isFy.value && filters.from) q.set('from', String(filters.from).slice(0, 10))
+    if (!isFy.value && filters.to) q.set('to', String(filters.to).slice(0, 10))
+    if (isFy.value && filters.fromYear != null) q.set('fromYear', String(filters.fromYear))
+    if (isFy.value && filters.toYear != null) q.set('toYear', String(filters.toYear))
     if (filters.recipients.length < allRecipientKeys.value.length) q.set('recipients', filters.recipients.join(','))
     if (filters.sources.length < sourceOptions.value.length) q.set('sources', filters.sources.join(','))
     if (filters.states.length < stateOptions.value.length) q.set('states', filters.states.join(','))
@@ -343,17 +383,31 @@ if (datasetExport) {
     <!-- Horizontal filter bar (full width, above the table) -->
     <div class="filter-bar padding-2 margin-bottom-2">
       <div class="filter-bar__fields">
-        <div class="field">
+        <div v-if="!isFy" class="field">
           <label class="usa-label margin-top-0" for="f-from">From</label>
           <select id="f-from" v-model="filters.from" class="usa-select">
             <option v-for="m in options?.months" :key="m" :value="m">{{ monthLabel(m) }}</option>
           </select>
         </div>
 
-        <div class="field">
+        <div v-if="!isFy" class="field">
           <label class="usa-label margin-top-0" for="f-to">To</label>
           <select id="f-to" v-model="filters.to" class="usa-select">
             <option v-for="m in options?.months" :key="m" :value="m">{{ monthLabel(m) }}</option>
+          </select>
+        </div>
+
+        <div v-if="isFy" class="field">
+          <label class="usa-label margin-top-0" for="f-from-year">From year</label>
+          <select id="f-from-year" v-model.number="filters.fromYear" class="usa-select">
+            <option v-for="y in fiscalYearOptions" :key="y" :value="y">FY {{ y }}</option>
+          </select>
+        </div>
+
+        <div v-if="isFy" class="field">
+          <label class="usa-label margin-top-0" for="f-to-year">To year</label>
+          <select id="f-to-year" v-model.number="filters.toYear" class="usa-select">
+            <option v-for="y in fiscalYearOptions" :key="y" :value="y">FY {{ y }}</option>
           </select>
         </div>
 
@@ -477,8 +531,8 @@ if (datasetExport) {
           </div>
         </div>
 
-        <!-- Commodities: usa-select-styled multi-select dropdown -->
-        <div class="field field--wide">
+        <!-- Commodities: usa-select-styled multi-select dropdown (hidden for fiscal year). -->
+        <div v-if="!isFy" class="field field--wide">
           <label class="usa-label margin-top-0" for="f-commodities">Commodities</label>
           <div ref="commodityRef" class="multi-select">
             <button
@@ -533,9 +587,10 @@ if (datasetExport) {
           class="usa-select group-select"
           aria-label="Group results by"
         >
-          <option v-for="o in GROUP_OPTIONS" :key="o.key" :value="o.key">{{ o.label }}</option>
+          <option v-for="o in groupOptions" :key="o.key" :value="o.key">{{ o.label }}</option>
         </select>
         <button
+          v-if="!isFy"
           type="button"
           class="usa-button usa-button--outline"
           :disabled="!groups.length"
@@ -571,52 +626,58 @@ if (datasetExport) {
         <thead ref="theadRef">
           <tr>
             <th scope="col" class="dim-col">{{ groupByLabel }}</th>
-            <th scope="col" class="month-col">Month</th>
+            <th v-if="!isFy" scope="col" class="month-col">Month</th>
             <th v-for="y in years" :key="y" scope="col" class="text-right">{{ y }}</th>
             <th scope="col" class="text-right">Total</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="!pending && !groups.length">
-            <td :colspan="years.length + 3">No records match the current filters.</td>
+            <td :colspan="years.length + (isFy ? 2 : 3)">No records match the current filters.</td>
           </tr>
           <template v-for="g in groups" :key="g.key">
-            <!-- Group header: a full-width light-violet band; the whole row toggles the
-                 group (a full-width unstyled button keeps it keyboard-accessible). Sticks
-                 below the thead while scrolling until the next header pushes it up. -->
-            <tr class="group-row">
-              <th scope="colgroup" :colspan="years.length + 3" class="group-head">
-                <button
-                  type="button"
-                  class="group-toggle"
-                  :aria-expanded="!collapsed.has(g.key)"
-                  @click="toggle(g.key)"
-                >
-                  <span aria-hidden="true" class="caret">{{ collapsed.has(g.key) ? '▸' : '▾' }}</span>
-                  <span class="group-name">{{ g.key }}</span>
-                </button>
-              </th>
+            <!-- Fiscal year: one flat row per group (annual grain, no month detail). -->
+            <tr v-if="isFy" class="fy-group-row">
+              <th scope="row" class="dim-cell fy-group-name">{{ g.key }}</th>
+              <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(g.byYear[y]) }">{{ g.byYear[y] ? currency(g.byYear[y]) : '—' }}</td>
+              <td class="text-right" :class="{ 'text-secondary': isNegative(g.total) }">{{ currency(g.total) }}</td>
             </tr>
-            <template v-if="!collapsed.has(g.key)">
-              <tr v-for="m in g.months" :key="`${g.key}-${m.month}`" class="month-row">
-                <td class="dim-cell"></td>
-                <td class="month-cell">{{ m.monthName }}</td>
-                <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(m.byYear[y]) }">{{ m.byYear[y] ? currency(m.byYear[y]) : '—' }}</td>
-                <td class="text-right" :class="{ 'text-secondary': isNegative(m.total) }">{{ currency(m.total) }}</td>
+            <!-- Monthly: full-width group header band + collapsible month rows + subtotal. -->
+            <template v-else>
+              <tr class="group-row">
+                <th scope="colgroup" :colspan="years.length + 3" class="group-head">
+                  <button
+                    type="button"
+                    class="group-toggle"
+                    :aria-expanded="!collapsed.has(g.key)"
+                    @click="toggle(g.key)"
+                  >
+                    <span aria-hidden="true" class="caret">{{ collapsed.has(g.key) ? '▸' : '▾' }}</span>
+                    <span class="group-name">{{ g.key }}</span>
+                  </button>
+                </th>
               </tr>
-              <!-- Group subtotal: "Subtotal:" in the month column; highlighted values. -->
-              <tr class="subtotal-row">
-                <td class="dim-cell"></td>
-                <th scope="row" class="month-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
-                <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(g.byYear[y]) }">{{ currency(g.byYear[y]) }}</td>
-                <td class="text-right" :class="{ 'text-secondary': isNegative(g.total) }">{{ currency(g.total) }}</td>
-              </tr>
+              <template v-if="!collapsed.has(g.key)">
+                <tr v-for="m in g.months" :key="`${g.key}-${m.month}`" class="month-row">
+                  <td class="dim-cell"></td>
+                  <td class="month-cell">{{ m.monthName }}</td>
+                  <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(m.byYear[y]) }">{{ m.byYear[y] ? currency(m.byYear[y]) : '—' }}</td>
+                  <td class="text-right" :class="{ 'text-secondary': isNegative(m.total) }">{{ currency(m.total) }}</td>
+                </tr>
+                <!-- Group subtotal: "Subtotal:" in the month column; highlighted values. -->
+                <tr class="subtotal-row">
+                  <td class="dim-cell"></td>
+                  <th scope="row" class="month-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
+                  <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(g.byYear[y]) }">{{ currency(g.byYear[y]) }}</td>
+                  <td class="text-right" :class="{ 'text-secondary': isNegative(g.total) }">{{ currency(g.total) }}</td>
+                </tr>
+              </template>
             </template>
           </template>
         </tbody>
         <tfoot v-if="groups.length">
           <tr class="total-row">
-            <th scope="row" colspan="2">Total</th>
+            <th scope="row" :colspan="isFy ? 1 : 2">Total</th>
             <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(yearTotals[y]) }">{{ currency(yearTotals[y]) }}</td>
             <td class="text-right" :class="{ 'text-secondary': isNegative(pivot?.grandTotal) }">{{ currency(pivot?.grandTotal) }}</td>
           </tr>

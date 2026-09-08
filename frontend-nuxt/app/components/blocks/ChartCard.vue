@@ -284,20 +284,31 @@ function buildPivotSeries(key, seriesData, groupBy, index) {
   }
 }
 
-// Transform the preview's pivot payload into a monthly stacked series set — the chart as
-// a visual twin of the table. X = chronological months across all years present; one
-// series per group (top-N + "Other" when the fully-selected dimension is high-cardinality).
+// Transform the preview's pivot payload into a stacked series set — the chart as a visual
+// twin of the table. Monthly: X = chronological months across all years present. Fiscal
+// year: X = the fiscal years (annual, no month grain). One series per group (top-N +
+// "Other" when the dimension is high-cardinality).
 function pivotChartData(p) {
   if (!p || p.empty || !p.groups?.length) return { categories: [], series: [] }
-  const periodSet = new Set()
-  for (const g of p.groups) for (const m of g.months || []) for (const y of Object.keys(m.byYear || {})) {
-    periodSet.add(`${y}-${String(m.month).padStart(2, '0')}`)
-  }
-  const periods = [...periodSet].sort()
-  const valAt = (g, period) => {
-    const [y, mm] = period.split('-')
-    const m = (g.months || []).find((x) => x.month === Number(mm))
-    return m ? Number(m.byYear[y]) || 0 : 0
+  const isFy = p.periodType === 'Fiscal Year'
+
+  let periods, categories, valAt
+  if (isFy) {
+    periods = (p.years || []).map(String)
+    categories = periods
+    valAt = (g, year) => Number(g.byYear?.[year]) || 0
+  } else {
+    const periodSet = new Set()
+    for (const g of p.groups) for (const m of g.months || []) for (const y of Object.keys(m.byYear || {})) {
+      periodSet.add(`${y}-${String(m.month).padStart(2, '0')}`)
+    }
+    periods = [...periodSet].sort()
+    categories = periods.map(pivotPeriodLabel)
+    valAt = (g, period) => {
+      const [y, mm] = period.split('-')
+      const m = (g.months || []).find((x) => x.month === Number(mm))
+      return m ? Number(m.byYear[y]) || 0 : 0
+    }
   }
 
   // Cap the number of series for readability: show up to TOP_N groups individually, and
@@ -310,7 +321,7 @@ function pivotChartData(p) {
   }
 
   return {
-    categories: periods.map(pivotPeriodLabel),
+    categories,
     series: displayGroups.map((g, i) =>
       buildPivotSeries(
         g.key,
@@ -475,8 +486,11 @@ const chartOptions = computed(() => {
 // When pivot-driven, reflect the active group-by in the title (the CMS title names a fixed
 // dimension, which is wrong once the chart follows the preview's group-by).
 const displayTitle = computed(() => {
-  const label = pivotPayload.value?.groupByLabel
-  if (pivotDriven.value && label) return `Disbursements by month and ${label.toLowerCase()}`
+  const p = pivotPayload.value
+  if (pivotDriven.value && p?.groupByLabel) {
+    const grain = p.periodType === 'Fiscal Year' ? 'fiscal year' : 'month'
+    return `Disbursements by ${grain} and ${p.groupByLabel.toLowerCase()}`
+  }
   return card.value.title
 })
 

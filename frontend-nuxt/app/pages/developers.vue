@@ -378,7 +378,7 @@ const contactBlock = {
             <h2>Bulk downloads</h2>
             <p>
               For a full dataset or a large slice, use <code class="code-inline">export=csv</code>
-              (or <code class="code-inline">xlsx</code> / <code class="code-inline">json</code>)
+              (or <code class="code-inline">json</code> / <code class="code-inline">xml</code>)
               rather than deep JSON pagination.
             </p>
             <div v-for="dl in downloads" :key="dl.path" class="example">

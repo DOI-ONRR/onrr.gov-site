@@ -77,7 +77,7 @@ GET https://data.onrr.gov/revenue?filter[commodity][_eq]=Gas&limit=0&meta=filter
 
 ## Bulk downloads
 
-For a full dataset or a large slice, use `?export=csv` (or `xlsx`/`json`) rather than
+For a full dataset or a large slice, use `?export=csv` (or `json`/`xml`) rather than
 deep JSON pagination:
 ```
 GET https://data.onrr.gov/disbursements?export=csv
