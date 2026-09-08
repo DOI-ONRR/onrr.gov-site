@@ -228,7 +228,7 @@ async function copyApiUrl() {
 
     <div v-if="terms.length" class="grid-row grid-gap margin-bottom-4">
       <div>Key terms:
-        <template v-for="(t, i) in terms" :key="t.id"><a class="usa-link ":href="`/glossary-terms#${t.term}`">{{ t.term }}</a><span v-if="i < terms.length - 1"> · </span></template>
+        <template v-for="(t, i) in terms" :key="t.id"><span class="term">{{ t.term }}</span><span v-if="i < terms.length - 1"> · </span></template>
       </div>
     </div>
   </div>
