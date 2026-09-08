@@ -46,15 +46,17 @@ const { data: options } = await useAsyncData('disb-pivot-options', () =>
 )
 const recipientOptions = computed(() => options.value?.recipients || []) // [{ key, label }]
 const sourceOptions = computed(() => options.value?.sources || []) // [string]
+const stateOptions = computed(() => options.value?.states || []) // [string]
+const commodityOptions = computed(() => options.value?.commodities || []) // [string]
 const recipientLabel = (key) => recipientOptions.value.find((r) => r.key === key)?.label || key
 
-// --- filter state (recipients/sources seeded to all-selected once options load) --
+// --- filter state (multi-selects seeded to all-selected once options load) --
 const filters = reactive({
   groupBy: 'recipient',
   from: '',
   to: '',
-  state: '',
-  commodity: '',
+  states: [],
+  commodities: [],
   recipients: [],
   sources: [],
 })
@@ -64,6 +66,8 @@ const filters = reactive({
 const allRecipientKeys = computed(() => recipientOptions.value.map((r) => r.key))
 const recipAllSelected = computed(() => allRecipientKeys.value.length > 0 && filters.recipients.length === allRecipientKeys.value.length)
 const sourceAllSelected = computed(() => sourceOptions.value.length > 0 && filters.sources.length === sourceOptions.value.length)
+const stateAllSelected = computed(() => stateOptions.value.length > 0 && filters.states.length === stateOptions.value.length)
+const commodityAllSelected = computed(() => commodityOptions.value.length > 0 && filters.commodities.length === commodityOptions.value.length)
 // Trigger summary: all -> "All X"; none -> "None selected"; one -> that label; else "N selected".
 const recipSummary = computed(() => {
   const n = filters.recipients.length
@@ -79,6 +83,20 @@ const sourceSummary = computed(() => {
   if (n === 1) return filters.sources[0]
   return `${n} selected`
 })
+const stateSummary = computed(() => {
+  const n = filters.states.length
+  if (stateAllSelected.value) return 'All states'
+  if (n === 0) return 'None selected'
+  if (n === 1) return filters.states[0]
+  return `${n} selected`
+})
+const commoditySummary = computed(() => {
+  const n = filters.commodities.length
+  if (commodityAllSelected.value) return 'All commodities'
+  if (n === 0) return 'None selected'
+  if (n === 1) return filters.commodities[0]
+  return `${n} selected`
+})
 
 // One-shot: seed the month range once options load.
 const ready = ref(false)
@@ -89,23 +107,35 @@ watchEffect(() => {
   // Default to everything selected (all boxes checked).
   filters.recipients = recipientOptions.value.map((r) => r.key)
   filters.sources = [...sourceOptions.value]
+  filters.states = [...stateOptions.value]
+  filters.commodities = [...commodityOptions.value]
   ready.value = true
 })
 
 // --- multi-select dropdowns (recipients + sources) ----------------------------
 const recipOpen = ref(false)
 const sourceOpen = ref(false)
+const stateOpen = ref(false)
+const commodityOpen = ref(false)
 const recipRef = ref(null)
 const sourceRef = ref(null)
+const stateRef = ref(null)
+const commodityRef = ref(null)
 const toggleIn = (arr, v) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v])
 function toggleRecipient(key) { filters.recipients = toggleIn(filters.recipients, key) }
 function toggleSource(val) { filters.sources = toggleIn(filters.sources, val) }
+function toggleState(val) { filters.states = toggleIn(filters.states, val) }
+function toggleCommodity(val) { filters.commodities = toggleIn(filters.commodities, val) }
 // Select-all toggle: check every option, or clear when already all-selected.
 function toggleAllRecipients() { filters.recipients = recipAllSelected.value ? [] : allRecipientKeys.value }
 function toggleAllSources() { filters.sources = sourceAllSelected.value ? [] : [...sourceOptions.value] }
+function toggleAllStates() { filters.states = stateAllSelected.value ? [] : [...stateOptions.value] }
+function toggleAllCommodities() { filters.commodities = commodityAllSelected.value ? [] : [...commodityOptions.value] }
 function handleClickOutside(e) {
   if (recipRef.value && !recipRef.value.contains(e.target)) recipOpen.value = false
   if (sourceRef.value && !sourceRef.value.contains(e.target)) sourceOpen.value = false
+  if (stateRef.value && !stateRef.value.contains(e.target)) stateOpen.value = false
+  if (commodityRef.value && !commodityRef.value.contains(e.target)) commodityOpen.value = false
 }
 
 // Sticky group headers pin directly beneath the sticky thead. Measure the thead's
@@ -174,27 +204,31 @@ const filterQuery = computed(() => {
   // CMS default window until the user actually narrows the dates.
   if (filters.from && filters.from !== fullFrom) query.from = String(filters.from).slice(0, 10)
   if (filters.to && filters.to !== fullTo) query.to = String(filters.to).slice(0, 10)
-  if (filters.state) query.state = filters.state
-  if (filters.commodity) query.commodity = filters.commodity
-  const empty = !filters.recipients.length || !filters.sources.length
-  // None selected -> empty. All selected -> omit (no filter). Partial -> narrow.
+  // None selected in any multi-select -> empty. All selected -> omit (no filter).
+  // Partial -> narrow (comma-joined keys/values).
+  const empty =
+    !filters.recipients.length || !filters.sources.length || !filters.states.length || !filters.commodities.length
   if (!empty) {
     if (filters.recipients.length < allRecipientKeys.value.length) query.recipients = filters.recipients.join(',')
     if (filters.sources.length < sourceOptions.value.length) query.sources = filters.sources.join(',')
+    if (filters.states.length < stateOptions.value.length) query.states = filters.states.join(',')
+    if (filters.commodities.length < commodityOptions.value.length) query.commodities = filters.commodities.join(',')
   }
-  // `recipients` (all keys + the current selection) lets a reactive chart drop the
-  // series/legend entries for unselected recipient groups; the query above handles the data.
-  return { query, empty, recipients: { all: allRecipientKeys.value, selected: [...filters.recipients] } }
+  return { query, empty }
 })
 
-// Publish the active filters so a filter-reactive chart on the same page can follow them.
-// null until ready, so the chart uses its CMS default until the preview has options.
-const previewFilters = inject('datasetPreviewFilters', null)
-if (previewFilters) {
-  watchEffect(() => {
-    previewFilters.value = ready.value ? filterQuery.value : null
-  })
-}
+// Whether the current group-by dimension is fully selected. When it is (the default) and
+// the dimension is high-cardinality, the chart shows top-N + "Other"; a partial selection
+// makes the chart show exactly the selected groups.
+const dimensionAllSelected = computed(() => {
+  switch (filters.groupBy) {
+    case 'recipient': return recipAllSelected.value
+    case 'source': return sourceAllSelected.value
+    case 'state': return stateAllSelected.value
+    case 'commodity': return commodityAllSelected.value
+    default: return true
+  }
+})
 
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(
@@ -213,6 +247,24 @@ const { data: pivot, pending } = await useAsyncData(
 const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
 const groupByLabel = computed(() => GROUP_OPTIONS.find((o) => o.key === filters.groupBy)?.label || 'Group')
+
+// Publish the pivot result so a filter-reactive chart on the page renders the same data
+// (a visual twin of the table). null until ready, so the chart holds until options load.
+const previewChart = inject('datasetPreviewChart', null)
+if (previewChart) {
+  watchEffect(() => {
+    previewChart.value = ready.value
+      ? {
+          empty: filterQuery.value.empty,
+          groupBy: filters.groupBy,
+          groupByLabel: groupByLabel.value,
+          dimensionAllSelected: dimensionAllSelected.value,
+          years: years.value,
+          groups: groups.value,
+        }
+      : null
+  })
+}
 // Column (per-year) totals across all groups, for the footer row.
 const yearTotals = computed(() => {
   const t = {}
@@ -225,10 +277,10 @@ watch(pivot, () => nextTick(measureDimCol))
 
 function clearFilters() {
   filters.groupBy = 'recipient'
-  filters.state = ''
-  filters.commodity = ''
   filters.recipients = recipientOptions.value.map((r) => r.key)
   filters.sources = [...sourceOptions.value]
+  filters.states = [...stateOptions.value]
+  filters.commodities = [...commodityOptions.value]
   filters.from = options.value?.months?.[0] || ''
   filters.to = options.value?.months?.[options.value.months.length - 1] || ''
 }
@@ -261,15 +313,15 @@ function downloadCsv() {
 const datasetExport = inject('datasetPreviewExport', null)
 if (datasetExport) {
   const exportHref = computed(() => {
-    // Nothing selected → no export (matches the empty-result short-circuit).
-    if (!filters.recipients.length || !filters.sources.length) return null
+    // Nothing selected in any multi-select → no export (matches the empty short-circuit).
+    if (!filters.recipients.length || !filters.sources.length || !filters.states.length || !filters.commodities.length) return null
     const q = new URLSearchParams()
     if (filters.from) q.set('from', String(filters.from).slice(0, 10))
     if (filters.to) q.set('to', String(filters.to).slice(0, 10))
-    if (filters.state) q.set('state', filters.state)
-    if (filters.commodity) q.set('commodity', filters.commodity)
     if (filters.recipients.length < allRecipientKeys.value.length) q.set('recipients', filters.recipients.join(','))
     if (filters.sources.length < sourceOptions.value.length) q.set('sources', filters.sources.join(','))
+    if (filters.states.length < stateOptions.value.length) q.set('states', filters.states.join(','))
+    if (filters.commodities.length < commodityOptions.value.length) q.set('commodities', filters.commodities.join(','))
     const qs = q.toString()
     return `${apiUrl}/charts/disbursement/export${qs ? `?${qs}` : ''}`
   })
@@ -385,20 +437,84 @@ if (datasetExport) {
           </div>
         </div>
 
+        <!-- States: usa-select-styled multi-select dropdown -->
         <div class="field">
-          <label class="usa-label margin-top-0" for="f-state">State</label>
-          <select id="f-state" v-model="filters.state" class="usa-select">
-            <option value="">All states</option>
-            <option v-for="v in options?.states" :key="v" :value="v">{{ v }}</option>
-          </select>
+          <label class="usa-label margin-top-0" for="f-states">States</label>
+          <div ref="stateRef" class="multi-select">
+            <button
+              id="f-states"
+              type="button"
+              class="usa-select multi-select__trigger"
+              :aria-expanded="stateOpen"
+              @click="stateOpen = !stateOpen"
+            >
+              <span :class="{ 'multi-select__placeholder': stateAllSelected }">{{ stateSummary }}</span>
+            </button>
+            <ul v-show="stateOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
+              <li
+                role="option"
+                :aria-selected="stateAllSelected"
+                class="multi-select__option multi-select__option--all"
+                :class="{ 'multi-select__option--selected': stateAllSelected }"
+                @click="toggleAllStates"
+              >
+                <input type="checkbox" :checked="stateAllSelected" tabindex="-1" class="multi-select__checkbox">
+                Select all
+              </li>
+              <li
+                v-for="v in stateOptions"
+                :key="v"
+                role="option"
+                :aria-selected="filters.states.includes(v)"
+                class="multi-select__option"
+                :class="{ 'multi-select__option--selected': filters.states.includes(v) }"
+                @click="toggleState(v)"
+              >
+                <input type="checkbox" :checked="filters.states.includes(v)" tabindex="-1" class="multi-select__checkbox">
+                {{ v }}
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <div class="field">
-          <label class="usa-label margin-top-0" for="f-com">Commodity</label>
-          <select id="f-com" v-model="filters.commodity" class="usa-select">
-            <option value="">All commodities</option>
-            <option v-for="v in options?.commodities" :key="v" :value="v">{{ v }}</option>
-          </select>
+        <!-- Commodities: usa-select-styled multi-select dropdown -->
+        <div class="field field--wide">
+          <label class="usa-label margin-top-0" for="f-commodities">Commodities</label>
+          <div ref="commodityRef" class="multi-select">
+            <button
+              id="f-commodities"
+              type="button"
+              class="usa-select multi-select__trigger"
+              :aria-expanded="commodityOpen"
+              @click="commodityOpen = !commodityOpen"
+            >
+              <span :class="{ 'multi-select__placeholder': commodityAllSelected }">{{ commoditySummary }}</span>
+            </button>
+            <ul v-show="commodityOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
+              <li
+                role="option"
+                :aria-selected="commodityAllSelected"
+                class="multi-select__option multi-select__option--all"
+                :class="{ 'multi-select__option--selected': commodityAllSelected }"
+                @click="toggleAllCommodities"
+              >
+                <input type="checkbox" :checked="commodityAllSelected" tabindex="-1" class="multi-select__checkbox">
+                Select all
+              </li>
+              <li
+                v-for="v in commodityOptions"
+                :key="v"
+                role="option"
+                :aria-selected="filters.commodities.includes(v)"
+                class="multi-select__option"
+                :class="{ 'multi-select__option--selected': filters.commodities.includes(v) }"
+                @click="toggleCommodity(v)"
+              >
+                <input type="checkbox" :checked="filters.commodities.includes(v)" tabindex="-1" class="multi-select__checkbox">
+                {{ v }}
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div class="field field--action">

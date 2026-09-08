@@ -80,10 +80,11 @@ const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceColl
 const previewExport = ref(null)
 provide('datasetPreviewExport', previewExport)
 
-// The active preview filters, published by the *Preview component and consumed by a
-// filter-reactive ChartCard (reacts_to_filters) so the chart follows the same controls.
-const previewFilters = ref(null)
-provide('datasetPreviewFilters', previewFilters)
+// The preview's pivot result (data + group-by metadata), published by the *Preview
+// component and consumed by a filter-reactive ChartCard (reacts_to_filters) so the chart
+// renders the same grouped/filtered data as the table.
+const previewChart = ref(null)
+provide('datasetPreviewChart', previewChart)
 
 // Public data API (data.onrr.gov), consistent with the /developers reference. Only the
 // flat-backed datasets are exposed; source_collection maps to the friendly endpoint name.

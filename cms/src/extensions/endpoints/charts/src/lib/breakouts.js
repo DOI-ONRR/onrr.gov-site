@@ -272,8 +272,8 @@ export async function monthlyByRecipientGroup(database, { table, amountColumn = 
 	const hasFilters =
 		filters &&
 		(hasDateRange ||
-			filters.state ||
-			filters.commodity ||
+			(Array.isArray(filters.states) && filters.states.length) ||
+			(Array.isArray(filters.commodities) && filters.commodities.length) ||
 			(Array.isArray(filters.recipients) && filters.recipients.length) ||
 			(Array.isArray(filters.sources) && filters.sources.length));
 
@@ -423,12 +423,12 @@ async function rawRecipientsForGroups(database, groupKeys) {
 // the (thenable) builder from an async fn would let `await` execute the query early,
 // before the caller adds its GROUP BY. `recipients` is a list of RECIPIENT_GROUPS
 // keys; empty/omitted means "no recipient filter".
-async function applyPivotFilters(database, q, { from, to, recipients, sources, state, commodity }) {
+async function applyPivotFilters(database, q, { from, to, recipients, sources, states, commodities }) {
 	q.where('p.type', 'Monthly');
 	if (from) q.where('p.period_date', '>=', from);
 	if (to) q.where('p.period_date', '<=', to);
-	if (state) q.where('l.state_name', state);
-	if (commodity) q.where('c.name', commodity);
+	if (Array.isArray(states) && states.length) q.whereIn('l.state_name', states);
+	if (Array.isArray(commodities) && commodities.length) q.whereIn('c.name', commodities);
 	if (Array.isArray(sources) && sources.length) q.whereIn('f.source', sources);
 	if (Array.isArray(recipients) && recipients.length) {
 		const { labels, includesOther } = await rawRecipientsForGroups(database, recipients);
