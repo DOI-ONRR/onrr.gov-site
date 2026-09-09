@@ -157,6 +157,7 @@ const chartPayload = computed(() => {
   return {
     empty: !p.groups?.length,
     periodType: 'Monthly',
+    layout: 'small-multiples', // one self-scaled panel per product (mixed units)
     valueFormat: 'number', // volumes (bbl/mcf/tons), not currency
     groupBy: 'product',
     groupByLabel: 'Product',
@@ -174,6 +175,54 @@ function clearFilters() {
   filters.to = options.value?.months?.[options.value.months.length - 1] || ''
   filters.landTypes = [...landTypeOptions.value]
   filters.products = [...productOptions.value]
+}
+
+// Download the current pivot as CSV — Product | Month | one column per year, one row per
+// product ("All months" subtotal) then a row per month. No cross-product total (units differ).
+function downloadCsv() {
+  const p = pivot.value
+  if (!p?.groups?.length) return
+  const head = ['Product', 'Month', ...p.years.map(String)]
+  const rows = [head]
+  for (const g of p.groups) {
+    rows.push([g.key, 'All months', ...p.years.map((y) => g.byYear[y] ?? '')])
+    for (const m of g.months) rows.push([g.key, m.monthName, ...p.years.map((y) => m.byYear[y] ?? '')])
+  }
+  const esc = (v) => {
+    const s = String(v ?? '')
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+  }
+  const csv = rows.map((r) => r.map(esc).join(',')).join('\n')
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
+  a.download = 'monthly-production.csv'
+  a.click()
+  URL.revokeObjectURL(a.href)
+}
+
+// Publish the current filtered selection to the dataset Download section's "Your filtered
+// selection" card (DatasetView provides the ref; DatasetDownloads renders it). The href
+// points at /charts/production/export — the raw records matching the preview's filters.
+const datasetExport = inject('datasetPreviewExport', null)
+if (datasetExport) {
+  const exportHref = computed(() => {
+    if (!filters.landTypes.length || !filters.products.length) return null // nothing selected
+    const q = new URLSearchParams()
+    const { query } = filterQuery.value
+    for (const [k, v] of Object.entries(query)) q.set(k, v)
+    const qs = q.toString()
+    return `${apiUrl}/charts/production/export${qs ? `?${qs}` : ''}`
+  })
+  watchEffect(() => {
+    const n = pivot.value?.recordCount ?? 0
+    datasetExport.value = {
+      ready: !!(pivot.value && groups.value.length) && !!exportHref.value,
+      recordCount: n,
+      note: `${n.toLocaleString()} records in current selection`,
+      href: exportHref.value,
+    }
+  })
+  onUnmounted(() => { datasetExport.value = null })
 }
 </script>
 
@@ -250,13 +299,19 @@ function clearFilters() {
         <template v-else>
           <strong>{{ (pivot?.recordCount || 0).toLocaleString() }}</strong> records ·
           <strong>{{ groups.length }}</strong> product{{ groups.length === 1 ? '' : 's' }}
+          <button
+            type="button"
+            class="usa-button usa-button--unstyled margin-left-2"
+            :disabled="!groups.length"
+            @click="downloadCsv"
+          >Download CSV</button>
         </template>
       </p>
     </div>
 
     <!-- Pivot table -->
-    <div ref="wrapRef" class="data-table-wrap pivot" :style="{ '--thead-h': `${theadH}px`, '--dim-w': dimW ? `${dimW}px` : undefined }">
-      <table class="usa-table usa-table--borderless width-full">
+    <div ref="wrapRef" class="data-table-wrap pivot margin-top-2" :style="{ '--thead-h': `${theadH}px`, '--dim-w': dimW ? `${dimW}px` : undefined }">
+      <table class="usa-table usa-table--borderless width-full margin-bottom-0 margin-top-0">
         <thead ref="theadRef">
           <tr>
             <th scope="col" class="dim-col">Product</th>

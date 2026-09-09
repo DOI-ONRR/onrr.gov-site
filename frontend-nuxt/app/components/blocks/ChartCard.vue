@@ -40,7 +40,15 @@ const gridColumns = computed(() => {
 // Reserve the chart's vertical space before Highcharts mounts (client-side), so the
 // container doesn't collapse and shift the layout. Mirrors the `height` field passed
 // to Highcharts; falls back to Highcharts' own default (400px) when height is unset.
-const chartMinHeight = computed(() => `${card.value.height || 400}px`)
+const chartMinHeight = computed(() => {
+  // Small multiples stack one ~150px pane per series, so the reserved height grows
+  // with the number of products in the current selection.
+  if (smallMultiples.value) {
+    const n = Math.max(1, pivotPayload.value?.groups?.length || 1)
+    return `${Math.max(card.value.height || 400, n * 150)}px`
+  }
+  return `${card.value.height || 400}px`
+})
 
 const isCollection = computed(() => (card.value.data_source_type || 'collection') === 'collection')
 const isEndpoint = computed(() => card.value.data_source_type === 'endpoint')
@@ -97,6 +105,11 @@ const previewChart = inject('datasetPreviewChart', null)
 const reactsToFilters = computed(() => !!card.value.reacts_to_filters && !!previewChart)
 const pivotPayload = computed(() => (reactsToFilters.value ? previewChart.value : null))
 const pivotDriven = computed(() => !!pivotPayload.value)
+// Small-multiples layout: one self-scaled panel per series (product), stacked
+// vertically. Opted into by the preview payload (`layout: 'small-multiples'`) —
+// used for production, where products carry different units and so can't share a
+// single value axis. Everything else keeps the default single-axis chart.
+const smallMultiples = computed(() => pivotDriven.value && pivotPayload.value?.layout === 'small-multiples')
 
 // High-cardinality dimensions (state, commodity) collapse to the top N groups by total
 // plus an "Other" bucket — but only when the dimension is fully selected. A partial
@@ -464,6 +477,40 @@ const chartOptions = computed(() => {
     },
     exporting: { enabled: card.value.enable_export === true },
     series: series.map(({ _format, _prefix, _suffix, ...s }) => s),
+  }
+
+  // Small multiples: replace the single value axis with one pane per series, each
+  // auto-scaled to its own data (mixed units), stacked top-to-bottom. Each series
+  // draws in its own pane; the shared x-axis renders once at the bottom. Legend is
+  // redundant here (each pane is labelled by its axis title), so it's dropped.
+  if (smallMultiples.value && series.length) {
+    const n = series.length
+    const gap = 6 // % vertical space between panes
+    const paneH = (100 - gap * (n - 1)) / n
+    options.yAxis = series.map((s, i) => ({
+      title: {
+        text: s.name,
+        rotation: 0,
+        align: 'high',
+        textAlign: 'left',
+        x: 0,
+        y: -6,
+        style: { color: '#565c65', fontSize: '11px', fontWeight: '600' },
+      },
+      top: `${i * (paneH + gap)}%`,
+      height: `${paneH}%`,
+      offset: 0,
+      min: 0,
+      gridLineColor: '#eef0f1',
+      labels: {
+        formatter() { return formatVar(this.value, `${pivotValueFormat.value}_compact`) },
+        style: { color: '#565c65', fontSize: '10px' },
+      },
+    }))
+    options.series = options.series.map((s, i) => ({ ...s, yAxis: i }))
+    options.legend = { enabled: false }
+    // spacingTop leaves room for the first pane's title, which sits above its axis.
+    options.chart = { ...chart, height: Math.max(card.value.height || 400, n * 150), spacingTop: 22 }
   }
 
   // Only set colors when a palette exists — never `undefined` (see note above).

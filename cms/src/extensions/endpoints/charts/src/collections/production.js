@@ -87,6 +87,21 @@ async function productionPivot(database, opts = {}) {
 	return { groupBy: 'product', periodType: 'Monthly', years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
 }
 
+// Raw production records matching the preview filters (Monthly), for the dataset Download
+// section's "filtered selection" CSV.
+async function productionRecords(database, opts = {}) {
+	const table = 'production';
+	const q = database
+		.select('p.period_date', 'l.land_category', 'l.land_type', 'l.state_name', 'l.county', 'c.product', 'c.name as commodity', 'c.mineral_lease_type', `${table}.volume`, `${table}.unit`)
+		.from(table)
+		.join('period as p', `${table}.period`, 'p.id')
+		.leftJoin('location as l', `${table}.location`, 'l.id')
+		.leftJoin('commodity as c', `${table}.commodity`, 'c.id')
+		.orderBy('p.period_date', 'asc');
+	applyProductionFilters(q, opts);
+	return q;
+}
+
 async function productionPivotOptions(database) {
 	const scoped = (q) => q.from('production').join('period as p', 'production.period', 'p.id').where('p.type', 'Monthly');
 	const [months, landTypes, products] = await Promise.all([
@@ -124,6 +139,36 @@ export default (router, { database }, base = '') => {
 		} catch (error) {
 			console.error('charts/production/pivot error:', error);
 			res.status(500).json({ error: 'Failed to fetch production pivot' });
+		}
+	});
+
+	// GET /charts/production/export?from=&to=&landTypes=&products=
+	// Streams the raw production records matching the current preview filters as CSV.
+	router.get(`${base}/export`, async (req, res) => {
+		const { from, to } = req.query;
+		try {
+			const rows = await productionRecords(database, {
+				from: from || null,
+				to: to || null,
+				landTypes: csvParam(req.query.landTypes),
+				products: csvParam(req.query.products),
+			});
+			const head = ['Date', 'Land Category', 'Land Type', 'State', 'County', 'Product', 'Commodity', 'Mineral Lease Type', 'Volume', 'Unit'];
+			const esc = (v) => {
+				const s = v == null ? '' : String(v);
+				return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+			};
+			const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? '').slice(0, 10));
+			const lines = [head.join(',')];
+			for (const r of rows) {
+				lines.push([ymd(r.period_date), r.land_category, r.land_type, r.state_name, r.county, r.product, r.commodity, r.mineral_lease_type, r.volume, r.unit].map(esc).join(','));
+			}
+			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+			res.setHeader('Content-Disposition', 'attachment; filename="production_filtered.csv"');
+			res.send(lines.join('\n'));
+		} catch (error) {
+			console.error('charts/production/export error:', error);
+			res.status(500).json({ error: 'Failed to export production' });
 		}
 	});
 };
