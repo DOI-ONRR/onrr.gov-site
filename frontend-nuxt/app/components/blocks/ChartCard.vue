@@ -45,7 +45,7 @@ const chartMinHeight = computed(() => {
   // with the number of products in the current selection.
   if (smallMultiples.value) {
     const n = Math.max(1, pivotPayload.value?.groups?.length || 1)
-    return `${Math.max(card.value.height || 400, n * 150)}px`
+    return `${Math.max(card.value.height || 400, n * 168)}px`
   }
   return `${card.value.height || 400}px`
 })
@@ -485,7 +485,7 @@ const chartOptions = computed(() => {
   // redundant here (each pane is labelled by its axis title), so it's dropped.
   if (smallMultiples.value && series.length) {
     const n = series.length
-    const gap = 6 // % vertical space between panes
+    const gap = 11 // % vertical space between panes — room above each product label
     const paneH = (100 - gap * (n - 1)) / n
     options.yAxis = series.map((s, i) => ({
       title: {
@@ -494,7 +494,7 @@ const chartOptions = computed(() => {
         align: 'high',
         textAlign: 'left',
         x: 0,
-        y: -6,
+        y: -10, // lift the label off the plot so the line doesn't crowd it
         style: { color: '#565c65', fontSize: '11px', fontWeight: '600' },
       },
       top: `${i * (paneH + gap)}%`,
@@ -509,8 +509,9 @@ const chartOptions = computed(() => {
     }))
     options.series = options.series.map((s, i) => ({ ...s, yAxis: i }))
     options.legend = { enabled: false }
-    // spacingTop leaves room for the first pane's title, which sits above its axis.
-    options.chart = { ...chart, height: Math.max(card.value.height || 400, n * 150), spacingTop: 22 }
+    // Taller per-pane allotment (and spacingTop for the first title) so the wider
+    // inter-pane gaps don't eat into each pane's plot area.
+    options.chart = { ...chart, height: Math.max(card.value.height || 400, n * 168), spacingTop: 24 }
   }
 
   // Only set colors when a palette exists — never `undefined` (see note above).
