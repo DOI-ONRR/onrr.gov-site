@@ -250,19 +250,6 @@ const filterQuery = computed(() => {
   return { query, empty }
 })
 
-// Whether the current group-by dimension is fully selected. When it is (the default) and
-// the dimension is high-cardinality, the chart shows top-N + "Other"; a partial selection
-// makes the chart show exactly the selected groups.
-const dimensionAllSelected = computed(() => {
-  switch (filters.groupBy) {
-    case 'recipient': return recipAllSelected.value
-    case 'source': return sourceAllSelected.value
-    case 'state': return stateAllSelected.value
-    case 'commodity': return commodityAllSelected.value
-    default: return true
-  }
-})
-
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(
   'disb-pivot',
@@ -274,7 +261,10 @@ const { data: pivot, pending } = await useAsyncData(
     }
     return $fetch(`${apiUrl}/charts/disbursement/pivot`, { query: { groupBy: filters.groupBy, ...query } })
   },
-  { watch: [() => JSON.stringify(filters), ready] },
+  // `cancel` (Nuxt's default, made explicit): a newer change supersedes an in-flight fetch,
+  // so a stale response can never overwrite the latest — the chart/table always reflect the
+  // most recent filter + group-by.
+  { watch: [() => JSON.stringify(filters), ready], dedupe: 'cancel' },
 )
 
 const years = computed(() => pivot.value?.years || [])
@@ -282,22 +272,39 @@ const groups = computed(() => pivot.value?.groups || [])
 const groupByLabel = computed(() => GROUP_OPTIONS.find((o) => o.key === filters.groupBy)?.label || 'Group')
 
 // Publish the pivot result so a filter-reactive chart on the page renders the same data
-// (a visual twin of the table). null until ready, so the chart holds until options load.
+// (a visual twin of the table). Everything is derived from the SAME pivot response —
+// groupBy, years, and groups from `pivot.value`, not live `filters` — so the payload is
+// always internally coherent. (Mixing live filters.groupBy with the lagging pivot groups
+// caused a transient "new group-by label + previous group-by's groups" mismatch when a
+// filter change was quickly followed by a group-by change.) dimensionAllSelected is
+// computed for the response's own groupBy, so it stays consistent with those groups.
+const allSelectedFor = (dim) => {
+  switch (dim) {
+    case 'recipient': return recipAllSelected.value
+    case 'source': return sourceAllSelected.value
+    case 'state': return stateAllSelected.value
+    case 'commodity': return commodityAllSelected.value
+    default: return true
+  }
+}
+const chartPayload = computed(() => {
+  const p = pivot.value
+  if (!ready.value || !p) return null
+  const gb = p.groupBy || filters.groupBy
+  return {
+    empty: !p.groups?.length,
+    periodType: p.periodType || periodType.value,
+    valueFormat: 'currency',
+    groupBy: gb,
+    groupByLabel: GROUP_OPTIONS.find((o) => o.key === gb)?.label || 'Group',
+    dimensionAllSelected: allSelectedFor(gb),
+    years: p.years || [],
+    groups: p.groups || [],
+  }
+})
 const previewChart = inject('datasetPreviewChart', null)
 if (previewChart) {
-  watchEffect(() => {
-    previewChart.value = ready.value
-      ? {
-          empty: filterQuery.value.empty,
-          periodType: periodType.value,
-          groupBy: filters.groupBy,
-          groupByLabel: groupByLabel.value,
-          dimensionAllSelected: dimensionAllSelected.value,
-          years: years.value,
-          groups: groups.value,
-        }
-      : null
-  })
+  watchEffect(() => { previewChart.value = chartPayload.value })
 }
 // Column (per-year) totals across all groups, for the footer row.
 const yearTotals = computed(() => {

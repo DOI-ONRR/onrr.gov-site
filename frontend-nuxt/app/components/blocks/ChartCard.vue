@@ -40,7 +40,15 @@ const gridColumns = computed(() => {
 // Reserve the chart's vertical space before Highcharts mounts (client-side), so the
 // container doesn't collapse and shift the layout. Mirrors the `height` field passed
 // to Highcharts; falls back to Highcharts' own default (400px) when height is unset.
-const chartMinHeight = computed(() => `${card.value.height || 400}px`)
+const chartMinHeight = computed(() => {
+  // Small multiples stack one ~150px pane per series, so the reserved height grows
+  // with the number of products in the current selection.
+  if (smallMultiples.value) {
+    const n = Math.max(1, pivotPayload.value?.groups?.length || 1)
+    return `${Math.max(card.value.height || 400, n * 150)}px`
+  }
+  return `${card.value.height || 400}px`
+})
 
 const isCollection = computed(() => (card.value.data_source_type || 'collection') === 'collection')
 const isEndpoint = computed(() => card.value.data_source_type === 'endpoint')
@@ -97,6 +105,11 @@ const previewChart = inject('datasetPreviewChart', null)
 const reactsToFilters = computed(() => !!card.value.reacts_to_filters && !!previewChart)
 const pivotPayload = computed(() => (reactsToFilters.value ? previewChart.value : null))
 const pivotDriven = computed(() => !!pivotPayload.value)
+// Small-multiples layout: one self-scaled panel per series (product), stacked
+// vertically. Opted into by the preview payload (`layout: 'small-multiples'`) —
+// used for production, where products carry different units and so can't share a
+// single value axis. Everything else keeps the default single-axis chart.
+const smallMultiples = computed(() => pivotDriven.value && pivotPayload.value?.layout === 'small-multiples')
 
 // High-cardinality dimensions (state, commodity) collapse to the top N groups by total
 // plus an "Other" bucket — but only when the dimension is fully selected. A partial
@@ -280,9 +293,13 @@ function buildPivotSeries(key, seriesData, groupBy, index) {
     type: card.value.chart_type || 'column',
     color,
     stack: 'disbursements',
-    _format: 'currency',
+    _format: pivotValueFormat.value,
   }
 }
+
+// Value format for a pivot-driven chart: the preview declares it in the payload
+// (currency for disbursement/revenue, number for production volumes). Default currency.
+const pivotValueFormat = computed(() => pivotPayload.value?.valueFormat || 'currency')
 
 // Transform the preview's pivot payload into a stacked series set — the chart as a visual
 // twin of the table. Monthly: X = chronological months across all years present. Fiscal
@@ -425,7 +442,7 @@ const chartOptions = computed(() => {
     min: card.value.y_axis_min ?? null,
     max: card.value.y_axis_max ?? null,
     gridLineColor: "#eef0f1",
-    labels: { formatter() { return formatVar(this.value, 'currency_compact'); }, style: { color: "#565c65", fontSize: "11px" } }
+    labels: { formatter() { return formatVar(this.value, pivotDriven.value ? `${pivotValueFormat.value}_compact` : 'currency_compact'); }, style: { color: "#565c65", fontSize: "11px" } }
   }
   const yTick = Number(card.value.y_tick_interval)
   if (Number.isFinite(yTick) && yTick > 0) yAxisPrimary.tickInterval = yTick
@@ -462,6 +479,40 @@ const chartOptions = computed(() => {
     series: series.map(({ _format, _prefix, _suffix, ...s }) => s),
   }
 
+  // Small multiples: replace the single value axis with one pane per series, each
+  // auto-scaled to its own data (mixed units), stacked top-to-bottom. Each series
+  // draws in its own pane; the shared x-axis renders once at the bottom. Legend is
+  // redundant here (each pane is labelled by its axis title), so it's dropped.
+  if (smallMultiples.value && series.length) {
+    const n = series.length
+    const gap = 6 // % vertical space between panes
+    const paneH = (100 - gap * (n - 1)) / n
+    options.yAxis = series.map((s, i) => ({
+      title: {
+        text: s.name,
+        rotation: 0,
+        align: 'high',
+        textAlign: 'left',
+        x: 0,
+        y: -6,
+        style: { color: '#565c65', fontSize: '11px', fontWeight: '600' },
+      },
+      top: `${i * (paneH + gap)}%`,
+      height: `${paneH}%`,
+      offset: 0,
+      min: 0,
+      gridLineColor: '#eef0f1',
+      labels: {
+        formatter() { return formatVar(this.value, `${pivotValueFormat.value}_compact`) },
+        style: { color: '#565c65', fontSize: '10px' },
+      },
+    }))
+    options.series = options.series.map((s, i) => ({ ...s, yAxis: i }))
+    options.legend = { enabled: false }
+    // spacingTop leaves room for the first pane's title, which sits above its axis.
+    options.chart = { ...chart, height: Math.max(card.value.height || 400, n * 150), spacingTop: 22 }
+  }
+
   // Only set colors when a palette exists — never `undefined` (see note above).
   if (Array.isArray(card.value.color_palette) && card.value.color_palette.length) {
     options.colors = card.value.color_palette
@@ -487,9 +538,12 @@ const chartOptions = computed(() => {
 // dimension, which is wrong once the chart follows the preview's group-by).
 const displayTitle = computed(() => {
   const p = pivotPayload.value
-  if (pivotDriven.value && p?.groupByLabel) {
+  if (pivotDriven.value && p?.groupByLabel && card.value.title) {
+    // Keep the card title's subject ("Disbursements" / "Production"), swap the grain +
+    // dimension to match the live group-by.
+    const subject = card.value.title.split(/\s+by\s+/i)[0]
     const grain = p.periodType === 'Fiscal Year' ? 'fiscal year' : 'month'
-    return `Disbursements by ${grain} and ${p.groupByLabel.toLowerCase()}`
+    return `${subject} by ${grain} and ${p.groupByLabel.toLowerCase()}`
   }
   return card.value.title
 })
@@ -527,6 +581,7 @@ function formatVar(value, format) {
     case 'currency_compact': return Number.isFinite(n) ? sign + '$' + abs.toLocaleString('en-US', { notation: 'compact', maximumFractionDigits: 1 }) : String(value)
     case 'percent': return Number.isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits: 1 }) + '%' : String(value)
     case 'number': return Number.isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits: 0 }) : String(value)
+    case 'number_compact': return Number.isFinite(n) ? sign + abs.toLocaleString('en-US', { notation: 'compact', maximumFractionDigits: 1 }) : String(value)
     case 'month_year': return fmtDate(value, { month: 'short', year: 'numeric' })
     case 'date': return fmtDate(value, { year: 'numeric', month: 'short', day: 'numeric' })
     default: return String(value)
