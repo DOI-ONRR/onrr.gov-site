@@ -280,9 +280,13 @@ function buildPivotSeries(key, seriesData, groupBy, index) {
     type: card.value.chart_type || 'column',
     color,
     stack: 'disbursements',
-    _format: 'currency',
+    _format: pivotValueFormat.value,
   }
 }
+
+// Value format for a pivot-driven chart: the preview declares it in the payload
+// (currency for disbursement/revenue, number for production volumes). Default currency.
+const pivotValueFormat = computed(() => pivotPayload.value?.valueFormat || 'currency')
 
 // Transform the preview's pivot payload into a stacked series set — the chart as a visual
 // twin of the table. Monthly: X = chronological months across all years present. Fiscal
@@ -425,7 +429,7 @@ const chartOptions = computed(() => {
     min: card.value.y_axis_min ?? null,
     max: card.value.y_axis_max ?? null,
     gridLineColor: "#eef0f1",
-    labels: { formatter() { return formatVar(this.value, 'currency_compact'); }, style: { color: "#565c65", fontSize: "11px" } }
+    labels: { formatter() { return formatVar(this.value, pivotDriven.value ? `${pivotValueFormat.value}_compact` : 'currency_compact'); }, style: { color: "#565c65", fontSize: "11px" } }
   }
   const yTick = Number(card.value.y_tick_interval)
   if (Number.isFinite(yTick) && yTick > 0) yAxisPrimary.tickInterval = yTick
@@ -487,9 +491,12 @@ const chartOptions = computed(() => {
 // dimension, which is wrong once the chart follows the preview's group-by).
 const displayTitle = computed(() => {
   const p = pivotPayload.value
-  if (pivotDriven.value && p?.groupByLabel) {
+  if (pivotDriven.value && p?.groupByLabel && card.value.title) {
+    // Keep the card title's subject ("Disbursements" / "Production"), swap the grain +
+    // dimension to match the live group-by.
+    const subject = card.value.title.split(/\s+by\s+/i)[0]
     const grain = p.periodType === 'Fiscal Year' ? 'fiscal year' : 'month'
-    return `Disbursements by ${grain} and ${p.groupByLabel.toLowerCase()}`
+    return `${subject} by ${grain} and ${p.groupByLabel.toLowerCase()}`
   }
   return card.value.title
 })
@@ -527,6 +534,7 @@ function formatVar(value, format) {
     case 'currency_compact': return Number.isFinite(n) ? sign + '$' + abs.toLocaleString('en-US', { notation: 'compact', maximumFractionDigits: 1 }) : String(value)
     case 'percent': return Number.isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits: 1 }) + '%' : String(value)
     case 'number': return Number.isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits: 0 }) : String(value)
+    case 'number_compact': return Number.isFinite(n) ? sign + abs.toLocaleString('en-US', { notation: 'compact', maximumFractionDigits: 1 }) : String(value)
     case 'month_year': return fmtDate(value, { month: 'short', year: 'numeric' })
     case 'date': return fmtDate(value, { year: 'numeric', month: 'short', day: 'numeric' })
     default: return String(value)

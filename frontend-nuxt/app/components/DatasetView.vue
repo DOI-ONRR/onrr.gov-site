@@ -7,6 +7,7 @@
   "About this data" section. Breadcrumb/H1/layout chrome stay in [...slug].vue.
 */
 import DisbursementPreview from '~/components/previews/DisbursementPreview.vue'
+import ProductionPreview from '~/components/previews/ProductionPreview.vue'
 
 const props = defineProps({
   dataset: { type: Object, required: true },
@@ -71,7 +72,8 @@ const initCap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '')
 const sourceCollection = computed(() => props.dataset.source_collection || null)
 const PREVIEW_COMPONENTS = {
   DisbursementPreview,
-  // RevenuePreview, ProductionPreview — add when built
+  ProductionPreview,
+  // RevenuePreview — add when built
 }
 const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceCollection.value)}Preview`] || null)
 

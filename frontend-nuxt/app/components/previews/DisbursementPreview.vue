@@ -294,6 +294,7 @@ const chartPayload = computed(() => {
   return {
     empty: !p.groups?.length,
     periodType: p.periodType || periodType.value,
+    valueFormat: 'currency',
     groupBy: gb,
     groupByLabel: GROUP_OPTIONS.find((o) => o.key === gb)?.label || 'Group',
     dimensionAllSelected: allSelectedFor(gb),
