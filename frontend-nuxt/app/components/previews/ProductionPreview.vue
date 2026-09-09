@@ -333,7 +333,7 @@ if (datasetExport) {
               </th>
             </tr>
             <template v-if="!collapsed.has(g.key)">
-              <tr v-for="m in g.months" :key="`${g.key}-${m.month}`" class="month-row">
+              <tr v-for="(m, mi) in g.months" :key="`${g.key}-${m.month}`" class="month-row" :class="{ 'row-alt': mi % 2 === 1 }">
                 <td class="dim-cell"></td>
                 <td class="month-cell">{{ m.monthName }}</td>
                 <td v-for="y in years" :key="y" class="text-right">{{ m.byYear[y] ? volume(m.byYear[y]) : '—' }}</td>
@@ -415,7 +415,20 @@ if (datasetExport) {
 
 .pivot .month-row td { font-size: 0.95rem; }
 .pivot .month-cell { white-space: nowrap; color: #565c65; }
-.pivot .subtotal-row { background: #f9fafb; }
+
+// White/gray zebra on the month rows, keyed off the row's index within its group
+// (`.row-alt`) so it stays consistent when a group is missing months.
+.pivot .month-row > th,
+.pivot .month-row > td { background: #fff; }
+.pivot .month-row.row-alt > th,
+.pivot .month-row.row-alt > td { background: #f5f5f5; }
+
+// Group subtotal: white, bold, ruled off — matches the disbursement tables.
+.pivot .subtotal-row > th,
+.pivot .subtotal-row > td {
+  background: #fff;
+  font-weight: 700;
+  border-top: 1px solid #dfe1e2;
+}
 .pivot .subtotal-label { font-weight: 700; }
-.pivot tbody tr:not(.group-row):not(.subtotal-row):nth-child(odd) td { background: #f7fafc; }
 </style>
