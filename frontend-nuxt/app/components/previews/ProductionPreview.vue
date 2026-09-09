@@ -311,7 +311,7 @@ if (datasetExport) {
 
     <!-- Pivot table -->
     <div ref="wrapRef" class="data-table-wrap pivot margin-top-2" :style="{ '--thead-h': `${theadH}px`, '--dim-w': dimW ? `${dimW}px` : undefined }">
-      <table class="usa-table usa-table--borderless width-full margin-bottom-0 margin-top-0">
+      <table class="usa-table usa-table--compact width-full margin-bottom-0 margin-top-0">
         <thead ref="theadRef">
           <tr>
             <th scope="col" class="dim-col">Product</th>
