@@ -183,7 +183,7 @@ async function copyApiUrl() {
 
     <div v-if="hasApi" class="grid-row grid-gap margin-bottom-2" id="api">
       <h2 class="font-heading-lg">API access</h2>
-      <div class="grid-col-12  border-bottom-05 padding-bottom-4 border-onrr-blue">
+      <div class="grid-col-12">
         <div>
           <p>
             This dataset is available through ONRR's open, read-only data API — no account or

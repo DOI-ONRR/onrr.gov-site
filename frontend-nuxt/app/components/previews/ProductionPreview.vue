@@ -396,7 +396,7 @@ if (datasetExport) {
   padding: 0;
   background: mix($onrr-violet, #fff, 12%);
   position: sticky;
-  top: calc(var(--thead-h, 2.5rem) - 1px);
+  top: calc(var(--thead-h, 2.5rem) - 2px);
   z-index: 1;
 }
 .group-toggle {
