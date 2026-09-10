@@ -66,7 +66,9 @@ const terms = computed(() => {
 
 // `source_collection` holds the real Directus collection name, so it drives both the
 // preview component (init-capped + "Preview", e.g. disbursement -> DisbursementPreview)
-// and DatasetDownloads' live count + native CSV export directly — no mapping needed.
+// and DatasetDownloads' live count + native CSV export directly — no mapping needed. Each
+// preview reads the dataset's export_filter to serve every period grain of that collection
+// (monthly / fiscal-year / calendar-year production all use one ProductionPreview).
 // Register each preview here as it's built.
 const initCap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '')
 const sourceCollection = computed(() => props.dataset.source_collection || null)

@@ -307,10 +307,11 @@ const pivotValueFormat = computed(() => pivotPayload.value?.valueFormat || 'curr
 // "Other" when the dimension is high-cardinality).
 function pivotChartData(p) {
   if (!p || p.empty || !p.groups?.length) return { categories: [], series: [] }
-  const isFy = p.periodType === 'Fiscal Year'
+  // Fiscal Year and Calendar Year are both annual grains: X = the years, no month detail.
+  const isAnnual = p.periodType === 'Fiscal Year' || p.periodType === 'Calendar Year'
 
   let periods, categories, valAt
-  if (isFy) {
+  if (isAnnual) {
     periods = (p.years || []).map(String)
     categories = periods
     valAt = (g, year) => Number(g.byYear?.[year]) || 0
@@ -498,7 +499,10 @@ const chartOptions = computed(() => {
         // Float the pane label over the plot: without this, Highcharts reserves a wide
         // left gutter for the horizontal title, pushing every pane far to the right.
         reserveSpace: false,
-        style: { color: '#565c65', fontSize: '11px', fontWeight: '600' },
+        // nowrap keeps long product names (e.g. "Geothermal - electrical generation -
+        // kilowatt hours (kwh)") on one line in the gap above the plot; otherwise
+        // Highcharts wraps the floating title into a cramped multi-line block.
+        style: { color: '#565c65', fontSize: '11px', fontWeight: '600', whiteSpace: 'nowrap' },
       },
       top: `${i * (paneH + gap)}%`,
       height: `${paneH}%`,
@@ -546,7 +550,7 @@ const displayTitle = computed(() => {
     // Keep the card title's subject ("Disbursements" / "Production"), swap the grain +
     // dimension to match the live group-by.
     const subject = card.value.title.split(/\s+by\s+/i)[0]
-    const grain = p.periodType === 'Fiscal Year' ? 'fiscal year' : 'month'
+    const grain = p.periodType === 'Fiscal Year' ? 'fiscal year' : p.periodType === 'Calendar Year' ? 'calendar year' : 'month'
     return `${subject} by ${grain} and ${p.groupByLabel.toLowerCase()}`
   }
   return card.value.title
