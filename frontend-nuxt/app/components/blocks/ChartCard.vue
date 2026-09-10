@@ -495,6 +495,9 @@ const chartOptions = computed(() => {
         textAlign: 'left',
         x: 0,
         y: -10, // lift the label off the plot so the line doesn't crowd it
+        // Float the pane label over the plot: without this, Highcharts reserves a wide
+        // left gutter for the horizontal title, pushing every pane far to the right.
+        reserveSpace: false,
         style: { color: '#565c65', fontSize: '11px', fontWeight: '600' },
       },
       top: `${i * (paneH + gap)}%`,
