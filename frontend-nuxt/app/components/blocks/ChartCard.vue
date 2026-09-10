@@ -493,7 +493,7 @@ const chartOptions = computed(() => {
         rotation: 0,
         align: 'high',
         textAlign: 'left',
-        x: 0,
+        x: -10, // pull left ~spacingLeft so the label sits flush with the card title
         y: -18, // lift the label well off the plot so there's clear padding below it
         // Float the pane label over the plot: without this, Highcharts reserves a wide
         // left gutter for the horizontal title, pushing every pane far to the right.
