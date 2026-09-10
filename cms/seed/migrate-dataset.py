@@ -218,10 +218,16 @@ def main():
         post("glossary_terms", new_glossary)
     print(f"  glossary_terms: {len(new_glossary)} created, {len(have)} already present")
 
-    # 2. contact_boxes (dataset_metadata.contact_box FKs to it).
+    # 2. contact_boxes (dataset_metadata.contact_box FKs to it) — create only the ones the
+    #    dest doesn't already have. A contact_box is shared content (several datasets can
+    #    point at the same one), so re-POSTing an existing id would 400 on the unique PK,
+    #    and overwriting/deleting it could disturb another dataset that shares it.
     if contact:
-        post("contact_boxes", contact)
-        print(f"  wrote {len(contact):4}  contact_boxes")
+        have_c = dest_existing_ids("contact_boxes", [c["id"] for c in contact])
+        new_contact = [c for c in contact if c["id"] not in have_c]
+        if new_contact:
+            post("contact_boxes", new_contact)
+        print(f"  contact_boxes: {len(new_contact)} created, {len(have_c)} already present")
 
     # 3. files: re-upload the binary to the dest, remap the junction's file id.
     file_id_map = {}
