@@ -199,7 +199,8 @@ const groups = computed(() => pivot.value?.groups || [])
 watch(pivot, () => nextTick(measureDimCol))
 
 // Publish a coherent pivot payload for the reactive chart — small multiples of the top N
-// products by total volume (the endpoint returns groups sorted by total desc).
+// products by breadth of reporting (the endpoint returns groups ranked by record count, so
+// the top N is unit-independent rather than dominated by large-magnitude units).
 const chartPayload = computed(() => {
   const p = pivot.value
   if (!ready.value || !p) return null

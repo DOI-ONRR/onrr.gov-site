@@ -61,7 +61,7 @@ async function productionPivot(database, opts = {}) {
 
 	const cols = [database.raw('"c"."product" as "dim"'), database.raw(`${yr}::int as "yr"`)];
 	if (isMonthly) cols.push(database.raw('EXTRACT(MONTH FROM "p"."period_date")::int as "mo"'));
-	cols.push(database.raw(`SUM("${table}"."volume") as "amt"`));
+	cols.push(database.raw(`SUM("${table}"."volume") as "amt"`), database.raw(`COUNT(*) as "cnt"`));
 
 	const aggQ = base().select(...cols);
 	applyProductionFilters(aggQ, opts);
@@ -84,10 +84,11 @@ async function productionPivot(database, opts = {}) {
 
 		let g = groups.get(label);
 		if (!g) {
-			g = { key: label, total: 0, byYear: {}, months: isMonthly ? new Map() : null };
+			g = { key: label, total: 0, recordCount: 0, byYear: {}, months: isMonthly ? new Map() : null };
 			groups.set(label, g);
 		}
 		g.total += amt;
+		g.recordCount += Number(r.cnt) || 0;
 		g.byYear[y] = (g.byYear[y] || 0) + amt;
 
 		if (isMonthly) {
@@ -105,11 +106,15 @@ async function productionPivot(database, opts = {}) {
 	const years = [...yearSet].sort((a, b) => a - b);
 	const groupList = [...groups.values()]
 		.map((g) => {
-			const out = { key: g.key, total: g.total, byYear: g.byYear };
+			const out = { key: g.key, total: g.total, recordCount: g.recordCount, byYear: g.byYear };
 			if (isMonthly) out.months = [...g.months.values()].sort((a, b) => a.month - b.month);
 			return out;
 		})
-		.sort((a, b) => b.total - a.total);
+		// Rank by breadth of reporting (record count), not raw volume: volumes across products
+		// use different units (bbl/mcf/ton/kwh/…), so a volume sort surfaces large-magnitude
+		// units (e.g. geothermal kwh/klb) over the headline products. Record count is
+		// unit-independent and naturally puts oil/gas/coal on top. Volume breaks ties.
+		.sort((a, b) => b.recordCount - a.recordCount || b.total - a.total);
 
 	return { groupBy: 'product', periodType, years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
 }
