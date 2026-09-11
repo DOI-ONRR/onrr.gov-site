@@ -62,7 +62,7 @@ function volume(v) {
 
 // --- optional secondary breakout (annual only) --------------------------------
 const BREAKOUT_OPTIONS = [
-  { value: '', label: 'No breakout' },
+  { value: '', label: 'None' },
   { value: 'land_category', label: 'Land Category' },
   { value: 'state', label: 'State' },
   { value: 'county', label: 'County' },
@@ -690,7 +690,7 @@ if (datasetExport) {
 // separated borders paint per-cell and stay put. Scoped to `.pivot--flat` so the monthly
 // and disbursement tables keep border-collapse (their sticky-header seam fix depends on it).
 .pivot--flat table {
-  border-collapse: separate;
+  border-collapse: inherit;
   border-spacing: 0;
 }
 
