@@ -24,13 +24,21 @@ const periodTypeOf = (p) => PERIOD_TYPES[p] || 'Monthly';
 // location.offshore_region — the region is whichever is present.
 const REGION_EXPR = `COALESCE(NULLIF("l"."state_name", ''), "l"."offshore_region")`;
 
+// Optional secondary breakout for the annual table: the ?breakout= value maps to the
+// location field that becomes a sub-row under each product. Anything else = no breakout.
+const BREAKOUT_FIELDS = {
+	land_category: '"l"."land_category"',
+	state: '"l"."state_name"',
+	county: '"l"."county"',
+};
+
 // The "year" column per grain: the fiscal_year for Fiscal Year rows, else the calendar
 // year off the period date (Monthly and Calendar Year rows both date to their year).
 const yearExpr = (periodType) => (periodType === 'Fiscal Year' ? '"p"."fiscal_year"' : 'EXTRACT(YEAR FROM "p"."period_date")');
 
 // Apply the preview filters to a production query builder (joins aliased p/l/c). Mutates in
 // place; returns nothing (returning the thenable would run it before the caller's GROUP BY).
-function applyProductionFilters(q, { periodType, from, to, fromYear, toYear, landTypes, regions, products }) {
+function applyProductionFilters(q, { periodType, from, to, fromYear, toYear, landTypes, landClasses, landCategories, regions, products }) {
 	q.where('p.type', periodType);
 	if (periodType === 'Monthly') {
 		if (from) q.where('p.period_date', '>=', from);
@@ -40,7 +48,11 @@ function applyProductionFilters(q, { periodType, from, to, fromYear, toYear, lan
 		if (fromYear) q.whereRaw(`${yr} >= ?`, [Number(fromYear)]);
 		if (toYear) q.whereRaw(`${yr} <= ?`, [Number(toYear)]);
 	}
+	// Land is filtered either by the combined land_type (monthly) or by land_class +
+	// land_category separately (annual) — whichever the caller sends.
 	if (Array.isArray(landTypes) && landTypes.length) q.whereIn('l.land_type', landTypes);
+	if (Array.isArray(landClasses) && landClasses.length) q.whereIn('l.land_class', landClasses);
+	if (Array.isArray(landCategories) && landCategories.length) q.whereIn('l.land_category', landCategories);
 	if (Array.isArray(products) && products.length) q.whereIn('c.product', products);
 	if (Array.isArray(regions) && regions.length) {
 		q.whereRaw(`${REGION_EXPR} IN (${regions.map(() => '?').join(', ')})`, regions);
@@ -50,6 +62,8 @@ function applyProductionFilters(q, { periodType, from, to, fromYear, toYear, lan
 async function productionPivot(database, opts = {}) {
 	const { periodType } = opts;
 	const isMonthly = periodType === 'Monthly';
+	// Optional secondary breakout (annual grains only): product -> breakout value sub-rows.
+	const breakoutExpr = isMonthly ? null : BREAKOUT_FIELDS[opts.breakout] || null;
 	const yr = yearExpr(periodType);
 	const table = 'production';
 	const base = () =>
@@ -61,11 +75,18 @@ async function productionPivot(database, opts = {}) {
 
 	const cols = [database.raw('"c"."product" as "dim"'), database.raw(`${yr}::int as "yr"`)];
 	if (isMonthly) cols.push(database.raw('EXTRACT(MONTH FROM "p"."period_date")::int as "mo"'));
+	else if (breakoutExpr) cols.push(database.raw(`${breakoutExpr} as "sub"`));
 	cols.push(database.raw(`SUM("${table}"."volume") as "amt"`), database.raw(`COUNT(*) as "cnt"`));
 
 	const aggQ = base().select(...cols);
 	applyProductionFilters(aggQ, opts);
-	aggQ.groupByRaw(isMonthly ? `"c"."product", ${yr}, EXTRACT(MONTH FROM "p"."period_date")` : `"c"."product", ${yr}`);
+	aggQ.groupByRaw(
+		isMonthly
+			? `"c"."product", ${yr}, EXTRACT(MONTH FROM "p"."period_date")`
+			: breakoutExpr
+				? `"c"."product", ${breakoutExpr}, ${yr}`
+				: `"c"."product", ${yr}`
+	);
 
 	const countQ = base().count(`${table}.id as n`);
 	applyProductionFilters(countQ, opts);
@@ -84,7 +105,7 @@ async function productionPivot(database, opts = {}) {
 
 		let g = groups.get(label);
 		if (!g) {
-			g = { key: label, total: 0, recordCount: 0, byYear: {}, months: isMonthly ? new Map() : null };
+			g = { key: label, total: 0, recordCount: 0, byYear: {}, months: isMonthly ? new Map() : null, subs: breakoutExpr ? new Map() : null };
 			groups.set(label, g);
 		}
 		g.total += amt;
@@ -100,6 +121,15 @@ async function productionPivot(database, opts = {}) {
 			}
 			m.byYear[y] = (m.byYear[y] || 0) + amt;
 			m.total += amt;
+		} else if (breakoutExpr) {
+			const subKey = r.sub == null || r.sub === '' ? '(unspecified)' : r.sub;
+			let s = g.subs.get(subKey);
+			if (!s) {
+				s = { key: subKey, total: 0, byYear: {} };
+				g.subs.set(subKey, s);
+			}
+			s.byYear[y] = (s.byYear[y] || 0) + amt;
+			s.total += amt;
 		}
 	}
 
@@ -108,6 +138,7 @@ async function productionPivot(database, opts = {}) {
 		.map((g) => {
 			const out = { key: g.key, total: g.total, recordCount: g.recordCount, byYear: g.byYear };
 			if (isMonthly) out.months = [...g.months.values()].sort((a, b) => a.month - b.month);
+			else if (breakoutExpr) out.rows = [...g.subs.values()].sort((a, b) => b.total - a.total).map((s) => ({ key: s.key, byYear: s.byYear }));
 			return out;
 		})
 		// Rank by breadth of reporting (record count), not raw volume: volumes across products
@@ -116,7 +147,7 @@ async function productionPivot(database, opts = {}) {
 		// unit-independent and naturally puts oil/gas/coal on top. Volume breaks ties.
 		.sort((a, b) => b.recordCount - a.recordCount || b.total - a.total);
 
-	return { groupBy: 'product', periodType, years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
+	return { groupBy: 'product', periodType, breakout: breakoutExpr ? opts.breakout : null, years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
 }
 
 // Raw production records matching the preview filters, for the "filtered selection" CSV.
@@ -151,28 +182,34 @@ async function productionPivotOptions(database, periodType) {
 	const yr = yearExpr(periodType);
 
 	const landTypesP = scoped(database.distinct('l.land_type')).join('location as l', 'production.location', 'l.id').whereNotNull('l.land_type').orderBy('l.land_type', 'asc').then((r) => r.map((x) => x.land_type));
+	const landClassesP = scoped(database.distinct('l.land_class')).join('location as l', 'production.location', 'l.id').whereNotNull('l.land_class').orderBy('l.land_class', 'asc').then((r) => r.map((x) => x.land_class));
+	const landCategoriesP = scoped(database.distinct('l.land_category')).join('location as l', 'production.location', 'l.id').whereNotNull('l.land_category').orderBy('l.land_category', 'asc').then((r) => r.map((x) => x.land_category));
 	const productsP = scoped(database.distinct('c.product')).join('commodity as c', 'production.commodity', 'c.id').whereNotNull('c.product').orderBy('c.product', 'asc').then((r) => r.map((x) => x.product));
 	const regionsP = scoped(database.select(database.raw(`DISTINCT ${REGION_EXPR} as region`))).join('location as l', 'production.location', 'l.id').then((r) => r.map((x) => x.region).filter(Boolean));
 
 	if (periodType === 'Monthly') {
-		const [months, landTypes, products, regions] = await Promise.all([
+		const [months, landTypes, landClasses, landCategories, products, regions] = await Promise.all([
 			scoped(database.distinct('p.period_date')).orderBy('p.period_date', 'asc').then((r) => r.map((x) => x.period_date)),
 			landTypesP,
+			landClassesP,
+			landCategoriesP,
 			productsP,
 			regionsP,
 		]);
 		regions.sort((a, b) => String(a).localeCompare(String(b)));
-		return { periodType, months, landTypes, products, regions };
+		return { periodType, months, landTypes, landClasses, landCategories, products, regions };
 	}
 
-	const [years, landTypes, products, regions] = await Promise.all([
+	const [years, landTypes, landClasses, landCategories, products, regions] = await Promise.all([
 		scoped(database.select(database.raw(`DISTINCT ${yr}::int as year`))).whereRaw(`${yr} IS NOT NULL`).then((r) => r.map((x) => x.year).sort((a, b) => a - b)),
 		landTypesP,
+		landClassesP,
+		landCategoriesP,
 		productsP,
 		regionsP,
 	]);
 	regions.sort((a, b) => String(a).localeCompare(String(b)));
-	return { periodType, years, landTypes, products, regions };
+	return { periodType, years, landTypes, landClasses, landCategories, products, regions };
 }
 
 // Reads the shared filter params off a request into a productionPivot/records opts object.
@@ -185,8 +222,11 @@ function readOpts(req) {
 		fromYear: req.query.fromYear || null,
 		toYear: req.query.toYear || null,
 		landTypes: csvParam(req.query.landTypes),
+		landClasses: csvParam(req.query.landClasses),
+		landCategories: csvParam(req.query.landCategories),
 		regions: csvParam(req.query.regions),
 		products: csvParam(req.query.products),
+		breakout: req.query.breakout || '',
 	};
 }
 

@@ -6,13 +6,13 @@
 
     Monthly       — From/To month, Land type, Product; grouped table (Product -> month
                     detail rows) with collapsible groups; chart = small multiples per product.
-    Fiscal Year   — From/To fiscal year, Land type, State/Offshore Region, Product; flat table
-    Calendar Year   (Product | one column per year); chart = small multiples of the TOP N
-                    products by total volume.
+    Fiscal Year   — From/To year, Land class, Land category, State/Offshore Region, Product;
+    Calendar Year   flat table (Product | one column per year); chart = small multiples of the
+                    TOP N products by breadth of reporting.
 
-  The annual grains add a State/Offshore Region filter and carry ~60 products (the annual
-  data covers all minerals, not just oil/gas/coal), so the chart is capped to the top N.
-  Units differ per product, so there are never cross-product totals.
+  The annual grains also offer an optional "Break out by" (Land Category / State / County):
+  when set, the flat table becomes grouped — Product turns into a collapsible band with one
+  sub-row per breakout value (plus a product subtotal), like the monthly month rows.
 
   Aggregation is server-side via `/charts/production/pivot?period=…`.
 */
@@ -32,8 +32,6 @@ const isAnnual = computed(() => !isMonthly.value)
 const periodParam = computed(() =>
   periodType.value === 'Fiscal Year' ? 'fiscal-year' : periodType.value === 'Calendar Year' ? 'calendar-year' : 'monthly',
 )
-// Number of product panes on the small-multiples chart (monthly has 3 products, so it just
-// shows them all; the annual grains have ~60, so this is a real top-N).
 const CHART_TOP_N = 5
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -50,6 +48,20 @@ function volume(v) {
   return n.toLocaleString('en-US', { maximumFractionDigits: 0 })
 }
 
+// --- optional secondary breakout (annual only) --------------------------------
+const BREAKOUT_OPTIONS = [
+  { value: '', label: 'No breakdown' },
+  { value: 'land_category', label: 'Land Category' },
+  { value: 'state', label: 'State' },
+  { value: 'county', label: 'County' },
+]
+const breakout = ref('')
+const breakoutColLabel = computed(() => BREAKOUT_OPTIONS.find((o) => o.value === breakout.value)?.label || '')
+const hasBreakout = computed(() => isAnnual.value && !!breakout.value)
+// The table is grouped (collapsible band + detail rows) for monthly, or for an annual grain
+// with a breakout; otherwise it's a flat one-row-per-product table.
+const grouped = computed(() => isMonthly.value || hasBreakout.value)
+
 // --- filter options (loaded once for this grain) ------------------------------
 const { data: options } = await useAsyncData(`prod-pivot-options-${periodParam.value}`, () =>
   $fetch(`${apiUrl}/charts/production/pivot/options`, { query: { period: periodParam.value } }),
@@ -57,13 +69,17 @@ const { data: options } = await useAsyncData(`prod-pivot-options-${periodParam.v
 const monthOptions = computed(() => options.value?.months || [])
 const yearOptions = computed(() => options.value?.years || [])
 const landTypeOptions = computed(() => options.value?.landTypes || [])
+const landClassOptions = computed(() => options.value?.landClasses || [])
+const landCategoryOptions = computed(() => options.value?.landCategories || [])
 const regionOptions = computed(() => options.value?.regions || [])
 const productOptions = computed(() => options.value?.products || [])
 
 // --- filter state (seeded to full range / all-selected once options load) -----
-const filters = reactive({ from: '', to: '', fromYear: '', toYear: '', landTypes: [], regions: [], products: [] })
+const filters = reactive({ from: '', to: '', fromYear: '', toYear: '', landTypes: [], landClasses: [], landCategories: [], regions: [], products: [] })
 
 const landAllSelected = computed(() => landTypeOptions.value.length > 0 && filters.landTypes.length === landTypeOptions.value.length)
+const landClassAllSelected = computed(() => landClassOptions.value.length > 0 && filters.landClasses.length === landClassOptions.value.length)
+const landCategoryAllSelected = computed(() => landCategoryOptions.value.length > 0 && filters.landCategories.length === landCategoryOptions.value.length)
 const regionAllSelected = computed(() => regionOptions.value.length > 0 && filters.regions.length === regionOptions.value.length)
 const productAllSelected = computed(() => productOptions.value.length > 0 && filters.products.length === productOptions.value.length)
 
@@ -74,6 +90,8 @@ const summarize = (all, arr, allLabel) => {
   return `${arr.length} selected`
 }
 const landSummary = computed(() => summarize(landAllSelected.value, filters.landTypes, 'All land types'))
+const landClassSummary = computed(() => summarize(landClassAllSelected.value, filters.landClasses, 'All land classes'))
+const landCategorySummary = computed(() => summarize(landCategoryAllSelected.value, filters.landCategories, 'All land categories'))
 const regionSummary = computed(() => summarize(regionAllSelected.value, filters.regions, 'All regions'))
 const productSummary = computed(() => summarize(productAllSelected.value, filters.products, 'All products'))
 
@@ -81,11 +99,13 @@ function seedFilters() {
   if (isMonthly.value) {
     filters.from = monthOptions.value[0] || ''
     filters.to = monthOptions.value[monthOptions.value.length - 1] || ''
+    filters.landTypes = [...landTypeOptions.value]
   } else {
     filters.fromYear = yearOptions.value[0] ?? ''
     filters.toYear = yearOptions.value[yearOptions.value.length - 1] ?? ''
+    filters.landClasses = [...landClassOptions.value]
+    filters.landCategories = [...landCategoryOptions.value]
   }
-  filters.landTypes = [...landTypeOptions.value]
   filters.regions = [...regionOptions.value]
   filters.products = [...productOptions.value]
 }
@@ -99,26 +119,36 @@ watchEffect(() => {
 
 // --- multi-select dropdowns ---------------------------------------------------
 const landOpen = ref(false)
+const landClassOpen = ref(false)
+const landCategoryOpen = ref(false)
 const regionOpen = ref(false)
 const productOpen = ref(false)
 const landRef = ref(null)
+const landClassRef = ref(null)
+const landCategoryRef = ref(null)
 const regionRef = ref(null)
 const productRef = ref(null)
 const toggleIn = (arr, v) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v])
 function toggleLand(v) { filters.landTypes = toggleIn(filters.landTypes, v) }
+function toggleLandClass(v) { filters.landClasses = toggleIn(filters.landClasses, v) }
+function toggleLandCategory(v) { filters.landCategories = toggleIn(filters.landCategories, v) }
 function toggleRegion(v) { filters.regions = toggleIn(filters.regions, v) }
 function toggleProduct(v) { filters.products = toggleIn(filters.products, v) }
 function toggleAllLand() { filters.landTypes = landAllSelected.value ? [] : [...landTypeOptions.value] }
+function toggleAllLandClasses() { filters.landClasses = landClassAllSelected.value ? [] : [...landClassOptions.value] }
+function toggleAllLandCategories() { filters.landCategories = landCategoryAllSelected.value ? [] : [...landCategoryOptions.value] }
 function toggleAllRegions() { filters.regions = regionAllSelected.value ? [] : [...regionOptions.value] }
 function toggleAllProducts() { filters.products = productAllSelected.value ? [] : [...productOptions.value] }
 function handleClickOutside(e) {
   if (landRef.value && !landRef.value.contains(e.target)) landOpen.value = false
+  if (landClassRef.value && !landClassRef.value.contains(e.target)) landClassOpen.value = false
+  if (landCategoryRef.value && !landCategoryRef.value.contains(e.target)) landCategoryOpen.value = false
   if (regionRef.value && !regionRef.value.contains(e.target)) regionOpen.value = false
   if (productRef.value && !productRef.value.contains(e.target)) productOpen.value = false
 }
 
 // Sticky group headers pin beneath the sticky thead; measure the thead height for the
-// --thead-h offset, and (monthly only) the widest product name for the group-column width.
+// --thead-h offset, and (grouped tables) the widest product name for the band-column width.
 const wrapRef = ref(null)
 const theadRef = ref(null)
 const theadH = ref(0)
@@ -147,7 +177,7 @@ onUnmounted(() => {
   theadObserver?.disconnect()
 })
 
-// Collapse/expand product groups (monthly grouped table only).
+// Collapse/expand product groups (grouped tables only).
 const collapsed = ref(new Set())
 function toggle(key) {
   const s = new Set(collapsed.value)
@@ -160,9 +190,11 @@ function toggleAll() {
 }
 
 // --- filter query -------------------------------------------------------------
-const selectionEmpty = computed(() =>
-  !filters.landTypes.length || !filters.products.length || (isAnnual.value && !filters.regions.length),
-)
+const selectionEmpty = computed(() => {
+  if (!filters.products.length) return true
+  if (isMonthly.value) return !filters.landTypes.length
+  return !filters.landClasses.length || !filters.landCategories.length || !filters.regions.length
+})
 const filterQuery = computed(() => {
   const query = { period: periodParam.value }
   if (isMonthly.value) {
@@ -175,10 +207,16 @@ const filterQuery = computed(() => {
     if (filters.toYear && filters.toYear !== ys[ys.length - 1]) query.toYear = String(filters.toYear)
   }
   if (!selectionEmpty.value) {
-    if (filters.landTypes.length < landTypeOptions.value.length) query.landTypes = filters.landTypes.join(',')
-    if (isAnnual.value && filters.regions.length < regionOptions.value.length) query.regions = filters.regions.join(',')
+    if (isMonthly.value) {
+      if (filters.landTypes.length < landTypeOptions.value.length) query.landTypes = filters.landTypes.join(',')
+    } else {
+      if (filters.landClasses.length < landClassOptions.value.length) query.landClasses = filters.landClasses.join(',')
+      if (filters.landCategories.length < landCategoryOptions.value.length) query.landCategories = filters.landCategories.join(',')
+      if (filters.regions.length < regionOptions.value.length) query.regions = filters.regions.join(',')
+    }
     if (filters.products.length < productOptions.value.length) query.products = filters.products.join(',')
   }
+  if (hasBreakout.value) query.breakout = breakout.value
   return { query, empty: selectionEmpty.value }
 })
 
@@ -191,7 +229,7 @@ const { data: pivot, pending } = await useAsyncData(
     if (empty) return { groupBy: 'product', periodType: periodType.value, years: [], groups: [], grandTotal: 0, recordCount: 0 }
     return $fetch(`${apiUrl}/charts/production/pivot`, { query })
   },
-  { watch: [() => JSON.stringify(filters), ready], dedupe: 'cancel' },
+  { watch: [() => JSON.stringify(filters), ready, breakout], dedupe: 'cancel' },
 )
 
 const years = computed(() => pivot.value?.years || [])
@@ -200,14 +238,15 @@ watch(pivot, () => nextTick(measureDimCol))
 
 // Publish a coherent pivot payload for the reactive chart — small multiples of the top N
 // products by breadth of reporting (the endpoint returns groups ranked by record count, so
-// the top N is unit-independent rather than dominated by large-magnitude units).
+// the top N is unit-independent rather than dominated by large-magnitude units). The chart
+// always uses product-level totals (g.byYear), so a table breakout doesn't change it.
 const chartPayload = computed(() => {
   const p = pivot.value
   if (!ready.value || !p) return null
   return {
     empty: !p.groups?.length,
     periodType: periodType.value,
-    layout: 'small-multiples', // one self-scaled panel per product (mixed units)
+    layout: 'small-multiples',
     valueFormat: 'number',
     groupBy: 'product',
     groupByLabel: 'Product',
@@ -224,7 +263,7 @@ function clearFilters() {
   seedFilters()
 }
 
-// --- CSV: Product [| Month] | one column per year --------------------------------
+// --- CSV ----------------------------------------------------------------------
 function downloadCsv() {
   const p = pivot.value
   if (!p?.groups?.length) return
@@ -234,6 +273,12 @@ function downloadCsv() {
     for (const g of p.groups) {
       rows.push([g.key, 'All months', ...p.years.map((y) => g.byYear[y] ?? '')])
       for (const m of g.months || []) rows.push([g.key, m.monthName, ...p.years.map((y) => m.byYear[y] ?? '')])
+    }
+  } else if (hasBreakout.value) {
+    rows.push(['Product', breakoutColLabel.value, ...p.years.map(String)])
+    for (const g of p.groups) {
+      rows.push([g.key, 'All', ...p.years.map((y) => g.byYear[y] ?? '')])
+      for (const row of g.rows || []) rows.push([g.key, row.key, ...p.years.map((y) => row.byYear[y] ?? '')])
     }
   } else {
     rows.push(['Product', ...p.years.map(String)])
@@ -259,7 +304,7 @@ if (datasetExport) {
     if (selectionEmpty.value) return null
     const q = new URLSearchParams()
     const { query } = filterQuery.value
-    for (const [k, v] of Object.entries(query)) q.set(k, v)
+    for (const [k, v] of Object.entries(query)) if (k !== 'breakout') q.set(k, v)
     const qs = q.toString()
     return `${apiUrl}/charts/production/export${qs ? `?${qs}` : ''}`
   })
@@ -311,8 +356,8 @@ if (datasetExport) {
           </div>
         </template>
 
-        <!-- Land type multi-select -->
-        <div class="field field--wide">
+        <!-- Monthly: single Land type multi-select -->
+        <div v-if="isMonthly" class="field field--wide">
           <label class="usa-label margin-top-0" for="p-land">Land type</label>
           <div ref="landRef" class="multi-select">
             <button id="p-land" type="button" class="usa-select multi-select__trigger" :aria-expanded="landOpen" @click="landOpen = !landOpen">
@@ -328,6 +373,42 @@ if (datasetExport) {
             </ul>
           </div>
         </div>
+
+        <!-- Annual: Land class + Land category multi-selects -->
+        <template v-else>
+          <div class="field field--wide">
+            <label class="usa-label margin-top-0" for="p-land-class">Land class</label>
+            <div ref="landClassRef" class="multi-select">
+              <button id="p-land-class" type="button" class="usa-select multi-select__trigger" :aria-expanded="landClassOpen" @click="landClassOpen = !landClassOpen">
+                <span :class="{ 'multi-select__placeholder': landClassAllSelected }">{{ landClassSummary }}</span>
+              </button>
+              <ul v-show="landClassOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
+                <li role="option" :aria-selected="landClassAllSelected" class="multi-select__option multi-select__option--all" :class="{ 'multi-select__option--selected': landClassAllSelected }" @click="toggleAllLandClasses">
+                  <input type="checkbox" :checked="landClassAllSelected" tabindex="-1" class="multi-select__checkbox"> Select all
+                </li>
+                <li v-for="v in landClassOptions" :key="v" role="option" :aria-selected="filters.landClasses.includes(v)" class="multi-select__option" :class="{ 'multi-select__option--selected': filters.landClasses.includes(v) }" @click="toggleLandClass(v)">
+                  <input type="checkbox" :checked="filters.landClasses.includes(v)" tabindex="-1" class="multi-select__checkbox"> {{ v }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="field field--wide">
+            <label class="usa-label margin-top-0" for="p-land-category">Land category</label>
+            <div ref="landCategoryRef" class="multi-select">
+              <button id="p-land-category" type="button" class="usa-select multi-select__trigger" :aria-expanded="landCategoryOpen" @click="landCategoryOpen = !landCategoryOpen">
+                <span :class="{ 'multi-select__placeholder': landCategoryAllSelected }">{{ landCategorySummary }}</span>
+              </button>
+              <ul v-show="landCategoryOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
+                <li role="option" :aria-selected="landCategoryAllSelected" class="multi-select__option multi-select__option--all" :class="{ 'multi-select__option--selected': landCategoryAllSelected }" @click="toggleAllLandCategories">
+                  <input type="checkbox" :checked="landCategoryAllSelected" tabindex="-1" class="multi-select__checkbox"> Select all
+                </li>
+                <li v-for="v in landCategoryOptions" :key="v" role="option" :aria-selected="filters.landCategories.includes(v)" class="multi-select__option" :class="{ 'multi-select__option--selected': filters.landCategories.includes(v) }" @click="toggleLandCategory(v)">
+                  <input type="checkbox" :checked="filters.landCategories.includes(v)" tabindex="-1" class="multi-select__checkbox"> {{ v }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </template>
 
         <!-- State / Offshore Region multi-select (annual grains only) -->
         <div v-if="isAnnual" class="field field--wide">
@@ -371,10 +452,18 @@ if (datasetExport) {
       </div>
     </div>
 
+    <!-- Break-out control (annual grains): adds a grouping column after Product -->
+    <div v-if="isAnnual" class="breakout-control margin-bottom-2">
+      <label class="usa-label margin-top-0" for="p-breakout">Break out by</label>
+      <select id="p-breakout" v-model="breakout" class="usa-select breakout-select">
+        <option v-for="o in BREAKOUT_OPTIONS" :key="o.value" :value="o.value">{{ o.label }}</option>
+      </select>
+    </div>
+
     <!-- Toolbar -->
     <div class="table-toolbar">
       <div class="table-toolbar__group">
-        <button v-if="isMonthly" type="button" class="usa-button usa-button--outline" :disabled="!groups.length" @click="toggleAll">
+        <button v-if="grouped" type="button" class="usa-button usa-button--outline" :disabled="!groups.length" @click="toggleAll">
           {{ allCollapsed ? 'Expand all' : 'Collapse all' }}
         </button>
       </div>
@@ -397,7 +486,7 @@ if (datasetExport) {
     <div
       ref="wrapRef"
       class="data-table-wrap pivot margin-top-2"
-      :class="{ 'pivot--flat': isAnnual }"
+      :class="{ 'pivot--flat': isAnnual && !hasBreakout }"
       :style="{ '--thead-h': `${theadH}px`, '--dim-w': dimW ? `${dimW}px` : undefined }"
     >
       <table class="usa-table usa-table--compact width-full margin-bottom-0 margin-top-0">
@@ -405,15 +494,16 @@ if (datasetExport) {
           <tr>
             <th scope="col" class="dim-col">Product</th>
             <th v-if="isMonthly" scope="col" class="month-col">Month</th>
+            <th v-else-if="hasBreakout" scope="col" class="breakout-col">{{ breakoutColLabel }}</th>
             <th v-for="y in years" :key="y" scope="col" class="text-right">{{ y }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="!pending && !groups.length">
-            <td :colspan="years.length + (isMonthly ? 2 : 1)">No records match the current filters.</td>
+            <td :colspan="years.length + (grouped ? 2 : 1)">No records match the current filters.</td>
           </tr>
 
-          <!-- Monthly: grouped (product band -> collapsible month rows -> subtotal) -->
+          <!-- Monthly: grouped by product -> collapsible month rows -> subtotal -->
           <template v-if="isMonthly">
             <template v-for="g in groups" :key="g.key">
               <tr class="group-row">
@@ -425,21 +515,47 @@ if (datasetExport) {
                 </th>
               </tr>
               <template v-if="!collapsed.has(g.key)">
-                <tr v-for="(m, mi) in g.months" :key="`${g.key}-${m.month}`" class="month-row" :class="{ 'row-alt': mi % 2 === 1 }">
+                <tr v-for="(m, mi) in g.months" :key="`${g.key}-${m.month}`" class="detail-row" :class="{ 'row-alt': mi % 2 === 1 }">
                   <td class="dim-cell"></td>
-                  <td class="month-cell">{{ m.monthName }}</td>
+                  <td class="breakout-cell">{{ m.monthName }}</td>
                   <td v-for="y in years" :key="y" class="text-right">{{ m.byYear[y] ? volume(m.byYear[y]) : '—' }}</td>
                 </tr>
                 <tr class="subtotal-row">
                   <td class="dim-cell"></td>
-                  <th scope="row" class="month-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
+                  <th scope="row" class="breakout-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
                   <td v-for="y in years" :key="y" class="text-right">{{ volume(g.byYear[y]) }}</td>
                 </tr>
               </template>
             </template>
           </template>
 
-          <!-- Annual: flat, one row per product, one column per year -->
+          <!-- Annual + breakout: grouped by product -> collapsible breakout rows -> subtotal -->
+          <template v-else-if="hasBreakout">
+            <template v-for="g in groups" :key="g.key">
+              <tr class="group-row">
+                <th scope="colgroup" :colspan="years.length + 2" class="group-head">
+                  <button type="button" class="group-toggle" :aria-expanded="!collapsed.has(g.key)" @click="toggle(g.key)">
+                    <span aria-hidden="true" class="caret">{{ collapsed.has(g.key) ? '▸' : '▾' }}</span>
+                    <span class="group-name">{{ g.key }}</span>
+                  </button>
+                </th>
+              </tr>
+              <template v-if="!collapsed.has(g.key)">
+                <tr v-for="(row, ri) in g.rows" :key="`${g.key}-${row.key}`" class="detail-row" :class="{ 'row-alt': ri % 2 === 1 }">
+                  <td class="dim-cell"></td>
+                  <td class="breakout-cell">{{ row.key }}</td>
+                  <td v-for="y in years" :key="y" class="text-right">{{ row.byYear[y] ? volume(row.byYear[y]) : '—' }}</td>
+                </tr>
+                <tr class="subtotal-row">
+                  <td class="dim-cell"></td>
+                  <th scope="row" class="breakout-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
+                  <td v-for="y in years" :key="y" class="text-right">{{ volume(g.byYear[y]) }}</td>
+                </tr>
+              </template>
+            </template>
+          </template>
+
+          <!-- Annual, no breakout: flat, one row per product -->
           <template v-else>
             <tr v-for="(g, gi) in groups" :key="g.key" class="prod-row" :class="{ 'row-alt': gi % 2 === 1 }">
               <th scope="row" class="dim-cell prod-name">{{ g.key }}</th>
@@ -463,10 +579,16 @@ if (datasetExport) {
   .usa-label { font-size: 0.82rem; margin-bottom: 0.25rem; }
   .usa-select { margin-top: 0; }
 }
-.field--wide { flex: 2 1 14rem; }
+.field--wide { flex: 2 1 13rem; }
 .field--action { flex: 0 0 auto; display: flex; align-items: flex-end; }
 
 .multi-select__option--all { font-weight: 700; border-bottom: 1px solid #dfe1e2; }
+
+// Break-out control: left-aligned single select below the filter bar.
+.breakout-control {
+  .usa-label { font-size: 0.82rem; margin-bottom: 0.25rem; }
+  .breakout-select { width: auto; min-width: 12rem; max-width: 16rem; margin-top: 0; }
+}
 
 .table-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
 .table-toolbar__group { display: flex; align-items: center; gap: 0.5rem; }
@@ -491,9 +613,10 @@ if (datasetExport) {
 .dim-col,
 .dim-cell { min-width: var(--dim-w, 12rem); }
 .dim-col { white-space: nowrap; }
-.month-col { width: 1%; white-space: nowrap; }
+.month-col,
+.breakout-col { width: 1%; white-space: nowrap; }
 
-// --- Monthly grouped table ----------------------------------------------------
+// --- Grouped table (monthly, or annual with a breakout) -----------------------
 .pivot .group-head {
   padding: 0;
   background: mix($onrr-violet, #fff, 12%);
@@ -515,13 +638,13 @@ if (datasetExport) {
 }
 .group-toggle .caret { color: $onrr-violet; font-size: 0.9rem; }
 
-.pivot .month-row td { font-size: 0.95rem; }
-.pivot .month-cell { white-space: nowrap; color: #565c65; }
-// White/gray zebra on the month rows, keyed off the row index within its group.
-.pivot .month-row > th,
-.pivot .month-row > td { background: #fff; }
-.pivot .month-row.row-alt > th,
-.pivot .month-row.row-alt > td { background: #f5f5f5; }
+.pivot .detail-row td { font-size: 0.95rem; }
+.pivot .breakout-cell { white-space: nowrap; color: #565c65; }
+// White/gray zebra on the detail rows, keyed off the row index within its group.
+.pivot .detail-row > th,
+.pivot .detail-row > td { background: #fff; }
+.pivot .detail-row.row-alt > th,
+.pivot .detail-row.row-alt > td { background: #f5f5f5; }
 // Group subtotal: white, bold, ruled off — matches the disbursement tables.
 .pivot .subtotal-row > th,
 .pivot .subtotal-row > td {
@@ -531,7 +654,7 @@ if (datasetExport) {
 }
 .pivot .subtotal-label { font-weight: 700; }
 
-// --- Annual flat table --------------------------------------------------------
+// --- Annual flat table (no breakout) ------------------------------------------
 // Product column sticks to the left as well, so the (often long) product name stays
 // visible while scrolling across the many fiscal/calendar-year columns.
 .pivot--flat .dim-col,
