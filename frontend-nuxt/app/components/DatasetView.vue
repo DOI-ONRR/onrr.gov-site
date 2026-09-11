@@ -66,7 +66,9 @@ const terms = computed(() => {
 
 // `source_collection` holds the real Directus collection name, so it drives both the
 // preview component (init-capped + "Preview", e.g. disbursement -> DisbursementPreview)
-// and DatasetDownloads' live count + native CSV export directly — no mapping needed.
+// and DatasetDownloads' live count + native CSV export directly — no mapping needed. Each
+// preview reads the dataset's export_filter to serve every period grain of that collection
+// (monthly / fiscal-year / calendar-year production all use one ProductionPreview).
 // Register each preview here as it's built.
 const initCap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '')
 const sourceCollection = computed(() => props.dataset.source_collection || null)
@@ -81,6 +83,12 @@ const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceColl
 // Download section's third card consumes it (works for any *Preview component).
 const previewExport = ref(null)
 provide('datasetPreviewExport', previewExport)
+
+// A preview whose grain is user-selectable (yearly production: Fiscal vs Calendar) publishes
+// the current period as an export filter here; DatasetDownloads' full-dataset export prefers
+// it over the dataset's static export_filter, so the full download follows the chosen period.
+const previewExportFilter = ref(null)
+provide('datasetExportFilter', previewExportFilter)
 
 // The preview's pivot result (data + group-by metadata), published by the *Preview
 // component and consumed by a filter-reactive ChartCard (reacts_to_filters) so the chart
@@ -183,7 +191,7 @@ async function copyApiUrl() {
 
     <div v-if="hasApi" class="grid-row grid-gap margin-bottom-2" id="api">
       <h2 class="font-heading-lg">API access</h2>
-      <div class="grid-col-12  border-bottom-05 padding-bottom-4 border-onrr-blue">
+      <div class="grid-col-12">
         <div>
           <p>
             This dataset is available through ONRR's open, read-only data API — no account or

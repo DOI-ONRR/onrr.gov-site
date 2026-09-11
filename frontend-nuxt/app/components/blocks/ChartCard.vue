@@ -45,7 +45,7 @@ const chartMinHeight = computed(() => {
   // with the number of products in the current selection.
   if (smallMultiples.value) {
     const n = Math.max(1, pivotPayload.value?.groups?.length || 1)
-    return `${Math.max(card.value.height || 400, n * 150)}px`
+    return `${Math.max(card.value.height || 400, n * 182)}px`
   }
   return `${card.value.height || 400}px`
 })
@@ -307,10 +307,11 @@ const pivotValueFormat = computed(() => pivotPayload.value?.valueFormat || 'curr
 // "Other" when the dimension is high-cardinality).
 function pivotChartData(p) {
   if (!p || p.empty || !p.groups?.length) return { categories: [], series: [] }
-  const isFy = p.periodType === 'Fiscal Year'
+  // Fiscal Year and Calendar Year are both annual grains: X = the years, no month detail.
+  const isAnnual = p.periodType === 'Fiscal Year' || p.periodType === 'Calendar Year'
 
   let periods, categories, valAt
-  if (isFy) {
+  if (isAnnual) {
     periods = (p.years || []).map(String)
     categories = periods
     valAt = (g, year) => Number(g.byYear?.[year]) || 0
@@ -485,7 +486,7 @@ const chartOptions = computed(() => {
   // redundant here (each pane is labelled by its axis title), so it's dropped.
   if (smallMultiples.value && series.length) {
     const n = series.length
-    const gap = 6 // % vertical space between panes
+    const gap = 14 // % vertical space between panes — room above each product label
     const paneH = (100 - gap * (n - 1)) / n
     options.yAxis = series.map((s, i) => ({
       title: {
@@ -493,9 +494,15 @@ const chartOptions = computed(() => {
         rotation: 0,
         align: 'high',
         textAlign: 'left',
-        x: 0,
-        y: -6,
-        style: { color: '#565c65', fontSize: '11px', fontWeight: '600' },
+        x: -10, // pull left ~spacingLeft so the label sits flush with the card title
+        y: -18, // lift the label well off the plot so there's clear padding below it
+        // Float the pane label over the plot: without this, Highcharts reserves a wide
+        // left gutter for the horizontal title, pushing every pane far to the right.
+        reserveSpace: false,
+        // nowrap keeps long product names (e.g. "Geothermal - electrical generation -
+        // kilowatt hours (kwh)") on one line in the gap above the plot; otherwise
+        // Highcharts wraps the floating title into a cramped multi-line block.
+        style: { color: '#565c65', fontSize: '11px', fontWeight: '600', whiteSpace: 'nowrap' },
       },
       top: `${i * (paneH + gap)}%`,
       height: `${paneH}%`,
@@ -509,8 +516,9 @@ const chartOptions = computed(() => {
     }))
     options.series = options.series.map((s, i) => ({ ...s, yAxis: i }))
     options.legend = { enabled: false }
-    // spacingTop leaves room for the first pane's title, which sits above its axis.
-    options.chart = { ...chart, height: Math.max(card.value.height || 400, n * 150), spacingTop: 22 }
+    // Taller per-pane allotment (and spacingTop for the first title) so the wider
+    // inter-pane gaps don't eat into each pane's plot area.
+    options.chart = { ...chart, height: Math.max(card.value.height || 400, n * 182), spacingTop: 28 }
   }
 
   // Only set colors when a palette exists — never `undefined` (see note above).
@@ -542,7 +550,7 @@ const displayTitle = computed(() => {
     // Keep the card title's subject ("Disbursements" / "Production"), swap the grain +
     // dimension to match the live group-by.
     const subject = card.value.title.split(/\s+by\s+/i)[0]
-    const grain = p.periodType === 'Fiscal Year' ? 'fiscal year' : 'month'
+    const grain = p.periodType === 'Fiscal Year' ? 'fiscal year' : p.periodType === 'Calendar Year' ? 'calendar year' : 'month'
     return `${subject} by ${grain} and ${p.groupByLabel.toLowerCase()}`
   }
   return card.value.title

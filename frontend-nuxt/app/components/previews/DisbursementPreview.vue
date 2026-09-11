@@ -642,9 +642,9 @@ if (datasetExport) {
           <tr v-if="!pending && !groups.length">
             <td :colspan="years.length + (isFy ? 2 : 3)">No records match the current filters.</td>
           </tr>
-          <template v-for="g in groups" :key="g.key">
+          <template v-for="(g, gi) in groups" :key="g.key">
             <!-- Fiscal year: one flat row per group (annual grain, no month detail). -->
-            <tr v-if="isFy" class="fy-group-row">
+            <tr v-if="isFy" class="fy-group-row" :class="{ 'row-alt': gi % 2 === 1 }">
               <th scope="row" class="dim-cell fy-group-name">{{ g.key }}</th>
               <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(g.byYear[y]) }">{{ g.byYear[y] ? currency(g.byYear[y]) : '—' }}</td>
               <td class="text-right" :class="{ 'text-secondary': isNegative(g.total) }">{{ currency(g.total) }}</td>
@@ -665,7 +665,7 @@ if (datasetExport) {
                 </th>
               </tr>
               <template v-if="!collapsed.has(g.key)">
-                <tr v-for="m in g.months" :key="`${g.key}-${m.month}`" class="month-row">
+                <tr v-for="(m, mi) in g.months" :key="`${g.key}-${m.month}`" class="month-row" :class="{ 'row-alt': mi % 2 === 1 }">
                   <td class="dim-cell"></td>
                   <td class="month-cell">{{ m.monthName }}</td>
                   <td v-for="y in years" :key="y" class="text-right" :class="{ 'text-secondary': isNegative(m.byYear[y]) }">{{ m.byYear[y] ? currency(m.byYear[y]) : '—' }}</td>
@@ -799,10 +799,20 @@ if (datasetExport) {
 }
 .group-row .caret { display: inline-block; width: 1em; color: $onrr-violet; }
 
-// Month detail rows: plain white cells; the month label in its own column.
+// Month detail rows: white/gray zebra; the month label in its own column. The stripe
+// is keyed off the row's index within its group (`.row-alt`), not nth-child, so it
+// stays consistent even when a group is missing some months.
 .pivot .month-row > th,
 .pivot .month-row > td { background: #fff; font-weight: 400; }
+.pivot .month-row.row-alt > th,
+.pivot .month-row.row-alt > td { background: #f5f5f5; }
 .month-cell { padding-left: 0.5rem; white-space: nowrap; color: #3d4551; }
+
+// Fiscal-year rows are flat (one per group), so they carry the zebra directly.
+.pivot .fy-group-row > th,
+.pivot .fy-group-row > td { background: #fff; }
+.pivot .fy-group-row.row-alt > th,
+.pivot .fy-group-row.row-alt > td { background: #f5f5f5; }
 
 // Group subtotal: "Subtotal:" label in the month column; highlighted (bold) values.
 .pivot .subtotal-row > th,
