@@ -1,16 +1,18 @@
 <script setup>
 /*
   ProductionPreview — the "Preview and filter" panel for every Production dataset. One
-  component serves all three period grains; the grain comes from the dataset's export_filter
-  (period.type), exactly like DisbursementPreview:
+  component serves both a monthly and a yearly page; the base grain comes from the dataset's
+  export_filter (period.type), like DisbursementPreview:
 
-    Monthly       — From/To month, Land type, Product; grouped table (Product -> month
-                    detail rows) with collapsible groups; chart = small multiples per product.
-    Fiscal Year   — From/To year, Land class, Land category, State/Offshore Region, Product;
-    Calendar Year   flat table (Product | one column per year); chart = small multiples of the
-                    TOP N products by breadth of reporting.
+    Monthly — From/To month, Land type, Product; grouped table (Product -> month detail
+              rows) with collapsible groups; chart = small multiples per product.
+    Yearly  — a Period filter (Fiscal year / Calendar year) + From/To year, Land class,
+              Land category, State/Offshore Region, Product; flat table (Product | one
+              column per year); chart = small multiples of the TOP N products by breadth of
+              reporting. An export_filter of Fiscal Year or Calendar Year just sets the
+              Period default; the user switches between them in-page.
 
-  The annual grains also offer an optional "Break out by" (Land Category / State / County):
+  The yearly grain also offers an optional "Break out by" (Land Category / State / County):
   when set, the flat table becomes grouped — Product turns into a collapsible band with one
   sub-row per breakout value (plus a product subtotal), like the monthly month rows.
 
@@ -21,14 +23,23 @@ const props = defineProps({
 })
 const { apiUrl } = useRuntimeConfig().public
 
-// Grain from export_filter (e.g. { period: { type: { _eq: 'Fiscal Year' } } }).
-const periodType = computed(() => {
+// The dataset's export_filter sets the base grain (e.g. { period: { type: { _eq: 'Fiscal
+// Year' } } }). Monthly is fixed; a yearly (annual) page lets the user switch between Fiscal
+// Year and Calendar Year with the Period filter, defaulting to whatever export_filter names.
+const basePeriodType = computed(() => {
   const t = props.dataset?.export_filter?.period?.type
   const val = typeof t === 'object' && t ? t._eq : t
   return val === 'Fiscal Year' ? 'Fiscal Year' : val === 'Calendar Year' ? 'Calendar Year' : 'Monthly'
 })
-const isMonthly = computed(() => periodType.value === 'Monthly')
+const isMonthly = computed(() => basePeriodType.value === 'Monthly')
 const isAnnual = computed(() => !isMonthly.value)
+
+const PERIOD_OPTIONS = [
+  { value: 'Fiscal Year', label: 'Fiscal year' },
+  { value: 'Calendar Year', label: 'Calendar year' },
+]
+const selectedPeriod = ref(basePeriodType.value === 'Calendar Year' ? 'Calendar Year' : 'Fiscal Year')
+const periodType = computed(() => (isMonthly.value ? 'Monthly' : selectedPeriod.value))
 const periodParam = computed(() =>
   periodType.value === 'Fiscal Year' ? 'fiscal-year' : periodType.value === 'Calendar Year' ? 'calendar-year' : 'monthly',
 )
@@ -40,7 +51,8 @@ function monthLabel(d) {
   const dt = new Date(`${String(d).slice(0, 10)}T00:00:00Z`)
   return Number.isNaN(dt.getTime()) ? d : `${MONTHS[dt.getUTCMonth()]} ${dt.getUTCFullYear()}`
 }
-const yearOptionLabel = (y) => (periodType.value === 'Fiscal Year' ? `FY ${y}` : String(y))
+// The Period filter names the grain (FY vs CY), so the year dropdowns show the bare year.
+const yearOptionLabel = (y) => String(y)
 // Volumes are counts (bbl/mcf/ton/…), not currency — plain grouped integers.
 function volume(v) {
   const n = Number(v)
@@ -63,8 +75,10 @@ const hasBreakout = computed(() => isAnnual.value && !!breakout.value)
 const grouped = computed(() => isMonthly.value || hasBreakout.value)
 
 // --- filter options (loaded once for this grain) ------------------------------
-const { data: options } = await useAsyncData(`prod-pivot-options-${periodParam.value}`, () =>
-  $fetch(`${apiUrl}/charts/production/pivot/options`, { query: { period: periodParam.value } }),
+const { data: options } = await useAsyncData(
+  `prod-pivot-options-${periodParam.value}`,
+  () => $fetch(`${apiUrl}/charts/production/pivot/options`, { query: { period: periodParam.value } }),
+  { watch: [periodParam] }, // re-fetch the option lists when the Period switches
 )
 const monthOptions = computed(() => options.value?.months || [])
 const yearOptions = computed(() => options.value?.years || [])
@@ -229,8 +243,16 @@ const { data: pivot, pending } = await useAsyncData(
     if (empty) return { groupBy: 'product', periodType: periodType.value, years: [], groups: [], grandTotal: 0, recordCount: 0 }
     return $fetch(`${apiUrl}/charts/production/pivot`, { query })
   },
-  { watch: [() => JSON.stringify(filters), ready, breakout], dedupe: 'cancel' },
+  { watch: [() => JSON.stringify(filters), ready, breakout, periodParam], dedupe: 'cancel' },
 )
+
+// When the Period (FY/CY) switches, the available years can differ — clamp the current
+// range into the new list so the From/To selects never point at a missing year.
+watch(yearOptions, (ys) => {
+  if (!ys.length || isMonthly.value) return
+  if (filters.fromYear && !ys.includes(filters.fromYear)) filters.fromYear = ys[0]
+  if (filters.toYear && !ys.includes(filters.toYear)) filters.toYear = ys[ys.length - 1]
+})
 
 const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
@@ -326,6 +348,14 @@ if (datasetExport) {
     <!-- Filter bar -->
     <div class="filter-bar padding-2 margin-bottom-2">
       <div class="filter-bar__fields">
+        <!-- Period: Fiscal vs Calendar year (annual grains only) -->
+        <div v-if="isAnnual" class="field">
+          <label class="usa-label margin-top-0" for="p-period">Period</label>
+          <select id="p-period" v-model="selectedPeriod" class="usa-select">
+            <option v-for="o in PERIOD_OPTIONS" :key="o.value" :value="o.value">{{ o.label }}</option>
+          </select>
+        </div>
+
         <!-- Range: month selects (monthly) or year selects (annual) -->
         <template v-if="isMonthly">
           <div class="field">
