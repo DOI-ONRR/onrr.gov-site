@@ -50,7 +50,7 @@ function volume(v) {
 
 // --- optional secondary breakout (annual only) --------------------------------
 const BREAKOUT_OPTIONS = [
-  { value: '', label: 'No breakdown' },
+  { value: '', label: 'No breakout' },
   { value: 'land_category', label: 'Land Category' },
   { value: 'state', label: 'State' },
   { value: 'county', label: 'County' },
@@ -655,6 +655,15 @@ if (datasetExport) {
 .pivot .subtotal-label { font-weight: 700; }
 
 // --- Annual flat table (no breakout) ------------------------------------------
+// Use the separated border model for this table only. Product names wrap here, and in
+// border-collapse mode a wrapped (taller) cell drops its bottom border (a Chromium quirk);
+// separated borders paint per-cell and stay put. Scoped to `.pivot--flat` so the monthly
+// and disbursement tables keep border-collapse (their sticky-header seam fix depends on it).
+.pivot--flat table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
 // Product column sticks to the left as well, so the (often long) product name stays
 // visible while scrolling across the many fiscal/calendar-year columns.
 .pivot--flat .dim-col,
