@@ -32,8 +32,11 @@ const EXPORT_FIELDS = {
 // --- Card 1: full dataset via native export ----------------------------------
 // Optional per-dataset export filter (JSON, e.g. {"period":{"type":{"_eq":"Monthly"}}})
 // scopes the full-dataset count + CSV to what the dataset represents. Comes through the
-// page GraphQL query; null when unset → no scoping.
-const exportFilter = computed(() => props.dataset.export_filter || null)
+// page GraphQL query; null when unset → no scoping. A preview with a user-selectable grain
+// (yearly production) can override it via `datasetExportFilter` so the full download follows
+// the chosen period.
+const previewExportFilter = inject('datasetExportFilter', ref(null))
+const exportFilter = computed(() => previewExportFilter.value || props.dataset.export_filter || null)
 
 const { data: countData } = await useAsyncData(
   `dataset-count-${props.dataset.id}`,

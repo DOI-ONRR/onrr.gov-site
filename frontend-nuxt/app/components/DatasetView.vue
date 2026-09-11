@@ -84,6 +84,12 @@ const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceColl
 const previewExport = ref(null)
 provide('datasetPreviewExport', previewExport)
 
+// A preview whose grain is user-selectable (yearly production: Fiscal vs Calendar) publishes
+// the current period as an export filter here; DatasetDownloads' full-dataset export prefers
+// it over the dataset's static export_filter, so the full download follows the chosen period.
+const previewExportFilter = ref(null)
+provide('datasetExportFilter', previewExportFilter)
+
 // The preview's pivot result (data + group-by metadata), published by the *Preview
 // component and consumed by a filter-reactive ChartCard (reacts_to_filters) so the chart
 // renders the same grouped/filtered data as the table.

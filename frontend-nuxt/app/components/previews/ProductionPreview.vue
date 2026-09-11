@@ -281,6 +281,15 @@ if (previewChart) {
   watchEffect(() => { previewChart.value = chartPayload.value })
 }
 
+// Publish the current period as the full-dataset export filter, so the Download section's
+// "Full dataset" export (and its record count) follows the selected grain — Monthly, or the
+// yearly page's Fiscal Year / Calendar Year — rather than the dataset's static export_filter.
+const datasetExportFilter = inject('datasetExportFilter', null)
+if (datasetExportFilter) {
+  watchEffect(() => { datasetExportFilter.value = { period: { type: { _eq: periodType.value } } } })
+  onUnmounted(() => { datasetExportFilter.value = null })
+}
+
 function clearFilters() {
   seedFilters()
 }
