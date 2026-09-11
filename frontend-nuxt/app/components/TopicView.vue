@@ -117,7 +117,7 @@ function goToSection(id) {
       <p v-if="eyebrow && !isSections" class="topic-eyebrow margin-bottom-0">{{ eyebrow }}</p>
       <h1 class="margin-top-05 margin-bottom-2">{{ page?.hero_title || page?.title }}</h1>
 
-      <div ref="contentEl" class="topic-content" :class="{ 'topic-content--sections': isSections }">
+      <div ref="contentEl" class="topic-content" :class="{ 'topic-content--sections': isSections, 'topic-content--full-measure': page?.full_width_prose }">
         <div
           v-for="block in blocks"
           :key="block.id"
@@ -187,6 +187,15 @@ function goToSection(id) {
   font-size: 0.82rem;
   font-weight: 700;
   color: #565c65;
+}
+
+// `full_width_prose` page flag: drop USWDS's readable measure so prose fills the content
+// column. Outranks `.usa-prose > p { max-width: … }` on specificity. Pair with a higher
+// `content_columns` for edge-to-edge text.
+.topic-content--full-measure :deep(.usa-prose) > p,
+.topic-content--full-measure :deep(.usa-prose) > ul,
+.topic-content--full-measure :deep(.usa-prose) > ol {
+  max-width: none;
 }
 
 // 'sections' variant: compact sans section headings (the payment-method mockup's
