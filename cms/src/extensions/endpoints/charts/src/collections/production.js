@@ -59,7 +59,7 @@ function applyProductionFilters(q, { periodType, from, to, fromYear, toYear, lan
 	}
 }
 
-async function productionPivot(database, opts = {}) {
+export async function productionPivot(database, opts = {}) {
 	const { periodType } = opts;
 	const isMonthly = periodType === 'Monthly';
 	// Optional secondary breakout (annual grains only): product -> breakout value sub-rows.

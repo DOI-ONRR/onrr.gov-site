@@ -21,9 +21,12 @@
 	"scripts": {
 		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-charts/dist; cp package.json ../../../../extensions/directus-extension-charts; cp dist/index.js ../../../../extensions/directus-extension-charts/dist",
 		"dev": "directus-extension build -w --no-minify",
-		"link": "directus-extension link"
+		"link": "directus-extension link",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.1.4"
+		"@directus/extensions-sdk": "^17.1.4",
+		"vitest": "^2.1.9"
 	}
 }
