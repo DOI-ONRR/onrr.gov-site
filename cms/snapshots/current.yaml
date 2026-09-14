@@ -759,14 +759,14 @@ collections:
       collection: dataset_metadata_files
       color: null
       display_template: null
-      group: null
+      group: dataset_metadata
       hidden: true
       icon: import_export
       item_duplication_fields: null
       note: null
       preview_url: null
       singleton: false
-      sort: 31
+      sort: 4
       sort_field: null
       status: active
       translations: null
@@ -7776,7 +7776,8 @@ fields:
       hidden: false
       interface: select-dropdown-m2o
       note: null
-      options: null
+      options:
+        template: '{{name}}'
       readonly: false
       required: false
       searchable: true
@@ -31281,7 +31282,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 3
+      sort: 4
       special: null
       translations: null
       validation: null
@@ -32173,7 +32174,7 @@ fields:
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
     schema:
       name: content_columns
       table: pages
@@ -32182,6 +32183,51 @@ fields:
       max_length: null
       numeric_precision: 32
       numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: pages
+    field: full_width_prose
+    type: boolean
+    meta:
+      collection: pages
+      conditions: null
+      display: null
+      display_options: null
+      field: full_width_prose
+      group: topic
+      hidden: false
+      interface: boolean
+      note: >-
+        When on, paragraphs and lists fill the content column instead of the
+        readable measure. Useful on wide topic pages; pair with a higher Content
+        columns value for edge-to-edge text.
+      options:
+        label: Let prose fill the column (drop the readable max-width)
+      readonly: false
+      required: false
+      searchable: true
+      sort: 3
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: full_width_prose
+      table: pages
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
       is_nullable: true
       is_unique: false
       is_indexed: false
