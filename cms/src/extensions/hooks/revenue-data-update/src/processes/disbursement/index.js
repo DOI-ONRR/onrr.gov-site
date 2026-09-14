@@ -42,6 +42,7 @@ export async function processDisbursementUpdate(fileId, context) {
     locationsCreated: 0,
     periodsCreated: 0,
     disbursementsCreated: 0,
+    disbursementsSkipped: 0,
     errors: [],
   };
 
@@ -351,6 +352,25 @@ export async function processDisbursementUpdate(fileId, context) {
 
     for (const disbursementRecord of disbursementAggregate.values()) {
       try {
+        // Idempotency: skip a fact row that already exists for this natural key
+        // (location + period + fund + commodity), matching nrrd's INSERT ... ON CONFLICT
+        // DO NOTHING. Without this, re-running a month's load duplicates its rows.
+        const existing = await disbursementService.readByQuery({
+          filter: {
+            location: { _eq: disbursementRecord.location },
+            period: { _eq: disbursementRecord.period },
+            fund: { _eq: disbursementRecord.fund },
+            commodity: { _eq: disbursementRecord.commodity },
+          },
+          fields: ['id'],
+          limit: 1,
+        });
+
+        if (existing.length > 0) {
+          result.disbursementsSkipped++;
+          continue;
+        }
+
         await disbursementService.createOne(disbursementRecord);
         result.disbursementsCreated++;
       } catch (error) {
@@ -378,6 +398,7 @@ export async function processDisbursementUpdate(fileId, context) {
       locationsCreated: result.locationsCreated,
       periodsCreated: result.periodsCreated,
       disbursementsCreated: result.disbursementsCreated,
+      disbursementsSkipped: result.disbursementsSkipped,
       errorCount: result.errors.length,
       success: result.success,
     });

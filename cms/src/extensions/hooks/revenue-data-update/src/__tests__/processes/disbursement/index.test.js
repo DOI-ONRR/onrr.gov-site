@@ -555,6 +555,49 @@ describe('processDisbursementUpdate', () => {
     expect(result.disbursementsCreated).toBe(1);
   });
 
+  it('should skip a disbursement row that already exists (idempotent re-run)', async () => {
+    const mockRecord = {
+      month: 'January',
+      calendar_year: '2024',
+      commodity: 'Oil',
+      disbursement: '1000',
+    };
+
+    parseCsv.mockReturnValue([mockRecord]);
+    transformDisbursementRecord.mockImplementation((record) => record);
+    transformFipsCode.mockImplementation((record) => Promise.resolve(record));
+
+    buildFundRecord.mockReturnValue({
+      type: 'TestFund',
+      class: 'Class1',
+      recipient: 'Recipient1',
+      revenue_type: 'Revenue1',
+      source: 'Source1',
+      disbursement_type: 'Type1',
+    });
+    buildLocationRecord.mockReturnValue({
+      land_class: 'Onshore',
+      land_category: 'Public',
+      state: 'TX',
+      county: 'Harris',
+      fips_code: '48201',
+    });
+    buildPeriodRecord.mockReturnValue({ period_date: '2024-01-01' });
+
+    mockFundService.readByQuery.mockResolvedValue([{ id: 'fund-id' }]);
+    mockLocationService.readByQuery.mockResolvedValue([{ id: 'location-id' }]);
+    mockPeriodService.readByQuery.mockResolvedValue([{ id: 'period-id' }]);
+    mockCommodityService.readByQuery.mockResolvedValue([{ id: 'commodity-id' }]);
+    // The fact row already exists → the process should skip it, not insert a duplicate.
+    mockDisbursementService.readByQuery.mockResolvedValue([{ id: 'existing-disbursement-id' }]);
+
+    const result = await processDisbursementUpdate('test-file-id', mockContext);
+
+    expect(mockDisbursementService.createOne).not.toHaveBeenCalled();
+    expect(result.disbursementsCreated).toBe(0);
+    expect(result.disbursementsSkipped).toBe(1);
+  });
+
   it('should handle fatal error and return error in result', async () => {
     getFileContents.mockRejectedValue(new Error('File not found'));
 
