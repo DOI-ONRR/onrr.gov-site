@@ -1,0 +1,60 @@
+import { expect } from '@playwright/test'
+import { createBdd } from 'playwright-bdd'
+
+const { Given, When, Then } = createBdd()
+
+// ProductionPreview puts .pivot / .pivot--flat on the wrap div (not the table) and uses
+// .detail-row for month/breakout rows, so it needs its own locators (vs the disbursement steps).
+const wrap = (page) => page.locator('.data-table-wrap')
+
+Given('I navigate to the yearly production dataset page', async ({ page }) => {
+  await page.goto('/revenue-data/yearly-production', { waitUntil: 'networkidle' })
+})
+
+Given('I navigate to the monthly production dataset page', async ({ page }) => {
+  await page.goto('/revenue-data/monthly-production', { waitUntil: 'networkidle' })
+})
+
+Then('the production pivot has product row {string}', async ({ page }, name) => {
+  await expect(wrap(page).locator('.prod-name', { hasText: name })).toBeVisible()
+})
+
+Then('the production pivot has group band {string}', async ({ page }, name) => {
+  await expect(wrap(page).locator('.group-name', { hasText: name })).toBeVisible()
+})
+
+Then('the production pivot has year column {string}', async ({ page }, y) => {
+  await expect(wrap(page).locator('thead th', { hasText: y }).first()).toBeVisible()
+})
+
+Then('the production pivot has column header {string}', async ({ page }, h) => {
+  await expect(wrap(page).locator('thead th', { hasText: h }).first()).toBeVisible()
+})
+
+Then('the production pivot has detail row {string}', async ({ page }, name) => {
+  await expect(wrap(page).locator('.detail-row', { hasText: name }).first()).toBeVisible()
+})
+
+Then('the production pivot is a flat table', async ({ page }) => {
+  await expect(page.locator('.data-table-wrap.pivot--flat')).toBeVisible()
+})
+
+Then('production month detail rows are visible', async ({ page }) => {
+  await expect(wrap(page).locator('.detail-row').first()).toBeVisible()
+})
+
+Then('the production filter {string} is present', async ({ page }, label) => {
+  await expect(page.locator('.filter-bar label', { hasText: label }).first()).toBeVisible()
+})
+
+Then('the production chart title contains {string}', async ({ page }, text) => {
+  await expect(page.locator('.chart-card h3').first()).toContainText(text)
+})
+
+When('I set the production period to {string}', async ({ page }, label) => {
+  await page.locator('#p-period').selectOption({ label })
+})
+
+When('I set the production breakout to {string}', async ({ page }, label) => {
+  await page.locator('#p-breakout').selectOption({ label })
+})
