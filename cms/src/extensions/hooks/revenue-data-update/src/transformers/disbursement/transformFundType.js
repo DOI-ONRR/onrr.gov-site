@@ -21,13 +21,15 @@ export function transformFundType(record) {
     fundType = 'Native American Tribes & Allottees';
   }
 
-  // Append suffix based on disbursement_type
+  // Append suffix based on disbursement_type. nrrd's transform_fund_type only appends to
+  // fund_type; it does NOT rewrite disbursement_type. Leaving disbursement_type unchanged is
+  // important because the fund `source` is derived from the ORIGINAL disbursement_type in
+  // buildFundRecord / nrrd's insert_fund ('8(g)' -> '8(g) offshore', GoMESA -> 'GOMESA
+  // offshore', else land_category); overwriting it here made those branches dead code.
   if (disbursementType.includes('8(g)')) {
     fundType = `${fundType} 8(g)`;
-    disbursementType = '8(g) offshore';
   } else if (disbursementType.includes('GoMESA') || disbursementType === 'OCS Gulf') {
     fundType = `${fundType} - OCS Gulf`;
-    disbursementType = 'OCS Gulf';
   }
 
   return {

@@ -42,6 +42,7 @@ export async function processDisbursementUpdate(fileId, context) {
     locationsCreated: 0,
     periodsCreated: 0,
     disbursementsCreated: 0,
+    disbursementsSkipped: 0,
     errors: [],
   };
 
@@ -94,8 +95,8 @@ export async function processDisbursementUpdate(fileId, context) {
       // Build and deduplicate fund record
       const fundRecord = buildFundRecord(record);
       const fundKey = [
-        fundRecord.fund_type,
-        fundRecord.fund_class,
+        fundRecord.type,
+        fundRecord.class,
         fundRecord.recipient,
         fundRecord.revenue_type,
         fundRecord.source,
@@ -276,8 +277,8 @@ export async function processDisbursementUpdate(fileId, context) {
 
       // Get fund ID from map
       const fundKey = [
-        fundRecord.fund_type,
-        fundRecord.fund_class,
+        fundRecord.type,
+        fundRecord.class,
         fundRecord.recipient,
         fundRecord.revenue_type,
         fundRecord.source,
@@ -351,6 +352,25 @@ export async function processDisbursementUpdate(fileId, context) {
 
     for (const disbursementRecord of disbursementAggregate.values()) {
       try {
+        // Idempotency: skip a fact row that already exists for this natural key
+        // (location + period + fund + commodity), matching nrrd's INSERT ... ON CONFLICT
+        // DO NOTHING. Without this, re-running a month's load duplicates its rows.
+        const existing = await disbursementService.readByQuery({
+          filter: {
+            location: { _eq: disbursementRecord.location },
+            period: { _eq: disbursementRecord.period },
+            fund: { _eq: disbursementRecord.fund },
+            commodity: { _eq: disbursementRecord.commodity },
+          },
+          fields: ['id'],
+          limit: 1,
+        });
+
+        if (existing.length > 0) {
+          result.disbursementsSkipped++;
+          continue;
+        }
+
         await disbursementService.createOne(disbursementRecord);
         result.disbursementsCreated++;
       } catch (error) {
@@ -360,6 +380,11 @@ export async function processDisbursementUpdate(fileId, context) {
         });
       }
     }
+
+    // Step 8b - Summarize fiscal-year disbursements from the monthly rows.
+    // Mirrors nrrd's summarize_fy_disbursements (and this repo's loadFiscalYearRevenue):
+    // roll each complete fiscal year's monthly disbursements onto its 'Fiscal Year' period row.
+    await loadFiscalYearDisbursement(periodService, disbursementService, result);
 
     // Step 9 - Update process status/log
     result.completedAt = new Date().toISOString();
@@ -373,6 +398,7 @@ export async function processDisbursementUpdate(fileId, context) {
       locationsCreated: result.locationsCreated,
       periodsCreated: result.periodsCreated,
       disbursementsCreated: result.disbursementsCreated,
+      disbursementsSkipped: result.disbursementsSkipped,
       errorCount: result.errors.length,
       success: result.success,
     });
@@ -392,4 +418,91 @@ export async function processDisbursementUpdate(fileId, context) {
   }
 
   return result;
+}
+
+/**
+ * Summarizes fiscal-year disbursements by aggregating each complete fiscal year's monthly
+ * disbursement rows onto that year's pre-existing 'Fiscal Year' period row.
+ *
+ * Mirrors nrrd's `summarize_fy_disbursements` procedure. Like the revenue FY loader in this
+ * repo, it is create-once (skips a fiscal year that already has disbursements) rather than
+ * delete-and-refresh; nrrd deletes the year's FY rows first and re-inserts. The 'Fiscal Year'
+ * period rows are expected to already exist (this does not create them), and only complete
+ * years (all 12 monthly periods present) are summarized.
+ *
+ * @param {Object} periodService - Directus ItemsService for period
+ * @param {Object} disbursementService - Directus ItemsService for disbursement
+ * @param {Object} result - Result object to update
+ */
+async function loadFiscalYearDisbursement(periodService, disbursementService, result) {
+  try {
+    const fiscalYearPeriods = await periodService.readByQuery({
+      filter: { type: { _eq: 'Fiscal Year' } },
+      fields: ['id', 'fiscal_year'],
+      limit: -1,
+    });
+
+    for (const fyPeriod of fiscalYearPeriods) {
+      // Create-once: skip a fiscal year that already has disbursement rows.
+      const existing = await disbursementService.readByQuery({
+        filter: { period: { _eq: fyPeriod.id } },
+        fields: ['id'],
+        limit: 1,
+      });
+      if (existing.length > 0) continue;
+
+      // Only summarize complete fiscal years (all 12 monthly periods present).
+      const monthlyPeriods = await periodService.readByQuery({
+        filter: { type: { _eq: 'Monthly' }, fiscal_year: { _eq: fyPeriod.fiscal_year } },
+        fields: ['id'],
+        limit: -1,
+      });
+      if (monthlyPeriods.length !== 12) continue;
+
+      // Aggregate the fiscal year's monthly disbursements by location + commodity + fund.
+      const monthlyPeriodIds = monthlyPeriods.map((p) => p.id);
+      const monthly = await disbursementService.readByQuery({
+        filter: { period: { _in: monthlyPeriodIds } },
+        fields: ['location', 'commodity', 'fund', 'amount'],
+        limit: -1,
+      });
+
+      const aggregate = new Map();
+      for (const d of monthly) {
+        const key = `${d.location}:${d.commodity}:${d.fund}`;
+        if (aggregate.has(key)) {
+          aggregate.get(key).amount += d.amount;
+          aggregate.get(key).duplicate_no++;
+        } else {
+          aggregate.set(key, {
+            location: d.location,
+            period: fyPeriod.id,
+            commodity: d.commodity,
+            fund: d.fund,
+            amount: d.amount,
+            unit: 'dollars',
+            unit_abbr: '$',
+            duplicate_no: 1,
+          });
+        }
+      }
+
+      for (const fyDisbursement of aggregate.values()) {
+        try {
+          await disbursementService.createOne(fyDisbursement);
+          result.disbursementsCreated++;
+        } catch (error) {
+          result.errors.push({
+            type: 'fiscal_year_disbursement_insert',
+            message: error.message,
+          });
+        }
+      }
+    }
+  } catch (error) {
+    result.errors.push({
+      type: 'fiscal_year_disbursement_load',
+      message: error.message,
+    });
+  }
 }
