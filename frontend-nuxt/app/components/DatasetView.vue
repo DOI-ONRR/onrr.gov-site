@@ -8,6 +8,7 @@
 */
 import DisbursementPreview from '~/components/previews/DisbursementPreview.vue'
 import ProductionPreview from '~/components/previews/ProductionPreview.vue'
+import RevenuePreview from '~/components/previews/RevenuePreview.vue'
 
 const props = defineProps({
   dataset: { type: Object, required: true },
@@ -75,7 +76,7 @@ const sourceCollection = computed(() => props.dataset.source_collection || null)
 const PREVIEW_COMPONENTS = {
   DisbursementPreview,
   ProductionPreview,
-  // RevenuePreview — add when built
+  RevenuePreview,
 }
 const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceCollection.value)}Preview`] || null)
 
@@ -214,7 +215,7 @@ async function copyApiUrl() {
       </div>
     </div>
 
-    <div class="grid-row grid-gap" id="scope">
+    <div v-if="dataset.scope" class="grid-row grid-gap" id="scope">
       <h2 class="font-heading-lg">Scope</h2>
       <div class="grid-col-12">
         <div class="line-height-sans-5"
@@ -223,7 +224,7 @@ async function copyApiUrl() {
       </div>
     </div>
 
-    <div class="grid-row grid-gap" id="publication">
+    <div v-if="dataset.publication" class="grid-row grid-gap" id="publication">
       <h2 class="font-heading-lg">Data publication</h2>
       <div class="grid-col-12">
         <div class="line-height-sans-5"
