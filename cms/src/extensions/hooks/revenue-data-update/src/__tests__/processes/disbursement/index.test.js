@@ -38,9 +38,11 @@ import {
   buildPeriodRecord,
 } from '../../../transformers/disbursement/index.js';
 
-// Mock ItemsService class
+// Mock ItemsService class. readByQuery defaults to [] (Directus always returns an array),
+// so code paths a given test doesn't explicitly stub — e.g. the fiscal-year summarization —
+// no-op cleanly instead of throwing on `undefined.length`.
 const createMockItemsService = () => ({
-  readByQuery: vi.fn(),
+  readByQuery: vi.fn().mockResolvedValue([]),
   createOne: vi.fn(),
 });
 

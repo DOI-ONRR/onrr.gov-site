@@ -51,8 +51,14 @@ export function transformDisbursementRecord(record) {
   // Apply field transformations
   transformed = transformCommodity(transformed);
   transformed = transformCounty(transformed);
-  transformed = transformFundType(transformed);
+  // fund_class_and_recipient runs BEFORE fund_type to match nrrd's trigger firing order
+  // (Postgres fires BEFORE-insert triggers alphabetically: ..._transform_fund_class_and_
+  // recipient_bri before ..._transform_fund_type_bri). This matters because fund_type
+  // normalizes/suffixes fund_type and the class/recipient branches key off fund_type — so
+  // they must see the ORIGINAL fund_type (e.g. "U.S. Treasury" for an OCS Gulf row, not the
+  // later "U.S. Treasury - OCS Gulf").
   transformed = transformFundClassAndRecipient(transformed);
+  transformed = transformFundType(transformed);
 
   return transformed;
 }

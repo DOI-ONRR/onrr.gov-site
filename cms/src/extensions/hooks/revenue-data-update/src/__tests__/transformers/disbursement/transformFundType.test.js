@@ -33,7 +33,8 @@ describe('transformFundType', () => {
     };
     const result = transformFundType(record);
     expect(result.fund_type).toBe('State 8(g)');
-    expect(result.disbursement_type).toBe('8(g) offshore');
+    // nrrd's transform_fund_type leaves disbursement_type unchanged (only fund_type is suffixed).
+    expect(result.disbursement_type).toBe('8(g) Offshore');
   });
 
   it('should append " - OCS Gulf" suffix when disbursement_type contains "GoMESA"', () => {
@@ -43,7 +44,8 @@ describe('transformFundType', () => {
     };
     const result = transformFundType(record);
     expect(result.fund_type).toBe('State - OCS Gulf');
-    expect(result.disbursement_type).toBe('OCS Gulf');
+    // nrrd's transform_fund_type leaves disbursement_type unchanged (only fund_type is suffixed).
+    expect(result.disbursement_type).toBe('GoMESA');
   });
 
   it('should append " - OCS Gulf" suffix when disbursement_type is "OCS Gulf"', () => {
