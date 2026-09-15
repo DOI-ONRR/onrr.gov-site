@@ -45,12 +45,6 @@ const periodParam = computed(() =>
 )
 const CHART_TOP_N = 5
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-function monthLabel(d) {
-  if (!d) return '—'
-  const dt = new Date(`${String(d).slice(0, 10)}T00:00:00Z`)
-  return Number.isNaN(dt.getTime()) ? d : `${MONTHS[dt.getUTCMonth()]} ${dt.getUTCFullYear()}`
-}
 // The Period filter names the grain (FY vs CY), so the year dropdowns show the bare year.
 const yearOptionLabel = (y) => String(y)
 // Volumes are counts (bbl/mcf/ton/…), not currency — plain grouped integers.
@@ -82,6 +76,12 @@ const { data: options } = await useAsyncData(
 )
 const monthOptions = computed(() => options.value?.months || [])
 const yearOptions = computed(() => options.value?.years || [])
+// Monthly grain: the From/To range is chosen by calendar year (Jan–Dec of the selected
+// years), derived from the available months, so the filter shows plain years like the yearly page.
+const monthlyYears = computed(() => {
+  const set = new Set(monthOptions.value.map((m) => Number(String(m).slice(0, 4))))
+  return [...set].sort((a, b) => a - b)
+})
 const landTypeOptions = computed(() => options.value?.landTypes || [])
 const landClassOptions = computed(() => options.value?.landClasses || [])
 const landCategoryOptions = computed(() => options.value?.landCategories || [])
@@ -89,7 +89,7 @@ const regionOptions = computed(() => options.value?.regions || [])
 const productOptions = computed(() => options.value?.products || [])
 
 // --- filter state (seeded to full range / all-selected once options load) -----
-const filters = reactive({ from: '', to: '', fromYear: '', toYear: '', landTypes: [], landClasses: [], landCategories: [], regions: [], products: [] })
+const filters = reactive({ fromYear: '', toYear: '', landTypes: [], landClasses: [], landCategories: [], regions: [], products: [] })
 
 const landAllSelected = computed(() => landTypeOptions.value.length > 0 && filters.landTypes.length === landTypeOptions.value.length)
 const landClassAllSelected = computed(() => landClassOptions.value.length > 0 && filters.landClasses.length === landClassOptions.value.length)
@@ -111,8 +111,8 @@ const productSummary = computed(() => summarize(productAllSelected.value, filter
 
 function seedFilters() {
   if (isMonthly.value) {
-    filters.from = monthOptions.value[0] || ''
-    filters.to = monthOptions.value[monthOptions.value.length - 1] || ''
+    filters.fromYear = monthlyYears.value[0] ?? ''
+    filters.toYear = monthlyYears.value[monthlyYears.value.length - 1] ?? ''
     filters.landTypes = [...landTypeOptions.value]
   } else {
     filters.fromYear = yearOptions.value[0] ?? ''
@@ -212,9 +212,10 @@ const selectionEmpty = computed(() => {
 const filterQuery = computed(() => {
   const query = { period: periodParam.value }
   if (isMonthly.value) {
-    const m = monthOptions.value
-    if (filters.from && filters.from !== m[0]) query.from = String(filters.from).slice(0, 10)
-    if (filters.to && filters.to !== m[m.length - 1]) query.to = String(filters.to).slice(0, 10)
+    // Year range -> month boundaries (Jan 1 … Dec 31); omit each end at the full range.
+    const ys = monthlyYears.value
+    if (filters.fromYear && filters.fromYear !== ys[0]) query.from = `${filters.fromYear}-01-01`
+    if (filters.toYear && filters.toYear !== ys[ys.length - 1]) query.to = `${filters.toYear}-12-31`
   } else {
     const ys = yearOptions.value
     if (filters.fromYear && filters.fromYear !== ys[0]) query.fromYear = String(filters.fromYear)
@@ -369,14 +370,14 @@ if (datasetExport) {
         <template v-if="isMonthly">
           <div class="field">
             <label class="usa-label margin-top-0" for="p-from">From</label>
-            <select id="p-from" v-model="filters.from" class="usa-select">
-              <option v-for="m in monthOptions" :key="m" :value="m">{{ monthLabel(m) }}</option>
+            <select id="p-from" v-model.number="filters.fromYear" class="usa-select">
+              <option v-for="y in monthlyYears" :key="y" :value="y">{{ y }}</option>
             </select>
           </div>
           <div class="field">
             <label class="usa-label margin-top-0" for="p-to">To</label>
-            <select id="p-to" v-model="filters.to" class="usa-select">
-              <option v-for="m in monthOptions" :key="m" :value="m">{{ monthLabel(m) }}</option>
+            <select id="p-to" v-model.number="filters.toYear" class="usa-select">
+              <option v-for="y in monthlyYears" :key="y" :value="y">{{ y }}</option>
             </select>
           </div>
         </template>

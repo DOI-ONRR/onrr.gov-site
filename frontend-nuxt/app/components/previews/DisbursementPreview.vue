@@ -43,12 +43,6 @@ const GROUP_OPTIONS = [
 const groupOptions = computed(() => (isFy.value ? GROUP_OPTIONS.filter((o) => o.key !== 'commodity') : GROUP_OPTIONS))
 
 // --- formatting ---------------------------------------------------------------
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-function monthLabel(d) {
-  if (!d) return '—'
-  const dt = new Date(`${String(d).slice(0, 10)}T00:00:00Z`)
-  return Number.isNaN(dt.getTime()) ? d : `${MONTHS[dt.getUTCMonth()]} ${dt.getUTCFullYear()}`
-}
 function currency(v) {
   const n = Number(v)
   if (!Number.isFinite(n)) return '—'
@@ -71,9 +65,7 @@ const recipientLabel = (key) => recipientOptions.value.find((r) => r.key === key
 // --- filter state (multi-selects seeded to all-selected once options load) --
 const filters = reactive({
   groupBy: 'recipient',
-  from: '',
-  to: '',
-  fromYear: null, // fiscal-year range (FY mode)
+  fromYear: null, // year range: fiscal years (FY mode) or calendar years (monthly)
   toYear: null,
   states: [],
   commodities: [],
@@ -83,6 +75,14 @@ const filters = reactive({
 
 // Fiscal-year options for the FY range selects.
 const fiscalYearOptions = computed(() => options.value?.fiscalYears || [])
+// Monthly grain: the From/To range is chosen by calendar year (Jan–Dec of the selected
+// years), derived from the available months, so the filter shows plain years like the FY page.
+const monthlyYears = computed(() => {
+  const set = new Set((options.value?.months || []).map((m) => Number(String(m).slice(0, 4))))
+  return [...set].sort((a, b) => a - b)
+})
+// The active year list for the range selects (FY years in FY mode, calendar years monthly).
+const yearOptions = computed(() => (isFy.value ? fiscalYearOptions.value : monthlyYears.value))
 
 // Selection helpers: "all selected" = every option checked (the default). recipients
 // hold RECIPIENT_GROUPS keys; sources hold raw fund.source values.
@@ -125,11 +125,8 @@ const commoditySummary = computed(() => {
 const ready = ref(false)
 watchEffect(() => {
   if (ready.value || !options.value) return
-  filters.from = options.value.months?.[0] || ''
-  filters.to = options.value.months?.[options.value.months.length - 1] || ''
-  const fy = options.value.fiscalYears || []
-  filters.fromYear = fy[0] ?? null
-  filters.toYear = fy[fy.length - 1] ?? null
+  filters.fromYear = yearOptions.value[0] ?? null
+  filters.toYear = yearOptions.value[yearOptions.value.length - 1] ?? null
   // Default to everything selected (all boxes checked).
   filters.recipients = recipientOptions.value.map((r) => r.key)
   filters.sources = [...sourceOptions.value]
@@ -229,13 +226,11 @@ const filterQuery = computed(() => {
     if (filters.fromYear != null && filters.fromYear !== fy[0]) query.fromYear = filters.fromYear
     if (filters.toYear != null && filters.toYear !== fy[fy.length - 1]) query.toYear = filters.toYear
   } else {
-    const months = options.value?.months || []
-    const fullFrom = months[0]
-    const fullTo = months[months.length - 1]
-    // Omit from/to when they span the full available range, so a reactive chart keeps its
-    // default window until the user actually narrows the dates.
-    if (filters.from && filters.from !== fullFrom) query.from = String(filters.from).slice(0, 10)
-    if (filters.to && filters.to !== fullTo) query.to = String(filters.to).slice(0, 10)
+    // Year range -> month boundaries (Jan 1 of fromYear … Dec 31 of toYear). Omit each end at
+    // the full range so a reactive chart keeps its default window until the user narrows it.
+    const yrs = monthlyYears.value
+    if (filters.fromYear != null && filters.fromYear !== yrs[0]) query.from = `${filters.fromYear}-01-01`
+    if (filters.toYear != null && filters.toYear !== yrs[yrs.length - 1]) query.to = `${filters.toYear}-12-31`
   }
   // None selected in any multi-select -> empty. All selected -> omit (no filter).
   // Partial -> narrow (comma-joined keys/values).
@@ -322,11 +317,8 @@ function clearFilters() {
   filters.sources = [...sourceOptions.value]
   filters.states = [...stateOptions.value]
   filters.commodities = [...commodityOptions.value]
-  filters.from = options.value?.months?.[0] || ''
-  filters.to = options.value?.months?.[options.value.months.length - 1] || ''
-  const fy = options.value?.fiscalYears || []
-  filters.fromYear = fy[0] ?? null
-  filters.toYear = fy[fy.length - 1] ?? null
+  filters.fromYear = yearOptions.value[0] ?? null
+  filters.toYear = yearOptions.value[yearOptions.value.length - 1] ?? null
 }
 
 function downloadCsv() {
@@ -361,8 +353,8 @@ if (datasetExport) {
     if (!filters.recipients.length || !filters.sources.length || !filters.states.length || !filters.commodities.length) return null
     const q = new URLSearchParams()
     q.set('period', periodParam.value)
-    if (!isFy.value && filters.from) q.set('from', String(filters.from).slice(0, 10))
-    if (!isFy.value && filters.to) q.set('to', String(filters.to).slice(0, 10))
+    if (!isFy.value && filters.fromYear != null) q.set('from', `${filters.fromYear}-01-01`)
+    if (!isFy.value && filters.toYear != null) q.set('to', `${filters.toYear}-12-31`)
     if (isFy.value && filters.fromYear != null) q.set('fromYear', String(filters.fromYear))
     if (isFy.value && filters.toYear != null) q.set('toYear', String(filters.toYear))
     if (filters.recipients.length < allRecipientKeys.value.length) q.set('recipients', filters.recipients.join(','))
@@ -392,15 +384,15 @@ if (datasetExport) {
       <div class="filter-bar__fields">
         <div v-if="!isFy" class="field">
           <label class="usa-label margin-top-0" for="f-from">From</label>
-          <select id="f-from" v-model="filters.from" class="usa-select">
-            <option v-for="m in options?.months" :key="m" :value="m">{{ monthLabel(m) }}</option>
+          <select id="f-from" v-model.number="filters.fromYear" class="usa-select">
+            <option v-for="y in monthlyYears" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
 
         <div v-if="!isFy" class="field">
           <label class="usa-label margin-top-0" for="f-to">To</label>
-          <select id="f-to" v-model="filters.to" class="usa-select">
-            <option v-for="m in options?.months" :key="m" :value="m">{{ monthLabel(m) }}</option>
+          <select id="f-to" v-model.number="filters.toYear" class="usa-select">
+            <option v-for="y in monthlyYears" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
 
