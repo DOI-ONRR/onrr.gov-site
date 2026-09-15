@@ -664,7 +664,7 @@ if (datasetExport) {
         </caption>
         <thead ref="theadRef">
           <tr>
-            <th scope="col" class="dim-col" :aria-sort="ariaSort('dim')">
+            <th scope="col" class="dim-col padding-y-105" :aria-sort="ariaSort('dim')">
               <button type="button" class="sort-btn" @click="setSort('dim')">
                 <span>{{ groupByLabel }}</span>
                 <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('dim') }" aria-hidden="true" role="img">

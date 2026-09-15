@@ -571,7 +571,7 @@ if (datasetExport) {
       <table class="usa-table usa-table--compact width-full margin-bottom-0 margin-top-0">
         <thead ref="theadRef">
           <tr>
-            <th scope="col" class="dim-col" :aria-sort="ariaSort('product')">
+            <th scope="col" class="dim-col padding-y-105" :aria-sort="ariaSort('product')">
               <button type="button" class="sort-btn" @click="setSort('product')">
                 <span>Product</span>
                 <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('product') }" aria-hidden="true" role="img">
