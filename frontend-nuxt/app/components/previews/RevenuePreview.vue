@@ -456,17 +456,16 @@ if (datasetExportFilter) {
       </div>
     </div>
 
-    <!-- Break-out control (annual grains): adds a grouping column after Commodity -->
-    <div v-if="isAnnual" class="breakout-control margin-bottom-2">
-      <label class="usa-label margin-top-0" for="r-breakout">Break out by</label>
-      <select id="r-breakout" v-model="breakout" class="usa-select breakout-select">
-        <option v-for="o in BREAKOUT_OPTIONS" :key="o.value" :value="o.value">{{ o.label }}</option>
-      </select>
-    </div>
-
-    <!-- Toolbar -->
-    <div class="table-toolbar">
+    <!-- Toolbar: breakout + collapse control (left), record count + CSV (right) -->
+    <div class="table-toolbar" :class="{ 'table-toolbar--breakout': isAnnual }">
       <div class="table-toolbar__group">
+        <!-- Break-out control (annual grains): adds a grouping column after Commodity -->
+        <div v-if="isAnnual" class="breakout-control">
+          <label class="usa-label margin-top-0" for="r-breakout">Break out by</label>
+          <select id="r-breakout" v-model="breakout" class="usa-select breakout-select">
+            <option v-for="o in BREAKOUT_OPTIONS" :key="o.value" :value="o.value">{{ o.label }}</option>
+          </select>
+        </div>
         <button v-if="grouped" type="button" class="usa-button usa-button--outline" :disabled="!groups.length" @click="toggleAll">
           {{ allCollapsed ? 'Expand all' : 'Collapse all' }}
         </button>
@@ -602,14 +601,30 @@ if (datasetExportFilter) {
 
 .multi-select__option--all { font-weight: 700; border-bottom: 1px solid #dfe1e2; }
 
-// Break-out control: left-aligned single select below the filter bar.
+// Break-out control (in the toolbar's left cluster): the "Break out by" label sits ABOVE the
+// dropdown, but the dropdown itself stays vertically centered on the row with the Collapse
+// button and results line — the label is taken out of flow (absolute) so it doesn't push the
+// select down. The toolbar reserves top room for the floating label via .table-toolbar--breakout.
 .breakout-control {
-  .usa-label { font-size: 0.82rem; margin-bottom: 0.25rem; }
-  .breakout-select { width: auto; min-width: 12rem; max-width: 16rem; margin-top: 0; }
+  position: relative;
+  display: flex;
+  align-items: center;
+  .usa-label {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 0.15rem);
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .breakout-select { width: auto; min-width: 10rem; max-width: 16rem; margin-top: 0; }
 }
 
 .table-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
-.table-toolbar__group { display: flex; align-items: center; gap: 0.5rem; }
+// Room above the row for the floating "Break out by" label (only when the breakout is shown).
+.table-toolbar--breakout { padding-top: 1.25rem; }
+.table-toolbar__group { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
 .table-toolbar__group .usa-button { margin: 0; }
 .results-line { font-size: 0.95rem; }
 
