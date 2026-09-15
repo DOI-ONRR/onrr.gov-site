@@ -23,6 +23,12 @@ Feature: Revenue dataset preview
     And the revenue pivot has column header "Revenue Type"
     And the revenue pivot has detail row "Royalties"
 
+  Scenario: Sorting by Commodity reorders the flat table alphabetically
+    Given I navigate to the revenue dataset page
+    Then the first revenue commodity row is "Oil"
+    When I sort the revenue table by "Commodity"
+    Then the first revenue commodity row is "Gas"
+
   Scenario: The Period selector offers Monthly, Calendar year and Fiscal year
     Given I navigate to the revenue dataset page
     Then the revenue period options are "Monthly", "Calendar year" and "Fiscal year"

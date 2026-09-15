@@ -49,6 +49,14 @@ When('I set the revenue breakout to {string}', async ({ page }, label) => {
   await page.locator('#r-breakout').selectOption({ label })
 })
 
+When('I sort the revenue table by {string}', async ({ page }, label) => {
+  await wrap(page).locator('thead th button', { hasText: label }).first().click()
+})
+
+Then('the first revenue commodity row is {string}', async ({ page }, name) => {
+  await expect(wrap(page).locator('tbody .prod-name').first()).toHaveText(name)
+})
+
 Then('the revenue chart title contains {string}', async ({ page }, text) => {
   await expect(page.locator('.chart-card h3').first()).toContainText(text)
 })
