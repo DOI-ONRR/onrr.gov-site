@@ -124,4 +124,24 @@ describe('revenuePivot', () => {
     expect(out.periodType).toBe('Monthly');
     expect(out.groups[0].months[0].monthName).toBe('March');
   });
+
+  it('breaks a commodity out into rows[] by the requested dimension (annual only)', async () => {
+    const rows = [
+      { dim: 'Oil', sub: 'Royalties', yr: 2020, amt: 700, cnt: 3 },
+      { dim: 'Oil', sub: 'Rents', yr: 2020, amt: 300, cnt: 2 },
+    ];
+    const out = await revenuePivot(makeDb(rows, 5), { periodType: 'Fiscal Year', breakout: 'revenue_type' });
+    expect(out.breakout).toBe('revenue_type');
+    const oil = out.groups[0];
+    expect(oil.rows.map((r) => r.key)).toEqual(['Royalties', 'Rents']); // rows sorted by total desc
+    expect(oil.byYear).toEqual({ 2020: 1000 }); // commodity subtotal across breakout values
+  });
+
+  it('ignores the breakout for the monthly grain (month detail wins)', async () => {
+    const rows = [{ dim: 'Oil', yr: 2020, mo: 1, amt: 5, cnt: 1 }];
+    const out = await revenuePivot(makeDb(rows, 1), { periodType: 'Monthly', breakout: 'state' });
+    expect(out.breakout).toBeNull();
+    expect(out.groups[0].rows).toBeUndefined();
+    expect(out.groups[0].months[0].monthName).toBe('January');
+  });
 });

@@ -41,6 +41,14 @@ When('I set the revenue period to {string}', async ({ page }, label) => {
   await page.locator('#r-period').selectOption({ label })
 })
 
+Then('the revenue pivot has detail row {string}', async ({ page }, name) => {
+  await expect(wrap(page).locator('.breakout-cell', { hasText: name }).first()).toBeVisible()
+})
+
+When('I set the revenue breakout to {string}', async ({ page }, label) => {
+  await page.locator('#r-breakout').selectOption({ label })
+})
+
 Then('the revenue chart title contains {string}', async ({ page }, text) => {
   await expect(page.locator('.chart-card h3').first()).toContainText(text)
 })

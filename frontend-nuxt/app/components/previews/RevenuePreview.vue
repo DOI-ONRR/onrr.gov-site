@@ -40,6 +40,26 @@ const periodParam = computed(() =>
 // Number of commodity series on the chart (top N by total revenue).
 const CHART_TOP_N = 6
 
+// Annual grains (Calendar/Fiscal Year) offer an optional secondary "Break out by" column,
+// like yearly production: Commodity becomes a collapsible band with one sub-row per breakout
+// value. Monthly already shows month detail, so the breakout is hidden there.
+const isAnnual = computed(() => !isMonthly.value)
+const BREAKOUT_OPTIONS = [
+  { value: '', label: 'None' },
+  { value: 'land_type', label: 'Land Type' },
+  { value: 'state', label: 'State' },
+  { value: 'county', label: 'County' },
+  { value: 'revenue_type', label: 'Revenue Type' },
+  { value: 'mineral_lease_type', label: 'Mineral Lease Type' },
+  { value: 'product', label: 'Product' },
+]
+const breakout = ref('')
+const breakoutColLabel = computed(() => BREAKOUT_OPTIONS.find((o) => o.value === breakout.value)?.label || '')
+const hasBreakout = computed(() => isAnnual.value && !!breakout.value)
+// The table is grouped (collapsible band + detail rows) for monthly, or an annual grain with
+// a breakout; otherwise it's a flat one-row-per-commodity table.
+const grouped = computed(() => isMonthly.value || hasBreakout.value)
+
 // Revenue is dollars.
 function currency(v) {
   const n = Number(v)
@@ -182,6 +202,7 @@ const filterQuery = computed(() => {
     if (filters.regions.length < regionOptions.value.length) query.regions = filters.regions.join(',')
     if (filters.products.length < productOptions.value.length) query.products = filters.products.join(',')
   }
+  if (hasBreakout.value) query.breakout = breakout.value
   return { query, empty: selectionEmpty.value }
 })
 
@@ -194,7 +215,7 @@ const { data: pivot, pending } = await useAsyncData(
     if (empty) return { groupBy: 'product', periodType: periodType.value, years: [], groups: [], grandTotal: 0, recordCount: 0 }
     return $fetch(`${apiUrl}/charts/revenue/pivot`, { query })
   },
-  { watch: [() => JSON.stringify(filters), ready, periodParam], dedupe: 'cancel' },
+  { watch: [() => JSON.stringify(filters), ready, breakout, periodParam], dedupe: 'cancel' },
 )
 
 const years = computed(() => pivot.value?.years || [])
@@ -236,6 +257,12 @@ function downloadCsv() {
       rows.push([g.key, 'All months', ...p.years.map((y) => g.byYear[y] ?? '')])
       for (const m of g.months || []) rows.push([g.key, m.monthName, ...p.years.map((y) => m.byYear[y] ?? '')])
     }
+  } else if (hasBreakout.value) {
+    rows.push(['Commodity', breakoutColLabel.value, ...p.years.map(String)])
+    for (const g of p.groups) {
+      rows.push([g.key, 'All', ...p.years.map((y) => g.byYear[y] ?? '')])
+      for (const row of g.rows || []) rows.push([g.key, row.key, ...p.years.map((y) => row.byYear[y] ?? '')])
+    }
   } else {
     rows.push(['Commodity', ...p.years.map(String)])
     for (const g of p.groups) rows.push([g.key, ...p.years.map((y) => g.byYear[y] ?? '')])
@@ -259,7 +286,8 @@ if (datasetExport) {
     if (selectionEmpty.value) return null
     const q = new URLSearchParams()
     const { query } = filterQuery.value
-    for (const [k, v] of Object.entries(query)) q.set(k, v)
+    // The raw-records export has no breakout concept — it's the flat record set.
+    for (const [k, v] of Object.entries(query)) if (k !== 'breakout') q.set(k, v)
     const qs = q.toString()
     return `${apiUrl}/charts/revenue/export${qs ? `?${qs}` : ''}`
   })
@@ -298,13 +326,13 @@ if (datasetExportFilter) {
 
         <!-- Year range -->
         <div class="field">
-          <label class="usa-label margin-top-0" for="r-from-year">Year from</label>
+          <label class="usa-label margin-top-0" for="r-from-year">From</label>
           <select id="r-from-year" v-model="filters.fromYear" class="usa-select">
             <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
         <div class="field">
-          <label class="usa-label margin-top-0" for="r-to-year">Year to</label>
+          <label class="usa-label margin-top-0" for="r-to-year">To</label>
           <select id="r-to-year" v-model="filters.toYear" class="usa-select">
             <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
           </select>
@@ -388,10 +416,18 @@ if (datasetExportFilter) {
       </div>
     </div>
 
+    <!-- Break-out control (annual grains): adds a grouping column after Commodity -->
+    <div v-if="isAnnual" class="breakout-control margin-bottom-2">
+      <label class="usa-label margin-top-0" for="r-breakout">Break out by</label>
+      <select id="r-breakout" v-model="breakout" class="usa-select breakout-select">
+        <option v-for="o in BREAKOUT_OPTIONS" :key="o.value" :value="o.value">{{ o.label }}</option>
+      </select>
+    </div>
+
     <!-- Toolbar -->
     <div class="table-toolbar">
       <div class="table-toolbar__group">
-        <button v-if="isMonthly" type="button" class="usa-button usa-button--outline" :disabled="!groups.length" @click="toggleAll">
+        <button v-if="grouped" type="button" class="usa-button usa-button--outline" :disabled="!groups.length" @click="toggleAll">
           {{ allCollapsed ? 'Expand all' : 'Collapse all' }}
         </button>
       </div>
@@ -414,7 +450,7 @@ if (datasetExportFilter) {
     <div
       ref="wrapRef"
       class="data-table-wrap pivot margin-top-2"
-      :class="{ 'pivot--flat': !isMonthly }"
+      :class="{ 'pivot--flat': isAnnual && !hasBreakout }"
       :style="{ '--thead-h': `${theadH}px`, '--dim-w': dimW ? `${dimW}px` : undefined }"
     >
       <table class="usa-table usa-table--compact width-full margin-bottom-0 margin-top-0">
@@ -422,12 +458,13 @@ if (datasetExportFilter) {
           <tr>
             <th scope="col" class="dim-col">Commodity</th>
             <th v-if="isMonthly" scope="col" class="month-col">Month</th>
+            <th v-else-if="hasBreakout" scope="col" class="breakout-col">{{ breakoutColLabel }}</th>
             <th v-for="y in years" :key="y" scope="col" class="text-right">{{ y }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="!pending && !groups.length">
-            <td :colspan="years.length + (isMonthly ? 2 : 1)">No records match the current filters.</td>
+            <td :colspan="years.length + (grouped ? 2 : 1)">No records match the current filters.</td>
           </tr>
 
           <!-- Monthly: grouped by commodity -> collapsible month rows -> subtotal -->
@@ -456,7 +493,33 @@ if (datasetExportFilter) {
             </template>
           </template>
 
-          <!-- Annual (Calendar/Fiscal Year): flat, one row per commodity -->
+          <!-- Annual + breakout: grouped by commodity -> collapsible breakout rows -> subtotal -->
+          <template v-else-if="hasBreakout">
+            <template v-for="g in groups" :key="g.key">
+              <tr class="group-row">
+                <th scope="colgroup" :colspan="years.length + 2" class="group-head">
+                  <button type="button" class="group-toggle" :aria-expanded="!collapsed.has(g.key)" @click="toggle(g.key)">
+                    <span aria-hidden="true" class="caret">{{ collapsed.has(g.key) ? '▸' : '▾' }}</span>
+                    <span class="group-name">{{ g.key }}</span>
+                  </button>
+                </th>
+              </tr>
+              <template v-if="!collapsed.has(g.key)">
+                <tr v-for="(row, ri) in g.rows" :key="`${g.key}-${row.key}`" class="detail-row" :class="{ 'row-alt': ri % 2 === 1 }">
+                  <td class="dim-cell"></td>
+                  <td class="breakout-cell">{{ row.key }}</td>
+                  <td v-for="y in years" :key="y" class="text-right">{{ row.byYear[y] ? currency(row.byYear[y]) : '—' }}</td>
+                </tr>
+                <tr class="subtotal-row">
+                  <td class="dim-cell"></td>
+                  <th scope="row" class="breakout-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
+                  <td v-for="y in years" :key="y" class="text-right">{{ currency(g.byYear[y]) }}</td>
+                </tr>
+              </template>
+            </template>
+          </template>
+
+          <!-- Annual (Calendar/Fiscal Year), no breakout: flat, one row per commodity -->
           <template v-else>
             <tr v-for="(g, gi) in groups" :key="g.key" class="prod-row" :class="{ 'row-alt': gi % 2 === 1 }">
               <th scope="row" class="dim-cell prod-name">{{ g.key }}</th>
@@ -485,6 +548,12 @@ if (datasetExportFilter) {
 
 .multi-select__option--all { font-weight: 700; border-bottom: 1px solid #dfe1e2; }
 
+// Break-out control: left-aligned single select below the filter bar.
+.breakout-control {
+  .usa-label { font-size: 0.82rem; margin-bottom: 0.25rem; }
+  .breakout-select { width: auto; min-width: 12rem; max-width: 16rem; margin-top: 0; }
+}
+
 .table-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
 .table-toolbar__group { display: flex; align-items: center; gap: 0.5rem; }
 .table-toolbar__group .usa-button { margin: 0; }
@@ -508,7 +577,8 @@ if (datasetExportFilter) {
 .dim-col,
 .dim-cell { min-width: var(--dim-w, 12rem); }
 .dim-col { white-space: nowrap; }
-.month-col { width: 1%; white-space: nowrap; }
+.month-col,
+.breakout-col { width: 1%; white-space: nowrap; }
 
 // --- Monthly grouped table ----------------------------------------------------
 .pivot .group-head {

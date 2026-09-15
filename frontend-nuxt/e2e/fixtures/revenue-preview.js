@@ -69,7 +69,7 @@ const flatGroup = (key, y) => ({
   byYear: { ...y },
 })
 
-export function revenuePivot(period) {
+export function revenuePivot(period, breakout = '') {
   if (period === 'monthly') {
     const years = [2023, 2024]
     const mgroup = (key, base) => ({
@@ -94,6 +94,21 @@ export function revenuePivot(period) {
 
   const periodType = period === 'calendar-year' ? 'Calendar Year' : 'Fiscal Year'
   const years = [2022, 2023, 2024]
+
+  if (breakout === 'revenue_type') {
+    const bgroup = (key, base) => ({
+      key,
+      total: base * 3,
+      recordCount: 6,
+      byYear: { 2022: base, 2023: base, 2024: base },
+      rows: [
+        { key: 'Royalties', byYear: { 2022: base * 0.7, 2023: base * 0.7, 2024: base * 0.7 } },
+        { key: 'Rents', byYear: { 2022: base * 0.3, 2023: base * 0.3, 2024: base * 0.3 } },
+      ],
+    })
+    return { groupBy: 'product', periodType, breakout: 'revenue_type', years, groups: [bgroup('Oil', 1000000000), bgroup('Gas', 300000000)], grandTotal: 3900000000, recordCount: 12 }
+  }
+
   return {
     groupBy: 'product',
     periodType,

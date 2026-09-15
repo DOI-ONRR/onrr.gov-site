@@ -258,7 +258,10 @@ export const restHandlers = [
   },
   {
     match: (url) => url === '/charts/revenue/pivot',
-    resolve: (urlPath, fullUrl = '') => revenuePivot(new URL(fullUrl, 'http://x').searchParams.get('period') || 'fiscal-year'),
+    resolve: (urlPath, fullUrl = '') => {
+      const q = new URL(fullUrl, 'http://x').searchParams
+      return revenuePivot(q.get('period') || 'fiscal-year', q.get('breakout') || '')
+    },
   },
   {
     match: (url) => url === '/items/revenue',
