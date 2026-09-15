@@ -12,6 +12,8 @@ import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
 import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactTopicPage, contactTopicPagePaged } from '../fixtures/contact-hub.js'
 import { datasetPage, pivotOptions, pivotResponse, disbursementCount } from '../fixtures/dataset-preview.js'
+import { productionYearlyPage, productionMonthlyPage, productionOptions, productionPivot, productionCount } from '../fixtures/production-preview.js'
+import { revenuePage, revenueOptions, revenuePivot, revenueCount } from '../fixtures/revenue-preview.js'
 
 /**
  * Each handler has:
@@ -139,6 +141,9 @@ export const handlers = [
       if (variables?.slug === 'oil-gas-reporting-paged') return { page: [contactTopicPagePaged] }
       // Dataset page: has dataset_metadata → renders DatasetView (preview + downloads).
       if (variables?.slug === 'monthly-disbursements') return { page: [datasetPage] }
+      if (variables?.slug === 'yearly-production') return { page: [productionYearlyPage] }
+      if (variables?.slug === 'monthly-production') return { page: [productionMonthlyPage] }
+      if (variables?.slug === 'revenue-by-commodity') return { page: [revenuePage] }
       return {
         page: [{
           __typename: 'pages',
@@ -227,5 +232,36 @@ export const restHandlers = [
   {
     match: (url) => url === '/items/disbursement',
     resolve: () => disbursementCount,
+  },
+
+  // --- Production dataset preview (ProductionPreview) ---
+  {
+    match: (url) => url === '/charts/production/pivot/options',
+    resolve: (urlPath, fullUrl = '') => productionOptions(new URL(fullUrl, 'http://x').searchParams.get('period') || 'monthly'),
+  },
+  {
+    match: (url) => url === '/charts/production/pivot',
+    resolve: (urlPath, fullUrl = '') => {
+      const q = new URL(fullUrl, 'http://x').searchParams
+      return productionPivot(q.get('period') || 'monthly', q.get('breakout') || '')
+    },
+  },
+  {
+    match: (url) => url === '/items/production',
+    resolve: () => productionCount,
+  },
+
+  // --- Revenue dataset preview (RevenuePreview) ---
+  {
+    match: (url) => url === '/charts/revenue/pivot/options',
+    resolve: (urlPath, fullUrl = '') => revenueOptions(new URL(fullUrl, 'http://x').searchParams.get('period') || 'fiscal-year'),
+  },
+  {
+    match: (url) => url === '/charts/revenue/pivot',
+    resolve: (urlPath, fullUrl = '') => revenuePivot(new URL(fullUrl, 'http://x').searchParams.get('period') || 'fiscal-year'),
+  },
+  {
+    match: (url) => url === '/items/revenue',
+    resolve: () => revenueCount,
   },
 ]
