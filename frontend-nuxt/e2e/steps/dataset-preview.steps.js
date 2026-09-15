@@ -96,3 +96,11 @@ Then('the API endpoint reads {string}', async ({ page }, url) => {
 Then('the API section links to the developer docs at {string}', async ({ page }, href) => {
   await expect(page.locator(`#api a[href="${href}"]`)).toBeVisible()
 })
+
+When('I sort the disbursement table by {string}', async ({ page }, label) => {
+  await pivot(page).locator('thead th button', { hasText: label }).first().click()
+})
+
+Then('the first disbursement group is {string}', async ({ page }, name) => {
+  await expect(pivot(page).locator('.group-name').first()).toHaveText(name)
+})

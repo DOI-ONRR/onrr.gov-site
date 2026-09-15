@@ -13,6 +13,12 @@ Feature: Monthly disbursements dataset page
     Then the preview pivot has group "Onshore"
     And the preview pivot has group "Offshore"
 
+  Scenario: Sorting by Total reorders the disbursement groups
+    Given I navigate to the monthly disbursements dataset page
+    Then the first disbursement group is "State & local"
+    When I sort the disbursement table by "Total"
+    Then the first disbursement group is "U.S. Treasury"
+
   Scenario: Negative values use the secondary color
     Given I navigate to the monthly disbursements dataset page
     Then a negative pivot value is styled with text-secondary

@@ -58,3 +58,11 @@ When('I set the production period to {string}', async ({ page }, label) => {
 When('I set the production breakout to {string}', async ({ page }, label) => {
   await page.locator('#p-breakout').selectOption({ label })
 })
+
+When('I sort the production table by {string}', async ({ page }, label) => {
+  await wrap(page).locator('thead th button', { hasText: label }).first().click()
+})
+
+Then('the first production row is {string}', async ({ page }, name) => {
+  await expect(wrap(page).locator('tbody .prod-name').first()).toHaveText(name)
+})

@@ -28,6 +28,12 @@ Feature: Production dataset preview
     And the production pivot has column header "State"
     And the production pivot has detail row "Wyoming"
 
+  Scenario: Sorting yearly production by Product reorders the rows alphabetically
+    Given I navigate to the yearly production dataset page
+    Then the first production row is "Gas (mcf)"
+    When I sort the production table by "Product"
+    Then the first production row is "Coal (tons)"
+
   Scenario: Monthly production renders a grouped table with month detail
     Given I navigate to the monthly production dataset page
     Then the production pivot has group band "Gas (mcf)"

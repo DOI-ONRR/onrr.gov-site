@@ -266,6 +266,46 @@ const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
 const groupByLabel = computed(() => GROUP_OPTIONS.find((o) => o.key === filters.groupBy)?.label || 'Group')
 
+// --- sorting ------------------------------------------------------------------
+// Client-side sort of the groups. The dimension header sorts by name, each year and the Total
+// column by value. Default (sortKey null) keeps the endpoint's ranking with no active arrow. In
+// the monthly grouped view this reorders the dimension bands; month rows keep chronological
+// order. The chart and footer year-totals are unaffected.
+const sortKey = ref(null) // null | 'dim' | 'total' | <year:number>
+const sortDir = ref('desc')
+function setSort(key) {
+  if (sortKey.value === key) {
+    sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortKey.value = key
+    sortDir.value = key === 'dim' ? 'asc' : 'desc' // text A→Z, values high→low on first click
+  }
+}
+const sortState = (key) => (sortKey.value === key ? sortDir.value : null)
+const ariaSort = (key) => (sortKey.value === key ? (sortDir.value === 'asc' ? 'ascending' : 'descending') : 'none')
+const sortIcon = (key) => {
+  const s = sortState(key)
+  return s === 'asc' ? 'arrow_drop_up' : s === 'desc' ? 'arrow_drop_down' : 'unfold_more'
+}
+const sortedGroups = computed(() => {
+  const gs = groups.value
+  if (!sortKey.value) return gs
+  const dir = sortDir.value === 'asc' ? 1 : -1
+  const key = sortKey.value
+  const copy = [...gs]
+  if (key === 'dim') copy.sort((a, b) => dir * String(a.key).localeCompare(String(b.key)))
+  else if (key === 'total') copy.sort((a, b) => dir * ((a.total || 0) - (b.total || 0)))
+  else copy.sort((a, b) => dir * ((a.byYear[key] || 0) - (b.byYear[key] || 0)))
+  return copy
+})
+// Drop a year sort that no longer exists after a grain/filter change (its column is gone).
+watch(years, (ys) => {
+  if (typeof sortKey.value === 'number' && !ys.includes(sortKey.value)) {
+    sortKey.value = null
+    sortDir.value = 'desc'
+  }
+})
+
 // Publish the pivot result so a filter-reactive chart on the page renders the same data
 // (a visual twin of the table). Everything is derived from the SAME pivot response —
 // groupBy, years, and groups from `pivot.value`, not live `filters` — so the payload is
@@ -624,17 +664,38 @@ if (datasetExport) {
         </caption>
         <thead ref="theadRef">
           <tr>
-            <th scope="col" class="dim-col">{{ groupByLabel }}</th>
+            <th scope="col" class="dim-col" :aria-sort="ariaSort('dim')">
+              <button type="button" class="sort-btn" @click="setSort('dim')">
+                <span>{{ groupByLabel }}</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('dim') }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon('dim')}`" />
+                </svg>
+              </button>
+            </th>
             <th v-if="!isFy" scope="col" class="month-col">Month</th>
-            <th v-for="y in years" :key="y" scope="col" class="text-right">{{ y }}</th>
-            <th scope="col" class="text-right">Total</th>
+            <th v-for="y in years" :key="y" scope="col" class="text-right" :aria-sort="ariaSort(y)">
+              <button type="button" class="sort-btn sort-btn--right" @click="setSort(y)">
+                <span>{{ y }}</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState(y) }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon(y)}`" />
+                </svg>
+              </button>
+            </th>
+            <th scope="col" class="text-right" :aria-sort="ariaSort('total')">
+              <button type="button" class="sort-btn sort-btn--right" @click="setSort('total')">
+                <span>Total</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('total') }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon('total')}`" />
+                </svg>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="!pending && !groups.length">
             <td :colspan="years.length + (isFy ? 2 : 3)">No records match the current filters.</td>
           </tr>
-          <template v-for="(g, gi) in groups" :key="g.key">
+          <template v-for="(g, gi) in sortedGroups" :key="g.key">
             <!-- Fiscal year: one flat row per group (annual grain, no month detail). -->
             <tr v-if="isFy" class="fy-group-row" :class="{ 'row-alt': gi % 2 === 1 }">
               <th scope="row" class="dim-cell fy-group-name">{{ g.key }}</th>
@@ -760,6 +821,33 @@ if (datasetExport) {
 .dim-cell { min-width: var(--dim-w, 12rem); }
 .dim-col { white-space: nowrap; }
 .month-col { width: 1%; white-space: nowrap; } // hug the month labels
+
+// Sortable column headers: the whole header is a button with a trailing caret. The active
+// column shows arrow_drop_up/arrow_drop_down; other sortable columns show a muted unfold_more.
+.sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+
+  &:hover .sort-icon { color: $onrr-violet; }
+  &:focus-visible { outline: 2px solid $onrr-violet; outline-offset: 2px; }
+}
+.sort-btn--right { justify-content: flex-end; }
+.sort-icon {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #a9aeb1; // muted (inactive / unfold_more)
+}
+.sort-icon--active { color: $onrr-violet; }
 
 // Group header: full-width light-violet band, entire row clickable (the button fills
 // the spanning cell), no link styling — plain bold text with the brand caret. Sticky
