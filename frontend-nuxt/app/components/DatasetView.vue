@@ -18,9 +18,15 @@ const { resolveImages } = useCmsContent()
 
 // Glossary-term tooltips for any tagged spans in this view's content.
 const { enhance: enhanceGlossary } = useGlossary()
+// USWDS accordion behavior for any accordion markup inside v-html content (CMS WYSIWYG fields).
+const { enhance: enhanceAccordions } = useUswdsAccordion()
 const glossaryRoot = ref(null)
-onMounted(() => enhanceGlossary(glossaryRoot.value))
-watch(() => props.dataset, () => nextTick(() => enhanceGlossary(glossaryRoot.value)))
+function enhanceContent() {
+  enhanceGlossary(glossaryRoot.value)
+  enhanceAccordions(glossaryRoot.value)
+}
+onMounted(enhanceContent)
+watch(() => props.dataset, () => nextTick(enhanceContent))
 
 const charts = computed(() => props.dataset.charts ?? [])
 

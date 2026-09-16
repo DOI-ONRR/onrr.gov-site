@@ -13,6 +13,12 @@ Feature: Monthly disbursements dataset page
     Then the preview pivot has group "Onshore"
     And the preview pivot has group "Offshore"
 
+  Scenario: USWDS accordion markup in dataset content becomes interactive
+    Given I navigate to the monthly disbursements dataset page
+    Then the accordion panel "Answer one" is hidden
+    When I click the accordion button "Question one"
+    Then the accordion panel "Answer one" is visible
+
   Scenario: Filter values are read from the URL query parameters
     Given I navigate to the monthly disbursements dataset page with query "?groupBy=source"
     Then the preview pivot has group "Onshore"

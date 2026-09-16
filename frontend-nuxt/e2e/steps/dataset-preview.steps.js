@@ -105,6 +105,18 @@ When('I sort the disbursement table by {string}', async ({ page }, label) => {
   await pivot(page).locator('thead th button', { hasText: label }).first().click()
 })
 
+When('I click the accordion button {string}', async ({ page }, label) => {
+  await page.locator('.usa-accordion__button', { hasText: label }).first().click()
+})
+
+Then('the accordion panel {string} is hidden', async ({ page }, text) => {
+  await expect(page.locator('.usa-accordion__content', { hasText: text })).toBeHidden()
+})
+
+Then('the accordion panel {string} is visible', async ({ page }, text) => {
+  await expect(page.locator('.usa-accordion__content', { hasText: text })).toBeVisible()
+})
+
 Then('the first disbursement group is {string}', async ({ page }, name) => {
   await expect(pivot(page).locator('.group-name').first()).toHaveText(name)
 })
