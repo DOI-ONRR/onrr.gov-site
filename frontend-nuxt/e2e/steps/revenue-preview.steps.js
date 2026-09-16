@@ -9,6 +9,18 @@ Given('I navigate to the revenue dataset page', async ({ page }) => {
   await page.goto('/revenue-data/revenue-by-commodity', { waitUntil: 'networkidle' })
 })
 
+Given('I navigate to the revenue dataset page with query {string}', async ({ page }, qs) => {
+  await page.goto(`/revenue-data/revenue-by-commodity${qs}`, { waitUntil: 'networkidle' })
+})
+
+Then('the revenue type filter shows {string}', async ({ page }, text) => {
+  await expect(page.locator('#r-revtype')).toContainText(text)
+})
+
+Then('the page URL contains {string}', async ({ page }, fragment) => {
+  await expect.poll(() => page.url()).toContain(fragment)
+})
+
 Then('the revenue pivot has commodity row {string}', async ({ page }, name) => {
   await expect(wrap(page).locator('.prod-name', { hasText: name })).toBeVisible()
 })

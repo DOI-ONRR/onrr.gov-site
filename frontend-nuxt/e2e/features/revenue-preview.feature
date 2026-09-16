@@ -29,6 +29,15 @@ Feature: Revenue dataset preview
     When I sort the revenue table by "Commodity"
     Then the first revenue commodity row is "Gas"
 
+  Scenario: Filter values are read from the URL query parameters
+    Given I navigate to the revenue dataset page with query "?revenueTypes=Royalties"
+    Then the revenue type filter shows "Royalties"
+
+  Scenario: Changing a filter reflects into the URL query
+    Given I navigate to the revenue dataset page
+    When I set the revenue period to "Monthly"
+    Then the page URL contains "period=monthly"
+
   Scenario: The Period selector offers Monthly, Calendar year and Fiscal year
     Given I navigate to the revenue dataset page
     Then the revenue period options are "Monthly", "Calendar year" and "Fiscal year"

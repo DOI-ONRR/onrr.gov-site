@@ -31,7 +31,19 @@ const PERIOD_OPTIONS = [
   { value: 'Calendar Year', label: 'Calendar year' },
   { value: 'Fiscal Year', label: 'Fiscal year' },
 ]
-const selectedPeriod = ref(basePeriodType.value)
+
+// --- URL query <-> filters (deep-linkable, two-way) ---------------------------
+// The page accepts (and reflects) filter values as query params, reusing the pivot endpoint's
+// own names: period, fromYear, toYear, landTypes, revenueTypes, regions, products, breakout
+// (multi-selects comma-separated). On load these seed the filters; as the user changes filters
+// the URL is kept in sync (router.replace, no history spam) so the view is shareable.
+const route = useRoute()
+const router = useRouter()
+const PERIOD_FROM_PARAM = { monthly: 'Monthly', 'calendar-year': 'Calendar Year', 'fiscal-year': 'Fiscal Year' }
+const queryStr = (v) => (Array.isArray(v) ? v[0] : v)
+const queryList = (v) => (v == null ? null : String(Array.isArray(v) ? v.join(',') : v).split(',').map((s) => s.trim()).filter(Boolean))
+
+const selectedPeriod = ref(PERIOD_FROM_PARAM[queryStr(route.query.period)] || basePeriodType.value)
 const periodType = computed(() => selectedPeriod.value)
 const isMonthly = computed(() => periodType.value === 'Monthly')
 const periodParam = computed(() =>
@@ -53,7 +65,8 @@ const BREAKOUT_OPTIONS = [
   { value: 'mineral_lease_type', label: 'Mineral Lease Type' },
   { value: 'product', label: 'Product' },
 ]
-const breakout = ref('')
+// Seed the breakout from the URL when it names a known option (applies on annual grains).
+const breakout = ref(BREAKOUT_OPTIONS.some((o) => o.value && o.value === queryStr(route.query.breakout)) ? queryStr(route.query.breakout) : '')
 const breakoutColLabel = computed(() => BREAKOUT_OPTIONS.find((o) => o.value === breakout.value)?.label || '')
 const hasBreakout = computed(() => isAnnual.value && !!breakout.value)
 // The table is grouped (collapsible band + detail rows) for monthly, or an annual grain with
@@ -107,10 +120,33 @@ function seedFilters() {
   filters.products = [...productOptions.value]
 }
 
+// Override the seeded defaults with any valid values from the URL query. Values are validated
+// against the loaded option lists / year range; unknown params or all-invalid selections fall
+// back to the default (so a stale/bad link degrades gracefully rather than showing nothing).
+function applyQueryToFilters() {
+  const q = route.query
+  const yrs = yearOptions.value
+  const fy = Number(queryStr(q.fromYear))
+  if (q.fromYear != null && yrs.includes(fy)) filters.fromYear = fy
+  const ty = Number(queryStr(q.toYear))
+  if (q.toYear != null && yrs.includes(ty)) filters.toYear = ty
+  const applyMulti = (param, optionList, target) => {
+    const req = queryList(q[param])
+    if (!req) return
+    const sel = optionList.filter((o) => req.includes(o))
+    if (sel.length) filters[target] = sel
+  }
+  applyMulti('landTypes', landTypeOptions.value, 'landTypes')
+  applyMulti('revenueTypes', revenueTypeOptions.value, 'revenueTypes')
+  applyMulti('regions', regionOptions.value, 'regions')
+  applyMulti('products', productOptions.value, 'products')
+}
+
 const ready = ref(false)
 watchEffect(() => {
   if (ready.value || !options.value) return
   seedFilters()
+  applyQueryToFilters()
   ready.value = true
 })
 
@@ -205,6 +241,25 @@ const filterQuery = computed(() => {
   if (hasBreakout.value) query.breakout = breakout.value
   return { query, empty: selectionEmpty.value }
 })
+
+// Two-way sync: reflect the active filters into the URL once seeded, so the current view is
+// shareable/bookmarkable. `router.replace` (no history spam); the filterQuery already omits
+// params at their default, so a default view yields a clean URL. Client-only, and any query
+// params we don't own are preserved. The same endpoint param names are used both directions.
+const FILTER_PARAM_KEYS = ['period', 'fromYear', 'toYear', 'landTypes', 'revenueTypes', 'regions', 'products', 'breakout']
+if (import.meta.client) {
+  watch(
+    () => filterQuery.value.query,
+    (q) => {
+      if (!ready.value) return
+      const merged = { ...route.query }
+      for (const k of FILTER_PARAM_KEYS) delete merged[k]
+      Object.assign(merged, q)
+      router.replace({ query: merged })
+    },
+    { flush: 'post' },
+  )
+}
 
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(
