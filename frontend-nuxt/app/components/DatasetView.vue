@@ -9,6 +9,7 @@
 import DisbursementPreview from '~/components/previews/DisbursementPreview.vue'
 import ProductionPreview from '~/components/previews/ProductionPreview.vue'
 import RevenuePreview from '~/components/previews/RevenuePreview.vue'
+import FederalSalesPreview from '~/components/previews/FederalSalesPreview.vue'
 
 const props = defineProps({
   dataset: { type: Object, required: true },
@@ -77,14 +78,16 @@ const terms = computed(() => {
 // preview reads the dataset's export_filter to serve every period grain of that collection
 // (monthly / fiscal-year / calendar-year production all use one ProductionPreview).
 // Register each preview here as it's built.
-const initCap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '')
+// snake_case collection -> PascalCase component prefix (e.g. federal_sales -> FederalSales).
+const pascalCase = (s) => (s || '').split('_').filter(Boolean).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join('')
 const sourceCollection = computed(() => props.dataset.source_collection || null)
 const PREVIEW_COMPONENTS = {
   DisbursementPreview,
   ProductionPreview,
   RevenuePreview,
+  FederalSalesPreview,
 }
-const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceCollection.value)}Preview`] || null)
+const previewComponent = computed(() => PREVIEW_COMPONENTS[`${pascalCase(sourceCollection.value)}Preview`] || null)
 
 // The active preview publishes a "filtered selection" export descriptor here; the
 // Download section's third card consumes it (works for any *Preview component).
@@ -107,7 +110,7 @@ provide('datasetPreviewChart', previewChart)
 // flat-backed datasets are exposed; source_collection maps to the friendly endpoint name.
 // The section stays hidden for datasets without a public endpoint.
 const dataApiBase = useRuntimeConfig().public.dataApiBase
-const API_ENDPOINTS = { disbursement: 'disbursements', revenue: 'revenue', production: 'production' }
+const API_ENDPOINTS = { disbursement: 'disbursements', revenue: 'revenue', production: 'production', federal_sales: 'federal-sales' }
 const apiEndpoint = computed(() => API_ENDPOINTS[sourceCollection.value] || null)
 const hasApi = computed(() => !!apiEndpoint.value)
 const apiUrl = computed(() => (apiEndpoint.value ? `${dataApiBase}/${apiEndpoint.value}` : null))

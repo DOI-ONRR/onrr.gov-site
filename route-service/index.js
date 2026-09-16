@@ -23,6 +23,8 @@ const DATASET_MAP = {
   disbursements: 'disbursement_flat',
   revenue: 'revenue_flat',
   production: 'production_flat',
+  // federal_sales is already a flat, denormalized collection, so it maps to itself.
+  'federal-sales': 'federal_sales',
 };
 const DOCS_URL = 'https://onrr.gov/developers';
 

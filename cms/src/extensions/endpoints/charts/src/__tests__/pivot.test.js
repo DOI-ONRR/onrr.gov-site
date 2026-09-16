@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { productionPivot } from '../collections/production.js';
 import { revenuePivot } from '../collections/revenue.js';
+import { federalSalesPivot } from '../collections/federal-sales.js';
 
 // Minimal chainable knex mock: every builder method records its call and returns `this`;
 // awaiting the builder resolves to `aggRows`; `.first()` resolves to the count row. This lets
@@ -143,5 +144,59 @@ describe('revenuePivot', () => {
     expect(out.breakout).toBeNull();
     expect(out.groups[0].rows).toBeUndefined();
     expect(out.groups[0].months[0].monthName).toBe('January');
+  });
+});
+
+describe('federalSalesPivot', () => {
+  const measures = (sv, sval, rvpa, ta, pa, rvla) => ({
+    sales_volume: sv, sales_value: sval, rvpa, ta, pa, rvla,
+  });
+
+  it('shapes commodities into measure columns, ranked by sales value, with grand totals', async () => {
+    const rows = [
+      { dim: 'Gas', ...measures(10, 100, 90, 5, 3, 82), cnt: 4 },
+      { dim: 'Oil', ...measures(20, 500, 450, 20, 10, 420), cnt: 6 },
+    ];
+    const out = await federalSalesPivot(makeDb(rows, 10), {});
+    expect(out.groupBy).toBe('commodity');
+    expect(out.recordCount).toBe(10);
+    expect(out.groups.map((g) => g.key)).toEqual(['Oil', 'Gas']); // sales_value desc
+    expect(out.groups[0].values).toEqual(measures(20, 500, 450, 20, 10, 420));
+    expect(out.totals).toEqual(measures(30, 600, 540, 25, 13, 502)); // summed across commodities
+    expect(out.measures.map((m) => m.key)).toEqual(['sales_volume', 'sales_value', 'rvpa', 'ta', 'pa', 'rvla']);
+  });
+
+  it('groups null/empty commodity under "(none)" and merges them (data uses a literal label otherwise)', async () => {
+    const rows = [
+      { dim: null, ...measures(1, 10, 9, 1, 0, 8), cnt: 1 },
+      { dim: '', ...measures(2, 20, 18, 1, 1, 16), cnt: 2 },
+      { dim: 'Oil', ...measures(5, 50, 45, 2, 1, 42), cnt: 3 },
+    ];
+    const out = await federalSalesPivot(makeDb(rows, 6), {});
+    const none = out.groups.find((g) => g.key === '(none)');
+    expect(none).toBeTruthy();
+    expect(none.values.sales_value).toBe(30); // null + '' merged
+    expect(none.recordCount).toBe(3);
+  });
+
+  it('breaks a commodity out into rows[] by the requested dimension', async () => {
+    const rows = [
+      { dim: 'Oil', sub: 'Federal Onshore', ...measures(7, 70, 63, 3, 2, 58), cnt: 3 },
+      { dim: 'Oil', sub: 'Federal Offshore', ...measures(3, 30, 27, 1, 1, 25), cnt: 2 },
+    ];
+    const out = await federalSalesPivot(makeDb(rows, 5), { breakout: 'land_type' });
+    expect(out.breakout).toBe('land_type');
+    const oil = out.groups[0];
+    expect(oil.rows.map((r) => r.key)).toEqual(['Federal Onshore', 'Federal Offshore']); // by sales_value desc
+    expect(oil.values.sales_value).toBe(100); // commodity subtotal across the breakout values
+  });
+
+  it('applies the calendar-year range, land type and region filters', async () => {
+    const db = makeDb([], 0);
+    await federalSalesPivot(db, { fromYear: 2019, toYear: 2023, landTypes: ['Federal Onshore'], regions: ['Wyoming'] });
+    expect(called(db, 'where', (a) => a[0] === 'calendar_year' && a[1] === '>=' && a[2] === 2019)).toBe(true);
+    expect(called(db, 'where', (a) => a[0] === 'calendar_year' && a[1] === '<=' && a[2] === 2023)).toBe(true);
+    expect(called(db, 'whereRaw', (a) => String(a[0]).includes('CONCAT_WS'))).toBe(true); // land type expr
+    expect(called(db, 'whereIn', (a) => a[0] === 'state_offshore_region')).toBe(true);
   });
 });

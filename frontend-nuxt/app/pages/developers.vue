@@ -43,6 +43,7 @@ const endpoints = [
   { name: 'Monthly disbursements', path: '/disbursements', measure: 'amount (USD)' },
   { name: 'Revenue', path: '/revenue', measure: 'amount (USD)' },
   { name: 'Production', path: '/production', measure: 'volume' },
+  { name: 'Federal sales', path: '/federal-sales', measure: 'sales value (USD)' },
 ]
 
 // Columns shared by all three collections.
@@ -94,6 +95,26 @@ const perDataset = [
   },
 ]
 
+// Federal sales has its own flat, calendar-year schema — it does NOT share the columns above
+// (no period_date / fiscal_year / month). Documented as a standalone column set.
+const federalSalesCols = [
+  ['id', 'uuid', 'Unique row identifier.'],
+  ['calendar_year', 'integer', 'Calendar year of the sales.'],
+  ['commodity', 'string', 'Oil, Gas, NGL, or "Not Tied to a Commodity".'],
+  ['land_class', 'string', 'Land ownership class (e.g. Federal).'],
+  ['land_category', 'string', 'Onshore or Offshore.'],
+  ['state_offshore_region', 'string', 'State name or offshore region.'],
+  ['revenue_type', 'string', 'Revenue category.'],
+  ['sales_volume', 'numeric', 'Sales volume.'],
+  ['gas_volume', 'numeric', 'Gas volume.'],
+  ['sales_value', 'numeric', 'Sales value, USD.'],
+  ['royalty_value_prior_to_allowance', 'numeric', 'Royalty value prior to allowances (RVPA), USD.'],
+  ['transportation_allowance', 'numeric', 'Transportation allowances (TA), USD.'],
+  ['processing_allowance', 'numeric', 'Processing allowances (PA), USD.'],
+  ['royalty_value_less_allowance', 'numeric', 'Royalty value less allowances (RVLA), USD.'],
+  ['effective_royalty_rate', 'numeric', 'Effective royalty rate.'],
+]
+
 const params = [
   ['fields', 'Choose which columns to return (default: all).', 'fields=period_date,state_name,amount'],
   ['filter', 'Filter rows by column values.', 'filter[state_name][_eq]=Colorado'],
@@ -126,6 +147,11 @@ const examples = [
     title: 'Row count for a filter',
     desc: 'No rows returned — just the total count.',
     path: '/revenue?filter[commodity][_eq]=Gas&limit=0&meta=filter_count',
+  },
+  {
+    title: 'Federal oil sales value by year',
+    desc: 'Sum of sales value grouped by calendar year.',
+    path: '/federal-sales?aggregate[sum]=sales_value&groupBy[]=calendar_year&filter[commodity][_eq]=Oil',
   },
 ]
 
@@ -272,7 +298,7 @@ const contactBlock = {
           <!-- Columns -->
           <section id="columns" class="api-section">
             <h2>Columns</h2>
-            <h3 class="margin-bottom-1">Shared by all datasets</h3>
+            <h3 class="margin-bottom-1">Shared by disbursements, revenue, and production</h3>
             <div class="table-scroll">
               <table class="usa-table usa-table--borderless width-full">
                 <thead>
@@ -315,6 +341,33 @@ const contactBlock = {
                 </table>
               </div>
             </template>
+
+            <h3 class="margin-bottom-1">
+              <code class="code-inline">/federal-sales</code> (its own schema)
+            </h3>
+            <p class="margin-top-0">
+              Federal sales is aggregated by calendar year and has a distinct set of columns — it
+              does not share the columns above (no <code class="code-inline">period_date</code>,
+              <code class="code-inline">fiscal_year</code>, or month).
+            </p>
+            <div class="table-scroll">
+              <table class="usa-table usa-table--borderless width-full">
+                <thead>
+                  <tr>
+                    <th scope="col">Column</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="c in federalSalesCols" :key="c[0]">
+                    <td><code class="code-inline">{{ c[0] }}</code></td>
+                    <td class="text-no-wrap">{{ c[1] }}</td>
+                    <td>{{ c[2] }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             <p class="api-hint">
               Offshore rows have no <code class="code-inline">state</code> /
