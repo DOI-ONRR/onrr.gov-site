@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { productionPivot } from '../collections/production.js';
 import { revenuePivot } from '../collections/revenue.js';
-import { federalSalesPivot } from '../collections/federal-sales.js';
+import { federalSalesPivot, federalSalesTimeseries } from '../collections/federal-sales.js';
 
 // Minimal chainable knex mock: every builder method records its call and returns `this`;
 // awaiting the builder resolves to `aggRows`; `.first()` resolves to the count row. This lets
@@ -207,5 +207,19 @@ describe('federalSalesPivot', () => {
     expect(base).toBeTruthy();
     expect(base[2]).toEqual(['Oil', 'Gas', 'NGL']);
     expect(base[2]).not.toContain('Not Tied to a Commodity');
+  });
+
+  it('shapes a time series: sales_volume + RVLA arrays per commodity, aligned to years', async () => {
+    const rows = [
+      { commodity: 'Oil', calendar_year: 2020, sv: 100, rvla: 900 },
+      { commodity: 'Oil', calendar_year: 2021, sv: 120, rvla: 950 },
+      { commodity: 'Gas', calendar_year: 2021, sv: 40, rvla: 300 }, // no 2020 -> null gap
+    ];
+    const out = await federalSalesTimeseries(makeDb(rows), {});
+    expect(out.years).toEqual([2020, 2021]);
+    expect(out.commodities).toEqual(['Oil', 'Gas']); // allowed-order (Oil before Gas)
+    expect(out.salesVolume.Oil).toEqual([100, 120]);
+    expect(out.salesVolume.Gas).toEqual([null, 40]); // missing 2020 -> null
+    expect(out.rvla.Oil).toEqual([900, 950]);
   });
 });

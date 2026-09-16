@@ -115,6 +115,47 @@ export async function federalSalesPivot(database, opts = {}) {
 	};
 }
 
+// Time-series shape for the preview charts: sales_volume + RVLA by calendar year, per commodity.
+// Uses the same filters as the pivot (year range, commodity, land type, region) so the charts
+// track the filter bar. Values are arrays aligned to `years`; missing year/commodity cells are
+// null (a gap in the line rather than a false zero).
+export async function federalSalesTimeseries(database, opts = {}) {
+	const q = database
+		.from('federal_sales')
+		.select(
+			'commodity',
+			'calendar_year',
+			database.raw('SUM("sales_volume") as "sv"'),
+			database.raw('SUM("royalty_value_less_allowance") as "rvla"')
+		)
+		.groupByRaw('"commodity", "calendar_year"')
+		.orderBy('calendar_year', 'asc');
+	applyFilters(q, opts);
+	const rows = await q;
+
+	const yearSet = new Set();
+	const byCommodity = new Map();
+	for (const r of rows) {
+		const c = r.commodity;
+		const y = Number(r.calendar_year);
+		yearSet.add(y);
+		if (!byCommodity.has(c)) byCommodity.set(c, { sv: {}, rvla: {} });
+		const e = byCommodity.get(c);
+		e.sv[y] = Number(r.sv) || 0;
+		e.rvla[y] = Number(r.rvla) || 0;
+	}
+	const years = [...yearSet].sort((a, b) => a - b);
+	const commodities = [...byCommodity.keys()].sort((a, b) => commodityRank(a) - commodityRank(b));
+	const salesVolume = {};
+	const rvla = {};
+	for (const c of commodities) {
+		const e = byCommodity.get(c);
+		salesVolume[c] = years.map((y) => (e.sv[y] == null ? null : e.sv[y]));
+		rvla[c] = years.map((y) => (e.rvla[y] == null ? null : e.rvla[y]));
+	}
+	return { years, commodities, salesVolume, rvla };
+}
+
 // Raw federal_sales records matching the preview filters, for the "filtered selection" CSV.
 async function federalSalesRecords(database, opts = {}) {
 	const q = database
@@ -174,6 +215,16 @@ export default (router, { database }, base = '') => {
 		} catch (error) {
 			console.error('charts/federal-sales/pivot error:', error);
 			res.status(500).json({ error: 'Failed to fetch federal sales pivot' });
+		}
+	});
+
+	// GET /charts/federal-sales/timeseries?... — sales_volume + RVLA by year, per commodity.
+	router.get(`${base}/timeseries`, async (req, res) => {
+		try {
+			res.json(await federalSalesTimeseries(database, readOpts(req)));
+		} catch (error) {
+			console.error('charts/federal-sales/timeseries error:', error);
+			res.status(500).json({ error: 'Failed to fetch federal sales time series' });
 		}
 	});
 

@@ -179,7 +179,7 @@ async function copyApiUrl() {
       </div>
     </div>
     
-    <div class="grid-row grid-gap margin-bottom-4" id="chart">
+    <div v-if="dataset.charts?.length" class="grid-row grid-gap margin-bottom-4" id="chart">
       <div class="grid-col-12">
         <ChartCard :block="dataset.charts[0]" />
       </div>

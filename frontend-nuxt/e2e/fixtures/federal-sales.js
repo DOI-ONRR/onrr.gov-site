@@ -34,8 +34,22 @@ export const federalSalesPage = {
     export_filter: {},
     files: [],
     terms: [],
-    charts: [{ id: 'fs-chart', title: 'Federal sales', data_source_type: 'static' }],
+    // No CMS chart card — FederalSalesPreview renders its own reactive charts from the
+    // /timeseries endpoint, and DatasetView's #chart section is guarded on charts.length.
+    charts: [],
   },
+}
+
+// Year x commodity series for the two reactive chart sections (small multiples + RVLA).
+export function federalSalesTimeseries() {
+  const years = [2020, 2021, 2022, 2023]
+  const mk = (base) => years.map((_, i) => base * (i + 1))
+  return {
+    years,
+    commodities: ['Oil', 'Gas', 'NGL'],
+    salesVolume: { Oil: mk(1000), Gas: mk(500), NGL: mk(200) },
+    rvla: { Oil: mk(1e9), Gas: mk(4e8), NGL: mk(1e8) },
+  }
 }
 
 export function federalSalesOptions() {

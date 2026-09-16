@@ -215,6 +215,33 @@ const groups = computed(() => pivot.value?.groups || [])
 const totals = computed(() => pivot.value?.totals || {})
 watch(pivot, () => nextTick(measureDimCol))
 
+// --- charts (reactive to the same filters) ------------------------------------
+// Time-series data (year x commodity) for the two chart sections: small multiples of Sales
+// Volume (one self-scaled pane per commodity) and a combined RVLA line chart. The breakout is a
+// table-only control, so it's stripped from the chart query and the charts don't refetch on it.
+const chartQuery = computed(() => {
+  const { breakout: _drop, ...rest } = filterQuery.value.query
+  return rest
+})
+const { data: timeseries } = await useAsyncData(
+  'fs-timeseries',
+  async () => {
+    if (!ready.value) return null
+    if (selectionEmpty.value) return { years: [], commodities: [], salesVolume: {}, rvla: {} }
+    return $fetch(`${apiUrl}/charts/federal-sales/timeseries`, { query: chartQuery.value })
+  },
+  { watch: [() => JSON.stringify(filters), ready], dedupe: 'cancel' },
+)
+const ts = computed(() => timeseries.value || { years: [], commodities: [], salesVolume: {}, rvla: {} })
+const chartYears = computed(() => ts.value.years || [])
+const hasChartData = computed(() => chartYears.value.length > 0 && (ts.value.commodities || []).length > 0)
+// One pane per commodity, a single Sales Volume line each (self-scaled).
+const smallMultiples = computed(() =>
+  (ts.value.commodities || []).map((c) => ({ commodity: c, series: [{ name: c, data: ts.value.salesVolume[c] || [] }] })),
+)
+// One combined chart: a RVLA line per commodity, shared dollar axis.
+const rvlaSeries = computed(() => (ts.value.commodities || []).map((c) => ({ name: c, data: ts.value.rvla[c] || [] })))
+
 // Reflect the active filters into the URL once seeded (filterQuery already omits defaults).
 useUrlFilterSync(() => filterQuery.value.query, ready, ['fromYear', 'toYear', 'commodities', 'landTypes', 'regions', 'breakout'])
 
@@ -385,6 +412,26 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
       </div>
     </div>
 
+    <!-- Charts — reactive to the filters above -->
+    <div v-if="hasChartData" class="fs-charts">
+      <section class="fs-chart-section">
+        <h3 class="font-heading-sm margin-y-0">Sales volume by commodity</h3>
+        <p class="fs-chart-note margin-top-05 margin-bottom-1">One panel per commodity, self-scaled · by calendar year</p>
+        <div class="fs-small-multiples">
+          <div v-for="sm in smallMultiples" :key="sm.commodity" class="fs-sm-pane">
+            <p class="fs-sm-title margin-0">{{ sm.commodity }}</p>
+            <MiniLineChart :categories="chartYears" :series="sm.series" value-format="number" :height="170" />
+          </div>
+        </div>
+      </section>
+
+      <section class="fs-chart-section">
+        <h3 class="font-heading-sm margin-y-0">Royalty value less allowances (RVLA) by commodity</h3>
+        <p class="fs-chart-note margin-top-05 margin-bottom-1">All three commodities · by calendar year</p>
+        <MiniLineChart :categories="chartYears" :series="rvlaSeries" value-format="currency" :height="340" :show-legend="true" />
+      </section>
+    </div>
+
     <!-- Toolbar: breakout + collapse control (left), record count + CSV (right) -->
     <div class="table-toolbar table-toolbar--breakout">
       <div class="table-toolbar__group">
@@ -429,7 +476,7 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
             <th v-if="grouped" scope="col" class="breakout-col">{{ breakoutColLabel }}</th>
             <th v-for="m in MEASURES" :key="m.key" scope="col" class="text-right" :aria-sort="ariaSort(m.key)">
               <button type="button" class="sort-btn sort-btn--right" @click="setSort(m.key)">
-                <abbr :title="m.full">{{ m.short }}</abbr>
+                <abbr :title="m.full">{{ m.full }} ({{ m.short }})</abbr>
                 <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState(m.key) }" aria-hidden="true" role="img">
                   <use :href="`/uswds/img/sprite.svg#${sortIcon(m.key)}`" />
                 </svg>
@@ -502,6 +549,23 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 .field--action { flex: 0 0 auto; display: flex; align-items: flex-end; }
 
 .multi-select__option--all { font-weight: 700; border-bottom: 1px solid #dfe1e2; }
+
+// --- reactive chart sections --------------------------------------------------
+.fs-charts { margin-bottom: 1.5rem; }
+.fs-chart-section { margin-bottom: 1.5rem; }
+.fs-chart-note { font-size: 0.85rem; color: #565c65; }
+.fs-small-multiples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.75rem 1rem;
+}
+.fs-sm-pane {
+  border: 1px solid #dfe1e2;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem 0.5rem;
+  background: #fff;
+}
+.fs-sm-title { font-weight: 700; font-size: 0.9rem; padding: 0.25rem 0.25rem 0; }
 
 // Break-out control (in the toolbar's left cluster): label above the dropdown, dropdown itself
 // vertically centered on the row with the button and results line (label taken out of flow).

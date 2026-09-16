@@ -14,7 +14,7 @@ import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactT
 import { datasetPage, pivotOptions, pivotResponse, disbursementCount } from '../fixtures/dataset-preview.js'
 import { productionYearlyPage, productionMonthlyPage, productionOptions, productionPivot, productionCount } from '../fixtures/production-preview.js'
 import { revenuePage, revenueOptions, revenuePivot, revenueCount } from '../fixtures/revenue-preview.js'
-import { federalSalesPage, federalSalesOptions, federalSalesPivot, federalSalesCount } from '../fixtures/federal-sales.js'
+import { federalSalesPage, federalSalesOptions, federalSalesPivot, federalSalesCount, federalSalesTimeseries } from '../fixtures/federal-sales.js'
 
 /**
  * Each handler has:
@@ -278,6 +278,10 @@ export const restHandlers = [
   {
     match: (url) => url === '/charts/federal-sales/pivot',
     resolve: (urlPath, fullUrl = '') => federalSalesPivot(new URL(fullUrl, 'http://x').searchParams.get('breakout') || ''),
+  },
+  {
+    match: (url) => url === '/charts/federal-sales/timeseries',
+    resolve: () => federalSalesTimeseries(),
   },
   {
     match: (url) => url === '/items/federal_sales',

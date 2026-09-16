@@ -13,6 +13,14 @@ Given('I navigate to the federal sales dataset page with query {string}', async 
   await page.goto(`/revenue-data/federal-sales${qs}`, { waitUntil: 'networkidle' })
 })
 
+Then('the federal sales chart section {string} is visible', async ({ page }, heading) => {
+  await expect(page.locator('.fs-chart-section h3', { hasText: heading })).toBeVisible()
+})
+
+Then('a federal sales chart pane {string} is visible', async ({ page }, name) => {
+  await expect(page.locator('.fs-sm-title', { hasText: name })).toBeVisible()
+})
+
 Then('the federal sales table has column {string}', async ({ page }, header) => {
   await expect(wrap(page).locator('thead th', { hasText: header }).first()).toBeVisible()
 })

@@ -7,6 +7,14 @@ Feature: Federal Sales dataset preview
     And the federal sales table has column "RVLA"
     And the federal sales table has commodity row "Oil"
 
+  Scenario: The preview renders the reactive commodity charts
+    Given I navigate to the federal sales dataset page
+    Then the federal sales chart section "Sales volume by commodity" is visible
+    And the federal sales chart section "Royalty value less allowances (RVLA) by commodity" is visible
+    And a federal sales chart pane "Oil" is visible
+    And a federal sales chart pane "Gas" is visible
+    And a federal sales chart pane "NGL" is visible
+
   Scenario: The federal sales filters are From, Commodity, Land type and Region
     Given I navigate to the federal sales dataset page
     Then the federal sales filter "From" is present
