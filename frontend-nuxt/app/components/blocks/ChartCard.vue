@@ -209,7 +209,11 @@ function buildSeries(identity, points) {
     yAxis: def?.y_axis === 'secondary' ? 1 : 0,
     stack: def?.stack_group || undefined,
     dashStyle: def?.dash_style || undefined,
-    marker: def?.marker_enabled != null ? { enabled: def.marker_enabled } : undefined,
+    // Only set `marker` when configured. Passing `marker: undefined` OVERWRITES Highcharts'
+    // default marker object with undefined; line/scatter series then crash in getSymbol
+    // ("Cannot read properties of undefined (reading 'symbol')"). Column series don't call
+    // getSymbol, which is why this only surfaced on line/time-series charts.
+    ...(def?.marker_enabled != null ? { marker: { enabled: def.marker_enabled } } : {}),
     _format: def?.value_format,
     _prefix: def?.prefix,
     _suffix: def?.suffix,
