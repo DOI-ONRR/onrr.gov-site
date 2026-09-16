@@ -28,6 +28,15 @@ Feature: Production dataset preview
     And the production pivot has column header "State"
     And the production pivot has detail row "Wyoming"
 
+  Scenario: Filter values are read from the URL query parameters
+    Given I navigate to the yearly production dataset page with query "?breakout=state"
+    Then the production pivot has column header "State"
+
+  Scenario: Changing a filter reflects into the URL query
+    Given I navigate to the yearly production dataset page
+    When I set the production breakout to "State"
+    Then the page URL contains "breakout=state"
+
   Scenario: Sorting yearly production by Product reorders the rows alphabetically
     Given I navigate to the yearly production dataset page
     Then the first production row is "Gas (mcf)"

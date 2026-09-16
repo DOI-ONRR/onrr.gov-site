@@ -38,7 +38,18 @@ const PERIOD_OPTIONS = [
   { value: 'Fiscal Year', label: 'Fiscal year' },
   { value: 'Calendar Year', label: 'Calendar year' },
 ]
-const selectedPeriod = ref(basePeriodType.value === 'Calendar Year' ? 'Calendar Year' : 'Fiscal Year')
+
+// URL query <-> filters (deep-linkable, two-way): read filter values from the query on load and
+// reflect changes back into it. Param names match the pivot endpoint. Shared helpers +
+// write-back sync live in the useQueryFilters composable (the standard for dataset previews).
+const route = useRoute()
+// The Period (FY/CY) is only user-switchable on annual pages; honor a query value there.
+const queryPeriod = PERIOD_FROM_PARAM[queryStr(route.query.period)]
+const selectedPeriod = ref(
+  queryPeriod === 'Calendar Year' || queryPeriod === 'Fiscal Year'
+    ? queryPeriod
+    : basePeriodType.value === 'Calendar Year' ? 'Calendar Year' : 'Fiscal Year',
+)
 const periodType = computed(() => (isMonthly.value ? 'Monthly' : selectedPeriod.value))
 const periodParam = computed(() =>
   periodType.value === 'Fiscal Year' ? 'fiscal-year' : periodType.value === 'Calendar Year' ? 'calendar-year' : 'monthly',
@@ -61,7 +72,8 @@ const BREAKOUT_OPTIONS = [
   { value: 'state', label: 'State' },
   { value: 'county', label: 'County' },
 ]
-const breakout = ref('')
+// Seed the breakout from the URL when it names a known option (applies on annual grains).
+const breakout = ref(BREAKOUT_OPTIONS.some((o) => o.value && o.value === queryStr(route.query.breakout)) ? queryStr(route.query.breakout) : '')
 const breakoutColLabel = computed(() => BREAKOUT_OPTIONS.find((o) => o.value === breakout.value)?.label || '')
 const hasBreakout = computed(() => isAnnual.value && !!breakout.value)
 // The table is grouped (collapsible band + detail rows) for monthly, or for an annual grain
@@ -124,10 +136,37 @@ function seedFilters() {
   filters.products = [...productOptions.value]
 }
 
+// Override the seeded defaults with any valid values from the URL query, validated against the
+// loaded option lists / year range for the current grain; unknown/all-invalid values keep the
+// default so a stale link degrades gracefully.
+function applyQueryToFilters() {
+  const q = route.query
+  const yrs = isMonthly.value ? monthlyYears.value : yearOptions.value
+  const fy = Number(queryStr(q.fromYear))
+  if (q.fromYear != null && yrs.includes(fy)) filters.fromYear = fy
+  const ty = Number(queryStr(q.toYear))
+  if (q.toYear != null && yrs.includes(ty)) filters.toYear = ty
+  const applyMulti = (param, optionList, target) => {
+    const req = queryList(q[param])
+    if (!req || !req.length) return
+    const sel = optionList.filter((o) => req.includes(o))
+    if (sel.length) filters[target] = sel
+  }
+  if (isMonthly.value) {
+    applyMulti('landTypes', landTypeOptions.value, 'landTypes')
+  } else {
+    applyMulti('landClasses', landClassOptions.value, 'landClasses')
+    applyMulti('landCategories', landCategoryOptions.value, 'landCategories')
+    applyMulti('regions', regionOptions.value, 'regions')
+  }
+  applyMulti('products', productOptions.value, 'products')
+}
+
 const ready = ref(false)
 watchEffect(() => {
   if (ready.value || !options.value) return
   seedFilters()
+  applyQueryToFilters()
   ready.value = true
 })
 
@@ -234,6 +273,29 @@ const filterQuery = computed(() => {
   if (hasBreakout.value) query.breakout = breakout.value
   return { query, empty: selectionEmpty.value }
 })
+
+// The shareable URL params (distinct from the pivot call above, which sends the monthly range as
+// from/to date boundaries): the URL always expresses the range as fromYear/toYear and includes
+// period only on annual grains. Omit anything at its default so a default view yields a clean URL.
+const urlQuery = computed(() => {
+  const q = {}
+  if (isAnnual.value) q.period = periodParam.value
+  const ys = isMonthly.value ? monthlyYears.value : yearOptions.value
+  if (filters.fromYear && filters.fromYear !== ys[0]) q.fromYear = String(filters.fromYear)
+  if (filters.toYear && filters.toYear !== ys[ys.length - 1]) q.toYear = String(filters.toYear)
+  const emit = (arr, optionList, name) => { if (arr.length > 0 && arr.length < optionList.length) q[name] = arr.join(',') }
+  if (isMonthly.value) {
+    emit(filters.landTypes, landTypeOptions.value, 'landTypes')
+  } else {
+    emit(filters.landClasses, landClassOptions.value, 'landClasses')
+    emit(filters.landCategories, landCategoryOptions.value, 'landCategories')
+    emit(filters.regions, regionOptions.value, 'regions')
+  }
+  emit(filters.products, productOptions.value, 'products')
+  if (hasBreakout.value) q.breakout = breakout.value
+  return q
+})
+useUrlFilterSync(() => urlQuery.value, ready, ['period', 'fromYear', 'toYear', 'landTypes', 'landClasses', 'landCategories', 'regions', 'products', 'breakout'])
 
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(

@@ -17,6 +17,11 @@
 */
 const { apiUrl } = useRuntimeConfig().public
 
+// URL query <-> filters (deep-linkable, two-way): read filter values from the query on load and
+// reflect changes back into it. Param names match the pivot endpoint (grain is fixed per page,
+// so no `period` param). Shared helpers + write-back sync live in the useQueryFilters composable.
+const route = useRoute()
+
 // Period grain comes from the dataset's export_filter (Monthly vs Fiscal Year), so the
 // same component serves both the monthly and fiscal-year disbursement pages. Fiscal-year
 // is annual: no month-range control and no monthly sub-rows.
@@ -122,6 +127,29 @@ const commoditySummary = computed(() => {
 })
 
 // One-shot: seed the month range once options load.
+// Override the seeded defaults with any valid values from the URL query, validated against the
+// loaded option lists / year range; unknown/all-invalid values keep the default.
+function applyQueryToFilters() {
+  const q = route.query
+  const gb = queryStr(q.groupBy)
+  if (gb && groupOptions.value.some((o) => o.key === gb)) filters.groupBy = gb
+  const yrs = yearOptions.value
+  const fy = Number(queryStr(q.fromYear))
+  if (q.fromYear != null && yrs.includes(fy)) filters.fromYear = fy
+  const ty = Number(queryStr(q.toYear))
+  if (q.toYear != null && yrs.includes(ty)) filters.toYear = ty
+  const applyMulti = (param, valid, target) => {
+    const req = queryList(q[param])
+    if (!req || !req.length) return
+    const sel = valid.filter((v) => req.includes(v))
+    if (sel.length) filters[target] = sel
+  }
+  applyMulti('recipients', allRecipientKeys.value, 'recipients')
+  applyMulti('sources', sourceOptions.value, 'sources')
+  applyMulti('states', stateOptions.value, 'states')
+  if (!isFy.value) applyMulti('commodities', commodityOptions.value, 'commodities')
+}
+
 const ready = ref(false)
 watchEffect(() => {
   if (ready.value || !options.value) return
@@ -132,6 +160,7 @@ watchEffect(() => {
   filters.sources = [...sourceOptions.value]
   filters.states = [...stateOptions.value]
   filters.commodities = [...commodityOptions.value]
+  applyQueryToFilters()
   ready.value = true
 })
 
@@ -244,6 +273,24 @@ const filterQuery = computed(() => {
   }
   return { query, empty }
 })
+
+// The shareable URL params (distinct from the pivot call above, which sends the monthly range as
+// from/to date boundaries): the URL always expresses the range as fromYear/toYear and includes
+// groupBy only when it isn't the default. Omit anything at its default for a clean URL.
+const urlQuery = computed(() => {
+  const q = {}
+  if (filters.groupBy !== 'recipient') q.groupBy = filters.groupBy
+  const ys = yearOptions.value
+  if (filters.fromYear != null && filters.fromYear !== ys[0]) q.fromYear = String(filters.fromYear)
+  if (filters.toYear != null && filters.toYear !== ys[ys.length - 1]) q.toYear = String(filters.toYear)
+  const emit = (arr, optionList, name) => { if (arr.length > 0 && arr.length < optionList.length) q[name] = arr.join(',') }
+  emit(filters.recipients, allRecipientKeys.value, 'recipients')
+  emit(filters.sources, sourceOptions.value, 'sources')
+  emit(filters.states, stateOptions.value, 'states')
+  if (!isFy.value) emit(filters.commodities, commodityOptions.value, 'commodities')
+  return q
+})
+useUrlFilterSync(() => urlQuery.value, ready, ['groupBy', 'fromYear', 'toYear', 'recipients', 'sources', 'states', 'commodities'])
 
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(

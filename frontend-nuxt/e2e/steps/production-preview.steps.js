@@ -59,6 +59,10 @@ When('I set the production breakout to {string}', async ({ page }, label) => {
   await page.locator('#p-breakout').selectOption({ label })
 })
 
+Given('I navigate to the yearly production dataset page with query {string}', async ({ page }, qs) => {
+  await page.goto(`/revenue-data/yearly-production${qs}`, { waitUntil: 'networkidle' })
+})
+
 When('I sort the production table by {string}', async ({ page }, label) => {
   await wrap(page).locator('thead th button', { hasText: label }).first().click()
 })

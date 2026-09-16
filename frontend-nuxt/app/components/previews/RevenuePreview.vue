@@ -32,16 +32,10 @@ const PERIOD_OPTIONS = [
   { value: 'Fiscal Year', label: 'Fiscal year' },
 ]
 
-// --- URL query <-> filters (deep-linkable, two-way) ---------------------------
-// The page accepts (and reflects) filter values as query params, reusing the pivot endpoint's
-// own names: period, fromYear, toYear, landTypes, revenueTypes, regions, products, breakout
-// (multi-selects comma-separated). On load these seed the filters; as the user changes filters
-// the URL is kept in sync (router.replace, no history spam) so the view is shareable.
+// URL query <-> filters (deep-linkable, two-way): read filter values from the query on load and
+// reflect changes back into it. Param names match the pivot endpoint. Shared helpers +
+// write-back sync live in the useQueryFilters composable (the standard for dataset previews).
 const route = useRoute()
-const router = useRouter()
-const PERIOD_FROM_PARAM = { monthly: 'Monthly', 'calendar-year': 'Calendar Year', 'fiscal-year': 'Fiscal Year' }
-const queryStr = (v) => (Array.isArray(v) ? v[0] : v)
-const queryList = (v) => (v == null ? null : String(Array.isArray(v) ? v.join(',') : v).split(',').map((s) => s.trim()).filter(Boolean))
 
 const selectedPeriod = ref(PERIOD_FROM_PARAM[queryStr(route.query.period)] || basePeriodType.value)
 const periodType = computed(() => selectedPeriod.value)
@@ -242,24 +236,9 @@ const filterQuery = computed(() => {
   return { query, empty: selectionEmpty.value }
 })
 
-// Two-way sync: reflect the active filters into the URL once seeded, so the current view is
-// shareable/bookmarkable. `router.replace` (no history spam); the filterQuery already omits
-// params at their default, so a default view yields a clean URL. Client-only, and any query
-// params we don't own are preserved. The same endpoint param names are used both directions.
-const FILTER_PARAM_KEYS = ['period', 'fromYear', 'toYear', 'landTypes', 'revenueTypes', 'regions', 'products', 'breakout']
-if (import.meta.client) {
-  watch(
-    () => filterQuery.value.query,
-    (q) => {
-      if (!ready.value) return
-      const merged = { ...route.query }
-      for (const k of FILTER_PARAM_KEYS) delete merged[k]
-      Object.assign(merged, q)
-      router.replace({ query: merged })
-    },
-    { flush: 'post' },
-  )
-}
+// Reflect the active filters into the URL once seeded (filterQuery already omits defaults, so a
+// default view yields a clean URL). Same endpoint param names both directions.
+useUrlFilterSync(() => filterQuery.value.query, ready, ['period', 'fromYear', 'toYear', 'landTypes', 'revenueTypes', 'regions', 'products', 'breakout'])
 
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(

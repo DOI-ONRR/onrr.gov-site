@@ -97,6 +97,10 @@ Then('the API section links to the developer docs at {string}', async ({ page },
   await expect(page.locator(`#api a[href="${href}"]`)).toBeVisible()
 })
 
+Given('I navigate to the monthly disbursements dataset page with query {string}', async ({ page }, qs) => {
+  await page.goto(`/revenue-data/monthly-disbursements${qs}`, { waitUntil: 'networkidle' })
+})
+
 When('I sort the disbursement table by {string}', async ({ page }, label) => {
   await pivot(page).locator('thead th button', { hasText: label }).first().click()
 })
