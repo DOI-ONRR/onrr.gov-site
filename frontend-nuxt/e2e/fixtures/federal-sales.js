@@ -41,7 +41,7 @@ export const federalSalesPage = {
 export function federalSalesOptions() {
   return {
     years: [2020, 2021, 2022, 2023],
-    commodities: ['Oil', 'Gas', 'NGL', 'Not Tied to a Commodity'],
+    commodities: ['Oil', 'Gas', 'NGL'],
     landTypes: ['Federal Offshore', 'Federal Onshore'],
     regions: ['Gulf of America', 'New Mexico', 'Wyoming'],
   }

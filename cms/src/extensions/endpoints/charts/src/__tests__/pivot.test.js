@@ -199,4 +199,13 @@ describe('federalSalesPivot', () => {
     expect(called(db, 'whereRaw', (a) => String(a[0]).includes('CONCAT_WS'))).toBe(true); // land type expr
     expect(called(db, 'whereIn', (a) => a[0] === 'state_offshore_region')).toBe(true);
   });
+
+  it('always restricts to the allowed commodities (excludes "Not Tied to a Commodity")', async () => {
+    const db = makeDb([], 0);
+    await federalSalesPivot(db, {}); // no commodity filter passed
+    const base = db.calls.find((c) => c[0] === 'whereIn' && c[1] === 'commodity');
+    expect(base).toBeTruthy();
+    expect(base[2]).toEqual(['Oil', 'Gas', 'NGL']);
+    expect(base[2]).not.toContain('Not Tied to a Commodity');
+  });
 });

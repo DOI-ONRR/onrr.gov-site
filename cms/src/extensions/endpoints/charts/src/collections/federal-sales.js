@@ -27,10 +27,11 @@ const MEASURES = [
 // "Land Type" = land_class + land_category combined; empty -> NULL so it drops out cleanly.
 const LAND_TYPE_EXPR = `NULLIF(TRIM(CONCAT_WS(' ', "land_class", "land_category")), '')`;
 const REGION_COL = 'state_offshore_region';
-// The Commodity filter is limited to these — matched case-insensitively against the data (the
-// data carries the "not tied" case as a literal commodity value, not null), so the options use
-// the data's actual casing while staying restricted to this set, in this order.
-const ALLOWED_COMMODITIES = ['Oil', 'Gas', 'NGL', 'Not Tied to a Commodity'];
+// The Commodity filter is limited to these — matched case-insensitively against the data, so
+// the options use the data's actual casing while staying restricted to this set, in this order.
+// "Not Tied to a Commodity" (a literal value in the data) is deliberately excluded everywhere —
+// filter options, pivot results, and export.
+const ALLOWED_COMMODITIES = ['Oil', 'Gas', 'NGL'];
 const commodityRank = (c) => {
 	const i = ALLOWED_COMMODITIES.findIndex((a) => a.toLowerCase() === String(c ?? '').toLowerCase());
 	return i === -1 ? ALLOWED_COMMODITIES.length : i;
@@ -41,6 +42,9 @@ const BREAKOUT_EXPRS = { land_type: LAND_TYPE_EXPR, region: `"${REGION_COL}"` };
 
 // Apply the preview filters to a federal_sales query builder. Mutates in place.
 function applyFilters(q, { fromYear, toYear, commodities, landTypes, regions }) {
+	// Always restrict to the allowed commodities (excludes "Not Tied to a Commodity" and any
+	// stray/null values) — so results and export never include it, regardless of the filter.
+	q.whereIn('commodity', ALLOWED_COMMODITIES);
 	if (fromYear) q.where('calendar_year', '>=', Number(fromYear));
 	if (toYear) q.where('calendar_year', '<=', Number(toYear));
 	if (Array.isArray(landTypes) && landTypes.length) {
