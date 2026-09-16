@@ -76,6 +76,15 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">
         <div class="ds-card padding-3">
+          <h3 class="font-heading-md">Fiscal year disbursements</h3>
+          <p class="ds-desc">Money paid each fiscal year to states, counties, Tribes and individual Indian
+            mineral owners, and federal funds.</p>
+          <p class="ds-meta">Updated monthly · Oct 2016 – Oct 2022 · CSV, XLSX, API</p>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/mfiscal-year-disbursements">Preview, filter &amp; download</a>
+        </div>
+      </div>
+      <div class="tablet:grid-col-4 margin-bottom-2">
+        <div class="ds-card padding-3">
           <h3 class="font-heading-md">Monthly Production</h3>
           <p class="ds-desc">Volumes of oil, gas, coal, and other commodities produced on federal
             and Indian lands.</p>
