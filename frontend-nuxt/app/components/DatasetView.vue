@@ -10,6 +10,7 @@ import DisbursementPreview from '~/components/previews/DisbursementPreview.vue'
 import ProductionPreview from '~/components/previews/ProductionPreview.vue'
 import RevenuePreview from '~/components/previews/RevenuePreview.vue'
 import FederalSalesPreview from '~/components/previews/FederalSalesPreview.vue'
+import PreviewCharts from '~/components/charts/PreviewCharts.vue'
 
 const props = defineProps({
   dataset: { type: Object, required: true },
@@ -106,6 +107,12 @@ provide('datasetExportFilter', previewExportFilter)
 const previewChart = ref(null)
 provide('datasetPreviewChart', previewChart)
 
+// A preview can also publish its OWN chart sections (descriptors) to render in the #chart
+// section ABOVE the "Preview and filter" heading — used when the dataset's charts are reactive
+// to the preview's filters and have no CMS chart card (e.g. Federal Sales: small multiples + RVLA).
+const previewCharts = ref(null)
+provide('datasetPreviewCharts', previewCharts)
+
 // Public data API (data.onrr.gov), consistent with the /developers reference. Only the
 // flat-backed datasets are exposed; source_collection maps to the friendly endpoint name.
 // The section stays hidden for datasets without a public endpoint.
@@ -179,9 +186,10 @@ async function copyApiUrl() {
       </div>
     </div>
     
-    <div v-if="dataset.charts?.length" class="grid-row grid-gap margin-bottom-4" id="chart">
+    <div v-if="dataset.charts?.length || previewCharts?.length" class="grid-row grid-gap margin-bottom-4" id="chart">
       <div class="grid-col-12">
-        <ChartCard :block="dataset.charts[0]" />
+        <ChartCard v-if="dataset.charts?.length" :block="dataset.charts[0]" />
+        <PreviewCharts v-if="previewCharts?.length" :sections="previewCharts" />
       </div>
     </div>
 

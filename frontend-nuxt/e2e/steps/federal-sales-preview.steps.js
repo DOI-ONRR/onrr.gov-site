@@ -14,11 +14,11 @@ Given('I navigate to the federal sales dataset page with query {string}', async 
 })
 
 Then('the federal sales chart section {string} is visible', async ({ page }, heading) => {
-  await expect(page.locator('.fs-chart-section h3', { hasText: heading })).toBeVisible()
+  await expect(page.locator('.preview-chart-section h3', { hasText: heading })).toBeVisible()
 })
 
 Then('a federal sales chart pane {string} is visible', async ({ page }, name) => {
-  await expect(page.locator('.fs-sm-title', { hasText: name })).toBeVisible()
+  await expect(page.locator('.preview-sm-title', { hasText: name })).toBeVisible()
 })
 
 Then('the federal sales table has column {string}', async ({ page }, header) => {

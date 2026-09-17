@@ -235,12 +235,38 @@ const { data: timeseries } = await useAsyncData(
 const ts = computed(() => timeseries.value || { years: [], commodities: [], salesVolume: {}, rvla: {} })
 const chartYears = computed(() => ts.value.years || [])
 const hasChartData = computed(() => chartYears.value.length > 0 && (ts.value.commodities || []).length > 0)
-// One pane per commodity, a single Sales Volume line each (self-scaled).
-const smallMultiples = computed(() =>
-  (ts.value.commodities || []).map((c) => ({ commodity: c, series: [{ name: c, data: ts.value.salesVolume[c] || [] }] })),
-)
-// One combined chart: a RVLA line per commodity, shared dollar axis.
-const rvlaSeries = computed(() => (ts.value.commodities || []).map((c) => ({ name: c, data: ts.value.rvla[c] || [] })))
+
+// Publish the two chart sections up to DatasetView, which renders them ABOVE the "Preview and
+// filter" heading (the #chart section). They stay reactive to the filters via the fetch above:
+// small multiples of Sales Volume (one self-scaled pane per commodity) + a combined RVLA chart.
+const chartSections = computed(() => {
+  if (!hasChartData.value) return null
+  const cs = ts.value.commodities || []
+  return [
+    {
+      kind: 'small-multiples',
+      title: 'Sales volume by commodity',
+      note: 'One panel per commodity, self-scaled · by calendar year',
+      categories: chartYears.value,
+      valueFormat: 'number',
+      panes: cs.map((c) => ({ title: c, series: [{ name: c, data: ts.value.salesVolume[c] || [] }] })),
+    },
+    {
+      kind: 'lines',
+      title: 'Royalty value less allowances (RVLA) by commodity',
+      note: 'All three commodities · by calendar year',
+      categories: chartYears.value,
+      valueFormat: 'currency',
+      showLegend: true,
+      series: cs.map((c) => ({ name: c, data: ts.value.rvla[c] || [] })),
+    },
+  ]
+})
+const previewCharts = inject('datasetPreviewCharts', null)
+if (previewCharts) {
+  watchEffect(() => { previewCharts.value = chartSections.value })
+  onUnmounted(() => { previewCharts.value = null })
+}
 
 // Reflect the active filters into the URL once seeded (filterQuery already omits defaults).
 useUrlFilterSync(() => filterQuery.value.query, ready, ['fromYear', 'toYear', 'commodities', 'landTypes', 'regions', 'breakout'])
@@ -412,26 +438,6 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
       </div>
     </div>
 
-    <!-- Charts — reactive to the filters above -->
-    <div v-if="hasChartData" class="fs-charts">
-      <section class="fs-chart-section">
-        <h3 class="font-heading-sm margin-y-0">Sales volume by commodity</h3>
-        <p class="fs-chart-note margin-top-05 margin-bottom-1">One panel per commodity, self-scaled · by calendar year</p>
-        <div class="fs-small-multiples">
-          <div v-for="sm in smallMultiples" :key="sm.commodity" class="fs-sm-pane">
-            <p class="fs-sm-title margin-0">{{ sm.commodity }}</p>
-            <MiniLineChart :categories="chartYears" :series="sm.series" value-format="number" :height="170" />
-          </div>
-        </div>
-      </section>
-
-      <section class="fs-chart-section">
-        <h3 class="font-heading-sm margin-y-0">Royalty value less allowances (RVLA) by commodity</h3>
-        <p class="fs-chart-note margin-top-05 margin-bottom-1">All three commodities · by calendar year</p>
-        <MiniLineChart :categories="chartYears" :series="rvlaSeries" value-format="currency" :height="340" :show-legend="true" />
-      </section>
-    </div>
-
     <!-- Toolbar: breakout + collapse control (left), record count + CSV (right) -->
     <div class="table-toolbar table-toolbar--breakout">
       <div class="table-toolbar__group">
@@ -549,23 +555,6 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 .field--action { flex: 0 0 auto; display: flex; align-items: flex-end; }
 
 .multi-select__option--all { font-weight: 700; border-bottom: 1px solid #dfe1e2; }
-
-// --- reactive chart sections --------------------------------------------------
-.fs-charts { margin-bottom: 1.5rem; }
-.fs-chart-section { margin-bottom: 1.5rem; }
-.fs-chart-note { font-size: 0.85rem; color: #565c65; }
-.fs-small-multiples {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 0.75rem 1rem;
-}
-.fs-sm-pane {
-  border: 1px solid #dfe1e2;
-  border-radius: 4px;
-  padding: 0.25rem 0.5rem 0.5rem;
-  background: #fff;
-}
-.fs-sm-title { font-weight: 700; font-size: 0.9rem; padding: 0.25rem 0.25rem 0; }
 
 // Break-out control (in the toolbar's left cluster): label above the dropdown, dropdown itself
 // vertically centered on the row with the button and results line (label taken out of flow).
