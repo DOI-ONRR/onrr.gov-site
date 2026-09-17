@@ -25,10 +25,10 @@ defineProps({
         </div>
       </div>
 
-      <div 
+      <div
         v-else
         class="preview-lines-pane">
-        <p class="preview-sm-title margin-0">RVLA</p>
+        <p v-if="s.paneLabel" class="preview-sm-title margin-0">{{ s.paneLabel }}</p>
         <MiniLineChart
           :categories="s.categories"
           :series="s.series"

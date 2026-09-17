@@ -10,6 +10,7 @@ import DisbursementPreview from '~/components/previews/DisbursementPreview.vue'
 import ProductionPreview from '~/components/previews/ProductionPreview.vue'
 import RevenuePreview from '~/components/previews/RevenuePreview.vue'
 import FederalSalesPreview from '~/components/previews/FederalSalesPreview.vue'
+import FederalRevenueByCompanyPreview from '~/components/previews/FederalRevenueByCompanyPreview.vue'
 import PreviewCharts from '~/components/charts/PreviewCharts.vue'
 
 const props = defineProps({
@@ -87,6 +88,7 @@ const PREVIEW_COMPONENTS = {
   ProductionPreview,
   RevenuePreview,
   FederalSalesPreview,
+  FederalRevenueByCompanyPreview,
 }
 const previewComponent = computed(() => PREVIEW_COMPONENTS[`${pascalCase(sourceCollection.value)}Preview`] || null)
 
@@ -117,7 +119,7 @@ provide('datasetPreviewCharts', previewCharts)
 // flat-backed datasets are exposed; source_collection maps to the friendly endpoint name.
 // The section stays hidden for datasets without a public endpoint.
 const dataApiBase = useRuntimeConfig().public.dataApiBase
-const API_ENDPOINTS = { disbursement: 'disbursements', revenue: 'revenue', production: 'production', federal_sales: 'federal-sales' }
+const API_ENDPOINTS = { disbursement: 'disbursements', revenue: 'revenue', production: 'production', federal_sales: 'federal-sales', federal_revenue_by_company: 'federal-revenue-by-company' }
 const apiEndpoint = computed(() => API_ENDPOINTS[sourceCollection.value] || null)
 const hasApi = computed(() => !!apiEndpoint.value)
 const apiUrl = computed(() => (apiEndpoint.value ? `${dataApiBase}/${apiEndpoint.value}` : null))

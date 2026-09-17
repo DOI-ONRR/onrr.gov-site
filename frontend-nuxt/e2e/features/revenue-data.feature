@@ -32,6 +32,8 @@ Feature: Revenue Data landing page
     And the dataset card "Monthly Production" links to "/revenue-data/monthly-production"
     And the dataset card "Yearly Production" links to "/revenue-data/yearly-production"
     And the dataset card "Revenue" links to "/revenue-data/revenue-by-commodity"
+    And the dataset card "Federal sales" links to "/revenue-data/federal-sales"
+    And the dataset card "Revenue by company" links to "/revenue-data/federal-revenue-by-company"
 
   Scenario: About this data section is visible
     Given I navigate to the revenue data page

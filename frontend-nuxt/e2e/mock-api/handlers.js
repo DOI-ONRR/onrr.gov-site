@@ -15,6 +15,7 @@ import { datasetPage, pivotOptions, pivotResponse, disbursementCount } from '../
 import { productionYearlyPage, productionMonthlyPage, productionOptions, productionPivot, productionCount } from '../fixtures/production-preview.js'
 import { revenuePage, revenueOptions, revenuePivot, revenueCount } from '../fixtures/revenue-preview.js'
 import { federalSalesPage, federalSalesOptions, federalSalesPivot, federalSalesCount, federalSalesTimeseries } from '../fixtures/federal-sales.js'
+import { federalRevenueByCompanyPage, federalRevenueByCompanyOptions, federalRevenueByCompanyPivot, federalRevenueByCompanyCount } from '../fixtures/federal-revenue-by-company.js'
 
 /**
  * Each handler has:
@@ -146,6 +147,7 @@ export const handlers = [
       if (variables?.slug === 'monthly-production') return { page: [productionMonthlyPage] }
       if (variables?.slug === 'revenue-by-commodity') return { page: [revenuePage] }
       if (variables?.slug === 'federal-sales') return { page: [federalSalesPage] }
+      if (variables?.slug === 'federal-revenue-by-company') return { page: [federalRevenueByCompanyPage] }
       return {
         page: [{
           __typename: 'pages',
@@ -286,5 +288,19 @@ export const restHandlers = [
   {
     match: (url) => url === '/items/federal_sales',
     resolve: () => federalSalesCount,
+  },
+
+  // --- Federal revenue by company dataset preview (FederalRevenueByCompanyPreview) ---
+  {
+    match: (url) => url === '/charts/federal-revenue-by-company/pivot/options',
+    resolve: () => federalRevenueByCompanyOptions(),
+  },
+  {
+    match: (url) => url === '/charts/federal-revenue-by-company/pivot',
+    resolve: (urlPath, fullUrl = '') => federalRevenueByCompanyPivot(new URL(fullUrl, 'http://x').searchParams.get('breakout') || ''),
+  },
+  {
+    match: (url) => url === '/items/federal_revenue_by_company',
+    resolve: () => federalRevenueByCompanyCount,
   },
 ]

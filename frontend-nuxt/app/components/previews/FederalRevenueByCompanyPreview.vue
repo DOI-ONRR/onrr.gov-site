@@ -1,77 +1,62 @@
 <script setup>
 /*
-  FederalSalesPreview — the "Preview and filter" panel for the Federal Sales dataset.
+  FederalRevenueByCompanyPreview — the "Preview and filter" panel for the Federal Revenue by
+  Company dataset. Calendar-year data only. Like RevenuePreview it spreads one measure
+  (SUM(revenue), dollars) across year COLUMNS, but the row dimension is the COMPANY
+  (corporate_name), one row per company with a column per calendar year in the selected range.
 
-  Unlike the other previews (one measure spread across year COLUMNS), federal sales aggregates
-  SIX measures for the selected calendar-year RANGE and shows them as the table's columns, one
-  row per commodity: Sales Volume, Sales Value, RVPA, TA, PA, RVLA.
+  Filters: Calendar-year From/To, Search Companies (a searchable multi-select on corporate_name;
+  empty = all companies, selecting narrows), Commodity, Revenue Type. An optional "Break out by"
+  (Commodity / Revenue Type) turns each company into a collapsible band with one sub-row per value.
 
-  Filters: Calendar-year From/To, Commodity (a fixed set), Land Type, State/Offshore Region.
-  An optional "Break out by" (Land Type / State/Offshore Region) turns each commodity into a
-  collapsible band with one sub-row per value plus a commodity subtotal. Deep-linkable via the
-  URL query (useQueryFilters). Aggregation is server-side via `/charts/federal-sales/pivot`.
+  With no company selected the table shows the top 50 companies by total revenue (the endpoint
+  caps and flags `truncated`); searching narrows to specific companies. The chart above the
+  heading is a top-6-companies revenue time series. Aggregation is server-side via
+  `/charts/federal-revenue-by-company/pivot`; deep-linkable via the URL query.
 */
 const props = defineProps({
   dataset: { type: Object, required: true },
 })
 const { apiUrl } = useRuntimeConfig().public
 
-// URL query <-> filters (deep-linkable, two-way): read filter values from the query on load and
-// reflect changes back into it. Param names match the endpoint. See the useQueryFilters composable.
 const route = useRoute()
-
-// The six measures, in display order. `short` heads the column (abbreviation for the long ones,
-// with `full` as its title); `format` picks currency vs plain volume.
-const MEASURES = [
-  { key: 'sales_volume', short: 'Sales Volume', full: 'Sales Volume', format: 'number' },
-  { key: 'sales_value', short: 'Sales Value', full: 'Sales Value', format: 'currency' },
-  { key: 'rvpa', short: 'RVPA', full: 'Royalty Value Prior to Allowances', format: 'currency' },
-  { key: 'ta', short: 'TA', full: 'Transportation Allowances', format: 'currency' },
-  { key: 'pa', short: 'PA', full: 'Processing Allowances', format: 'currency' },
-  { key: 'rvla', short: 'RVLA', full: 'Royalty Value Less Allowances', format: 'currency' },
-]
 
 const BREAKOUT_OPTIONS = [
   { value: '', label: 'None' },
-  { value: 'land_type', label: 'Land Type' },
-  { value: 'region', label: 'State/Offshore Region' },
+  { value: 'commodity', label: 'Commodity' },
+  { value: 'revenue_type', label: 'Revenue Type' },
 ]
 const breakout = ref(BREAKOUT_OPTIONS.some((o) => o.value && o.value === queryStr(route.query.breakout)) ? queryStr(route.query.breakout) : '')
-const hasBreakout = computed(() => !!breakout.value) // drives the query
+const hasBreakout = computed(() => !!breakout.value)
 // The breakout the CURRENT DATA is grouped by — render off this (not the live control) so the
 // breakout layout only appears once its rows have loaded, never as empty bands.
 const dataBreakout = computed(() => pivot.value?.breakout || '')
 const breakoutColLabel = computed(() => BREAKOUT_OPTIONS.find((o) => o.value === dataBreakout.value)?.label || '')
 const grouped = computed(() => !!dataBreakout.value)
 
-// --- formatting ---------------------------------------------------------------
+// Revenue is dollars.
 function currency(v) {
   const n = Number(v)
   if (!Number.isFinite(n)) return '—'
   return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
 }
-function volume(v) {
-  const n = Number(v)
-  if (!Number.isFinite(n)) return '—'
-  return n.toLocaleString('en-US', { maximumFractionDigits: 0 })
-}
-const fmt = (measure, v) => (measure.format === 'currency' ? currency(v) : volume(v))
 
 // --- filter options (loaded once) ---------------------------------------------
-const { data: options } = await useAsyncData('fs-pivot-options', () =>
-  $fetch(`${apiUrl}/charts/federal-sales/pivot/options`),
+const { data: options } = await useAsyncData('frbc-pivot-options', () =>
+  $fetch(`${apiUrl}/charts/federal-revenue-by-company/pivot/options`),
 )
 const yearOptions = computed(() => options.value?.years || [])
+const companyOptions = computed(() => options.value?.companies || [])
 const commodityOptions = computed(() => options.value?.commodities || [])
-const landTypeOptions = computed(() => options.value?.landTypes || [])
-const regionOptions = computed(() => options.value?.regions || [])
+const revenueTypeOptions = computed(() => options.value?.revenueTypes || [])
 
-// --- filter state (seeded to full range / all-selected once options load) -----
-const filters = reactive({ fromYear: '', toYear: '', commodities: [], landTypes: [], regions: [] })
+// --- filter state -------------------------------------------------------------
+// companies defaults to [] meaning "all companies" (server shows the top 50); commodities and
+// revenue types default to all-selected (empty = a deliberately empty selection -> no records).
+const filters = reactive({ fromYear: '', toYear: '', companies: [], commodities: [], revenueTypes: [] })
 
 const commodityAllSelected = computed(() => commodityOptions.value.length > 0 && filters.commodities.length === commodityOptions.value.length)
-const landAllSelected = computed(() => landTypeOptions.value.length > 0 && filters.landTypes.length === landTypeOptions.value.length)
-const regionAllSelected = computed(() => regionOptions.value.length > 0 && filters.regions.length === regionOptions.value.length)
+const revenueAllSelected = computed(() => revenueTypeOptions.value.length > 0 && filters.revenueTypes.length === revenueTypeOptions.value.length)
 
 const summarize = (all, arr, allLabel) => {
   if (all) return allLabel
@@ -80,15 +65,18 @@ const summarize = (all, arr, allLabel) => {
   return `${arr.length} selected`
 }
 const commoditySummary = computed(() => summarize(commodityAllSelected.value, filters.commodities, 'All commodities'))
-const landSummary = computed(() => summarize(landAllSelected.value, filters.landTypes, 'All land types'))
-const regionSummary = computed(() => summarize(regionAllSelected.value, filters.regions, 'All regions'))
+const revenueSummary = computed(() => summarize(revenueAllSelected.value, filters.revenueTypes, 'All revenue types'))
+// Companies: empty = all; otherwise the count (never "None selected", since empty is valid here).
+const companySummary = computed(() =>
+  filters.companies.length === 0 ? 'All companies' : filters.companies.length === 1 ? filters.companies[0] : `${filters.companies.length} selected`,
+)
 
 function seedFilters() {
   filters.fromYear = yearOptions.value[0] ?? ''
   filters.toYear = yearOptions.value[yearOptions.value.length - 1] ?? ''
+  filters.companies = []
   filters.commodities = [...commodityOptions.value]
-  filters.landTypes = [...landTypeOptions.value]
-  filters.regions = [...regionOptions.value]
+  filters.revenueTypes = [...revenueTypeOptions.value]
 }
 
 // Override the seeded defaults with any valid values from the URL query; unknown/all-invalid
@@ -106,9 +94,9 @@ function applyQueryToFilters() {
     const sel = optionList.filter((o) => req.includes(o))
     if (sel.length) filters[target] = sel
   }
+  applyMulti('companies', companyOptions.value, 'companies')
   applyMulti('commodities', commodityOptions.value, 'commodities')
-  applyMulti('landTypes', landTypeOptions.value, 'landTypes')
-  applyMulti('regions', regionOptions.value, 'regions')
+  applyMulti('revenueTypes', revenueTypeOptions.value, 'revenueTypes')
 }
 
 const ready = ref(false)
@@ -120,37 +108,52 @@ watchEffect(() => {
 })
 
 // --- multi-select dropdowns ---------------------------------------------------
+const companyOpen = ref(false)
 const commodityOpen = ref(false)
-const landOpen = ref(false)
-const regionOpen = ref(false)
+const revenueOpen = ref(false)
+const companyRef = ref(null)
 const commodityRef = ref(null)
-const landRef = ref(null)
-const regionRef = ref(null)
+const revenueRef = ref(null)
 const toggleIn = (arr, v) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v])
+function toggleCompany(v) { filters.companies = toggleIn(filters.companies, v) }
 function toggleCommodity(v) { filters.commodities = toggleIn(filters.commodities, v) }
-function toggleLand(v) { filters.landTypes = toggleIn(filters.landTypes, v) }
-function toggleRegion(v) { filters.regions = toggleIn(filters.regions, v) }
+function toggleRevenue(v) { filters.revenueTypes = toggleIn(filters.revenueTypes, v) }
 function toggleAllCommodities() { filters.commodities = commodityAllSelected.value ? [] : [...commodityOptions.value] }
-function toggleAllLand() { filters.landTypes = landAllSelected.value ? [] : [...landTypeOptions.value] }
-function toggleAllRegions() { filters.regions = regionAllSelected.value ? [] : [...regionOptions.value] }
+function toggleAllRevenue() { filters.revenueTypes = revenueAllSelected.value ? [] : [...revenueTypeOptions.value] }
+function clearCompanies() { filters.companies = [] }
 function handleClickOutside(e) {
+  if (companyRef.value && !companyRef.value.contains(e.target)) companyOpen.value = false
   if (commodityRef.value && !commodityRef.value.contains(e.target)) commodityOpen.value = false
-  if (landRef.value && !landRef.value.contains(e.target)) landOpen.value = false
-  if (regionRef.value && !regionRef.value.contains(e.target)) regionOpen.value = false
+  if (revenueRef.value && !revenueRef.value.contains(e.target)) revenueOpen.value = false
 }
 
-// Sticky headers + the widest commodity name for the band-column width.
+// Searchable company list: filter by the typed term and cap the rendered matches (the option
+// list can be very long). Selected companies always show at the top so they can be unchecked
+// even when the search box is empty.
+const companySearch = ref('')
+const COMPANY_RENDER_CAP = 100
+const companyMatches = computed(() => {
+  const term = companySearch.value.trim().toLowerCase()
+  const selected = new Set(filters.companies)
+  const all = companyOptions.value
+  const matches = term ? all.filter((c) => c.toLowerCase().includes(term)) : all
+  // Selected first (stable), then the rest, then cap.
+  const head = matches.filter((c) => selected.has(c))
+  const tail = matches.filter((c) => !selected.has(c))
+  const ordered = [...head, ...tail]
+  return { list: ordered.slice(0, COMPANY_RENDER_CAP), more: Math.max(0, ordered.length - COMPANY_RENDER_CAP) }
+})
+
+// Sticky headers + the widest band name for the group-column width; the flat first column is a
+// sticky, separately-composited layer, so its violet borders can paint a hair out of step with
+// each row on the first paint (hydration + web fonts settling). Swapping the tbody forces a clean
+// repaint — bump `tbodyKey` once fonts settle (see onMounted) so it lines up on load without a
+// breakout toggle.
 const wrapRef = ref(null)
 const theadRef = ref(null)
 const theadH = ref(0)
 let theadObserver = null
 const dimW = ref(0)
-// The flat table's first column is a sticky, separately-composited layer, and every cell paints
-// its own violet border-bottom. On the first paint (hydration + web fonts settling after paint)
-// that sticky layer can keep the fallback-font row metrics, leaving its borders a hair out of step
-// with the rest of each row — the "askew first column" until something forces a repaint. Swapping
-// the tbody does it (that's why toggling a breakout fixes it), so we bump this key once, after
-// fonts settle, to trigger the same clean repaint on load without any user interaction.
 const tbodyKey = ref(0)
 function measureDimCol() {
   const spans = wrapRef.value?.querySelectorAll('.group-name')
@@ -169,9 +172,6 @@ onMounted(() => {
     theadObserver.observe(theadRef.value)
   }
   measureDimCol()
-  // Repaint the sticky first column once web fonts settle so its borders line up with each row on
-  // load (see tbodyKey). document.fonts.ready is already resolved when fonts are cached, so this
-  // fires immediately in that case — a single, imperceptible re-render before any interaction.
   if (import.meta.client && document.fonts?.ready) {
     document.fonts.ready.then(() => { tbodyKey.value++; nextTick(measureDimCol) })
   }
@@ -181,8 +181,7 @@ onUnmounted(() => {
   theadObserver?.disconnect()
 })
 
-// Collapse/expand commodity bands (breakout only). Reset when the breakout dimension changes,
-// so a new breakout always starts expanded (otherwise stale collapsed keys hide the new rows).
+// Collapse/expand company bands (breakout only). Reset when the breakout dimension changes.
 const collapsed = ref(new Set())
 watch(breakout, () => { collapsed.value = new Set() })
 function toggle(key) {
@@ -196,105 +195,80 @@ function toggleAll() {
 }
 
 // --- filter query -------------------------------------------------------------
-const selectionEmpty = computed(() => !filters.commodities.length || !filters.landTypes.length || !filters.regions.length)
+// Commodity/Revenue-Type all-deselected = an empty selection (no records). Companies empty is
+// valid (all companies), so it doesn't count toward "empty".
+const selectionEmpty = computed(() => !filters.commodities.length || !filters.revenueTypes.length)
 const filterQuery = computed(() => {
   const query = {}
   const ys = yearOptions.value
   if (filters.fromYear && filters.fromYear !== ys[0]) query.fromYear = String(filters.fromYear)
   if (filters.toYear && filters.toYear !== ys[ys.length - 1]) query.toYear = String(filters.toYear)
+  if (filters.companies.length) query.companies = filters.companies.join(',')
   if (!selectionEmpty.value) {
     if (filters.commodities.length < commodityOptions.value.length) query.commodities = filters.commodities.join(',')
-    if (filters.landTypes.length < landTypeOptions.value.length) query.landTypes = filters.landTypes.join(',')
-    if (filters.regions.length < regionOptions.value.length) query.regions = filters.regions.join(',')
+    if (filters.revenueTypes.length < revenueTypeOptions.value.length) query.revenueTypes = filters.revenueTypes.join(',')
   }
   if (hasBreakout.value) query.breakout = breakout.value
   return { query, empty: selectionEmpty.value }
 })
 
+useUrlFilterSync(() => filterQuery.value.query, ready, ['fromYear', 'toYear', 'companies', 'commodities', 'revenueTypes', 'breakout'])
+
 // --- pivot data ---------------------------------------------------------------
-const emptyPivot = () => ({ groupBy: 'commodity', breakout: null, measures: MEASURES, groups: [], totals: {}, recordCount: 0 })
+const emptyPivot = () => ({ groupBy: 'company', breakout: null, years: [], groups: [], totalsByYear: {}, truncated: false, shownCompanies: 0, totalCompanies: 0, recordCount: 0 })
 const { data: pivot, pending } = await useAsyncData(
-  'fs-pivot',
+  'frbc-pivot',
   async () => {
     if (!ready.value) return null
     const { query, empty } = filterQuery.value
     if (empty) return emptyPivot()
-    return $fetch(`${apiUrl}/charts/federal-sales/pivot`, { query })
+    return $fetch(`${apiUrl}/charts/federal-revenue-by-company/pivot`, { query })
   },
   { watch: [() => JSON.stringify(filters), ready, breakout], dedupe: 'cancel' },
 )
 
+const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
-const totals = computed(() => pivot.value?.totals || {})
+const totalsByYear = computed(() => pivot.value?.totalsByYear || {})
+const truncated = computed(() => !!pivot.value?.truncated)
 watch(pivot, () => nextTick(measureDimCol))
 
-// --- charts (reactive to the same filters) ------------------------------------
-// Time-series data (year x commodity) for the two chart sections: small multiples of Sales
-// Volume (one self-scaled pane per commodity) and a combined RVLA line chart. The breakout is a
-// table-only control, so it's stripped from the chart query and the charts don't refetch on it.
-const chartQuery = computed(() => {
-  const { breakout: _drop, ...rest } = filterQuery.value.query
-  return rest
+// --- chart (reactive to the same filters) -------------------------------------
+// Published to the dataset's reactive ChartCard (reacts_to_filters) via the datasetPreviewChart
+// inject — the same pattern as the revenue / production / disbursement previews. A multi-series
+// currency line chart of the top N companies by total revenue, X = calendar year. Derived
+// straight from the pivot groups (already ranked by total), so there's no separate fetch; the
+// breakout is a table-only control and doesn't affect the top-level company series.
+const CHART_TOP_N = 6
+const chartPayload = computed(() => {
+  const p = pivot.value
+  if (!ready.value || !p) return null
+  return {
+    empty: !p.groups?.length,
+    periodType: 'Calendar Year',
+    valueFormat: 'currency',
+    groupBy: 'company',
+    groupByLabel: 'Company',
+    years: p.years || [],
+    groups: (p.groups || []).slice(0, CHART_TOP_N),
+  }
 })
-const { data: timeseries } = await useAsyncData(
-  'fs-timeseries',
-  async () => {
-    if (!ready.value) return null
-    if (selectionEmpty.value) return { years: [], commodities: [], salesVolume: {}, rvla: {} }
-    return $fetch(`${apiUrl}/charts/federal-sales/timeseries`, { query: chartQuery.value })
-  },
-  { watch: [() => JSON.stringify(filters), ready], dedupe: 'cancel' },
-)
-const ts = computed(() => timeseries.value || { years: [], commodities: [], salesVolume: {}, rvla: {} })
-const chartYears = computed(() => ts.value.years || [])
-const hasChartData = computed(() => chartYears.value.length > 0 && (ts.value.commodities || []).length > 0)
-
-// Publish the two chart sections up to DatasetView, which renders them ABOVE the "Preview and
-// filter" heading (the #chart section). They stay reactive to the filters via the fetch above:
-// small multiples of Sales Volume (one self-scaled pane per commodity) + a combined RVLA chart.
-const chartSections = computed(() => {
-  if (!hasChartData.value) return null
-  const cs = ts.value.commodities || []
-  return [
-    {
-      kind: 'small-multiples',
-      title: 'Sales volume by commodity',
-      categories: chartYears.value,
-      valueFormat: 'number',
-      panes: cs.map((c) => ({ title: c, series: [{ name: c, data: ts.value.salesVolume[c] || [] }] })),
-    },
-    {
-      kind: 'lines',
-      title: 'Royalty value less allowances (RVLA) by commodity',
-      paneLabel: 'RVLA',
-      categories: chartYears.value,
-      valueFormat: 'currency',
-      showLegend: true,
-      series: cs.map((c) => ({ name: c, data: ts.value.rvla[c] || [] })),
-    },
-  ]
-})
-const previewCharts = inject('datasetPreviewCharts', null)
-if (previewCharts) {
-  watchEffect(() => { previewCharts.value = chartSections.value })
-  onUnmounted(() => { previewCharts.value = null })
+const previewChart = inject('datasetPreviewChart', null)
+if (previewChart) {
+  watchEffect(() => { previewChart.value = chartPayload.value })
 }
 
-// Reflect the active filters into the URL once seeded (filterQuery already omits defaults).
-useUrlFilterSync(() => filterQuery.value.query, ready, ['fromYear', 'toYear', 'commodities', 'landTypes', 'regions', 'breakout'])
-
 // --- sorting ------------------------------------------------------------------
-// Client-side sort of the commodity rows. The Commodity header sorts by name; each measure
-// header by that measure's value. Default (sortKey null) keeps the endpoint ranking (sales
-// value desc). In the breakout view this reorders the commodity bands; sub-rows keep their order.
-const sortKey = ref(null) // null | 'commodity' | <measure key>
+// Client-side sort of the company rows. The Company header sorts by name; each year header by
+// that year's value. Default (sortKey null) keeps the endpoint's total-revenue-desc ranking.
+const sortKey = ref(null) // null | 'company' | <year:number>
 const sortDir = ref('desc')
 function setSort(key) {
   if (sortKey.value === key) {
     sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
   } else {
     sortKey.value = key
-    sortDir.value = key === 'commodity' ? 'asc' : 'desc'
+    sortDir.value = key === 'company' ? 'asc' : 'desc'
   }
 }
 const sortState = (key) => (sortKey.value === key ? sortDir.value : null)
@@ -309,29 +283,36 @@ const sortedGroups = computed(() => {
   const dir = sortDir.value === 'asc' ? 1 : -1
   const key = sortKey.value
   const copy = [...gs]
-  if (key === 'commodity') copy.sort((a, b) => dir * String(a.key).localeCompare(String(b.key)))
-  else copy.sort((a, b) => dir * ((a.values?.[key] || 0) - (b.values?.[key] || 0)))
+  if (key === 'company') copy.sort((a, b) => dir * String(a.key).localeCompare(String(b.key)))
+  else copy.sort((a, b) => dir * ((a.byYear[key] || 0) - (b.byYear[key] || 0)))
   return copy
+})
+watch(years, (ys) => {
+  if (typeof sortKey.value === 'number' && !ys.includes(sortKey.value)) {
+    sortKey.value = null
+    sortDir.value = 'desc'
+  }
 })
 
 function clearFilters() {
   seedFilters()
+  companySearch.value = ''
 }
 
-// --- CSV ----------------------------------------------------------------------
+// --- CSV: Company [| breakout] | one column per year --------------------------
 function downloadCsv() {
   const p = pivot.value
   if (!p?.groups?.length) return
-  const head = ['Commodity', ...(dataBreakout.value ? [breakoutColLabel.value] : []), ...MEASURES.map((m) => m.short)]
-  const rows = [head]
-  const vals = (v) => MEASURES.map((m) => v?.[m.key] ?? '')
-  for (const g of p.groups) {
-    if (dataBreakout.value) {
-      rows.push([g.key, 'All', ...vals(g.values)])
-      for (const r of g.rows || []) rows.push([g.key, r.key, ...vals(r.values)])
-    } else {
-      rows.push([g.key, ...vals(g.values)])
+  const rows = []
+  if (dataBreakout.value) {
+    rows.push(['Company', breakoutColLabel.value, ...p.years.map(String)])
+    for (const g of p.groups) {
+      rows.push([g.key, 'All', ...p.years.map((y) => g.byYear[y] ?? '')])
+      for (const row of g.rows || []) rows.push([g.key, row.key, ...p.years.map((y) => row.byYear[y] ?? '')])
     }
+  } else {
+    rows.push(['Company', ...p.years.map(String)])
+    for (const g of p.groups) rows.push([g.key, ...p.years.map((y) => g.byYear[y] ?? '')])
   }
   const esc = (v) => {
     const s = String(v ?? '')
@@ -340,7 +321,7 @@ function downloadCsv() {
   const csv = rows.map((r) => r.map(esc).join(',')).join('\n')
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
-  a.download = 'federal-sales.csv'
+  a.download = 'federal-revenue-by-company.csv'
   a.click()
   URL.revokeObjectURL(a.href)
 }
@@ -354,7 +335,7 @@ if (datasetExport) {
     const { query } = filterQuery.value
     for (const [k, v] of Object.entries(query)) if (k !== 'breakout') q.set(k, v)
     const qs = q.toString()
-    return `${apiUrl}/charts/federal-sales/export${qs ? `?${qs}` : ''}`
+    return `${apiUrl}/charts/federal-revenue-by-company/export${qs ? `?${qs}` : ''}`
   })
   watchEffect(() => {
     const n = pivot.value?.recordCount ?? 0
@@ -368,7 +349,7 @@ if (datasetExport) {
   onUnmounted(() => { datasetExport.value = null })
 }
 
-const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
+const colspanEmpty = computed(() => years.value.length + (grouped.value ? 2 : 1))
 </script>
 
 <template>
@@ -378,23 +359,46 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
       <div class="filter-bar__fields">
         <!-- Calendar-year range -->
         <div class="field">
-          <label class="usa-label margin-top-0" for="fs-from">From</label>
-          <select id="fs-from" v-model.number="filters.fromYear" class="usa-select">
+          <label class="usa-label margin-top-0" for="frbc-from">From</label>
+          <select id="frbc-from" v-model.number="filters.fromYear" class="usa-select">
             <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
         <div class="field">
-          <label class="usa-label margin-top-0" for="fs-to">To</label>
-          <select id="fs-to" v-model.number="filters.toYear" class="usa-select">
+          <label class="usa-label margin-top-0" for="frbc-to">To</label>
+          <select id="frbc-to" v-model.number="filters.toYear" class="usa-select">
             <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
 
+        <!-- Search Companies (searchable multi-select) -->
+        <div class="field field--wide">
+          <label class="usa-label margin-top-0" for="frbc-company">Search companies</label>
+          <div ref="companyRef" class="multi-select">
+            <button id="frbc-company" type="button" class="usa-select multi-select__trigger" :aria-expanded="companyOpen" @click="companyOpen = !companyOpen">
+              <span :class="{ 'multi-select__placeholder': filters.companies.length === 0 }">{{ companySummary }}</span>
+            </button>
+            <div v-show="companyOpen" class="multi-select__dropdown multi-select__dropdown--search">
+              <div class="multi-select__search">
+                <input v-model="companySearch" type="text" class="usa-input" placeholder="Type to search companies…" aria-label="Search companies">
+                <button v-if="filters.companies.length" type="button" class="usa-button usa-button--unstyled multi-select__clear" @click="clearCompanies">Clear</button>
+              </div>
+              <ul class="multi-select__list" role="listbox" aria-multiselectable="true">
+                <li v-if="!companyMatches.list.length" class="multi-select__empty">No matching companies</li>
+                <li v-for="v in companyMatches.list" :key="v" role="option" :aria-selected="filters.companies.includes(v)" class="multi-select__option" :class="{ 'multi-select__option--selected': filters.companies.includes(v) }" @click="toggleCompany(v)">
+                  <input type="checkbox" :checked="filters.companies.includes(v)" tabindex="-1" class="multi-select__checkbox"> {{ v }}
+                </li>
+                <li v-if="companyMatches.more" class="multi-select__more">+{{ companyMatches.more.toLocaleString() }} more — refine your search</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         <!-- Commodity -->
         <div class="field field--wide">
-          <label class="usa-label margin-top-0" for="fs-commodity">Commodity</label>
+          <label class="usa-label margin-top-0" for="frbc-commodity">Commodity</label>
           <div ref="commodityRef" class="multi-select">
-            <button id="fs-commodity" type="button" class="usa-select multi-select__trigger" :aria-expanded="commodityOpen" @click="commodityOpen = !commodityOpen">
+            <button id="frbc-commodity" type="button" class="usa-select multi-select__trigger" :aria-expanded="commodityOpen" @click="commodityOpen = !commodityOpen">
               <span :class="{ 'multi-select__placeholder': commodityAllSelected }">{{ commoditySummary }}</span>
             </button>
             <ul v-show="commodityOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
@@ -408,37 +412,19 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
           </div>
         </div>
 
-        <!-- Land Type -->
+        <!-- Revenue Type -->
         <div class="field field--wide">
-          <label class="usa-label margin-top-0" for="fs-land">Land type</label>
-          <div ref="landRef" class="multi-select">
-            <button id="fs-land" type="button" class="usa-select multi-select__trigger" :aria-expanded="landOpen" @click="landOpen = !landOpen">
-              <span :class="{ 'multi-select__placeholder': landAllSelected }">{{ landSummary }}</span>
+          <label class="usa-label margin-top-0" for="frbc-revtype">Revenue type</label>
+          <div ref="revenueRef" class="multi-select">
+            <button id="frbc-revtype" type="button" class="usa-select multi-select__trigger" :aria-expanded="revenueOpen" @click="revenueOpen = !revenueOpen">
+              <span :class="{ 'multi-select__placeholder': revenueAllSelected }">{{ revenueSummary }}</span>
             </button>
-            <ul v-show="landOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
-              <li role="option" :aria-selected="landAllSelected" class="multi-select__option multi-select__option--all" :class="{ 'multi-select__option--selected': landAllSelected }" @click="toggleAllLand">
-                <input type="checkbox" :checked="landAllSelected" tabindex="-1" class="multi-select__checkbox"> Select all
+            <ul v-show="revenueOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
+              <li role="option" :aria-selected="revenueAllSelected" class="multi-select__option multi-select__option--all" :class="{ 'multi-select__option--selected': revenueAllSelected }" @click="toggleAllRevenue">
+                <input type="checkbox" :checked="revenueAllSelected" tabindex="-1" class="multi-select__checkbox"> Select all
               </li>
-              <li v-for="v in landTypeOptions" :key="v" role="option" :aria-selected="filters.landTypes.includes(v)" class="multi-select__option" :class="{ 'multi-select__option--selected': filters.landTypes.includes(v) }" @click="toggleLand(v)">
-                <input type="checkbox" :checked="filters.landTypes.includes(v)" tabindex="-1" class="multi-select__checkbox"> {{ v }}
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- State / Offshore Region -->
-        <div class="field field--wide">
-          <label class="usa-label margin-top-0" for="fs-region">State/Offshore Region</label>
-          <div ref="regionRef" class="multi-select">
-            <button id="fs-region" type="button" class="usa-select multi-select__trigger" :aria-expanded="regionOpen" @click="regionOpen = !regionOpen">
-              <span :class="{ 'multi-select__placeholder': regionAllSelected }">{{ regionSummary }}</span>
-            </button>
-            <ul v-show="regionOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
-              <li role="option" :aria-selected="regionAllSelected" class="multi-select__option multi-select__option--all" :class="{ 'multi-select__option--selected': regionAllSelected }" @click="toggleAllRegions">
-                <input type="checkbox" :checked="regionAllSelected" tabindex="-1" class="multi-select__checkbox"> Select all
-              </li>
-              <li v-for="v in regionOptions" :key="v" role="option" :aria-selected="filters.regions.includes(v)" class="multi-select__option" :class="{ 'multi-select__option--selected': filters.regions.includes(v) }" @click="toggleRegion(v)">
-                <input type="checkbox" :checked="filters.regions.includes(v)" tabindex="-1" class="multi-select__checkbox"> {{ v }}
+              <li v-for="v in revenueTypeOptions" :key="v" role="option" :aria-selected="filters.revenueTypes.includes(v)" class="multi-select__option" :class="{ 'multi-select__option--selected': filters.revenueTypes.includes(v) }" @click="toggleRevenue(v)">
+                <input type="checkbox" :checked="filters.revenueTypes.includes(v)" tabindex="-1" class="multi-select__checkbox"> {{ v }}
               </li>
             </ul>
           </div>
@@ -454,8 +440,8 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
     <div class="table-toolbar table-toolbar--breakout">
       <div class="table-toolbar__group">
         <div class="breakout-control">
-          <label class="usa-label margin-top-0" for="fs-breakout">Break out by</label>
-          <select id="fs-breakout" v-model="breakout" class="usa-select breakout-select">
+          <label class="usa-label margin-top-0" for="frbc-breakout">Break out by</label>
+          <select id="frbc-breakout" v-model="breakout" class="usa-select breakout-select">
             <option v-for="o in BREAKOUT_OPTIONS" :key="o.value" :value="o.value">{{ o.label }}</option>
           </select>
         </div>
@@ -467,13 +453,18 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
         <template v-if="pending">Loading…</template>
         <template v-else>
           <strong>{{ (pivot?.recordCount || 0).toLocaleString() }}</strong> records ·
-          <strong>{{ groups.length }}</strong> commodit{{ groups.length === 1 ? 'y' : 'ies' }}
+          <strong>{{ groups.length }}</strong> compan{{ groups.length === 1 ? 'y' : 'ies' }}
           <button type="button" class="usa-button usa-button--unstyled margin-left-2" :disabled="!groups.length" @click="downloadCsv">Download CSV</button>
         </template>
       </p>
     </div>
 
-    <!-- Table: Commodity [| breakout] | six measure columns -->
+    <!-- Top-companies note when the table is capped -->
+    <p v-if="truncated && !pending" class="truncation-note margin-top-0 margin-bottom-1">
+      Showing the top {{ groups.length }} companies by total revenue of {{ (pivot?.totalCompanies || 0).toLocaleString() }}. Search for a company above to find others.
+    </p>
+
+    <!-- Table: Company [| breakout] | one column per year -->
     <div
       ref="wrapRef"
       class="data-table-wrap pivot margin-top-2"
@@ -483,35 +474,35 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
       <table class="usa-table usa-table--compact width-full margin-bottom-0 margin-top-0">
         <thead ref="theadRef">
           <tr>
-            <th scope="col" class="dim-col padding-y-105" :aria-sort="ariaSort('commodity')">
-              <button type="button" class="sort-btn" @click="setSort('commodity')">
-                <span>Commodity</span>
-                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('commodity') }" aria-hidden="true" role="img">
-                  <use :href="`/uswds/img/sprite.svg#${sortIcon('commodity')}`" />
+            <th scope="col" class="dim-col padding-y-105" :aria-sort="ariaSort('company')">
+              <button type="button" class="sort-btn" @click="setSort('company')">
+                <span>Company</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('company') }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon('company')}`" />
                 </svg>
               </button>
             </th>
             <th v-if="grouped" scope="col" class="breakout-col">{{ breakoutColLabel }}</th>
-            <th v-for="m in MEASURES" :key="m.key" scope="col" class="text-right" :aria-sort="ariaSort(m.key)">
-              <button type="button" class="sort-btn sort-btn--right" @click="setSort(m.key)">
-                <abbr :title="m.full">{{ m.full }} ({{ m.short }})</abbr>
-                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState(m.key) }" aria-hidden="true" role="img">
-                  <use :href="`/uswds/img/sprite.svg#${sortIcon(m.key)}`" />
+            <th v-for="y in years" :key="y" scope="col" class="text-right" :aria-sort="ariaSort(y)">
+              <button type="button" class="sort-btn sort-btn--right" @click="setSort(y)">
+                <span>{{ y }}</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState(y) }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon(y)}`" />
                 </svg>
               </button>
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody :key="tbodyKey">
           <tr v-if="!pending && !groups.length">
             <td :colspan="colspanEmpty">No records match the current filters.</td>
           </tr>
 
-          <!-- Breakout: commodity band -> collapsible sub-rows -> subtotal -->
+          <!-- Breakout: company band -> collapsible sub-rows -> subtotal -->
           <template v-if="grouped">
             <template v-for="g in sortedGroups" :key="g.key">
               <tr class="group-row">
-                <th scope="colgroup" :colspan="MEASURES.length + 2" class="group-head">
+                <th scope="colgroup" :colspan="years.length + 2" class="group-head">
                   <button type="button" class="group-toggle" :aria-expanded="!collapsed.has(g.key)" @click="toggle(g.key)">
                     <span aria-hidden="true" class="caret">{{ collapsed.has(g.key) ? '▸' : '▾' }}</span>
                     <span class="group-name">{{ g.key }}</span>
@@ -522,29 +513,29 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
                 <tr v-for="(row, ri) in g.rows" :key="`${g.key}-${row.key}`" class="detail-row" :class="{ 'row-alt': ri % 2 === 1 }">
                   <td class="dim-cell"></td>
                   <td class="breakout-cell">{{ row.key }}</td>
-                  <td v-for="m in MEASURES" :key="m.key" class="text-right">{{ fmt(m, row.values[m.key]) }}</td>
+                  <td v-for="y in years" :key="y" class="text-right">{{ row.byYear[y] ? currency(row.byYear[y]) : '—' }}</td>
                 </tr>
                 <tr class="subtotal-row">
                   <td class="dim-cell"></td>
                   <th scope="row" class="breakout-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
-                  <td v-for="m in MEASURES" :key="m.key" class="text-right">{{ fmt(m, g.values[m.key]) }}</td>
+                  <td v-for="y in years" :key="y" class="text-right">{{ currency(g.byYear[y]) }}</td>
                 </tr>
               </template>
             </template>
           </template>
 
-          <!-- Flat: one row per commodity -->
+          <!-- Flat: one row per company -->
           <template v-else>
             <tr v-for="(g, gi) in sortedGroups" :key="g.key" class="prod-row" :class="{ 'row-alt': gi % 2 === 1 }">
               <th scope="row" class="dim-cell prod-name">{{ g.key }}</th>
-              <td v-for="m in MEASURES" :key="m.key" class="text-right">{{ fmt(m, g.values[m.key]) }}</td>
+              <td v-for="y in years" :key="y" class="text-right">{{ g.byYear[y] ? currency(g.byYear[y]) : '—' }}</td>
             </tr>
           </template>
         </tbody>
         <tfoot v-if="groups.length">
           <tr class="total-row">
-            <th scope="row" :colspan="grouped ? 2 : 1">Total</th>
-            <td v-for="m in MEASURES" :key="m.key" class="text-right">{{ fmt(m, totals[m.key]) }}</td>
+            <th scope="row" :colspan="grouped ? 2 : 1">{{ truncated ? 'Total (shown)' : 'Total' }}</th>
+            <td v-for="y in years" :key="y" class="text-right">{{ currency(totalsByYear[y]) }}</td>
           </tr>
         </tfoot>
       </table>
@@ -567,6 +558,21 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 .field--action { flex: 0 0 auto; display: flex; align-items: flex-end; }
 
 .multi-select__option--all { font-weight: 700; border-bottom: 1px solid #dfe1e2; }
+
+// Searchable company dropdown: a sticky search box above a scrolling option list.
+.multi-select__dropdown--search { padding: 0; }
+.multi-select__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #dfe1e2;
+  .usa-input { margin: 0; height: 2.25rem; }
+  .multi-select__clear { flex: none; font-size: 0.85rem; }
+}
+.multi-select__list { list-style: none; margin: 0; padding: 0; max-height: 16rem; overflow-y: auto; }
+.multi-select__empty,
+.multi-select__more { padding: 0.5rem 0.75rem; font-size: 0.85rem; color: #565c65; }
 
 // Break-out control (in the toolbar's left cluster): label above the dropdown, dropdown itself
 // vertically centered on the row with the button and results line (label taken out of flow).
@@ -591,6 +597,7 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 .table-toolbar__group { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
 .table-toolbar__group .usa-button { margin: 0; }
 .results-line { font-size: 0.95rem; }
+.truncation-note { font-size: 0.9rem; color: #565c65; }
 
 .data-table-wrap {
   max-height: 36rem;
@@ -608,7 +615,7 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 }
 
 .dim-col,
-.dim-cell { min-width: var(--dim-w, 12rem); }
+.dim-cell { min-width: var(--dim-w, 15rem); }
 .dim-col { white-space: nowrap; }
 .breakout-col { width: 1%; white-space: nowrap; }
 
@@ -626,7 +633,6 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
   color: inherit;
   text-align: inherit;
 
-  abbr { text-decoration: none; }
   &:hover .sort-icon { color: $onrr-violet; }
   &:focus-visible { outline: 2px solid $onrr-violet; outline-offset: 2px; }
 }
@@ -682,8 +688,8 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 }
 .pivot--flat .dim-col,
 .pivot--flat .dim-cell {
-  min-width: 12rem;
-  max-width: 20rem;
+  min-width: 15rem;
+  max-width: 22rem;
   position: sticky;
   left: 0;
 }
@@ -710,8 +716,7 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
   bottom: 0;
 }
 // In the flat table the first column is sticky (position: sticky; left: 0). Pin the total row's
-// first cell the same way, or it scrolls out from under the sticky Commodity column when the
-// table scrolls horizontally — leaving the "Total" label misaligned against the commodity rows.
+// first cell the same way so the "Total" label stays under the sticky Company column on h-scroll.
 .pivot--flat .total-row > th {
   left: 0;
   z-index: 2;
