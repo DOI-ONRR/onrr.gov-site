@@ -15572,6 +15572,8 @@ fields:
             value: production
           - text: Revenue
             value: revenue
+          - text: Federal Sales
+            value: federal-sales
       readonly: false
       required: false
       searchable: true
@@ -15646,6 +15648,8 @@ fields:
             value: production
           - text: Revenue
             value: revenue
+          - text: Federal Sales
+            value: federal_sales
       readonly: false
       required: false
       searchable: true
