@@ -76,11 +76,29 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">
         <div class="ds-card padding-3">
-          <h3 class="font-heading-md">Production</h3>
+          <h3 class="font-heading-md">Fiscal year disbursements</h3>
+          <p class="ds-desc">Money paid each fiscal year to states, counties, Tribes and individual Indian
+            mineral owners, and federal funds.</p>
+          <p class="ds-meta">Updated monthly · Oct 2016 – Oct 2022 · CSV, XLSX, API</p>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/fiscal-year-disbursements">Preview, filter &amp; download</a>
+        </div>
+      </div>
+      <div class="tablet:grid-col-4 margin-bottom-2">
+        <div class="ds-card padding-3">
+          <h3 class="font-heading-md">Monthly Production</h3>
           <p class="ds-desc">Volumes of oil, gas, coal, and other commodities produced on federal
             and Indian lands.</p>
-          <p class="ds-meta">Updated monthly, plus fiscal and calendar year · CSV, XLSX, API</p>
-          <a class="usa-button usa-button--outline ds-cta" href="#" aria-disabled="true">Preview, filter &amp; download</a>
+          <p class="ds-meta">Updated monthly · CSV, XLSX, API</p>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/monthly-production">Preview, filter &amp; download</a>
+        </div>
+      </div>
+      <div class="tablet:grid-col-4 margin-bottom-2">
+        <div class="ds-card padding-3">
+          <h3 class="font-heading-md">Yearly Production</h3>
+          <p class="ds-desc">Volumes of oil, gas, coal, and other commodities produced on federal
+            and Indian lands.</p>
+          <p class="ds-meta">Updated annually · CSV, XLSX, API</p>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/yearly-production">Preview, filter &amp; download</a>
         </div>
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">
@@ -89,7 +107,7 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
           <p class="ds-desc">Royalties, rents, bonuses, and other payments companies make for
             producing on federal and Indian lands.</p>
           <p class="ds-meta">Updated monthly, plus fiscal and calendar year · CSV, XLSX, API</p>
-          <a class="usa-button usa-button--outline ds-cta" href="#" aria-disabled="true">Preview, filter &amp; download</a>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/revenue-by-commodity">Preview, filter &amp; download</a>
         </div>
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">
@@ -97,7 +115,7 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
           <h3 class="font-heading-md">Federal sales</h3>
           <p class="ds-desc">Sales of federal royalty gas taken in kind rather than in value.</p>
           <p class="ds-meta">Updated periodically · CSV, XLSX, API</p>
-          <a class="usa-button usa-button--outline ds-cta" href="#" aria-disabled="true">Preview, filter &amp; download</a>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/federal-sales">Preview, filter &amp; download</a>
         </div>
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">

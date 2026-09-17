@@ -10,11 +10,33 @@ Feature: Revenue dataset preview
   Scenario: The revenue filters are Period, Year, Land type, Revenue type, Region and Commodity
     Given I navigate to the revenue dataset page
     Then the revenue filter "Period" is present
-    And the revenue filter "Year from" is present
+    And the revenue filter "From" is present
     And the revenue filter "Land type" is present
     And the revenue filter "Revenue type" is present
     And the revenue filter "State/Offshore Region" is present
     And the revenue filter "Commodity" is present
+
+  Scenario: Breaking out by Revenue type groups the table with a Revenue type column
+    Given I navigate to the revenue dataset page
+    When I set the revenue breakout to "Revenue Type"
+    Then the revenue pivot has group band "Oil"
+    And the revenue pivot has column header "Revenue Type"
+    And the revenue pivot has detail row "Royalties"
+
+  Scenario: Sorting by Commodity reorders the flat table alphabetically
+    Given I navigate to the revenue dataset page
+    Then the first revenue commodity row is "Oil"
+    When I sort the revenue table by "Commodity"
+    Then the first revenue commodity row is "Gas"
+
+  Scenario: Filter values are read from the URL query parameters
+    Given I navigate to the revenue dataset page with query "?revenueTypes=Royalties"
+    Then the revenue type filter shows "Royalties"
+
+  Scenario: Changing a filter reflects into the URL query
+    Given I navigate to the revenue dataset page
+    When I set the revenue period to "Monthly"
+    Then the page URL contains "period=monthly"
 
   Scenario: The Period selector offers Monthly, Calendar year and Fiscal year
     Given I navigate to the revenue dataset page

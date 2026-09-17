@@ -31,7 +31,13 @@ const PERIOD_OPTIONS = [
   { value: 'Calendar Year', label: 'Calendar year' },
   { value: 'Fiscal Year', label: 'Fiscal year' },
 ]
-const selectedPeriod = ref(basePeriodType.value)
+
+// URL query <-> filters (deep-linkable, two-way): read filter values from the query on load and
+// reflect changes back into it. Param names match the pivot endpoint. Shared helpers +
+// write-back sync live in the useQueryFilters composable (the standard for dataset previews).
+const route = useRoute()
+
+const selectedPeriod = ref(PERIOD_FROM_PARAM[queryStr(route.query.period)] || basePeriodType.value)
 const periodType = computed(() => selectedPeriod.value)
 const isMonthly = computed(() => periodType.value === 'Monthly')
 const periodParam = computed(() =>
@@ -39,6 +45,27 @@ const periodParam = computed(() =>
 )
 // Number of commodity series on the chart (top N by total revenue).
 const CHART_TOP_N = 6
+
+// Annual grains (Calendar/Fiscal Year) offer an optional secondary "Break out by" column,
+// like yearly production: Commodity becomes a collapsible band with one sub-row per breakout
+// value. Monthly already shows month detail, so the breakout is hidden there.
+const isAnnual = computed(() => !isMonthly.value)
+const BREAKOUT_OPTIONS = [
+  { value: '', label: 'None' },
+  { value: 'land_type', label: 'Land Type' },
+  { value: 'state', label: 'State' },
+  { value: 'county', label: 'County' },
+  { value: 'revenue_type', label: 'Revenue Type' },
+  { value: 'mineral_lease_type', label: 'Mineral Lease Type' },
+  { value: 'product', label: 'Product' },
+]
+// Seed the breakout from the URL when it names a known option (applies on annual grains).
+const breakout = ref(BREAKOUT_OPTIONS.some((o) => o.value && o.value === queryStr(route.query.breakout)) ? queryStr(route.query.breakout) : '')
+const breakoutColLabel = computed(() => BREAKOUT_OPTIONS.find((o) => o.value === breakout.value)?.label || '')
+const hasBreakout = computed(() => isAnnual.value && !!breakout.value)
+// The table is grouped (collapsible band + detail rows) for monthly, or an annual grain with
+// a breakout; otherwise it's a flat one-row-per-commodity table.
+const grouped = computed(() => isMonthly.value || hasBreakout.value)
 
 // Revenue is dollars.
 function currency(v) {
@@ -87,10 +114,33 @@ function seedFilters() {
   filters.products = [...productOptions.value]
 }
 
+// Override the seeded defaults with any valid values from the URL query. Values are validated
+// against the loaded option lists / year range; unknown params or all-invalid selections fall
+// back to the default (so a stale/bad link degrades gracefully rather than showing nothing).
+function applyQueryToFilters() {
+  const q = route.query
+  const yrs = yearOptions.value
+  const fy = Number(queryStr(q.fromYear))
+  if (q.fromYear != null && yrs.includes(fy)) filters.fromYear = fy
+  const ty = Number(queryStr(q.toYear))
+  if (q.toYear != null && yrs.includes(ty)) filters.toYear = ty
+  const applyMulti = (param, optionList, target) => {
+    const req = queryList(q[param])
+    if (!req) return
+    const sel = optionList.filter((o) => req.includes(o))
+    if (sel.length) filters[target] = sel
+  }
+  applyMulti('landTypes', landTypeOptions.value, 'landTypes')
+  applyMulti('revenueTypes', revenueTypeOptions.value, 'revenueTypes')
+  applyMulti('regions', regionOptions.value, 'regions')
+  applyMulti('products', productOptions.value, 'products')
+}
+
 const ready = ref(false)
 watchEffect(() => {
   if (ready.value || !options.value) return
   seedFilters()
+  applyQueryToFilters()
   ready.value = true
 })
 
@@ -182,8 +232,13 @@ const filterQuery = computed(() => {
     if (filters.regions.length < regionOptions.value.length) query.regions = filters.regions.join(',')
     if (filters.products.length < productOptions.value.length) query.products = filters.products.join(',')
   }
+  if (hasBreakout.value) query.breakout = breakout.value
   return { query, empty: selectionEmpty.value }
 })
+
+// Reflect the active filters into the URL once seeded (filterQuery already omits defaults, so a
+// default view yields a clean URL). Same endpoint param names both directions.
+useUrlFilterSync(() => filterQuery.value.query, ready, ['period', 'fromYear', 'toYear', 'landTypes', 'revenueTypes', 'regions', 'products', 'breakout'])
 
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(
@@ -194,12 +249,52 @@ const { data: pivot, pending } = await useAsyncData(
     if (empty) return { groupBy: 'product', periodType: periodType.value, years: [], groups: [], grandTotal: 0, recordCount: 0 }
     return $fetch(`${apiUrl}/charts/revenue/pivot`, { query })
   },
-  { watch: [() => JSON.stringify(filters), ready, periodParam], dedupe: 'cancel' },
+  { watch: [() => JSON.stringify(filters), ready, breakout, periodParam], dedupe: 'cancel' },
 )
 
 const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
 watch(pivot, () => nextTick(measureDimCol))
+
+// --- sorting ------------------------------------------------------------------
+// Client-side sort of the commodity groups (the pivot returns them all, unpaginated). The
+// Commodity header sorts by name; each year header by that year's value. Default (sortKey
+// null) keeps the endpoint's total-revenue-desc ranking with no active arrow. In grouped
+// views (monthly, breakout) this reorders the commodity bands; their detail rows (months /
+// breakout values) keep their natural order. The chart is unaffected — it ranks by total.
+const sortKey = ref(null) // null | 'commodity' | <year:number>
+const sortDir = ref('desc')
+function setSort(key) {
+  if (sortKey.value === key) {
+    sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortKey.value = key
+    sortDir.value = key === 'commodity' ? 'asc' : 'desc' // text A→Z, values high→low on first click
+  }
+}
+const sortState = (key) => (sortKey.value === key ? sortDir.value : null) // 'asc' | 'desc' | null
+const ariaSort = (key) => (sortKey.value === key ? (sortDir.value === 'asc' ? 'ascending' : 'descending') : 'none')
+const sortIcon = (key) => {
+  const s = sortState(key)
+  return s === 'asc' ? 'arrow_drop_up' : s === 'desc' ? 'arrow_drop_down' : 'unfold_more'
+}
+const sortedGroups = computed(() => {
+  const gs = groups.value
+  if (!sortKey.value) return gs
+  const dir = sortDir.value === 'asc' ? 1 : -1
+  const key = sortKey.value
+  const copy = [...gs]
+  if (key === 'commodity') copy.sort((a, b) => dir * String(a.key).localeCompare(String(b.key)))
+  else copy.sort((a, b) => dir * ((a.byYear[key] || 0) - (b.byYear[key] || 0)))
+  return copy
+})
+// Drop a year sort that no longer exists after a Period switch (its column is gone).
+watch(years, (ys) => {
+  if (typeof sortKey.value === 'number' && !ys.includes(sortKey.value)) {
+    sortKey.value = null
+    sortDir.value = 'desc'
+  }
+})
 
 // Publish a coherent pivot payload for the reactive chart — a multi-series currency chart of
 // the top N commodities by total revenue (single unit, so no small multiples).
@@ -236,6 +331,12 @@ function downloadCsv() {
       rows.push([g.key, 'All months', ...p.years.map((y) => g.byYear[y] ?? '')])
       for (const m of g.months || []) rows.push([g.key, m.monthName, ...p.years.map((y) => m.byYear[y] ?? '')])
     }
+  } else if (hasBreakout.value) {
+    rows.push(['Commodity', breakoutColLabel.value, ...p.years.map(String)])
+    for (const g of p.groups) {
+      rows.push([g.key, 'All', ...p.years.map((y) => g.byYear[y] ?? '')])
+      for (const row of g.rows || []) rows.push([g.key, row.key, ...p.years.map((y) => row.byYear[y] ?? '')])
+    }
   } else {
     rows.push(['Commodity', ...p.years.map(String)])
     for (const g of p.groups) rows.push([g.key, ...p.years.map((y) => g.byYear[y] ?? '')])
@@ -259,7 +360,8 @@ if (datasetExport) {
     if (selectionEmpty.value) return null
     const q = new URLSearchParams()
     const { query } = filterQuery.value
-    for (const [k, v] of Object.entries(query)) q.set(k, v)
+    // The raw-records export has no breakout concept — it's the flat record set.
+    for (const [k, v] of Object.entries(query)) if (k !== 'breakout') q.set(k, v)
     const qs = q.toString()
     return `${apiUrl}/charts/revenue/export${qs ? `?${qs}` : ''}`
   })
@@ -298,13 +400,13 @@ if (datasetExportFilter) {
 
         <!-- Year range -->
         <div class="field">
-          <label class="usa-label margin-top-0" for="r-from-year">Year from</label>
+          <label class="usa-label margin-top-0" for="r-from-year">From</label>
           <select id="r-from-year" v-model="filters.fromYear" class="usa-select">
             <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
         <div class="field">
-          <label class="usa-label margin-top-0" for="r-to-year">Year to</label>
+          <label class="usa-label margin-top-0" for="r-to-year">To</label>
           <select id="r-to-year" v-model="filters.toYear" class="usa-select">
             <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
           </select>
@@ -388,10 +490,17 @@ if (datasetExportFilter) {
       </div>
     </div>
 
-    <!-- Toolbar -->
-    <div class="table-toolbar">
+    <!-- Toolbar: breakout + collapse control (left), record count + CSV (right) -->
+    <div class="table-toolbar" :class="{ 'table-toolbar--breakout': isAnnual }">
       <div class="table-toolbar__group">
-        <button v-if="isMonthly" type="button" class="usa-button usa-button--outline" :disabled="!groups.length" @click="toggleAll">
+        <!-- Break-out control (annual grains): adds a grouping column after Commodity -->
+        <div v-if="isAnnual" class="breakout-control">
+          <label class="usa-label margin-top-0" for="r-breakout">Break out by</label>
+          <select id="r-breakout" v-model="breakout" class="usa-select breakout-select">
+            <option v-for="o in BREAKOUT_OPTIONS" :key="o.value" :value="o.value">{{ o.label }}</option>
+          </select>
+        </div>
+        <button v-if="grouped" type="button" class="usa-button usa-button--outline" :disabled="!groups.length" @click="toggleAll">
           {{ allCollapsed ? 'Expand all' : 'Collapse all' }}
         </button>
       </div>
@@ -414,25 +523,40 @@ if (datasetExportFilter) {
     <div
       ref="wrapRef"
       class="data-table-wrap pivot margin-top-2"
-      :class="{ 'pivot--flat': !isMonthly }"
+      :class="{ 'pivot--flat': isAnnual && !hasBreakout }"
       :style="{ '--thead-h': `${theadH}px`, '--dim-w': dimW ? `${dimW}px` : undefined }"
     >
       <table class="usa-table usa-table--compact width-full margin-bottom-0 margin-top-0">
         <thead ref="theadRef">
           <tr>
-            <th scope="col" class="dim-col">Commodity</th>
+            <th scope="col" class="dim-col padding-y-105" :aria-sort="ariaSort('commodity')">
+              <button type="button" class="sort-btn" @click="setSort('commodity')">
+                <span>Commodity</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('commodity') }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon('commodity')}`" />
+                </svg>
+              </button>
+            </th>
             <th v-if="isMonthly" scope="col" class="month-col">Month</th>
-            <th v-for="y in years" :key="y" scope="col" class="text-right">{{ y }}</th>
+            <th v-else-if="hasBreakout" scope="col" class="breakout-col">{{ breakoutColLabel }}</th>
+            <th v-for="y in years" :key="y" scope="col" class="text-right" :aria-sort="ariaSort(y)">
+              <button type="button" class="sort-btn sort-btn--right" @click="setSort(y)">
+                <span>{{ y }}</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState(y) }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon(y)}`" />
+                </svg>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="!pending && !groups.length">
-            <td :colspan="years.length + (isMonthly ? 2 : 1)">No records match the current filters.</td>
+            <td :colspan="years.length + (grouped ? 2 : 1)">No records match the current filters.</td>
           </tr>
 
           <!-- Monthly: grouped by commodity -> collapsible month rows -> subtotal -->
           <template v-if="isMonthly">
-            <template v-for="g in groups" :key="g.key">
+            <template v-for="g in sortedGroups" :key="g.key">
               <tr class="group-row">
                 <th scope="colgroup" :colspan="years.length + 2" class="group-head">
                   <button type="button" class="group-toggle" :aria-expanded="!collapsed.has(g.key)" @click="toggle(g.key)">
@@ -456,9 +580,35 @@ if (datasetExportFilter) {
             </template>
           </template>
 
-          <!-- Annual (Calendar/Fiscal Year): flat, one row per commodity -->
+          <!-- Annual + breakout: grouped by commodity -> collapsible breakout rows -> subtotal -->
+          <template v-else-if="hasBreakout">
+            <template v-for="g in sortedGroups" :key="g.key">
+              <tr class="group-row">
+                <th scope="colgroup" :colspan="years.length + 2" class="group-head">
+                  <button type="button" class="group-toggle" :aria-expanded="!collapsed.has(g.key)" @click="toggle(g.key)">
+                    <span aria-hidden="true" class="caret">{{ collapsed.has(g.key) ? '▸' : '▾' }}</span>
+                    <span class="group-name">{{ g.key }}</span>
+                  </button>
+                </th>
+              </tr>
+              <template v-if="!collapsed.has(g.key)">
+                <tr v-for="(row, ri) in g.rows" :key="`${g.key}-${row.key}`" class="detail-row" :class="{ 'row-alt': ri % 2 === 1 }">
+                  <td class="dim-cell"></td>
+                  <td class="breakout-cell">{{ row.key }}</td>
+                  <td v-for="y in years" :key="y" class="text-right">{{ row.byYear[y] ? currency(row.byYear[y]) : '—' }}</td>
+                </tr>
+                <tr class="subtotal-row">
+                  <td class="dim-cell"></td>
+                  <th scope="row" class="breakout-cell subtotal-label">Subtotal:<span class="usa-sr-only"> {{ g.key }}</span></th>
+                  <td v-for="y in years" :key="y" class="text-right">{{ currency(g.byYear[y]) }}</td>
+                </tr>
+              </template>
+            </template>
+          </template>
+
+          <!-- Annual (Calendar/Fiscal Year), no breakout: flat, one row per commodity -->
           <template v-else>
-            <tr v-for="(g, gi) in groups" :key="g.key" class="prod-row" :class="{ 'row-alt': gi % 2 === 1 }">
+            <tr v-for="(g, gi) in sortedGroups" :key="g.key" class="prod-row" :class="{ 'row-alt': gi % 2 === 1 }">
               <th scope="row" class="dim-cell prod-name">{{ g.key }}</th>
               <td v-for="y in years" :key="y" class="text-right">{{ g.byYear[y] ? currency(g.byYear[y]) : '—' }}</td>
             </tr>
@@ -485,8 +635,30 @@ if (datasetExportFilter) {
 
 .multi-select__option--all { font-weight: 700; border-bottom: 1px solid #dfe1e2; }
 
+// Break-out control (in the toolbar's left cluster): the "Break out by" label sits ABOVE the
+// dropdown, but the dropdown itself stays vertically centered on the row with the Collapse
+// button and results line — the label is taken out of flow (absolute) so it doesn't push the
+// select down. The toolbar reserves top room for the floating label via .table-toolbar--breakout.
+.breakout-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  .usa-label {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 0.15rem);
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .breakout-select { width: auto; min-width: 10rem; max-width: 16rem; margin-top: 0; }
+}
+
 .table-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
-.table-toolbar__group { display: flex; align-items: center; gap: 0.5rem; }
+// Room above the row for the floating "Break out by" label (only when the breakout is shown).
+.table-toolbar--breakout { padding-top: 1.25rem; }
+.table-toolbar__group { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
 .table-toolbar__group .usa-button { margin: 0; }
 .results-line { font-size: 0.95rem; }
 
@@ -508,7 +680,36 @@ if (datasetExportFilter) {
 .dim-col,
 .dim-cell { min-width: var(--dim-w, 12rem); }
 .dim-col { white-space: nowrap; }
-.month-col { width: 1%; white-space: nowrap; }
+.month-col,
+.breakout-col { width: 1%; white-space: nowrap; }
+
+// Sortable column headers: the whole header is a button with a trailing caret. The active
+// column shows arrow_drop_up/arrow_drop_down; other sortable columns show a muted unfold_more
+// to signal they're clickable.
+.sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+
+  &:hover .sort-icon { color: $onrr-violet; }
+  &:focus-visible { outline: 2px solid $onrr-violet; outline-offset: 2px; }
+}
+.sort-btn--right { justify-content: flex-end; }
+.sort-icon {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #a9aeb1; // muted (inactive / unfold_more)
+}
+.sort-icon--active { color: $onrr-violet; }
 
 // --- Monthly grouped table ----------------------------------------------------
 .pivot .group-head {

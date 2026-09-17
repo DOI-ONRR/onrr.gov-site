@@ -9,6 +9,18 @@ Given('I navigate to the revenue dataset page', async ({ page }) => {
   await page.goto('/revenue-data/revenue-by-commodity', { waitUntil: 'networkidle' })
 })
 
+Given('I navigate to the revenue dataset page with query {string}', async ({ page }, qs) => {
+  await page.goto(`/revenue-data/revenue-by-commodity${qs}`, { waitUntil: 'networkidle' })
+})
+
+Then('the revenue type filter shows {string}', async ({ page }, text) => {
+  await expect(page.locator('#r-revtype')).toContainText(text)
+})
+
+Then('the page URL contains {string}', async ({ page }, fragment) => {
+  await expect.poll(() => page.url()).toContain(fragment)
+})
+
 Then('the revenue pivot has commodity row {string}', async ({ page }, name) => {
   await expect(wrap(page).locator('.prod-name', { hasText: name })).toBeVisible()
 })
@@ -39,6 +51,22 @@ Then('the revenue period options are {string}, {string} and {string}', async ({ 
 
 When('I set the revenue period to {string}', async ({ page }, label) => {
   await page.locator('#r-period').selectOption({ label })
+})
+
+Then('the revenue pivot has detail row {string}', async ({ page }, name) => {
+  await expect(wrap(page).locator('.breakout-cell', { hasText: name }).first()).toBeVisible()
+})
+
+When('I set the revenue breakout to {string}', async ({ page }, label) => {
+  await page.locator('#r-breakout').selectOption({ label })
+})
+
+When('I sort the revenue table by {string}', async ({ page }, label) => {
+  await wrap(page).locator('thead th button', { hasText: label }).first().click()
+})
+
+Then('the first revenue commodity row is {string}', async ({ page }, name) => {
+  await expect(wrap(page).locator('tbody .prod-name').first()).toHaveText(name)
 })
 
 Then('the revenue chart title contains {string}', async ({ page }, text) => {

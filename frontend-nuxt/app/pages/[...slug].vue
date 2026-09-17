@@ -4,7 +4,10 @@ import getMenuByLabel from '@/graphql/queries/collections/menus/getMenuByLabel.g
 import getContactTopics from '@/graphql/queries/collections/contacts/getContactTopics.gql'
 
 definePageMeta({
-  key: (route) => route.fullPath,
+  // Key on the PATH only (not fullPath) so query-string changes — e.g. a dataset preview's
+  // filter state synced to the URL — do NOT re-mount the page. Re-mounting on every filter
+  // change caused a flicker and a stale-data race in the reactive previews.
+  key: (route) => route.path,
 })
 
 const route = useRoute()

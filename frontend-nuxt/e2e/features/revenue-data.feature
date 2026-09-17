@@ -17,15 +17,21 @@ Feature: Revenue Data landing page
     Given I navigate to the revenue data page
     Then the revenue data section heading "Find a dataset" is visible
     And the dataset card "Monthly disbursements" is visible
-    And the dataset card "Production" is visible
+    And the dataset card "Fiscal year disbursements" is visible
+    And the dataset card "Monthly Production" is visible
+    And the dataset card "Yearly Production" is visible
     And the dataset card "Revenue" is visible
     And the dataset card "Federal sales" is visible
     And the dataset card "Revenue by company" is visible
     And the dataset card "Reference data" is visible
 
-  Scenario: Monthly disbursements card links to its dataset page
+  Scenario: Active dataset cards link to their preview pages
     Given I navigate to the revenue data page
     Then the dataset card "Monthly disbursements" links to "/revenue-data/monthly-disbursements"
+    And the dataset card "Fiscal year disbursements" links to "/revenue-data/fiscal-year-disbursements"
+    And the dataset card "Monthly Production" links to "/revenue-data/monthly-production"
+    And the dataset card "Yearly Production" links to "/revenue-data/yearly-production"
+    And the dataset card "Revenue" links to "/revenue-data/revenue-by-commodity"
 
   Scenario: About this data section is visible
     Given I navigate to the revenue data page

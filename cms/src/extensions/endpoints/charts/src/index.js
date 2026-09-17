@@ -13,9 +13,11 @@
 import revenue from './collections/revenue.js';
 import disbursement from './collections/disbursement.js';
 import production from './collections/production.js';
+import federalSales from './collections/federal-sales.js';
 
 export default (router, context) => {
 	revenue(router, context, '/revenue');
 	disbursement(router, context, '/disbursement');
 	production(router, context, '/production');
+	federalSales(router, context, '/federal-sales');
 };

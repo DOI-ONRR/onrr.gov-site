@@ -13,6 +13,27 @@ Feature: Monthly disbursements dataset page
     Then the preview pivot has group "Onshore"
     And the preview pivot has group "Offshore"
 
+  Scenario: USWDS accordion markup in dataset content becomes interactive
+    Given I navigate to the monthly disbursements dataset page
+    Then the accordion panel "Answer one" is hidden
+    When I click the accordion button "Question one"
+    Then the accordion panel "Answer one" is visible
+
+  Scenario: Filter values are read from the URL query parameters
+    Given I navigate to the monthly disbursements dataset page with query "?groupBy=source"
+    Then the preview pivot has group "Onshore"
+
+  Scenario: Changing a filter reflects into the URL query
+    Given I navigate to the monthly disbursements dataset page
+    When I group the pivot by "Source"
+    Then the page URL contains "groupBy=source"
+
+  Scenario: Sorting by Total reorders the disbursement groups
+    Given I navigate to the monthly disbursements dataset page
+    Then the first disbursement group is "State & local"
+    When I sort the disbursement table by "Total"
+    Then the first disbursement group is "U.S. Treasury"
+
   Scenario: Negative values use the secondary color
     Given I navigate to the monthly disbursements dataset page
     Then a negative pivot value is styled with text-secondary

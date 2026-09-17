@@ -17,6 +17,11 @@
 */
 const { apiUrl } = useRuntimeConfig().public
 
+// URL query <-> filters (deep-linkable, two-way): read filter values from the query on load and
+// reflect changes back into it. Param names match the pivot endpoint (grain is fixed per page,
+// so no `period` param). Shared helpers + write-back sync live in the useQueryFilters composable.
+const route = useRoute()
+
 // Period grain comes from the dataset's export_filter (Monthly vs Fiscal Year), so the
 // same component serves both the monthly and fiscal-year disbursement pages. Fiscal-year
 // is annual: no month-range control and no monthly sub-rows.
@@ -43,12 +48,6 @@ const GROUP_OPTIONS = [
 const groupOptions = computed(() => (isFy.value ? GROUP_OPTIONS.filter((o) => o.key !== 'commodity') : GROUP_OPTIONS))
 
 // --- formatting ---------------------------------------------------------------
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-function monthLabel(d) {
-  if (!d) return '—'
-  const dt = new Date(`${String(d).slice(0, 10)}T00:00:00Z`)
-  return Number.isNaN(dt.getTime()) ? d : `${MONTHS[dt.getUTCMonth()]} ${dt.getUTCFullYear()}`
-}
 function currency(v) {
   const n = Number(v)
   if (!Number.isFinite(n)) return '—'
@@ -71,9 +70,7 @@ const recipientLabel = (key) => recipientOptions.value.find((r) => r.key === key
 // --- filter state (multi-selects seeded to all-selected once options load) --
 const filters = reactive({
   groupBy: 'recipient',
-  from: '',
-  to: '',
-  fromYear: null, // fiscal-year range (FY mode)
+  fromYear: null, // year range: fiscal years (FY mode) or calendar years (monthly)
   toYear: null,
   states: [],
   commodities: [],
@@ -83,6 +80,14 @@ const filters = reactive({
 
 // Fiscal-year options for the FY range selects.
 const fiscalYearOptions = computed(() => options.value?.fiscalYears || [])
+// Monthly grain: the From/To range is chosen by calendar year (Jan–Dec of the selected
+// years), derived from the available months, so the filter shows plain years like the FY page.
+const monthlyYears = computed(() => {
+  const set = new Set((options.value?.months || []).map((m) => Number(String(m).slice(0, 4))))
+  return [...set].sort((a, b) => a - b)
+})
+// The active year list for the range selects (FY years in FY mode, calendar years monthly).
+const yearOptions = computed(() => (isFy.value ? fiscalYearOptions.value : monthlyYears.value))
 
 // Selection helpers: "all selected" = every option checked (the default). recipients
 // hold RECIPIENT_GROUPS keys; sources hold raw fund.source values.
@@ -122,19 +127,40 @@ const commoditySummary = computed(() => {
 })
 
 // One-shot: seed the month range once options load.
+// Override the seeded defaults with any valid values from the URL query, validated against the
+// loaded option lists / year range; unknown/all-invalid values keep the default.
+function applyQueryToFilters() {
+  const q = route.query
+  const gb = queryStr(q.groupBy)
+  if (gb && groupOptions.value.some((o) => o.key === gb)) filters.groupBy = gb
+  const yrs = yearOptions.value
+  const fy = Number(queryStr(q.fromYear))
+  if (q.fromYear != null && yrs.includes(fy)) filters.fromYear = fy
+  const ty = Number(queryStr(q.toYear))
+  if (q.toYear != null && yrs.includes(ty)) filters.toYear = ty
+  const applyMulti = (param, valid, target) => {
+    const req = queryList(q[param])
+    if (!req || !req.length) return
+    const sel = valid.filter((v) => req.includes(v))
+    if (sel.length) filters[target] = sel
+  }
+  applyMulti('recipients', allRecipientKeys.value, 'recipients')
+  applyMulti('sources', sourceOptions.value, 'sources')
+  applyMulti('states', stateOptions.value, 'states')
+  if (!isFy.value) applyMulti('commodities', commodityOptions.value, 'commodities')
+}
+
 const ready = ref(false)
 watchEffect(() => {
   if (ready.value || !options.value) return
-  filters.from = options.value.months?.[0] || ''
-  filters.to = options.value.months?.[options.value.months.length - 1] || ''
-  const fy = options.value.fiscalYears || []
-  filters.fromYear = fy[0] ?? null
-  filters.toYear = fy[fy.length - 1] ?? null
+  filters.fromYear = yearOptions.value[0] ?? null
+  filters.toYear = yearOptions.value[yearOptions.value.length - 1] ?? null
   // Default to everything selected (all boxes checked).
   filters.recipients = recipientOptions.value.map((r) => r.key)
   filters.sources = [...sourceOptions.value]
   filters.states = [...stateOptions.value]
   filters.commodities = [...commodityOptions.value]
+  applyQueryToFilters()
   ready.value = true
 })
 
@@ -229,13 +255,11 @@ const filterQuery = computed(() => {
     if (filters.fromYear != null && filters.fromYear !== fy[0]) query.fromYear = filters.fromYear
     if (filters.toYear != null && filters.toYear !== fy[fy.length - 1]) query.toYear = filters.toYear
   } else {
-    const months = options.value?.months || []
-    const fullFrom = months[0]
-    const fullTo = months[months.length - 1]
-    // Omit from/to when they span the full available range, so a reactive chart keeps its
-    // default window until the user actually narrows the dates.
-    if (filters.from && filters.from !== fullFrom) query.from = String(filters.from).slice(0, 10)
-    if (filters.to && filters.to !== fullTo) query.to = String(filters.to).slice(0, 10)
+    // Year range -> month boundaries (Jan 1 of fromYear … Dec 31 of toYear). Omit each end at
+    // the full range so a reactive chart keeps its default window until the user narrows it.
+    const yrs = monthlyYears.value
+    if (filters.fromYear != null && filters.fromYear !== yrs[0]) query.from = `${filters.fromYear}-01-01`
+    if (filters.toYear != null && filters.toYear !== yrs[yrs.length - 1]) query.to = `${filters.toYear}-12-31`
   }
   // None selected in any multi-select -> empty. All selected -> omit (no filter).
   // Partial -> narrow (comma-joined keys/values).
@@ -249,6 +273,24 @@ const filterQuery = computed(() => {
   }
   return { query, empty }
 })
+
+// The shareable URL params (distinct from the pivot call above, which sends the monthly range as
+// from/to date boundaries): the URL always expresses the range as fromYear/toYear and includes
+// groupBy only when it isn't the default. Omit anything at its default for a clean URL.
+const urlQuery = computed(() => {
+  const q = {}
+  if (filters.groupBy !== 'recipient') q.groupBy = filters.groupBy
+  const ys = yearOptions.value
+  if (filters.fromYear != null && filters.fromYear !== ys[0]) q.fromYear = String(filters.fromYear)
+  if (filters.toYear != null && filters.toYear !== ys[ys.length - 1]) q.toYear = String(filters.toYear)
+  const emit = (arr, optionList, name) => { if (arr.length > 0 && arr.length < optionList.length) q[name] = arr.join(',') }
+  emit(filters.recipients, allRecipientKeys.value, 'recipients')
+  emit(filters.sources, sourceOptions.value, 'sources')
+  emit(filters.states, stateOptions.value, 'states')
+  if (!isFy.value) emit(filters.commodities, commodityOptions.value, 'commodities')
+  return q
+})
+useUrlFilterSync(() => urlQuery.value, ready, ['groupBy', 'fromYear', 'toYear', 'recipients', 'sources', 'states', 'commodities'])
 
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(
@@ -270,6 +312,46 @@ const { data: pivot, pending } = await useAsyncData(
 const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
 const groupByLabel = computed(() => GROUP_OPTIONS.find((o) => o.key === filters.groupBy)?.label || 'Group')
+
+// --- sorting ------------------------------------------------------------------
+// Client-side sort of the groups. The dimension header sorts by name, each year and the Total
+// column by value. Default (sortKey null) keeps the endpoint's ranking with no active arrow. In
+// the monthly grouped view this reorders the dimension bands; month rows keep chronological
+// order. The chart and footer year-totals are unaffected.
+const sortKey = ref(null) // null | 'dim' | 'total' | <year:number>
+const sortDir = ref('desc')
+function setSort(key) {
+  if (sortKey.value === key) {
+    sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortKey.value = key
+    sortDir.value = key === 'dim' ? 'asc' : 'desc' // text A→Z, values high→low on first click
+  }
+}
+const sortState = (key) => (sortKey.value === key ? sortDir.value : null)
+const ariaSort = (key) => (sortKey.value === key ? (sortDir.value === 'asc' ? 'ascending' : 'descending') : 'none')
+const sortIcon = (key) => {
+  const s = sortState(key)
+  return s === 'asc' ? 'arrow_drop_up' : s === 'desc' ? 'arrow_drop_down' : 'unfold_more'
+}
+const sortedGroups = computed(() => {
+  const gs = groups.value
+  if (!sortKey.value) return gs
+  const dir = sortDir.value === 'asc' ? 1 : -1
+  const key = sortKey.value
+  const copy = [...gs]
+  if (key === 'dim') copy.sort((a, b) => dir * String(a.key).localeCompare(String(b.key)))
+  else if (key === 'total') copy.sort((a, b) => dir * ((a.total || 0) - (b.total || 0)))
+  else copy.sort((a, b) => dir * ((a.byYear[key] || 0) - (b.byYear[key] || 0)))
+  return copy
+})
+// Drop a year sort that no longer exists after a grain/filter change (its column is gone).
+watch(years, (ys) => {
+  if (typeof sortKey.value === 'number' && !ys.includes(sortKey.value)) {
+    sortKey.value = null
+    sortDir.value = 'desc'
+  }
+})
 
 // Publish the pivot result so a filter-reactive chart on the page renders the same data
 // (a visual twin of the table). Everything is derived from the SAME pivot response —
@@ -322,11 +404,8 @@ function clearFilters() {
   filters.sources = [...sourceOptions.value]
   filters.states = [...stateOptions.value]
   filters.commodities = [...commodityOptions.value]
-  filters.from = options.value?.months?.[0] || ''
-  filters.to = options.value?.months?.[options.value.months.length - 1] || ''
-  const fy = options.value?.fiscalYears || []
-  filters.fromYear = fy[0] ?? null
-  filters.toYear = fy[fy.length - 1] ?? null
+  filters.fromYear = yearOptions.value[0] ?? null
+  filters.toYear = yearOptions.value[yearOptions.value.length - 1] ?? null
 }
 
 function downloadCsv() {
@@ -361,8 +440,8 @@ if (datasetExport) {
     if (!filters.recipients.length || !filters.sources.length || !filters.states.length || !filters.commodities.length) return null
     const q = new URLSearchParams()
     q.set('period', periodParam.value)
-    if (!isFy.value && filters.from) q.set('from', String(filters.from).slice(0, 10))
-    if (!isFy.value && filters.to) q.set('to', String(filters.to).slice(0, 10))
+    if (!isFy.value && filters.fromYear != null) q.set('from', `${filters.fromYear}-01-01`)
+    if (!isFy.value && filters.toYear != null) q.set('to', `${filters.toYear}-12-31`)
     if (isFy.value && filters.fromYear != null) q.set('fromYear', String(filters.fromYear))
     if (isFy.value && filters.toYear != null) q.set('toYear', String(filters.toYear))
     if (filters.recipients.length < allRecipientKeys.value.length) q.set('recipients', filters.recipients.join(','))
@@ -392,15 +471,15 @@ if (datasetExport) {
       <div class="filter-bar__fields">
         <div v-if="!isFy" class="field">
           <label class="usa-label margin-top-0" for="f-from">From</label>
-          <select id="f-from" v-model="filters.from" class="usa-select">
-            <option v-for="m in options?.months" :key="m" :value="m">{{ monthLabel(m) }}</option>
+          <select id="f-from" v-model.number="filters.fromYear" class="usa-select">
+            <option v-for="y in monthlyYears" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
 
         <div v-if="!isFy" class="field">
           <label class="usa-label margin-top-0" for="f-to">To</label>
-          <select id="f-to" v-model="filters.to" class="usa-select">
-            <option v-for="m in options?.months" :key="m" :value="m">{{ monthLabel(m) }}</option>
+          <select id="f-to" v-model.number="filters.toYear" class="usa-select">
+            <option v-for="y in monthlyYears" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
 
@@ -632,17 +711,38 @@ if (datasetExport) {
         </caption>
         <thead ref="theadRef">
           <tr>
-            <th scope="col" class="dim-col">{{ groupByLabel }}</th>
+            <th scope="col" class="dim-col padding-y-105" :aria-sort="ariaSort('dim')">
+              <button type="button" class="sort-btn" @click="setSort('dim')">
+                <span>{{ groupByLabel }}</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('dim') }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon('dim')}`" />
+                </svg>
+              </button>
+            </th>
             <th v-if="!isFy" scope="col" class="month-col">Month</th>
-            <th v-for="y in years" :key="y" scope="col" class="text-right">{{ y }}</th>
-            <th scope="col" class="text-right">Total</th>
+            <th v-for="y in years" :key="y" scope="col" class="text-right" :aria-sort="ariaSort(y)">
+              <button type="button" class="sort-btn sort-btn--right" @click="setSort(y)">
+                <span>{{ y }}</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState(y) }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon(y)}`" />
+                </svg>
+              </button>
+            </th>
+            <th scope="col" class="text-right" :aria-sort="ariaSort('total')">
+              <button type="button" class="sort-btn sort-btn--right" @click="setSort('total')">
+                <span>Total</span>
+                <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('total') }" aria-hidden="true" role="img">
+                  <use :href="`/uswds/img/sprite.svg#${sortIcon('total')}`" />
+                </svg>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="!pending && !groups.length">
             <td :colspan="years.length + (isFy ? 2 : 3)">No records match the current filters.</td>
           </tr>
-          <template v-for="(g, gi) in groups" :key="g.key">
+          <template v-for="(g, gi) in sortedGroups" :key="g.key">
             <!-- Fiscal year: one flat row per group (annual grain, no month detail). -->
             <tr v-if="isFy" class="fy-group-row" :class="{ 'row-alt': gi % 2 === 1 }">
               <th scope="row" class="dim-cell fy-group-name">{{ g.key }}</th>
@@ -768,6 +868,33 @@ if (datasetExport) {
 .dim-cell { min-width: var(--dim-w, 12rem); }
 .dim-col { white-space: nowrap; }
 .month-col { width: 1%; white-space: nowrap; } // hug the month labels
+
+// Sortable column headers: the whole header is a button with a trailing caret. The active
+// column shows arrow_drop_up/arrow_drop_down; other sortable columns show a muted unfold_more.
+.sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+
+  &:hover .sort-icon { color: $onrr-violet; }
+  &:focus-visible { outline: 2px solid $onrr-violet; outline-offset: 2px; }
+}
+.sort-btn--right { justify-content: flex-end; }
+.sort-icon {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #a9aeb1; // muted (inactive / unfold_more)
+}
+.sort-icon--active { color: $onrr-violet; }
 
 // Group header: full-width light-violet band, entire row clickable (the button fills
 // the spanning cell), no link styling — plain bold text with the brand caret. Sticky

@@ -14,6 +14,7 @@ import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactT
 import { datasetPage, pivotOptions, pivotResponse, disbursementCount } from '../fixtures/dataset-preview.js'
 import { productionYearlyPage, productionMonthlyPage, productionOptions, productionPivot, productionCount } from '../fixtures/production-preview.js'
 import { revenuePage, revenueOptions, revenuePivot, revenueCount } from '../fixtures/revenue-preview.js'
+import { federalSalesPage, federalSalesOptions, federalSalesPivot, federalSalesCount, federalSalesTimeseries } from '../fixtures/federal-sales.js'
 
 /**
  * Each handler has:
@@ -144,6 +145,7 @@ export const handlers = [
       if (variables?.slug === 'yearly-production') return { page: [productionYearlyPage] }
       if (variables?.slug === 'monthly-production') return { page: [productionMonthlyPage] }
       if (variables?.slug === 'revenue-by-commodity') return { page: [revenuePage] }
+      if (variables?.slug === 'federal-sales') return { page: [federalSalesPage] }
       return {
         page: [{
           __typename: 'pages',
@@ -258,10 +260,31 @@ export const restHandlers = [
   },
   {
     match: (url) => url === '/charts/revenue/pivot',
-    resolve: (urlPath, fullUrl = '') => revenuePivot(new URL(fullUrl, 'http://x').searchParams.get('period') || 'fiscal-year'),
+    resolve: (urlPath, fullUrl = '') => {
+      const q = new URL(fullUrl, 'http://x').searchParams
+      return revenuePivot(q.get('period') || 'fiscal-year', q.get('breakout') || '')
+    },
   },
   {
     match: (url) => url === '/items/revenue',
     resolve: () => revenueCount,
+  },
+
+  // --- Federal sales dataset preview (FederalSalesPreview) ---
+  {
+    match: (url) => url === '/charts/federal-sales/pivot/options',
+    resolve: () => federalSalesOptions(),
+  },
+  {
+    match: (url) => url === '/charts/federal-sales/pivot',
+    resolve: (urlPath, fullUrl = '') => federalSalesPivot(new URL(fullUrl, 'http://x').searchParams.get('breakout') || ''),
+  },
+  {
+    match: (url) => url === '/charts/federal-sales/timeseries',
+    resolve: () => federalSalesTimeseries(),
+  },
+  {
+    match: (url) => url === '/items/federal_sales',
+    resolve: () => federalSalesCount,
   },
 ]

@@ -9,6 +9,8 @@
 import DisbursementPreview from '~/components/previews/DisbursementPreview.vue'
 import ProductionPreview from '~/components/previews/ProductionPreview.vue'
 import RevenuePreview from '~/components/previews/RevenuePreview.vue'
+import FederalSalesPreview from '~/components/previews/FederalSalesPreview.vue'
+import PreviewCharts from '~/components/charts/PreviewCharts.vue'
 
 const props = defineProps({
   dataset: { type: Object, required: true },
@@ -18,9 +20,15 @@ const { resolveImages } = useCmsContent()
 
 // Glossary-term tooltips for any tagged spans in this view's content.
 const { enhance: enhanceGlossary } = useGlossary()
+// USWDS accordion behavior for any accordion markup inside v-html content (CMS WYSIWYG fields).
+const { enhance: enhanceAccordions } = useUswdsAccordion()
 const glossaryRoot = ref(null)
-onMounted(() => enhanceGlossary(glossaryRoot.value))
-watch(() => props.dataset, () => nextTick(() => enhanceGlossary(glossaryRoot.value)))
+function enhanceContent() {
+  enhanceGlossary(glossaryRoot.value)
+  enhanceAccordions(glossaryRoot.value)
+}
+onMounted(enhanceContent)
+watch(() => props.dataset, () => nextTick(enhanceContent))
 
 const charts = computed(() => props.dataset.charts ?? [])
 
@@ -71,14 +79,16 @@ const terms = computed(() => {
 // preview reads the dataset's export_filter to serve every period grain of that collection
 // (monthly / fiscal-year / calendar-year production all use one ProductionPreview).
 // Register each preview here as it's built.
-const initCap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '')
+// snake_case collection -> PascalCase component prefix (e.g. federal_sales -> FederalSales).
+const pascalCase = (s) => (s || '').split('_').filter(Boolean).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join('')
 const sourceCollection = computed(() => props.dataset.source_collection || null)
 const PREVIEW_COMPONENTS = {
   DisbursementPreview,
   ProductionPreview,
   RevenuePreview,
+  FederalSalesPreview,
 }
-const previewComponent = computed(() => PREVIEW_COMPONENTS[`${initCap(sourceCollection.value)}Preview`] || null)
+const previewComponent = computed(() => PREVIEW_COMPONENTS[`${pascalCase(sourceCollection.value)}Preview`] || null)
 
 // The active preview publishes a "filtered selection" export descriptor here; the
 // Download section's third card consumes it (works for any *Preview component).
@@ -97,11 +107,17 @@ provide('datasetExportFilter', previewExportFilter)
 const previewChart = ref(null)
 provide('datasetPreviewChart', previewChart)
 
+// A preview can also publish its OWN chart sections (descriptors) to render in the #chart
+// section ABOVE the "Preview and filter" heading — used when the dataset's charts are reactive
+// to the preview's filters and have no CMS chart card (e.g. Federal Sales: small multiples + RVLA).
+const previewCharts = ref(null)
+provide('datasetPreviewCharts', previewCharts)
+
 // Public data API (data.onrr.gov), consistent with the /developers reference. Only the
 // flat-backed datasets are exposed; source_collection maps to the friendly endpoint name.
 // The section stays hidden for datasets without a public endpoint.
 const dataApiBase = useRuntimeConfig().public.dataApiBase
-const API_ENDPOINTS = { disbursement: 'disbursements', revenue: 'revenue', production: 'production' }
+const API_ENDPOINTS = { disbursement: 'disbursements', revenue: 'revenue', production: 'production', federal_sales: 'federal-sales' }
 const apiEndpoint = computed(() => API_ENDPOINTS[sourceCollection.value] || null)
 const hasApi = computed(() => !!apiEndpoint.value)
 const apiUrl = computed(() => (apiEndpoint.value ? `${dataApiBase}/${apiEndpoint.value}` : null))
@@ -170,9 +186,10 @@ async function copyApiUrl() {
       </div>
     </div>
     
-    <div class="grid-row grid-gap margin-bottom-4" id="chart">
+    <div v-if="dataset.charts?.length || previewCharts?.length" class="grid-row grid-gap margin-bottom-4" id="chart">
       <div class="grid-col-12">
-        <ChartCard :block="dataset.charts[0]" />
+        <ChartCard v-if="dataset.charts?.length" :block="dataset.charts[0]" />
+        <PreviewCharts v-if="previewCharts?.length" :sections="previewCharts" />
       </div>
     </div>
 

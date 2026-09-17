@@ -28,6 +28,17 @@ const REGION_EXPR = `COALESCE(NULLIF("l"."state_name", ''), "l"."offshore_region
 // the period date (Monthly and Calendar Year rows both date to their year).
 const yearExpr = (periodType) => (periodType === 'Fiscal Year' ? '"p"."fiscal_year"' : 'EXTRACT(YEAR FROM "p"."period_date")');
 
+// Optional secondary breakout for the annual table: the ?breakout= value maps to the column
+// that becomes a sub-row under each commodity. Anything else = no breakout.
+const BREAKOUT_FIELDS = {
+	land_type: '"l"."land_type"',
+	state: '"l"."state_name"',
+	county: '"l"."county"',
+	revenue_type: '"f"."revenue_type"',
+	mineral_lease_type: '"c"."mineral_lease_type"',
+	product: '"c"."product"',
+};
+
 // Apply the preview filters to a revenue query builder (joins aliased p/l/c/f). Mutates in
 // place; returns nothing (returning the thenable would run it before the caller's GROUP BY).
 function applyRevenueFilters(q, { periodType, fromYear, toYear, landTypes, revenueTypes, regions, products }) {
@@ -46,6 +57,8 @@ function applyRevenueFilters(q, { periodType, fromYear, toYear, landTypes, reven
 export async function revenuePivot(database, opts = {}) {
 	const { periodType } = opts;
 	const isMonthly = periodType === 'Monthly';
+	// Optional secondary breakout (annual grains only): commodity -> breakout value sub-rows.
+	const breakoutExpr = isMonthly ? null : BREAKOUT_FIELDS[opts.breakout] || null;
 	const yr = yearExpr(periodType);
 	const table = 'revenue';
 	const base = () =>
@@ -58,11 +71,18 @@ export async function revenuePivot(database, opts = {}) {
 
 	const cols = [database.raw('"c"."product" as "dim"'), database.raw(`${yr}::int as "yr"`)];
 	if (isMonthly) cols.push(database.raw('EXTRACT(MONTH FROM "p"."period_date")::int as "mo"'));
+	else if (breakoutExpr) cols.push(database.raw(`${breakoutExpr} as "sub"`));
 	cols.push(database.raw(`SUM("${table}"."amount") as "amt"`), database.raw(`COUNT(*) as "cnt"`));
 
 	const aggQ = base().select(...cols);
 	applyRevenueFilters(aggQ, opts);
-	aggQ.groupByRaw(isMonthly ? `"c"."product", ${yr}, EXTRACT(MONTH FROM "p"."period_date")` : `"c"."product", ${yr}`);
+	aggQ.groupByRaw(
+		isMonthly
+			? `"c"."product", ${yr}, EXTRACT(MONTH FROM "p"."period_date")`
+			: breakoutExpr
+				? `"c"."product", ${breakoutExpr}, ${yr}`
+				: `"c"."product", ${yr}`
+	);
 
 	const countQ = base().count(`${table}.id as n`);
 	applyRevenueFilters(countQ, opts);
@@ -83,7 +103,7 @@ export async function revenuePivot(database, opts = {}) {
 
 		let g = groups.get(label);
 		if (!g) {
-			g = { key: label, total: 0, recordCount: 0, byYear: {}, months: isMonthly ? new Map() : null };
+			g = { key: label, total: 0, recordCount: 0, byYear: {}, months: isMonthly ? new Map() : null, subs: breakoutExpr ? new Map() : null };
 			groups.set(label, g);
 		}
 		g.total += amt;
@@ -99,6 +119,15 @@ export async function revenuePivot(database, opts = {}) {
 			}
 			m.byYear[y] = (m.byYear[y] || 0) + amt;
 			m.total += amt;
+		} else if (breakoutExpr) {
+			const subKey = r.sub == null || r.sub === '' ? '(unspecified)' : r.sub;
+			let s = g.subs.get(subKey);
+			if (!s) {
+				s = { key: subKey, total: 0, byYear: {} };
+				g.subs.set(subKey, s);
+			}
+			s.byYear[y] = (s.byYear[y] || 0) + amt;
+			s.total += amt;
 		}
 	}
 
@@ -107,12 +136,13 @@ export async function revenuePivot(database, opts = {}) {
 		.map((g) => {
 			const out = { key: g.key, total: g.total, recordCount: g.recordCount, byYear: g.byYear };
 			if (isMonthly) out.months = [...g.months.values()].sort((a, b) => a.month - b.month);
+			else if (breakoutExpr) out.rows = [...g.subs.values()].sort((a, b) => b.total - a.total).map((s) => ({ key: s.key, byYear: s.byYear }));
 			return out;
 		})
 		// Revenue is single-unit (dollars), so rank commodities by total revenue.
 		.sort((a, b) => b.total - a.total);
 
-	return { groupBy: 'product', periodType, years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
+	return { groupBy: 'product', periodType, breakout: breakoutExpr ? opts.breakout : null, years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
 }
 
 // Raw revenue records matching the preview filters, for the "filtered selection" CSV.
@@ -166,6 +196,7 @@ function readOpts(req) {
 		revenueTypes: csvParam(req.query.revenueTypes),
 		regions: csvParam(req.query.regions),
 		products: csvParam(req.query.products),
+		breakout: req.query.breakout || '',
 	};
 }
 
