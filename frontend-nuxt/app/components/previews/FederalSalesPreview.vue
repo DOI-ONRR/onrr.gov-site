@@ -145,6 +145,13 @@ const theadRef = ref(null)
 const theadH = ref(0)
 let theadObserver = null
 const dimW = ref(0)
+// The flat table's first column is a sticky, separately-composited layer, and every cell paints
+// its own violet border-bottom. On the first paint (hydration + web fonts settling after paint)
+// that sticky layer can keep the fallback-font row metrics, leaving its borders a hair out of step
+// with the rest of each row — the "askew first column" until something forces a repaint. Swapping
+// the tbody does it (that's why toggling a breakout fixes it), so we bump this key once, after
+// fonts settle, to trigger the same clean repaint on load without any user interaction.
+const tbodyKey = ref(0)
 function measureDimCol() {
   const spans = wrapRef.value?.querySelectorAll('.group-name')
   if (!spans?.length) { dimW.value = 0; return }
@@ -162,6 +169,12 @@ onMounted(() => {
     theadObserver.observe(theadRef.value)
   }
   measureDimCol()
+  // Repaint the sticky first column once web fonts settle so its borders line up with each row on
+  // load (see tbodyKey). document.fonts.ready is already resolved when fonts are cached, so this
+  // fires immediately in that case — a single, imperceptible re-render before any interaction.
+  if (import.meta.client && document.fonts?.ready) {
+    document.fonts.ready.then(() => { tbodyKey.value++; nextTick(measureDimCol) })
+  }
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
@@ -246,7 +259,6 @@ const chartSections = computed(() => {
     {
       kind: 'small-multiples',
       title: 'Sales volume by commodity',
-      note: 'One panel per commodity, self-scaled · by calendar year',
       categories: chartYears.value,
       valueFormat: 'number',
       panes: cs.map((c) => ({ title: c, series: [{ name: c, data: ts.value.salesVolume[c] || [] }] })),
@@ -254,7 +266,6 @@ const chartSections = computed(() => {
     {
       kind: 'lines',
       title: 'Royalty value less allowances (RVLA) by commodity',
-      note: 'All three commodities · by calendar year',
       categories: chartYears.value,
       valueFormat: 'currency',
       showLegend: true,
@@ -471,7 +482,7 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
       <table class="usa-table usa-table--compact width-full margin-bottom-0 margin-top-0">
         <thead ref="theadRef">
           <tr>
-            <th scope="col" class="dim-col" :aria-sort="ariaSort('commodity')">
+            <th scope="col" class="dim-col padding-y-105" :aria-sort="ariaSort('commodity')">
               <button type="button" class="sort-btn" @click="setSort('commodity')">
                 <span>Commodity</span>
                 <svg class="usa-icon sort-icon" :class="{ 'sort-icon--active': sortState('commodity') }" aria-hidden="true" role="img">
@@ -696,6 +707,13 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
   border-top: 2px solid #565c65;
   position: sticky;
   bottom: 0;
+}
+// In the flat table the first column is sticky (position: sticky; left: 0). Pin the total row's
+// first cell the same way, or it scrolls out from under the sticky Commodity column when the
+// table scrolls horizontally — leaving the "Total" label misaligned against the commodity rows.
+.pivot--flat .total-row > th {
+  left: 0;
+  z-index: 2;
 }
 
 .text-right { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }

@@ -15,7 +15,7 @@ defineProps({
 <template>
   <div class="preview-charts">
     <section v-for="(s, i) in sections" :key="s.title || i" class="preview-chart-section">
-      <h3 class="font-heading-sm margin-y-0">{{ s.title }}</h3>
+      <h3 class="font-heading-sm margin-bottom-2 margin-top-0">{{ s.title }}</h3>
       <p v-if="s.note" class="preview-chart-note margin-top-05 margin-bottom-1">{{ s.note }}</p>
 
       <div v-if="s.kind === 'small-multiples'" class="preview-small-multiples">
@@ -25,14 +25,18 @@ defineProps({
         </div>
       </div>
 
-      <MiniLineChart
+      <div 
         v-else
-        :categories="s.categories"
-        :series="s.series"
-        :value-format="s.valueFormat"
-        :height="s.height || 340"
-        :show-legend="!!s.showLegend"
-      />
+        class="preview-lines-pane">
+        <p class="preview-sm-title margin-0">RVLA</p>
+        <MiniLineChart
+          :categories="s.categories"
+          :series="s.series"
+          :value-format="s.valueFormat"
+          :height="s.height || 340"
+          :show-legend="!!s.showLegend"
+        />
+      </div>
     </section>
   </div>
 </template>
@@ -46,7 +50,8 @@ defineProps({
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 0.75rem 1rem;
 }
-.preview-sm-pane {
+.preview-sm-pane,
+.preview-lines-pane {
   border: 1px solid #dfe1e2;
   border-radius: 4px;
   padding: 0.25rem 0.5rem 0.5rem;
