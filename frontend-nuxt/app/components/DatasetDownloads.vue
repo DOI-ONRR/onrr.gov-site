@@ -29,6 +29,16 @@ const EXPORT_FIELDS = {
     'period.period_date,fund.type,location.land_category,fund.disbursement_type,location.state_name,location.county,commodity.name,amount',
 }
 
+// Datasets whose full-dataset CSV should come from their custom /charts/<ds>/export endpoint
+// (a curated set of columns with human-readable headers) rather than the native /items export
+// (which emits every column — including audit fields — under raw column names). Called with no
+// filters, the endpoint returns the whole dataset in the same shape as the "filtered selection"
+// download, so the two are consistent. Only flat, self-contained collections belong here — their
+// unfiltered export is the entire dataset, so the record count below still matches.
+const FULL_EXPORT_ENDPOINTS = {
+  federal_revenue_by_company: '/charts/federal-revenue-by-company/export',
+}
+
 // --- Card 1: full dataset via native export ----------------------------------
 // Optional per-dataset export filter (JSON, e.g. {"period":{"type":{"_eq":"Monthly"}}})
 // scopes the full-dataset count + CSV to what the dataset represents. Comes through the
@@ -55,6 +65,10 @@ const recordCount = computed(() => Number(countData.value?.data?.[0]?.count?.id)
 
 const csvHref = computed(() => {
   if (!props.sourceTable) return null
+  // Curated export endpoint (selected columns + friendly headers) when the dataset has one.
+  const customExport = FULL_EXPORT_ENDPOINTS[props.sourceTable]
+  if (customExport) return `${apiUrl}${customExport}`
+  // Otherwise the native Directus export, optionally column-limited via EXPORT_FIELDS.
   const q = new URLSearchParams({ export: 'csv', limit: '-1' })
   const fields = EXPORT_FIELDS[props.sourceTable]
   if (fields) q.set('fields', fields)

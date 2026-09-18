@@ -172,21 +172,25 @@ export default (router, { database }, base = '') => {
 		}
 	});
 
-	// GET /export?... — raw records matching the filters as CSV.
+	// GET /export?... — records matching the filters as CSV. Serves both the "filtered selection"
+	// download (with filters) and the "full dataset" download (no filters); the filename reflects
+	// which, so a whole-dataset export isn't mislabeled "_filtered".
 	router.get(`${base}/export`, async (req, res) => {
 		try {
-			const rows = await companyRecords(database, readOpts(req));
+			const opts = readOpts(req);
+			const filtered = !!(opts.fromYear || opts.toYear || opts.companies.length || opts.commodities.length || opts.revenueTypes.length);
+			const rows = await companyRecords(database, opts);
 			const esc = (v) => {
 				const s = v == null ? '' : String(v);
 				return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 			};
-			const head = ['Calendar Year', 'Corporate Name', 'Revenue Agency', 'Revenue Type', 'Commodity', 'Revenue'];
+			const head = ['Calendar Year', 'Company Name', 'Revenue Type', 'Commodity', 'Revenue'];
 			const lines = [head.join(',')];
 			for (const r of rows) {
-				lines.push([r.calendar_year, r[COMPANY_COL], r.revenue_agency, r.revenue_type, r.commodity, r.revenue].map(esc).join(','));
+				lines.push([r.calendar_year, r[COMPANY_COL], r.revenue_type, r.commodity, r.revenue].map(esc).join(','));
 			}
 			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-			res.setHeader('Content-Disposition', 'attachment; filename="federal_revenue_by_company_filtered.csv"');
+			res.setHeader('Content-Disposition', `attachment; filename="federal_revenue_by_company${filtered ? '_filtered' : ''}.csv"`);
 			res.send(lines.join('\n'));
 		} catch (error) {
 			console.error('charts/federal-revenue-by-company/export error:', error);
