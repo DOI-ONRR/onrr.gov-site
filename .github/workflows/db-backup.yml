@@ -43,11 +43,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install tooling (postgres client, age, awscli, jq)
+      - name: Install tooling (postgres client, age, jq, aws)
         run: |
           set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y postgresql-client age awscli jq
+          # awscli is not an apt package on Ubuntu 24.04; AWS CLI v2 is preinstalled on the runner.
+          sudo apt-get install -y postgresql-client age jq unzip
+          if ! command -v aws >/dev/null 2>&1; then
+            curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
+            unzip -q awscliv2.zip
+            sudo ./aws/install
+            rm -rf awscliv2.zip aws
+          fi
           pg_dump --version
           age --version
           aws --version
