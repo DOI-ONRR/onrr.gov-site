@@ -44,6 +44,7 @@ const endpoints = [
   { name: 'Revenue', path: '/revenue', measure: 'amount (USD)' },
   { name: 'Production', path: '/production', measure: 'volume' },
   { name: 'Federal sales', path: '/federal-sales', measure: 'sales value (USD)' },
+  { name: 'Federal revenue by company', path: '/federal-revenue-by-company', measure: 'revenue (USD)' },
 ]
 
 // Columns shared by all three collections.
@@ -115,6 +116,18 @@ const federalSalesCols = [
   ['effective_royalty_rate', 'numeric', 'Effective royalty rate.'],
 ]
 
+// Federal revenue by company is also a flat, calendar-year schema keyed by corporate name;
+// documented as its own standalone column set.
+const federalRevenueByCompanyCols = [
+  ['id', 'uuid', 'Unique row identifier.'],
+  ['calendar_year', 'integer', 'Calendar year of the revenue.'],
+  ['corporate_name', 'string', 'Reporting company (corporate name).'],
+  ['revenue_agency', 'string', 'Agency the revenue was reported to (e.g. Federal).'],
+  ['revenue_type', 'string', 'Revenue category (e.g. Royalties, Rents, Bonus).'],
+  ['commodity', 'string', 'Commodity that generated the revenue (Oil, Gas, NGL, Coal, …).'],
+  ['revenue', 'numeric', 'Revenue amount, USD (can be negative).'],
+]
+
 const params = [
   ['fields', 'Choose which columns to return (default: all).', 'fields=period_date,state_name,amount'],
   ['filter', 'Filter rows by column values.', 'filter[state_name][_eq]=Colorado'],
@@ -152,6 +165,11 @@ const examples = [
     title: 'Federal oil sales value by year',
     desc: 'Sum of sales value grouped by calendar year.',
     path: '/federal-sales?aggregate[sum]=sales_value&groupBy[]=calendar_year&filter[commodity][_eq]=Oil',
+  },
+  {
+    title: 'Revenue by company, CY2024',
+    desc: 'Sum of revenue grouped by company for one year.',
+    path: '/federal-revenue-by-company?aggregate[sum]=revenue&groupBy[]=corporate_name&filter[calendar_year][_eq]=2024',
   },
 ]
 
@@ -375,6 +393,33 @@ const contactBlock = {
               <code class="code-inline">land_category</code> /
               <code class="code-inline">land_type</code> instead.
             </p>
+
+            <h3 class="margin-bottom-1">
+              <code class="code-inline">/federal-revenue-by-company</code> (its own schema)
+            </h3>
+            <p class="margin-top-0">
+              Federal revenue by company is aggregated by calendar year and company, with its own
+              flat set of columns (no <code class="code-inline">period_date</code>,
+              <code class="code-inline">fiscal_year</code>, or month).
+            </p>
+            <div class="table-scroll">
+              <table class="usa-table usa-table--borderless width-full">
+                <thead>
+                  <tr>
+                    <th scope="col">Column</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="c in federalRevenueByCompanyCols" :key="c[0]">
+                    <td><code class="code-inline">{{ c[0] }}</code></td>
+                    <td class="text-no-wrap">{{ c[1] }}</td>
+                    <td>{{ c[2] }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <!-- Querying -->

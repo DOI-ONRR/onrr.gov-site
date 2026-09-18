@@ -25,6 +25,8 @@ const DATASET_MAP = {
   production: 'production_flat',
   // federal_sales is already a flat, denormalized collection, so it maps to itself.
   'federal-sales': 'federal_sales',
+  // federal_revenue_by_company is likewise a flat, denormalized collection.
+  'federal-revenue-by-company': 'federal_revenue_by_company',
 };
 const DOCS_URL = 'https://onrr.gov/developers';
 

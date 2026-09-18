@@ -44,6 +44,11 @@ function compactValue(v) {
 function options() {
   const fv = fullValue
   const cv = compactValue
+  // The x-axis is categorical and the series carry plain y-values, so a point's `x` is its
+  // index (0..n) — that's what the tooltip header showed. Look the category (the year) up by
+  // that index instead.
+  const cats = props.categories.map(String)
+  const xLabel = (x) => cats[x] ?? x
   return {
     chart: { type: 'line', height: props.height, spacingTop: 8, spacingBottom: 6, style: { fontFamily: 'inherit' } },
     title: { text: null },
@@ -56,9 +61,9 @@ function options() {
       shared: props.showLegend,
       formatter() {
         if (this.points) {
-          return `<b>${this.x}</b><br/>` + this.points.map((p) => `${p.series.name}: <b>${fv(p.y)}</b>`).join('<br/>')
+          return `<b>${xLabel(this.x)}</b><br/>` + this.points.map((p) => `${p.series.name}: <b>${fv(p.y)}</b>`).join('<br/>')
         }
-        return `<b>${this.x}</b><br/>${this.series.name}: <b>${fv(this.y)}</b>`
+        return `<b>${xLabel(this.x)}</b><br/>${this.series.name}: <b>${fv(this.y)}</b>`
       },
     },
     plotOptions: { line: { marker: { enabled: false, symbol: 'circle', radius: 3 }, lineWidth: 2, connectNulls: false } },

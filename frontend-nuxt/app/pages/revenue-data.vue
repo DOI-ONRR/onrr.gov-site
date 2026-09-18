@@ -123,7 +123,7 @@ const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
           <h3 class="font-heading-md">Revenue by company</h3>
           <p class="ds-desc">Federal revenue itemized by the company that reported it, by calendar year.</p>
           <p class="ds-meta">Updated annually · CSV, XLSX, API</p>
-          <a class="usa-button usa-button--outline ds-cta" href="#" aria-disabled="true">Preview, filter &amp; download</a>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/federal-revenue-by-company">Preview, filter &amp; download</a>
         </div>
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">

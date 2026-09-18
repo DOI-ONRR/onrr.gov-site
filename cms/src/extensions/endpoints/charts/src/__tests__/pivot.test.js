@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { productionPivot } from '../collections/production.js';
 import { revenuePivot } from '../collections/revenue.js';
 import { federalSalesPivot, federalSalesTimeseries } from '../collections/federal-sales.js';
+import { companyPivot } from '../collections/federal-revenue-by-company.js';
 
 // Minimal chainable knex mock: every builder method records its call and returns `this`;
 // awaiting the builder resolves to `aggRows`; `.first()` resolves to the count row. This lets
@@ -15,7 +16,7 @@ function makeDb(aggRows, countN = 0) {
     first: () => Promise.resolve({ n: countN }),
     then: (resolve, reject) => Promise.resolve(aggRows).then(resolve, reject),
   };
-  for (const m of ['from', 'join', 'leftJoin', 'select', 'count', 'where', 'whereRaw', 'whereIn', 'groupByRaw', 'orderBy', 'distinct']) {
+  for (const m of ['from', 'join', 'leftJoin', 'select', 'count', 'countDistinct', 'where', 'whereRaw', 'whereIn', 'groupByRaw', 'orderBy', 'distinct']) {
     db[m] = (...args) => { calls.push([m, ...args]); return db; };
   }
   return db;
@@ -221,5 +222,64 @@ describe('federalSalesPivot', () => {
     expect(out.salesVolume.Oil).toEqual([100, 120]);
     expect(out.salesVolume.Gas).toEqual([null, 40]); // missing 2020 -> null
     expect(out.rvla.Oil).toEqual([900, 950]);
+  });
+});
+
+describe('companyPivot', () => {
+  it('shapes company rows into byYear + totalsByYear, ranked by total revenue', async () => {
+    const rows = [
+      { dim: 'Exxon', yr: 2021, amt: 300, cnt: 3 },
+      { dim: 'Exxon', yr: 2022, amt: 330, cnt: 3 },
+      { dim: 'Chevron', yr: 2021, amt: 200, cnt: 2 },
+      { dim: 'Chevron', yr: 2022, amt: 220, cnt: 2 },
+    ];
+    const out = await companyPivot(makeDb(rows, 10), {});
+    expect(out.groupBy).toBe('company');
+    expect(out.years).toEqual([2021, 2022]);
+    expect(out.recordCount).toBe(10);
+    expect(out.groups.map((g) => g.key)).toEqual(['Exxon', 'Chevron']); // total desc
+    const exxon = out.groups[0];
+    expect(exxon.byYear).toEqual({ 2021: 300, 2022: 330 });
+    expect(out.totalsByYear).toEqual({ 2021: 500, 2022: 550 });
+    expect(out.truncated).toBe(false);
+  });
+
+  it('adds breakout sub-rows under each company (ranked by sub total)', async () => {
+    const rows = [
+      { dim: 'Exxon', yr: 2021, sub: 'Oil', amt: 120, cnt: 1 },
+      { dim: 'Exxon', yr: 2021, sub: 'Gas', amt: 80, cnt: 1 },
+    ];
+    const out = await companyPivot(makeDb(rows, 2), { breakout: 'commodity' });
+    expect(out.breakout).toBe('commodity');
+    const exxon = out.groups[0];
+    expect(exxon.rows.map((r) => r.key)).toEqual(['Oil', 'Gas']); // sub total desc
+    expect(exxon.rows[0].byYear).toEqual({ 2021: 120 });
+  });
+
+  it('caps to the top 50 companies when no company filter is applied', async () => {
+    // 51 distinct companies, one row each; the pivot keeps the top 50 and flags truncation.
+    const rows = Array.from({ length: 51 }, (_, i) => ({ dim: `Co${i}`, yr: 2021, amt: 51 - i, cnt: 1 }));
+    const out = await companyPivot(makeDb(rows, 51), {});
+    expect(out.truncated).toBe(true);
+    expect(out.shownCompanies).toBe(50);
+    expect(out.totalCompanies).toBe(51);
+    expect(out.groups).toHaveLength(50);
+  });
+
+  it('does NOT cap when specific companies are selected', async () => {
+    const rows = Array.from({ length: 51 }, (_, i) => ({ dim: `Co${i}`, yr: 2021, amt: 1, cnt: 1 }));
+    const out = await companyPivot(makeDb(rows, 51), { companies: ['Co0', 'Co1'] });
+    expect(out.truncated).toBe(false);
+    expect(out.groups).toHaveLength(51);
+  });
+
+  it('applies the year range and company/commodity/revenue-type filters', async () => {
+    const db = makeDb([], 0);
+    await companyPivot(db, { fromYear: 2021, toYear: 2023, companies: ['Exxon'], commodities: ['Oil'], revenueTypes: ['Royalties'] });
+    expect(called(db, 'where', (a) => a[0] === 'calendar_year' && a[1] === '>=' && a[2] === 2021)).toBe(true);
+    expect(called(db, 'where', (a) => a[0] === 'calendar_year' && a[1] === '<=' && a[2] === 2023)).toBe(true);
+    expect(called(db, 'whereIn', (a) => a[0] === 'corporate_name' && a[1].includes('Exxon'))).toBe(true);
+    expect(called(db, 'whereIn', (a) => a[0] === 'commodity' && a[1].includes('Oil'))).toBe(true);
+    expect(called(db, 'whereIn', (a) => a[0] === 'revenue_type' && a[1].includes('Royalties'))).toBe(true);
   });
 });
