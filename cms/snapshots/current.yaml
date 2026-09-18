@@ -13544,7 +13544,7 @@ fields:
       display_options: null
       field: dataset
       group: null
-      hidden: false
+      hidden: true
       interface: select-dropdown-m2o
       note: null
       options:
@@ -13627,7 +13627,7 @@ fields:
       field: definition
       group: null
       hidden: false
-      interface: input-multiline
+      interface: onrr-wysiwyg
       note: null
       options: null
       readonly: false
@@ -14068,7 +14068,7 @@ fields:
       field: definition
       group: null
       hidden: false
-      interface: input-multiline
+      interface: onrr-wysiwyg
       note: null
       options: null
       readonly: false

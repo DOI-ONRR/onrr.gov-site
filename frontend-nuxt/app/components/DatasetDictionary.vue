@@ -12,6 +12,11 @@ const props = defineProps({
   dataset: { type: Object, required: true },
 })
 
+// `definition` on both fields and values is CMS WYSIWYG HTML — rendered via v-html, through
+// resolveImages so any inline <img> src paths resolve against the API (same as the dataset's
+// other WYSIWYG fields in DatasetView).
+const { resolveImages } = useCmsContent()
+
 const fields = computed(() => props.dataset.data_dictionary || [])
 
 // Anchor id for a field's row / jump link (mirrors the mockup's dict-<slug>).
@@ -45,7 +50,7 @@ const slug = (s) =>
               <tr class="dict-parent">
                 <th :id="slug(f.field_name)" scope="row" class="dict-term">{{ f.field_name }}</th>
                 <td>
-                  <span v-if="f.definition">{{ f.definition }}</span>
+                  <div v-if="f.definition" class="dict-def" v-html="resolveImages(f.definition)" />
                   <div v-if="f.value_style === 'tags' && f.values?.length" class="dict-chips">
                     {{ f.values.map((v) => v.term).join(', ') }}
                   </div>
@@ -54,7 +59,7 @@ const slug = (s) =>
               <template v-if="f.value_style !== 'tags'">
                 <tr v-for="v in f.values" :key="v.id" class="dict-sub">
                   <th scope="row" class="dict-term dict-term--sub">{{ v.term }}</th>
-                  <td>{{ v.definition }}</td>
+                  <td><div class="dict-def" v-html="resolveImages(v.definition)" /></td>
                 </tr>
               </template>
             </template>
@@ -104,6 +109,18 @@ const slug = (s) =>
   // Field column: hold a readable, consistent width; definitions get the rest.
   .dict-term { width: 20rem; font-weight: 700; }
   td { max-width: 46rem; }
+}
+
+// `definition` is CMS WYSIWYG HTML (v-html). Tame the default block margins so paragraphs and
+// lists sit tightly in the table cell (no leading/trailing gap, modest spacing between blocks).
+.dict-def {
+  :deep(p) { margin: 0 0 0.5rem; }
+  :deep(p:first-child) { margin-top: 0; }
+  :deep(p:last-child) { margin-bottom: 0; }
+  :deep(ul), :deep(ol) { margin: 0.25rem 0 0.5rem; padding-left: 1.25rem; }
+  :deep(ul:last-child), :deep(ol:last-child) { margin-bottom: 0; }
+  :deep(li) { margin-bottom: 0.15rem; }
+  :deep(a) { color: $onrr-violet; }
 }
 
 // Sub-value rows: indented term, muted, lighter weight.
