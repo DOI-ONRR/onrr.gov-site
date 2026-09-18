@@ -11,7 +11,11 @@ UPDATE dataset_metadata
    SET data_dictionary_intro = 'Definitions for the fields in the Federal Revenue by Company dataset. Revenue is reported by company (corporate name) and calendar year.'
  WHERE source_collection = 'federal_revenue_by_company';
 
--- Clear any existing dictionary for this dataset first (cascades to values via FK).
+-- Clear any existing dictionary for this dataset first. The values -> fields FK is set-null on
+-- delete (not cascade), so remove the values BEFORE the fields — otherwise the old values linger
+-- (orphaned, field = null) and collide with the fixed-id re-insert below.
+DELETE FROM data_dictionary_values
+ WHERE field IN (SELECT id FROM data_dictionary_fields WHERE dataset = (SELECT id FROM dataset_metadata WHERE source_collection='federal_revenue_by_company' LIMIT 1));
 DELETE FROM data_dictionary_fields WHERE dataset = (SELECT id FROM dataset_metadata WHERE source_collection='federal_revenue_by_company' LIMIT 1);
 
 INSERT INTO data_dictionary_fields (id, dataset, sort, field_name, definition, value_style) VALUES ('75dc682d-55ae-4f65-9270-7405ccf37c04', (SELECT id FROM dataset_metadata WHERE source_collection='federal_revenue_by_company' LIMIT 1), 1, 'Calendar Year', 'The calendar year in which ONRR received the revenue.', 'rows');
