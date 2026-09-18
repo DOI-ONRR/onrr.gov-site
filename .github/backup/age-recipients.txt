@@ -12,4 +12,4 @@
 # You may list more than one recipient (one age1... per line) so multiple identities can restore.
 # Restore: age -d -i backup-identity.txt backup.sql.gz.age | gunzip > backup.sql
 #
-REPLACE_WITH_AGE_PUBLIC_KEY
+age1wndz5a37uhayj7atvj57aruj63vg6j8685dw6s87y4fkhqlpgvcq32gk3q
