@@ -4,9 +4,10 @@ import { processRevenueUpdate } from './processes/revenue/index.js';
 import { processCYProductionUpdate } from './processes/cy-production/index.js';
 import { processFYProductionUpdate } from './processes/fy-production/index.js';
 import { processRevenueByCompanyUpdate } from './processes/revenue-by-company/index.js';
+import { generateRevenueByCompanyWorkbook } from './processes/revenue-by-company/generateWorkbook.js';
 import { processFederalSalesUpdate } from './processes/federal-sales/index.js';
 
-export default ({ filter, action }, { services, database, getSchema }) => {
+export default ({ filter, action }, { services, database, getSchema, env }) => {
 	const { ItemsService } = services;
 
 	action('revenue_data_update.items.create', async (meta, { schema, accountability }) => {
@@ -55,6 +56,18 @@ export default ({ filter, action }, { services, database, getSchema }) => {
 				console.log(`[Revenue Data Update] refreshed ${meta.payload.dataset}_flat`);
 			} catch (error) {
 				console.error('[Revenue Data Update] flat refresh failed:', error.message);
+			}
+		}
+
+		// Federal Revenue by Company: (re)generate the downloadable XLSX (data + corporate crosswalk
+		// + data dictionary) and store it as the same Directus file so the download link stays stable.
+		// Best-effort: a failure here is logged, not fatal to the data load.
+		if (result?.success && meta.payload.dataset === 'federal-revenue-by-company') {
+			try {
+				const summary = await generateRevenueByCompanyWorkbook({ services, database, schema, accountability, env });
+				console.log('[Revenue Data Update] federal-revenue-by-company XLSX generated:', summary);
+			} catch (error) {
+				console.error('[Revenue Data Update] XLSX generation failed:', error.message);
 			}
 		}
 

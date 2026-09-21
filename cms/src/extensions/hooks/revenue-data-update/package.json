@@ -29,5 +29,8 @@
 	"devDependencies": {
 		"@directus/extensions-sdk": "^17.1.4",
 		"vitest": "^2.1.9"
+	},
+	"dependencies": {
+		"xlsx": "^0.18.5"
 	}
 }
