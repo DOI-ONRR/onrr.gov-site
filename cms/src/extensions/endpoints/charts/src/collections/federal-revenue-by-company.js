@@ -118,7 +118,7 @@ export async function companyPivot(database, opts = {}) {
 // Raw records matching the preview filters, for the "filtered selection" CSV.
 async function companyRecords(database, opts = {}) {
 	const q = database
-		.select('calendar_year', COMPANY_COL, 'revenue_agency', 'revenue_type', 'commodity', 'revenue')
+		.select('calendar_year', COMPANY_COL, 'revenue_agency', 'revenue_type', 'revenue_agency_type', 'commodity', 'revenue')
 		.from(TABLE)
 		.orderBy([{ column: 'calendar_year', order: 'asc' }, { column: COMPANY_COL, order: 'asc' }]);
 	applyFilters(q, opts);
