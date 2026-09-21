@@ -13,12 +13,27 @@ on:
         required: false
         type: string
         default: prod
+      backup-s3-service:
+        description: "cloud.gov S3 service to store backups (a PRIVATE bucket — NOT the app's asset bucket)"
+        required: false
+        type: string
+        default: onrr-backups
   schedule:
     - cron: '0 3 * * 0,4' # runs on Sunday and Thursday at 3am UTC
+
+# The dump contains credential material (password hashes, static API tokens, TFA secrets,
+# sessions), so it never leaves the cloud.gov boundary as a public artifact: it is encrypted on
+# the runner with an age recipient (public key in the repo; private key held offline) and pushed
+# to a private, in-boundary S3 bucket. See docs/runbooks/db-backup-and-restore.md.
+permissions:
+  contents: read
 
 env:
   CF_SPACE: ${{ inputs.cf-space || 'prod' }}
   DB_SERVICE: ${{ inputs.db-service || 'onrr-psql' }}
+  BACKUP_S3_SERVICE: ${{ inputs.backup-s3-service || 'onrr-backups' }}
+  RETENTION_DAYS: '90'
+  AGE_RECIPIENTS_FILE: .github/backup/age-recipients.txt
 
 jobs:
   db-backup:
@@ -28,46 +43,118 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install PostgreSQL client
+      - name: Install tooling (postgres client, age, jq, aws)
         run: |
+          set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y postgresql-client
+          # awscli is not an apt package on Ubuntu 24.04; AWS CLI v2 is preinstalled on the runner.
+          sudo apt-get install -y postgresql-client age jq unzip
+          if ! command -v aws >/dev/null 2>&1; then
+            curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
+            unzip -q awscliv2.zip
+            sudo ./aws/install
+            rm -rf awscliv2.zip aws
+          fi
+          pg_dump --version
+          age --version
+          aws --version
 
-      - name: Verify pg_dump version
-        run: pg_dump --version
-      
       - name: Install CF CLI
         uses: doi-onrr/oddd-actions/.github/actions/cf-install@v1
 
       - name: Install cg-manage-rds (pipx)
         run: |
-          sudo apt-get update
+          set -euo pipefail
           sudo apt-get install -y python3 python3-pip pipx
           pipx ensurepath
           pipx install git+https://github.com/cloud-gov/cg-manage-rds.git
           cg-manage-rds --help
 
+      - name: Verify encryption recipient is configured
+        run: |
+          set -euo pipefail
+          # Fail closed: never produce a backup we can't encrypt to a real key.
+          if [ ! -s "$AGE_RECIPIENTS_FILE" ] || grep -q "REPLACE_WITH_AGE_PUBLIC_KEY" "$AGE_RECIPIENTS_FILE"; then
+            echo "::error::$AGE_RECIPIENTS_FILE has no real age recipient. Generate a keypair (age-keygen), commit the public key line, and vault the private identity. See docs/runbooks/db-backup-and-restore.md"
+            exit 1
+          fi
+
       - name: Log in to Cloud Foundry
-        shell: bash
         run: |
-          cf login -u ${{ secrets.CF_USERNAME }} -p ${{ secrets.CF_PASSWORD }} -a api.fr.cloud.gov -o doi-onrr -s "$CF_SPACE"
+          cf login -u "${{ secrets.CF_USERNAME }}" -p "${{ secrets.CF_PASSWORD }}" -a api.fr.cloud.gov -o doi-onrr -s "$CF_SPACE"
 
-      - name: Backup database
-        working-directory: ${{ github.workspace }}
+      - name: Dump database
         run: |
-          cg-manage-rds export -o "-F p --no-owner --no-acl" -f backup.sql "$DB_SERVICE" 2>&1 | cat
+          set -euo pipefail
+          # cg-manage-rds provisions a temporary service key whose credentials could otherwise
+          # leak into the (public) build log, so its combined output goes to a file we do NOT print.
+          if ! cg-manage-rds export -o "-F p --no-owner --no-acl" -f backup.sql "$DB_SERVICE" >cg-export.log 2>&1; then
+            echo "::error::database export failed (log withheld — it may contain credentials; re-run manually to debug)"
+            exit 1
+          fi
+          test -s backup.sql
+          ls -lh backup.sql
 
-      - name: Verify backup file
-        run: ls -lh backup.sql
-
-      - name: Compress backup
+      - name: Compress and encrypt
         run: |
-          gzip -9 backup.sql
-      
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: db-backup-${{ env.CF_SPACE }}-${{ env.DB_SERVICE }}
-          path: |
-            backup.sql.gz
-          retention-days: 14
+          set -euo pipefail
+          gzip -9 backup.sql                                   # -> backup.sql.gz
+          age -R "$AGE_RECIPIENTS_FILE" -o backup.sql.gz.age backup.sql.gz
+          rm -f backup.sql.gz                                  # keep only the encrypted file on disk
+          ls -lh backup.sql.gz.age
+
+      - name: Store encrypted backup in S3 (in-boundary) and prune old backups
+        run: |
+          set -euo pipefail
+          KEY_NAME="gha-backup-${GITHUB_RUN_ID}"
+
+          if ! cf service "$BACKUP_S3_SERVICE" >/dev/null 2>&1; then
+            echo "::error::S3 service '$BACKUP_S3_SERVICE' not found in space '$CF_SPACE'. Create a PRIVATE bucket first (do NOT reuse the app asset bucket): cf create-service s3 basic $BACKUP_S3_SERVICE"
+            exit 1
+          fi
+
+          # Short-lived credentials: create a service key, use it, always delete it on exit.
+          cf create-service-key "$BACKUP_S3_SERVICE" "$KEY_NAME" >/dev/null
+          trap 'cf delete-service-key "$BACKUP_S3_SERVICE" "$KEY_NAME" -f >/dev/null 2>&1 || true' EXIT
+
+          CREDS="$(cf service-key "$BACKUP_S3_SERVICE" "$KEY_NAME" | sed -n '/{/,$p')"
+          get() { jq -r "(.credentials // .).$1 // empty" <<<"$CREDS"; }
+          export AWS_ACCESS_KEY_ID="$(get access_key_id)"
+          export AWS_SECRET_ACCESS_KEY="$(get secret_access_key)"
+          export AWS_DEFAULT_REGION="$(get region)"
+          BUCKET="$(get bucket)"
+          ENDPOINT="$(get endpoint)"
+          # Mask the dynamic credentials so nothing downstream can echo them into the log.
+          echo "::add-mask::$AWS_ACCESS_KEY_ID"
+          echo "::add-mask::$AWS_SECRET_ACCESS_KEY"
+          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$BUCKET" ]; then
+            echo "::error::could not read S3 credentials from the service key"
+            exit 1
+          fi
+          EP_ARG=()
+          [ -n "$ENDPOINT" ] && EP_ARG=(--endpoint-url "https://${ENDPOINT#https://}")
+
+          PREFIX="db-backups/${CF_SPACE}/${DB_SERVICE}/"
+          OBJECT="${PREFIX}$(date -u +%Y-%m-%dT%H-%M-%SZ).sql.gz.age"
+          aws "${EP_ARG[@]}" s3 cp backup.sql.gz.age "s3://${BUCKET}/${OBJECT}" --sse AES256 --no-progress
+          echo "Uploaded s3://${BUCKET}/${OBJECT}"
+
+          # Prune backups older than RETENTION_DAYS under this dataset's prefix. The upload above
+          # already succeeded, so a pruning hiccup must not fail the job — isolate it and warn.
+          (
+            set -euo pipefail
+            CUTOFF="$(date -u -d "-${RETENTION_DAYS} days" +%s)"
+            OLD="$(aws "${EP_ARG[@]}" s3api list-objects-v2 --bucket "$BUCKET" --prefix "$PREFIX" \
+                     --query 'Contents[].{Key:Key,LastModified:LastModified}' --output json 2>/dev/null \
+                   | jq -r --argjson cutoff "$CUTOFF" \
+                       '(. // [])[] | select((.LastModified | sub("\\+00:00$";"Z") | fromdateiso8601) < $cutoff) | .Key')"
+            if [ -n "$OLD" ]; then
+              while IFS= read -r k; do
+                [ -n "$k" ] && aws "${EP_ARG[@]}" s3 rm "s3://${BUCKET}/${k}" && echo "Pruned $k"
+              done <<<"$OLD"
+            fi
+          ) || echo "::warning::pruning old backups failed; the new backup uploaded successfully"
+
+      - name: Clean up local files
+        if: always()
+        run: rm -f backup.sql backup.sql.gz backup.sql.gz.age cg-export.log

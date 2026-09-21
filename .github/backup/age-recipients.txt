@@ -1,0 +1,15 @@
+# age recipients for encrypted database backups (db-backup.yml).
+#
+# This file holds ONLY public keys — safe to commit. The matching PRIVATE identity is what
+# decrypts a backup; keep it OUT of git and store it in a secrets manager / offline vault.
+# Only holders of the private identity can restore a backup.
+#
+# Set up (once):
+#   age-keygen -o backup-identity.txt        # prints "Public key: age1..." and writes the identity
+#   # copy the "age1..." public key into the line below (replace the placeholder), commit this file
+#   # store backup-identity.txt in the team vault (NOT in git); delete the local copy
+#
+# You may list more than one recipient (one age1... per line) so multiple identities can restore.
+# Restore: age -d -i backup-identity.txt backup.sql.gz.age | gunzip > backup.sql
+#
+age1wndz5a37uhayj7atvj57aruj63vg6j8685dw6s87y4fkhqlpgvcq32gk3q
