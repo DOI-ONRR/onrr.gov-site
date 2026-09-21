@@ -187,7 +187,7 @@ export default (router, { database }, base = '') => {
 			const head = ['Calendar Year', 'Company Name', 'Revenue Type', 'Commodity', 'Revenue'];
 			const lines = [head.join(',')];
 			for (const r of rows) {
-				lines.push([r.calendar_year, r[COMPANY_COL], r.revenue_type, r.commodity, r.revenue].map(esc).join(','));
+				lines.push([r.calendar_year, r[COMPANY_COL], r.revenue_agency_type, r.commodity, r.revenue].map(esc).join(','));
 			}
 			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
 			res.setHeader('Content-Disposition', `attachment; filename="federal_revenue_by_company${filtered ? '_filtered' : ''}.csv"`);
