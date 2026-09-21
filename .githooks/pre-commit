@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# Pre-commit: keep CMS extension lockfiles in sync with the Linux CI runner.
+#
+# When a commit stages changes to a cms/src/extensions/*/*/package.json or package-lock.json,
+# regenerate that extension's lockfile in a Linux container (so `npm ci` in CI won't fail on a
+# macOS-generated lock) and re-stage it. No-op for commits that don't touch extension deps.
+#
+# Enable once per clone:   git config core.hooksPath .githooks
+# Skip for one commit:     git commit --no-verify
+#
+# Degrades gracefully: if Docker isn't running it warns and lets the commit through — CI's
+# `npm ci` is the backstop.
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+
+staged="$(git diff --cached --name-only -- \
+	'cms/src/extensions/*/*/package.json' \
+	'cms/src/extensions/*/*/package-lock.json' || true)"
+[ -z "$staged" ] && exit 0
+
+if ! docker info >/dev/null 2>&1; then
+	echo "pre-commit: Docker not available — skipping extension lockfile sync (CI will verify)." >&2
+	exit 0
+fi
+
+echo "pre-commit: syncing extension lockfile(s) with Linux CI…"
+# arm64 is fast on Apple Silicon and produces a lock equivalent to CI's amd64 (verified);
+# CI's own amd64 `npm ci` remains the backstop.
+LOCKFILE_PLATFORM="${LOCKFILE_PLATFORM:-linux/arm64}" \
+	"$ROOT/cms/scripts/regen-extension-lockfiles.sh" --staged
+
+# Re-stage any lockfiles the script rewrote so the fix is part of this commit.
+changed="$(git diff --name-only -- 'cms/src/extensions/*/*/package-lock.json' || true)"
+if [ -n "$changed" ]; then
+	echo "pre-commit: re-staged regenerated lockfile(s):"
+	echo "$changed" | sed 's/^/  /'
+	# shellcheck disable=SC2086
+	(cd "$ROOT" && git add -- $changed)
+fi
