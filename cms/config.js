@@ -9,8 +9,8 @@ module.exports = function (env) {
     PUBLIC_URL: `https://${ vcap_application.uris[0] }`,
     LOG_STYLE: "pretty",
 
-    KEY: vcap_application.application_id,
-    SECRET: vcap_application.application_version,
+    KEY: env.KEY,
+    SECRET: env.SECRET,
 
     DB_CLIENT: "pg",
     DB_HOST: vcap_services['aws-rds'][0].credentials.host,
@@ -46,9 +46,6 @@ module.exports = function (env) {
       : {
           CACHE_ENABLED: false,
         }),
-
-    ADMIN_EMAIL: `${vcap_application.organization_name}@onrr.gov`,
-    ADMIN_PASSWORD: vcap_application.organization_id,
 
     EMAIL_SENDMAIL_NEW_LINE: "unix",
     EMAIL_SENDMAIL_PATH: "/usr/sbin/sendmail",
