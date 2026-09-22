@@ -4,6 +4,21 @@ import { resolveBreakout, breakoutNames, monthlyBreakoutSummary, recentMonthlyTo
 // comma-separated string into a clean array of trimmed, non-empty values.
 const csvParam = (v) => (Array.isArray(v) ? v : v == null || v === '' ? [] : String(v).split(',')).map((s) => String(s).trim()).filter(Boolean);
 
+// A period_date (Date or string) rendered as YYYY-MM-DD for the CSV.
+const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? '').slice(0, 10));
+
+// ── CSV export columns ──────────────────────────────────────────────────────────────────────
+const EXPORT_COLUMNS = [
+	{ header: 'Date', value: (r) => ymd(r.period_date) },
+	{ header: 'Fund Type', value: (r) => r.fund_type },
+	{ header: 'Land Category', value: (r) => r.land_category },
+	{ header: 'Disbursement Type', value: (r) => r.disbursement_type },
+	{ header: 'State', value: (r) => r.state_name },
+	{ header: 'County', value: (r) => r.county },
+	{ header: 'Commodity', value: (r) => r.commodity },
+	{ header: 'Disbursement', value: (r) => r.amount },
+];
+
 // Registers disbursement chart routes under `base` (mounted by index.js as
 // /disbursement, so the full prefix is /charts/disbursement).
 export default (router, { database }, base = '') => {
@@ -147,39 +162,43 @@ export default (router, { database }, base = '') => {
 	});
 
 	// GET /charts/disbursement/export?from=&to=&recipients=&sources=&state=&commodity=
-	// Streams the raw disbursement records matching the current preview filters as CSV
-	// (Monthly-enforced), for the dataset Download section's "filtered selection" card.
-	// Same filter params as /pivot; recipients = RECIPIENT_GROUPS keys, sources = raw
-	// fund.source values.
+	// Streams the raw disbursement records as CSV (Monthly-enforced). Serves both the "filtered
+	// selection" download (with filters) and a whole-dataset download (no filters); the filename
+	// reflects which, so a full export isn't mislabeled "_filtered". Same filter params as /pivot;
+	// recipients = RECIPIENT_GROUPS keys, sources = raw fund.source values.
 	router.get(`${base}/export`, async (req, res) => {
 		const { from, to } = req.query;
 		const periodType = req.query.period === 'fiscal-year' ? 'Fiscal Year' : 'Monthly';
 		const fromYear = parseInt(req.query.fromYear, 10);
 		const toYear = parseInt(req.query.toYear, 10);
 		try {
+			const states = csvParam(req.query.states);
+			const commodities = csvParam(req.query.commodities);
+			const recipients = csvParam(req.query.recipients);
+			const sources = csvParam(req.query.sources);
+			const filtered = !!(from || to || !Number.isNaN(fromYear) || !Number.isNaN(toYear) || states.length || commodities.length || recipients.length || sources.length);
 			const rows = await disbursementRecords(database, {
 				periodType,
 				from: from || null,
 				to: to || null,
 				fromYear: Number.isNaN(fromYear) ? null : fromYear,
 				toYear: Number.isNaN(toYear) ? null : toYear,
-				states: csvParam(req.query.states),
-				commodities: csvParam(req.query.commodities),
-				recipients: csvParam(req.query.recipients),
-				sources: csvParam(req.query.sources),
+				states,
+				commodities,
+				recipients,
+				sources,
 			});
-			const head = ['Date', 'Fund Type', 'Land Category', 'Disbursement Type', 'State', 'County', 'Recipient', 'Source', 'Commodity', 'Disbursement'];
 			const esc = (v) => {
 				const s = v == null ? '' : String(v);
 				return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 			};
-			const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? '').slice(0, 10));
-			const lines = [head.join(',')];
+			// Columns + headers come from EXPORT_COLUMNS
+			const lines = [EXPORT_COLUMNS.map((c) => c.header).map(esc).join(',')];
 			for (const r of rows) {
-				lines.push([ymd(r.period_date), r.fund_type, r.land_category, r.disbursement_type, r.state_name, r.county, r.recipient, r.source, r.commodity, r.amount].map(esc).join(','));
+				lines.push(EXPORT_COLUMNS.map((c) => c.value(r)).map(esc).join(','));
 			}
 			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-			res.setHeader('Content-Disposition', 'attachment; filename="disbursements_filtered.csv"');
+			res.setHeader('Content-Disposition', `attachment; filename="disbursements${filtered ? '_filtered' : ''}.csv"`);
 			res.send(lines.join('\n'));
 		} catch (error) {
 			console.error('charts/disbursement/export error:', error);
