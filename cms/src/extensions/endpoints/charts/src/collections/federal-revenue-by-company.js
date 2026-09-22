@@ -115,10 +115,23 @@ export async function companyPivot(database, opts = {}) {
 	};
 }
 
-// Raw records matching the preview filters, for the "filtered selection" CSV.
+// ── CSV export columns ────────────────────────────────────────────────────────────────────────
+// EDIT THIS LIST to change the CSV download's columns and headers. Each entry is one column, in
+// order: `header` is the text in the CSV header row; `value` reads the cell off a record (any
+// federal_revenue_by_company column). Add / remove / reorder / rename freely, in one place.
+const EXPORT_COLUMNS = [
+	{ header: 'Calendar Year', value: (r) => r.calendar_year },
+	{ header: 'Company Name', value: (r) => r.corporate_name },
+	{ header: 'Revenue Type', value: (r) => r.revenue_type },
+	{ header: 'Commodity', value: (r) => r.commodity },
+	{ header: 'Revenue', value: (r) => r.revenue },
+];
+
+// Raw records matching the preview filters, for the CSV export. Selects every column so
+// EXPORT_COLUMNS above can reference any of them without touching this query.
 async function companyRecords(database, opts = {}) {
 	const q = database
-		.select('calendar_year', COMPANY_COL, 'revenue_agency', 'revenue_type', 'commodity', 'revenue')
+		.select('*')
 		.from(TABLE)
 		.orderBy([{ column: 'calendar_year', order: 'asc' }, { column: COMPANY_COL, order: 'asc' }]);
 	applyFilters(q, opts);
@@ -184,10 +197,10 @@ export default (router, { database }, base = '') => {
 				const s = v == null ? '' : String(v);
 				return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 			};
-			const head = ['Calendar Year', 'Company Name', 'Revenue Type', 'Commodity', 'Revenue'];
-			const lines = [head.join(',')];
+			// Columns + headers come from EXPORT_COLUMNS (edit that list above to change the CSV).
+			const lines = [EXPORT_COLUMNS.map((c) => c.header).map(esc).join(',')];
 			for (const r of rows) {
-				lines.push([r.calendar_year, r[COMPANY_COL], r.revenue_type, r.commodity, r.revenue].map(esc).join(','));
+				lines.push(EXPORT_COLUMNS.map((c) => c.value(r)).map(esc).join(','));
 			}
 			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
 			res.setHeader('Content-Disposition', `attachment; filename="federal_revenue_by_company${filtered ? '_filtered' : ''}.csv"`);

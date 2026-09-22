@@ -156,18 +156,30 @@ export async function federalSalesTimeseries(database, opts = {}) {
 	return { years, commodities, salesVolume, rvla };
 }
 
-// Raw federal_sales records matching the preview filters, for the "filtered selection" CSV.
+// ── CSV export columns ────────────────────────────────────────────────────────────────────────
+const EXPORT_COLUMNS = [
+	{ header: 'Calendar Year', value: (r) => r.calendar_year },
+	{ header: 'Land Class', value: (r) => r.land_class },
+	{ header: 'Land Category', value: (r) => r.land_category },
+	{ header: 'State/Offshore Region', value: (r) => r.state_offshore_region },
+	{ header: 'Revenue Type', value: (r) => r.revenue_type },
+	{ header: 'Commodity', value: (r) => r.commodity },
+	{ header: 'Sales Volume', value: (r) => r.sales_volume },
+	{ header: 'Gas MMBtu Volume', value: (r) => r.gas_volume },
+	{ header: 'Sales Value', value: (r) => r.sales_value },
+	{ header: 'Royalty Value Prior to Allowances (RVPA)', value: (r) => r.royalty_value_prior_to_allowance },
+	{ header: 'Transportation Allowances (TA)', value: (r) => r.transportation_allowance },
+	{ header: 'Processing Allowances (PA)', value: (r) => r.processing_allowance },
+	{ header: 'Royalty Value Less Allowances (RVLA)', value: (r) => r.royalty_value_less_allowance },
+	{ header: 'Effective Royalty Rate', value: (r) => r.effective_royalty_rate },
+];
+
+// Raw federal_sales records matching the preview filters, for the CSV export. Selects every base
+// column, so EXPORT_COLUMNS above can reference any of them without
+// touching this query.
 async function federalSalesRecords(database, opts = {}) {
 	const q = database
-		.select(
-			'calendar_year',
-			'commodity',
-			database.raw(`${LAND_TYPE_EXPR} as land_type`),
-			'land_class',
-			'land_category',
-			REGION_COL,
-			...MEASURES.map((m) => m.col)
-		)
+		.select('federal_sales.*', database.raw(`${LAND_TYPE_EXPR} as land_type`))
 		.from('federal_sales')
 		.orderBy('calendar_year', 'asc');
 	applyFilters(q, opts);
@@ -228,21 +240,25 @@ export default (router, { database }, base = '') => {
 		}
 	});
 
-	// GET /charts/federal-sales/export?... — raw records matching the filters as CSV.
+	// GET /charts/federal-sales/export?... — records matching the filters as CSV. Serves both the
+	// "filtered selection" download (with filters) and the "full dataset" download (no filters);
+	// the filename reflects which, so a whole-dataset export isn't mislabeled "_filtered".
 	router.get(`${base}/export`, async (req, res) => {
 		try {
-			const rows = await federalSalesRecords(database, readOpts(req));
+			const opts = readOpts(req);
+			const filtered = !!(opts.fromYear || opts.toYear || opts.commodities.length || opts.landTypes.length || opts.regions.length);
+			const rows = await federalSalesRecords(database, opts);
 			const esc = (v) => {
 				const s = v == null ? '' : String(v);
 				return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 			};
-			const head = ['Calendar Year', 'Commodity', 'Land Type', 'State/Offshore Region', ...MEASURES.map((m) => m.label)];
-			const lines = [head.join(',')];
+			// Columns + headers come from EXPORT_COLUMNS (edit that list above to change the CSV).
+			const lines = [EXPORT_COLUMNS.map((c) => c.header).map(esc).join(',')];
 			for (const r of rows) {
-				lines.push([r.calendar_year, r.commodity, r.land_type, r[REGION_COL], ...MEASURES.map((m) => r[m.col])].map(esc).join(','));
+				lines.push(EXPORT_COLUMNS.map((c) => c.value(r)).map(esc).join(','));
 			}
 			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-			res.setHeader('Content-Disposition', 'attachment; filename="federal_sales_filtered.csv"');
+			res.setHeader('Content-Disposition', `attachment; filename="federal_sales${filtered ? '_filtered' : ''}.csv"`);
 			res.send(lines.join('\n'));
 		} catch (error) {
 			console.error('charts/federal-sales/export error:', error);

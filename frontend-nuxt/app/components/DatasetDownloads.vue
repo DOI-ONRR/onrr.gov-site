@@ -37,6 +37,7 @@ const EXPORT_FIELDS = {
 // unfiltered export is the entire dataset, so the record count below still matches.
 const FULL_EXPORT_ENDPOINTS = {
   federal_revenue_by_company: '/charts/federal-revenue-by-company/export',
+  federal_sales: '/charts/federal-sales/export',
 }
 
 // --- Card 1: full dataset via native export ----------------------------------
