@@ -1,0 +1,39 @@
+{
+	"name": "regenerate-dataset-xlsx",
+	"description": "Flow operation to (re)generate a dataset's downloadable XLSX in-process (no HTTP self-call).",
+	"icon": "sync",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-operation"
+	],
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "operation",
+		"path": {
+			"app": "dist/app.js",
+			"api": "dist/api.js"
+		},
+		"source": {
+			"app": "src/app.js",
+			"api": "src/api.js"
+		},
+		"host": "^12.0.0"
+	},
+	"scripts": {
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-regenerate-dataset-xlsx/dist; cp package.json ../../../../extensions/directus-extension-regenerate-dataset-xlsx; cp dist/*.js ../../../../extensions/directus-extension-regenerate-dataset-xlsx/dist",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link"
+	},
+	"dependencies": {
+		"xlsx": "^0.18.5"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "^17.1.4",
+		"vue": "^3.5.35"
+	}
+}

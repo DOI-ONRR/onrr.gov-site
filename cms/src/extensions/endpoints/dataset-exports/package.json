@@ -1,0 +1,35 @@
+{
+	"name": "dataset-exports",
+	"description": "Endpoint extension to (re)generate a dataset's downloadable XLSX on demand, outside the data-update process",
+	"icon": "extension",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-extension-endpoint"
+	],
+	"type": "module",
+	"files": [
+		"dist"
+	],
+	"directus:extension": {
+		"type": "endpoint",
+		"path": "dist/index.js",
+		"source": "src/index.js",
+		"host": "^12.0.0"
+	},
+	"scripts": {
+		"build": "directus-extension build; mkdir -p ../../../../extensions/directus-extension-dataset-exports/dist; cp package.json ../../../../extensions/directus-extension-dataset-exports; cp dist/index.js ../../../../extensions/directus-extension-dataset-exports/dist",
+		"dev": "directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
+	"dependencies": {
+		"xlsx": "^0.18.5"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "^17.1.4",
+		"vitest": "^2.1.9"
+	}
+}

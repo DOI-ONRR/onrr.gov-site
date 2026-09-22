@@ -36,7 +36,9 @@
     "build:onrr-flows": "cd src/extensions/endpoints/onrr-flows; npm run build",
     "build:onrr-generate-uuid": "cd src/extensions/operations/onrr-generate-uuid; npm run build",
     "build:revenue-data-update": "cd src/extensions/hooks/revenue-data-update; npm run build",
-    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:revenue-summary build:disbursement-summary build:fy-summary build:charts build:index-zones build:directus-users build:directus-roles build:directus-policies build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows build:revenue-data-update"
+    "build:dataset-exports": "cd src/extensions/endpoints/dataset-exports; npm run build",
+    "build:regenerate-dataset-xlsx": "cd src/extensions/operations/regenerate-dataset-xlsx; npm run build",
+    "build:all": "npm-run-all --parallel build:onrr-generate-uuid build:wysiwyg-static build:onrr-wysiwyg build:contacts-accordion-select build:contacts-page-select build:contacts-tab-select build:topics-select build:link-autocomplete build:document build:image-uploader build:press-releases build:reporter-letters build:unbundling build:revenue-summary build:disbursement-summary build:fy-summary build:charts build:index-zones build:directus-users build:directus-roles build:directus-policies build:indian-gas-major-portion build:ibmp build:nymex build:onrr-flows build:revenue-data-update build:dataset-exports build:regenerate-dataset-xlsx"
   },
   "engines": {
     "node": "22.x"
