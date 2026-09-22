@@ -22,22 +22,24 @@ const props = defineProps({
 
 const { apiUrl } = useRuntimeConfig().public
 
-// Readable CSV headers per collection (nested field paths → dotted export columns).
-// Collections without a spec export all fields (relational values come through as ids).
-const EXPORT_FIELDS = {
-  disbursement:
-    'period.period_date,fund.type,location.land_category,fund.disbursement_type,location.state_name,location.county,commodity.name,amount',
-}
+// Native-export column limiting per collection (nested field paths → dotted export columns), for
+// datasets that use the native /items export below. Collections without a spec export all fields
+// (relational values come through as ids). Datasets in FULL_EXPORT_ENDPOINTS don't use this — their
+// columns live in the endpoint's EXPORT_COLUMNS instead.
+const EXPORT_FIELDS = {}
 
 // Datasets whose full-dataset CSV should come from their custom /charts/<ds>/export endpoint
 // (a curated set of columns with human-readable headers) rather than the native /items export
 // (which emits every column — including audit fields — under raw column names). Called with no
 // filters, the endpoint returns the whole dataset in the same shape as the "filtered selection"
-// download, so the two are consistent. Only flat, self-contained collections belong here — their
-// unfiltered export is the entire dataset, so the record count below still matches.
+// download, so the two are consistent. The record count below (queried from /items with the same
+// export_filter) must match the endpoint's row count: true for flat collections, and for
+// disbursement too since its joins are all to-one — disbursement's export is period-aware, so
+// csvHref carries the page's period grain (Monthly vs Fiscal Year) below.
 const FULL_EXPORT_ENDPOINTS = {
   federal_revenue_by_company: '/charts/federal-revenue-by-company/export',
   federal_sales: '/charts/federal-sales/export',
+  disbursement: '/charts/disbursement/export',
 }
 
 // --- Card 1: full dataset via native export ----------------------------------
@@ -68,7 +70,14 @@ const csvHref = computed(() => {
   if (!props.sourceTable) return null
   // Curated export endpoint (selected columns + friendly headers) when the dataset has one.
   const customExport = FULL_EXPORT_ENDPOINTS[props.sourceTable]
-  if (customExport) return `${apiUrl}${customExport}`
+  if (customExport) {
+    // Carry the dataset's period grain so a period-aware endpoint (disbursement) exports the
+    // matching slice; the endpoint defaults to Monthly, so only Fiscal Year needs the param.
+    // Flat endpoints ignore it. This keeps the CSV in step with the record count above (scoped
+    // by the same export_filter).
+    const suffix = exportFilter.value?.period?.type?._eq === 'Fiscal Year' ? '?period=fiscal-year' : ''
+    return `${apiUrl}${customExport}${suffix}`
+  }
   // Otherwise the native Directus export, optionally column-limited via EXPORT_FIELDS.
   const q = new URLSearchParams({ export: 'csv', limit: '-1' })
   const fields = EXPORT_FIELDS[props.sourceTable]
