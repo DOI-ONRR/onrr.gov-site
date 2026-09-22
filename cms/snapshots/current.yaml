@@ -452,7 +452,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 7
+      sort: 8
       sort_field: null
       status: active
       translations: null
@@ -662,7 +662,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 8
+      sort: 9
       sort_field: null
       status: active
       translations: null
@@ -766,7 +766,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 17
+      sort: 16
       sort_field: null
       status: active
       translations: null
@@ -1082,7 +1082,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 9
+      sort: 10
       sort_field: null
       status: active
       translations: null
@@ -1108,7 +1108,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 16
+      sort: 17
       sort_field: null
       status: active
       translations: null
@@ -1424,7 +1424,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 10
+      sort: 11
       sort_field: null
       status: active
       translations: null
@@ -1786,7 +1786,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 11
+      sort: 12
       sort_field: null
       status: active
       translations: null
@@ -2020,7 +2020,7 @@ collections:
       note: null
       preview_url: null
       singleton: false
-      sort: 12
+      sort: 7
       sort_field: null
       status: active
       translations: null
@@ -16259,6 +16259,91 @@ fields:
       has_auto_increment: false
       foreign_key_table: contact_boxes
       foreign_key_column: id
+  - collection: dataset_metadata
+    field: notes
+    type: json
+    meta:
+      collection: dataset_metadata
+      conditions:
+        - hidden: false
+          name: Show for federal sales
+          rule:
+            _and:
+              - source_collection:
+                  _eq: federal_sales
+      display: null
+      display_options: null
+      field: notes
+      group: null
+      hidden: true
+      interface: list
+      note: Notes for combined XLXS download
+      options:
+        fields:
+          - field: Note
+            meta:
+              field: Note
+              interface: input-multiline
+              type: text
+            name: Note
+            type: text
+      readonly: false
+      required: false
+      searchable: true
+      sort: 25
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: notes
+      table: dataset_metadata
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: links-eo0iab
+    type: alias
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: links-eo0iab
+      group: null
+      hidden: false
+      interface: presentation-links
+      note: null
+      options:
+        links:
+          - actionType: url
+            icon: file_save
+            label: Generate downloads
+            type: normal
+      readonly: false
+      required: false
+      searchable: true
+      sort: 27
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
   - collection: dataset_metadata_files
     field: id
     type: integer

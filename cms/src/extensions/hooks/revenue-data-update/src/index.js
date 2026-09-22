@@ -6,6 +6,7 @@ import { processFYProductionUpdate } from './processes/fy-production/index.js';
 import { processRevenueByCompanyUpdate } from './processes/revenue-by-company/index.js';
 import { generateRevenueByCompanyWorkbook } from './processes/revenue-by-company/generateWorkbook.js';
 import { processFederalSalesUpdate } from './processes/federal-sales/index.js';
+import { generateFederalSalesWorkbook } from './processes/federal-sales/generateWorkbook.js';
 
 export default ({ filter, action }, { services, database, getSchema, env }) => {
 	const { ItemsService } = services;
@@ -68,6 +69,17 @@ export default ({ filter, action }, { services, database, getSchema, env }) => {
 				console.log('[Revenue Data Update] federal-revenue-by-company XLSX generated:', summary);
 			} catch (error) {
 				console.error('[Revenue Data Update] XLSX generation failed:', error.message);
+			}
+		}
+
+		// Federal Sales: (re)generate the downloadable XLSX (sales data + data dictionary + notes)
+		// and store it as the same Directus file so the download link stays stable. Best-effort.
+		if (result?.success && meta.payload.dataset === 'federal-sales') {
+			try {
+				const summary = await generateFederalSalesWorkbook({ services, database, schema, accountability, env });
+				console.log('[Revenue Data Update] federal-sales XLSX generated:', summary);
+			} catch (error) {
+				console.error('[Revenue Data Update] federal-sales XLSX generation failed:', error.message);
 			}
 		}
 
