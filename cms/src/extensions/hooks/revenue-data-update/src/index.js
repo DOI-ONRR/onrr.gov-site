@@ -7,6 +7,7 @@ import { processRevenueByCompanyUpdate } from './processes/revenue-by-company/in
 import { generateRevenueByCompanyWorkbook } from './processes/revenue-by-company/generateWorkbook.js';
 import { processFederalSalesUpdate } from './processes/federal-sales/index.js';
 import { generateFederalSalesWorkbook } from './processes/federal-sales/generateWorkbook.js';
+import { generateMonthlyDisbursementWorkbook, generateFiscalYearDisbursementWorkbook } from './processes/disbursement/generateWorkbook.js';
 
 export default ({ filter, action }, { services, database, getSchema, env }) => {
 	const { ItemsService } = services;
@@ -80,6 +81,19 @@ export default ({ filter, action }, { services, database, getSchema, env }) => {
 				console.log('[Revenue Data Update] federal-sales XLSX generated:', summary);
 			} catch (error) {
 				console.error('[Revenue Data Update] federal-sales XLSX generation failed:', error.message);
+			}
+		}
+
+		// Disbursement: (re)generate both downloadable XLSX files (Monthly and Fiscal Year), each with
+		// its data + data dictionary, stored as stable Directus files. Best-effort, independent.
+		if (result?.success && meta.payload.dataset === 'disbursement') {
+			for (const generate of [generateMonthlyDisbursementWorkbook, generateFiscalYearDisbursementWorkbook]) {
+				try {
+					const summary = await generate({ services, database, schema, accountability, env });
+					console.log('[Revenue Data Update] disbursement XLSX generated:', summary);
+				} catch (error) {
+					console.error('[Revenue Data Update] disbursement XLSX generation failed:', error.message);
+				}
 			}
 		}
 

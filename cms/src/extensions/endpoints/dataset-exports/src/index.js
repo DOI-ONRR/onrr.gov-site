@@ -14,7 +14,7 @@
 // NOTE: this is the HTTP/API entry point. The dataset_metadata "Regenerate download XLSX" flow does
 // NOT call this route — a flow's Request operation can't reach an internal URL (Directus SSRF guard);
 // it uses the `regenerate-dataset-xlsx` flow operation, which runs the same dispatcher in-process.
-import { generateForRequest, DATASET_GENERATORS } from '../../../hooks/revenue-data-update/src/processes/datasetWorkbooks.js';
+import { generateForRequest, SUPPORTED_SOURCE_COLLECTIONS } from '../../../hooks/revenue-data-update/src/processes/datasetWorkbooks.js';
 
 const asArray = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
 
@@ -23,7 +23,7 @@ export default (router, context) => {
 
 	// List the datasets this endpoint can (re)generate — handy for wiring a button / debugging.
 	router.get('/datasets', (req, res) => {
-		res.json({ datasets: Object.keys(DATASET_GENERATORS) });
+		res.json({ datasets: SUPPORTED_SOURCE_COLLECTIONS });
 	});
 
 	// Regenerate one or more datasets' XLSX. Admin-only: it overwrites Directus files, and the route
@@ -43,7 +43,7 @@ export default (router, context) => {
 
 			if (!generated.length) {
 				return res.status(400).json({
-					error: `No supported dataset in request. Received: ${requested.join(', ') || '(none)'}. Supported: ${Object.keys(DATASET_GENERATORS).join(', ')}.`,
+					error: `No supported dataset in request. Received: ${requested.join(', ') || '(none)'}. Supported: ${SUPPORTED_SOURCE_COLLECTIONS.join(', ')}.`,
 					skipped,
 				});
 			}
