@@ -102,3 +102,52 @@ export function pivotResponse(groupBy = 'recipient') {
 
 // The unfiltered full-dataset count (native-export card), scoped by export_filter server-side.
 export const disbursementCount = { data: [{ count: { id: 50769 } }] }
+
+// A "downloads-only" dataset: no source_collection, so DatasetView renders NO preview section and no
+// automatic full-dataset export — just the manually-attached curated files. Used to verify the header
+// actions (no Preview button; Download becomes the primary/solid button). Served at
+// /revenue-data/reference-tables.
+export const downloadsOnlyPage = {
+  __typename: 'pages',
+  id: 'ds-page-ref',
+  title: 'Reference tables',
+  slug: 'reference-tables',
+  url: '/revenue-data/reference-tables',
+  hero_image: null,
+  hero_title: null,
+  page_blocks: [],
+  sidebar_blocks: [],
+  parent: null,
+  meta_title: null,
+  meta_description: null,
+  dataset_metadata: {
+    id: 'ds-meta-ref',
+    name: 'Reference tables',
+    description: '<p>Supporting reference tables published as prepared files.</p>',
+    update_frequency: 'As needed',
+    formats: ['PDF', 'XLSX'],
+    coverage_start: null,
+    coverage_end: null,
+    publisher: 'Office of Natural Resources Revenue',
+    related_links: [],
+    about: null,
+    publication: null,
+    // No preview and no automatic downloads: source_collection / preview_component / export_filter unset.
+    preview_component: null,
+    source_collection: null,
+    export_filter: null,
+    files: [
+      {
+        directus_files_id: {
+          id: 'file-ref-pdf',
+          title: 'Allocation reference table',
+          type: 'application/pdf',
+          filesize: 245760,
+          filename_download: 'allocation-reference-table.pdf',
+        },
+      },
+    ],
+    terms: [],
+    charts: [],
+  },
+}

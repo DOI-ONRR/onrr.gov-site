@@ -144,8 +144,10 @@ async function copyApiUrl() {
         <h1 class="margin-bottom-1">{{ dataset.name }}</h1>
         <div class="usa-intro measure-5" v-html="resolveImages(dataset.description)" />
         <div class="margin-top-2">
-          <a class="usa-button" href="#preview">Preview &amp; filter data</a>
-          <a class="usa-button usa-button--outline" href="#download">Download files</a>
+          <!-- No source_collection -> no preview section, so drop the Preview button and let the
+               Download button be the primary (solid, no outline) call to action. -->
+          <a v-if="previewComponent" class="usa-button" href="#preview">Preview &amp; filter data</a>
+          <a class="usa-button" :class="{ 'usa-button--outline': previewComponent }" href="#download">Download files</a>
           <a v-if="hasApi" class="usa-button usa-button--outline" href="#api">API access</a>
         </div>
       </div>

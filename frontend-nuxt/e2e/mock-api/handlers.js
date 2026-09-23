@@ -11,7 +11,7 @@ import { paymentOptionsPage } from '../fixtures/payment-options.js'
 import { renewableEnergyPage } from '../fixtures/renewable-energy.js'
 import { valuationPage, nymexRows, indexZonesRows } from '../fixtures/valuation.js'
 import { contactHubPage, contactTopics, oilGasContacts, searchContacts, contactTopicPage, contactTopicPagePaged } from '../fixtures/contact-hub.js'
-import { datasetPage, pivotOptions, pivotResponse, disbursementCount } from '../fixtures/dataset-preview.js'
+import { datasetPage, pivotOptions, pivotResponse, disbursementCount, downloadsOnlyPage } from '../fixtures/dataset-preview.js'
 import { productionYearlyPage, productionMonthlyPage, productionOptions, productionPivot, productionCount } from '../fixtures/production-preview.js'
 import { revenuePage, revenueOptions, revenuePivot, revenueCount } from '../fixtures/revenue-preview.js'
 import { federalSalesPage, federalSalesOptions, federalSalesPivot, federalSalesCount, federalSalesTimeseries } from '../fixtures/federal-sales.js'
@@ -143,6 +143,8 @@ export const handlers = [
       if (variables?.slug === 'oil-gas-reporting-paged') return { page: [contactTopicPagePaged] }
       // Dataset page: has dataset_metadata → renders DatasetView (preview + downloads).
       if (variables?.slug === 'monthly-disbursements') return { page: [datasetPage] }
+      // Downloads-only dataset (no source_collection → no preview, no auto export).
+      if (variables?.slug === 'reference-tables') return { page: [downloadsOnlyPage] }
       if (variables?.slug === 'yearly-production') return { page: [productionYearlyPage] }
       if (variables?.slug === 'monthly-production') return { page: [productionMonthlyPage] }
       if (variables?.slug === 'revenue-by-commodity') return { page: [revenuePage] }
