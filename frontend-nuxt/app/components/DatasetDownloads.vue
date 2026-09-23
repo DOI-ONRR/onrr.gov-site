@@ -97,7 +97,10 @@ const curatedFiles = computed(() =>
       label: f.title || f.filename_download || 'Download',
       format: (f.filename_download?.split('.').pop() || '').toUpperCase(),
       size: humanSize(f.filesize),
-      href: `${apiUrl}/assets/${f.id}?download`,
+      // Files like the generated XLSX are overwritten in place (same id/URL), so a browser or CDN
+      // can keep serving a stale copy. Key the URL on filesize — which changes whenever the content
+      // does — so a regenerated file fetches fresh instead of a cached older version.
+      href: `${apiUrl}/assets/${f.id}?download${f.filesize ? `&v=${f.filesize}` : ''}`,
     })),
 )
 
