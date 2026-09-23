@@ -15,6 +15,7 @@ const EXPORT_COLUMNS = [
 	{ header: 'Disbursement Type', value: (r) => r.disbursement_type },
 	{ header: 'State', value: (r) => r.state_name },
 	{ header: 'County', value: (r) => r.county },
+	{ header: 'Category', value: (r) => r.revenue_type },
 	{ header: 'Commodity', value: (r) => r.commodity },
 	{ header: 'Disbursement', value: (r) => r.amount },
 ];

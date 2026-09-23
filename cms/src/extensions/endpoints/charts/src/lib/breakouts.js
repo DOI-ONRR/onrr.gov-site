@@ -584,6 +584,7 @@ export async function disbursementRecords(database, opts = {}) {
 			'f.disbursement_type',
 			'l.state_name',
 			'l.county',
+			'f.revenue_type',
 			'f.recipient',
 			'f.source',
 			'c.name as commodity',
