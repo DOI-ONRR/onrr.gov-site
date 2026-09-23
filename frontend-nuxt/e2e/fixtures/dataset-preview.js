@@ -44,6 +44,8 @@ export const datasetPage = {
     // Raw USWDS accordion markup (as a CMS WYSIWYG field would emit) to exercise the
     // useUswdsAccordion enhancer that wires interactivity onto v-html content.
     publication: '<div class="usa-accordion"><h4 class="usa-accordion__heading"><button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="faq-a1">Question one</button></h4><div id="faq-a1" class="usa-accordion__content usa-prose" hidden><p>Answer one.</p></div></div>',
+    // Free-form WYSIWYG links/notes rendered beneath the standard Download cards.
+    supplemental_downloads: '<p>Supplemental materials: <a href="/reports/historical-allocations.pdf">Historical allocations (PDF)</a></p>',
     preview_component: 'disbursements',
     source_collection: 'disbursement',
     export_filter: { period: { type: { _eq: 'Monthly' } } },

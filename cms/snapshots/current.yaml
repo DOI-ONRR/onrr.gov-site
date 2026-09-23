@@ -16090,7 +16090,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 25
       special:
         - o2m
       translations: null
@@ -16114,7 +16114,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 23
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -16154,7 +16154,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -16194,7 +16194,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 22
+      sort: 23
       special: null
       translations: null
       validation: null
@@ -16235,7 +16235,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 27
       special:
         - m2o
       translations: null
@@ -16290,7 +16290,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 26
       special:
         - cast-json
       translations: null
@@ -16315,35 +16315,45 @@ fields:
       foreign_key_table: null
       foreign_key_column: null
   - collection: dataset_metadata
-    field: links-eo0iab
-    type: alias
+    field: supplemental_downloads
+    type: text
     meta:
       collection: dataset_metadata
       conditions: null
       display: null
       display_options: null
-      field: links-eo0iab
+      field: supplemental_downloads
       group: null
       hidden: false
-      interface: presentation-links
+      interface: onrr-wysiwyg
       note: null
-      options:
-        links:
-          - actionType: url
-            icon: file_save
-            label: Generate downloads
-            type: normal
+      options: null
       readonly: false
       required: false
       searchable: true
-      sort: 27
-      special:
-        - alias
-        - no-data
+      sort: 21
+      special: null
       translations: null
       validation: null
       validation_message: null
       width: full
+    schema:
+      name: supplemental_downloads
+      table: dataset_metadata
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: dataset_metadata_files
     field: id
     type: integer

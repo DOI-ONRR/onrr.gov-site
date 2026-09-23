@@ -139,6 +139,7 @@ fragment pageFields on pages {
         filename_download
       }
     }
+    supplemental_downloads
     scope
     publication
     data_dictionary_intro

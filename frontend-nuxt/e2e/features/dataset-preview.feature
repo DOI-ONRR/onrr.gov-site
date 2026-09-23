@@ -64,3 +64,7 @@ Feature: Monthly disbursements dataset page
     Given I navigate to the monthly disbursements dataset page
     Then the API endpoint reads "https://data.onrr.gov/disbursements"
     And the API section links to the developer docs at "/developers"
+
+  Scenario: The Download section renders supplemental downloads content
+    Given I navigate to the monthly disbursements dataset page
+    Then the download section shows a supplemental link to "/reports/historical-allocations.pdf"

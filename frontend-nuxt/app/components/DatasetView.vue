@@ -208,6 +208,12 @@ async function copyApiUrl() {
       <div class="grid-col-12">
         <h2 class="font-heading-lg">Download</h2>
         <DatasetDownloads :dataset="dataset" :source-table="sourceCollection" />
+        <!-- Free-form (WYSIWYG) supplemental downloads/links, shown beneath the standard cards. -->
+        <div
+          v-if="dataset.supplemental_downloads"
+          class="line-height-sans-5 margin-top-3"
+          v-html="resolveImages(dataset.supplemental_downloads)"
+        />
       </div>
     </div>
 

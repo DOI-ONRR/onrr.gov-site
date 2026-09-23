@@ -37,3 +37,8 @@ Then('the download card {string} is not rendered', async ({ page }, heading) => 
     page.locator('#download .download-card').filter({ has: page.getByRole('heading', { name: heading, exact: true }) }),
   ).toHaveCount(0)
 })
+
+// The supplemental_downloads WYSIWYG renders as free-form HTML beneath the Download cards.
+Then('the download section shows a supplemental link to {string}', async ({ page }, href) => {
+  await expect(page.locator(`#download a[href="${href}"]`)).toBeVisible()
+})
