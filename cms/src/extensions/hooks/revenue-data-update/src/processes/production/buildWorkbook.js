@@ -1,10 +1,11 @@
 /**
- * Builds a Production XLSX workbook (two sheets) from already-fetched rows. One builder serves every
- * period grain — the first tab's name and columns differ per grain (keyed by period type).
+ * Builds a Production XLSX workbook from already-fetched rows. Takes one or more data sheets (each a
+ * period grain) followed by a single Data Dictionary tab — so the Monthly workbook has one data tab
+ * and the Annual workbook has two (Fiscal Year + Calendar Year).
  *
  * Pure and side-effect free so it can be unit-tested without Directus/DB. Returns a Buffer.
  *
- *   Tab <sheetName>        — the same columns as the production CSV download for that grain.
+ *   Tab <sheetName>…       — the production data for each grain, columns matching that grain's CSV.
  *   Tab "Data Dictionary"  — the dataset's data_dictionary fields + values.
  */
 import * as XLSX from 'xlsx';
@@ -87,36 +88,39 @@ const PRODUCTION_COLUMNS = {
 	'Calendar Year': [{ header: 'Calendar Year', value: (r) => yearOf(r.period_date), width: 14 }, ...ANNUAL_COLUMNS],
 };
 
-/**
- * @param {Object} data
- * @param {string} data.periodType       period grain key into PRODUCTION_COLUMNS, e.g. "Monthly"
- * @param {string} data.sheetName        name of the first tab, e.g. "Monthly Production"
- * @param {Array}  data.rows             production rows (any column referenced by the grain's columns)
- * @param {Array}  data.dictionaryFields fields of { field_name, definition, value_style, values: [{ term, definition }] }
- * @returns {Buffer} the .xlsx file contents
- */
-export function buildWorkbook({ periodType = 'Monthly', sheetName = 'Production', rows = [], dictionaryFields = [] } = {}) {
+// Build one data worksheet for a grain, applying the date format to any date columns.
+function dataSheet({ periodType, rows = [] }) {
 	const columns = PRODUCTION_COLUMNS[periodType];
 	if (!columns) throw new Error(`buildWorkbook: no production columns for period type "${periodType}"`);
-
-	const wb = XLSX.utils.book_new();
-
-	// Tab 1 — the production data (mirrors the CSV download for this grain).
-	const dataAoa = [columns.map((c) => c.header)];
-	for (const r of rows) dataAoa.push(columns.map((c) => c.value(r)));
-	const dataWs = sheetFromAoa(dataAoa, columns.map((c) => c.width || 16));
-	// Give date columns (values are Excel serials) a date number format so Excel shows dates.
-	const range = XLSX.utils.decode_range(dataWs['!ref']);
+	const aoa = [columns.map((c) => c.header)];
+	for (const r of rows) aoa.push(columns.map((c) => c.value(r)));
+	const ws = sheetFromAoa(aoa, columns.map((c) => c.width || 16));
+	const range = XLSX.utils.decode_range(ws['!ref']);
 	columns.forEach((c, ci) => {
 		if (!c.date) return;
 		for (let R = range.s.r + 1; R <= range.e.r; R++) {
-			const cell = dataWs[XLSX.utils.encode_cell({ r: R, c: ci })];
+			const cell = ws[XLSX.utils.encode_cell({ r: R, c: ci })];
 			if (cell && cell.t === 'n') cell.z = 'yyyy-mm-dd';
 		}
 	});
-	XLSX.utils.book_append_sheet(wb, dataWs, sheetName);
+	return ws;
+}
 
-	// Tab 2 — Data Dictionary (Field | Definition | Values).
+/**
+ * @param {Object} data
+ * @param {Array}  data.sheets           one per data tab: { periodType, sheetName, rows }
+ * @param {Array}  data.dictionaryFields fields of { field_name, definition, value_style, values: [{ term, definition }] }
+ * @returns {Buffer} the .xlsx file contents
+ */
+export function buildWorkbook({ sheets = [], dictionaryFields = [] } = {}) {
+	const wb = XLSX.utils.book_new();
+
+	// Data tabs (one per grain — mirrors the CSV download for that grain).
+	for (const sheet of sheets) {
+		XLSX.utils.book_append_sheet(wb, dataSheet(sheet), sheet.sheetName);
+	}
+
+	// Data Dictionary tab (Field | Definition | Values).
 	const dictAoa = [['Field', 'Definition', 'Values']];
 	for (const f of dictionaryFields) {
 		const values = (f.values || [])
@@ -129,6 +133,6 @@ export function buildWorkbook({ periodType = 'Monthly', sheetName = 'Production'
 	}
 	XLSX.utils.book_append_sheet(wb, sheetFromAoa(dictAoa, [22, 60, 50]), 'Data Dictionary');
 
-	// compression + shared string table keep the large data tab a reasonable size.
+	// compression + shared string table keep the (potentially large, multi-tab) file small.
 	return XLSX.write(wb, { type: 'buffer', bookType: 'xlsx', compression: true, bookSST: true });
 }

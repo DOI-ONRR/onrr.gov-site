@@ -9,11 +9,7 @@
 import { generateFederalSalesWorkbook } from './federal-sales/generateWorkbook.js';
 import { generateRevenueByCompanyWorkbook } from './revenue-by-company/generateWorkbook.js';
 import { generateFiscalYearDisbursementWorkbook, generateMonthlyDisbursementWorkbook } from './disbursement/generateWorkbook.js';
-import {
-	generateMonthlyProductionWorkbook,
-	generateFiscalYearProductionWorkbook,
-	generateCalendarYearProductionWorkbook,
-} from './production/generateWorkbook.js';
+import { generateMonthlyProductionWorkbook, generateAnnualProductionWorkbook } from './production/generateWorkbook.js';
 
 // Source collections this module can (re)generate a workbook for. The normalized ones (disbursement,
 // production) have per-grain variants — see pickGenerators for which grains have a workbook.
@@ -50,7 +46,7 @@ function pickGenerators(row) {
 				case 'Monthly': return [generateMonthlyProductionWorkbook];
 				case 'Fiscal Year':
 				case 'Calendar Year':
-					return [generateFiscalYearProductionWorkbook, generateCalendarYearProductionWorkbook];
+					return [generateAnnualProductionWorkbook];
 				default: return [];
 			}
 		default:

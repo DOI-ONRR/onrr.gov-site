@@ -8,7 +8,7 @@ import { generateRevenueByCompanyWorkbook } from './processes/revenue-by-company
 import { processFederalSalesUpdate } from './processes/federal-sales/index.js';
 import { generateFederalSalesWorkbook } from './processes/federal-sales/generateWorkbook.js';
 import { generateMonthlyDisbursementWorkbook, generateFiscalYearDisbursementWorkbook } from './processes/disbursement/generateWorkbook.js';
-import { generateMonthlyProductionWorkbook, generateFiscalYearProductionWorkbook, generateCalendarYearProductionWorkbook } from './processes/production/generateWorkbook.js';
+import { generateMonthlyProductionWorkbook, generateAnnualProductionWorkbook } from './processes/production/generateWorkbook.js';
 
 export default ({ filter, action }, { services, database, getSchema, env }) => {
 	const { ItemsService } = services;
@@ -102,12 +102,8 @@ export default ({ filter, action }, { services, database, getSchema, env }) => {
 		// Production updates are grain-specific (meta.payload.period), so each load regenerates its
 		// own workbook (Monthly / Fiscal Year / Calendar Year). Best-effort.
 		if (result?.success && meta.payload.dataset === 'production') {
-			const generate =
-				meta.payload.period === 'fiscal-year'
-					? generateFiscalYearProductionWorkbook
-					: meta.payload.period === 'calendar-year'
-						? generateCalendarYearProductionWorkbook
-						: generateMonthlyProductionWorkbook;
+			const isAnnual = meta.payload.period === 'fiscal-year' || meta.payload.period === 'calendar-year';
+			const generate = isAnnual ? generateAnnualProductionWorkbook : generateMonthlyProductionWorkbook;
 			try {
 				const summary = await generate({ services, database, schema, accountability, env });
 				console.log('[Revenue Data Update] production XLSX generated:', summary);
