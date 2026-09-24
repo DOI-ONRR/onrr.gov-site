@@ -1,8 +1,11 @@
 ---
 applications:
   - name: onrr-frontend
-    memory: 512M
-    disk_quota: 1G
+    # Staging runs `nuxt build` in a container sized to this memory; a Nuxt/Vite production build
+    # peaks well above 1G and gets OOM-killed there. 2G stages reliably. (The SSR server itself needs
+    # far less at runtime — `cf scale onrr-frontend -m 1G` after a successful push reclaims it.)
+    memory: 2G
+    disk_quota: 2G
     instances: 1
     buildpacks:
       - nodejs_buildpack
