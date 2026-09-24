@@ -8,6 +8,7 @@ import { generateRevenueByCompanyWorkbook } from './processes/revenue-by-company
 import { processFederalSalesUpdate } from './processes/federal-sales/index.js';
 import { generateFederalSalesWorkbook } from './processes/federal-sales/generateWorkbook.js';
 import { generateMonthlyDisbursementWorkbook, generateFiscalYearDisbursementWorkbook } from './processes/disbursement/generateWorkbook.js';
+import { generateMonthlyProductionWorkbook } from './processes/production/generateWorkbook.js';
 
 export default ({ filter, action }, { services, database, getSchema, env }) => {
 	const { ItemsService } = services;
@@ -93,6 +94,21 @@ export default ({ filter, action }, { services, database, getSchema, env }) => {
 					console.log('[Revenue Data Update] disbursement XLSX generated:', summary);
 				} catch (error) {
 					console.error('[Revenue Data Update] disbursement XLSX generation failed:', error.message);
+				}
+			}
+		}
+
+		// Production: (re)generate the downloadable XLSX for the grain that was just loaded. Only
+		// Monthly is wired for now (Fiscal Year and Calendar Year to follow); production updates are
+		// grain-specific, so a monthly load regenerates the Monthly workbook. Best-effort.
+		if (result?.success && meta.payload.dataset === 'production') {
+			const isAnnual = meta.payload.period === 'calendar-year' || meta.payload.period === 'fiscal-year';
+			if (!isAnnual) {
+				try {
+					const summary = await generateMonthlyProductionWorkbook({ services, database, schema, accountability, env });
+					console.log('[Revenue Data Update] monthly production XLSX generated:', summary);
+				} catch (error) {
+					console.error('[Revenue Data Update] monthly production XLSX generation failed:', error.message);
 				}
 			}
 		}

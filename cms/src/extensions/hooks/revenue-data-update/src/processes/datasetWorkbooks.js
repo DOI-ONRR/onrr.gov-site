@@ -9,10 +9,11 @@
 import { generateFederalSalesWorkbook } from './federal-sales/generateWorkbook.js';
 import { generateRevenueByCompanyWorkbook } from './revenue-by-company/generateWorkbook.js';
 import { generateFiscalYearDisbursementWorkbook, generateMonthlyDisbursementWorkbook } from './disbursement/generateWorkbook.js';
+import { generateMonthlyProductionWorkbook } from './production/generateWorkbook.js';
 
-// Source collections this module can (re)generate a workbook for. disbursement is listed because its
-// Fiscal Year variant has one (Monthly does not) — see pickGenerator.
-export const SUPPORTED_SOURCE_COLLECTIONS = ['federal_sales', 'federal_revenue_by_company', 'disbursement'];
+// Source collections this module can (re)generate a workbook for. The normalized ones (disbursement,
+// production) have per-grain variants — see pickGenerator for which grains have a workbook.
+export const SUPPORTED_SOURCE_COLLECTIONS = ['federal_sales', 'federal_revenue_by_company', 'disbursement', 'production'];
 
 const asArray = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
 
@@ -38,6 +39,12 @@ function pickGenerator(row) {
 			switch (periodTypeOf(row.export_filter)) {
 				case 'Fiscal Year': return generateFiscalYearDisbursementWorkbook;
 				case 'Monthly': return generateMonthlyDisbursementWorkbook;
+				default: return null;
+			}
+		case 'production':
+			switch (periodTypeOf(row.export_filter)) {
+				case 'Monthly': return generateMonthlyProductionWorkbook;
+				// Fiscal Year / Calendar Year workbooks are added next.
 				default: return null;
 			}
 		default:

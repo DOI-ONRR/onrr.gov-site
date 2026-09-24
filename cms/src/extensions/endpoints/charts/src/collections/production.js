@@ -150,8 +150,37 @@ export async function productionPivot(database, opts = {}) {
 	return { groupBy: 'product', periodType, breakout: breakoutExpr ? opts.breakout : null, years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
 }
 
+// A period_date (Date or string) rendered as YYYY-MM-DD for the CSV.
+const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? '').slice(0, 10));
+
+// ── CSV export columns ────────────────────────────────────────────────────────────────────────
+// One list per period grain (keyed by period.type): Monthly is dated and carries County; the
+// annual grains lead with their year column and have no County.
+const ANNUAL_COLUMNS = [
+	{ header: 'Land Class', value: (r) => r.land_class },
+	{ header: 'Land Category', value: (r) => r.land_category },
+	{ header: 'State', value: (r) => r.state },
+	{ header: 'County', value: (r) => r.county },
+	{ header: 'FIPS Code', value: (r) => r.fips_code },
+	{ header: 'Offshore Region', value: (r) => r.offshore_region },
+	{ header: 'Product', value: (r) => r.product },
+	{ header: 'Volume', value: (r) => r.volume },
+];
+const EXPORT_COLUMNS = {
+	Monthly: [
+		{ header: 'Date', value: (r) => ymd(r.period_date) },
+		{ header: 'Land Class', value: (r) => r.land_class },
+		{ header: 'Land Category', value: (r) => r.land_category },
+		{ header: 'Commodity', value: (r) => r.commodity },
+		{ header: 'Volume', value: (r) => r.volume },
+	],
+	'Fiscal Year': [{ header: 'Fiscal Year', value: (r) => r.fiscal_year }, ...ANNUAL_COLUMNS],
+	'Calendar Year': [{ header: 'Calendar Year', value: (r) => ymd(r.period_date).slice(0, 4) }, ...ANNUAL_COLUMNS],
+};
+
 // Raw production records matching the preview filters, for the "filtered selection" CSV.
-// Selects a superset; the export route emits grain-appropriate columns.
+// Selects a superset of columns, so EXPORT_COLUMNS above can reference any of them without
+// touching this query.
 async function productionRecords(database, opts = {}) {
 	const table = 'production';
 	const q = database
@@ -159,8 +188,12 @@ async function productionRecords(database, opts = {}) {
 			'p.period_date',
 			'p.fiscal_year',
 			'l.land_type',
+			'l.land_class',
 			'l.land_category',
+			'l.state',
 			'l.county',
+			'l.fips_code',
+			'l.offshore_region',
 			database.raw(`${REGION_EXPR} as region`),
 			'c.product',
 			'c.name as commodity',
@@ -255,33 +288,25 @@ export default (router, { database }, base = '') => {
 	// GET /charts/production/export?period=&... — raw records matching the filters as CSV.
 	router.get(`${base}/export`, async (req, res) => {
 		const opts = readOpts(req);
-		const isMonthly = opts.periodType === 'Monthly';
 		try {
 			const rows = await productionRecords(database, opts);
 			const esc = (v) => {
 				const s = v == null ? '' : String(v);
 				return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 			};
-			const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? '').slice(0, 10));
-			const yearOf = (r) => (opts.periodType === 'Fiscal Year' ? r.fiscal_year : ymd(r.period_date).slice(0, 4));
-
-			let head;
-			let mapRow;
-			if (isMonthly) {
-				head = ['Date', 'Land Type', 'Land Category', 'State/Offshore Region', 'County', 'Product', 'Commodity', 'Mineral Lease Type', 'Volume', 'Unit'];
-				mapRow = (r) => [ymd(r.period_date), r.land_type, r.land_category, r.region, r.county, r.product, r.commodity, r.mineral_lease_type, r.volume, r.unit];
-			} else {
-				const yearLabel = opts.periodType === 'Fiscal Year' ? 'Fiscal Year' : 'Calendar Year';
-				head = [yearLabel, 'Land Type', 'Land Category', 'State/Offshore Region', 'Product', 'Commodity', 'Mineral Lease Type', 'Volume', 'Unit'];
-				mapRow = (r) => [yearOf(r), r.land_type, r.land_category, r.region, r.product, r.commodity, r.mineral_lease_type, r.volume, r.unit];
+			// Columns + headers come from EXPORT_COLUMNS (edit those lists above to change the CSV).
+			const columns = EXPORT_COLUMNS[opts.periodType];
+			const lines = [columns.map((c) => c.header).map(esc).join(',')];
+			for (const r of rows) {
+				lines.push(columns.map((c) => c.value(r)).map(esc).join(','));
 			}
 
-			const lines = [head.join(',')];
-			for (const r of rows) lines.push(mapRow(r).map(esc).join(','));
-
+			// Only a request with row filters is a "filtered selection"; a whole-grain export isn't
+			// labeled "_filtered". (breakout only shapes the pivot, not the exported rows.)
+			const filtered = !!(opts.from || opts.to || opts.fromYear || opts.toYear || opts.landTypes.length || opts.landClasses.length || opts.landCategories.length || opts.regions.length || opts.products.length);
 			const slug = req.query.period && PERIOD_TYPES[req.query.period] ? req.query.period : 'monthly';
 			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-			res.setHeader('Content-Disposition', `attachment; filename="production_${slug}_filtered.csv"`);
+			res.setHeader('Content-Disposition', `attachment; filename="production_${slug}${filtered ? '_filtered' : ''}.csv"`);
 			res.send(lines.join('\n'));
 		} catch (error) {
 			console.error('charts/production/export error:', error);

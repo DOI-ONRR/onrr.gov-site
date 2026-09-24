@@ -33,14 +33,20 @@ const EXPORT_FIELDS = {}
 // (which emits every column — including audit fields — under raw column names). Called with no
 // filters, the endpoint returns the whole dataset in the same shape as the "filtered selection"
 // download, so the two are consistent. The record count below (queried from /items with the same
-// export_filter) must match the endpoint's row count: true for flat collections, and for
-// disbursement too since its joins are all to-one — disbursement's export is period-aware, so
-// csvHref carries the page's period grain (Monthly vs Fiscal Year) below.
+// export_filter) must match the endpoint's row count: true for flat collections, and for the
+// normalized ones (disbursement, production) too since their joins are all to-one. Those endpoints
+// are period-aware, so csvHref carries the page's period grain (see PERIOD_PARAM) below.
 const FULL_EXPORT_ENDPOINTS = {
   federal_revenue_by_company: '/charts/federal-revenue-by-company/export',
   federal_sales: '/charts/federal-sales/export',
   disbursement: '/charts/disbursement/export',
+  production: '/charts/production/export',
 }
+
+// Maps a dataset's export_filter period grain to the ?period= slug the period-aware endpoints
+// (disbursement, production) expect. Flat datasets have no period in their export_filter, so they get
+// no param. Endpoints default to Monthly, but we send it explicitly to stay in step with the count.
+const PERIOD_PARAM = { Monthly: 'monthly', 'Fiscal Year': 'fiscal-year', 'Calendar Year': 'calendar-year' }
 
 // --- Card 1: full dataset via native export ----------------------------------
 // Optional per-dataset export filter (JSON, e.g. {"period":{"type":{"_eq":"Monthly"}}})
@@ -71,11 +77,11 @@ const csvHref = computed(() => {
   // Curated export endpoint (selected columns + friendly headers) when the dataset has one.
   const customExport = FULL_EXPORT_ENDPOINTS[props.sourceTable]
   if (customExport) {
-    // Carry the dataset's period grain so a period-aware endpoint (disbursement) exports the
-    // matching slice; the endpoint defaults to Monthly, so only Fiscal Year needs the param.
-    // Flat endpoints ignore it. This keeps the CSV in step with the record count above (scoped
-    // by the same export_filter).
-    const suffix = exportFilter.value?.period?.type?._eq === 'Fiscal Year' ? '?period=fiscal-year' : ''
+    // Carry the dataset's period grain so a period-aware endpoint (disbursement, production) exports
+    // the matching slice. Flat endpoints have no period grain, so no param. This keeps the CSV in
+    // step with the record count above (scoped by the same export_filter).
+    const grain = PERIOD_PARAM[exportFilter.value?.period?.type?._eq]
+    const suffix = grain ? `?period=${grain}` : ''
     return `${apiUrl}${customExport}${suffix}`
   }
   // Otherwise the native Directus export, optionally column-limited via EXPORT_FIELDS.
