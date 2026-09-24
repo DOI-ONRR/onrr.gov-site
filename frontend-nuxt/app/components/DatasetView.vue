@@ -143,11 +143,11 @@ async function copyApiUrl() {
              column keeps its full 8-col width and the meta panel fills its 4. -->
         <h1 class="margin-bottom-1">{{ dataset.name }}</h1>
         <div class="usa-intro measure-5" v-html="resolveImages(dataset.description)" />
-        <div class="margin-top-2">
-          <!-- No source_collection -> no preview section, so drop the Preview button and let the
-               Download button be the primary (solid, no outline) call to action. -->
+        <div v-if="previewComponent || sourceCollection || hasApi" class="margin-top-2">
+          <!-- No source_collection -> no preview and no download section, so neither button renders;
+               a manual dataset drives its downloads through supplemental_downloads instead. -->
           <a v-if="previewComponent" class="usa-button" href="#preview">Preview &amp; filter data</a>
-          <a class="usa-button" :class="{ 'usa-button--outline': previewComponent }" href="#download">Download files</a>
+          <a v-if="sourceCollection" class="usa-button" :class="{ 'usa-button--outline': previewComponent }" href="#download">Download files</a>
           <a v-if="hasApi" class="usa-button usa-button--outline" href="#api">API access</a>
         </div>
       </div>
@@ -204,17 +204,24 @@ async function copyApiUrl() {
       </div>
     </div>
 
-    <div class="grid-row grid-gap margin-bottom-2" id="download">
+    <!-- Download cards (auto export + curated files) — only for datasets backed by a source
+         collection. A dataset with no source_collection has no download section; its download
+         content comes entirely from the supplemental_downloads block below. -->
+    <div v-if="sourceCollection" class="grid-row grid-gap margin-bottom-2" id="download">
       <div class="grid-col-12">
         <h2 class="font-heading-lg">Download</h2>
         <DatasetDownloads :dataset="dataset" :source-table="sourceCollection" />
-        <!-- Free-form (WYSIWYG) supplemental downloads/links, shown beneath the standard cards. -->
-        <div
-          v-if="dataset.supplemental_downloads"
-          class="line-height-sans-5 margin-top-3"
-          v-html="resolveImages(dataset.supplemental_downloads)"
-        />
       </div>
+    </div>
+
+    <!-- Free-form (WYSIWYG) supplemental / manual downloads. Supplements the cards for a
+         source-backed dataset; for a dataset with no source collection it IS the download content. -->
+    <div
+      v-if="dataset.supplemental_downloads"
+      class="grid-row grid-gap margin-bottom-2"
+      id="supplemental-downloads"
+    >
+      <div class="grid-col-12 line-height-sans-5" v-html="resolveImages(dataset.supplemental_downloads)" />
     </div>
 
     <div v-if="hasApi" class="grid-row grid-gap margin-bottom-2" id="api">

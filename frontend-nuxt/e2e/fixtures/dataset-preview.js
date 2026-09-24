@@ -105,10 +105,9 @@ export function pivotResponse(groupBy = 'recipient') {
 // The unfiltered full-dataset count (native-export card), scoped by export_filter server-side.
 export const disbursementCount = { data: [{ count: { id: 50769 } }] }
 
-// A "downloads-only" dataset: no source_collection, so DatasetView renders NO preview section and no
-// automatic full-dataset export — just the manually-attached curated files. Used to verify the header
-// actions (no Preview button; Download becomes the primary/solid button). Served at
-// /revenue-data/reference-tables.
+// A "downloads-only" dataset: no source_collection, so DatasetView renders NO preview section AND no
+// download section (no cards, no Download button). Its download content comes entirely from the
+// supplemental_downloads WYSIWYG. Served at /revenue-data/reference-tables.
 export const downloadsOnlyPage = {
   __typename: 'pages',
   id: 'ds-page-ref',
@@ -138,17 +137,9 @@ export const downloadsOnlyPage = {
     preview_component: null,
     source_collection: null,
     export_filter: null,
-    files: [
-      {
-        directus_files_id: {
-          id: 'file-ref-pdf',
-          title: 'Allocation reference table',
-          type: 'application/pdf',
-          filesize: 245760,
-          filename_download: 'allocation-reference-table.pdf',
-        },
-      },
-    ],
+    // All download content is authored here (no cards); links live in this WYSIWYG HTML.
+    supplemental_downloads: '<h3>Historical tables</h3><p><a href="/reports/historical-allocations.pdf">Historical allocations (PDF)</a></p>',
+    files: [],
     terms: [],
     charts: [],
   },

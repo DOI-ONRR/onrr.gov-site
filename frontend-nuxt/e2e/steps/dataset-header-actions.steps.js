@@ -3,10 +3,10 @@ import { createBdd } from 'playwright-bdd'
 
 const { Given, Then } = createBdd()
 
-// DatasetView's header actions change with whether the dataset has a preview (driven by
-// source_collection): with a preview, "Preview & filter data" is the primary button and "Download
-// files" is an outline button; with no source_collection there is no preview, so the Preview button
-// is dropped and Download becomes the primary (solid) button.
+// DatasetView's header actions and download section depend on source_collection: a source-backed
+// dataset shows the Preview button (primary), the Download button (outline), and the Download section;
+// a dataset with no source_collection shows neither button and no download section — its download
+// content is authored entirely in the supplemental_downloads WYSIWYG.
 const HEADER_BTN = {
   'Preview & filter data': '#preview',
   'Download files': '#download',
@@ -32,13 +32,15 @@ Then('the dataset header button {string} is an outline button', async ({ page },
   await expect(headerBtn(page, name)).toHaveClass(/usa-button--outline/)
 })
 
-Then('the download card {string} is not rendered', async ({ page }, heading) => {
-  await expect(
-    page.locator('#download .download-card').filter({ has: page.getByRole('heading', { name: heading, exact: true }) }),
-  ).toHaveCount(0)
+Then('the download section is rendered', async ({ page }) => {
+  await expect(page.locator('#download')).toBeVisible()
 })
 
-// The supplemental_downloads WYSIWYG renders as free-form HTML beneath the Download cards.
-Then('the download section shows a supplemental link to {string}', async ({ page }, href) => {
-  await expect(page.locator(`#download a[href="${href}"]`)).toBeVisible()
+Then('the download section is not rendered', async ({ page }) => {
+  await expect(page.locator('#download')).toHaveCount(0)
+})
+
+// The supplemental_downloads WYSIWYG renders as free-form HTML in its own #supplemental-downloads block.
+Then('the page shows a supplemental download link to {string}', async ({ page }, href) => {
+  await expect(page.locator(`#supplemental-downloads a[href="${href}"]`)).toBeVisible()
 })
