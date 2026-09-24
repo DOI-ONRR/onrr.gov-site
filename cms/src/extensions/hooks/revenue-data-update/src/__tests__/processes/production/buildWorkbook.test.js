@@ -54,3 +54,34 @@ describe('production buildWorkbook (Monthly)', () => {
 		expect(sheets['Monthly Production']).toEqual([['Date', 'Land Class', 'Land Category', 'Commodity', 'Volume']]);
 	});
 });
+
+describe('production buildWorkbook (annual grains)', () => {
+	const annualRow = {
+		land_class: 'Federal', land_category: 'Offshore', state: 'Louisiana', county: 'Cameron',
+		fips_code: '22023', offshore_region: 'Gulf of Mexico', product: 'Oil (bbl)', volume: '4200.75',
+	};
+	const ANNUAL_HEADERS = ['Land Class', 'Land Category', 'State', 'County', 'FIPS Code', 'Offshore Region', 'Product', 'Volume'];
+
+	it('Fiscal Year: year column is a number, then the annual detail columns', () => {
+		const { sheetNames, sheets } = parse(buildWorkbook({
+			periodType: 'Fiscal Year', sheetName: 'Fiscal Year Production',
+			rows: [{ fiscal_year: 2022, ...annualRow }], dictionaryFields: [],
+		}));
+		expect(sheetNames).toEqual(['Fiscal Year Production', 'Data Dictionary']);
+		const t1 = sheets['Fiscal Year Production'];
+		expect(t1[0]).toEqual(['Fiscal Year', ...ANNUAL_HEADERS]);
+		expect(t1[1][0]).toBe(2022);
+		expect(t1[1][8]).toBe(4200.75); // Volume numeric
+		expect(t1[1][5]).toBe('22023'); // FIPS Code stays text (leading zeros safe)
+	});
+
+	it('Calendar Year: year is derived from period_date as a number', () => {
+		const { sheets } = parse(buildWorkbook({
+			periodType: 'Calendar Year', sheetName: 'Calendar Year Production',
+			rows: [{ period_date: '2021-01-01', ...annualRow }], dictionaryFields: [],
+		}));
+		const t1 = sheets['Calendar Year Production'];
+		expect(t1[0]).toEqual(['Calendar Year', ...ANNUAL_HEADERS]);
+		expect(t1[1][0]).toBe(2021);
+	});
+});

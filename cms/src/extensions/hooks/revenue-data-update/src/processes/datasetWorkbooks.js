@@ -9,10 +9,14 @@
 import { generateFederalSalesWorkbook } from './federal-sales/generateWorkbook.js';
 import { generateRevenueByCompanyWorkbook } from './revenue-by-company/generateWorkbook.js';
 import { generateFiscalYearDisbursementWorkbook, generateMonthlyDisbursementWorkbook } from './disbursement/generateWorkbook.js';
-import { generateMonthlyProductionWorkbook } from './production/generateWorkbook.js';
+import {
+	generateMonthlyProductionWorkbook,
+	generateFiscalYearProductionWorkbook,
+	generateCalendarYearProductionWorkbook,
+} from './production/generateWorkbook.js';
 
 // Source collections this module can (re)generate a workbook for. The normalized ones (disbursement,
-// production) have per-grain variants — see pickGenerator for which grains have a workbook.
+// production) have per-grain variants — see pickGenerators for which grains have a workbook.
 export const SUPPORTED_SOURCE_COLLECTIONS = ['federal_sales', 'federal_revenue_by_company', 'disbursement', 'production'];
 
 const asArray = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
@@ -26,29 +30,31 @@ function periodTypeOf(exportFilter) {
 	return ef?.period?.type?._eq ?? null;
 }
 
-// Choose the generator for a dataset_metadata row. source_collection is unique for most datasets;
-// disbursement has two rows (Monthly / Fiscal Year) distinguished by export_filter period grain, each
-// with its own workbook.
-function pickGenerator(row) {
+// The generator(s) for a dataset_metadata row, as an array (a row can back more than one workbook).
+// source_collection is unique for most datasets; the normalized ones split by export_filter period
+// grain. The Yearly production page (annual grain) hosts both annual workbooks.
+function pickGenerators(row) {
 	switch (row.source_collection) {
 		case 'federal_sales':
-			return generateFederalSalesWorkbook;
+			return [generateFederalSalesWorkbook];
 		case 'federal_revenue_by_company':
-			return generateRevenueByCompanyWorkbook;
+			return [generateRevenueByCompanyWorkbook];
 		case 'disbursement':
 			switch (periodTypeOf(row.export_filter)) {
-				case 'Fiscal Year': return generateFiscalYearDisbursementWorkbook;
-				case 'Monthly': return generateMonthlyDisbursementWorkbook;
-				default: return null;
+				case 'Fiscal Year': return [generateFiscalYearDisbursementWorkbook];
+				case 'Monthly': return [generateMonthlyDisbursementWorkbook];
+				default: return [];
 			}
 		case 'production':
 			switch (periodTypeOf(row.export_filter)) {
-				case 'Monthly': return generateMonthlyProductionWorkbook;
-				// Fiscal Year / Calendar Year workbooks are added next.
-				default: return null;
+				case 'Monthly': return [generateMonthlyProductionWorkbook];
+				case 'Fiscal Year':
+				case 'Calendar Year':
+					return [generateFiscalYearProductionWorkbook, generateCalendarYearProductionWorkbook];
+				default: return [];
 			}
 		default:
-			return null;
+			return [];
 	}
 }
 
@@ -84,13 +90,15 @@ export async function generateForRequest(ctx, { datasets, keys } = {}) {
 	const generated = [];
 	const skipped = [];
 	for (const row of uniqueRows) {
-		const generate = pickGenerator(row);
-		if (!generate) {
+		const generators = pickGenerators(row);
+		if (!generators.length) {
 			skipped.push(row.name || row.source_collection);
 			continue;
 		}
-		const summary = await generate(ctx);
-		generated.push({ dataset: row.source_collection, name: row.name, ...summary });
+		for (const generate of generators) {
+			const summary = await generate(ctx);
+			generated.push({ dataset: row.source_collection, name: row.name, ...summary });
+		}
 	}
 
 	return { requested, generated, skipped };

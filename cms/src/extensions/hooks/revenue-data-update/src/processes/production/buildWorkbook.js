@@ -48,6 +48,13 @@ function excelSerial(v) {
 	return Math.round((Date.UTC(y, m - 1, d) - EXCEL_EPOCH_UTC) / 86400000);
 }
 
+// The 4-digit year of a date (Date or 'YYYY-...' string) as a number; '' for blanks/invalid.
+const yearOf = (v) => {
+	if (v == null || v === '') return '';
+	const y = v instanceof Date ? v.getUTCFullYear() : Number(String(v).slice(0, 4));
+	return Number.isFinite(y) ? y : '';
+};
+
 function sheetFromAoa(aoa, colWidths) {
 	const ws = XLSX.utils.aoa_to_sheet(aoa);
 	if (colWidths) ws['!cols'] = colWidths.map((wch) => ({ wch }));
@@ -56,8 +63,18 @@ function sheetFromAoa(aoa, colWidths) {
 
 // Tab 1 columns per period grain — mirror the production CSV download (EXPORT_COLUMNS in the charts
 // endpoint). Keep these in sync with that endpoint if the CSV columns change. `date: true` marks a
-// column whose value is an Excel serial that should render as a date. (Fiscal Year / Calendar Year
-// grains are added when those workbooks are wired.)
+// column whose value is an Excel serial that should render as a date. The annual grains (Fiscal Year,
+// Calendar Year) lead with their year column and share the same detail columns.
+const ANNUAL_COLUMNS = [
+	{ header: 'Land Class', value: (r) => r.land_class ?? '', width: 16 },
+	{ header: 'Land Category', value: (r) => r.land_category ?? '', width: 16 },
+	{ header: 'State', value: (r) => r.state ?? '', width: 16 },
+	{ header: 'County', value: (r) => r.county ?? '', width: 16 },
+	{ header: 'FIPS Code', value: (r) => r.fips_code ?? '', width: 12 },
+	{ header: 'Offshore Region', value: (r) => r.offshore_region ?? '', width: 18 },
+	{ header: 'Product', value: (r) => r.product ?? '', width: 18 },
+	{ header: 'Volume', value: (r) => num(r.volume), width: 16 },
+];
 const PRODUCTION_COLUMNS = {
 	Monthly: [
 		{ header: 'Date', value: (r) => excelSerial(r.period_date), date: true, width: 12 },
@@ -66,6 +83,8 @@ const PRODUCTION_COLUMNS = {
 		{ header: 'Commodity', value: (r) => r.commodity ?? '', width: 18 },
 		{ header: 'Volume', value: (r) => num(r.volume), width: 16 },
 	],
+	'Fiscal Year': [{ header: 'Fiscal Year', value: (r) => num(r.fiscal_year), width: 12 }, ...ANNUAL_COLUMNS],
+	'Calendar Year': [{ header: 'Calendar Year', value: (r) => yearOf(r.period_date), width: 14 }, ...ANNUAL_COLUMNS],
 };
 
 /**

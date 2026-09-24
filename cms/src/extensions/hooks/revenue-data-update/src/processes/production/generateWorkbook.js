@@ -1,12 +1,12 @@
 /**
  * Regenerates a Production XLSX (per period grain) and stores it in Directus.
  *
- * production has several dataset_metadata rows (Monthly / Yearly) sharing source_collection
- * 'production', distinguished by export_filter (period.type). Pulls that grain's rows (same
- * joins/columns as the CSV download) and the data dictionary, builds the two-tab workbook, and writes
- * it back to the SAME directus_files record each run so the download link (/assets/<id>) stays stable.
- * On first run it creates the file and links it into dataset_metadata.files; afterwards it just
- * replaces the contents.
+ * production has two dataset_metadata pages sharing source_collection 'production': Monthly and Yearly
+ * (the Yearly page's preview toggles Fiscal Year / Calendar Year, so it hosts BOTH annual workbooks).
+ * A workbook pulls its grain's rows (same joins/columns as the CSV download) and the dataset's data
+ * dictionary, builds the two-tab workbook, and writes it back to the SAME directus_files record each
+ * run so the download link (/assets/<id>) stays stable. On first run it creates the file and links it
+ * into dataset_metadata.files; afterwards it just replaces the contents.
  */
 import { Readable } from 'node:stream';
 import { buildWorkbook } from './buildWorkbook.js';
@@ -31,29 +31,36 @@ function periodTypeOf(exportFilter) {
 	return ef?.period?.type?._eq ?? null;
 }
 
-// Find the dataset_metadata row for a grain. If several share the grain (e.g. a scratch/duplicate
-// page), prefer the one that has a data dictionary — that's the real published dataset the workbook
-// (with its Data Dictionary tab) belongs to.
-async function findDatasetRow(database, periodType) {
+// Find the dataset_metadata row a workbook links to. `grains` is an ordered preference list of
+// export_filter period grains: the first grain with a matching row wins, so the annual workbooks can
+// prefer their own page and fall back to the shared Yearly page. If several rows share a grain (e.g. a
+// scratch/duplicate page), prefer the one with a data dictionary — the real published dataset.
+async function findDatasetRow(database, grains) {
 	const all = await database('dataset_metadata').where({ source_collection: SOURCE_COLLECTION }).select('id', 'export_filter');
-	const matching = all.filter((d) => periodTypeOf(d.export_filter) === periodType);
-	if (matching.length <= 1) return matching[0] || null;
-	for (const row of matching) {
-		const [{ n }] = await database('data_dictionary_fields').where({ dataset: row.id }).count({ n: '*' });
-		if (Number(n) > 0) return row;
+	for (const grain of grains) {
+		const matching = all.filter((d) => periodTypeOf(d.export_filter) === grain);
+		if (matching.length === 1) return matching[0];
+		if (matching.length > 1) {
+			for (const row of matching) {
+				const [{ n }] = await database('data_dictionary_fields').where({ dataset: row.id }).count({ n: '*' });
+				if (Number(n) > 0) return row;
+			}
+			return matching[0];
+		}
 	}
-	return matching[0];
+	return null;
 }
 
-// Shared core: (re)generate the workbook for one production period grain.
-async function generateProductionWorkbook(context, { periodType, filename, title }) {
+// Shared core: (re)generate the workbook for one production period grain. `periodType` selects the
+// rows; `datasetGrains` selects the dataset_metadata page the file links to.
+async function generateProductionWorkbook(context, { periodType, datasetGrains, filename, title }) {
 	const { services, database, schema, accountability, env } = context;
 	const { FilesService } = services;
 
-	// 1. Identify the dataset row for this grain (source_collection is shared across grains).
-	const dataset = await findDatasetRow(database, periodType);
+	// 1. Identify the dataset page this workbook belongs to.
+	const dataset = await findDatasetRow(database, datasetGrains);
 	if (!dataset) {
-		return { skipped: `no ${periodType} production dataset_metadata row found`, filename };
+		return { skipped: `no production dataset_metadata row for "${title}"`, filename };
 	}
 
 	// 2. Rows for this grain — same joins/columns/order as the charts CSV export (superset select).
@@ -129,7 +136,28 @@ async function generateProductionWorkbook(context, { periodType, filename, title
 export function generateMonthlyProductionWorkbook(context) {
 	return generateProductionWorkbook(context, {
 		periodType: 'Monthly',
+		datasetGrains: ['Monthly'],
 		filename: 'monthly-production.xlsx',
 		title: 'Monthly Production',
+	});
+}
+
+// The annual workbooks both live on the Yearly production page (it serves both grains via its Period
+// toggle), so each prefers its own page but falls back to the other annual page.
+export function generateFiscalYearProductionWorkbook(context) {
+	return generateProductionWorkbook(context, {
+		periodType: 'Fiscal Year',
+		datasetGrains: ['Fiscal Year', 'Calendar Year'],
+		filename: 'fiscal-year-production.xlsx',
+		title: 'Fiscal Year Production',
+	});
+}
+
+export function generateCalendarYearProductionWorkbook(context) {
+	return generateProductionWorkbook(context, {
+		periodType: 'Calendar Year',
+		datasetGrains: ['Calendar Year', 'Fiscal Year'],
+		filename: 'calendar-year-production.xlsx',
+		title: 'Calendar Year Production',
 	});
 }
