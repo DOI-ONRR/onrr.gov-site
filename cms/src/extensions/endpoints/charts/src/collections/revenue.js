@@ -28,6 +28,28 @@ const REGION_EXPR = `COALESCE(NULLIF("l"."state_name", ''), "l"."offshore_region
 // the period date (Monthly and Calendar Year rows both date to their year).
 const yearExpr = (periodType) => (periodType === 'Fiscal Year' ? '"p"."fiscal_year"' : 'EXTRACT(YEAR FROM "p"."period_date")');
 
+// A period_date (Date or string) rendered as YYYY-MM-DD for the CSV.
+const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? '').slice(0, 10));
+
+// ── CSV export columns ────────────────────────────────────────────────────────────────────────
+// One list per period grain (keyed by period.type): Monthly is dated; the annual grains lead with
+// their year column. The detail columns are shared. EDIT these lists to change the CSV download's
+// columns and headers; `value` reads a cell off a record from revenueRecords().
+const SHARED_COLUMNS = [
+	{ header: 'Land Type', value: (r) => r.land_type },
+	{ header: 'State/Offshore Region', value: (r) => r.region },
+	{ header: 'Revenue Type', value: (r) => r.revenue_type },
+	{ header: 'Product', value: (r) => r.product },
+	{ header: 'Commodity', value: (r) => r.commodity },
+	{ header: 'Amount', value: (r) => r.amount },
+	{ header: 'Unit', value: (r) => r.unit },
+];
+const EXPORT_COLUMNS = {
+	Monthly: [{ header: 'Date', value: (r) => ymd(r.period_date) }, ...SHARED_COLUMNS],
+	'Fiscal Year': [{ header: 'Fiscal Year', value: (r) => r.fiscal_year }, ...SHARED_COLUMNS],
+	'Calendar Year': [{ header: 'Calendar Year', value: (r) => ymd(r.period_date).slice(0, 4) }, ...SHARED_COLUMNS],
+};
+
 // Optional secondary breakout for the annual table: the ?breakout= value maps to the column
 // that becomes a sub-row under each commodity. Anything else = no breakout.
 const BREAKOUT_FIELDS = {
@@ -241,36 +263,27 @@ export default (router, { database }, base = '') => {
 		}
 	});
 
-	// GET /charts/revenue/export?period=&... — raw records matching the filters as CSV.
+	// GET /charts/revenue/export?period=&... — raw records matching the filters as CSV. Serves both
+	// the "filtered selection" download (with filters) and a whole-grain download (no filters); the
+	// filename reflects which, so a full export isn't mislabeled "_filtered".
 	router.get(`${base}/export`, async (req, res) => {
 		const opts = readOpts(req);
-		const isMonthly = opts.periodType === 'Monthly';
 		try {
 			const rows = await revenueRecords(database, opts);
 			const esc = (v) => {
 				const s = v == null ? '' : String(v);
 				return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 			};
-			const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d ?? '').slice(0, 10));
-			const yearOf = (r) => (opts.periodType === 'Fiscal Year' ? r.fiscal_year : ymd(r.period_date).slice(0, 4));
+			// Columns + headers come from EXPORT_COLUMNS for the grain (edit those lists above).
+			const columns = EXPORT_COLUMNS[opts.periodType];
+			const lines = [columns.map((c) => c.header).map(esc).join(',')];
+			for (const r of rows) lines.push(columns.map((c) => c.value(r)).map(esc).join(','));
 
-			let head;
-			let mapRow;
-			if (isMonthly) {
-				head = ['Date', 'Land Type', 'State/Offshore Region', 'Revenue Type', 'Product', 'Commodity', 'Amount', 'Unit'];
-				mapRow = (r) => [ymd(r.period_date), r.land_type, r.region, r.revenue_type, r.product, r.commodity, r.amount, r.unit];
-			} else {
-				const yearLabel = opts.periodType === 'Fiscal Year' ? 'Fiscal Year' : 'Calendar Year';
-				head = [yearLabel, 'Land Type', 'State/Offshore Region', 'Revenue Type', 'Product', 'Commodity', 'Amount', 'Unit'];
-				mapRow = (r) => [yearOf(r), r.land_type, r.region, r.revenue_type, r.product, r.commodity, r.amount, r.unit];
-			}
-
-			const lines = [head.join(',')];
-			for (const r of rows) lines.push(mapRow(r).map(esc).join(','));
-
+			// Only a request with row filters is a "filtered selection" (breakout only shapes the pivot).
+			const filtered = !!(opts.fromYear || opts.toYear || opts.landTypes.length || opts.revenueTypes.length || opts.regions.length || opts.products.length);
 			const slug = req.query.period && PERIOD_TYPES[req.query.period] ? req.query.period : 'monthly';
 			res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-			res.setHeader('Content-Disposition', `attachment; filename="revenue_${slug}_filtered.csv"`);
+			res.setHeader('Content-Disposition', `attachment; filename="revenue_${slug}${filtered ? '_filtered' : ''}.csv"`);
 			res.send(lines.join('\n'));
 		} catch (error) {
 			console.error('charts/revenue/export error:', error);
