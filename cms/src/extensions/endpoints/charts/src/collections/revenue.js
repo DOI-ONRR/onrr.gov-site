@@ -36,13 +36,17 @@ const ymd = (d) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d 
 // their year column. The detail columns are shared. EDIT these lists to change the CSV download's
 // columns and headers; `value` reads a cell off a record from revenueRecords().
 const SHARED_COLUMNS = [
-	{ header: 'Land Type', value: (r) => r.land_type },
-	{ header: 'State/Offshore Region', value: (r) => r.region },
+	{ header: 'Land Class', value: (r) => r.land_class },
+	{ header: 'Land Category', value: (r) => r.land_category },
+	{ header: 'State', value: (r) => r.state },
+	{ header: 'County', value: (r) => r.county },
+	{ header: 'FIPS Code', value: (r) => r.fips_code },
+	{ header: 'Offshore Region', value: (r) => r.offshore_region },
 	{ header: 'Revenue Type', value: (r) => r.revenue_type },
-	{ header: 'Product', value: (r) => r.product },
+	{ header: 'Mineral Lease Type', value: (r) => r.mineral_lease_type },
 	{ header: 'Commodity', value: (r) => r.commodity },
-	{ header: 'Amount', value: (r) => r.amount },
-	{ header: 'Unit', value: (r) => r.unit },
+	{ header: 'Product', value: (r) => r.product },
+	{ header: 'Revenue', value: (r) => r.amount },
 ];
 const EXPORT_COLUMNS = {
 	Monthly: [{ header: 'Date', value: (r) => ymd(r.period_date) }, ...SHARED_COLUMNS],
@@ -174,10 +178,17 @@ async function revenueRecords(database, opts = {}) {
 		.select(
 			'p.period_date',
 			'p.fiscal_year',
+			'p.calendar_year',
 			'l.land_type',
+			'l.land_class',
 			'l.land_category',
+			'l.state',
+			'l.county',
+			'l.fips_code',
+			'l.offshore_region',
 			database.raw(`${REGION_EXPR} as region`),
 			'f.revenue_type',
+			'c.mineral_lease_type',
 			'c.product',
 			'c.name as commodity',
 			`${table}.amount`,

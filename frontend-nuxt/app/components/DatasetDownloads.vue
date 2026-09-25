@@ -41,6 +41,7 @@ const FULL_EXPORT_ENDPOINTS = {
   federal_sales: '/charts/federal-sales/export',
   disbursement: '/charts/disbursement/export',
   production: '/charts/production/export',
+  revenue: '/charts/revenue/export',
 }
 
 // Maps a dataset's export_filter period grain to the ?period= slug the period-aware endpoints
