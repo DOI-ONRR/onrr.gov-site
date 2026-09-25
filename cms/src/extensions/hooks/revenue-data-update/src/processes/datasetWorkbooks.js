@@ -10,10 +10,12 @@ import { generateFederalSalesWorkbook } from './federal-sales/generateWorkbook.j
 import { generateRevenueByCompanyWorkbook } from './revenue-by-company/generateWorkbook.js';
 import { generateFiscalYearDisbursementWorkbook, generateMonthlyDisbursementWorkbook } from './disbursement/generateWorkbook.js';
 import { generateMonthlyProductionWorkbook, generateAnnualProductionWorkbook } from './production/generateWorkbook.js';
+import { generateRevenueWorkbook } from './revenue/generateWorkbook.js';
 
 // Source collections this module can (re)generate a workbook for. The normalized ones (disbursement,
-// production) have per-grain variants — see pickGenerators for which grains have a workbook.
-export const SUPPORTED_SOURCE_COLLECTIONS = ['federal_sales', 'federal_revenue_by_company', 'disbursement', 'production'];
+// production) have per-grain variants — see pickGenerators for which grains have a workbook. revenue
+// is one combined file (all grains as tabs), built with a streaming writer.
+export const SUPPORTED_SOURCE_COLLECTIONS = ['federal_sales', 'federal_revenue_by_company', 'disbursement', 'production', 'revenue'];
 
 const asArray = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
 
@@ -49,6 +51,10 @@ function pickGenerators(row) {
 					return [generateAnnualProductionWorkbook];
 				default: return [];
 			}
+		case 'revenue':
+			// One combined workbook (Monthly + Calendar Year + Fiscal Year tabs), so any grain's row
+			// maps to it.
+			return [generateRevenueWorkbook];
 		default:
 			return [];
 	}
