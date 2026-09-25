@@ -9,6 +9,7 @@ import { processFederalSalesUpdate } from './processes/federal-sales/index.js';
 import { generateFederalSalesWorkbook } from './processes/federal-sales/generateWorkbook.js';
 import { generateMonthlyDisbursementWorkbook, generateFiscalYearDisbursementWorkbook } from './processes/disbursement/generateWorkbook.js';
 import { generateMonthlyProductionWorkbook, generateAnnualProductionWorkbook } from './processes/production/generateWorkbook.js';
+import { generateRevenueWorkbook } from './processes/revenue/generateWorkbook.js';
 
 export default ({ filter, action }, { services, database, getSchema, env }) => {
 	const { ItemsService } = services;
@@ -109,6 +110,18 @@ export default ({ filter, action }, { services, database, getSchema, env }) => {
 				console.log('[Revenue Data Update] production XLSX generated:', summary);
 			} catch (error) {
 				console.error('[Revenue Data Update] production XLSX generation failed:', error.message);
+			}
+		}
+
+		// Revenue: (re)generate the combined XLSX (Monthly + Calendar Year + Fiscal Year tabs + Data
+		// Dictionary) via the streaming writer, so a large dataset doesn't OOM the instance. Any grain's
+		// update refreshes the whole file. Best-effort.
+		if (result?.success && meta.payload.dataset === 'revenue') {
+			try {
+				const summary = await generateRevenueWorkbook({ services, database, schema, accountability, env });
+				console.log('[Revenue Data Update] revenue XLSX generated:', summary);
+			} catch (error) {
+				console.error('[Revenue Data Update] revenue XLSX generation failed:', error.message);
 			}
 		}
 
