@@ -231,6 +231,9 @@ jobs:
   deploy-cms:
     needs: build-tinymce
     runs-on: ubuntu-latest
+    # Prod cloud.gov credentials live only in the `prod` environment, which is
+    # restricted to the main branch; every other branch gets `nonprod`.
+    environment: ${{ github.ref_name == 'main' && 'prod' || 'nonprod' }}
     steps:
       - name: Checkout repo (for deploy.sh & manifests)
         uses: actions/checkout@v4
@@ -251,8 +254,9 @@ jobs:
 
       - name: Deploy CMS
         working-directory: cms
-        run: ../.github/scripts/deploy.sh --branch ${{ github.ref_name }}
+        run: ../.github/scripts/deploy.sh --branch "$BRANCH"
         env:
+          BRANCH: ${{ github.ref_name }}
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
           CF_ORG: ${{ secrets.CF_ORG }}
