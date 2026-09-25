@@ -38,6 +38,9 @@ env:
 jobs:
   db-backup:
     runs-on: ubuntu-latest
+    # Uses the prod cloud.gov credentials, which live only in the `prod`
+    # environment (restricted to the main branch).
+    environment: prod
 
     steps:
       - name: Checkout repository
@@ -81,7 +84,10 @@ jobs:
 
       - name: Log in to Cloud Foundry
         run: |
-          cf login -u "${{ secrets.CF_USERNAME }}" -p "${{ secrets.CF_PASSWORD }}" -a api.fr.cloud.gov -o doi-onrr -s "$CF_SPACE"
+          cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o doi-onrr -s "$CF_SPACE"
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
 
       - name: Dump database
         run: |
