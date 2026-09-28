@@ -33,7 +33,7 @@
 		"xlsx": "^0.18.5"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.1.4",
+		"@directus/extensions-sdk": "^18.0.5",
 		"vue": "^3.5.35"
 	}
 }

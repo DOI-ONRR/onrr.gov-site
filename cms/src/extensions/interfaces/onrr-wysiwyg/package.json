@@ -24,7 +24,7 @@
 		"link": "directus-extension link"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.1.4",
+		"@directus/extensions-sdk": "^18.0.5",
 		"autoprefixer": "^10.5.0",
 		"postcss": "^8.5.15",
 		"sass": "^1.100.0",
@@ -41,7 +41,6 @@
 		"@codemirror/lang-sql": "^6.10.0",
 		"@codemirror/state": "6.6.0",
 		"@codemirror/view": "6.43.0",
-		"@directus/sdk": "^21.3.0",
 		"@tarekraafat/autocomplete.js": "^10.2.10",
 		"@tinymce/tinymce-vue": "^6.3.0",
 		"js-beautify": "^2.0.3",
