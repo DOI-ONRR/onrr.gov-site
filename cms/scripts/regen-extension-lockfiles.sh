@@ -54,7 +54,8 @@ ext_dir_of() { # normalize a path to src/extensions/<type>/<name>/
 if [ "${#explicit[@]}" -gt 0 ]; then
 	for e in "${explicit[@]}"; do dirs+=("$(echo "$e" | ext_dir_of)"); done
 elif [ "$mode" = "all" ]; then
-	while IFS= read -r d; do dirs+=("${d#"$CMS"/}"); done < <(find "$CMS/src/extensions" -mindepth 2 -maxdepth 2 -name package.json -exec dirname {} \; | sort)
+	# package.json lives at src/extensions/<type>/<name>/package.json — depth 3 under src/extensions.
+	while IFS= read -r d; do dirs+=("${d#"$CMS"/}/"); done < <(find "$CMS/src/extensions" -mindepth 3 -maxdepth 3 -name package.json -exec dirname {} \; | sort)
 else
 	diffargs=(--name-only)
 	[ "$mode" = "staged" ] && diffargs=(--cached --name-only) || diffargs=(--name-only HEAD)
