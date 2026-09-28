@@ -23,12 +23,6 @@ jobs:
       github.event_name == 'push' ||
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
-    environment: >-
-      ${{
-        github.event_name == 'pull_request' && github.base_ref == 'main' && 'prod' ||
-        github.event_name == 'pull_request' && github.base_ref == 'dev' && 'dev' ||
-        'preview'
-      }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
