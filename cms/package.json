@@ -46,7 +46,7 @@
   "dependencies": {
     "axios": "^1.19.0",
     "debug": "^4.4.3",
-    "directus": "^12.3.0",
+    "directus": "^12.4.1",
     "human-signals": "^8.0.1",
     "jszip": "^3.10.1",
     "node-fetch": "^3.3.2",

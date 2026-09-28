@@ -25,8 +25,8 @@
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
 	},
 	"dependencies": {
-		"@directus/extensions-sdk": "^17.1.4",
-		"@directus/sdk": "^21.3.0",
+		"@directus/extensions-sdk": "^18.0.5",
+		"@directus/sdk": "^26.0.0",
 		"deep-diff": "^1.0.2",
 		"graphql-request": "^7.4.0",
 		"winston": "^3.19.0"
