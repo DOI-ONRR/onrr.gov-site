@@ -55,8 +55,8 @@ jobs:
     needs: build-frontend
     runs-on: ubuntu-latest
     # Prod cloud.gov credentials live only in the `prod` environment, which is
-    # restricted to the main branch; every other branch gets `nonprod`.
-    environment: ${{ github.ref_name == 'main' && 'prod' || 'nonprod' }}
+    # restricted to the main branch; every other branch gets `non-prod`.
+    environment: ${{ github.ref_name == 'main' && 'prod' || 'non-prod' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
