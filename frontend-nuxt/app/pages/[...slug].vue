@@ -3,6 +3,13 @@ import getPageBySlug from '@/graphql/queries/collections/pages/getPageBySlug.gql
 import getMenuByLabel from '@/graphql/queries/collections/menus/getMenuByLabel.gql'
 import getContactTopics from '@/graphql/queries/collections/contacts/getContactTopics.gql'
 
+// Boxed page blocks that render as a self-contained visual unit with no outer margin get
+// 24px below in the block grid (grid-gap only gutters horizontally, so stacked/wrapped
+// boxes would otherwise touch). Prose (content_blocks), self-managing blocks (tab_blocks,
+// expansion_panels, collection_blocks) and blocks that carry their own margin
+// (pay_gov_forms) are excluded so spacing isn't doubled.
+const SPACED_BLOCKS = new Set(['card_blocks', 'chart_cards', 'data_tables', 'contact_boxes'])
+
 definePageMeta({
   // Key on the PATH only (not fullPath) so query-string changes — e.g. a dataset preview's
   // filter state synced to the URL — do NOT re-mount the page. Re-mounting on every filter
@@ -161,7 +168,10 @@ const sidenavLinks = computed(() => {
           <div
             v-for="block in page?.page_blocks"
             :key="block.id"
-            :class="`grid-col-${block.item?.block_v_col || 12}`"
+            :class="[
+              `grid-col-${block.item?.block_v_col || 12}`,
+              SPACED_BLOCKS.has(block.item?.__typename) && 'margin-bottom-3',
+            ]"
           >
             <div
               v-if="block.item?.__typename === 'content_blocks'"
