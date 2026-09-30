@@ -7,7 +7,7 @@
       elevation="0"
       class="card">
       <v-card-title class="text--primary">{{ announcement.title }}</v-card-title>
-      <v-card-text v-html="announcement.content" class="text--primary body-1" />
+      <v-card-text v-html="$sanitizeHtml(announcement.content)" class="text--primary body-1" />
     </v-card>
   </div>
 </template>

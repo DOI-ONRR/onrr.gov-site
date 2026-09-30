@@ -16,12 +16,12 @@
           @change="submitSearch($event, contactsSearchField.select || contactsSearchField.search)">
           <template v-slot:selection="{ item }">
             <v-list-item-content>
-              <v-list-item-title v-html="item"></v-list-item-title>
+              <v-list-item-title v-html="$sanitizeHtml(item)"></v-list-item-title>
             </v-list-item-content>
           </template>
           <template v-slot:item="{ item }">
             <v-list-item-content>
-              <v-list-item-title v-html="item"></v-list-item-title>
+              <v-list-item-title v-html="$sanitizeHtml(item)"></v-list-item-title>
             </v-list-item-content>
           </template>
         </v-autocomplete>

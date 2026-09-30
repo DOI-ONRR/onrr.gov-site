@@ -74,7 +74,7 @@ function onTabChange(index) {
         <button
           class="tabs-block__tab"
           :class="{ 'tabs-block__tab--selected': selected }"
-          v-html="tab.label"
+          v-html="sanitizeHtml(tab.label)"
         />
       </Tab>
     </TabList>
@@ -88,7 +88,7 @@ function onTabChange(index) {
           >
             <div
               v-if="block.item?.__typename === 'content_blocks'"
-              v-html="resolveImages(block.item.block_content_html)"
+              v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
             />
             <TabsBlock
               v-else-if="block.item?.__typename === 'tab_blocks'"

@@ -1,6 +1,7 @@
 const express = require('express');
 const https = require('https');
 const { URL } = require('url');
+const { securityHeaders } = require('./security-headers');
 
 const app = express();
 app.use(express.json());
@@ -21,12 +22,9 @@ function proxyRequest(req, res, options, isGraphQL = false) {
       return res.status(proxyRes.statusCode).send("Error from external server");
     }
 
-    // Override X-Frame-Options to allow embedding in CMS
-    const headers = { ...proxyRes.headers };
-    headers['x-frame-options'] = 'SAMEORIGIN';
-    headers['content-security-policy'] = "frame-ancestors 'self' https://preview-onrr-cms.app.cloud.gov";
-
-    res.writeHead(proxyRes.statusCode, headers);
+    // Keep the upstream CSP (e.g. Directus's default-src 'none' on /assets) and
+    // allow this environment's CMS to frame the site for live preview.
+    res.writeHead(proxyRes.statusCode, securityHeaders(proxyRes.headers));
 
     proxyRes.pipe(res);
 
