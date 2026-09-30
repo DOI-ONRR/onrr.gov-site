@@ -24,6 +24,11 @@ const { resolveImages, assetUrl } = useCmsContent()
 const { data } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
 const page = computed(() => data.value?.page?.[0])
 
+// A band's `placement` (default 'top') decides whether it renders above or below the
+// page_blocks, so bands and blocks can be combined on one page.
+const topBands = computed(() => (page.value?.page_bands ?? []).filter((b) => b.placement !== 'bottom'))
+const bottomBands = computed(() => (page.value?.page_bands ?? []).filter((b) => b.placement === 'bottom'))
+
 // Contact-topic fallback: /about/contact/<slug> with no authored CMS page → render the
 // topic's contacts directory directly, so every hub topic works before its page exists.
 const contactFallbackWanted = !page.value && route.path.startsWith('/about/contact/')
@@ -135,7 +140,8 @@ const sidenavLinks = computed(() => {
     <p v-if="fallbackTopic.description" class="usa-intro">{{ fallbackTopic.description }}</p>
     <ContactDirectory :topic="fallbackTopic.slug" />
   </section>
-  <section v-else class="grid-container usa-section margin-top-4">
+  <template v-else>
+  <section class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
       <div v-if="!isCustomLayout && !isFullWidth" class="grid-col-2">
         <nav v-if="sidenavLinks.length" aria-label="Side navigation">
@@ -161,9 +167,10 @@ const sidenavLinks = computed(() => {
         <JourneyLandingView v-else-if="isJourneyLanding" :page="page" />
         <HandbookDetailView v-else-if="isHandbook" :page="page" />
         <template v-else>
-        <!-- page_bands render (constrained) above any page_blocks; full-width pages
-             like Payment options are built entirely from bands. -->
-        <PageBands v-if="page?.page_bands?.length" :bands="page.page_bands" :bleed="false" />
+        <!-- page_bands render (constrained) above or below page_blocks per each band's
+             `placement` field; full-width pages like Payment options are built entirely
+             from bands (all default to 'top'). -->
+        <PageBands v-if="topBands.length" :bands="topBands" :bleed="false" />
         <div class="grid-row grid-gap">
           <div
             v-for="block in page?.page_blocks"
@@ -215,6 +222,10 @@ const sidenavLinks = computed(() => {
       </div>
     </div>
   </section>
+  <!-- Bottom bands render full-bleed OUTSIDE the container so a colored band spans the full
+       viewport width; PageBands' inner grid-container re-constrains the content to page width. -->
+  <PageBands v-if="!isCustomLayout && bottomBands.length" :bands="bottomBands" />
+  </template>
 </template>
 
 <style lang="scss" scoped>

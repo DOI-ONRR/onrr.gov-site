@@ -55,6 +55,8 @@ fragment pageFields on pages {
     body_columns
     background
     card_variant
+    placement
+    heading_large
     chart {
       ...chartCardFields
     }
