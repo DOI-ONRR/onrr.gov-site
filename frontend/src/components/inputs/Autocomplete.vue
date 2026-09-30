@@ -11,7 +11,7 @@
       multiple>
       <template v-slot:selection="{ item }">
         <v-list-item-content>
-          <v-list-item-title v-html="getHeader(item)"></v-list-item-title>
+          <v-list-item-title v-html="$sanitizeHtml(getHeader(item))"></v-list-item-title>
           <v-list-item-subtitle v-for="(contact,i) in item.text.contacts" :key="i">
             <v-chip
               v-if="contact.contact">
@@ -29,7 +29,7 @@
       </template>
       <template v-slot:item="{ item }">
         <v-list-item-content>
-          <v-list-item-title v-html="getHeader(item)"></v-list-item-title>
+          <v-list-item-title v-html="$sanitizeHtml(getHeader(item))"></v-list-item-title>
           <v-list-item-subtitle v-for="(contact,i) in item.text.contacts" :key="i">
             <v-chip v-if="contact.contact">
               <v-avatar left>

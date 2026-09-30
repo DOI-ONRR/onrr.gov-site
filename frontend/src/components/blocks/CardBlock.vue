@@ -9,7 +9,7 @@
     <v-icon v-if="blockIcon === 'alert'" class="alert-color mdi mdi-alert " :class="blockColor"></v-icon> 
     <v-icon v-if="blockIcon === 'info'" class="info-color mdi mdi-information" :class="blockColor"></v-icon> 
     <v-card-text class="text--primary body-1">
-      <div v-html="processedContent"></div>
+      <div v-html="$sanitizeHtml(processedContent)"></div>
       <LayoutBlock :layoutBlocks="blockItems" v-if="blockItems.length > 0"></LayoutBlock>
     </v-card-text>
   </v-card>

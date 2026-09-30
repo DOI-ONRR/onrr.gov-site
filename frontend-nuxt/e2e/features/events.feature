@@ -60,3 +60,11 @@ Feature: Events page
   Scenario: Breadcrumbs show correct path
     Given I navigate to the events page
     Then the breadcrumbs show "Home" and "Events"
+
+  Scenario: Unsafe markup in event content is removed, not executed
+    Given the API returns events with unsafe markup
+    And I navigate to the events page
+    Then no script from the event content has run
+    And the first event card shows the field "Description" with "Safe description text."
+    And the first event card shows the field "Location" with "Tulsa, OK"
+    And the first event card shows the field "Contact" with "John Smith"

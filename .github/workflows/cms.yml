@@ -112,6 +112,10 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/hooks/nymex
 
+      - name: Install html-sanitizer dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/hooks/html-sanitizer
+
       - name: Install wysiwyg-static dependencies
         run: npm ci
         working-directory: cms/src/extensions/endpoints/wysiwyg-static

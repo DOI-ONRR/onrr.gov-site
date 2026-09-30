@@ -10,3 +10,5 @@ applications:
   env:
     CMS_HOST: upgrade-onrr-cms.apps.internal
     FRONTEND_HOST: upgrade-onrr-frontend.apps.internal
+    # CMS allowed to frame the site (live preview); see security-headers.js
+    FRAME_ANCESTORS: https://upgrade-onrr-cms.app.cloud.gov
