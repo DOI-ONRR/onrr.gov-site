@@ -1,9 +1,16 @@
 import { logger } from "./utils/logger";
+import { createAuthorize, parseAllowedRoles, requireUuidParam } from "./utils/authorize";
 import { runPages } from "./services/pagesFlow";
 import { runFiles } from "./services/filesFlow";
 
-export default (router, { env }) => {
-	router.post('/pages/:id', async (req, res, next) => {
+export default (router, { env, database }) => {
+	// Only callers in an allowed role may push content upstream; see
+	// utils/authorize.js. Configured per environment with
+	// ONRR_FLOWS_ALLOWED_ROLES (comma-separated role names).
+	const allowedRoles = parseAllowedRoles(env.ONRR_FLOWS_ALLOWED_ROLES ?? process.env.ONRR_FLOWS_ALLOWED_ROLES);
+	router.use(createAuthorize({ database, allowedRoles, logger }));
+
+	router.post('/pages/:id', requireUuidParam('id'), async (req, res, next) => {
 		try {
 			const id = req.params.id;
 			const response = await runPages(id);
@@ -15,7 +22,7 @@ export default (router, { env }) => {
 		}
 	});
 
-	router.post('/files/:fileUuid', async (req, res, next) => {
+	router.post('/files/:fileUuid', requireUuidParam('fileUuid'), async (req, res, next) => {
 		try {
 			const fileUuid = req.params.fileUuid;
 			const response = await runFiles(fileUuid);
