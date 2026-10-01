@@ -4,13 +4,13 @@
 // flows service token (Authorization: Bearer {{$env.FLOWS_LOCAL_TOKEN}}), so
 // that account must be in an allowed role too.
 
-// Role names, comma-separated. Names rather than IDs because IDs differ
-// between environments. Matching ignores case and surrounding spaces.
-export const DEFAULT_ALLOWED_ROLES = 'Admin,Events,Service Account';
-
+// Role names, comma-separated (ONRR_FLOWS_ALLOWED_ROLES). Names rather than
+// IDs because IDs differ between environments. Matching ignores case and
+// surrounding spaces. There is no default: unset or empty means nobody is
+// allowed, so a missing setting can only lock the endpoints, never open them.
 export function parseAllowedRoles(value) {
-    const list = value === undefined || value === null ? DEFAULT_ALLOWED_ROLES : String(value);
-    return list.split(',').map(name => name.trim()).filter(Boolean);
+    if (value === undefined || value === null) return [];
+    return String(value).split(',').map(name => name.trim()).filter(Boolean);
 }
 
 const normalize = name => String(name).trim().toLowerCase();

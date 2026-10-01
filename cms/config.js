@@ -64,8 +64,8 @@ module.exports = function (env) {
     // ONRR_FLOWS_ALLOWED_ROLES.
     FLOWS_LOCAL_TOKEN: env.DIRECTUS_EXTENSION_FLOWS_LOCAL_AUTH_TOKEN,
     FLOWS_ENV_ALLOW_LIST: "UPSTREAM_URL,PUBLIC_URL,CMS_TOKEN,FLOWS_LOCAL_TOKEN,DIRECTUS_PUBLIC_HOST",
-    // Comma-separated role names allowed to call the onrr-flows endpoints
-    // (default in the extension: Admin,Events,Service Account).
+    // Comma-separated role names allowed to call the onrr-flows endpoints.
+    // No default: if unset, the endpoints reject every request.
     ONRR_FLOWS_ALLOWED_ROLES: env.ONRR_FLOWS_ALLOWED_ROLES,
 
     SERVER_KEEP_ALIVE_TIMEOUT: 90000 // in ms; must match proxy_read_timeout value in frontend nginx config

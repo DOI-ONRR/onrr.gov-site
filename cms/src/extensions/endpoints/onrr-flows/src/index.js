@@ -8,6 +8,9 @@ export default (router, { env, database }) => {
 	// utils/authorize.js. Configured per environment with
 	// ONRR_FLOWS_ALLOWED_ROLES (comma-separated role names).
 	const allowedRoles = parseAllowedRoles(env.ONRR_FLOWS_ALLOWED_ROLES ?? process.env.ONRR_FLOWS_ALLOWED_ROLES);
+	if (allowedRoles.length === 0) {
+		logger.warn('onrr-flows: ONRR_FLOWS_ALLOWED_ROLES is not set; every request to /onrr-flows will be rejected.');
+	}
 	router.use(createAuthorize({ database, allowedRoles, logger }));
 
 	router.post('/pages/:id', requireUuidParam('id'), async (req, res, next) => {

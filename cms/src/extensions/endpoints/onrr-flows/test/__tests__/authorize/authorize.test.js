@@ -1,6 +1,5 @@
 import { jest } from '@jest/globals';
 import {
-    DEFAULT_ALLOWED_ROLES,
     parseAllowedRoles,
     createAuthorize,
     requireUuidParam,
@@ -15,7 +14,7 @@ const mockRes = () => {
 
 const logger = { warn: jest.fn() };
 
-const run = async ({ accountability, roles = [], allowed = parseAllowedRoles(undefined), lookup }) => {
+const run = async ({ accountability, roles = [], allowed = parseAllowedRoles('Admin,Events,Service Account'), lookup }) => {
     const getRoleNamesFn = lookup ?? jest.fn(async () => roles);
     const middleware = createAuthorize({ database: {}, allowedRoles: allowed, logger, getRoleNamesFn });
     const req = { accountability, method: 'POST', originalUrl: '/onrr-flows/pages/x' };
@@ -26,18 +25,18 @@ const run = async ({ accountability, roles = [], allowed = parseAllowedRoles(und
 };
 
 describe('parseAllowedRoles', () => {
-    it('defaults to Admin, Events and Service Account when unset', () => {
-        expect(DEFAULT_ALLOWED_ROLES).toBe('Admin,Events,Service Account');
-        expect(parseAllowedRoles(undefined)).toEqual(['Admin', 'Events', 'Service Account']);
-        expect(parseAllowedRoles(null)).toEqual(['Admin', 'Events', 'Service Account']);
+    it('has no default: unset means nobody', () => {
+        expect(parseAllowedRoles(undefined)).toEqual([]);
+        expect(parseAllowedRoles(null)).toEqual([]);
     });
 
     it('splits and trims a configured list', () => {
         expect(parseAllowedRoles(' Admin , Pages Editor,Events ')).toEqual(['Admin', 'Pages Editor', 'Events']);
     });
 
-    it('treats an empty setting as "nobody"', () => {
+    it('treats an empty or blank setting as "nobody"', () => {
         expect(parseAllowedRoles('')).toEqual([]);
+        expect(parseAllowedRoles(' , ,')).toEqual([]);
     });
 });
 
@@ -94,9 +93,10 @@ describe('createAuthorize', () => {
         expect((await run({ accountability: { user: 'u1' }, roles: ['Admin'], allowed })).res.status).toHaveBeenCalledWith(403);
     });
 
-    it('denies everyone when the list is empty', async () => {
-        const { res } = await run({ accountability: { user: 'u1' }, roles: ['Admin'], allowed: [] });
+    it('denies everyone, admins included, when the setting is missing', async () => {
+        const { res, next } = await run({ accountability: { user: 'u1', admin: true }, roles: ['Admin'], allowed: parseAllowedRoles(undefined) });
         expect(res.status).toHaveBeenCalledWith(403);
+        expect(next).not.toHaveBeenCalled();
     });
 
     it('passes a lookup failure to the error handler instead of allowing the request', async () => {
