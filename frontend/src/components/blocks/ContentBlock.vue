@@ -1,5 +1,5 @@
 <template>
-  <div v-html="processedContent"></div>
+  <div v-html="$sanitizeHtml(processedContent)"></div>
 </template>
 
 <script>

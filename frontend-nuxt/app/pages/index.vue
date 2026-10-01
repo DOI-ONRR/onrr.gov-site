@@ -33,7 +33,7 @@ const page = computed(() => data.value?.page?.[0])
           >
             <div
               v-if="block.item?.__typename === 'content_blocks'"
-              v-html="block.item.block_content_html || block.item.block_content"
+              v-html="sanitizeHtml(block.item.block_content_html || block.item.block_content)"
             />
             <TabsBlock
               v-else-if="block.item?.__typename === 'tab_blocks'"
@@ -62,7 +62,7 @@ const page = computed(() => data.value?.page?.[0])
         >
           <div
             v-if="block.item?.__typename === 'content_blocks'"
-            v-html="resolveImages(block.item.block_content_html)"
+            v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
           />
           <CollectionBlock
             v-else-if="block.item?.__typename === 'collection_blocks'"

@@ -109,3 +109,29 @@ export const outreachOnly = {
     other_events: [],
   },
 }
+
+// CMS content carrying script payloads, as an editor could store by writing to
+// the API directly. Each payload sets window.__xss if it ever runs.
+export const withUnsafeMarkup = {
+  data: {
+    outreach_events: [
+      {
+        ...eventTypename,
+        id: '1',
+        title: 'Indian Minerals Training',
+        description: '<p>Safe description text.</p><img src="x" onerror="window.__xss = \'img onerror\'">',
+        location: '<svg onload="window.__xss = \'svg onload\'"></svg>Tulsa, OK',
+        other_information: '<p onmouseover="window.__xss = \'onmouseover\'">Hover me</p><script>window.__xss = \'script\'</script><iframe src="javascript:window.__xss=\'iframe\'"></iframe>',
+        contact: '<a href="javascript:window.__xss=\'javascript: href\'">John Smith</a>',
+        event_start_date: toDateString(event1Date),
+        event_end_date: toDateString(event1Date),
+        time: '1:00 p.m. - 5:00 p.m. CT',
+        who_should_attend: 'Tribal representatives',
+        // Breaks out of the href attribute that Events.vue builds around the email.
+        email: "x@onrr.gov' onmouseover='window.__xss = \"email attribute\"",
+        is_training: false,
+      },
+    ],
+    other_events: [],
+  },
+}

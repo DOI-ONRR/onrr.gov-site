@@ -10,3 +10,5 @@ applications:
   env:
     CMS_HOST: dev-onrr-cms.apps.internal
     FRONTEND_HOST: dev-onrr-frontend.apps.internal
+    # CMS allowed to frame the site (live preview); see security-headers.js
+    FRAME_ANCESTORS: https://dev-onrr-cms.app.cloud.gov

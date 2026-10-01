@@ -20,13 +20,13 @@
             <v-card-title class="text-h2 text-wrap text-uppercase">{{ event.title }}</v-card-title>
             <v-card-subtitle class="text-h3 black--text my-4">{{ formatDateRange(event) }}</v-card-subtitle>
             <v-card-text class="text--primary body-1">
-              <div v-if="event.time" class="mb-4" v-html="labeledField('Time', event.time)"></div>
-              <div v-if="event.location" class="mb-4" v-html="labeledField('Location', event.location)"></div>
-              <div v-if="event.description" class="mb-4" v-html="labeledField('Description', event.description)"></div>
-              <div v-if="event.who_should_attend" class="mb-4" v-html="labeledField('Who Should Attend', event.who_should_attend)"></div>
-              <div v-if="event.other_information" class="mb-4" v-html="labeledField('Other Information', event.other_information)"></div>
-              <div v-if="event.contact" class="mb-4" v-html="labeledField('Contact', event.contact)"></div>
-              <div v-if="event.email" class="mb-4" v-html="labeledField('Email', `<a href='mailto:${event.email}' class='usa-link usa-link--external'>${event.email}</a>`)"></div>
+              <div v-if="event.time" class="mb-4" v-html="$sanitizeHtml(labeledField('Time', event.time))"></div>
+              <div v-if="event.location" class="mb-4" v-html="$sanitizeHtml(labeledField('Location', event.location))"></div>
+              <div v-if="event.description" class="mb-4" v-html="$sanitizeHtml(labeledField('Description', event.description))"></div>
+              <div v-if="event.who_should_attend" class="mb-4" v-html="$sanitizeHtml(labeledField('Who Should Attend', event.who_should_attend))"></div>
+              <div v-if="event.other_information" class="mb-4" v-html="$sanitizeHtml(labeledField('Other Information', event.other_information))"></div>
+              <div v-if="event.contact" class="mb-4" v-html="$sanitizeHtml(labeledField('Contact', event.contact))"></div>
+              <div v-if="event.email" class="mb-4" v-html="$sanitizeHtml(labeledField('Email', `<a href='mailto:${event.email}' class='usa-link usa-link--external'>${event.email}</a>`))"></div>
             </v-card-text>
           </v-card>
         </div>
@@ -44,13 +44,13 @@
             <v-card-title class="text-h2 text-wrap text-uppercase">{{ event.title }}</v-card-title>
             <v-card-subtitle class="text-h3 black--text my-4">{{ formatDateRange(event) }}</v-card-subtitle>
             <v-card-text class="text--primary body-1">
-              <div v-if="event.time" class="mb-4" v-html="labeledField('Time', event.time)"></div>
-              <div v-if="event.location" class="mb-4" v-html="labeledField('Location', event.location)"></div>
-              <div v-if="event.description" class="mb-4" v-html="labeledField('Description', event.description)"></div>
-              <div v-if="event.who_should_attend" class="mb-4" v-html="labeledField('Who Should Attend', event.who_should_attend)"></div>
-              <div v-if="event.other_information" class="mb-4" v-html="labeledField('Other Information', event.other_information)"></div>
-              <div v-if="event.contact" class="mb-4" v-html="labeledField('Contact', event.contact)"></div>
-              <div v-if="event.email" class="mb-4" v-html="labeledField('Email', `<a href='mailto:${event.email}'>${event.email}</a>`)"></div>
+              <div v-if="event.time" class="mb-4" v-html="$sanitizeHtml(labeledField('Time', event.time))"></div>
+              <div v-if="event.location" class="mb-4" v-html="$sanitizeHtml(labeledField('Location', event.location))"></div>
+              <div v-if="event.description" class="mb-4" v-html="$sanitizeHtml(labeledField('Description', event.description))"></div>
+              <div v-if="event.who_should_attend" class="mb-4" v-html="$sanitizeHtml(labeledField('Who Should Attend', event.who_should_attend))"></div>
+              <div v-if="event.other_information" class="mb-4" v-html="$sanitizeHtml(labeledField('Other Information', event.other_information))"></div>
+              <div v-if="event.contact" class="mb-4" v-html="$sanitizeHtml(labeledField('Contact', event.contact))"></div>
+              <div v-if="event.email" class="mb-4" v-html="$sanitizeHtml(labeledField('Email', `<a href='mailto:${event.email}'>${event.email}</a>`))"></div>
             </v-card-text>
           </v-card>
         </div>
