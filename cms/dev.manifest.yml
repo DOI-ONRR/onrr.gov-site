@@ -20,4 +20,6 @@ applications:
     UPSTREAM_URL: https://prod-onrr-cms.app.cloud.gov
     CORS_ORIGIN: https://preview-onrr-cms.app.cloud.gov
     DIRECTUS_PUBLIC_HOST: https://dev-onrr-cms.app.cloud.gov
+    # Roles allowed to call the onrr-flows endpoints (cms/config.js)
+    ONRR_FLOWS_ALLOWED_ROLES: Admin,Events,Service Account
     PUBLIC_URL: https://dev-onrr-cms.app.cloud.gov

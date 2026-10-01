@@ -14,4 +14,6 @@ applications:
     CONFIG_PATH: ./config.js
     UPSTREAM_URL: https://preview-onrr-cms.app.cloud.gov
     DIRECTUS_PUBLIC_HOST: https://upgrade-onrr-cms.app.cloud.gov
+    # Roles allowed to call the onrr-flows endpoints (cms/config.js)
+    ONRR_FLOWS_ALLOWED_ROLES: Admin,Events,Service Account
     PUBLIC_URL: https://upgrade-onrr-cms.app.cloud.gov
