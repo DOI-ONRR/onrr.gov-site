@@ -4,7 +4,8 @@
   learn-page mockup: a 3-col "On this page" left rail beside a 9-col content column.
   Chosen in [...slug].vue by the page's template field; the standard sidenav is
   dropped there. Content is the page's page_blocks (same block types as the default
-  renderer); the in-page nav is derived from the <h2> headings in that content.
+  renderer); the in-page nav is derived from the <h2> headings (and top-level
+  accordion <h3> titles) in that content.
 */
 const props = defineProps({
   page: { type: Object, required: true },
@@ -30,10 +31,11 @@ const contentCols = computed(() => props.page?.content_columns || 7)
 const relatedContent = computed(() => props.page?.related_content || null)
 
 // --- "On this page" in-page nav -----------------------------------------------
-// Built from the <h2>s inside the rendered content. Headings without an id get a
-// slugified one so the anchors resolve; runs after mount and when content changes.
+// Built from the <h2>s inside the rendered content, plus top-level accordion (<h3>)
+// titles nested as a sub-level under the preceding section. Headings without an id get
+// a slugified one so the anchors resolve; runs after mount and when content changes.
 const contentEl = ref(null)
-const sections = ref([]) // [{ id, text }]
+const sections = ref([]) // [{ id, text, children: [{ id, text }] }]
 
 function slugify(text) {
   return String(text).toLowerCase().trim()
@@ -46,17 +48,33 @@ function buildSections() {
   const root = contentEl.value
   if (!root) return
   const used = new Set()
-  const out = []
-  for (const h of root.querySelectorAll('h2')) {
-    const text = h.textContent.trim()
-    if (!text) continue
-    let id = h.id || slugify(text)
+  const ensureId = (el, text) => {
+    let id = el.id || slugify(text)
     while (used.has(id)) id = `${id}-1`
     used.add(id)
-    h.id = id
-    // Offset scroll target so a fixed/anchored heading isn't hidden under the header.
-    h.style.scrollMarginTop = '1rem'
-    out.push({ id, text })
+    el.id = id
+    // Offset scroll target so an anchored heading isn't hidden under the header.
+    el.style.scrollMarginTop = '1rem'
+    return id
+  }
+  const out = []
+  let current = null
+  // <h2> sections + top-level accordion headings (now <h3>), in document order.
+  for (const el of root.querySelectorAll('h2, .usa-accordion__heading')) {
+    const text = el.textContent.trim()
+    if (!text) continue
+    const isAccordion = !el.matches('h2')
+    // Only TOP-LEVEL accordions — skip those inside tabs, cards, or nested accordions
+    // (hidden or outside the page's primary outline).
+    if (isAccordion && el.closest('[role="tabpanel"], .usa-card, .usa-accordion__content')) continue
+    const id = ensureId(el, text)
+    if (isAccordion) {
+      if (current) current.children.push({ id, text })
+      else out.push({ id, text, children: [] }) // accordion before any h2
+    } else {
+      current = { id, text, children: [] }
+      out.push(current)
+    }
   }
   sections.value = out
 }
@@ -65,10 +83,12 @@ function buildSections() {
 // has scrolled to within ~120px of the top, matching the mockup's behavior.
 const activeId = ref(null)
 function spy() {
-  let current = sections.value[0]?.id ?? null
-  for (const s of sections.value) {
-    const el = document.getElementById(s.id)
-    if (el && el.getBoundingClientRect().top < 120) current = s.id
+  // Flatten sections + their accordion children so either level can be the active one.
+  const ids = sections.value.flatMap((s) => [s.id, ...s.children.map((c) => c.id)])
+  let current = ids[0] ?? null
+  for (const id of ids) {
+    const el = document.getElementById(id)
+    if (el && el.getBoundingClientRect().top < 120) current = id
   }
   activeId.value = current
 }
@@ -90,6 +110,17 @@ function goToSection(id) {
   const el = contentEl.value?.querySelector(`#${CSS.escape(id)}`)
   if (!el) return
   history.replaceState(null, '', `#${id}`)
+  // Accordion heading: open its panel first. The open state lives inside the
+  // ExpansionPanelBlock component, so we trigger its Vue toggle by clicking the button.
+  const btn = el.querySelector('.usa-accordion__button')
+  const needsExpand = btn && btn.getAttribute('aria-expanded') === 'false'
+  if (needsExpand) {
+    btn.click()
+    // The expanding panel inserts content and shifts layout, which cancels an in-flight
+    // smooth scroll — so defer to the next tick and jump instantly once it's laid out.
+    nextTick(() => el.scrollIntoView({ block: 'start' }))
+    return
+  }
   el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 </script>
@@ -107,6 +138,15 @@ function goToSection(id) {
               :class="{ active: activeId === s.id }"
               @click.prevent="goToSection(s.id)"
             >{{ s.text }}</a>
+            <ul v-if="s.children.length" class="onpage-sub">
+              <li v-for="c in s.children" :key="c.id">
+                <a
+                  :href="`#${c.id}`"
+                  :class="{ active: activeId === c.id }"
+                  @click.prevent="goToSection(c.id)"
+                >{{ c.text }}</a>
+              </li>
+            </ul>
           </li>
         </ul>
       </nav>
@@ -223,6 +263,10 @@ function goToSection(id) {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+// The gray rail is on the top-level list only — nested sub-lists must not double it.
+.onpage > ul {
   border-left: 3px solid #dfe1e2;
 }
 
@@ -244,6 +288,13 @@ function goToSection(id) {
   color: #1b1b1b;
   font-weight: 700;
   border-left-color: $onrr-blue;
+}
+
+// Accordion titles: an indented sub-level under their section (active border stays on
+// the shared rail; only the text is inset).
+.onpage-sub a {
+  padding-left: 1.75rem;
+  font-size: 0.85rem;
 }
 
 // Related box: bordered card with a violet left accent (matches the mockup). The
