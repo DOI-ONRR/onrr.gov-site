@@ -116,6 +116,10 @@ jobs:
         run: npm ci
         working-directory: cms/src/extensions/hooks/html-sanitizer
 
+      - name: Install revenue-data-update dependencies
+        run: npm ci
+        working-directory: cms/src/extensions/hooks/revenue-data-update
+
       - name: Install wysiwyg-static dependencies
         run: npm ci
         working-directory: cms/src/extensions/endpoints/wysiwyg-static
