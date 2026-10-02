@@ -1,7 +1,7 @@
 <template>
     <div class="border-2px padding-top-05 padding-left-1 maxw-tablet-lg">
         <h5 class="font-heading-md">{{ block.item.title }}</h5>
-        <p v-html="block.item.formula_tex" ref="formula" class="font-serif-md"></p>
+        <p v-html="$sanitizeHtml(block.item.formula_tex)" ref="formula" class="font-serif-md"></p>
     </div>
 </template>
 

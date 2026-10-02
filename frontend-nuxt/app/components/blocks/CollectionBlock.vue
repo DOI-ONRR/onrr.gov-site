@@ -79,7 +79,7 @@ const items = computed(() => {
         <div class="usa-card__header">
           <h3 class="usa-card__heading">{{ item.title }}</h3>
         </div>
-        <div v-if="item.content" class="usa-card__body" v-html="resolveImages(item.content)" />
+        <div v-if="item.content" class="usa-card__body" v-html="sanitizeHtml(resolveImages(item.content))" />
       </div>
     </div>
   </template>

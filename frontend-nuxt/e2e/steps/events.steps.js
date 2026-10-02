@@ -39,6 +39,11 @@ Given('the API returns outreach events only', async () => {
   await setMockState('events', eventsFixtures.outreachOnly)
 })
 
+Given('the API returns events with unsafe markup', async () => {
+  await resetMock()
+  await setMockState('events', eventsFixtures.withUnsafeMarkup)
+})
+
 Given('I navigate to the events page', async ({ page }) => {
   await page.goto('/events', { waitUntil: 'networkidle' })
 })
@@ -144,4 +149,19 @@ Then('the outreach section shows {string}', async ({ page }, message) => {
 
 Then('the other section shows {string}', async ({ page }, message) => {
   await expect(otherSection(page).locator('.empty-state')).toHaveText(message)
+})
+
+Then('no script from the event content has run', async ({ page }) => {
+  const card = page.locator('[role="tabpanel"]:not([hidden]) .event-card').first()
+  // Give any handler a chance to fire: hover every element, let images error out.
+  for (const el of await card.locator('*').all()) await el.hover({ force: true, timeout: 1000 }).catch(() => {})
+  await page.waitForTimeout(500)
+  expect(await page.evaluate(() => window.__xss)).toBeUndefined()
+
+  const unsafe = await card.evaluate(root => [...root.querySelectorAll('*')].flatMap(el => [
+    ...[...el.attributes].filter(a => /^on/i.test(a.name)).map(a => `${el.tagName} ${a.name}`),
+    ...(/^\s*javascript:/i.test(el.getAttribute('href') || el.getAttribute('src') || '') ? [`${el.tagName} javascript: url`] : []),
+    ...(['SCRIPT', 'IFRAME', 'SVG', 'OBJECT', 'EMBED'].includes(el.tagName.toUpperCase()) ? [el.tagName] : []),
+  ]))
+  expect(unsafe).toEqual([])
 })

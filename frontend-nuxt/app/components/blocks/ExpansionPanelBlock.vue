@@ -71,7 +71,7 @@ function toggle(id) {
         >
           <div
             v-if="child.item?.__typename === 'content_blocks'"
-            v-html="resolveImages(child.item.block_content_html)"
+            v-html="sanitizeHtml(resolveImages(child.item.block_content_html))"
           />
           <CardBlock
             v-else-if="child.item?.__typename === 'card_blocks'"

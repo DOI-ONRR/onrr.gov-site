@@ -3,7 +3,7 @@
     <v-container class="pa-0">
       <v-row v-if="collectionHeader">
         <v-col cols="12" sm="6">
-          <div v-html="collectionHeader"></div>
+          <div v-html="$sanitizeHtml(collectionHeader)"></div>
         </v-col>
       </v-row>
         <v-row>

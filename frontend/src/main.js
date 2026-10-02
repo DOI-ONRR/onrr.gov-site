@@ -6,6 +6,7 @@ import VueApollo from 'vue-apollo'
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client'
 import fetch from 'node-fetch'
 import vuetify from './plugins/vuetify'
+import sanitizeHtml from './plugins/sanitizeHtml'
 import App from './App.vue'
 import possibleTypes from './json/possibleTypes.json'
 import '../public/uswds/css/styles.css'
@@ -60,6 +61,7 @@ const apolloProvider = new VueApollo({
 
 Vue.config.productionTip = false
 
+Vue.use(sanitizeHtml)
 Vue.use(VueApollo)
 Vue.use(VueMeta)
 if (GTM_ID) {

@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -27,6 +29,15 @@ export default defineNuxtConfig({
   ],
 
   vite: {
+    // Browser bundle only: replace postcss (pulled in by sanitize-html) with a
+    // stub; see stubs/postcss-client.js.
+    $client: {
+      resolve: {
+        alias: {
+          postcss: fileURLToPath(new URL('./stubs/postcss-client.js', import.meta.url)),
+        },
+      },
+    },
     css: {
       preprocessorMaxWorkers: true,
       preprocessorOptions: {

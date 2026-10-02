@@ -105,7 +105,7 @@ function formatDate(dateStr) {
       <p class="text-base margin-top-0 margin-bottom-05">
         {{ formatDate(release.date) }}
       </p>
-      <div v-if="release.excerpt" class="margin-top-0" v-html="release.excerpt" />
+      <div v-if="release.excerpt" class="margin-top-0" v-html="sanitizeHtml(release.excerpt)" />
     </li>
   </ul>
   <PaginationBar
