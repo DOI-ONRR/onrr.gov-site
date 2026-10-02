@@ -69,7 +69,7 @@ const dataHeading = computed(() => props.page?.data_heading || null)
               v-for="block in introBlocks"
               :key="block.id"
               class="usa-prose hub-intro margin-bottom-0"
-              v-html="resolveImages(block.item.block_content_html)"
+              v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
             />
           </div>
         </div>
@@ -91,7 +91,7 @@ const dataHeading = computed(() => props.page?.data_heading || null)
             <div
               v-if="card.body"
               class="aud-card__body"
-              v-html="resolveImages(card.body)"
+              v-html="sanitizeHtml(resolveImages(card.body))"
             />
           </div>
         </div>
@@ -116,7 +116,7 @@ const dataHeading = computed(() => props.page?.data_heading || null)
             <div
               v-if="help.description"
               class="help-box__desc font-body-2xs margin-bottom-1"
-              v-html="resolveImages(help.description)"
+              v-html="sanitizeHtml(resolveImages(help.description))"
             />
             <a
               v-if="help.link_url"

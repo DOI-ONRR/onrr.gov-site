@@ -63,7 +63,7 @@ const bandHasBackground = (band) => band.background && band.background !== 'defa
               <div class="page-band__step-num" aria-hidden="true">{{ si + 1 }}</div>
               <div>
                 <h3 class="margin-top-0">{{ step.title }}</h3>
-                <div v-if="step.body" class="page-band__step-body" v-html="resolveImages(step.body)" />
+                <div v-if="step.body" class="page-band__step-body" v-html="sanitizeHtml(resolveImages(step.body))" />
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@ const bandHasBackground = (band) => band.background && band.background !== 'defa
            as a linked title (navy top border, no button); otherwise title + body + CTA. -->
       <template v-else-if="band.cards?.length">
         <!-- Optional group hint (band.body) between the heading and the cards. -->
-        <div v-if="band.body" class="page-band__hint" v-html="resolveImages(band.body)" />
+        <div v-if="band.body" class="page-band__hint" v-html="sanitizeHtml(resolveImages(band.body))" />
         <div class="page-band__cards margin-top-3">
           <div
             v-for="(card, ci) in band.cards"
@@ -88,11 +88,11 @@ const bandHasBackground = (band) => band.background && band.background !== 'defa
                 <a v-if="card.cta_url" class="usa-link" :href="card.cta_url">{{ card.title }}</a>
                 <template v-else>{{ card.title }}</template>
               </h3>
-              <div v-if="card.body" class="page-band__card-body" v-html="resolveImages(card.body)" />
+              <div v-if="card.body" class="page-band__card-body" v-html="sanitizeHtml(resolveImages(card.body))" />
             </template>
             <template v-else>
               <h3 class="font-heading-md margin-top-0">{{ card.title }}</h3>
-              <div v-if="card.body" class="page-band__card-body" v-html="resolveImages(card.body)" />
+              <div v-if="card.body" class="page-band__card-body" v-html="sanitizeHtml(resolveImages(card.body))" />
               <a
                 v-if="card.cta_url"
                 class="usa-button usa-button--outline page-band__card-cta"
@@ -113,7 +113,7 @@ const bandHasBackground = (band) => band.background && band.background !== 'defa
             v-else-if="band.body"
             class="page-band__body"
             :class="{ 'measure-5': bleed }"
-            v-html="resolveImages(band.body)"
+            v-html="sanitizeHtml(resolveImages(band.body))"
           />
           <a
             v-if="band.cta_url"
@@ -126,7 +126,7 @@ const bandHasBackground = (band) => band.background && band.background !== 'defa
           v-if="bandAsideCols(band) > 0 && band.aside"
           :class="`tablet:grid-col-${bandAsideCols(band)}`"
         >
-          <div class="page-band__aside" v-html="resolveImages(band.aside)" />
+          <div class="page-band__aside" v-html="sanitizeHtml(resolveImages(band.aside))" />
         </div>
       </div>
     </div>

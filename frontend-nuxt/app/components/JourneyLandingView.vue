@@ -62,7 +62,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
             <div
               v-if="block.item?.__typename === 'content_blocks'"
               class="usa-prose"
-              v-html="resolveImages(block.item.block_content_html)"
+              v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
             />
             <TabsBlock
               v-else-if="block.item?.__typename === 'tab_blocks'"
@@ -108,7 +108,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
           :class="`journey-callout--${callout.variant || 'default'}`"
         >
           <h2 class="margin-top-0 font-heading-sm">{{ callout.title }}</h2>
-          <div v-if="callout.description" class="journey-callout__desc font-body-2xs margin-bottom-1" v-html="resolveImages(callout.description)" />
+          <div v-if="callout.description" class="journey-callout__desc font-body-2xs margin-bottom-1" v-html="sanitizeHtml(resolveImages(callout.description))" />
           <!-- 'alert' variant renders the CTA as a plain link (per the reporting/paying
                deadline box); the default renders it as an outline button. -->
           <a
@@ -122,7 +122,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
           <h2 v-if="referencesHeading" class="font-heading-sm margin-bottom-1">{{ referencesHeading }}</h2>
           <ul class="journey-refs">
             <li v-for="ref in references" :key="ref.id">
-              <a v-if="ref.link_url" class="usa-link" :href="ref.link_url">{{ ref.title }}</a><template v-else>{{ ref.title }}</template><span v-if="ref.description" class="journey-ref-desc"> — <span v-html="resolveImages(ref.description)"></span></span>
+              <a v-if="ref.link_url" class="usa-link" :href="ref.link_url">{{ ref.title }}</a><template v-else>{{ ref.title }}</template><span v-if="ref.description" class="journey-ref-desc"> — <span v-html="sanitizeHtml(resolveImages(ref.description))"></span></span>
             </li>
           </ul>
         </div>
@@ -143,7 +143,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
                "Questions about a payment?" contact card); default = plain white. -->
           <div class="jl-card padding-3" :class="card.variant ? `jl-card--${card.variant}` : null">
             <h3 class="font-heading-md margin-top-0">{{ card.title }}</h3>
-            <div v-if="card.description" class="jl-card__desc" v-html="resolveImages(card.description)" />
+            <div v-if="card.description" class="jl-card__desc" v-html="sanitizeHtml(resolveImages(card.description))" />
             <a
               v-if="card.link_url"
               class="usa-button usa-button--outline jl-card__cta"
@@ -170,7 +170,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
           >
             <div class="jl-card padding-3">
               <h3 class="font-heading-md margin-top-0">{{ card.title }}</h3>
-              <div v-if="card.description" class="jl-card__desc margin-top-2" v-html="resolveImages(card.description)" />
+              <div v-if="card.description" class="jl-card__desc margin-top-2" v-html="sanitizeHtml(resolveImages(card.description))" />
               <a
                 v-if="card.link_url"
                 class="usa-button usa-button--outline jl-card__cta"

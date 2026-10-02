@@ -166,7 +166,7 @@ function goToSection(id) {
           <div
             v-if="block.item?.__typename === 'content_blocks'"
             class="usa-prose"
-            v-html="resolveImages(block.item.block_content_html)"
+            v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
           />
           <TabsBlock
             v-else-if="block.item?.__typename === 'tab_blocks'"
@@ -206,7 +206,7 @@ function goToSection(id) {
              list. Inside .topic-content so its <h2> joins the "On this page" nav. -->
         <div v-if="relatedContent" class="related-box padding-3 margin-y-4">
           <h2>Related</h2>
-          <div v-html="resolveImages(relatedContent)" />
+          <div v-html="sanitizeHtml(resolveImages(relatedContent))" />
         </div>
       </div>
     </div>

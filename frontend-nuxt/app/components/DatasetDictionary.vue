@@ -50,7 +50,7 @@ const slug = (s) =>
               <tr class="dict-parent">
                 <th :id="slug(f.field_name)" scope="row" class="dict-term">{{ f.field_name }}</th>
                 <td>
-                  <div v-if="f.definition" class="dict-def" v-html="resolveImages(f.definition)" />
+                  <div v-if="f.definition" class="dict-def" v-html="sanitizeHtml(resolveImages(f.definition))" />
                   <div v-if="f.value_style === 'tags' && f.values?.length" class="dict-chips">
                     {{ f.values.map((v) => v.term).join(', ') }}
                   </div>
@@ -59,7 +59,7 @@ const slug = (s) =>
               <template v-if="f.value_style !== 'tags'">
                 <tr v-for="v in f.values" :key="v.id" class="dict-sub">
                   <th scope="row" class="dict-term dict-term--sub">{{ v.term }}</th>
-                  <td><div class="dict-def" v-html="resolveImages(v.definition)" /></td>
+                  <td><div class="dict-def" v-html="sanitizeHtml(resolveImages(v.definition))" /></td>
                 </tr>
               </template>
             </template>

@@ -38,7 +38,7 @@ const announcements = computed(() => data.value?.announcements ?? [])
               <div
                 v-if="item.content"
                 class="usa-card__body"
-                v-html="resolveImages(item.content)"
+                v-html="sanitizeHtml(resolveImages(item.content))"
               />
             </div>
           </div>

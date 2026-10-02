@@ -109,7 +109,7 @@ const isNum = (c) => c.align === 'right'
       </table>
     </div>
     <!-- footnote / download line (mockup .dl-line) — WYSIWYG, so a <div> not a <p> -->
-    <div v-if="block.footnote" class="data-table__footnote" v-html="resolveImages(block.footnote)" />
+    <div v-if="block.footnote" class="data-table__footnote" v-html="sanitizeHtml(resolveImages(block.footnote))" />
   </div>
 </template>
 

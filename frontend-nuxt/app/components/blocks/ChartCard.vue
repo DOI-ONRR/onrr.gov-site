@@ -838,7 +838,7 @@ onBeforeUnmount(() => {
          markup from the editor is valid; a leading <p> is forced inline so it flows
          after the "Source:" label. -->
     <div v-if="card.source" class="chart-card__source font-body-2xs text-base margin-top-1">
-      <span v-html="resolveImages(card.source)"></span>
+      <span v-html="sanitizeHtml(resolveImages(card.source))"></span>
     </div>
   </section>
 </template>

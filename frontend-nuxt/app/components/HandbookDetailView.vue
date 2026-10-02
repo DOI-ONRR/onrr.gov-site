@@ -104,7 +104,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
         <span class="hb-release">{{ hb.release }}</span>
       </p>
       <!-- intro is WYSIWYG HTML → div, never a <p> wrapper -->
-      <div v-if="hb.intro" class="usa-intro lede" v-html="hb.intro" />
+      <div v-if="hb.intro" class="usa-intro lede" v-html="sanitizeHtml(hb.intro)" />
       <p v-if="hb.download_url">
         <a class="usa-button" :href="hb.download_url">View complete handbook</a>
       </p>

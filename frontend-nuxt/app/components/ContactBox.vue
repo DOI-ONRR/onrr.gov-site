@@ -15,7 +15,7 @@ const { resolveImages } = useCmsContent()
 <template>
   <div class="contact-box">
     <p v-if="block.heading" class="margin-top-0 margin-bottom-1 text-bold">{{ block.heading }}</p>
-    <div v-if="block.body" class="contact-box__body" v-html="resolveImages(block.body)" />
+    <div v-if="block.body" class="contact-box__body" v-html="sanitizeHtml(resolveImages(block.body))" />
   </div>
 </template>
 

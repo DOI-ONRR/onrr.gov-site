@@ -120,7 +120,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
               <h2>{{ t.title }}</h2>
               <p class="event-date">{{ formatDateRange(t) }}</p>
               <!-- div, not p: description is WYSIWYG HTML that may itself contain <p>. -->
-              <div v-if="t.description" class="training-desc" v-html="addExternalLinkClasses(t.description)" />
+              <div v-if="t.description" class="training-desc" v-html="sanitizeHtml(addExternalLinkClasses(t.description))" />
               <a
                 v-for="(r, i) in (t.registration || [])"
                 :key="i"
@@ -128,7 +128,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
                 :href="r.href"
               >{{ r.label }}</a>
               <p v-if="t.location" class="reg-note"><strong>Venue:</strong> {{ t.location }}</p>
-              <p v-if="t.contact" class="reg-note margin-top-1" v-html="contactHtml(t)" />
+              <p v-if="t.contact" class="reg-note margin-top-1" v-html="sanitizeHtml(contactHtml(t))" />
             </div>
           </section>
 
@@ -147,7 +147,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
                 <dl class="event-dl">
                   <template v-for="[key, label] in rowsFor(ev)" :key="key">
                     <dt>{{ label }}</dt>
-                    <dd v-html="addExternalLinkClasses(ev[key])" />
+                    <dd v-html="sanitizeHtml(addExternalLinkClasses(ev[key]))" />
                   </template>
                   <template v-if="ev.email">
                     <dt>Email</dt>
@@ -169,7 +169,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
                 <dl class="event-dl">
                   <template v-for="[key, label] in rowsFor(ev)" :key="key">
                     <dt>{{ label }}</dt>
-                    <dd v-html="addExternalLinkClasses(ev[key])" />
+                    <dd v-html="sanitizeHtml(addExternalLinkClasses(ev[key]))" />
                   </template>
                   <template v-if="ev.email">
                     <dt>Email</dt>
