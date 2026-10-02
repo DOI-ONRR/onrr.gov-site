@@ -152,16 +152,17 @@ Then('the other section shows {string}', async ({ page }, message) => {
 })
 
 Then('no script from the event content has run', async ({ page }) => {
-  const card = page.locator('[role="tabpanel"]:not([hidden]) .event-card').first()
+  const cards = page.locator('.training-card, .event-card')
+  await expect(cards.first()).toBeVisible()
   // Give any handler a chance to fire: hover every element, let images error out.
-  for (const el of await card.locator('*').all()) await el.hover({ force: true, timeout: 1000 }).catch(() => {})
+  for (const el of await cards.locator('*').all()) await el.hover({ force: true, timeout: 1000 }).catch(() => {})
   await page.waitForTimeout(500)
   expect(await page.evaluate(() => window.__xss)).toBeUndefined()
 
-  const unsafe = await card.evaluate(root => [...root.querySelectorAll('*')].flatMap(el => [
+  const unsafe = await page.evaluate(() => [...document.querySelectorAll('.training-card *, .event-card *')].flatMap(el => [
     ...[...el.attributes].filter(a => /^on/i.test(a.name)).map(a => `${el.tagName} ${a.name}`),
     ...(/^\s*javascript:/i.test(el.getAttribute('href') || el.getAttribute('src') || '') ? [`${el.tagName} javascript: url`] : []),
-    ...(['SCRIPT', 'IFRAME', 'SVG', 'OBJECT', 'EMBED'].includes(el.tagName.toUpperCase()) ? [el.tagName] : []),
+    ...(['SCRIPT', 'IFRAME', 'SVG', 'OBJECT', 'EMBED', 'FORM', 'INPUT'].includes(el.tagName.toUpperCase()) ? [el.tagName] : []),
   ]))
   expect(unsafe).toEqual([])
 })
