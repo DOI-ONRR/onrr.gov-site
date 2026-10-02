@@ -13,6 +13,6 @@ const block = computed(() => data.value?.content_blocks?.[0])
     <div class="usa-card__header">
       <h4 class="usa-card__heading text-center font-ui-lg">{{ block.block_label }}</h4>
     </div>
-    <div class="usa-card__body" v-html="block.block_content_html" />
+    <div class="usa-card__body" v-html="sanitizeHtml(block.block_content_html)" />
   </div>
 </template>

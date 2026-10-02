@@ -24,6 +24,7 @@
     "apollo-boost": "^0.4.9",
     "axios": "^0.27.2",
     "core-js": "^3.19.1",
+    "dompurify": "^3.4.16",
     "graphql": "^15.8.0",
     "node-fetch": "^2.6.1",
     "puppeteer": "^13.0.1",

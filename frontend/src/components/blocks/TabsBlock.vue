@@ -15,7 +15,7 @@
         :ref="`tab_label_${ formattedLabel(tab.item.tab_block_label) }`"
         @click="handleClick()"
         :transition="false">
-        <span v-html="tab.item.tab_block_label"></span>
+        <span v-html="$sanitizeHtml(tab.item.tab_block_label)"></span>
       </v-tab>
     </v-tabs>
     <v-tabs-items

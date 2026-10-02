@@ -94,10 +94,20 @@ jobs:
           set -euo pipefail
           # cg-manage-rds provisions a temporary service key whose credentials could otherwise
           # leak into the (public) build log, so its combined output goes to a file we do NOT print.
-          if ! cg-manage-rds export -o "-F p --no-owner --no-acl" -f backup.sql "$DB_SERVICE" >cg-export.log 2>&1; then
-            echo "::error::database export failed (log withheld — it may contain credentials; re-run manually to debug)"
-            exit 1
-          fi
+          # Retried because the first try regularly fails: cg-manage-rds creates fresh database
+          # credentials and connects straight away, before they are always usable.
+          for attempt in 1 2 3; do
+            if cg-manage-rds export -o "-F p --no-owner --no-acl" -f backup.sql "$DB_SERVICE" >cg-export.log 2>&1; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::database export failed after 3 attempts (log withheld — it may contain credentials; re-run manually to debug)"
+              exit 1
+            fi
+            echo "::warning::database export attempt $attempt failed; retrying in 30s"
+            rm -f backup.sql
+            sleep 30
+          done
           test -s backup.sql
           ls -lh backup.sql
 
@@ -140,6 +150,21 @@ jobs:
           EP_ARG=()
           [ -n "$ENDPOINT" ] && EP_ARG=(--endpoint-url "https://${ENDPOINT#https://}")
 
+          # A new service key is a new AWS access key, which takes a few seconds to become valid
+          # (using it straight away fails with InvalidAccessKeyId). Wait until a harmless
+          # one-item listing succeeds, for up to ~2 minutes, before uploading.
+          for attempt in $(seq 1 12); do
+            if aws "${EP_ARG[@]}" s3api list-objects-v2 --bucket "$BUCKET" --max-items 1 >/dev/null 2>s3-check.err; then
+              break
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo "::error::S3 credentials were not accepted after 2 minutes: $(grep -oE '\(([A-Za-z]+)\)' s3-check.err | head -1)"
+              exit 1
+            fi
+            sleep 10
+          done
+          echo "S3 credentials accepted after $attempt attempt(s)"
+
           PREFIX="db-backups/${CF_SPACE}/${DB_SERVICE}/"
           OBJECT="${PREFIX}$(date -u +%Y-%m-%dT%H-%M-%SZ).sql.gz.age"
           aws "${EP_ARG[@]}" s3 cp backup.sql.gz.age "s3://${BUCKET}/${OBJECT}" --sse AES256 --no-progress
@@ -163,4 +188,4 @@ jobs:
 
       - name: Clean up local files
         if: always()
-        run: rm -f backup.sql backup.sql.gz backup.sql.gz.age cg-export.log
+        run: rm -f backup.sql backup.sql.gz backup.sql.gz.age cg-export.log s3-check.err
