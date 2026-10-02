@@ -15,6 +15,7 @@ describe('sanitize: removes script execution vectors', () => {
     'onclick on allowed tag': ['<p onclick="alert(1)" class="c">x</p>', '<p class="c">x</p>'],
     'onmouseover on link': ['<a href="/x" onmouseover="alert(1)">x</a>', '<a href="/x">x</a>'],
     'form + input': ['<form action="https://evil.example"><input name="p"></form>', ''],
+    'button form attributes and handlers': ['<button type="submit" formaction="https://evil.example" onclick="alert(1)">b</button>', '<button type="submit">b</button>'],
     'style element': ['<style>body{display:none}</style><p>x</p>', '<p>x</p>'],
     'object/embed': ['<object data="x.swf"></object><embed src="x.swf">', ''],
     'video javascript: src': ['<video src="javascript:alert(1)"></video>', '<video></video>'],
@@ -43,6 +44,15 @@ describe('sanitize: keeps legitimate CMS markup', () => {
   for (const html of keep) {
     it(html.slice(0, 60), () => expect(sanitize(html)).toBe(html))
   }
+
+  it('keeps USWDS accordion markup working (button, aria, collapsed panel)', () => {
+    const html = '<div class="usa-accordion"><h4 class="usa-accordion__heading"><button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="faq-a1">Q</button></h4><div id="faq-a1" class="usa-accordion__content usa-prose" hidden><p>A</p></div></div>'
+    expect(sanitize(html)).toBe(html.replace(' hidden>', ' hidden="">'))
+  })
+
+  it('keeps valueless download on links', () => {
+    expect(sanitize('<a href="/f.pdf" download>f</a>')).toBe('<a href="/f.pdf" download="">f</a>')
+  })
 
   it('keeps text of unknown tags (pasted sitemap XML)', () => {
     expect(sanitize('<urlset><url><loc>https://www.onrr.gov/</loc></url></urlset>')).toBe('https://www.onrr.gov/')

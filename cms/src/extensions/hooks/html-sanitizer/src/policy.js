@@ -13,7 +13,7 @@ import sanitizeHtml from 'sanitize-html'
 export const SANITIZE_OPTIONS = {
   allowedTags: [
     'a', 'abbr', 'address', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo',
-    'blockquote', 'br', 'caption', 'cite', 'code', 'col', 'colgroup', 'dd',
+    'blockquote', 'br', 'button', 'caption', 'cite', 'code', 'col', 'colgroup', 'dd',
     'del', 'details', 'dfn', 'div', 'dl', 'dt', 'em', 'figcaption', 'figure',
     'font', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'i',
     'img', 'ins', 'kbd', 'li', 'main', 'mark', 'nav', 'ol', 'p', 'picture',
@@ -24,6 +24,9 @@ export const SANITIZE_OPTIONS = {
   allowedAttributes: {
     '*': ['class', 'id', 'style', 'title', 'lang', 'dir', 'role', 'tabindex', 'hidden', 'aria-*', 'data-*', 'align'],
     a: ['href', 'target', 'rel', 'name', 'download', 'hreflang', 'type'],
+    // USWDS accordion toggles (aria-expanded / aria-controls come from '*').
+    // No form attributes, and <form> itself is not allowed, so it can't submit.
+    button: ['type'],
     img: ['src', 'srcset', 'sizes', 'alt', 'width', 'height', 'loading', 'decoding'],
     video: ['src', 'poster', 'controls', 'width', 'height', 'preload', 'muted', 'loop', 'playsinline', 'autoplay'],
     audio: ['src', 'controls', 'preload', 'muted', 'loop'],
@@ -53,6 +56,10 @@ export const SANITIZE_OPTIONS = {
   parseStyleAttributes: false,
   // Void elements, written as <x /> with no closing tag.
   selfClosing: ['img', 'br', 'hr', 'wbr', 'source', 'track', 'col'],
+  // Keep these when written with no value (e.g. a collapsed accordion panel's
+  // bare `hidden`, a link's bare `download`); sanitize-html drops empty
+  // non-boolean attributes otherwise.
+  allowedEmptyAttributes: ['alt', 'hidden', 'download'],
   // Drop a disallowed tag but keep its text, except for these, whose contents
   // are dropped along with them.
   disallowedTagsMode: 'discard',
