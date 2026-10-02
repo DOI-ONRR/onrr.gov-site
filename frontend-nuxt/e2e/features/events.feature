@@ -52,3 +52,12 @@ Feature: Events page
     And I navigate to the events page
     Then the outreach section shows "No upcoming events at this time."
     And the other section shows "No upcoming events at this time."
+
+  Scenario: Unsafe markup in event content is removed, not executed
+    Given the API returns events with unsafe markup
+    And I navigate to the events page
+    Then no script from the event content has run
+    And the training card title is "In-Person Reporter Training, Denver"
+    And the training card has a mailto link for "Reporter.Training@onrr.gov"
+    And the first outreach card shows field "Location" with value "Oklahoma City"
+    And the other section has 1 event card
