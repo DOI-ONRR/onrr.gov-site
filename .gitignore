@@ -21,3 +21,23 @@ frontend/public/uswds/css/*
 frontend/public/uswds/fonts/*
 frontend/public/uswds/img/*
 frontend/public/uswds/js/*
+# Credentials and database dumps must never be committed (fix/4319).
+# Connection/tunnel credentials (cf connect-to-service, tunnel scripts, psql)
+.tunnelrc
+.pgpass
+.creds
+*.creds
+# Private keys and certificates
+*.pem
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+# Database dumps and backups (DDL/migration .sql files stay trackable)
+*.pg
+*.dump
+*.backup
+*.sql.gz
+*.sql.gz.age
+backup.sql
+database/backup/
