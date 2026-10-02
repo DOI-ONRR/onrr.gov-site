@@ -142,7 +142,7 @@ async function copyApiUrl() {
         <!-- Reading-measure cap lives on the text, not the grid column, so the
              column keeps its full 8-col width and the meta panel fills its 4. -->
         <h1 class="margin-bottom-1">{{ dataset.name }}</h1>
-        <div class="usa-intro measure-5" v-html="resolveImages(dataset.description)" />
+        <div class="usa-intro measure-5" v-html="sanitizeHtml(resolveImages(dataset.description))" />
         <div v-if="previewComponent || sourceCollection || hasApi" class="margin-top-2">
           <!-- No source_collection -> no preview and no download section, so neither button renders;
                a manual dataset drives its downloads through supplemental_downloads instead. -->
@@ -221,7 +221,7 @@ async function copyApiUrl() {
       class="grid-row grid-gap margin-bottom-2"
       id="supplemental-downloads"
     >
-      <div class="grid-col-12 line-height-sans-5" v-html="resolveImages(dataset.supplemental_downloads)" />
+      <div class="grid-col-12 line-height-sans-5" v-html="sanitizeHtml(resolveImages(dataset.supplemental_downloads))" />
     </div>
 
     <div v-if="hasApi" class="grid-row grid-gap margin-bottom-2" id="api">
@@ -253,7 +253,7 @@ async function copyApiUrl() {
       <h2 class="font-heading-lg">Scope</h2>
       <div class="grid-col-12">
         <div class="line-height-sans-5"
-          v-html="resolveImages(dataset.scope)">
+          v-html="sanitizeHtml(resolveImages(dataset.scope))">
         </div>
       </div>
     </div>
@@ -262,7 +262,7 @@ async function copyApiUrl() {
       <h2 class="font-heading-lg">Data publication</h2>
       <div class="grid-col-12">
         <div class="line-height-sans-5"
-          v-html="resolveImages(dataset.publication)">
+          v-html="sanitizeHtml(resolveImages(dataset.publication))">
         </div>
       </div>
     </div>

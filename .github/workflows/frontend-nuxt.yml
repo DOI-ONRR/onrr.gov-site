@@ -44,6 +44,10 @@ jobs:
         run: npm ci
         working-directory: frontend-nuxt
 
+      - name: Check every v-html is sanitized
+        run: npm run check:vhtml
+        working-directory: frontend-nuxt
+
       - name: Build USWDS
         run: npx gulp updateUswds                                                                                                                         
         working-directory: frontend-nuxt

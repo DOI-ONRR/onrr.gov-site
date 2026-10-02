@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare && npm run copy:fonts",
     "updateuswds": "npx gulp updateUswds",
     "heroku-postbuild": "npm run updateuswds && npm run build",
+    "check:vhtml": "node scripts/check-vhtml.mjs",
     "test:e2e": "npx bddgen && npx playwright test",
     "test:e2e:ui": "npx bddgen && npx playwright test --ui"
   },

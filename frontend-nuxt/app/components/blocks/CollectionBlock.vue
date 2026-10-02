@@ -53,7 +53,7 @@ const items = computed(() => {
 </script>
 
 <template>
-  <div v-if="block.header" v-html="block.header" class="margin-top-4"></div>
+  <div v-if="block.header" v-html="sanitizeHtml(block.header)" class="margin-top-4"></div>
   <ContactHub v-if="collection === 'contact_topics'" />
   <!-- contacts scoped to a contact_topic → the per-topic directory; else legacy page-level -->
   <ContactDirectory
