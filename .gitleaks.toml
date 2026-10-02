@@ -1,0 +1,28 @@
+# gitleaks configuration for the secret-scan workflow
+# (.github/workflows/secret-scan.yml): gitleaks's built-in rules (API keys,
+# tokens, private keys, ...) plus one rule for credentials written as plain
+# assignments in env/config files, which the built-in rules can miss (e.g. the
+# old 40-character CircleCI token once committed in frontend/.env.development).
+#
+# Dump and credential FILES (.pg, .tunnelrc, ...) are blocked by name in a
+# separate workflow step: gitleaks skips binary changes, so it can't see a
+# committed database dump (fix/4319).
+
+title = "onrr.gov-site"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "config-credential-assignment"
+description = "Token, secret, password or API key assigned a literal value in an env/config file"
+path = '''(?i)((^|/)\.env(\.[^/]*)?|(^|/)[^/]*rc|\.(ya?ml|json|toml|ini|cfg|conf|properties))$'''
+regex = '''(?i)\b[a-z0-9_]*(token|secret|passwd|password|api_?key|private_?key)[a-z0-9_]*["']?\s*[:=]\s*["']?([a-z0-9][a-z0-9_\-+/=.]{15,})["']?'''
+secretGroup = 2
+entropy = 3.0
+keywords = ["token", "secret", "passwd", "password", "apikey", "api_key", "private_key", "privatekey"]
+
+  # References to configuration, not literal secrets.
+  [[rules.allowlists]]
+  regexTarget = "secret"
+  regexes = ['''^(env|process\.env|secrets|vars|inputs|github|steps)\.''']
