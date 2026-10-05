@@ -1,18 +1,12 @@
 name: CMS Pipeline
 
+# Deploys run on push, including the push a merged PR makes to dev/main, so
+# github.ref is the real branch (refs/heads/main). The prod environment's
+# branch rule checks that ref; a pull_request run would present
+# refs/pull/<n>/merge instead and be refused.
 on:
   push:
     paths: 'cms/**'
-    branches-ignore:
-      - main
-      - dev
-  
-  pull_request:
-    paths: 'cms/**'
-    types: [closed]
-    branches:
-      - dev
-      - main
 
   workflow_dispatch:
 
@@ -24,10 +18,6 @@ permissions:
 jobs:
   gate:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     steps:
       - run: echo "Ok to proceed with build"
   build-cms-extensions:
