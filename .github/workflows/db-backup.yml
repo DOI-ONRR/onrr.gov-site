@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Install tooling (postgres client, age, jq, aws)
         run: |
@@ -63,7 +63,7 @@ jobs:
           aws --version
 
       - name: Install CF CLI
-        uses: doi-onrr/oddd-actions/.github/actions/cf-install@v1
+        uses: doi-onrr/oddd-actions/.github/actions/cf-install@c1dc8be771d2f239f13a5c4fca870c5fd5600b8f # v1
 
       - name: Install cg-manage-rds (pipx)
         run: |
