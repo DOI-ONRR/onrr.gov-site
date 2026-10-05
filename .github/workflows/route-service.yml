@@ -16,6 +16,11 @@ on:
 
   workflow_dispatch:
 
+# Least privilege for GITHUB_TOKEN: these jobs only read the repository
+# (deploy credentials come from secrets, not the token).
+permissions:
+  contents: read
+
 jobs:
   deploy-route-service:
     if: |
@@ -28,7 +33,7 @@ jobs:
     environment: ${{ github.ref_name == 'main' && 'prod' || 'non-prod' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       
       - name: Deploy frontend
         working-directory: route-service
