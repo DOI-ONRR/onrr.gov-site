@@ -268,12 +268,18 @@ watch(() => props.value, (val) => {
     return
   }
 
-  // Apply true external changes (record switches, programmatic updates, etc.)
-  lastAppliedFromProps.value = html
-
+  // Apply true external changes (record switches, programmatic updates, etc.).
   if (normalizeNbsp(ed.getContent({ format: 'html' })) !== normalizeNbsp(html)) {
     ed.setContent(html, { format: 'html' })
+    // TinyMCE re-serializes to its own canonical form on setContent, which can differ
+    // from server-sanitized/scrubbed HTML. Record what the editor now actually holds
+    // (not the raw prop `html`), so the change we dispatch below is recognized as
+    // programmatic and NOT re-emitted as a user edit — otherwise the form loads dirty
+    // with no change whenever the stored HTML isn't already TinyMCE-canonical.
+    lastAppliedFromProps.value = ed.getContent({ format: 'html' })
     ed.dispatch?.('change')
+  } else {
+    lastAppliedFromProps.value = html
   }
 })
 
