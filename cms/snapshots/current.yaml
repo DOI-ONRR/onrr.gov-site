@@ -15827,7 +15827,7 @@ fields:
       field: about
       group: null
       hidden: false
-      interface: input-rich-text-html
+      interface: onrr-wysiwyg
       note: null
       options: null
       readonly: false
@@ -16188,7 +16188,7 @@ fields:
       field: publication
       group: null
       hidden: false
-      interface: input-rich-text-html
+      interface: onrr-wysiwyg
       note: null
       options: null
       readonly: false
