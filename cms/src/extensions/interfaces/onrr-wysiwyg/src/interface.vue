@@ -327,8 +327,12 @@ function getTinyEditorInstance() {
   const comp = tinyRef.value
   if (!comp) return null
   const inst = comp.editor || (typeof comp.getEditor === 'function' ? comp.getEditor() : null)
-  // Treat falsy, removed, or missing containers as dead
-  if (!inst || inst.removed || !inst.getContainer?.()) return null
+  // Treat falsy, removed, not-yet-initialized, or container-less editors as dead.
+  // getContent()/setContent() on an uninitialized editor throws ("Cannot read properties
+  // of undefined (reading 'serialize')") because its serializer isn't set up until the
+  // 'init' event. The props.value watcher can run before that, so callers must get null
+  // here and let the init handler apply the value once the editor is ready.
+  if (!inst || inst.removed || !inst.initialized || !inst.getContainer?.()) return null
   return inst
 }
 
