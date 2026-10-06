@@ -1,0 +1,21 @@
+# Links lychee skips in the weekly link check (.github/workflows/link-check.yml).
+# One regular expression per line, matched against each URL. Only add a pattern
+# for a failure that has been checked by hand: everything here goes unchecked.
+# Real broken links (404s) belong in the CMS fix list, not in this file.
+
+# Sites that block or challenge automated link checkers (403 / 405 / 429 or a
+# redirect to a bot-check page) but open normally in a browser. Spot-check by hand.
+^https?://(www\.)?federalregister\.gov/
+^https?://(www\.)?ecfr\.gov/
+^https?://(www\.)?regulations\.gov/
+^https?://(www\.)?fcc\.gov/
+^https?://(www\.)?gao\.gov/
+^https?://(www\.)?spglobal\.com/
+^https?://(www\.)?fnrel\.org/
+^https?://(www\.)?naturalgasintel\.com/
+^https?://(www\.)?dol\.gov/
+
+# ONRR applications reachable in browsers, but whose TLS certificate chain the
+# checker cannot verify ("unable to verify the first certificate"). Remove once
+# the servers send a complete chain.
+^https?://(mrmss|onrrreporting|portal|solids)\.onrr\.gov/
