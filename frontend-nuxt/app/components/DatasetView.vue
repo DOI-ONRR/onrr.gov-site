@@ -263,9 +263,7 @@ async function copyApiUrl() {
       </div>
     </div>
 
-    <!-- `sections` repeater (header + WYSIWYG body) replaces the legacy scope/publication
-         fields. Those two blocks below remain until the data is migrated into sections and
-         the old fields are removed from the CMS. -->
+    <!-- `sections` repeater (header + WYSIWYG body); replaced the legacy scope/publication fields. -->
     <div
       v-for="(section, i) in sections"
       :key="i"
@@ -275,24 +273,6 @@ async function copyApiUrl() {
       <h2 v-if="section.header" class="font-heading-lg">{{ section.header }}</h2>
       <div v-if="section.body" class="grid-col-12">
         <div class="line-height-sans-5" v-html="sanitizeHtml(resolveImages(section.body))"></div>
-      </div>
-    </div>
-
-    <div v-if="dataset.scope" class="grid-row grid-gap" id="scope">
-      <h2 class="font-heading-lg">Scope</h2>
-      <div class="grid-col-12">
-        <div class="line-height-sans-5"
-          v-html="sanitizeHtml(resolveImages(dataset.scope))">
-        </div>
-      </div>
-    </div>
-
-    <div v-if="dataset.publication" class="grid-row grid-gap" id="publication">
-      <h2 class="font-heading-lg">Data publication</h2>
-      <div class="grid-col-12">
-        <div class="line-height-sans-5"
-          v-html="sanitizeHtml(resolveImages(dataset.publication))">
-        </div>
       </div>
     </div>
 

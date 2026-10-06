@@ -142,8 +142,6 @@ fragment pageFields on pages {
       }
     }
     supplemental_downloads
-    scope
-    publication
     sections
     data_dictionary_intro
     contact_box {
