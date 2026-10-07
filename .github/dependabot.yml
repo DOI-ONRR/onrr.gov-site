@@ -1,0 +1,21 @@
+# Keeps the GitHub Actions pinned by commit SHA in .github/workflows current
+# (fix/4325). Dependabot updates both the SHA and its `# vX.Y.Z` comment.
+# Minor/patch releases are grouped into one weekly PR; new major versions
+# arrive as separate PRs to review on their own. PRs target dev, which is
+# promoted to main as usual.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: weekly
+    groups:
+      github-actions-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: "chore(actions)"

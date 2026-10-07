@@ -1,28 +1,23 @@
 name: CMS Pipeline
 
+# Deploys run on push, including the push a merged PR makes to dev/main, so
+# github.ref is the real branch (refs/heads/main). The prod environment's
+# branch rule checks that ref; a pull_request run would present
+# refs/pull/<n>/merge instead and be refused.
 on:
   push:
     paths: 'cms/**'
-    branches-ignore:
-      - main
-      - dev
-  
-  pull_request:
-    paths: 'cms/**'
-    types: [closed]
-    branches:
-      - dev
-      - main
 
   workflow_dispatch:
+
+# Least privilege for GITHUB_TOKEN: these jobs only read the repository
+# (deploy credentials come from secrets, not the token).
+permissions:
+  contents: read
 
 jobs:
   gate:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     steps:
       - run: echo "Ok to proceed with build"
   build-cms-extensions:
@@ -30,12 +25,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
 
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: 'npm'
@@ -63,7 +58,7 @@ jobs:
           tar -czf cms-deploy.tar.gz cms/extensions
 
       - name: Upload CMS deploy tarball
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: cms-deploy-tar
           path: cms-deploy.tar.gz
@@ -77,7 +72,7 @@ jobs:
       SRC_DIR: "source/cms/src/extensions/interfaces/onrr-wysiwyg"
     steps:
       - name: Download CMS deploy tarball
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: cms-deploy-tar
           path: .
@@ -87,13 +82,13 @@ jobs:
           tar -xzf cms-deploy.tar.gz
 
       - name: Checkout source repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
           path: source
 
       - name: Checkout TinyMCE (shallow)
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: tinymce/tinymce
           ref: ${{ env.TINYMCE_REF }}
@@ -101,7 +96,7 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Node for TinyMCE
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 20
           cache: yarn
@@ -135,7 +130,7 @@ jobs:
           tar -czf cms-deploy.tar.gz cms
 
       - name: Upload final CMS deploy tarball
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: cms-deploy-tar
           path: cms-deploy.tar.gz
@@ -149,12 +144,12 @@ jobs:
     environment: ${{ github.ref_name == 'main' && 'prod' || 'non-prod' }}
     steps:
       - name: Checkout repo (for deploy.sh & manifests)
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
 
       - name: Download CMS deploy tarball
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: cms-deploy-tar
           path: .

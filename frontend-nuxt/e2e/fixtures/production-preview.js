@@ -26,9 +26,11 @@ function datasetMeta(overrides = {}) {
     publisher: 'Office of Natural Resources Revenue',
     related_links: [],
     about: null,
-    // Populated so the "Scope" / "Data publication" headers render (gating test).
-    scope: '<p>Production scope text.</p>',
-    publication: '<p>Production publication text.</p>',
+    // Populated so the "Scope" / "Data publication" section headers render (gating test).
+    sections: [
+      { header: 'Scope', body: '<p>Production scope text.</p>' },
+      { header: 'Data publication', body: '<p>Production publication text.</p>' },
+    ],
     preview_component: null,
     source_collection: 'production',
     export_filter: { period: { type: { _eq: 'Fiscal Year' } } },

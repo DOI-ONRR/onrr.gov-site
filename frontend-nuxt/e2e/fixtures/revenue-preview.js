@@ -39,8 +39,7 @@ export const revenuePage = {
     publisher: 'Office of Natural Resources Revenue',
     related_links: [],
     about: null,
-    scope: null, // empty → the "Scope" header should NOT render
-    publication: null, // empty → the "Data publication" header should NOT render
+    sections: [], // no sections → the "Scope"/"Data publication" headers should NOT render
     preview_component: null,
     source_collection: 'revenue',
     export_filter: { period: { type: { _eq: 'Fiscal Year' } } },

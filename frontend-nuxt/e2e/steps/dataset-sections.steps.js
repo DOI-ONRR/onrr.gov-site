@@ -3,11 +3,12 @@ import { createBdd } from 'playwright-bdd'
 
 const { Then } = createBdd()
 
-// DatasetView renders the "Scope" (#scope) and "Data publication" (#publication) sections
-// only when the corresponding dataset_metadata field is non-empty.
+// DatasetView renders each `sections` repeater entry with an id of slugify(header), so
+// "Scope" -> #scope and "Data publication" -> #data-publication. A section renders only
+// when the entry exists (non-empty).
 const SECTION_ID = {
   Scope: 'scope',
-  'Data publication': 'publication',
+  'Data publication': 'data-publication',
 }
 
 Then('the dataset section {string} is visible', async ({ page }, name) => {
