@@ -14,10 +14,13 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
   ],
 
-  // Canonical site URL for the sitemap (and any future SEO tags). Production is onrr.gov;
-  // override per-env with NUXT_PUBLIC_SITE_URL (e.g. the preview host) when needed.
+  // Canonical site URL + name for the sitemap (and any future SEO tags). Production is
+  // onrr.gov; override the URL per-env with NUXT_PUBLIC_SITE_URL (e.g. the preview host).
+  // `name` titles the sitemap's human-readable XSL view — without it the header renders
+  // the literal "undefined".
   site: {
     url: process.env.NUXT_PUBLIC_SITE_URL || 'https://onrr.gov',
+    name: 'Office of Natural Resources Revenue (ONRR)',
   },
 
   sitemap: {
