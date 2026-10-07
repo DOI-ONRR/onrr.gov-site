@@ -268,12 +268,18 @@ watch(() => props.value, (val) => {
     return
   }
 
-  // Apply true external changes (record switches, programmatic updates, etc.)
-  lastAppliedFromProps.value = html
-
+  // Apply true external changes (record switches, programmatic updates, etc.).
   if (normalizeNbsp(ed.getContent({ format: 'html' })) !== normalizeNbsp(html)) {
     ed.setContent(html, { format: 'html' })
+    // TinyMCE re-serializes to its own canonical form on setContent, which can differ
+    // from server-sanitized/scrubbed HTML. Record what the editor now actually holds
+    // (not the raw prop `html`), so the change we dispatch below is recognized as
+    // programmatic and NOT re-emitted as a user edit — otherwise the form loads dirty
+    // with no change whenever the stored HTML isn't already TinyMCE-canonical.
+    lastAppliedFromProps.value = ed.getContent({ format: 'html' })
     ed.dispatch?.('change')
+  } else {
+    lastAppliedFromProps.value = html
   }
 })
 
@@ -321,8 +327,12 @@ function getTinyEditorInstance() {
   const comp = tinyRef.value
   if (!comp) return null
   const inst = comp.editor || (typeof comp.getEditor === 'function' ? comp.getEditor() : null)
-  // Treat falsy, removed, or missing containers as dead
-  if (!inst || inst.removed || !inst.getContainer?.()) return null
+  // Treat falsy, removed, not-yet-initialized, or container-less editors as dead.
+  // getContent()/setContent() on an uninitialized editor throws ("Cannot read properties
+  // of undefined (reading 'serialize')") because its serializer isn't set up until the
+  // 'init' event. The props.value watcher can run before that, so callers must get null
+  // here and let the init handler apply the value once the editor is ready.
+  if (!inst || inst.removed || !inst.initialized || !inst.getContainer?.()) return null
   return inst
 }
 

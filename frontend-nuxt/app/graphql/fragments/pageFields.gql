@@ -56,6 +56,8 @@ fragment pageFields on pages {
     body_columns
     background
     card_variant
+    placement
+    heading_large
     chart {
       ...chartCardFields
     }
@@ -141,8 +143,7 @@ fragment pageFields on pages {
       }
     }
     supplemental_downloads
-    scope
-    publication
+    sections
     data_dictionary_intro
     contact_box {
       id

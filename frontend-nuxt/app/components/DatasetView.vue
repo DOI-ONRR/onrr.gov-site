@@ -33,6 +33,20 @@ watch(() => props.dataset, () => nextTick(enhanceContent))
 
 const charts = computed(() => props.dataset.charts ?? [])
 
+// `sections` is a repeater (JSON array of { header, body }) that will replace the legacy
+// scope/publication fields. Tolerate an already-parsed array or a JSON string.
+const sections = computed(() => {
+  const s = props.dataset.sections
+  if (Array.isArray(s)) return s
+  if (typeof s === 'string') { try { return JSON.parse(s) } catch { return [] } }
+  return []
+})
+// Slugified id from the header for deep-linking; falls back to an index.
+const sectionId = (section, i) =>
+  section?.header
+    ? section.header.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    : `section-${i + 1}`
+
 // `formats` is a select-multiple-dropdown -> array of strings (["CSV","XLSX",...]).
 const formats = computed(() => {
   const f = props.dataset.formats
@@ -249,21 +263,16 @@ async function copyApiUrl() {
       </div>
     </div>
 
-    <div v-if="dataset.scope" class="grid-row grid-gap" id="scope">
-      <h2 class="font-heading-lg">Scope</h2>
-      <div class="grid-col-12">
-        <div class="line-height-sans-5"
-          v-html="sanitizeHtml(resolveImages(dataset.scope))">
-        </div>
-      </div>
-    </div>
-
-    <div v-if="dataset.publication" class="grid-row grid-gap" id="publication">
-      <h2 class="font-heading-lg">Data publication</h2>
-      <div class="grid-col-12">
-        <div class="line-height-sans-5"
-          v-html="sanitizeHtml(resolveImages(dataset.publication))">
-        </div>
+    <!-- `sections` repeater (header + WYSIWYG body); replaced the legacy scope/publication fields. -->
+    <div
+      v-for="(section, i) in sections"
+      :key="i"
+      class="grid-row grid-gap"
+      :id="sectionId(section, i)"
+    >
+      <h2 v-if="section.header" class="font-heading-lg">{{ section.header }}</h2>
+      <div v-if="section.body" class="grid-col-12">
+        <div class="line-height-sans-5" v-html="sanitizeHtml(resolveImages(section.body))"></div>
       </div>
     </div>
 

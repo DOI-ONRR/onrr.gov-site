@@ -20,6 +20,10 @@ const { resolveImages } = useCmsContent()
 // remainder and is dropped entirely at 12 (full-width body).
 const bandBodyCols = (band) => band.body_columns || 12
 const bandAsideCols = (band) => 12 - bandBodyCols(band)
+
+// A band with a real background color needs inset padding so its content doesn't hug the
+// colored edges — otherwise a constrained (bleed=false) colored band looks like a bare strip.
+const bandHasBackground = (band) => band.background && band.background !== 'default'
 </script>
 
 <template>
@@ -31,16 +35,20 @@ const bandAsideCols = (band) => 12 - bandBodyCols(band)
     :class="[
       `page-band--${band.background || 'default'}`,
       { 'page-band--hub': band.card_variant === 'link' },
-      bleed ? 'padding-y-4' : 'padding-bottom-4',
+      // Full-bleed bands pad top+bottom; constrained bands normally only pad below, but a
+      // constrained band WITH a background color needs full padding so its content is inset.
+      bleed ? 'padding-y-4' : (bandHasBackground(band) ? 'padding-4' : 'padding-bottom-4'),
     ]"
   >
     <div :class="{ 'grid-container': bleed }">
       <!-- font-heading-lg is size-only and `!important`, so it can't be overridden by
            the .page-band--hub rule — omit it on hub headings and size them there. -->
+      <!-- font-heading-lg by default; authors can turn it off per band via `heading_large`.
+           Link/hub bands never use it (they size their h2 in .page-band--hub). -->
       <h2
         v-if="band.heading"
         class="margin-top-0"
-        :class="{ 'font-heading-lg': band.card_variant !== 'link' }"
+        :class="{ 'font-heading-lg': band.heading_large !== false && band.card_variant !== 'link' }"
       >{{ band.heading }}</h2>
 
       <!-- Steps band: a full-width 3-up numbered grid (number from sort order). -->

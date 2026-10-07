@@ -1,0 +1,230 @@
+// Sales data diagram (ported from nrrd SalesDataDiagram.js)
+// Icons are Material UI SVG paths applied as CSS masks on pseudo-elements,
+// so the markup needs no <svg> or empty elements.
+
+$sdd-primary-text: #0a314d;
+$sdd-icon-size: 100px;
+$sdd-icon-padding: 30px;
+$sdd-icon-border: 3px;
+$sdd-rail-offset: 50px; // half the icon size, so the rail runs through the icon's center
+$sdd-rail-width: 3px;
+$sdd-connector-height: 1.5rem;
+
+$sdd-themes: (
+  "minty":    (bg: #c2d0bd, accent: #3a4730),
+  "lavender": (bg: #dcd2df, accent: #503b5e),
+  "slate":    (bg: #d3dfe6, accent: #39474f),
+);
+
+// 24x24 Material UI icon paths
+$sdd-icon-paths: (
+  "assignment": "M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z",
+  "bar-chart": "M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z",
+  "pie-chart": "M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z",
+  "expand-more": "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z",
+  "open-in-new": "M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z",
+);
+
+// Paints a Material icon in the element's background-color
+@mixin sdd-icon($name) {
+  $svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='#{map-get($sdd-icon-paths, $name)}'/%3E%3C/svg%3E";
+  -webkit-mask: url("#{$svg}") center / contain no-repeat;
+  mask: url("#{$svg}") center / contain no-repeat;
+}
+
+.sales-data-diagram {
+  margin-top: 1.5rem;
+
+  p {
+    margin: 0;
+  }
+
+  .sdd-mt {
+    margin-top: 1rem;
+  }
+
+  .sdd-spaced {
+    margin: 1rem 0;
+  }
+}
+
+.sdd-step {
+  position: relative;
+
+  &:not(:last-child) {
+    padding-bottom: $sdd-connector-height;
+  }
+
+  // Icon circle
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    box-sizing: border-box;
+    width: $sdd-icon-size;
+    height: $sdd-icon-size;
+    border: $sdd-icon-border solid;
+    border-radius: 50%;
+    background-color: #ffffff;
+  }
+
+  // Icon glyph
+  &::after {
+    content: "";
+    position: absolute;
+    top: $sdd-icon-padding + $sdd-icon-border;
+    left: $sdd-icon-padding + $sdd-icon-border;
+    z-index: 2;
+    width: $sdd-icon-size - 2 * ($sdd-icon-padding + $sdd-icon-border);
+    height: $sdd-icon-size - 2 * ($sdd-icon-padding + $sdd-icon-border);
+  }
+
+  @each $name in ("assignment", "bar-chart", "pie-chart") {
+    &--#{$name}::after {
+      @include sdd-icon($name);
+    }
+  }
+
+  &__body {
+    position: relative;
+    margin-left: $sdd-rail-offset;
+    padding: 0.5rem 0 0.5rem 60px;
+    border-left: $sdd-rail-width solid;
+  }
+
+  // Connector line down to the next step
+  &:not(:last-child) &__body::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: -$sdd-rail-width;
+    height: $sdd-connector-height;
+    border-left: $sdd-rail-width solid;
+    border-left-color: inherit;
+  }
+
+  &__details {
+    > summary {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      color: $sdd-primary-text;
+      cursor: pointer;
+      list-style: none;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      // Chevron
+      &::after {
+        @include sdd-icon("expand-more");
+        content: "";
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        margin-left: 12px;
+        background-color: $sdd-primary-text;
+        transition: transform 150ms ease-in-out;
+      }
+    }
+
+    &[open] > summary::after {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__content {
+    padding: 8px 24px 24px 0;
+  }
+
+  @each $name, $colors in $sdd-themes {
+    &--#{$name} {
+      &::before {
+        border-color: map-get($colors, accent);
+      }
+
+      &::after {
+        background-color: map-get($colors, accent);
+      }
+
+      .sdd-step__body {
+        background-color: map-get($colors, bg);
+        border-left-color: map-get($colors, accent);
+      }
+    }
+  }
+}
+
+.sdd-link {
+  color: $sdd-primary-text;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &--external::after {
+    @include sdd-icon("open-in-new");
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 0.25em;
+    vertical-align: middle;
+    background-color: currentColor;
+  }
+}
+
+.sdd-references {
+  margin: 0;
+}
+
+.sdd-glossary-term {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+.sdd-formula-image {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  padding: 0.5rem 0;
+  border: 2px solid #000000;
+  background-color: #ffffff;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.sdd-formula {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 2px solid #000000;
+  background-color: #ffffff;
+  text-align: center;
+
+  &__label {
+    padding: 0 0.5rem;
+  }
+
+  &__fraction {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__numerator {
+    padding: 0.5rem;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  }
+
+  &__denominator {
+    padding-top: 0.5rem;
+  }
+}

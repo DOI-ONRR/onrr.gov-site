@@ -1,5 +1,5 @@
 version: 1
-directus: 12.3.0
+directus: 12.4.1
 vendor: postgres
 collections:
   - collection: API
@@ -15827,7 +15827,7 @@ fields:
       field: about
       group: null
       hidden: false
-      interface: input-rich-text-html
+      interface: onrr-wysiwyg
       note: null
       options: null
       readonly: false
@@ -16090,7 +16090,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 26
       special:
         - o2m
       translations: null
@@ -16114,7 +16114,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 25
       special: null
       translations: null
       validation: null
@@ -16122,86 +16122,6 @@ fields:
       width: full
     schema:
       name: data_dictionary_intro
-      table: dataset_metadata
-      data_type: text
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: dataset_metadata
-    field: scope
-    type: text
-    meta:
-      collection: dataset_metadata
-      conditions: null
-      display: null
-      display_options: null
-      field: scope
-      group: null
-      hidden: false
-      interface: onrr-wysiwyg
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 22
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: scope
-      table: dataset_metadata
-      data_type: text
-      default_value: null
-      max_length: null
-      numeric_precision: null
-      numeric_scale: null
-      is_nullable: true
-      is_unique: false
-      is_indexed: false
-      is_primary_key: false
-      is_generated: false
-      generation_expression: null
-      has_auto_increment: false
-      foreign_key_table: null
-      foreign_key_column: null
-  - collection: dataset_metadata
-    field: publication
-    type: text
-    meta:
-      collection: dataset_metadata
-      conditions: null
-      display: null
-      display_options: null
-      field: publication
-      group: null
-      hidden: false
-      interface: input-rich-text-html
-      note: null
-      options: null
-      readonly: false
-      required: false
-      searchable: true
-      sort: 23
-      special: null
-      translations: null
-      validation: null
-      validation_message: null
-      width: full
-    schema:
-      name: publication
       table: dataset_metadata
       data_type: text
       default_value: null
@@ -16235,7 +16155,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 28
       special:
         - m2o
       translations: null
@@ -16290,7 +16210,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 27
       special:
         - cast-json
       translations: null
@@ -16341,6 +16261,63 @@ fields:
       name: supplemental_downloads
       table: dataset_metadata
       data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: sections
+    type: json
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: sections
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        fields:
+          - field: header
+            meta:
+              field: header
+              interface: input
+              type: string
+            name: header
+            type: string
+          - field: body
+            meta:
+              field: body
+              interface: onrr-wysiwyg
+              type: text
+              width: full
+            name: body
+            type: text
+      readonly: false
+      required: false
+      searchable: true
+      sort: 24
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sections
+      table: dataset_metadata
+      data_type: json
       default_value: null
       max_length: null
       numeric_precision: null
@@ -29464,13 +29441,13 @@ fields:
       field: body
       group: null
       hidden: false
-      interface: input-rich-text-html
+      interface: onrr-wysiwyg
       note: null
       options: null
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 10
       special: null
       translations: null
       validation: null
@@ -29510,7 +29487,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -29550,7 +29527,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -29590,7 +29567,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -29637,7 +29614,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -29689,7 +29666,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -29729,7 +29706,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 16
       special:
         - m2o
       translations: null
@@ -29772,7 +29749,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 17
       special:
         - o2m
       translations: null
@@ -29798,7 +29775,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 18
       special:
         - o2m
       translations: null
@@ -29827,7 +29804,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -29839,6 +29816,92 @@ fields:
       data_type: character varying
       default_value: button
       max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: placement
+    type: string
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: placement
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Top
+            value: top
+          - text: Bottom
+            value: bottom
+      readonly: false
+      required: false
+      searchable: true
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: placement
+      table: page_bands
+      data_type: character varying
+      default_value: top
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: page_bands
+    field: heading_large
+    type: boolean
+    meta:
+      collection: page_bands
+      conditions: null
+      display: null
+      display_options: null
+      field: heading_large
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: heading_large
+      table: page_bands
+      data_type: boolean
+      default_value: true
+      max_length: null
       numeric_precision: null
       numeric_scale: null
       is_nullable: true

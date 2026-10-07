@@ -3,6 +3,13 @@ import getPageBySlug from '@/graphql/queries/collections/pages/getPageBySlug.gql
 import getMenuByLabel from '@/graphql/queries/collections/menus/getMenuByLabel.gql'
 import getContactTopics from '@/graphql/queries/collections/contacts/getContactTopics.gql'
 
+// Boxed page blocks that render as a self-contained visual unit with no outer margin get
+// 24px below in the block grid (grid-gap only gutters horizontally, so stacked/wrapped
+// boxes would otherwise touch). Prose (content_blocks), self-managing blocks (tab_blocks,
+// expansion_panels, collection_blocks) and blocks that carry their own margin
+// (pay_gov_forms) are excluded so spacing isn't doubled.
+const SPACED_BLOCKS = new Set(['card_blocks', 'chart_cards', 'data_tables', 'contact_boxes'])
+
 definePageMeta({
   // Key on the PATH only (not fullPath) so query-string changes — e.g. a dataset preview's
   // filter state synced to the URL — do NOT re-mount the page. Re-mounting on every filter
@@ -16,6 +23,11 @@ const slug = computed(() => route.params.slug?.at(-1) || null)
 const { resolveImages, assetUrl } = useCmsContent()
 const { data } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
 const page = computed(() => data.value?.page?.[0])
+
+// A band's `placement` (default 'top') decides whether it renders above or below the
+// page_blocks, so bands and blocks can be combined on one page.
+const topBands = computed(() => (page.value?.page_bands ?? []).filter((b) => b.placement !== 'bottom'))
+const bottomBands = computed(() => (page.value?.page_bands ?? []).filter((b) => b.placement === 'bottom'))
 
 // Contact-topic fallback: /about/contact/<slug> with no authored CMS page → render the
 // topic's contacts directory directly, so every hub topic works before its page exists.
@@ -128,7 +140,8 @@ const sidenavLinks = computed(() => {
     <p v-if="fallbackTopic.description" class="usa-intro">{{ fallbackTopic.description }}</p>
     <ContactDirectory :topic="fallbackTopic.slug" />
   </section>
-  <section v-else class="grid-container usa-section margin-top-4">
+  <template v-else>
+  <section class="grid-container usa-section margin-top-4">
     <div class="grid-row grid-gap">
       <div v-if="!isCustomLayout && !isFullWidth" class="grid-col-2">
         <nav v-if="sidenavLinks.length" aria-label="Side navigation">
@@ -154,14 +167,18 @@ const sidenavLinks = computed(() => {
         <JourneyLandingView v-else-if="isJourneyLanding" :page="page" />
         <HandbookDetailView v-else-if="isHandbook" :page="page" />
         <template v-else>
-        <!-- page_bands render (constrained) above any page_blocks; full-width pages
-             like Payment options are built entirely from bands. -->
-        <PageBands v-if="page?.page_bands?.length" :bands="page.page_bands" :bleed="false" />
+        <!-- page_bands render (constrained) above or below page_blocks per each band's
+             `placement` field; full-width pages like Payment options are built entirely
+             from bands (all default to 'top'). -->
+        <PageBands v-if="topBands.length" :bands="topBands" :bleed="false" />
         <div class="grid-row grid-gap">
           <div
             v-for="block in page?.page_blocks"
             :key="block.id"
-            :class="`grid-col-${block.item?.block_v_col || 12}`"
+            :class="[
+              `grid-col-${block.item?.block_v_col || 12}`,
+              SPACED_BLOCKS.has(block.item?.__typename) && 'margin-bottom-3',
+            ]"
           >
             <div
               v-if="block.item?.__typename === 'content_blocks'"
@@ -205,6 +222,10 @@ const sidenavLinks = computed(() => {
       </div>
     </div>
   </section>
+  <!-- Bottom bands render full-bleed OUTSIDE the container so a colored band spans the full
+       viewport width; PageBands' inner grid-container re-constrains the content to page width. -->
+  <PageBands v-if="!isCustomLayout && bottomBands.length" :bands="bottomBands" />
+  </template>
 </template>
 
 <style lang="scss" scoped>

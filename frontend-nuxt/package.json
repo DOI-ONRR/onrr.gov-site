@@ -24,17 +24,22 @@
     "@uswds/uswds": "^3.13.0",
     "graphql": "^16.12.0",
     "highcharts": "^12.5.0",
-    "nuxt": "^4.3.1",
+    "nuxt": "^4.5.2",
     "sanitize-html": "^2.17.7",
     "sass": "^1.97.3",
     "vue": "^3.5.28",
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "engines": {
     "node": "22.x"
   },
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": ">=1.58.2 <1.60",
     "playwright-bdd": "^8.4.2"
+  },
+  "//overrides": "Security patches (fix/4322): undici 7.x is pulled in by cheerio via @uswds/compile (build tooling; Nuxt itself uses undici 8), and postcss 8.x by sanitize-html, which ships in the server bundle (the app never parses style attributes with it). Remove each once the dependents require fixed versions.",
+  "overrides": {
+    "undici@^7": "7.30.0",
+    "postcss@^8": "8.5.29"
   }
 }

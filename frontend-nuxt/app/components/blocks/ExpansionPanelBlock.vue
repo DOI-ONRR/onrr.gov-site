@@ -49,7 +49,9 @@ function toggle(id) {
 <template>
   <div class="usa-accordion usa-accordion--bordered">
     <template v-for="panel in panels" :key="panel.id">
-      <h4 class="usa-accordion__heading">
+      <!-- h3 (not h4) so accordion titles nest correctly under the content's h2s and can
+           join the TopicView "On this page" rail as a sub-level. -->
+      <h3 class="usa-accordion__heading">
         <button
           type="button"
           class="usa-accordion__button"
@@ -59,7 +61,7 @@ function toggle(id) {
         >
           {{ panel.label }}
         </button>
-      </h4>
+      </h3>
       <div
         :id="`accordion-${panel.id}`"
         class="usa-accordion__content usa-prose"
