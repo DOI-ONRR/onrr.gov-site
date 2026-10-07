@@ -4,9 +4,10 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 
 const route = useRoute()
 
-const { data: menuData } = await useAsyncQuery(getMenuByLabel, {
+const { data: menuData, error: menuError } = await useAsyncQuery(getMenuByLabel, {
   menuLabel: 'Revenue Data',
 })
+throwOnCmsError(menuError)
 
 </script> 
 
