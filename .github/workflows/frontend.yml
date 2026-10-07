@@ -1,36 +1,31 @@
 name: Frontend Pipeline
 
+# Deploys run on push, including the push a merged PR makes to dev/main, so
+# github.ref is the real branch (refs/heads/main). The prod environment's
+# branch rule checks that ref; a pull_request run would present
+# refs/pull/<n>/merge instead and be refused.
 on:
   push:
     paths: 'frontend/**'
-    branches-ignore:
-      - main
-      - dev
-  
-  pull_request:
-    paths: 'frontend/**'
-    types: [closed]
-    branches:
-      - dev
-      - main
 
   workflow_dispatch:
 
+# Least privilege for GITHUB_TOKEN: these jobs only read the repository
+# (deploy credentials come from secrets, not the token).
+permissions:
+  contents: read
+
 jobs:
   build-frontend:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     env:
       VUE_APP_HOME_PAGE_ID: ${{ secrets.VUE_APP_HOME_PAGE_ID }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 20
           cache: 'npm'
@@ -46,7 +41,7 @@ jobs:
           VUE_APP_ONRR_GTM_ID: ${{ secrets.VUE_APP_ONRR_GTM_ID }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: dist
           path: frontend/dist
@@ -59,10 +54,10 @@ jobs:
     environment: ${{ github.ref_name == 'main' && 'prod' || 'non-prod' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: dist
           path: frontend/dist
