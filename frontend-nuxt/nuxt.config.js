@@ -11,7 +11,25 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxtjs/apollo',
+    '@nuxtjs/sitemap',
   ],
+
+  // Canonical site URL for the sitemap (and any future SEO tags). Production is onrr.gov;
+  // override per-env with NUXT_PUBLIC_SITE_URL (e.g. the preview host) when needed.
+  site: {
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://onrr.gov',
+  },
+
+  sitemap: {
+    // The page URLs come from the CMS at request time via this server route (published
+    // pages only, per the public read policy) — see server/api/__sitemap__/urls.js. The
+    // module still auto-discovers the static file-based routes (/, /developers, …) and
+    // merges them in; the catch-all [...slug] can't be auto-enumerated, which is exactly
+    // what this source supplies. Search.gov crawls /sitemap.xml to index the site.
+    sources: ['/api/__sitemap__/urls'],
+    // Don't advertise the error page (auto-discovered from the app routes).
+    exclude: ['/404'],
+  },
 
   apollo: {
     clients: {
