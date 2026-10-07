@@ -27,8 +27,10 @@ export default defineNuxtConfig({
     // merges them in; the catch-all [...slug] can't be auto-enumerated, which is exactly
     // what this source supplies. Search.gov crawls /sitemap.xml to index the site.
     sources: ['/api/__sitemap__/urls'],
-    // Don't advertise the error page (auto-discovered from the app routes).
-    exclude: ['/404'],
+    // Keep out of the XML sitemap: the error page (auto-discovered from the app routes)
+    // and the human-facing HTML site map page (a CMS page at /site-map). `exclude` applies
+    // to URLs from every source, including the CMS one above.
+    exclude: ['/404', '/site-map'],
   },
 
   apollo: {
