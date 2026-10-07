@@ -11,12 +11,17 @@
         </li>
       </ul>
       <div class="masthead-actions">
-        <button type="button" class="masthead-btn" id="search-toggle" aria-expanded="false" aria-controls="mobile-search">Search</button>
+        <button type="button" class="masthead-btn" id="search-toggle" :aria-expanded="searchOpen" aria-controls="mobile-search" @click="toggleSearch">Search</button>
         <span class="masthead-sep" aria-hidden="true"></span>
         <div class="usa-navbar">
           <button type="button" class="usa-menu-btn">Menu</button>
         </div>
       </div>
+    </div>
+    <!-- Mobile search: revealed below the masthead row by #search-toggle. The desktop
+         search lives in the nav row (NavigationMenu); this one shows only below 64em. -->
+    <div v-show="searchOpen" id="mobile-search" class="mobile-search grid-container">
+      <SiteSearchForm ref="mobileSearch" input-id="search-field-mobile" />
     </div>
   </div>
 </template>
@@ -32,4 +37,25 @@ const menuItems = computed(() => data.value?.menus ?? [])
 function itemUrl(item) {
   return item.custom_url || item.link_to_page?.url || '#'
 }
+
+// Mobile search reveal: toggled by #search-toggle; focus the field when opening.
+const searchOpen = ref(false)
+const mobileSearch = ref(null)
+function toggleSearch() {
+  searchOpen.value = !searchOpen.value
+  if (searchOpen.value) {
+    nextTick(() => mobileSearch.value?.$el?.querySelector('input[type="search"]')?.focus())
+  }
+}
 </script>
+
+<style lang="scss" scoped>
+  // The reveal drops below the navy masthead row; give it the same bottom gutter.
+  .mobile-search { padding-bottom: 0.9rem; }
+
+  // Defensive: the #search-toggle is already hidden at desktop (.masthead-actions),
+  // but never render the mobile reveal there — the nav-row search covers desktop.
+  @media (min-width: 64em) {
+    .mobile-search { display: none; }
+  }
+</style>
