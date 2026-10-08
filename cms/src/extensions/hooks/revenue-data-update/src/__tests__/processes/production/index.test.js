@@ -773,4 +773,30 @@ describe('processProductionUpdate', () => {
     expect(inserted).toHaveLength(3);
     expect(result.productionCreated).toBe(3);
   });
+
+  it('resolves the Monthly period by type, ignoring a same-date Calendar/Fiscal Year period', async () => {
+    // Regression: Monthly, Calendar Year, and Fiscal Year periods all sit on Jan 1, so a
+    // date-only lookup bound January monthly rows to a CY/FY period. The lookup must filter type.
+    const mockRecord = { production_date: '1/1/2024', land_class: 'Federal', land_category: 'Onshore', commodity: 'Oil Prod Vol (bbl)', volume: '100' };
+    parseCsv.mockReturnValue([mockRecord]);
+    transformProductionRecord.mockReturnValue(mockRecord);
+    buildPeriodRecord.mockReturnValue({ type: 'Monthly', period_date: '2024-01-01' });
+
+    mockLocationService.readByQuery.mockResolvedValue([{ id: 'location-id' }]);
+    mockCommodityService.readByQuery.mockResolvedValue([{ id: 'commodity-id' }]);
+    mockProductionService.readByQuery.mockResolvedValue([]);
+    // Jan 1 carries both a Monthly and a Calendar Year period; only the type filter picks right.
+    mockPeriodService.readByQuery.mockImplementation((q) =>
+      Promise.resolve([{ id: q?.filter?.type?._eq === 'Monthly' ? 'monthly-jan' : 'calendar-year-jan' }]),
+    );
+
+    await processProductionUpdate('test-file-id', mockContext);
+
+    expect(mockPeriodService.readByQuery).toHaveBeenCalledWith(
+      expect.objectContaining({ filter: expect.objectContaining({ type: { _eq: 'Monthly' } }) }),
+    );
+    const inserted = mockProductionService.createMany.mock.calls.flatMap((c) => c[0]);
+    expect(inserted).toHaveLength(1);
+    expect(inserted[0].period).toBe('monthly-jan');
+  });
 });

@@ -923,4 +923,34 @@ describe('processDisbursementUpdate', () => {
     expect(result.disbursementsCreated).toBe(3);
     expect(result.disbursementsSkipped).toBe(0);
   });
+
+  it('resolves the Monthly period by type, ignoring a same-date Calendar/Fiscal Year period', async () => {
+    // Regression: Monthly, Calendar Year, and Fiscal Year periods all sit on Jan 1, so a
+    // date-only lookup bound January monthly rows to a CY/FY period. The lookup must filter type.
+    const mockRecord = { month: 'January', calendar_year: '2024', commodity: 'Oil', disbursement: '1000' };
+    parseCsv.mockReturnValue([mockRecord]);
+    transformDisbursementRecord.mockReturnValue(mockRecord);
+    transformFipsCode.mockResolvedValue(mockRecord);
+    buildFundRecord.mockReturnValue({ type: 'F', class: 'C', recipient: 'R', revenue_type: 'RT', source: 'S', disbursement_type: 'DT' });
+    buildLocationRecord.mockReturnValue({ land_class: 'Onshore', land_category: 'Public', state: 'TX', county: 'Harris', fips_code: '48201' });
+    buildPeriodRecord.mockReturnValue({ type: 'Monthly', period_date: '2024-01-01' });
+
+    mockFundService.readByQuery.mockResolvedValue([{ id: 'fund-id' }]);
+    mockLocationService.readByQuery.mockResolvedValue([{ id: 'location-id' }]);
+    mockCommodityService.readByQuery.mockResolvedValue([{ id: 'commodity-id' }]);
+    mockDisbursementService.readByQuery.mockResolvedValue([]);
+    // Jan 1 carries both a Monthly and a Calendar Year period; only the type filter picks right.
+    mockPeriodService.readByQuery.mockImplementation((q) =>
+      Promise.resolve([{ id: q?.filter?.type?._eq === 'Monthly' ? 'monthly-jan' : 'calendar-year-jan' }]),
+    );
+
+    await processDisbursementUpdate('test-file-id', mockContext);
+
+    expect(mockPeriodService.readByQuery).toHaveBeenCalledWith(
+      expect.objectContaining({ filter: expect.objectContaining({ type: { _eq: 'Monthly' } }) }),
+    );
+    const inserted = mockDisbursementService.createMany.mock.calls.flatMap((c) => c[0]);
+    expect(inserted).toHaveLength(1);
+    expect(inserted[0].period).toBe('monthly-jan');
+  });
 });

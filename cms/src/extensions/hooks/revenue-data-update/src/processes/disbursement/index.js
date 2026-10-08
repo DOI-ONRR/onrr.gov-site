@@ -218,6 +218,10 @@ export async function processDisbursementUpdate(fileId, context) {
         // Check if period already exists
         const existing = await periodService.readByQuery({
           filter: {
+            // Disambiguate by type: Monthly, Calendar Year, and Fiscal Year periods can
+            // share a period_date (all three sit on Jan 1), so a date-only lookup could bind
+            // a January monthly row to the CY/FY period that happened to match first.
+            type: { _eq: entry.record.type },
             period_date: { _eq: entry.record.period_date },
           },
           fields: ['id'],
