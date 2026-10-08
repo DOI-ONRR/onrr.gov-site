@@ -37,8 +37,11 @@ describe('processFYProductionUpdate', () => {
       createOne: vi.fn().mockResolvedValue(1),
     };
 
+    // The FY loader preloads commodities (mineral_lease_type empty) keyed by lowercased
+    // product; the real transformFYProductionRecord title-cases 'Gas (Mcf)' -> 'Gas (mcf)',
+    // so the preloaded commodity's product must match case-insensitively.
     mockCommodityService = {
-      readByQuery: vi.fn().mockResolvedValue([{ id: 1 }]),
+      readByQuery: vi.fn().mockResolvedValue([{ id: 1, product: 'Gas (mcf)' }]),
     };
 
     mockProductionService = {
@@ -267,7 +270,7 @@ describe('processFYProductionUpdate', () => {
   });
 
   describe('commodity handling', () => {
-    it('should lookup commodity', async () => {
+    it('preloads commodities by product and resolves case-insensitively', async () => {
       getFileContents.mockResolvedValue('');
       parseCsv.mockReturnValue([
         {
@@ -285,14 +288,16 @@ describe('processFYProductionUpdate', () => {
 
       await processFYProductionUpdate('test-file-id', mockContext);
 
+      // One preload query scoped to mineral_lease_type empty (not a per-key name/product lookup).
       expect(mockCommodityService.readByQuery).toHaveBeenCalledWith(expect.objectContaining({
-        filter: expect.objectContaining({
-          name: { _eq: 'Gas' },
-        }),
+        filter: expect.objectContaining({ mineral_lease_type: { _empty: true } }),
       }));
+      const inserted = mockProductionService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(1);
+      expect(inserted[0].commodity).toBe(1);
     });
 
-    it('should add error when commodity not found', async () => {
+    it('drops (does not error) an unmatched product, mirroring the inner join', async () => {
       getFileContents.mockResolvedValue('');
       parseCsv.mockReturnValue([
         {
@@ -311,7 +316,9 @@ describe('processFYProductionUpdate', () => {
 
       const result = await processFYProductionUpdate('test-file-id', mockContext);
 
-      expect(result.errors.some(e => e.type === 'commodity_not_found')).toBe(true);
+      expect(result.errors.some(e => e.type === 'commodity_not_found')).toBe(false);
+      expect(result.commoditiesUnmatched).toBe(1);
+      expect(mockProductionService.createMany).not.toHaveBeenCalled();
     });
   });
 

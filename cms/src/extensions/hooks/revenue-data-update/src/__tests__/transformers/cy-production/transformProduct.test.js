@@ -19,12 +19,17 @@ describe('transformProduct', () => {
     expect(result.product).toBe('Sand/gravel (cubic yards)');
   });
 
-  it('should transform geothermal products', () => {
-    expect(transformProduct({ product: 'Geothermal - Direct Utilization, Hundreds of Gallons (cgal)' }).product)
-      .toBe('Geothermal - direct use - hundreds of gallons (cgal)');
+  it('should transform geothermal products (matching nrrd transform_product)', () => {
+    expect(transformProduct({ product: 'Geothermal - Direct Utilization, Hundreds of Gallons' }).product)
+      .toBe('Geothermal - direct use (hundreds of gallons)');
 
     expect(transformProduct({ product: 'Geothermal - sulfur' }).product)
       .toBe('Geothermal - sulfur (tons)');
+  });
+
+  it('should map carbon dioxide to its unit form', () => {
+    expect(transformProduct({ product: 'Carbon Dioxide' }).product)
+      .toBe('Carbon dioxide (ton)');
   });
 
   it('should capitalize first letter and lowercase rest', () => {

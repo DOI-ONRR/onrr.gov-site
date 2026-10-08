@@ -53,11 +53,12 @@ export function transformCYProductionRecord(record) {
     return null;
   }
 
-  // Apply transformations in order
+  // Apply transformations in order. NOTE: the product is intentionally left RAW — nrrd
+  // retired the CY transform_product trigger and resolves the raw CSV spelling through the
+  // commodity-alias map in load_production_calendar_year, which the CY loader mirrors.
   transformed = formatVolume(transformed);
   transformed = transformOffshoreRegion(transformed);
   transformed = transformCountyStateFipsCode(transformed);
-  transformed = transformProduct(transformed);
 
   return transformed;
 }
