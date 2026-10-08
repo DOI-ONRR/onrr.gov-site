@@ -16,6 +16,7 @@ describe('buildLocationRecord', () => {
     expect(result).toEqual({
       land_class: 'Federal',
       land_category: 'Offshore',
+      land_type: 'Federal offshore',
       state: 'TX',
       county: 'Harris',
       fips_code: '48201',
@@ -37,6 +38,7 @@ describe('buildLocationRecord', () => {
     expect(result).toEqual({
       land_class: 'Federal',
       land_category: 'Onshore',
+      land_type: 'Federal onshore',
       state: null,
       county: null,
       fips_code: null,
@@ -58,6 +60,7 @@ describe('buildLocationRecord', () => {
     expect(result).toEqual({
       land_class: '',
       land_category: '',
+      land_type: '',
       state: null,
       county: null,
       fips_code: null,
@@ -72,6 +75,7 @@ describe('buildLocationRecord', () => {
     expect(result).toEqual({
       land_class: '',
       land_category: '',
+      land_type: '',
       state: null,
       county: null,
       fips_code: null,
