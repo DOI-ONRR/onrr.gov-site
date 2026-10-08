@@ -6,10 +6,15 @@
  * @param {Object} record - The revenue record
  * @returns {Object} - Location record ready for insertion
  */
+import { deriveLandType } from '../shared/deriveLandType.js';
+
 export function buildLocationRecord(record) {
+  const land_class = record.land_class_code || '';
+  const land_category = record.land_category_code_desc || '';
   return {
-    land_class: record.land_class_code || '',
-    land_category: record.land_category_code_desc || '',
+    land_class,
+    land_category,
+    land_type: deriveLandType(land_class, land_category),
     state: record.state || null,
     county: record.county_code_desc || null,
     fips_code: record.fips_code || null,

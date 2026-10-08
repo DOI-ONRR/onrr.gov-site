@@ -7,6 +7,7 @@
 
 import { getFileContents, parseCsv, yieldToEventLoop, chunk } from '../shared/index.js';
 import { PRODUCTION_FIELD_MAP } from './fieldMappings.js';
+import { deriveLandType } from '../../transformers/shared/deriveLandType.js';
 import {
   transformProductionRecord,
   buildPeriodRecord,
@@ -72,10 +73,13 @@ function deriveState(landClass) {
  * @returns {Object} - Location record for lookup/insert
  */
 function buildLocationRecord(record) {
+  const land_class = record.land_class || '';
+  const land_category = record.land_category || '';
   return {
-    land_class: record.land_class || '',
-    land_category: record.land_category || '',
-    state: deriveState(record.land_class),
+    land_class,
+    land_category,
+    land_type: deriveLandType(land_class, land_category),
+    state: deriveState(land_class),
     county: '',
     fips_code: '',
   };
