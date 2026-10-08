@@ -21,7 +21,9 @@ const route = useRoute()
 const slug = computed(() => route.params.slug?.at(-1) || null)
 
 const { resolveImages, assetUrl } = useCmsContent()
-const { data } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
+const { data, error } = await useAsyncQuery(getPageBySlug, { slug: slug.value })
+// A failed CMS query is an outage (503), not a missing page — check before the 404 below.
+throwOnCmsError(error)
 const page = computed(() => data.value?.page?.[0])
 
 // A band's `placement` (default 'top') decides whether it renders above or below the
@@ -38,6 +40,13 @@ const fallbackTopic = computed(() =>
     ? ((contactTopicsData.value?.contact_topics ?? []).find((t) => t.slug === slug.value) ?? null)
     : null,
 )
+
+// No CMS page for this slug and no contact-topic fallback → a real 404. Without this the
+// catch-all would render an empty page shell with a 200 status; throwing here renders
+// app/error.vue and sets a 404 HTTP status on SSR (so crawlers don't index the miss).
+if (!page.value && !fallbackTopic.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+}
 
 // A page with an associated dataset_metadata record renders as a dataset page
 // (DatasetView) instead of the standard page_blocks layout — and drops the sidenav.

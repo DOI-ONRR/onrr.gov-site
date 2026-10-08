@@ -17,3 +17,8 @@ applications:
     # Roles allowed to call the onrr-flows endpoints (cms/config.js)
     ONRR_FLOWS_ALLOWED_ROLES: Admin,Events,Service Account
     PUBLIC_URL: https://upgrade-onrr-cms.app.cloud.gov
+    # The revenue data update now yields to the event loop (CSV parse + per-record loops)
+    # and bulk-inserts, so it no longer stalls past the pressure limiter's default threshold
+    # (left at default so the limiter stays a canary for future regressions). Keep only
+    # Retry-After so a shed client is still told when to retry.
+    PRESSURE_LIMITER_RETRY_AFTER: 10

@@ -3,17 +3,25 @@
  */
 
 import { mapHeader } from './utils.js';
+import { yieldToEventLoop } from './batch.js';
+
+// Parsing a whole file is otherwise one unbroken synchronous pass (character scan + per-row
+// object build) that can stall the event loop past the pressure limiter's threshold on a
+// large file. Yield to the loop every this-many characters/rows so the parse can't trip it.
+const PARSE_YIELD_EVERY = 50000;
 
 /**
  * Parses a CSV string into an array of objects.
  * Uses the first row as headers for object keys.
  *
+ * Async so it can yield to the event loop periodically (large files); callers must await it.
+ *
  * @param {string} csvString - The CSV content as a string
  * @param {Object} [fieldMap] - Optional mapping of CSV headers to property names
- * @returns {Array<Object>} - Array of records with header keys
+ * @returns {Promise<Array<Object>>} - Array of records with header keys
  */
-export function parseCsv(csvString, fieldMap = null) {
-  const lines = parseLines(csvString);
+export async function parseCsv(csvString, fieldMap = null) {
+  const lines = await parseLines(csvString);
 
   if (lines.length === 0) {
     return [];
@@ -41,6 +49,8 @@ export function parseCsv(csvString, fieldMap = null) {
       record[headers[j]] = values[j] !== undefined ? values[j] : '';
     }
     records.push(record);
+
+    if (i % PARSE_YIELD_EVERY === 0) await yieldToEventLoop();
   }
 
   return records;
@@ -53,7 +63,7 @@ export function parseCsv(csvString, fieldMap = null) {
  * @param {string} csvString - The CSV content
  * @returns {Array<string>} - Array of lines
  */
-function parseLines(csvString) {
+async function parseLines(csvString) {
   const lines = [];
   let currentLine = '';
   let inQuotes = false;
@@ -75,6 +85,8 @@ function parseLines(csvString) {
     } else {
       currentLine += char;
     }
+
+    if (i % PARSE_YIELD_EVERY === 0) await yieldToEventLoop();
   }
 
   // Don't forget the last line if it doesn't end with a newline

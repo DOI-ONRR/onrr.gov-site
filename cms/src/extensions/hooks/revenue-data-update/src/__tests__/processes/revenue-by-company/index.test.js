@@ -1,10 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { processRevenueByCompanyUpdate } from '../../../processes/revenue-by-company/index.js';
 
-// Mock shared utilities
+// Mock shared utilities. yieldToEventLoop/chunk are real (lightweight) so the batched
+// insert path runs as in production — the whole barrel is mocked, so they must be provided.
 vi.mock('../../../processes/shared/index.js', () => ({
   getFileContents: vi.fn(),
   parseCsv: vi.fn(),
+  yieldToEventLoop: () => Promise.resolve(),
+  chunk: (items, size) => {
+    const out = [];
+    for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+    return out;
+  },
 }));
 
 import { getFileContents, parseCsv } from '../../../processes/shared/index.js';
@@ -19,7 +26,9 @@ describe('processRevenueByCompanyUpdate', () => {
     mockRevenueByCompanyService = {
       readByQuery: vi.fn().mockResolvedValue([]),
       createOne: vi.fn().mockResolvedValue(1),
+      createMany: vi.fn().mockResolvedValue([]),
       deleteOne: vi.fn().mockResolvedValue(undefined),
+      deleteByQuery: vi.fn().mockResolvedValue([]),
     };
 
     mockContext = {
@@ -101,12 +110,12 @@ describe('processRevenueByCompanyUpdate', () => {
 
       await processRevenueByCompanyUpdate('test-file-id', mockContext);
 
-      expect(mockRevenueByCompanyService.createOne).toHaveBeenCalledWith(
+      expect(mockRevenueByCompanyService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           commodity: 'Oil',
           commodity_order: '1',
-        })
-      );
+        }),
+      ]);
     });
 
     it('should transform Oil & Gas to Oil & gas (pre-production)', async () => {
@@ -123,12 +132,12 @@ describe('processRevenueByCompanyUpdate', () => {
 
       await processRevenueByCompanyUpdate('test-file-id', mockContext);
 
-      expect(mockRevenueByCompanyService.createOne).toHaveBeenCalledWith(
+      expect(mockRevenueByCompanyService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           commodity: 'Oil & gas (pre-production)',
           commodity_order: '3',
-        })
-      );
+        }),
+      ]);
     });
 
     it('should parse revenue from accounting notation', async () => {
@@ -145,12 +154,12 @@ describe('processRevenueByCompanyUpdate', () => {
 
       await processRevenueByCompanyUpdate('test-file-id', mockContext);
 
-      expect(mockRevenueByCompanyService.createOne).toHaveBeenCalledWith(
+      expect(mockRevenueByCompanyService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           raw_revenue: '-$1,234.56',
           revenue: -1234.56,
-        })
-      );
+        }),
+      ]);
     });
 
     it('should split revenue_agency_type into agency and type', async () => {
@@ -167,12 +176,12 @@ describe('processRevenueByCompanyUpdate', () => {
 
       await processRevenueByCompanyUpdate('test-file-id', mockContext);
 
-      expect(mockRevenueByCompanyService.createOne).toHaveBeenCalledWith(
+      expect(mockRevenueByCompanyService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           revenue_agency: 'ONRR',
           revenue_type: 'Royalties',
-        })
-      );
+        }),
+      ]);
     });
 
     it('should use first 5 chars as commodity_order for unknown commodities', async () => {
@@ -189,11 +198,11 @@ describe('processRevenueByCompanyUpdate', () => {
 
       await processRevenueByCompanyUpdate('test-file-id', mockContext);
 
-      expect(mockRevenueByCompanyService.createOne).toHaveBeenCalledWith(
+      expect(mockRevenueByCompanyService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           commodity_order: 'Geoth',
-        })
-      );
+        }),
+      ]);
     });
   });
 
@@ -222,7 +231,10 @@ describe('processRevenueByCompanyUpdate', () => {
           filter: { calendar_year: { _eq: 2023 } },
         })
       );
-      expect(mockRevenueByCompanyService.deleteOne).toHaveBeenCalledTimes(2);
+      // Rows are deleted in one query per year, and the count comes from the prior read.
+      expect(mockRevenueByCompanyService.deleteByQuery).toHaveBeenCalledWith({
+        filter: { calendar_year: { _eq: 2023 } },
+      });
       expect(result.recordsDeleted).toBe(2);
     });
 
@@ -273,7 +285,9 @@ describe('processRevenueByCompanyUpdate', () => {
 
       const result = await processRevenueByCompanyUpdate('test-file-id', mockContext);
 
-      expect(mockRevenueByCompanyService.createOne).toHaveBeenCalledTimes(2);
+      // Bulk-inserted via createMany; count parity with the number of transformed rows.
+      const inserted = mockRevenueByCompanyService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(2);
       expect(result.recordsCreated).toBe(2);
     });
 
@@ -289,7 +303,7 @@ describe('processRevenueByCompanyUpdate', () => {
         },
       ]);
 
-      mockRevenueByCompanyService.createOne.mockRejectedValue(new Error('Insert failed'));
+      mockRevenueByCompanyService.createMany.mockRejectedValue(new Error('Insert failed'));
 
       const result = await processRevenueByCompanyUpdate('test-file-id', mockContext);
 
@@ -300,6 +314,21 @@ describe('processRevenueByCompanyUpdate', () => {
           message: 'Insert failed',
         })
       );
+    });
+
+    it('bulk-inserts every transformed row across createMany batches (count parity)', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([
+        { calendar_year: '2023', corporate_name: 'A', revenue_agency_type: 'ONRR - Royalties', commodity: 'Oil', raw_revenue: '$1.00' },
+        { calendar_year: '2023', corporate_name: 'B', revenue_agency_type: 'ONRR - Rents', commodity: 'Gas', raw_revenue: '$2.00' },
+        { calendar_year: '2023', corporate_name: 'C', revenue_agency_type: 'ONRR - Royalties', commodity: 'Coal', raw_revenue: '$3.00' },
+      ]);
+
+      const result = await processRevenueByCompanyUpdate('test-file-id', mockContext);
+
+      const inserted = mockRevenueByCompanyService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(3);
+      expect(result.recordsCreated).toBe(3);
     });
   });
 

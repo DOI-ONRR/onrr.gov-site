@@ -5,8 +5,13 @@
  * transforming and loading the data into the appropriate tables.
  */
 
-import { getFileContents, parseCsv } from '../shared/index.js';
+import { getFileContents, parseCsv, yieldToEventLoop, chunk } from '../shared/index.js';
 import { REVENUE_FIELD_MAP } from './fieldMappings.js';
+
+// Insert batch size for the revenue fact table, and how often to yield to the event loop
+// inside the synchronous transform/aggregate loops (see ../shared/batch.js).
+const INSERT_CHUNK_SIZE = 500;
+const YIELD_EVERY = 500;
 import {
   transformRevenueRecord,
   summarizeNativeAmericanRevenue,
@@ -45,10 +50,11 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
     const fileContents = await getFileContents(fileId, { services, schema, accountability });
 
     // Step 2 - Parse the file contents (CSV)
-    const records = parseCsv(fileContents, REVENUE_FIELD_MAP);
+    const records = await parseCsv(fileContents, REVENUE_FIELD_MAP);
 
     // Step 3 - Transform each record using revenue transformers
     const transformedRecords = [];
+    let transformCount = 0;
     for (const record of records) {
       let transformed = transformRevenueRecord(record);
 
@@ -60,6 +66,9 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
 
       transformedRecords.push(transformed);
       result.recordsProcessed++;
+
+      // Yield periodically so a large synchronous transform doesn't stall the event loop.
+      if (++transformCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Step 3b - Delete existing revenue for true-up period
@@ -84,6 +93,7 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
     const periodMap = new Map();
     const commodityMap = new Map();
 
+    let dedupCount = 0;
     for (const record of summarizedRecords) {
       // Build and deduplicate fund record
       const fundRecord = buildFundRecord(record);
@@ -132,6 +142,8 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
           id: null,
         });
       }
+
+      if (++dedupCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Step 5 - Query/insert fund records and store IDs
@@ -271,6 +283,7 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
     // Step 9 - Build monthly revenue records
     const monthlyRevenueRecords = [];
 
+    let buildCount = 0;
     for (const record of summarizedRecords) {
       const fundRecord = buildFundRecord(record);
       const locationRecord = buildLocationRecord(record);
@@ -339,12 +352,15 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
         unit: 'dollars',
         unit_abbr: '$',
       });
+
+      if (++buildCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Step 10 - Aggregate monthly revenue records
     const revenueAggregate = new Map();
 
-    monthlyRevenueRecords.forEach(record => {
+    let aggregateCount = 0;
+    for (const record of monthlyRevenueRecords) {
       const key = `${record.location}:${record.period}:${record.commodity}:${record.fund}`;
 
       if (revenueAggregate.has(key)) {
@@ -362,19 +378,24 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
           duplicate_no: 1,
         });
       }
-    });
 
-    // Step 11 - Insert monthly revenue records
-    for (const revenueRecord of revenueAggregate.values()) {
+      if (++aggregateCount % YIELD_EVERY === 0) await yieldToEventLoop();
+    }
+
+    // Step 11 - Bulk-insert monthly revenue records. True-up already deleted the overlapping
+    // rows (delete-then-insert), so no per-row existence check — chunk the aggregated rows
+    // into createMany batches, yielding between them, instead of one createOne per row.
+    for (const batch of chunk([...revenueAggregate.values()], INSERT_CHUNK_SIZE)) {
       try {
-        await revenueService.createOne(revenueRecord);
-        result.revenueCreated++;
+        await revenueService.createMany(batch);
+        result.revenueCreated += batch.length;
       } catch (error) {
         result.errors.push({
           type: 'revenue_insert',
           message: error.message,
         });
       }
+      await yieldToEventLoop();
     }
 
     // Step 12 - Load fiscal year revenue
@@ -481,10 +502,9 @@ async function deleteTrueUpRevenue(transformedRecords, services, schema, account
       limit: -1,
     });
 
-    for (const rev of existingRevenue) {
-      await revenueService.deleteOne(rev.id);
-      result.revenueDeleted++;
-    }
+    // One bulk delete scoped by the same period filter, instead of a deleteOne per row.
+    await revenueService.deleteByQuery({ filter: { period: { _in: periodIds } } });
+    result.revenueDeleted += existingRevenue.length;
 
     console.log(`[Revenue Update] True-up: deleted ${result.revenueDeleted} revenue records from ${minDate} onwards`);
   } catch (error) {
@@ -554,6 +574,7 @@ async function loadFiscalYearRevenue(periodService, revenueService, result) {
 
       // Aggregate by location, commodity, fund
       const aggregate = new Map();
+      let fyAggCount = 0;
       for (const rev of monthlyRevenue) {
         const key = `${rev.location}:${rev.commodity}:${rev.fund}`;
         if (aggregate.has(key)) {
@@ -571,19 +592,22 @@ async function loadFiscalYearRevenue(periodService, revenueService, result) {
             duplicate_no: 1,
           });
         }
+
+        if (++fyAggCount % YIELD_EVERY === 0) await yieldToEventLoop();
       }
 
-      // Insert fiscal year revenue records
-      for (const fyRevenue of aggregate.values()) {
+      // Bulk-insert fiscal year revenue records in chunks.
+      for (const batch of chunk([...aggregate.values()], INSERT_CHUNK_SIZE)) {
         try {
-          await revenueService.createOne(fyRevenue);
-          result.revenueCreated++;
+          await revenueService.createMany(batch);
+          result.revenueCreated += batch.length;
         } catch (error) {
           result.errors.push({
             type: 'fiscal_year_revenue_insert',
             message: error.message,
           });
         }
+        await yieldToEventLoop();
       }
     }
   } catch (error) {
@@ -653,6 +677,7 @@ async function loadCalendarYearRevenue(periodService, revenueService, result) {
 
       // Aggregate by location, commodity, fund
       const aggregate = new Map();
+      let cyAggCount = 0;
       for (const rev of monthlyRevenue) {
         const key = `${rev.location}:${rev.commodity}:${rev.fund}`;
         if (aggregate.has(key)) {
@@ -670,19 +695,22 @@ async function loadCalendarYearRevenue(periodService, revenueService, result) {
             duplicate_no: 1,
           });
         }
+
+        if (++cyAggCount % YIELD_EVERY === 0) await yieldToEventLoop();
       }
 
-      // Insert calendar year revenue records
-      for (const cyRevenue of aggregate.values()) {
+      // Bulk-insert calendar year revenue records in chunks.
+      for (const batch of chunk([...aggregate.values()], INSERT_CHUNK_SIZE)) {
         try {
-          await revenueService.createOne(cyRevenue);
-          result.revenueCreated++;
+          await revenueService.createMany(batch);
+          result.revenueCreated += batch.length;
         } catch (error) {
           result.errors.push({
             type: 'calendar_year_revenue_insert',
             message: error.message,
           });
         }
+        await yieldToEventLoop();
       }
     }
   } catch (error) {

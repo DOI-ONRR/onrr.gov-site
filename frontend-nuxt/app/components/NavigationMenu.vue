@@ -64,6 +64,11 @@
           </template>
         </li>
       </ul>
+      <!-- Desktop search sits at the right end of the nav row (`.navrow > section` in
+           _uswds-overrides.scss). Hidden below 64em, where the masthead toggle shows it. -->
+      <section aria-label="Search">
+        <SiteSearchForm input-id="search-field-desktop" />
+      </section>
     </div>
   </nav>
 </template>

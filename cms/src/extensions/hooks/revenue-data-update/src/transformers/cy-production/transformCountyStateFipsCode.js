@@ -84,7 +84,15 @@ export async function transformCountyStateFipsCodeWithLookup(record, lookupFipsC
  * @returns {Function} - Lookup function for use with transformCountyStateFipsCodeWithLookup
  */
 export function createFipsCodeLookup(itemsService) {
+  // Memoize by county|state for the lifetime of one load: a production file repeats the
+  // same counties across many rows, so without a cache this does one DB round-trip per
+  // record. county_lookup is static during a load, so caching is safe.
+  const cache = new Map();
+
   return async (county, state) => {
+    const cacheKey = `${county}|${state}`;
+    if (cache.has(cacheKey)) return cache.get(cacheKey);
+
     const results = await itemsService.readByQuery({
       filter: {
         county: { _eq: county },
@@ -94,6 +102,8 @@ export function createFipsCodeLookup(itemsService) {
       limit: 1,
     });
 
-    return results?.[0]?.fips_code || null;
+    const fipsCode = results?.[0]?.fips_code || null;
+    cache.set(cacheKey, fipsCode);
+    return fipsCode;
   };
 }

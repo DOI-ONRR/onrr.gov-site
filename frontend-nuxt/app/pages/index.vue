@@ -4,7 +4,8 @@ import getPageBySlug from '@/graphql/queries/collections/pages/getPageBySlug.gql
 
 const { assetUrl } = useCmsContent()
 
-const { data } = await useAsyncQuery(getPageBySlug, { slug: null })
+const { data, error } = await useAsyncQuery(getPageBySlug, { slug: null })
+throwOnCmsError(error)
 const page = computed(() => data.value?.page?.[0])
 
 const heroTitle = computed(

@@ -5,6 +5,13 @@ import { processFYProductionUpdate } from '../../../processes/fy-production/inde
 vi.mock('../../../processes/shared/index.js', () => ({
   getFileContents: vi.fn(),
   parseCsv: vi.fn(),
+  // Real behavior for the batch helpers so the bulk-insert path runs; yield is a no-op.
+  yieldToEventLoop: () => Promise.resolve(),
+  chunk: (items, size) => {
+    const out = [];
+    for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+    return out;
+  },
 }));
 
 import { getFileContents, parseCsv } from '../../../processes/shared/index.js';
@@ -37,7 +44,9 @@ describe('processFYProductionUpdate', () => {
     mockProductionService = {
       readByQuery: vi.fn().mockResolvedValue([]),
       createOne: vi.fn().mockResolvedValue(1),
+      createMany: vi.fn().mockResolvedValue([]),
       deleteOne: vi.fn().mockResolvedValue(undefined),
+      deleteMany: vi.fn().mockResolvedValue([]),
     };
 
     mockCountyLookupService = {
@@ -336,14 +345,14 @@ describe('processFYProductionUpdate', () => {
 
       await processFYProductionUpdate('test-file-id', mockContext);
 
-      // Should create only one production record (aggregated)
-      expect(mockProductionService.createOne).toHaveBeenCalledTimes(1);
-      expect(mockProductionService.createOne).toHaveBeenCalledWith(
+      // Should create only one production record (aggregated), bulk-inserted via createMany.
+      expect(mockProductionService.createMany).toHaveBeenCalledTimes(1);
+      expect(mockProductionService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           volume: 500,
           duplicate_no: 2,
-        })
-      );
+        }),
+      ]);
     });
   });
 
@@ -356,6 +365,28 @@ describe('processFYProductionUpdate', () => {
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
       expect(result.errors[0].message).toBe('File not found');
+    });
+  });
+
+  describe('bulk insert', () => {
+    it('inserts every distinct aggregated row via createMany (count parity)', async () => {
+      const mk = (year) => ({
+        fiscal_year: year, land_class: 'Federal', land_category: 'Offshore',
+        state: '', county: '', fips_code: '', offshore_region: 'Offshore Gulf of America',
+        product: 'Gas (Mcf)', volume: '100',
+      });
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([mk('2021'), mk('2022'), mk('2023')]);
+      // Three distinct fiscal years → three distinct periods → three distinct natural keys.
+      mockPeriodService.readByQuery.mockResolvedValue([]);
+      mockPeriodService.createOne
+        .mockResolvedValueOnce(1).mockResolvedValueOnce(2).mockResolvedValueOnce(3);
+
+      const result = await processFYProductionUpdate('test-file-id', mockContext);
+
+      const inserted = mockProductionService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(3);
+      expect(result.productionCreated).toBe(3);
     });
   });
 });

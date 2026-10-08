@@ -1,7 +1,8 @@
 <script setup>
 import getEvents from '@/graphql/queries/collections/events/getEvents.gql'
 
-const { data } = await useAsyncQuery(getEvents)
+const { data, error } = await useAsyncQuery(getEvents)
+throwOnCmsError(error)
 const events = computed(() => data.value?.events ?? [])
 
 // The query already sorts by event_start_date; grouping preserves that order.

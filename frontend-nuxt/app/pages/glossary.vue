@@ -8,7 +8,8 @@
 */
 import getGlossaryTerms from '@/graphql/queries/collections/glossary_terms/getGlossaryTerms.gql'
 
-const { data } = await useAsyncQuery(getGlossaryTerms)
+const { data, error } = await useAsyncQuery(getGlossaryTerms)
+throwOnCmsError(error)
 const terms = computed(() => data.value?.glossary_terms ?? [])
 
 // Filter state.

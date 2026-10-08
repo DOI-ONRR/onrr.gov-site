@@ -1,10 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { processRevenueUpdate } from '../../../processes/revenue/index.js';
 
-// Mock shared utilities
+// Mock shared utilities. yieldToEventLoop/chunk get real-enough stand-ins (the barrel is
+// fully mocked, so the real exports aren't loaded): yield resolves immediately, chunk splits.
 vi.mock('../../../processes/shared/index.js', () => ({
   getFileContents: vi.fn(),
   parseCsv: vi.fn(),
+  yieldToEventLoop: vi.fn().mockResolvedValue(undefined),
+  chunk: (items, size) => {
+    const out = [];
+    for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+    return out;
+  },
 }));
 
 import { getFileContents, parseCsv } from '../../../processes/shared/index.js';
@@ -42,7 +49,9 @@ describe('processRevenueUpdate', () => {
     mockRevenueService = {
       readByQuery: vi.fn().mockResolvedValue([]),
       createOne: vi.fn().mockResolvedValue(1),
+      createMany: vi.fn().mockResolvedValue([]),
       deleteOne: vi.fn().mockResolvedValue(undefined),
+      deleteByQuery: vi.fn().mockResolvedValue([]),
     };
 
     mockContext = {
@@ -192,8 +201,9 @@ describe('processRevenueUpdate', () => {
 
       // Should process both records
       expect(result.recordsProcessed).toBe(2);
-      // But should only create one revenue record (aggregated)
-      expect(mockRevenueService.createOne).toHaveBeenCalledTimes(1);
+      // But should only create one revenue record (aggregated), bulk-inserted via createMany.
+      const inserted = mockRevenueService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(1);
     });
   });
 
@@ -398,10 +408,11 @@ describe('processRevenueUpdate', () => {
 
       await processRevenueUpdate('test-file-id', mockContext);
 
-      // Should create only one revenue record (aggregated)
-      expect(mockRevenueService.createOne).toHaveBeenCalledTimes(1);
+      // Should create only one revenue record (aggregated), bulk-inserted via createMany.
+      const inserted = mockRevenueService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(1);
       // The aggregated amount should be 1500
-      expect(mockRevenueService.createOne).toHaveBeenCalledWith(
+      expect(inserted[0]).toEqual(
         expect.objectContaining({
           revenue: 1500,
           duplicate_no: 2,
@@ -512,7 +523,9 @@ describe('processRevenueUpdate', () => {
 
       const result = await processRevenueUpdate('test-file-id', mockContext, { period: 'true-up' });
 
-      expect(mockRevenueService.deleteOne).toHaveBeenCalledTimes(3);
+      // One bulk delete (deleteByQuery) rather than a deleteOne per row; count preserved.
+      expect(mockRevenueService.deleteByQuery).toHaveBeenCalledTimes(1);
+      expect(mockRevenueService.deleteOne).not.toHaveBeenCalled();
       expect(result.revenueDeleted).toBe(3);
     });
 
@@ -563,6 +576,39 @@ describe('processRevenueUpdate', () => {
           }),
         })
       );
+    });
+  });
+
+  describe('bulk insert', () => {
+    it('bulk-inserts every distinct aggregated revenue row in createMany batches (count parity)', async () => {
+      const rec = (acceptDate) => ({
+        accept_date: acceptDate,
+        land_class_code: 'Federal',
+        land_category_code_desc: 'Offshore',
+        state: '',
+        county_code_desc: '',
+        fips_code: '',
+        agency_state_region_code_desc: 'GULF OF AMERICA',
+        revenue_type: 'Royalties',
+        mineral_production_code_desc: 'Oil & Gas',
+        commodity: 'Oil',
+        product_code_desc: 'Oil',
+        revenue: '1000.00',
+      });
+      getFileContents.mockResolvedValue('');
+      // Three different months → three distinct monthly periods → three distinct natural keys.
+      parseCsv.mockReturnValue([rec('1/1/2026'), rec('2/1/2026'), rec('3/1/2026')]);
+
+      // Distinct period ids so the three rows don't collapse onto a shared period FK.
+      let pid = 0;
+      mockPeriodService.createOne.mockImplementation(() => Promise.resolve(++pid));
+
+      const result = await processRevenueUpdate('test-file-id', mockContext);
+
+      // Count parity: as many rows inserted (across all createMany batches) as distinct keys.
+      const inserted = mockRevenueService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(3);
+      expect(result.revenueCreated).toBe(3);
     });
   });
 });

@@ -5,7 +5,7 @@
  * transforming and loading the data into the appropriate tables.
  */
 
-import { getFileContents, parseCsv } from '../shared/index.js';
+import { getFileContents, parseCsv, yieldToEventLoop, chunk } from '../shared/index.js';
 import { CY_PRODUCTION_FIELD_MAP } from './fieldMappings.js';
 import {
   transformCYProductionRecord,
@@ -25,6 +25,11 @@ import {
  * @param {Object} context - Directus hook context containing services
  * @returns {Promise<Object>} - Result summary of the update process
  */
+// Insert batch size for the production fact table, and how often to yield to the event loop
+// inside the synchronous transform/aggregate loops (see ../shared/batch.js).
+const INSERT_CHUNK_SIZE = 500;
+const YIELD_EVERY = 500;
+
 export async function processCYProductionUpdate(fileId, context) {
   const { services, database, schema, accountability } = context;
 
@@ -47,7 +52,7 @@ export async function processCYProductionUpdate(fileId, context) {
     const fileContents = await getFileContents(fileId, { services, schema, accountability });
 
     // Step 2 - Parse the file contents (CSV)
-    const records = parseCsv(fileContents, CY_PRODUCTION_FIELD_MAP);
+    const records = await parseCsv(fileContents, CY_PRODUCTION_FIELD_MAP);
 
     // Step 3 - Transform each record using CY production transformers
     const { ItemsService } = services;
@@ -55,6 +60,7 @@ export async function processCYProductionUpdate(fileId, context) {
     const lookupFipsCode = createFipsCodeLookup(countyLookupService);
 
     const transformedRecords = [];
+    let transformCount = 0;
     for (const record of records) {
       // Apply synchronous transformations
       let transformed = transformCYProductionRecord(record);
@@ -65,11 +71,13 @@ export async function processCYProductionUpdate(fileId, context) {
         continue;
       }
 
-      // Apply async FIPS code lookup if needed
+      // Apply async FIPS code lookup if needed (memoized per county/state in the lookup)
       transformed = await transformCountyStateFipsCodeWithLookup(transformed, lookupFipsCode);
 
       transformedRecords.push(transformed);
       result.recordsProcessed++;
+
+      if (++transformCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Initialize services
@@ -83,6 +91,7 @@ export async function processCYProductionUpdate(fileId, context) {
     const periodMap = new Map();
     const commodityMap = new Map();
 
+    let dedupCount = 0;
     for (const record of transformedRecords) {
       // Build and deduplicate location record
       const locationRecord = buildLocationRecord(record);
@@ -117,6 +126,8 @@ export async function processCYProductionUpdate(fileId, context) {
           id: null,
         });
       }
+
+      if (++dedupCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Step 4 - Query/insert location records and store IDs
@@ -243,9 +254,10 @@ export async function processCYProductionUpdate(fileId, context) {
             limit: -1,
           });
 
-          for (const prod of existingProduction) {
-            await productionService.deleteOne(prod.id);
-            result.productionDeleted++;
+          if (existingProduction.length > 0) {
+            // One bulk delete instead of a deleteOne per row.
+            await productionService.deleteMany(existingProduction.map((p) => p.id));
+            result.productionDeleted += existingProduction.length;
           }
         }
       } catch (error) {
@@ -259,6 +271,7 @@ export async function processCYProductionUpdate(fileId, context) {
     // Step 8 - Build production records
     const productionRecords = [];
 
+    let buildCount = 0;
     for (const record of transformedRecords) {
       const locationRecord = buildLocationRecord(record);
       const periodRecord = buildPeriodRecord(record);
@@ -315,12 +328,15 @@ export async function processCYProductionUpdate(fileId, context) {
         unit,
         unit_abbr: unitAbbr,
       });
+
+      if (++buildCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Step 9 - Aggregate production records
     const productionAggregate = new Map();
 
-    productionRecords.forEach(record => {
+    let aggregateCount = 0;
+    for (const record of productionRecords) {
       const key = `${record.location}:${record.period}:${record.commodity}`;
 
       if (productionAggregate.has(key)) {
@@ -336,19 +352,23 @@ export async function processCYProductionUpdate(fileId, context) {
           duplicate_no: 1,
         });
       }
-    });
 
-    // Step 10 - Insert production records
-    for (const productionRecord of productionAggregate.values()) {
+      if (++aggregateCount % YIELD_EVERY === 0) await yieldToEventLoop();
+    }
+
+    // Step 10 - Bulk-insert production records (delete-then-insert above means no
+    // per-row existence check is needed) in chunks, yielding between batches.
+    for (const batch of chunk([...productionAggregate.values()], INSERT_CHUNK_SIZE)) {
       try {
-        await productionService.createOne(productionRecord);
-        result.productionCreated++;
+        await productionService.createMany(batch);
+        result.productionCreated += batch.length;
       } catch (error) {
         result.errors.push({
           type: 'production_insert',
           message: error.message,
         });
       }
+      await yieldToEventLoop();
     }
 
     // Final status
