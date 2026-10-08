@@ -37,8 +37,10 @@ describe('processCYProductionUpdate', () => {
       createOne: vi.fn().mockResolvedValue(1),
     };
 
+    // The CY loader preloads commodities (mineral_lease_type empty) keyed by lowercased
+    // product, so the mock must carry `product`. Most tests use 'Gas (Mcf)'.
     mockCommodityService = {
-      readByQuery: vi.fn().mockResolvedValue([{ id: 1 }]),
+      readByQuery: vi.fn().mockResolvedValue([{ id: 1, product: 'Gas (Mcf)' }]),
     };
 
     mockProductionService = {
@@ -267,8 +269,9 @@ describe('processCYProductionUpdate', () => {
   });
 
   describe('commodity handling', () => {
-    it('should lookup commodity', async () => {
+    it('preloads commodities by product and resolves case-insensitively', async () => {
       getFileContents.mockResolvedValue('');
+      // lowercase CSV spelling resolves to the commodity whose product is 'Gas (Mcf)'.
       parseCsv.mockReturnValue([
         {
           calendar_year: '2023',
@@ -278,21 +281,46 @@ describe('processCYProductionUpdate', () => {
           county: '',
           fips_code: '',
           offshore_region: 'Offshore Gulf of America',
-          product: 'Gas (Mcf)',
+          product: 'gas (mcf)',
           volume: '1000',
         },
       ]);
 
       await processCYProductionUpdate('test-file-id', mockContext);
 
+      // One preload query, scoped to mineral_lease_type empty (not a per-key lookup).
       expect(mockCommodityService.readByQuery).toHaveBeenCalledWith(expect.objectContaining({
-        filter: expect.objectContaining({
-          name: { _eq: 'Gas' },
-        }),
+        filter: expect.objectContaining({ mineral_lease_type: { _empty: true } }),
       }));
+      const inserted = mockProductionService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(1);
+      expect(inserted[0].commodity).toBe(1);
     });
 
-    it('should add error when commodity not found', async () => {
+    it('resolves a variant product spelling through the alias map', async () => {
+      getFileContents.mockResolvedValue('');
+      // Raw CY spelling 'Geothermal - Direct Utilization, Hundreds of Gallons' must alias to
+      // the commodity whose product is 'Geothermal - direct use (hundreds of gallons)'.
+      mockCommodityService.readByQuery.mockResolvedValue([
+        { id: 7, product: 'Geothermal - direct use (hundreds of gallons)' },
+      ]);
+      parseCsv.mockReturnValue([
+        {
+          calendar_year: '2023', land_class: 'Federal', land_category: 'Onshore',
+          state: '', county: '', fips_code: '', offshore_region: '',
+          product: 'Geothermal - Direct Utilization, Hundreds of Gallons', volume: '42',
+        },
+      ]);
+
+      const result = await processCYProductionUpdate('test-file-id', mockContext);
+
+      const inserted = mockProductionService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(1);
+      expect(inserted[0].commodity).toBe(7);
+      expect(result.commoditiesUnmatched).toBe(0);
+    });
+
+    it('drops (does not error) an unmatched product, mirroring the inner join', async () => {
       getFileContents.mockResolvedValue('');
       parseCsv.mockReturnValue([
         {
@@ -307,11 +335,13 @@ describe('processCYProductionUpdate', () => {
           volume: '1000',
         },
       ]);
-      mockCommodityService.readByQuery.mockResolvedValue([]);
+      mockCommodityService.readByQuery.mockResolvedValue([{ id: 1, product: 'Gas (Mcf)' }]);
 
       const result = await processCYProductionUpdate('test-file-id', mockContext);
 
-      expect(result.errors.some(e => e.type === 'commodity_not_found')).toBe(true);
+      expect(result.errors.some(e => e.type === 'commodity_not_found')).toBe(false);
+      expect(result.commoditiesUnmatched).toBe(1);
+      expect(mockProductionService.createMany).not.toHaveBeenCalled();
     });
   });
 
@@ -345,11 +375,11 @@ describe('processCYProductionUpdate', () => {
 
       await processCYProductionUpdate('test-file-id', mockContext);
 
-      // Should create only one production record (aggregated), bulk-inserted via createMany.
+      // One aggregated record, bulk-inserted via createMany, with volume SUMmed (500+500).
       expect(mockProductionService.createMany).toHaveBeenCalledTimes(1);
       expect(mockProductionService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
-          volume: 500,
+          volume: 1000,
           duplicate_no: 2,
         }),
       ]);

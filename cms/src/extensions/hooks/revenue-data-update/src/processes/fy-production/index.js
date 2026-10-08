@@ -11,7 +11,6 @@ import {
   transformFYProductionRecord,
   transformCountyStateFipsCodeWithLookup,
   createFipsCodeLookup,
-  extractCommodity,
   extractUnit,
   extractUnitAbbr,
   buildPeriodRecord,
@@ -44,6 +43,7 @@ export async function processFYProductionUpdate(fileId, context) {
     periodsCreated: 0,
     productionCreated: 0,
     productionDeleted: 0,
+    commoditiesUnmatched: 0,
     errors: [],
   };
 
@@ -86,10 +86,22 @@ export async function processFYProductionUpdate(fileId, context) {
     const commodityService = new ItemsService('commodity', { schema, accountability });
     const productionService = new ItemsService('production', { schema, accountability });
 
+    // Preload commodities (mineral_lease_type empty) keyed by lowercased product. nrrd's
+    // load_production_fiscal_year matches LOWER(e.product)=LOWER(c.product) after the FY
+    // transform_product trigger normalizes the spelling (which transformFYProductionRecord
+    // mirrors), so a case-insensitive product lookup is all that's needed — no name match.
+    const commodityRows = await commodityService.readByQuery({
+      filter: { mineral_lease_type: { _empty: true } },
+      fields: ['id', 'product'],
+      limit: -1,
+    });
+    const commodityByProduct = new Map(
+      (commodityRows ?? []).map((c) => [String(c.product ?? '').toLowerCase(), c.id]),
+    );
+
     // Build deduplicated reference data maps
     const locationMap = new Map();
     const periodMap = new Map();
-    const commodityMap = new Map();
 
     let dedupCount = 0;
     for (const record of transformedRecords) {
@@ -114,17 +126,6 @@ export async function processFYProductionUpdate(fileId, context) {
         if (!periodMap.has(periodKey)) {
           periodMap.set(periodKey, { record: periodRecord, id: null });
         }
-      }
-
-      // Track commodity (extract from product)
-      const commodity = extractCommodity(record.product);
-      const commodityKey = `${commodity}|${record.product}`;
-      if (!commodityMap.has(commodityKey)) {
-        commodityMap.set(commodityKey, {
-          commodity,
-          product: record.product,
-          id: null,
-        });
       }
 
       if (++dedupCount % YIELD_EVERY === 0) await yieldToEventLoop();
@@ -192,38 +193,7 @@ export async function processFYProductionUpdate(fileId, context) {
       }
     }
 
-    // Step 6 - Retrieve commodity records
-    for (const [key, entry] of commodityMap.entries()) {
-      try {
-        const commodity = await commodityService.readByQuery({
-          filter: {
-            name: { _eq: entry.commodity },
-            product: { _eq: entry.product },
-            mineral_lease_type: { _eq: null },
-          },
-          fields: ['id'],
-          limit: 1,
-        });
-
-        if (commodity.length > 0) {
-          entry.id = commodity[0].id;
-        } else {
-          result.errors.push({
-            type: 'commodity_not_found',
-            commodity: entry.commodity,
-            product: entry.product,
-            message: `Commodity not found: ${entry.commodity} / ${entry.product}`,
-          });
-        }
-      } catch (error) {
-        result.errors.push({
-          type: 'commodity_read',
-          commodity: entry.commodity,
-          product: entry.product,
-          message: error.message,
-        });
-      }
-    }
+    // Commodity is resolved per record in the build step via the preloaded product map.
 
     // Step 7 - Delete existing production from the minimum year onwards
     const fiscalYears = transformedRecords.map(r => parseInt(r.fiscal_year, 10)).filter(y => !isNaN(y));
@@ -300,17 +270,20 @@ export async function processFYProductionUpdate(fileId, context) {
       const periodKey = `${periodRecord.type}|${periodRecord.period_date}`;
       const periodId = periodMap.get(periodKey)?.id;
 
-      // Get commodity ID from map
-      const commodity = extractCommodity(record.product);
-      const commodityKey = `${commodity}|${record.product}`;
-      const commodityId = commodityMap.get(commodityKey)?.id;
+      // Resolve commodity by case-insensitive product (post-transform). An unmatched product
+      // is dropped (not an error), mirroring nrrd's inner join — tracked for visibility.
+      const commodityId = commodityByProduct.get(String(record.product ?? '').toLowerCase()) ?? null;
+      if (!commodityId) {
+        result.commoditiesUnmatched++;
+        continue;
+      }
 
-      // Skip if any foreign key is missing
-      if (!locationId || !periodId || !commodityId) {
+      // location/period are created above, so a miss here is a real problem.
+      if (!locationId || !periodId) {
         result.errors.push({
           type: 'production_skip',
           message: 'Missing foreign key',
-          details: { locationId, periodId, commodityId },
+          details: { locationId, periodId },
         });
         continue;
       }
@@ -383,6 +356,7 @@ export async function processFYProductionUpdate(fileId, context) {
       periodsCreated: result.periodsCreated,
       productionDeleted: result.productionDeleted,
       productionCreated: result.productionCreated,
+      commoditiesUnmatched: result.commoditiesUnmatched,
       errorCount: result.errors.length,
       success: result.success,
     });

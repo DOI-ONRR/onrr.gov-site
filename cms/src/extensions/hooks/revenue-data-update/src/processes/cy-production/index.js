@@ -11,12 +11,40 @@ import {
   transformCYProductionRecord,
   transformCountyStateFipsCodeWithLookup,
   createFipsCodeLookup,
-  extractCommodity,
   extractUnit,
   extractUnitAbbr,
   buildPeriodRecord,
   buildLocationRecord,
 } from '../../transformers/cy-production/index.js';
+
+// CY commodity resolution mirrors nrrd's commodity_alias lookup for source
+// 'production_calendar_year' (database/changelog/changelog-data/commodity-alias-*.yaml):
+// every raw CSV product is matched case-insensitively against commodity.product, with these
+// spelling variants first rewritten to the canonical commodity.product. Keys are lowercased.
+// 'Geothermal - Direct Use, Millions of Gallons (cgal)' is intentionally absent — the old CY
+// trigger renamed it to a non-existent target so those rows were dropped; nrrd preserves that.
+const CY_PRODUCT_ALIASES = {
+  'carbon dioxide': 'Carbon dioxide (ton)',
+  'sand/gravel-cubic yards (cyd)': 'Sand/gravel (cubic yards)',
+  'geothermal - direct utilization, hundreds of gallons': 'Geothermal - direct use (hundreds of gallons)',
+  'geothermal - direct use, millions of gallons': 'Geothermal - direct use (millions of gallons)',
+  'geothermal - direct utilization, millions of btus': 'Geothermal - direct use (millions of btus)',
+  'geothermal - electrical generation, kilowatt hours': 'Geothermal - electrical generation (kilowatt hours)',
+  'geothermal - electrical generation, other': 'Geothermal - electrical generation (other)',
+  'geothermal - electrical generation, thousands of pounds': 'Geothermal - electrical generation (thousands of pounds)',
+  'geothermal - sulfur': 'Geothermal - sulfur (tons)',
+  'geothermal - direct utilization (hundreds of gallons)': 'Geothermal - direct use (hundreds of gallons)',
+  'geothermal - direct utilization (millions of btus)': 'Geothermal - direct use (millions of btus)',
+};
+
+// Resolve a raw CSV product to a commodity id using the alias map + a preloaded
+// lowercased-product -> id map of commodities (mineral_lease_type empty). Returns null when
+// unmatched (nrrd's inner join drops those rows), so the caller skips rather than errors.
+function resolveCommodityId(rawProduct, commodityByProduct) {
+  const raw = String(rawProduct ?? '');
+  const canonical = CY_PRODUCT_ALIASES[raw.toLowerCase()] ?? raw;
+  return commodityByProduct.get(canonical.toLowerCase()) ?? null;
+}
 
 /**
  * Main entry point for the calendar year production update process.
@@ -44,6 +72,7 @@ export async function processCYProductionUpdate(fileId, context) {
     periodsCreated: 0,
     productionCreated: 0,
     productionDeleted: 0,
+    commoditiesUnmatched: 0,
     errors: [],
   };
 
@@ -86,10 +115,20 @@ export async function processCYProductionUpdate(fileId, context) {
     const commodityService = new ItemsService('commodity', { schema, accountability });
     const productionService = new ItemsService('production', { schema, accountability });
 
+    // Preload commodities (mineral_lease_type empty) keyed by lowercased product, mirroring
+    // nrrd's case-insensitive commodity_alias join — one query instead of a lookup per key.
+    const commodityRows = await commodityService.readByQuery({
+      filter: { mineral_lease_type: { _empty: true } },
+      fields: ['id', 'product'],
+      limit: -1,
+    });
+    const commodityByProduct = new Map(
+      (commodityRows ?? []).map((c) => [String(c.product ?? '').toLowerCase(), c.id]),
+    );
+
     // Build deduplicated reference data maps
     const locationMap = new Map();
     const periodMap = new Map();
-    const commodityMap = new Map();
 
     let dedupCount = 0;
     for (const record of transformedRecords) {
@@ -114,17 +153,6 @@ export async function processCYProductionUpdate(fileId, context) {
         if (!periodMap.has(periodKey)) {
           periodMap.set(periodKey, { record: periodRecord, id: null });
         }
-      }
-
-      // Track commodity (extract from product)
-      const commodity = extractCommodity(record.product);
-      const commodityKey = `${commodity}|${record.product}`;
-      if (!commodityMap.has(commodityKey)) {
-        commodityMap.set(commodityKey, {
-          commodity,
-          product: record.product,
-          id: null,
-        });
       }
 
       if (++dedupCount % YIELD_EVERY === 0) await yieldToEventLoop();
@@ -192,38 +220,7 @@ export async function processCYProductionUpdate(fileId, context) {
       }
     }
 
-    // Step 6 - Retrieve commodity records
-    for (const [key, entry] of commodityMap.entries()) {
-      try {
-        const commodity = await commodityService.readByQuery({
-          filter: {
-            name: { _eq: entry.commodity },
-            product: { _eq: entry.product },
-            mineral_lease_type: { _eq: null },
-          },
-          fields: ['id'],
-          limit: 1,
-        });
-
-        if (commodity.length > 0) {
-          entry.id = commodity[0].id;
-        } else {
-          result.errors.push({
-            type: 'commodity_not_found',
-            commodity: entry.commodity,
-            product: entry.product,
-            message: `Commodity not found: ${entry.commodity} / ${entry.product}`,
-          });
-        }
-      } catch (error) {
-        result.errors.push({
-          type: 'commodity_read',
-          commodity: entry.commodity,
-          product: entry.product,
-          message: error.message,
-        });
-      }
-    }
+    // Commodity is resolved per record in the build step via the preloaded alias map.
 
     // Step 7 - Delete existing production from the minimum year onwards
     const calendarYears = transformedRecords.map(r => parseInt(r.calendar_year, 10)).filter(y => !isNaN(y));
@@ -300,17 +297,20 @@ export async function processCYProductionUpdate(fileId, context) {
       const periodKey = `${periodRecord.type}|${periodRecord.period_date}`;
       const periodId = periodMap.get(periodKey)?.id;
 
-      // Get commodity ID from map
-      const commodity = extractCommodity(record.product);
-      const commodityKey = `${commodity}|${record.product}`;
-      const commodityId = commodityMap.get(commodityKey)?.id;
+      // Resolve commodity via the alias map. An unmatched product is dropped (not an error),
+      // mirroring nrrd's inner join to commodity_alias — tracked for visibility.
+      const commodityId = resolveCommodityId(record.product, commodityByProduct);
+      if (!commodityId) {
+        result.commoditiesUnmatched++;
+        continue;
+      }
 
-      // Skip if any foreign key is missing
-      if (!locationId || !periodId || !commodityId) {
+      // location/period are created above, so a miss here is a real problem.
+      if (!locationId || !periodId) {
         result.errors.push({
           type: 'production_skip',
           message: 'Missing foreign key',
-          details: { locationId, periodId, commodityId },
+          details: { locationId, periodId },
         });
         continue;
       }
@@ -340,6 +340,10 @@ export async function processCYProductionUpdate(fileId, context) {
       const key = `${record.location}:${record.period}:${record.commodity}`;
 
       if (productionAggregate.has(key)) {
+        // SUM volume per (location, period, commodity) — the CSV flattens offshore
+        // leases/blocks to many rows per key; nrrd's load_production_calendar_year SUMs
+        // them (previously ON CONFLICT DO NOTHING dropped all but one, under-counting).
+        productionAggregate.get(key).volume += record.volume;
         productionAggregate.get(key).duplicate_no++;
       } else {
         productionAggregate.set(key, {
@@ -383,6 +387,7 @@ export async function processCYProductionUpdate(fileId, context) {
       periodsCreated: result.periodsCreated,
       productionDeleted: result.productionDeleted,
       productionCreated: result.productionCreated,
+      commoditiesUnmatched: result.commoditiesUnmatched,
       errorCount: result.errors.length,
       success: result.success,
     });

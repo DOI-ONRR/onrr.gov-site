@@ -13,34 +13,29 @@ export function transformProduct(record) {
     return record;
   }
 
-  // Apply specific replacements
+  // Mirror nrrd's transform_product() (database/changelog/src/functions/transform_product.sql),
+  // the trigger the FISCAL-YEAR production ELT still uses. (The calendar-year ELT no longer
+  // transforms the product — CY resolves the raw spelling through the commodity-alias map in
+  // the CY loader — so transformCYProductionRecord no longer calls this.)
   const productMappings = {
     'Sand/Gravel-Cubic Yards (cyd)': 'Sand/Gravel (Cubic Yards)',
-    'Geothermal - Direct Utilization, Hundreds of Gallons (cgal)':
-      'Geothermal - direct use - hundreds of gallons (cgal)',
-    'Geothermal - Direct Use, Millions of Gallons':
-      'Geothermal - Direct Use (Millions of Gallons)',
-    'Geothermal - Direct Use, Millions of Gallons (mgal)':
-      'Geothermal - direct use - millions of gallons (mgal)',
-    'Geothermal - Direct Utilization, Millions of BTUs (mmbtu)':
-      'Geothermal - Direct Use - Millions of BTUS (mmbtu)',
-    'Geothermal - Electrical Generation, Kilowatt Hours (kwh)':
-      'Geothermal - Electrical Generation - Kilowatt Hours (kwh)',
-    'Geothermal - Electrical Generation, Other (mmbtu)':
-      'Geothermal - Electrical Generation - Other (mmbtu)',
-    'Geothermal - Electrical Generation, Thousands of Pounds (klb)':
-      'Geothermal - Electrical Generation - Thousands of Pounds (klb)',
+    'Geothermal - Direct Utilization, Hundreds of Gallons': 'Geothermal - Direct Use (Hundreds of Gallons)',
+    'Geothermal - Direct Use, Millions of Gallons': 'Geothermal - Direct Use (Millions of Gallons)',
+    'Geothermal - Direct Use, Millions of Gallons (cgal)': 'Geothermal - Direct Use, Millions of Gallons (mgal)',
+    'Geothermal - Direct Utilization, Millions of BTUs': 'Geothermal - Direct Use (Millions of BTUs)',
+    'Geothermal - Electrical Generation, Kilowatt Hours': 'Geothermal - Electrical Generation (Kilowatt Hours)',
+    'Geothermal - Electrical Generation, Other': 'Geothermal - Electrical Generation (Other)',
+    'Geothermal - Electrical Generation, Thousands of Pounds': 'Geothermal - Electrical Generation (Thousands of Pounds)',
     'Geothermal - sulfur': 'Geothermal - Sulfur (tons)',
   };
 
-  if (productMappings[product]) {
+  if (product.toLowerCase() === 'carbon dioxide') {
+    product = 'Carbon dioxide (ton)';
+  } else if (productMappings[product]) {
     product = productMappings[product];
-  } else if (product.includes('Dioxide')) {
-    // Handle Dioxide -> dioxide transformation
-    product = product.replace('Dioxide', 'dioxide');
   }
 
-  // Capitalize first letter, lowercase the rest
+  // Capitalize first letter, lowercase the rest (nrrd's UPPER(1) || LOWER(2..)).
   product = product.charAt(0).toUpperCase() + product.slice(1).toLowerCase();
 
   return {
