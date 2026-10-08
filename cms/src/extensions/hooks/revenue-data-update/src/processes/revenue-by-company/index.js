@@ -6,9 +6,14 @@
  * federal_revenue_by_company collection.
  */
 
-import { getFileContents, parseCsv } from '../shared/index.js';
+import { getFileContents, parseCsv, yieldToEventLoop, chunk } from '../shared/index.js';
 import { REVENUE_BY_COMPANY_FIELD_MAP } from './fieldMappings.js';
 import { transformRevenueByCompanyRecord } from '../../transformers/revenue-by-company/index.js';
+
+// Insert batch size for the fact table, and how often to yield to the event loop inside the
+// synchronous transform loop (see ../shared/batch.js).
+const INSERT_CHUNK_SIZE = 500;
+const YIELD_EVERY = 500;
 
 /**
  * Main entry point for the federal revenue by company update process.
@@ -37,10 +42,11 @@ export async function processRevenueByCompanyUpdate(fileId, context) {
     const fileContents = await getFileContents(fileId, { services, schema, accountability });
 
     // Step 2 - Parse the file contents (CSV)
-    const records = parseCsv(fileContents, REVENUE_BY_COMPANY_FIELD_MAP);
+    const records = await parseCsv(fileContents, REVENUE_BY_COMPANY_FIELD_MAP);
 
     // Step 3 - Transform each record
     const transformedRecords = [];
+    let transformCount = 0;
     for (const record of records) {
       const transformed = transformRevenueByCompanyRecord(record);
 
@@ -51,6 +57,9 @@ export async function processRevenueByCompanyUpdate(fileId, context) {
 
       transformedRecords.push(transformed);
       result.recordsProcessed++;
+
+      // Yield periodically so a large file's synchronous transform doesn't stall the loop.
+      if (++transformCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     const { ItemsService } = services;
@@ -70,18 +79,16 @@ export async function processRevenueByCompanyUpdate(fileId, context) {
 
     for (const year of calendarYears) {
       try {
+        const filter = { calendar_year: { _eq: year } };
+        // Count the rows being replaced, then delete them in one query rather than per row.
         const existing = await revenueByCompanyService.readByQuery({
-          filter: {
-            calendar_year: { _eq: year },
-          },
+          filter,
           fields: ['id'],
           limit: -1,
         });
 
-        for (const item of existing) {
-          await revenueByCompanyService.deleteOne(item.id);
-          result.recordsDeleted++;
-        }
+        await revenueByCompanyService.deleteByQuery({ filter });
+        result.recordsDeleted += existing.length;
       } catch (error) {
         result.errors.push({
           type: 'record_delete',
@@ -91,27 +98,31 @@ export async function processRevenueByCompanyUpdate(fileId, context) {
       }
     }
 
-    // Step 5 - Insert transformed records
-    for (const record of transformedRecords) {
+    // Step 5 - Insert transformed records in bulk (chunked createMany) rather than one row at
+    // a time, yielding between batches so a large file doesn't monopolize the event loop.
+    const toInsert = transformedRecords.map((record) => ({
+      calendar_year: record.calendar_year,
+      corporate_name: record.corporate_name,
+      revenue_agency_type: record.revenue_agency_type,
+      revenue_agency: record.revenue_agency,
+      revenue_type: record.revenue_type,
+      commodity: record.commodity,
+      commodity_order: record.commodity_order,
+      revenue: record.revenue,
+      raw_revenue: record.raw_revenue,
+    }));
+
+    for (const batch of chunk(toInsert, INSERT_CHUNK_SIZE)) {
       try {
-        await revenueByCompanyService.createOne({
-          calendar_year: record.calendar_year,
-          corporate_name: record.corporate_name,
-          revenue_agency_type: record.revenue_agency_type,
-          revenue_agency: record.revenue_agency,
-          revenue_type: record.revenue_type,
-          commodity: record.commodity,
-          commodity_order: record.commodity_order,
-          revenue: record.revenue,
-          raw_revenue: record.raw_revenue,
-        });
-        result.recordsCreated++;
+        await revenueByCompanyService.createMany(batch);
+        result.recordsCreated += batch.length;
       } catch (error) {
         result.errors.push({
           type: 'record_insert',
           message: error.message,
         });
       }
+      await yieldToEventLoop();
     }
 
     // Final status

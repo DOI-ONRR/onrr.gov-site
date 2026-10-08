@@ -34,7 +34,9 @@ import {
 const createMockItemsService = () => ({
   readByQuery: vi.fn(),
   createOne: vi.fn(),
+  createMany: vi.fn().mockResolvedValue([]),
   deleteOne: vi.fn(),
+  deleteMany: vi.fn().mockResolvedValue([]),
 });
 
 describe('processProductionUpdate', () => {
@@ -368,14 +370,14 @@ describe('processProductionUpdate', () => {
 
     const result = await processProductionUpdate('test-file-id', mockContext);
 
-    // Only one production should be created (aggregated)
-    expect(mockProductionService.createOne).toHaveBeenCalledTimes(1);
-    expect(mockProductionService.createOne).toHaveBeenCalledWith(
+    // Only one production should be created (aggregated), bulk-inserted via createMany.
+    expect(mockProductionService.createMany).toHaveBeenCalledTimes(1);
+    expect(mockProductionService.createMany).toHaveBeenCalledWith([
       expect.objectContaining({
         volume: 1500, // 1000 + 500
         duplicate_no: 2,
-      })
-    );
+      }),
+    ]);
     expect(result.productionCreated).toBe(1);
   });
 
@@ -482,7 +484,7 @@ describe('processProductionUpdate', () => {
     mockPeriodService.readByQuery.mockResolvedValue([{ id: 'period-id' }]);
     mockCommodityService.readByQuery.mockResolvedValue([{ id: 'commodity-id' }]);
     mockProductionService.readByQuery.mockResolvedValue([]);
-    mockProductionService.createOne.mockRejectedValue(new Error('Insert failed'));
+    mockProductionService.createMany.mockRejectedValue(new Error('Insert failed'));
 
     const result = await processProductionUpdate('test-file-id', mockContext);
 
@@ -520,11 +522,11 @@ describe('processProductionUpdate', () => {
 
     await processProductionUpdate('test-file-id', mockContext);
 
-    expect(mockProductionService.createOne).toHaveBeenCalledWith(
+    expect(mockProductionService.createMany).toHaveBeenCalledWith([
       expect.objectContaining({
         volume: 1234567.89,
-      })
-    );
+      }),
+    ]);
   });
 
   it('should handle empty records array', async () => {
@@ -634,12 +636,13 @@ describe('processProductionUpdate', () => {
       { id: 'prod-1' },
       { id: 'prod-2' },
     ]);
-    mockProductionService.deleteOne.mockResolvedValue(true);
+    mockProductionService.deleteMany.mockResolvedValue(['prod-1', 'prod-2']);
     mockProductionService.createOne.mockResolvedValue('new-production-id');
 
     const result = await processProductionUpdate('test-file-id', mockContext);
 
-    expect(mockProductionService.deleteOne).toHaveBeenCalledTimes(2);
+    // One bulk delete of both prior rows instead of a deleteOne per row.
+    expect(mockProductionService.deleteMany).toHaveBeenCalledWith(['prod-1', 'prod-2']);
     expect(result.productionDeleted).toBe(2);
   });
 
@@ -668,12 +671,12 @@ describe('processProductionUpdate', () => {
 
     await processProductionUpdate('test-file-id', mockContext);
 
-    expect(mockProductionService.createOne).toHaveBeenCalledWith(
+    expect(mockProductionService.createMany).toHaveBeenCalledWith([
       expect.objectContaining({
         unit: 'bbl',
         unit_abbr: 'bbl',
-      })
-    );
+      }),
+    ]);
   });
 
   it('should derive state as Nationwide for Federal land class', async () => {
@@ -740,5 +743,34 @@ describe('processProductionUpdate', () => {
         state: 'Native American',
       })
     );
+  });
+
+  it('bulk-inserts every distinct aggregated row in one createMany batch (count parity)', async () => {
+    const mk = (date) => ({
+      production_date: date, land_class: 'Federal', land_category: 'Onshore',
+      commodity: 'Oil Prod Vol (bbl)', volume: '100',
+    });
+    parseCsv.mockReturnValue([mk('1/1/2024'), mk('2/1/2024'), mk('3/1/2024')]);
+    transformProductionRecord.mockImplementation((r) => r);
+
+    // Distinct period per record → distinct natural keys. buildPeriodRecord runs in both the
+    // dedup and build passes, so key it on the record (not mockReturnValueOnce).
+    const periodByDate = { '1/1/2024': '2024-01-01', '2/1/2024': '2024-02-01', '3/1/2024': '2024-03-01' };
+    buildPeriodRecord.mockImplementation((r) => ({ period_date: periodByDate[r.production_date], type: 'Monthly' }));
+
+    mockLocationService.readByQuery.mockResolvedValue([{ id: 'location-id' }]);
+    const periodIdByDate = { '2024-01-01': 'p1', '2024-02-01': 'p2', '2024-03-01': 'p3' };
+    mockPeriodService.readByQuery.mockImplementation((q) => {
+      const pd = q?.filter?.period_date?._eq;
+      return Promise.resolve(pd && periodIdByDate[pd] ? [{ id: periodIdByDate[pd] }] : []);
+    });
+    mockCommodityService.readByQuery.mockResolvedValue([{ id: 'commodity-id' }]);
+    mockProductionService.readByQuery.mockResolvedValue([]); // nothing to delete
+
+    const result = await processProductionUpdate('test-file-id', mockContext);
+
+    const inserted = mockProductionService.createMany.mock.calls.flatMap((c) => c[0]);
+    expect(inserted).toHaveLength(3);
+    expect(result.productionCreated).toBe(3);
   });
 });

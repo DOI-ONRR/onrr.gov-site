@@ -35,7 +35,16 @@ export async function transformFipsCode(record, lookupFipsCode) {
  * @returns {Function} - Lookup function for use with transformFipsCode
  */
 export function createFipsCodeLookup(itemsService) {
+  // Memoize by county|state for the lifetime of one load: a disbursement file repeats the
+  // same counties across thousands of rows, so without a cache this does one DB round-trip
+  // per record. county_lookup is static during a load, so caching is safe and cuts the
+  // transform phase from thousands of queries to one per distinct county.
+  const cache = new Map();
+
   return async (county, state) => {
+    const cacheKey = `${county}|${state}`;
+    if (cache.has(cacheKey)) return cache.get(cacheKey);
+
     const results = await itemsService.readByQuery({
       filter: {
         county: { _eq: county },
@@ -45,6 +54,8 @@ export function createFipsCodeLookup(itemsService) {
       limit: 1,
     });
 
-    return results?.[0]?.fips_code || null;
+    const fipsCode = results?.[0]?.fips_code || null;
+    cache.set(cacheKey, fipsCode);
+    return fipsCode;
   };
 }

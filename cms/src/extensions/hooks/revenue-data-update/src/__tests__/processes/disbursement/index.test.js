@@ -44,6 +44,7 @@ import {
 const createMockItemsService = () => ({
   readByQuery: vi.fn().mockResolvedValue([]),
   createOne: vi.fn(),
+  createMany: vi.fn().mockResolvedValue([]),
 });
 
 describe('processDisbursementUpdate', () => {
@@ -544,14 +545,14 @@ describe('processDisbursementUpdate', () => {
 
     const result = await processDisbursementUpdate('test-file-id', mockContext);
 
-    // Only one disbursement should be created (aggregated)
-    expect(mockDisbursementService.createOne).toHaveBeenCalledTimes(1);
-    expect(mockDisbursementService.createOne).toHaveBeenCalledWith(
+    // Only one disbursement should be created (aggregated), bulk-inserted via createMany.
+    expect(mockDisbursementService.createMany).toHaveBeenCalledTimes(1);
+    expect(mockDisbursementService.createMany).toHaveBeenCalledWith([
       expect.objectContaining({
         amount: 1500, // 1000 + 500
         duplicate_no: 2,
-      })
-    );
+      }),
+    ]);
     expect(result.disbursementsCreated).toBe(1);
   });
 
@@ -588,12 +589,15 @@ describe('processDisbursementUpdate', () => {
     mockLocationService.readByQuery.mockResolvedValue([{ id: 'location-id' }]);
     mockPeriodService.readByQuery.mockResolvedValue([{ id: 'period-id' }]);
     mockCommodityService.readByQuery.mockResolvedValue([{ id: 'commodity-id' }]);
-    // The fact row already exists → the process should skip it, not insert a duplicate.
-    mockDisbursementService.readByQuery.mockResolvedValue([{ id: 'existing-disbursement-id' }]);
+    // The fact row already exists → the batched existence read returns it by natural key,
+    // so the process should skip it, not insert a duplicate.
+    mockDisbursementService.readByQuery.mockResolvedValue([
+      { location: 'location-id', period: 'period-id', fund: 'fund-id', commodity: 'commodity-id' },
+    ]);
 
     const result = await processDisbursementUpdate('test-file-id', mockContext);
 
-    expect(mockDisbursementService.createOne).not.toHaveBeenCalled();
+    expect(mockDisbursementService.createMany).not.toHaveBeenCalled();
     expect(result.disbursementsCreated).toBe(0);
     expect(result.disbursementsSkipped).toBe(1);
   });
@@ -760,7 +764,7 @@ describe('processDisbursementUpdate', () => {
     mockLocationService.readByQuery.mockResolvedValue([{ id: 'location-id' }]);
     mockPeriodService.readByQuery.mockResolvedValue([{ id: 'period-id' }]);
     mockCommodityService.readByQuery.mockResolvedValue([{ id: 'commodity-id' }]);
-    mockDisbursementService.createOne.mockRejectedValue(new Error('Insert failed'));
+    mockDisbursementService.createMany.mockRejectedValue(new Error('Insert failed'));
 
     const result = await processDisbursementUpdate('test-file-id', mockContext);
 
@@ -814,11 +818,11 @@ describe('processDisbursementUpdate', () => {
 
     await processDisbursementUpdate('test-file-id', mockContext);
 
-    expect(mockDisbursementService.createOne).toHaveBeenCalledWith(
+    expect(mockDisbursementService.createMany).toHaveBeenCalledWith([
       expect.objectContaining({
         amount: 1234567.89,
-      })
-    );
+      }),
+    ]);
   });
 
   it('should handle empty records array', async () => {
@@ -878,5 +882,45 @@ describe('processDisbursementUpdate', () => {
         message: 'Commodity not found',
       })
     );
+  });
+
+  it('bulk-inserts every distinct aggregated row in one createMany batch (count parity)', async () => {
+    const mk = (month) => ({ month, calendar_year: '2024', commodity: 'Oil', disbursement: '100' });
+    parseCsv.mockReturnValue([mk('January'), mk('February'), mk('March')]);
+    transformDisbursementRecord.mockImplementation((r) => r);
+    transformFipsCode.mockImplementation((r) => Promise.resolve(r));
+
+    buildFundRecord.mockReturnValue({
+      type: 'F', class: 'C', recipient: 'R', revenue_type: 'RT', source: 'S', disbursement_type: 'DT',
+    });
+    buildLocationRecord.mockReturnValue({
+      land_class: 'Onshore', land_category: 'Public', state: 'TX', county: 'Harris', fips_code: '48201',
+    });
+    // Three distinct periods → three distinct natural keys (no aggregation). buildPeriodRecord
+    // is called once per record in both the dedup and build passes, so key it on the record
+    // (not mockReturnValueOnce) to stay consistent across calls.
+    const periodByMonth = { January: '2024-01-01', February: '2024-02-01', March: '2024-03-01' };
+    buildPeriodRecord.mockImplementation((r) => ({ period_date: periodByMonth[r.month] }));
+
+    mockFundService.readByQuery.mockResolvedValue([{ id: 'fund-id' }]);
+    mockLocationService.readByQuery.mockResolvedValue([{ id: 'location-id' }]);
+    // Each distinct period_date resolves to a distinct period id; the Fiscal Year read
+    // (no period_date filter) returns [] so the FY summarization no-ops.
+    const periodIdByDate = { '2024-01-01': 'p1', '2024-02-01': 'p2', '2024-03-01': 'p3' };
+    mockPeriodService.readByQuery.mockImplementation((q) => {
+      const pd = q?.filter?.period_date?._eq;
+      return Promise.resolve(pd && periodIdByDate[pd] ? [{ id: periodIdByDate[pd] }] : []);
+    });
+    mockCommodityService.readByQuery.mockResolvedValue([{ id: 'commodity-id' }]);
+    // No existing fact rows for these periods → all three are inserted.
+    mockDisbursementService.readByQuery.mockResolvedValue([]);
+
+    const result = await processDisbursementUpdate('test-file-id', mockContext);
+
+    // Count parity: as many rows inserted (across all createMany batches) as distinct keys.
+    const inserted = mockDisbursementService.createMany.mock.calls.flatMap((c) => c[0]);
+    expect(inserted).toHaveLength(3);
+    expect(result.disbursementsCreated).toBe(3);
+    expect(result.disbursementsSkipped).toBe(0);
   });
 });

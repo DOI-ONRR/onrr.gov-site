@@ -1,10 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { processFederalSalesUpdate } from '../../../processes/federal-sales/index.js';
 
-// Mock shared utilities
+// Mock shared utilities. yieldToEventLoop/chunk are real (lightweight) so the batched
+// insert path runs as in production — the whole barrel is mocked, so they must be provided.
 vi.mock('../../../processes/shared/index.js', () => ({
   getFileContents: vi.fn(),
   parseCsv: vi.fn(),
+  yieldToEventLoop: () => Promise.resolve(),
+  chunk: (items, size) => {
+    const out = [];
+    for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+    return out;
+  },
 }));
 
 import { getFileContents, parseCsv } from '../../../processes/shared/index.js';
@@ -37,7 +44,9 @@ describe('processFederalSalesUpdate', () => {
     mockFederalSalesService = {
       readByQuery: vi.fn().mockResolvedValue([]),
       createOne: vi.fn().mockResolvedValue(1),
+      createMany: vi.fn().mockResolvedValue([]),
       deleteOne: vi.fn().mockResolvedValue(undefined),
+      deleteByQuery: vi.fn().mockResolvedValue([]),
     };
 
     mockContext = {
@@ -110,11 +119,11 @@ describe('processFederalSalesUpdate', () => {
 
       await processFederalSalesUpdate('test-file-id', mockContext);
 
-      expect(mockFederalSalesService.createOne).toHaveBeenCalledWith(
+      expect(mockFederalSalesService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           calendar_year: 2023,
-        })
-      );
+        }),
+      ]);
     });
 
     it('should parse numeric fields as floats', async () => {
@@ -123,7 +132,7 @@ describe('processFederalSalesUpdate', () => {
 
       await processFederalSalesUpdate('test-file-id', mockContext);
 
-      expect(mockFederalSalesService.createOne).toHaveBeenCalledWith(
+      expect(mockFederalSalesService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           sales_volume: 354736.48,
           gas_volume: 0,
@@ -133,8 +142,8 @@ describe('processFederalSalesUpdate', () => {
           processing_allowance: 0,
           royalty_value_less_allowance: 5751165.18,
           effective_royalty_rate: 0.15,
-        })
-      );
+        }),
+      ]);
     });
 
     it('should handle comma-separated numeric values', async () => {
@@ -143,11 +152,11 @@ describe('processFederalSalesUpdate', () => {
 
       await processFederalSalesUpdate('test-file-id', mockContext);
 
-      expect(mockFederalSalesService.createOne).toHaveBeenCalledWith(
+      expect(mockFederalSalesService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           sales_value: 1234567.89,
-        })
-      );
+        }),
+      ]);
     });
 
     it('should pass string fields through as-is', async () => {
@@ -156,15 +165,15 @@ describe('processFederalSalesUpdate', () => {
 
       await processFederalSalesUpdate('test-file-id', mockContext);
 
-      expect(mockFederalSalesService.createOne).toHaveBeenCalledWith(
+      expect(mockFederalSalesService.createMany).toHaveBeenCalledWith([
         expect.objectContaining({
           land_class: 'Federal',
           land_category: 'Offshore',
           state_offshore_region: 'Gulf of America',
           revenue_type: 'Royalties',
           commodity: 'Oil',
-        })
-      );
+        }),
+      ]);
     });
 
     it('should skip records with invalid calendar year', async () => {
@@ -175,7 +184,7 @@ describe('processFederalSalesUpdate', () => {
 
       expect(result.recordsSkipped).toBe(1);
       expect(result.recordsProcessed).toBe(0);
-      expect(mockFederalSalesService.createOne).not.toHaveBeenCalled();
+      expect(mockFederalSalesService.createMany).not.toHaveBeenCalled();
     });
   });
 
@@ -196,7 +205,10 @@ describe('processFederalSalesUpdate', () => {
           filter: { calendar_year: { _eq: 2023 } },
         })
       );
-      expect(mockFederalSalesService.deleteOne).toHaveBeenCalledTimes(2);
+      // Rows are deleted in one query per year, and the count comes from the prior read.
+      expect(mockFederalSalesService.deleteByQuery).toHaveBeenCalledWith({
+        filter: { calendar_year: { _eq: 2023 } },
+      });
       expect(result.recordsDeleted).toBe(2);
     });
 
@@ -227,7 +239,9 @@ describe('processFederalSalesUpdate', () => {
 
       const result = await processFederalSalesUpdate('test-file-id', mockContext);
 
-      expect(mockFederalSalesService.createOne).toHaveBeenCalledTimes(2);
+      // Bulk-inserted via createMany; count parity with the number of transformed rows.
+      const inserted = mockFederalSalesService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(2);
       expect(result.recordsCreated).toBe(2);
     });
 
@@ -235,7 +249,7 @@ describe('processFederalSalesUpdate', () => {
       getFileContents.mockResolvedValue('');
       parseCsv.mockReturnValue([makeSalesRecord()]);
 
-      mockFederalSalesService.createOne.mockRejectedValue(new Error('Insert failed'));
+      mockFederalSalesService.createMany.mockRejectedValue(new Error('Insert failed'));
 
       const result = await processFederalSalesUpdate('test-file-id', mockContext);
 
@@ -246,6 +260,21 @@ describe('processFederalSalesUpdate', () => {
           message: 'Insert failed',
         })
       );
+    });
+
+    it('bulk-inserts every transformed row across createMany batches (count parity)', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([
+        makeSalesRecord(),
+        makeSalesRecord({ commodity: 'Gas' }),
+        makeSalesRecord({ commodity: 'Coal' }),
+      ]);
+
+      const result = await processFederalSalesUpdate('test-file-id', mockContext);
+
+      const inserted = mockFederalSalesService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(3);
+      expect(result.recordsCreated).toBe(3);
     });
   });
 

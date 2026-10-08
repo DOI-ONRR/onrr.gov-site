@@ -5,7 +5,12 @@
  * transforming and loading the reference data into the appropriate tables.
  */
 
-import { getFileContents, parseCsv } from '../shared/index.js';
+import { getFileContents, parseCsv, yieldToEventLoop, chunk } from '../shared/index.js';
+
+// Insert batch size for the disbursement fact table, and how often to yield to the event
+// loop inside the synchronous transform/aggregate loops (see ../shared/batch.js).
+const INSERT_CHUNK_SIZE = 500;
+const YIELD_EVERY = 500;
 import { DISBURSEMENT_FIELD_MAP } from './fieldMappings.js';
 import {
   transformDisbursementRecord,
@@ -51,7 +56,7 @@ export async function processDisbursementUpdate(fileId, context) {
     const fileContents = await getFileContents(fileId, { services, schema, accountability });
 
     // Step 2 - Parse the file contents (CSV)
-    const records = parseCsv(fileContents, DISBURSEMENT_FIELD_MAP);
+    const records = await parseCsv(fileContents, DISBURSEMENT_FIELD_MAP);
 
     // Step 3 - Transform each record using disbursement transformers
     const { ItemsService } = services;
@@ -62,6 +67,7 @@ export async function processDisbursementUpdate(fileId, context) {
     const lookupFipsCode = createFipsCodeLookup(countyLookupService);
 
     const transformedRecords = [];
+    let transformCount = 0;
     for (const record of records) {
       // Apply synchronous transformations
       let transformed = transformDisbursementRecord(record);
@@ -72,11 +78,14 @@ export async function processDisbursementUpdate(fileId, context) {
         continue;
       }
 
-      // Apply async FIPS code lookup
+      // Apply async FIPS code lookup (memoized per county/state in createFipsCodeLookup)
       transformed = await transformFipsCode(transformed, lookupFipsCode);
 
       transformedRecords.push(transformed);
       result.recordsProcessed++;
+
+      // Yield periodically so a warm-cache (synchronous) run doesn't stall the event loop.
+      if (++transformCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Steps 4-6: Build deduplicated reference data maps in a single pass
@@ -91,6 +100,7 @@ export async function processDisbursementUpdate(fileId, context) {
     const periodMap = new Map();
     const commodityMap = new Map();
 
+    let dedupCount = 0;
     for (const record of transformedRecords) {
       // Build and deduplicate fund record
       const fundRecord = buildFundRecord(record);
@@ -132,6 +142,8 @@ export async function processDisbursementUpdate(fileId, context) {
       if (!commodityMap.has(record.commodity)) {
         commodityMap.set(record.commodity, { commodity: record.commodity, id: null});
       }
+
+      if (++dedupCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Step 4 - Query/insert fund records and store IDs
@@ -260,6 +272,7 @@ export async function processDisbursementUpdate(fileId, context) {
 
     let disbursementRecords = [];
 
+    let buildCount = 0;
     for (const record of transformedRecords) {
       // Build the related records to get lookup keys
       const fundRecord = buildFundRecord(record);
@@ -325,19 +338,22 @@ export async function processDisbursementUpdate(fileId, context) {
         unit: record.unit || 'dollars',
         unit_abbr: record.unit_abbr || '$',
       });
+
+      if (++buildCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
     // Aggregate disbursement data
     const disbursementAggregate = new Map();
 
-    disbursementRecords.forEach(record => {
+    let aggregateCount = 0;
+    for (const record of disbursementRecords) {
       const key = `${record.location}:${record.period}:${record.fund}:${record.commodity}`;
-  
+
       if (disbursementAggregate.has(key)) {
         disbursementAggregate.get(key).amount += record.amount;
         disbursementAggregate.get(key).duplicate_no++;
       } else {
-        disbursementAggregate.set(key, { 
+        disbursementAggregate.set(key, {
           location: record.location,
           period: record.period,
           fund: record.fund,
@@ -348,36 +364,57 @@ export async function processDisbursementUpdate(fileId, context) {
           duplicate_no: 1
         });
       }
-    });
 
-    for (const disbursementRecord of disbursementAggregate.values()) {
+      if (++aggregateCount % YIELD_EVERY === 0) await yieldToEventLoop();
+    }
+
+    // Idempotency + bulk insert. Instead of a read-then-insert per aggregated row (thousands
+    // of sequential round-trips that keep the request — and the event loop — busy), fetch every
+    // existing fact row for this load's periods in ONE query, skip the rows that already exist,
+    // and bulk-insert the rest in chunks (yielding between them). Scoping the existence read by
+    // period is correct because the natural key (location+period+fund+commodity) always
+    // includes one of these periods — same ON CONFLICT DO NOTHING semantics as before.
+    const aggregatedRows = [...disbursementAggregate.values()];
+    const loadPeriodIds = [...new Set(aggregatedRows.map((r) => r.period))];
+
+    const naturalKey = (r) => `${r.location}:${r.period}:${r.fund}:${r.commodity}`;
+    const existingKeys = new Set();
+    let existenceReadFailed = false;
+
+    if (loadPeriodIds.length > 0) {
       try {
-        // Idempotency: skip a fact row that already exists for this natural key
-        // (location + period + fund + commodity), matching nrrd's INSERT ... ON CONFLICT
-        // DO NOTHING. Without this, re-running a month's load duplicates its rows.
-        const existing = await disbursementService.readByQuery({
-          filter: {
-            location: { _eq: disbursementRecord.location },
-            period: { _eq: disbursementRecord.period },
-            fund: { _eq: disbursementRecord.fund },
-            commodity: { _eq: disbursementRecord.commodity },
-          },
-          fields: ['id'],
-          limit: 1,
+        const existingRows = await disbursementService.readByQuery({
+          filter: { period: { _in: loadPeriodIds } },
+          fields: ['location', 'period', 'fund', 'commodity'],
+          limit: -1,
         });
-
-        if (existing.length > 0) {
-          result.disbursementsSkipped++;
-          continue;
-        }
-
-        await disbursementService.createOne(disbursementRecord);
-        result.disbursementsCreated++;
+        for (const r of existingRows) existingKeys.add(naturalKey(r));
       } catch (error) {
-        result.errors.push({
-          type: 'disbursement_insert',
-          message: error.message,
-        });
+        // Don't risk duplicating rows we couldn't verify — skip the insert phase on a read
+        // failure (same net effect as the old per-row read throwing before its insert).
+        existenceReadFailed = true;
+        result.errors.push({ type: 'disbursement_insert', message: error.message });
+      }
+    }
+
+    if (!existenceReadFailed) {
+      const toInsert = [];
+      for (const row of aggregatedRows) {
+        if (existingKeys.has(naturalKey(row))) {
+          result.disbursementsSkipped++;
+        } else {
+          toInsert.push(row);
+        }
+      }
+
+      for (const batch of chunk(toInsert, INSERT_CHUNK_SIZE)) {
+        try {
+          await disbursementService.createMany(batch);
+          result.disbursementsCreated += batch.length;
+        } catch (error) {
+          result.errors.push({ type: 'disbursement_insert', message: error.message });
+        }
+        await yieldToEventLoop();
       }
     }
 
