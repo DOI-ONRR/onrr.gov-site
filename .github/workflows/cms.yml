@@ -39,109 +39,30 @@ jobs:
         run: npm ci
         working-directory: cms
 
-      - name: Install document dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/document
+      # The extensions each vendor their own @directus/extensions-sdk, so a cold
+      # install of all of them is what dominates this job's wall-clock. Cache the
+      # installed node_modules keyed on every extension lockfile: an unchanged set
+      # restores and skips the install entirely; otherwise install them in
+      # parallel below (which also replaces the former one-step-per-extension
+      # sequential installs).
+      - name: Cache extension node_modules
+        id: ext-deps-cache
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: cms/src/extensions/*/*/node_modules
+          key: ext-node-modules-v1-${{ runner.os }}-node22-${{ hashFiles('cms/src/extensions/*/*/package-lock.json') }}
 
-      - name: Install image-uploader dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/image-uploader
-
-      - name: Install link-autocomplete dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/link-autocomplete
-
-      - name: Install onrr-flows dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/onrr-flows
-
-      - name: Install press-releases dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/press-releases
-
-      - name: Install reporter-letters dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/reporter-letters
-
-      - name: Install unbundling dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/unbundling
-
-      - name: Install revenue-summary dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/revenue-summary
-
-      - name: Install disbursement-summary dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/disbursement-summary
-
-      - name: Install fy-summary dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/fy-summary
-
-      - name: Install index-zones dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/index-zones
-
-      - name: Install directus-users dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/directus-users
-
-      - name: Install directus-roles dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/directus-roles
-
-      - name: Install directus-policies dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/directus-policies
-
-      - name: Install indian-gas-major-portion dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/indian-gas-major-portion
-
-      - name: Install ibmp dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/ibmp
-
-      - name: Install nymex dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/nymex
-
-      - name: Install html-sanitizer dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/html-sanitizer
-
-      - name: Install revenue-data-update dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/hooks/revenue-data-update
-
-      - name: Install wysiwyg-static dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/endpoints/wysiwyg-static
-
-      - name: Install onrr-wysiwyg dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/onrr-wysiwyg
-
-      - name: Install onrr-generate-uuid dependencies
-        run: npm ci
-        working-directory: cms/src/extensions/operations/onrr-generate-uuid
-
-      - name: Install contacts-accordion-select deps
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/contacts-accordion-select
-
-      - name: Install contacts-page-select deps
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/contacts-page-select
-
-      - name: Install contacts-tab-select deps
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/contacts-tab-select
-
-      - name: Install topics-select deps
-        run: npm ci
-        working-directory: cms/src/extensions/interfaces/topics-select
+      - name: Install extension dependencies (parallel, on cache miss)
+        if: steps.ext-deps-cache.outputs.cache-hit != 'true'
+        working-directory: cms
+        run: |
+          # Install up to 4 extensions concurrently (the runner has 4 vCPUs).
+          # The directory is passed as a positional arg ("$1") so no path is
+          # interpolated into the shell command. xargs exits non-zero if any
+          # install fails, which fails the step.
+          ls -d src/extensions/*/*/ \
+            | while read -r d; do [ -f "${d}package.json" ] && printf '%s\n' "$d"; done \
+            | xargs -P4 -I{} sh -c 'cd "$1" && npm ci' _ {}
 
       - name: Build extensions
         run: npm run build:all
@@ -182,7 +103,19 @@ jobs:
           fetch-depth: 1
           path: source
 
+      # Building the Oxide skin (tinymce checkout + yarn + oxide-build) only
+      # produces different output when the pinned TinyMCE ref or our skin LESS
+      # changes. Cache the compiled output keyed on both and skip the whole
+      # build on a hit. Bump the v1 token to force a rebuild.
+      - name: Cache compiled TinyMCE Oxide skin
+        id: tinymce-cache
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: tinymce-oxide-build
+          key: tinymce-oxide-v1-${{ env.TINYMCE_REF }}-${{ hashFiles('source/cms/src/extensions/interfaces/onrr-wysiwyg/src/tinymce/modules/oxide/src/less/skins/ui/default/**') }}
+
       - name: Checkout TinyMCE (shallow)
+        if: steps.tinymce-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: tinymce/tinymce
@@ -191,6 +124,7 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Node for TinyMCE
+        if: steps.tinymce-cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 20
@@ -200,6 +134,7 @@ jobs:
             tinymce/package-lock.json
 
       - name: Copy TinyMCE skin LESS
+        if: steps.tinymce-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
           mkdir -p tinymce/modules/oxide/src/less/skins/ui/default/
@@ -207,17 +142,22 @@ jobs:
           cp -v "${SRC_DIR}/src/tinymce/modules/oxide/src/less/skins/ui/default/"* \
                 "tinymce/modules/oxide/src/less/skins/ui/default/"
           shopt -u nullglob
-      
-      - name: Build TinyMCE Oxide 
+
+      - name: Build TinyMCE Oxide
+        if: steps.tinymce-cache.outputs.cache-hit != 'true'
         working-directory: tinymce
         run: |
           yarn
           yarn oxide-build
+          # Stage the compiled skin under the cached path so the next run with an
+          # unchanged ref + LESS restores it and skips everything above.
+          mkdir -p ../tinymce-oxide-build
+          cp -R modules/oxide/build/. ../tinymce-oxide-build/
 
       - name: Copy compiled TinyMCE into extension
         run: |
           mkdir -p "${DEPLOY_DIR}"
-          cp -R tinymce/modules/oxide/build/* "${DEPLOY_DIR}/"
+          cp -R tinymce-oxide-build/. "${DEPLOY_DIR}/"
 
       - name: Re-pack CMS deploy tarball
         run: |
