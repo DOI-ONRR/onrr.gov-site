@@ -478,8 +478,9 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
  * Deletes existing revenue records for a true-up update.
  * Based on: delete_revenue.sql
  *
- * Finds the minimum accept_date from the uploaded records, then deletes
- * all revenue records whose period has a period_date >= that date.
+ * Finds the min and max accept_date from the uploaded records, then deletes
+ * all revenue records whose period_date falls within that range (inclusive),
+ * so a true-up only clears the periods the file actually covers.
  *
  * @param {Object[]} transformedRecords - Records after transformation
  * @param {Object} services - Directus services
@@ -512,12 +513,17 @@ async function deleteTrueUpRevenue(transformedRecords, services, schema, account
       return;
     }
 
+    // Bound the delete by the file's accept_date range (min..max), matching nrrd's
+    // delete_revenue() (period_date BETWEEN MIN and MAX accept_date). Scoping to only
+    // the periods the file actually covers means a true-up for an older range (e.g.
+    // 2005-2025) no longer wipes newer data (e.g. 2026) that isn't in the file.
     const minDate = acceptDates[0];
+    const maxDate = acceptDates[acceptDates.length - 1];
 
-    // Find all periods with period_date >= minDate
+    // Find all periods within the file's date range
     const periods = await periodService.readByQuery({
       filter: {
-        period_date: { _gte: minDate },
+        period_date: { _gte: minDate, _lte: maxDate },
       },
       fields: ['id'],
       limit: -1,
@@ -542,7 +548,7 @@ async function deleteTrueUpRevenue(transformedRecords, services, schema, account
     await revenueService.deleteByQuery({ filter: { period: { _in: periodIds } } });
     result.revenueDeleted += existingRevenue.length;
 
-    console.log(`[Revenue Update] True-up: deleted ${result.revenueDeleted} revenue records from ${minDate} onwards`);
+    console.log(`[Revenue Update] True-up: deleted ${result.revenueDeleted} revenue records between ${minDate} and ${maxDate}`);
   } catch (error) {
     result.errors.push({
       type: 'true_up_delete',

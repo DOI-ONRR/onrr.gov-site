@@ -557,7 +557,7 @@ describe('processRevenueUpdate', () => {
       );
     });
 
-    it('should use minimum accept_date for true-up deletion', async () => {
+    it('should bound true-up deletion by the file accept_date range (min..max)', async () => {
       getFileContents.mockResolvedValue('');
       parseCsv.mockReturnValue([
         makeRevenueRecord('6/1/2026'),
@@ -570,11 +570,12 @@ describe('processRevenueUpdate', () => {
 
       await processRevenueUpdate('test-file-id', mockContext, { period: 'true-up' });
 
-      // Should query periods with min date 2026-03-01
+      // Should query periods within the file's range (min 2026-03-01, max 2026-09-01),
+      // so periods outside the file (e.g. later months) are left untouched.
       expect(mockPeriodService.readByQuery).toHaveBeenCalledWith(
         expect.objectContaining({
           filter: expect.objectContaining({
-            period_date: { _gte: '2026-03-01' },
+            period_date: { _gte: '2026-03-01', _lte: '2026-09-01' },
           }),
         })
       );
