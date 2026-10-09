@@ -411,10 +411,12 @@ describe('processRevenueUpdate', () => {
       // Should create only one revenue record (aggregated), bulk-inserted via createMany.
       const inserted = mockRevenueService.createMany.mock.calls.flatMap((c) => c[0]);
       expect(inserted).toHaveLength(1);
-      // The aggregated amount should be 1500
+      // The aggregated amount should be 1500, written to the `amount` column
+      // (the revenue collection has no `revenue` field — Directus would silently
+      // drop it and leave amount NULL).
       expect(inserted[0]).toEqual(
         expect.objectContaining({
-          revenue: 1500,
+          amount: 1500,
           duplicate_no: 2,
         })
       );
