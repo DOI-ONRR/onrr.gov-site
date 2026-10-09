@@ -610,5 +610,35 @@ describe('processRevenueUpdate', () => {
       expect(inserted).toHaveLength(3);
       expect(result.revenueCreated).toBe(3);
     });
+
+    it('skips a revenue row that already exists (idempotent monthly re-run)', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([{
+        accept_date: '1/1/2026',
+        land_class_code: 'Federal',
+        land_category_code_desc: 'Offshore',
+        state: '',
+        county_code_desc: '',
+        fips_code: '',
+        agency_state_region_code_desc: 'GULF OF AMERICA',
+        revenue_type: 'Royalties',
+        mineral_production_code_desc: 'Oil & Gas',
+        commodity: 'Oil',
+        product_code_desc: 'Oil',
+        revenue: '1000.00',
+      }]);
+      // A plain monthly load does no delete, so the Step 11 existence check must skip a row
+      // that already exists for its natural key (location+period+commodity+fund all resolve
+      // to 1 with the default mocks) — preventing a duplicate on re-run.
+      mockRevenueService.readByQuery.mockResolvedValue([
+        { location: 1, period: 1, commodity: 1, fund: 1 },
+      ]);
+
+      const result = await processRevenueUpdate('test-file-id', mockContext);
+
+      expect(mockRevenueService.createMany).not.toHaveBeenCalled();
+      expect(result.revenueCreated).toBe(0);
+      expect(result.revenueSkipped).toBe(1);
+    });
   });
 });
