@@ -51,6 +51,7 @@ describe('processRevenueUpdate', () => {
       createOne: vi.fn().mockResolvedValue(1),
       createMany: vi.fn().mockResolvedValue([]),
       deleteOne: vi.fn().mockResolvedValue(undefined),
+      deleteMany: vi.fn().mockResolvedValue([]),
       deleteByQuery: vi.fn().mockResolvedValue([]),
     };
 
@@ -525,8 +526,11 @@ describe('processRevenueUpdate', () => {
 
       const result = await processRevenueUpdate('test-file-id', mockContext, { period: 'true-up' });
 
-      // One bulk delete (deleteByQuery) rather than a deleteOne per row; count preserved.
-      expect(mockRevenueService.deleteByQuery).toHaveBeenCalledTimes(1);
+      // Delete every matched id via chunked deleteMany (NOT deleteByQuery, which would only
+      // remove the default-limited first page), and not a deleteOne per row. All 3 ids deleted.
+      const deleted = mockRevenueService.deleteMany.mock.calls.flatMap((c) => c[0]);
+      expect(deleted).toEqual(['rev-1', 'rev-2', 'rev-3']);
+      expect(mockRevenueService.deleteByQuery).not.toHaveBeenCalled();
       expect(mockRevenueService.deleteOne).not.toHaveBeenCalled();
       expect(result.revenueDeleted).toBe(3);
     });

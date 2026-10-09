@@ -535,7 +535,7 @@ async function deleteTrueUpRevenue(transformedRecords, services, schema, account
 
     const periodIds = periods.map(p => p.id);
 
-    // Delete all revenue records for those periods
+    // Read every revenue id for those periods (limit: -1 — not the default page).
     const existingRevenue = await revenueService.readByQuery({
       filter: {
         period: { _in: periodIds },
@@ -544,9 +544,16 @@ async function deleteTrueUpRevenue(transformedRecords, services, schema, account
       limit: -1,
     });
 
-    // One bulk delete scoped by the same period filter, instead of a deleteOne per row.
-    await revenueService.deleteByQuery({ filter: { period: { _in: periodIds } } });
-    result.revenueDeleted += existingRevenue.length;
+    // Delete by explicit id in chunks. deleteByQuery WITHOUT limit: -1 only removes the
+    // default-limited first page (QUERY_LIMIT_DEFAULT) and silently leaves the rest — which
+    // for a true-up means the old rows survive and Step 11's existence check then skips the
+    // re-insert, so the load no-ops. Deleting the ids we already read avoids that entirely.
+    const idsToDelete = existingRevenue.map((r) => r.id);
+    for (const batch of chunk(idsToDelete, INSERT_CHUNK_SIZE)) {
+      await revenueService.deleteMany(batch);
+      await yieldToEventLoop();
+    }
+    result.revenueDeleted += idsToDelete.length;
 
     console.log(`[Revenue Update] True-up: deleted ${result.revenueDeleted} revenue records between ${minDate} and ${maxDate}`);
   } catch (error) {
