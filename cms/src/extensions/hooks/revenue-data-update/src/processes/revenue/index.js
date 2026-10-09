@@ -42,6 +42,7 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
     periodsCreated: 0,
     revenueDeleted: 0,
     revenueCreated: 0,
+    revenueSkipped: 0,
     errors: [],
   };
 
@@ -382,20 +383,54 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
       if (++aggregateCount % YIELD_EVERY === 0) await yieldToEventLoop();
     }
 
-    // Step 11 - Bulk-insert monthly revenue records. True-up already deleted the overlapping
-    // rows (delete-then-insert), so no per-row existence check — chunk the aggregated rows
-    // into createMany batches, yielding between them, instead of one createOne per row.
-    for (const batch of chunk([...revenueAggregate.values()], INSERT_CHUNK_SIZE)) {
+    // Step 11 - Idempotent bulk insert, mirroring nrrd's load_revenue_monthly
+    // (INSERT ... ON CONFLICT DO NOTHING on the natural key location+period+commodity+fund):
+    // fetch every existing revenue row for this load's periods in one query, skip the rows
+    // that already exist, and bulk-insert the rest. For a true-up load deleteTrueUpRevenue
+    // already cleared the overlap so nothing is skipped; for a plain monthly load this is what
+    // prevents duplicates on a re-run (the monthly path does no delete).
+    const aggregatedRows = [...revenueAggregate.values()];
+    const loadPeriodIds = [...new Set(aggregatedRows.map((r) => r.period))];
+
+    const naturalKey = (r) => `${r.location}:${r.period}:${r.commodity}:${r.fund}`;
+    const existingKeys = new Set();
+    let existenceReadFailed = false;
+
+    if (loadPeriodIds.length > 0) {
       try {
-        await revenueService.createMany(batch);
-        result.revenueCreated += batch.length;
-      } catch (error) {
-        result.errors.push({
-          type: 'revenue_insert',
-          message: error.message,
+        const existingRows = await revenueService.readByQuery({
+          filter: { period: { _in: loadPeriodIds } },
+          fields: ['location', 'period', 'commodity', 'fund'],
+          limit: -1,
         });
+        for (const r of existingRows) existingKeys.add(naturalKey(r));
+      } catch (error) {
+        // Don't risk duplicating rows we couldn't verify — skip the insert phase on a read
+        // failure rather than inserting blind.
+        existenceReadFailed = true;
+        result.errors.push({ type: 'revenue_insert', message: error.message });
       }
-      await yieldToEventLoop();
+    }
+
+    if (!existenceReadFailed) {
+      const toInsert = [];
+      for (const row of aggregatedRows) {
+        if (existingKeys.has(naturalKey(row))) {
+          result.revenueSkipped++;
+        } else {
+          toInsert.push(row);
+        }
+      }
+
+      for (const batch of chunk(toInsert, INSERT_CHUNK_SIZE)) {
+        try {
+          await revenueService.createMany(batch);
+          result.revenueCreated += batch.length;
+        } catch (error) {
+          result.errors.push({ type: 'revenue_insert', message: error.message });
+        }
+        await yieldToEventLoop();
+      }
     }
 
     // Step 12 - Load fiscal year revenue
@@ -417,6 +452,7 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
       periodsCreated: result.periodsCreated,
       revenueDeleted: result.revenueDeleted,
       revenueCreated: result.revenueCreated,
+      revenueSkipped: result.revenueSkipped,
       errorCount: result.errors.length,
       success: result.success,
     });
