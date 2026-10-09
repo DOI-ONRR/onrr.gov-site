@@ -349,7 +349,7 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
         period: periodId,
         commodity: commodityId,
         fund: fundId,
-        revenue: amount,
+        amount,
         unit: 'dollars',
         unit_abbr: '$',
       });
@@ -365,7 +365,7 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
       const key = `${record.location}:${record.period}:${record.commodity}:${record.fund}`;
 
       if (revenueAggregate.has(key)) {
-        revenueAggregate.get(key).revenue += record.revenue;
+        revenueAggregate.get(key).amount += record.amount;
         revenueAggregate.get(key).duplicate_no++;
       } else {
         revenueAggregate.set(key, {
@@ -373,7 +373,7 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
           period: record.period,
           commodity: record.commodity,
           fund: record.fund,
-          revenue: record.revenue,
+          amount: record.amount,
           unit: record.unit,
           unit_abbr: record.unit_abbr,
           duplicate_no: 1,
@@ -614,7 +614,7 @@ async function loadFiscalYearRevenue(periodService, revenueService, result) {
       for (const rev of monthlyRevenue) {
         const key = `${rev.location}:${rev.commodity}:${rev.fund}`;
         if (aggregate.has(key)) {
-          aggregate.get(key).amount += rev.ramount;
+          aggregate.get(key).amount += rev.amount;
           aggregate.get(key).duplicate_no++;
         } else {
           aggregate.set(key, {
