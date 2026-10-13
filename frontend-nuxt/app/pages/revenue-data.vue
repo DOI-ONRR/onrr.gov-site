@@ -86,7 +86,7 @@ throwOnCmsError(menuError)
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">
         <div class="ds-card padding-3">
-          <h3 class="font-heading-md">Monthly Production</h3>
+          <h3 class="font-heading-md">Monthly production</h3>
           <p class="ds-desc">Volumes of oil, gas, coal, and other commodities produced on federal
             and Indian lands.</p>
           <p class="ds-meta">Updated monthly · CSV, XLSX, API</p>
@@ -95,7 +95,7 @@ throwOnCmsError(menuError)
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">
         <div class="ds-card padding-3">
-          <h3 class="font-heading-md">Yearly Production</h3>
+          <h3 class="font-heading-md">Yearly production</h3>
           <p class="ds-desc">Volumes of oil, gas, coal, and other commodities produced on federal
             and Indian lands.</p>
           <p class="ds-meta">Updated annually · CSV, XLSX, API</p>
