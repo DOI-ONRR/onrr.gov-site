@@ -565,6 +565,43 @@ async function deleteTrueUpRevenue(transformedRecords, services, schema, account
 }
 
 /**
+ * Aggregates a year's monthly revenue rows into one row per (location, commodity, fund),
+ * tagged with the given fiscal/calendar-year period id. Shared by the FY and CY roll-ups.
+ *
+ * `amount` is a numeric column, which pg returns as a STRING, so it must be coerced with
+ * Number() before summing — otherwise `+=` concatenates ("119.80" + "7158.75" =>
+ * "119.807158.75") and the resulting row fails to insert as a numeric.
+ *
+ * @param {Array<{location:string, commodity:string, fund:string, amount:string|number}>} monthlyRevenue
+ * @param {string} periodId - The fiscal/calendar year period id to tag each aggregated row with.
+ * @returns {Array<Object>} - Aggregated revenue rows ready for insert.
+ */
+export function aggregateYearlyRevenue(monthlyRevenue, periodId) {
+  const aggregate = new Map();
+  for (const rev of monthlyRevenue) {
+    const key = `${rev.location}:${rev.commodity}:${rev.fund}`;
+    const amt = Number(rev.amount) || 0;
+    if (aggregate.has(key)) {
+      const agg = aggregate.get(key);
+      agg.amount += amt;
+      agg.duplicate_no++;
+    } else {
+      aggregate.set(key, {
+        location: rev.location,
+        period: periodId,
+        commodity: rev.commodity,
+        fund: rev.fund,
+        amount: amt,
+        unit: 'dollars',
+        unit_abbr: '$',
+        duplicate_no: 1,
+      });
+    }
+  }
+  return [...aggregate.values()];
+}
+
+/**
  * Loads fiscal year revenue by aggregating monthly revenue records.
  * Based on: load_revenue_fiscal_year.sql
  *
@@ -621,32 +658,11 @@ async function loadFiscalYearRevenue(periodService, revenueService, result) {
         limit: -1,
       });
 
-      // Aggregate by location, commodity, fund
-      const aggregate = new Map();
-      let fyAggCount = 0;
-      for (const rev of monthlyRevenue) {
-        const key = `${rev.location}:${rev.commodity}:${rev.fund}`;
-        if (aggregate.has(key)) {
-          aggregate.get(key).amount += rev.amount;
-          aggregate.get(key).duplicate_no++;
-        } else {
-          aggregate.set(key, {
-            location: rev.location,
-            period: fyPeriod.id,
-            commodity: rev.commodity,
-            fund: rev.fund,
-            amount: rev.amount,
-            unit: 'dollars',
-            unit_abbr: '$',
-            duplicate_no: 1,
-          });
-        }
-
-        if (++fyAggCount % YIELD_EVERY === 0) await yieldToEventLoop();
-      }
+      // Aggregate by location, commodity, fund (amount coerced from the pg numeric string).
+      const aggregated = aggregateYearlyRevenue(monthlyRevenue, fyPeriod.id);
 
       // Bulk-insert fiscal year revenue records in chunks.
-      for (const batch of chunk([...aggregate.values()], INSERT_CHUNK_SIZE)) {
+      for (const batch of chunk(aggregated, INSERT_CHUNK_SIZE)) {
         try {
           await revenueService.createMany(batch);
           result.revenueCreated += batch.length;
@@ -724,32 +740,11 @@ async function loadCalendarYearRevenue(periodService, revenueService, result) {
         limit: -1,
       });
 
-      // Aggregate by location, commodity, fund
-      const aggregate = new Map();
-      let cyAggCount = 0;
-      for (const rev of monthlyRevenue) {
-        const key = `${rev.location}:${rev.commodity}:${rev.fund}`;
-        if (aggregate.has(key)) {
-          aggregate.get(key).amount += rev.amount;
-          aggregate.get(key).duplicate_no++;
-        } else {
-          aggregate.set(key, {
-            location: rev.location,
-            period: cyPeriod.id,
-            commodity: rev.commodity,
-            fund: rev.fund,
-            amount: rev.amount,
-            unit: 'dollars',
-            unit_abbr: '$',
-            duplicate_no: 1,
-          });
-        }
-
-        if (++cyAggCount % YIELD_EVERY === 0) await yieldToEventLoop();
-      }
+      // Aggregate by location, commodity, fund (amount coerced from the pg numeric string).
+      const aggregated = aggregateYearlyRevenue(monthlyRevenue, cyPeriod.id);
 
       // Bulk-insert calendar year revenue records in chunks.
-      for (const batch of chunk([...aggregate.values()], INSERT_CHUNK_SIZE)) {
+      for (const batch of chunk(aggregated, INSERT_CHUNK_SIZE)) {
         try {
           await revenueService.createMany(batch);
           result.revenueCreated += batch.length;
