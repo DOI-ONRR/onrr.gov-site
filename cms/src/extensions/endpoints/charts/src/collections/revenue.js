@@ -8,7 +8,8 @@ import { resolveBreakout, breakoutNames, monthlyBreakoutSummary } from '../lib/b
 //   fiscal-year   -> period.type 'Fiscal Year'    (commodity x fiscal_year)
 // Mirrors the production endpoint's single-route + `period` param design.
 //
-// Revenue is grouped by commodity (commodity.product); the measure is `amount` and it's all
+// Revenue is grouped by commodity (commodity.name — the commodity, matching the legacy
+// revenue-by-commodity view and the /summary breakout); the measure is `amount` and it's all
 // dollars, so — unlike production's mixed-unit volumes — totals and a shared-axis chart are
 // meaningful, and groups rank by total revenue. Revenue also filters by fund.revenue_type
 // (Royalties / Rents / Bonus / …) and by State/Offshore Region, and the range is always a
@@ -74,7 +75,8 @@ function applyRevenueFilters(q, { periodType, fromYear, toYear, landTypes, reven
 	if (toYear) q.whereRaw(`${yr} <= ?`, [Number(toYear)]);
 	if (Array.isArray(landTypes) && landTypes.length) q.whereIn('l.land_type', landTypes);
 	if (Array.isArray(revenueTypes) && revenueTypes.length) q.whereIn('f.revenue_type', revenueTypes);
-	if (Array.isArray(products) && products.length) q.whereIn('c.product', products);
+	// `products` is the Commodity filter — the page groups by commodity NAME, so match on name.
+	if (Array.isArray(products) && products.length) q.whereIn('c.name', products);
 	if (Array.isArray(regions) && regions.length) {
 		q.whereRaw(`${REGION_EXPR} IN (${regions.map(() => '?').join(', ')})`, regions);
 	}
@@ -95,7 +97,7 @@ export async function revenuePivot(database, opts = {}) {
 			.leftJoin('commodity as c', `${table}.commodity`, 'c.id')
 			.leftJoin('fund as f', `${table}.fund`, 'f.id');
 
-	const cols = [database.raw('"c"."product" as "dim"'), database.raw(`${yr}::int as "yr"`)];
+	const cols = [database.raw('"c"."name" as "dim"'), database.raw(`${yr}::int as "yr"`)];
 	if (isMonthly) cols.push(database.raw('EXTRACT(MONTH FROM "p"."period_date")::int as "mo"'));
 	else if (breakoutExpr) cols.push(database.raw(`${breakoutExpr} as "sub"`));
 	cols.push(database.raw(`SUM("${table}"."amount") as "amt"`), database.raw(`COUNT(*) as "cnt"`));
@@ -104,10 +106,10 @@ export async function revenuePivot(database, opts = {}) {
 	applyRevenueFilters(aggQ, opts);
 	aggQ.groupByRaw(
 		isMonthly
-			? `"c"."product", ${yr}, EXTRACT(MONTH FROM "p"."period_date")`
+			? `"c"."name", ${yr}, EXTRACT(MONTH FROM "p"."period_date")`
 			: breakoutExpr
-				? `"c"."product", ${breakoutExpr}, ${yr}`
-				: `"c"."product", ${yr}`
+				? `"c"."name", ${breakoutExpr}, ${yr}`
+				: `"c"."name", ${yr}`
 	);
 
 	const countQ = base().count(`${table}.id as n`);
@@ -168,7 +170,7 @@ export async function revenuePivot(database, opts = {}) {
 		// Revenue is single-unit (dollars), so rank commodities by total revenue.
 		.sort((a, b) => b.total - a.total);
 
-	return { groupBy: 'product', periodType, breakout: breakoutExpr ? opts.breakout : null, years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
+	return { groupBy: 'name', periodType, breakout: breakoutExpr ? opts.breakout : null, years, groups: groupList, grandTotal, recordCount: Number(countRow?.n) || 0 };
 }
 
 // Raw revenue records matching the preview filters, for the "filtered selection" CSV.
@@ -212,7 +214,7 @@ async function revenuePivotOptions(database, periodType) {
 		scoped(database.select(database.raw(`DISTINCT ${yr}::int as year`))).whereRaw(`${yr} IS NOT NULL`).then((r) => r.map((x) => x.year).sort((a, b) => a - b)),
 		scoped(database.distinct('l.land_type')).join('location as l', 'revenue.location', 'l.id').whereNotNull('l.land_type').orderBy('l.land_type', 'asc').then((r) => r.map((x) => x.land_type)),
 		scoped(database.distinct('f.revenue_type')).join('fund as f', 'revenue.fund', 'f.id').whereNotNull('f.revenue_type').orderBy('f.revenue_type', 'asc').then((r) => r.map((x) => x.revenue_type).filter((x) => x !== '')),
-		scoped(database.distinct('c.product')).join('commodity as c', 'revenue.commodity', 'c.id').whereNotNull('c.product').orderBy('c.product', 'asc').then((r) => r.map((x) => x.product).filter((x) => x !== '')),
+		scoped(database.distinct('c.name')).join('commodity as c', 'revenue.commodity', 'c.id').whereNotNull('c.name').orderBy('c.name', 'asc').then((r) => r.map((x) => x.name).filter((x) => x !== '')),
 		scoped(database.select(database.raw(`DISTINCT ${REGION_EXPR} as region`))).join('location as l', 'revenue.location', 'l.id').then((r) => r.map((x) => x.region).filter(Boolean)),
 	]);
 	regions.sort((a, b) => String(a).localeCompare(String(b)));

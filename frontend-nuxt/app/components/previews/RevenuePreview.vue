@@ -246,7 +246,7 @@ const { data: pivot, pending } = await useAsyncData(
   async () => {
     if (!ready.value) return null
     const { query, empty } = filterQuery.value
-    if (empty) return { groupBy: 'product', periodType: periodType.value, years: [], groups: [], grandTotal: 0, recordCount: 0 }
+    if (empty) return { groupBy: 'name', periodType: periodType.value, years: [], groups: [], grandTotal: 0, recordCount: 0 }
     return $fetch(`${apiUrl}/charts/revenue/pivot`, { query })
   },
   { watch: [() => JSON.stringify(filters), ready, breakout, periodParam], dedupe: 'cancel' },
@@ -305,7 +305,7 @@ const chartPayload = computed(() => {
     empty: !p.groups?.length,
     periodType: periodType.value,
     valueFormat: 'currency',
-    groupBy: 'product',
+    groupBy: 'name',
     groupByLabel: 'Commodity',
     years: p.years || [],
     groups: (p.groups || []).slice(0, CHART_TOP_N),

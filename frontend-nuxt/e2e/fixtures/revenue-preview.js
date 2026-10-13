@@ -82,7 +82,7 @@ export function revenuePivot(period, breakout = '') {
       ],
     })
     return {
-      groupBy: 'product',
+      groupBy: 'name',
       periodType: 'Monthly',
       years,
       groups: [mgroup('Oil', 1000000), mgroup('Gas', 500000), mgroup('Not tied to a commodity', 250000)],
@@ -105,11 +105,11 @@ export function revenuePivot(period, breakout = '') {
         { key: 'Rents', byYear: { 2022: base * 0.3, 2023: base * 0.3, 2024: base * 0.3 } },
       ],
     })
-    return { groupBy: 'product', periodType, breakout: 'revenue_type', years, groups: [bgroup('Oil', 1000000000), bgroup('Gas', 300000000)], grandTotal: 3900000000, recordCount: 12 }
+    return { groupBy: 'name', periodType, breakout: 'revenue_type', years, groups: [bgroup('Oil', 1000000000), bgroup('Gas', 300000000)], grandTotal: 3900000000, recordCount: 12 }
   }
 
   return {
-    groupBy: 'product',
+    groupBy: 'name',
     periodType,
     years,
     groups: [
