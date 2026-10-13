@@ -120,6 +120,22 @@ describe('revenuePivot', () => {
     expect(called(db, 'whereRaw', (a) => String(a[0]).includes('COALESCE'))).toBe(true);
   });
 
+  it('groups by and filters the Commodity selection on commodity NAME, not product', async () => {
+    const db = makeDb([], 0);
+    await revenuePivot(db, { periodType: 'Monthly', products: ['Oil'] });
+    // The "Commodity" filter must match commodity.name (legacy revenue-by-commodity semantics),
+    // not commodity.product — otherwise a name that spans multiple products undercounts.
+    expect(called(db, 'whereIn', (a) => a[0] === 'c.name' && Array.isArray(a[1]) && a[1].includes('Oil'))).toBe(true);
+    expect(called(db, 'whereIn', (a) => a[0] === 'c.product')).toBe(false);
+    expect(called(db, 'groupByRaw', (a) => String(a[0]).includes('"c"."name"'))).toBe(true);
+    expect(called(db, 'groupByRaw', (a) => String(a[0]).includes('"c"."product"'))).toBe(false);
+  });
+
+  it('reports groupBy as name', async () => {
+    const out = await revenuePivot(makeDb([{ dim: 'Oil', yr: 2020, amt: 5, cnt: 1 }], 1), { periodType: 'Fiscal Year' });
+    expect(out.groupBy).toBe('name');
+  });
+
   it('adds month detail for the monthly grain', async () => {
     const rows = [{ dim: 'Oil', yr: 2020, mo: 3, amt: 5, cnt: 1 }];
     const out = await revenuePivot(makeDb(rows, 1), { periodType: 'Monthly' });
