@@ -190,6 +190,13 @@ function measureDimCol() {
   dimW.value = max ? Math.ceil(max + 44) : 0
 }
 
+// The flat table's sticky first column can keep fallback-font row metrics on the first paint,
+// leaving its row rule a hair out of step with each row until something forces a repaint (any
+// re-layout — nav, zoom, a filter change — fixes it). Bump this key once web fonts settle to
+// trigger one clean tbody repaint on load, with no user interaction (see FederalSalesPreview /
+// FederalRevenueByCompanyPreview, which already do this).
+const tbodyKey = ref(0)
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
   if (theadRef.value) {
@@ -199,6 +206,10 @@ onMounted(() => {
     theadObserver.observe(theadRef.value)
   }
   measureDimCol()
+  // document.fonts.ready is already resolved when fonts are cached, so this fires immediately then.
+  if (import.meta.client && document.fonts?.ready) {
+    document.fonts.ready.then(() => { tbodyKey.value++; nextTick(measureDimCol) })
+  }
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
@@ -549,7 +560,7 @@ if (datasetExportFilter) {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody :key="tbodyKey">
           <tr v-if="!pending && !groups.length">
             <td :colspan="years.length + (grouped ? 2 : 1)">No records match the current filters.</td>
           </tr>

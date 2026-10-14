@@ -502,7 +502,7 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody :key="tbodyKey">
           <tr v-if="!pending && !groups.length">
             <td :colspan="colspanEmpty">No records match the current filters.</td>
           </tr>
