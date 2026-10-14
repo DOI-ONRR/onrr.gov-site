@@ -852,13 +852,17 @@ if (datasetExport) {
 .pivot .subtotal-label { font-weight: 700; }
 
 // --- Annual flat table (no breakout) ------------------------------------------
-// Use the separated border model for this table only. Product names wrap here, and in
-// border-collapse mode a wrapped (taller) cell drops its bottom border (a Chromium quirk);
-// separated borders paint per-cell and stay put. Scoped to `.pivot--flat` so the monthly
-// and disbursement tables keep border-collapse (their sticky-header seam fix depends on it).
+// Border model — both quirks below are real (verified in-browser), so neither pure model works:
+//  - `border-collapse: separate` mis-paints the sticky Product column's cell borders on any
+//    RE-LAYOUT (switching Period, or loading with ?period= pre-applied): rules drop / double.
+//  - `border-collapse: collapse` fixes that, but then a wrapped (taller) product cell drops its
+//    bottom border (a Chromium quirk — the reason `separate` was originally tried).
+// So stay collapsed (robust with the sticky column, like the grouped tables) and draw the row
+// rule as an inset box-shadow on the cells (below) instead of the real border-bottom — the
+// box-shadow survives BOTH the wrap and the re-layout. (_tables.scss' violet border-bottom still
+// draws the heavier 2px rule under the thead, which doesn't wrap, so that's left as-is.)
 .pivot--flat table {
-  border-collapse: inherit;
-  border-spacing: 0;
+  border-collapse: collapse;
 }
 
 // Product column sticks to the left as well, so the (often long) product name stays
@@ -879,7 +883,11 @@ if (datasetExport) {
   color: #1b1b1b;
 }
 .pivot--flat .prod-row > th,
-.pivot--flat .prod-row > td { background: #fff; }
+.pivot--flat .prod-row > td {
+  background: #fff;
+  border-bottom: 0; // row rule is the inset box-shadow below (survives wrapping + re-layout)
+  box-shadow: inset 0 -1px 0 $onrr-violet;
+}
 .pivot--flat .prod-row.row-alt > th,
 .pivot--flat .prod-row.row-alt > td { background: #f5f5f5; }
 

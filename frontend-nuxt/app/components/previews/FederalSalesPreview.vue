@@ -676,9 +676,11 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 .pivot .subtotal-label { font-weight: 700; }
 
 // --- Flat table ---------------------------------------------------------------
+// Collapsed border model with a box-shadow row rule — see ProductionPreview for the full
+// rationale (separate mis-paints the sticky column on re-layout; collapse drops wrapped-cell
+// borders; box-shadow on the cells survives both).
 .pivot--flat table {
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
 }
 .pivot--flat .dim-col,
 .pivot--flat .dim-cell {
@@ -696,7 +698,11 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
   color: #1b1b1b;
 }
 .pivot--flat .prod-row > th,
-.pivot--flat .prod-row > td { background: #fff; }
+.pivot--flat .prod-row > td {
+  background: #fff;
+  border-bottom: 0; // row rule is the inset box-shadow below (survives wrapping + re-layout)
+  box-shadow: inset 0 -1px 0 $onrr-violet;
+}
 .pivot--flat .prod-row.row-alt > th,
 .pivot--flat .prod-row.row-alt > td { background: #f5f5f5; }
 
