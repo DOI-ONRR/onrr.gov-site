@@ -852,15 +852,16 @@ if (datasetExport) {
 .pivot .subtotal-label { font-weight: 700; }
 
 // --- Annual flat table (no breakout) ------------------------------------------
-// Border model — both quirks below are real (verified in-browser), so neither pure model works:
+// Three real quirks here (all verified in-browser), so no single built-in border does the job:
 //  - `border-collapse: separate` mis-paints the sticky Product column's cell borders on any
 //    RE-LAYOUT (switching Period, or loading with ?period= pre-applied): rules drop / double.
 //  - `border-collapse: collapse` fixes that, but then a wrapped (taller) product cell drops its
 //    bottom border (a Chromium quirk — the reason `separate` was originally tried).
+//  - an inset `box-shadow` row rule survives both of those, but renders as 0/2px on HiDPI
+//    (Retina) displays, so it looks dropped/doubled there (while fine on a DPR-1 screen).
 // So stay collapsed (robust with the sticky column, like the grouped tables) and draw the row
-// rule as an inset box-shadow on the cells (below) instead of the real border-bottom — the
-// box-shadow survives BOTH the wrap and the re-layout. (_tables.scss' violet border-bottom still
-// draws the heavier 2px rule under the thead, which doesn't wrap, so that's left as-is.)
+// rule as a pixel-snapped 1px ::after element on the cells (below). (_tables.scss' violet
+// border-bottom still draws the heavier 2px rule under the non-wrapping thead, left as-is.)
 .pivot--flat table {
   border-collapse: collapse;
 }
@@ -885,8 +886,24 @@ if (datasetExport) {
 .pivot--flat .prod-row > th,
 .pivot--flat .prod-row > td {
   background: #fff;
-  border-bottom: 0; // row rule is the inset box-shadow below (survives wrapping + re-layout)
-  box-shadow: inset 0 -1px 0 $onrr-violet;
+  border-bottom: 0;
+}
+// Row rule as a pixel-snapped 1px element. A real border-bottom drops on a wrapped cell under
+// collapse, and an inset box-shadow renders as 0/2px on HiDPI (Retina) displays — both verified
+// in-browser. An absolutely-positioned 1px child snaps to the device-pixel grid, so it stays
+// crisp while surviving wrapping, re-layout and horizontal scroll. Only the non-sticky year cells
+// need the positioning context; the sticky Product column (<th>) is already a positioned box.
+.pivot--flat .prod-row > td { position: relative; }
+.pivot--flat .prod-row > th::after,
+.pivot--flat .prod-row > td::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: $onrr-violet;
+  pointer-events: none;
 }
 .pivot--flat .prod-row.row-alt > th,
 .pivot--flat .prod-row.row-alt > td { background: #f5f5f5; }

@@ -676,9 +676,9 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 .pivot .subtotal-label { font-weight: 700; }
 
 // --- Flat table ---------------------------------------------------------------
-// Collapsed border model with a box-shadow row rule — see ProductionPreview for the full
-// rationale (separate mis-paints the sticky column on re-layout; collapse drops wrapped-cell
-// borders; box-shadow on the cells survives both).
+// Collapsed border model with a pixel-snapped ::after row rule — see ProductionPreview for the
+// full rationale (separate mis-paints the sticky column on re-layout; collapse drops wrapped-cell
+// borders; an inset box-shadow drops/doubles on HiDPI/Retina).
 .pivot--flat table {
   border-collapse: collapse;
 }
@@ -700,8 +700,22 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 .pivot--flat .prod-row > th,
 .pivot--flat .prod-row > td {
   background: #fff;
-  border-bottom: 0; // row rule is the inset box-shadow below (survives wrapping + re-layout)
-  box-shadow: inset 0 -1px 0 $onrr-violet;
+  border-bottom: 0;
+}
+// Row rule as a pixel-snapped 1px ::after (not border-bottom/box-shadow) — see ProductionPreview.
+// Only the non-sticky year cells need the positioning context; the sticky first column (<th>) is
+// already a positioned box.
+.pivot--flat .prod-row > td { position: relative; }
+.pivot--flat .prod-row > th::after,
+.pivot--flat .prod-row > td::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: $onrr-violet;
+  pointer-events: none;
 }
 .pivot--flat .prod-row.row-alt > th,
 .pivot--flat .prod-row.row-alt > td { background: #f5f5f5; }
