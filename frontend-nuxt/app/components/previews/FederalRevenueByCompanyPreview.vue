@@ -231,6 +231,8 @@ const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
 const totalsByYear = computed(() => pivot.value?.totalsByYear || {})
 const truncated = computed(() => !!pivot.value?.truncated)
+// Total revenue across the companies currently shown in the table (sum of the visible rows' totals).
+const shownTotal = computed(() => groups.value.reduce((sum, g) => sum + (g.total || 0), 0))
 watch(pivot, () => nextTick(measureDimCol))
 
 // --- chart (reactive to the same filters) -------------------------------------
@@ -453,7 +455,8 @@ const colspanEmpty = computed(() => years.value.length + (grouped.value ? 2 : 1)
         <template v-if="pending">Loading…</template>
         <template v-else>
           <strong>{{ (pivot?.recordCount || 0).toLocaleString() }}</strong> records ·
-          <strong>{{ groups.length }}</strong> compan{{ groups.length === 1 ? 'y' : 'ies' }}
+          <strong>{{ groups.length }}</strong> compan{{ groups.length === 1 ? 'y' : 'ies' }} ·
+          <strong>{{ currency(shownTotal) }}</strong> total revenue
           <button type="button" class="usa-button usa-button--unstyled margin-left-2" :disabled="!groups.length" @click="downloadCsv">Download CSV</button>
         </template>
       </p>
