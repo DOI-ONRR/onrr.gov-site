@@ -212,7 +212,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
 }
 
 .journey-content :deep(.step-body) {
-  max-width: 60ch;
+  max-width: 80ch;
 }
 
 .journey-content :deep(.step-meta) {
