@@ -254,6 +254,10 @@ const { data: pivot, pending } = await useAsyncData(
 
 const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
+// Surface a total only when a single commodity is selected (mirrors the production preview). Revenue
+// is single-unit (dollars) so a total is always valid; we show it on a single-commodity drill-down.
+const singleCommodity = computed(() => filters.products.length === 1)
+const commodityTotal = computed(() => groups.value.reduce((sum, g) => sum + (g.total || 0), 0))
 watch(pivot, () => nextTick(measureDimCol))
 
 // --- sorting ------------------------------------------------------------------
@@ -508,7 +512,8 @@ if (datasetExportFilter) {
         <template v-if="pending">Loading…</template>
         <template v-else>
           <strong>{{ (pivot?.recordCount || 0).toLocaleString() }}</strong> records ·
-          <strong>{{ groups.length }}</strong> commodit{{ groups.length === 1 ? 'y' : 'ies' }}
+          <strong>{{ groups.length }}</strong> commodit{{ groups.length === 1 ? 'y' : 'ies' }}<template v-if="singleCommodity"> ·
+          <strong>{{ currency(commodityTotal) }}</strong> total revenue</template>
           <button
             type="button"
             class="usa-button usa-button--unstyled margin-left-2"

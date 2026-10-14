@@ -319,6 +319,10 @@ watch(yearOptions, (ys) => {
 
 const years = computed(() => pivot.value?.years || [])
 const groups = computed(() => pivot.value?.groups || [])
+// Total volume only makes sense when a single product is selected: production volumes are mixed
+// units (bbl/mcf/ton/…), so summing across products is meaningless — one product means one unit.
+const singleProduct = computed(() => filters.products.length === 1)
+const productTotal = computed(() => groups.value.reduce((sum, g) => sum + (g.total || 0), 0))
 watch(pivot, () => nextTick(measureDimCol))
 
 // --- sorting ------------------------------------------------------------------
@@ -611,7 +615,8 @@ if (datasetExport) {
         <template v-if="pending">Loading…</template>
         <template v-else>
           <strong>{{ (pivot?.recordCount || 0).toLocaleString() }}</strong> records ·
-          <strong>{{ groups.length }}</strong> product{{ groups.length === 1 ? '' : 's' }}
+          <strong>{{ groups.length }}</strong> product{{ groups.length === 1 ? '' : 's' }}<template v-if="singleProduct"> ·
+          <strong>{{ volume(productTotal) }}</strong> total volume</template>
           <button
             type="button"
             class="usa-button usa-button--unstyled margin-left-2"
