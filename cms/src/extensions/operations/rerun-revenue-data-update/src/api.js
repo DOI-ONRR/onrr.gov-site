@@ -11,6 +11,7 @@
 // Re-running is only safe where the loader is idempotent (true-up + monthly revenue, disbursement,
 // production/CY/FY all are); re-running a non-idempotent dataset can double-load.
 import { runDatasetUpdate } from '../../../hooks/revenue-data-update/src/processes/runUpdate.js';
+import { updateDatasetMetadata } from '../../../hooks/revenue-data-update/src/processes/updateDatasetMetadata.js';
 
 const asArray = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
 
@@ -42,6 +43,8 @@ export default {
 
 			const status = result.success ? 'success' : 'error';
 			await svc.updateOne(key, { result, status });
+			// Stamp coverage_end + dataset_last_updated on a successful rerun (same as the create hook).
+			await updateDatasetMetadata(item, ctx, result);
 			results.push({ key, status, dataset: item.dataset, period: item.period });
 		}
 

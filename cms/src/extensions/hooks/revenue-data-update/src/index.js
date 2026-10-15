@@ -1,4 +1,5 @@
 import { runDatasetUpdate } from './processes/runUpdate.js';
+import { updateDatasetMetadata } from './processes/updateDatasetMetadata.js';
 
 export default ({ filter, action }, { services, database, getSchema }) => {
 	const { ItemsService } = services;
@@ -29,6 +30,9 @@ export default ({ filter, action }, { services, database, getSchema }) => {
 			} catch (error) {
 				console.error('[Revenue Data Update] Failed to save result:', error.message);
 			}
+
+			// On success, stamp the dataset's coverage_end + dataset_last_updated (no-op otherwise).
+			await updateDatasetMetadata(meta.payload, context, result);
 		}
 	});
 };
