@@ -43,6 +43,23 @@ describe('loadFiscalYearDisbursement', () => {
     expect(l1.period).toBe('fy2024');
     expect(inserted.find((r) => r.location === 'L2').amount).toBeCloseTo(25, 2);
     expect(result.disbursementsCreated).toBe(2);
+    // This year already had FY rows → a refresh, not a newly-completed year.
+    expect(result.fiscalYearsCompleted || []).toEqual([]);
+  });
+
+  it('records a fiscal year whose final month was just processed (no prior FY rows)', async () => {
+    periodService.readByQuery
+      .mockResolvedValueOnce([{ id: 'fy2026', fiscal_year: 2026 }])
+      .mockResolvedValueOnce(twelveMonths);
+    disbursementService.readByQuery
+      .mockResolvedValueOnce([]) // no existing FY rows → newly completed
+      .mockResolvedValueOnce([{ location: 'L1', commodity: 'C1', fund: 'F1', amount: '100.00' }]);
+
+    await loadFiscalYearDisbursement(periodService, disbursementService, result);
+
+    expect(result.fiscalYearsCompleted).toEqual([2026]);
+    expect(disbursementService.deleteMany).not.toHaveBeenCalled(); // nothing to delete
+    expect(disbursementService.createMany).toHaveBeenCalled();
   });
 
   it('skips fiscal years without all 12 monthly periods (and does not delete/insert)', async () => {

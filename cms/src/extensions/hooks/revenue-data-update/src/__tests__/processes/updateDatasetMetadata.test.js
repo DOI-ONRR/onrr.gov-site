@@ -31,13 +31,16 @@ describe('helpers', () => {
 
 // Chainable knex-ish mock: database('dataset_metadata')…select() resolves to metadataRows;
 // database(fact)…max().first() resolves to the aggregate ({d} monthly, {y} yearly).
-function makeDb({ metadataRows = [], maxMonthly = null, maxYear = null } = {}) {
+function makeDb({ metadataRows = [], yearlyRows = [], maxMonthly = null, maxYear = null } = {}) {
   return (table) => {
     const b = {
-      where: () => b,
+      _yearly: false,
+      _max: null,
+      // The generic query filters period_type via whereIn; the yearly query via where('period_type','yearly').
+      where(field, val) { if (field === 'period_type' && val === 'yearly') b._yearly = true; return b; },
       whereIn: () => b,
       join: () => b,
-      select: () => Promise.resolve(metadataRows),
+      select: () => Promise.resolve(b._yearly ? yearlyRows : metadataRows),
       max(expr) { b._max = String(expr); return b; },
       first: () =>
         Promise.resolve(b._max && b._max.includes('calendar_year') ? (maxYear ? { y: maxYear } : {}) : (maxMonthly ? { d: maxMonthly } : {})),
@@ -95,5 +98,29 @@ describe('updateDatasetMetadata', () => {
     const database = makeDb({ metadataRows: [], maxMonthly: '2026-08-01' });
     await updateDatasetMetadata({ dataset: 'revenue', period: 'monthly' }, { database, services, schema: {}, accountability: {} }, ok());
     expect(updateMany).not.toHaveBeenCalled();
+  });
+
+  it('on a monthly load that completes a fiscal year, also stamps the yearly row at Sep 30 of the FY', async () => {
+    const database = makeDb({ metadataRows: [{ id: 'monthly-disb' }], yearlyRows: [{ id: 'yearly-disb' }], maxMonthly: '2026-09-01' });
+    await updateDatasetMetadata(
+      { dataset: 'disbursement', period: 'monthly' },
+      { database, services, schema: {}, accountability: {} },
+      ok({ fiscalYearsCompleted: [2026] }),
+    );
+    // monthly row: last day of the latest month
+    expect(updateMany).toHaveBeenCalledWith(['monthly-disb'], expect.objectContaining({ coverage_end: '2026-09-30' }));
+    // yearly row: the completed fiscal year's end
+    expect(updateMany).toHaveBeenCalledWith(['yearly-disb'], { dataset_last_updated: '2026-10-15T12:00:00.000Z', coverage_end: '2026-09-30' });
+  });
+
+  it('does not touch the yearly row on a monthly load that completes no fiscal year', async () => {
+    const database = makeDb({ metadataRows: [{ id: 'monthly-disb' }], yearlyRows: [{ id: 'yearly-disb' }], maxMonthly: '2026-08-01' });
+    await updateDatasetMetadata(
+      { dataset: 'disbursement', period: 'monthly' },
+      { database, services, schema: {}, accountability: {} },
+      ok(), // no fiscalYearsCompleted
+    );
+    expect(updateMany).toHaveBeenCalledWith(['monthly-disb'], expect.objectContaining({ coverage_end: '2026-08-31' }));
+    expect(updateMany).not.toHaveBeenCalledWith(['yearly-disb'], expect.anything());
   });
 });
