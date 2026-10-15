@@ -500,6 +500,15 @@ export async function loadFiscalYearDisbursement(periodService, disbursementServ
         fields: ['id'],
         limit: -1,
       });
+
+      // A complete fiscal year that has no FY rows yet is one whose final month was just processed
+      // (not merely a refresh of an already-summarized year). Record it so updateDatasetMetadata can
+      // stamp the yearly dataset_metadata row — its coverage ends at this fiscal year's end.
+      if (existingFy.length === 0) {
+        result.fiscalYearsCompleted = result.fiscalYearsCompleted || [];
+        result.fiscalYearsCompleted.push(fyPeriod.fiscal_year);
+      }
+
       for (const batch of chunk(existingFy.map((r) => r.id), INSERT_CHUNK_SIZE)) {
         await disbursementService.deleteMany(batch);
         await yieldToEventLoop();

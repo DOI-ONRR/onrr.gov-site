@@ -10,7 +10,11 @@
  * Which rows get stamped: dataset_metadata is matched by `source_collection` (the revenue_data_update
  * `dataset` value with hyphens swapped for underscores) AND `period_type`. A monthly load
  * (period `monthly`/`true-up`, or none) stamps rows set to `monthly` or `both`; a `calendar-year` /
- * `fiscal-year` load stamps rows set to `yearly` or `both`. Shared by the items.create hook and the
+ * `fiscal-year` load stamps rows set to `yearly` or `both`. Additionally, when a monthly load
+ * finalizes a fiscal year (its last month was just processed — `result.fiscalYearsCompleted`), the
+ * `yearly` row is stamped too, with coverage_end = that fiscal year's end (Sep 30). This is how
+ * disbursements — which load monthly + FY in one run — advance their yearly page (its `period_type`
+ * stays `yearly`), rather than on every monthly load. Shared by the items.create hook and the
  * "Rerun revenue data update" flow operation so both paths stamp identically.
  */
 
@@ -51,26 +55,46 @@ export async function updateDatasetMetadata(payload, context, result) {
   if (!sourceCollection) return;
 
   const grain = grainForPeriod(payload?.period);
+  const now = result.completedAt || new Date().toISOString();
 
   try {
+    const { ItemsService } = services;
+    const svc = new ItemsService('dataset_metadata', { schema, accountability });
+
+    // 1) Stamp the rows for this load's grain: a monthly load (monthly/true-up/none) -> 'monthly'/
+    //    'both'; a calendar-year/fiscal-year load -> 'yearly'/'both'. coverage_end = last day of the
+    //    latest Monthly period (Dec 31 of the latest calendar_year for the annual-only datasets).
     const rows = await database('dataset_metadata')
       .where('source_collection', sourceCollection)
       .whereIn('period_type', [grain, 'both'])
       .select('id');
-    if (!rows.length) return;
+    if (rows.length) {
+      const patch = { dataset_last_updated: now };
+      const coverageEnd = await coverageEndFor(database, sourceCollection);
+      if (coverageEnd) patch.coverage_end = coverageEnd;
+      await svc.updateMany(rows.map((r) => r.id), patch);
+      console.log(
+        `[Dataset metadata] Stamped ${rows.length} ${sourceCollection} row(s) (${grain}): ` +
+          `coverage_end=${patch.coverage_end ?? '(unchanged)'}, dataset_last_updated=${now}`,
+      );
+    }
 
-    const patch = { dataset_last_updated: result.completedAt || new Date().toISOString() };
-    const coverageEnd = await coverageEndFor(database, sourceCollection);
-    if (coverageEnd) patch.coverage_end = coverageEnd;
-
-    const { ItemsService } = services;
-    const svc = new ItemsService('dataset_metadata', { schema, accountability });
-    await svc.updateMany(rows.map((r) => r.id), patch);
-
-    console.log(
-      `[Dataset metadata] Stamped ${rows.length} ${sourceCollection} row(s) (${grain}): ` +
-        `coverage_end=${patch.coverage_end ?? '(unchanged)'}, dataset_last_updated=${patch.dataset_last_updated}`,
-    );
+    // 2) Fiscal-year completion: when a monthly load finalizes a fiscal year (its last month was just
+    //    processed — see loadFiscalYearDisbursement), also stamp the 'yearly' row, whose coverage
+    //    ends at that fiscal year's end (Sep 30). This is how disbursements — which load monthly + FY
+    //    in one run — advance their yearly page, instead of on every monthly load.
+    const completed = Array.isArray(result.fiscalYearsCompleted) ? result.fiscalYearsCompleted : [];
+    if (grain === 'monthly' && completed.length) {
+      const maxFy = Math.max(...completed);
+      const yearlyRows = await database('dataset_metadata')
+        .where('source_collection', sourceCollection)
+        .where('period_type', 'yearly')
+        .select('id');
+      if (yearlyRows.length) {
+        await svc.updateMany(yearlyRows.map((r) => r.id), { dataset_last_updated: now, coverage_end: `${maxFy}-09-30` });
+        console.log(`[Dataset metadata] FY ${maxFy} completed — stamped ${yearlyRows.length} yearly ${sourceCollection} row(s): coverage_end=${maxFy}-09-30`);
+      }
+    }
   } catch (error) {
     // A metadata stamp must never fail the load itself.
     console.error('[Dataset metadata] Failed to update:', error.message);
