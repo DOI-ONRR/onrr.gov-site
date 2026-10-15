@@ -127,6 +127,7 @@ fragment pageFields on pages {
     formats
     coverage_start
     coverage_end
+    dataset_last_updated
     publisher
     related_links
     about

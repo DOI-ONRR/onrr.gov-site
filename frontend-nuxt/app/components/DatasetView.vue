@@ -79,6 +79,15 @@ const coverage = computed(() => {
   return start || end || null
 })
 
+// dataset_last_updated is a timestamp; show it as "Mon D, YYYY" in UTC so it doesn't drift by tz.
+const lastUpdated = computed(() => {
+  const v = props.dataset.dataset_last_updated
+  if (!v) return null
+  const dt = new Date(v)
+  if (Number.isNaN(dt.getTime())) return null
+  return `${MONTHS[dt.getUTCMonth()]} ${dt.getUTCDate()}, ${dt.getUTCFullYear()}`
+})
+
 // `terms` is a M2M -> junction rows each wrapping a glossary_terms record.
 const terms = computed(() => {
   const rows = props.dataset.terms
@@ -174,7 +183,7 @@ async function copyApiUrl() {
           <dl class="usa-list usa-list--unstyled">
             <template v-if="dataset.update_frequency">
               <dt>Update frequency</dt>
-              <dd>{{ dataset.update_frequency }}</dd>
+              <dd>{{ dataset.update_frequency }}<template v-if="lastUpdated">, last updated {{ lastUpdated }}</template></dd>
             </template>
             <template v-if="coverage">
               <dt>Coverage</dt>
