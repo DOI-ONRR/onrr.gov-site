@@ -465,17 +465,16 @@ export async function processDisbursementUpdate(fileId, context) {
  * Summarizes fiscal-year disbursements by aggregating each complete fiscal year's monthly
  * disbursement rows onto that year's pre-existing 'Fiscal Year' period row.
  *
- * Mirrors nrrd's `summarize_fy_disbursements` procedure. Like the revenue FY loader in this
- * repo, it is create-once (skips a fiscal year that already has disbursements) rather than
- * delete-and-refresh; nrrd deletes the year's FY rows first and re-inserts. The 'Fiscal Year'
- * period rows are expected to already exist (this does not create them), and only complete
- * years (all 12 monthly periods present) are summarized.
+ * Mirrors nrrd's `summarize_fy_disbursements`: delete-and-refresh — each complete fiscal year's
+ * existing FY disbursement rows are cleared and recomputed, so corrected monthly data is reflected
+ * on a re-run. The 'Fiscal Year' period rows are expected to already exist (this does not create
+ * them), and only complete years (all 12 monthly periods present) are summarized.
  *
  * @param {Object} periodService - Directus ItemsService for period
  * @param {Object} disbursementService - Directus ItemsService for disbursement
  * @param {Object} result - Result object to update
  */
-async function loadFiscalYearDisbursement(periodService, disbursementService, result) {
+export async function loadFiscalYearDisbursement(periodService, disbursementService, result) {
   try {
     const fiscalYearPeriods = await periodService.readByQuery({
       filter: { type: { _eq: 'Fiscal Year' } },
@@ -484,14 +483,6 @@ async function loadFiscalYearDisbursement(periodService, disbursementService, re
     });
 
     for (const fyPeriod of fiscalYearPeriods) {
-      // Create-once: skip a fiscal year that already has disbursement rows.
-      const existing = await disbursementService.readByQuery({
-        filter: { period: { _eq: fyPeriod.id } },
-        fields: ['id'],
-        limit: 1,
-      });
-      if (existing.length > 0) continue;
-
       // Only summarize complete fiscal years (all 12 monthly periods present).
       const monthlyPeriods = await periodService.readByQuery({
         filter: { type: { _eq: 'Monthly' }, fiscal_year: { _eq: fyPeriod.fiscal_year } },
@@ -500,7 +491,23 @@ async function loadFiscalYearDisbursement(periodService, disbursementService, re
       });
       if (monthlyPeriods.length !== 12) continue;
 
-      // Aggregate the fiscal year's monthly disbursements by location + commodity + fund.
+      // Delete-and-refresh (mirrors summarize_fy_disbursements): clear this fiscal year's existing
+      // FY disbursement rows, then recompute, so corrected monthly data is reflected on a re-run.
+      // Read the ids (limit: -1) and deleteMany in chunks — deleteByQuery without limit: -1 only
+      // removes the default page (QUERY_LIMIT_DEFAULT).
+      const existingFy = await disbursementService.readByQuery({
+        filter: { period: { _eq: fyPeriod.id } },
+        fields: ['id'],
+        limit: -1,
+      });
+      for (const batch of chunk(existingFy.map((r) => r.id), INSERT_CHUNK_SIZE)) {
+        await disbursementService.deleteMany(batch);
+        await yieldToEventLoop();
+      }
+
+      // Aggregate the fiscal year's monthly disbursements by location + commodity + fund. amount is
+      // a decimal column, which pg returns as a STRING — coerce before summing, or `+=` concatenates
+      // ("100.00200.00") and the row fails to insert as numeric.
       const monthlyPeriodIds = monthlyPeriods.map((p) => p.id);
       const monthly = await disbursementService.readByQuery({
         filter: { period: { _in: monthlyPeriodIds } },
@@ -511,8 +518,9 @@ async function loadFiscalYearDisbursement(periodService, disbursementService, re
       const aggregate = new Map();
       for (const d of monthly) {
         const key = `${d.location}:${d.commodity}:${d.fund}`;
+        const amt = Number(d.amount) || 0;
         if (aggregate.has(key)) {
-          aggregate.get(key).amount += d.amount;
+          aggregate.get(key).amount += amt;
           aggregate.get(key).duplicate_no++;
         } else {
           aggregate.set(key, {
@@ -520,7 +528,7 @@ async function loadFiscalYearDisbursement(periodService, disbursementService, re
             period: fyPeriod.id,
             commodity: d.commodity,
             fund: d.fund,
-            amount: d.amount,
+            amount: amt,
             unit: 'dollars',
             unit_abbr: '$',
             duplicate_no: 1,
@@ -528,16 +536,14 @@ async function loadFiscalYearDisbursement(periodService, disbursementService, re
         }
       }
 
-      for (const fyDisbursement of aggregate.values()) {
+      for (const batch of chunk([...aggregate.values()], INSERT_CHUNK_SIZE)) {
         try {
-          await disbursementService.createOne(fyDisbursement);
-          result.disbursementsCreated++;
+          await disbursementService.createMany(batch);
+          result.disbursementsCreated += batch.length;
         } catch (error) {
-          result.errors.push({
-            type: 'fiscal_year_disbursement_insert',
-            message: error.message,
-          });
+          result.errors.push({ type: 'fiscal_year_disbursement_insert', message: error.message });
         }
+        await yieldToEventLoop();
       }
     }
   } catch (error) {
