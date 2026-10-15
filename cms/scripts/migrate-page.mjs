@@ -44,7 +44,13 @@ const out = (s) => process.stdout.write(s + '\n');
 
 // Extra O2M children to follow: parent collection → { table, fk }. M2A junctions are auto-
 // discovered; this is only for plain one-to-many content like a chart card's series.
-const FOLLOW_O2M = { chart_cards: [{ table: 'chart_series', fk: 'chart_card' }] };
+const FOLLOW_O2M = {
+  chart_cards: [{ table: 'chart_series', fk: 'chart_card' }],
+  pages: [
+    { table: 'journey_steps', fk: 'page' },
+    { table: 'journey_links', fk: 'page' },
+  ],
+};
 
 const client = new Client({
   connectionString: SOURCE_DSN,
