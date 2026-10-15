@@ -15561,12 +15561,12 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 10
       special: null
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
     schema:
       name: update_frequency
       table: dataset_metadata
@@ -15610,7 +15610,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 12
+      sort: 13
       special:
         - cast-json
       translations: null
@@ -15653,7 +15653,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 10
+      sort: 11
       special: null
       translations: null
       validation: null
@@ -15693,7 +15693,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 11
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -15733,7 +15733,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 13
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -15792,7 +15792,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 14
+      sort: 15
       special:
         - cast-json
       translations: null
@@ -15874,7 +15874,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 16
+      sort: 17
       special:
         - m2m
       translations: null
@@ -15899,7 +15899,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 15
+      sort: 16
       special:
         - o2m
       translations: null
@@ -15932,7 +15932,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 17
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -15975,7 +15975,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 19
+      sort: 20
       special:
         - files
       translations: null
@@ -16008,7 +16008,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 18
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -16048,7 +16048,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 20
+      sort: 21
       special:
         - cast-json
       translations: null
@@ -16090,7 +16090,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 26
+      sort: 25
       special:
         - o2m
       translations: null
@@ -16114,7 +16114,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 25
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -16155,7 +16155,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 28
+      sort: 27
       special:
         - m2o
       translations: null
@@ -16210,7 +16210,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 27
+      sort: 26
       special:
         - cast-json
       translations: null
@@ -16251,7 +16251,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 21
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -16307,7 +16307,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 24
+      sort: 23
       special:
         - cast-json
       translations: null
@@ -16320,6 +16320,93 @@ fields:
       data_type: json
       default_value: null
       max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: dataset_last_updated
+    type: dateTime
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: dataset_last_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 28
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: dataset_last_updated
+      table: dataset_metadata
+      data_type: timestamp without time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: dataset_metadata
+    field: period_type
+    type: string
+    meta:
+      collection: dataset_metadata
+      conditions: null
+      display: null
+      display_options: null
+      field: period_type
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Both
+            value: both
+          - text: Monthly
+            value: monthly
+          - text: Yearly
+            value: yearly
+      readonly: false
+      required: false
+      searchable: true
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: period_type
+      table: dataset_metadata
+      data_type: character varying
+      default_value: both
+      max_length: 255
       numeric_precision: null
       numeric_scale: null
       is_nullable: true
