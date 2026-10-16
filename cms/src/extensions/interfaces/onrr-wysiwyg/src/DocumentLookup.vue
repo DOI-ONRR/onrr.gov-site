@@ -25,12 +25,25 @@ const api = useApi();
 const config = {
   selector: "#documentLookup",
   wrapper: false,
+  // Only query once there are a few characters, and coalesce keystrokes, so we issue far
+  // fewer requests. Besides being lighter on the DB, this means the CMS pressure limiter
+  // (which sheds requests with a transient 503 "Under pressure." when the instance is
+  // momentarily busy) has far fewer keystroke requests to catch.
+  threshold: 3,
+  debounce: 300,
   data: {
     src: async (searchTerm) => {
-      const { data } = await api.get('/link-autocomplete', { params: { term: searchTerm } });
-      // Support either `{ items: [...] }` or `{ data: { items: [...] } }` from the endpoint
-      const items = Array.isArray(data?.items) ? data.items : Array.isArray(data?.data?.items) ? data.data.items : [];
-      return items;
+      try {
+        const { data } = await api.get('/link-autocomplete', { params: { term: searchTerm } });
+        // Support either `{ items: [...] }` or `{ data: { items: [...] } }` from the endpoint
+        return Array.isArray(data?.items) ? data.items : Array.isArray(data?.data?.items) ? data.data.items : [];
+      } catch (error) {
+        // A shed request (503) or any transient failure should just yield no results for
+        // this keystroke rather than surfacing as an uncaught promise rejection; the next
+        // (debounced) keystroke re-queries naturally.
+        console.warn('[DocumentLookup] link-autocomplete lookup failed:', error?.message || error);
+        return [];
+      }
     },
     keys: ['name', 'href']
   },
