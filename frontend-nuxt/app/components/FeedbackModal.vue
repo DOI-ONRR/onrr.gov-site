@@ -71,7 +71,7 @@
             </fieldset>
             <ul class="usa-button-group">
               <li class="usa-button-group__item">
-                <button type="submit" class="usa-button" :disabled="status === 'submitting'">
+                <button type="submit" class="usa-button" :disabled="!helpful || status === 'submitting'">
                   {{ status === 'submitting' ? 'Submitting…' : 'Submit' }}
                 </button>
               </li>
