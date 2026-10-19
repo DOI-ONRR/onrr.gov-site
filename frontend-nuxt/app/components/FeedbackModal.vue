@@ -146,6 +146,7 @@ async function submit() {
         submission: {
           answer_01: helpful.value,
           answer_02: comments.value,
+          answer_03: window.location.pathname + window.location.search, // current path incl. query string
           referer: document.referrer,
           hostname: window.location.hostname,
           page: window.location.pathname,
