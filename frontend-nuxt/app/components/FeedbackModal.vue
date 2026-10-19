@@ -121,6 +121,8 @@ const errorMessage = ref('')
 const successHeading = ref('Success')
 const successText = ref('Thank you. Your feedback has been received.')
 
+const { trackEvent } = useAnalytics()
+
 function resetForm() {
   helpful.value = ''
   comments.value = ''
@@ -162,6 +164,12 @@ async function submit() {
     if (form?.success_text_heading) successHeading.value = form.success_text_heading
     if (form?.success_text) successText.value = form.success_text
     status.value = 'success'
+    // Custom analytics event (no free-text — avoid sending PII to GTM/GA).
+    trackEvent('feedback_submit', {
+      feedback_helpful: helpful.value,
+      feedback_has_comment: comments.value.trim().length > 0,
+      page_path: window.location.pathname + window.location.search,
+    })
   } catch {
     status.value = 'error'
     errorMessage.value = 'Sorry, your feedback could not be sent. Please try again.'
