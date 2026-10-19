@@ -21,8 +21,8 @@
           <!-- Submitted: success confirmation (mirrors the Touchpoints "received" message). -->
           <div v-if="status === 'success'" class="usa-alert usa-alert--success" role="status">
             <div class="usa-alert__body">
-              <h3 class="usa-alert__heading">Thank you</h3>
-              <p class="usa-alert__text">Your feedback has been received.</p>
+              <h3 class="usa-alert__heading">{{ successHeading }}</h3>
+              <p class="usa-alert__text">{{ successText }}</p>
             </div>
           </div>
 
@@ -117,6 +117,10 @@ const comments = ref('') //             -> answer_02
 const status = ref('idle') // 'idle' | 'submitting' | 'success' | 'error'
 const errorMessage = ref('')
 
+// Confirmation copy — defaults, overwritten from the Touchpoints response (form.success_*).
+const successHeading = ref('Success')
+const successText = ref('Thank you. Your feedback has been received.')
+
 function resetForm() {
   helpful.value = ''
   comments.value = ''
@@ -152,6 +156,10 @@ async function submit() {
       }),
     })
     if (!res.ok) throw new Error(`Touchpoints responded ${res.status}`)
+    // Use the confirmation copy configured in Touchpoints, falling back to our defaults.
+    const form = await res.json().then((d) => d?.submission?.form).catch(() => null)
+    if (form?.success_text_heading) successHeading.value = form.success_text_heading
+    if (form?.success_text) successText.value = form.success_text
     status.value = 'success'
   } catch {
     status.value = 'error'
