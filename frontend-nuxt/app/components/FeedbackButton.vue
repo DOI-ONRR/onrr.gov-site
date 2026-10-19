@@ -3,9 +3,12 @@
     type="button"
     class="usa-button usa-button--outline feedback-button"
     :style="{ bottom }"
+    @click="showFeedback = true"
   >
     Is this page helpful?
   </button>
+
+  <FeedbackModal v-model:open="showFeedback" />
 </template>
 
 <script setup>
@@ -18,6 +21,9 @@ const GAP_REM = 2
 // Inline `bottom` overrides the CSS default once mounted; the SCSS keeps a sane
 // server-rendered / no-JS value.
 const bottom = ref(`${GAP_REM}rem`)
+
+// Controls the feedback modal's visibility (v-model:open on <FeedbackModal>).
+const showFeedback = ref(false)
 
 let footerEl = null
 let ticking = false
