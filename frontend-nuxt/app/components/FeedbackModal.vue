@@ -18,9 +18,68 @@
           <h2 id="feedback-modal-heading" class="usa-modal__heading">
             Is this page helpful?
           </h2>
-          <div class="usa-prose">
-            <p>We&rsquo;d love your feedback about this page.</p>
+          <!-- Submitted: success confirmation (mirrors the Touchpoints "received" message). -->
+          <div v-if="status === 'success'" class="usa-alert usa-alert--success" role="status">
+            <div class="usa-alert__body">
+              <h3 class="usa-alert__heading">Thank you</h3>
+              <p class="usa-alert__text">Your feedback has been received.</p>
+            </div>
           </div>
+
+          <form v-else class="usa-form" @submit.prevent="submit">
+            <fieldset class="usa-fieldset">
+              <legend class="usa-legend">We'd love your feedback about this page.</legend>
+
+              <div v-if="status === 'error'" class="usa-alert usa-alert--error usa-alert--slim margin-bottom-2" role="alert">
+                <div class="usa-alert__body">
+                  <p class="usa-alert__text">{{ errorMessage }}</p>
+                </div>
+              </div>
+
+              <div class="usa-radio">
+                <input
+                  class="usa-radio__input usa-radio__input--tile"
+                  id="feedback-yes"
+                  type="radio"
+                  name="feedback-helpful"
+                  value="Yes"
+                  v-model="helpful"
+                />
+                <label class="usa-radio__label" for="feedback-yes">Yes</label>
+              </div>
+              <div class="usa-radio">
+                <input
+                  class="usa-radio__input usa-radio__input--tile"
+                  id="feedback-no"
+                  type="radio"
+                  name="feedback-helpful"
+                  value="No"
+                  v-model="helpful"
+                />
+                <label class="usa-radio__label" for="feedback-no">No</label>
+              </div>
+
+              <label class="usa-label margin-bottom-1" for="feedback-comments">Optional comments</label>
+              <textarea
+                class="usa-textarea width-full height-card"
+                id="feedback-comments"
+                name="feedback-comments"
+                maxlength="10000"
+                v-model="comments"
+              ></textarea>
+              <span class="usa-hint font-ui-2xs">Please do not include any personally identifiable information.</span>
+            </fieldset>
+            <ul class="usa-button-group">
+              <li class="usa-button-group__item">
+                <button type="submit" class="usa-button" :disabled="status === 'submitting'">
+                  {{ status === 'submitting' ? 'Submitting…' : 'Submit' }}
+                </button>
+              </li>
+              <li class="usa-button-group__item">
+                <button type="button" class="usa-button usa-button--outline" @click="requestClose">Cancel</button>
+              </li>
+            </ul>
+          </form>
         </div>
         <button
           type="button"
@@ -28,8 +87,8 @@
           aria-label="Close this window"
           @click="requestClose"
         >
-          <svg class="usa-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+          <svg class="usa-icon" aria-hidden="true" focusable="false" role="img">
+            <use href="/uswds/img/sprite.svg#close"></use>
           </svg>
         </button>
       </div>
@@ -48,12 +107,65 @@ const emit = defineEmits(['update:open'])
 
 const dialogEl = ref(null)
 
+// Google Touchpoints "Is this page helpful?" form (id 2dcadeaf). The legacy site embedded
+// the Touchpoints widget (/2dcadeaf.js) and let it POST; here we submit our own modal form
+// to the same endpoint with the payload that widget's ajaxPost builds.
+const TOUCHPOINTS_URL = 'https://touchpoints.app.cloud.gov/touchpoints/2dcadeaf/submissions.json'
+
+const helpful = ref('') // 'Yes' | 'No' -> answer_01
+const comments = ref('') //             -> answer_02
+const status = ref('idle') // 'idle' | 'submitting' | 'success' | 'error'
+const errorMessage = ref('')
+
+function resetForm() {
+  helpful.value = ''
+  comments.value = ''
+  status.value = 'idle'
+  errorMessage.value = ''
+}
+
+async function submit() {
+  if (!helpful.value) {
+    status.value = 'error'
+    errorMessage.value = 'Please choose Yes or No.'
+    return
+  }
+  status.value = 'submitting'
+  errorMessage.value = ''
+  try {
+    // Matches the Touchpoints widget's ajaxPost: POST { submission: {...} } as JSON. The
+    // endpoint is cross-origin and accepts anonymous submissions (no cookies / CSRF token).
+    const res = await fetch(TOUCHPOINTS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        submission: {
+          answer_01: helpful.value,
+          answer_02: comments.value,
+          referer: document.referrer,
+          hostname: window.location.hostname,
+          page: window.location.pathname,
+          location_code: null,
+          fba_directive: null,
+          language: 'en',
+        },
+      }),
+    })
+    if (!res.ok) throw new Error(`Touchpoints responded ${res.status}`)
+    status.value = 'success'
+  } catch {
+    status.value = 'error'
+    errorMessage.value = 'Sorry, your feedback could not be sent. Please try again.'
+  }
+}
+
 // Reflect the `open` prop onto the real <dialog>. Guarded against redundant calls so the
 // watch <-> emit round-trip can't double-toggle.
 function sync(open) {
   const dlg = dialogEl.value
   if (!dlg) return
   if (open && !dlg.open) {
+    resetForm() // start each session fresh (clears a prior success/error state)
     dlg.showModal()
     document.body.style.overflow = 'hidden' // lock background scroll while open
   } else if (!open && dlg.open) {
@@ -99,5 +211,16 @@ onBeforeUnmount(() => {
 
 .feedback-dialog::backdrop {
   background: rgba(0, 0, 0, 0.7);
+}
+
+/*
+  Keep the footer buttons at their natural height. The modal (.usa-modal__main) raises the
+  inherited line-height, which inflates the line box that each inline-flex .usa-button sits in,
+  making the .usa-button-group__item ~63px tall. The button group's equalize rules
+  (align-items: stretch + .usa-button-group__item .usa-button { height: 100% }) then stretch the
+  buttons to that height. Opting out of height: 100% lets them size to their own content.
+*/
+.usa-button-group .usa-button {
+  height: auto;
 }
 </style>
