@@ -440,6 +440,7 @@ function downloadCsv() {
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
   a.download = `${periodParam.value}-production.csv`
+  trackDatasetDownload(route, 'preview_csv')
   a.click()
   URL.revokeObjectURL(a.href)
 }
