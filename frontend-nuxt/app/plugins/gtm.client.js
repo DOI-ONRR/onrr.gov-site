@@ -43,4 +43,47 @@ export default defineNuxtPlugin((nuxtApp) => {
       firstView = false
     }))
   })
+
+  // File downloads anywhere on the site (PDFs, CSVs, spreadsheets, …). One delegated click
+  // listener covers every page — including links inside CMS WYSIWYG content (press releases,
+  // reporter letters, /document/<name>.pdf) that no component instruments. Emits a `file_download`
+  // event with GA4's standard params so it slots straight into GA4's file-download reporting.
+  //
+  // This deliberately does NOT fire for dataset downloads: those URLs are extension-less
+  // (/charts/<ds>/export, /items/<t>?export=csv, /assets/<id>?download, blob:) and carry no
+  // download attribute, so they never match here and stay owned by dataset_download. We also
+  // don't match on the `?download` query (that's the curated-file dataset card) to keep it that way.
+  const FILE_EXTENSIONS = new Set([
+    'pdf', 'csv', 'xls', 'xlsx', 'xlsm', 'doc', 'docx', 'ppt', 'pptx',
+    'txt', 'rtf', 'zip', '7z', 'gz', 'xml', 'json',
+  ])
+  document.addEventListener(
+    'click',
+    (e) => {
+      // Ignore modified clicks handled by the browser's own open-in-new-tab/save behavior path;
+      // we still track plain left-clicks, which is where downloads overwhelmingly happen.
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      const a = e.target?.closest?.('a[href]')
+      if (!a) return
+      let url
+      try { url = new URL(a.href, location.href) } catch { return }
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return // skip mailto:/tel:/blob:/data:
+
+      const segment = decodeURIComponent(url.pathname.split('/').pop() || '')
+      const ext = segment.includes('.') ? segment.split('.').pop().toLowerCase() : ''
+      const isDoc = url.pathname.startsWith('/document/') // CMS document endpoint
+      const isFile = FILE_EXTENSIONS.has(ext) || isDoc || a.hasAttribute('download')
+      if (!isFile) return
+
+      window.dataLayer.push({
+        event: 'file_download',
+        file_name: segment || url.pathname,
+        file_extension: ext,
+        link_url: url.href,
+        link_text: (a.textContent || '').trim().slice(0, 100),
+        page_path: router.currentRoute.value.fullPath,
+      })
+    },
+    true, // capture: run before any content handler that might stopPropagation
+  )
 })
