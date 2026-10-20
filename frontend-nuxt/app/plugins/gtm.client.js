@@ -6,9 +6,12 @@
 //
 // Page views: this is a single-page app, so we own page-view tracking via a `page_view`
 // dataLayer event. Nuxt's router afterEach fires for the initial (hydrated) route as well
-// as every in-app navigation, so one handler covers both. In GTM, trigger the pageview tag
-// on this `page_view` custom event (not the native All Pages trigger) to avoid double
-// counting. Custom events are pushed via the useAnalytics() composable.
+// as every in-app navigation, so one handler covers both. Each event carries a
+// `navigation_type`: `initial` for the first (landing) view, `spa` for in-app navigations.
+// In GTM, trigger the pageview tag on this `page_view` custom event (not the native All
+// Pages trigger). If this container is shared with a non-SPA app whose Google Tag already
+// sends an automatic pageview on load, condition the trigger on `navigation_type` equals
+// `spa` so the landing page isn't counted twice. Custom events go through useAnalytics().
 export default defineNuxtPlugin(() => {
   const { gtmId } = useRuntimeConfig().public
   if (!gtmId) return // analytics disabled (no container configured for this env)
@@ -22,14 +25,18 @@ export default defineNuxtPlugin(() => {
   script.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`
   document.head.appendChild(script)
 
-  // SPA page views on route change (the initial load is handled by the container itself).
+  // Page view on the initial (hydrated) route and every in-app navigation. The first fire
+  // is the landing view (navigation_type: 'initial'); the rest are SPA navigations ('spa').
   // Wait a tick so the new page's <title> (set via useHead) is in place before we read it.
+  let firstView = true
   useRouter().afterEach(async (to) => {
     await nextTick()
     window.dataLayer.push({
       event: 'page_view',
       page_path: to.fullPath,
       page_title: document.title,
+      navigation_type: firstView ? 'initial' : 'spa',
     })
+    firstView = false
   })
 })
