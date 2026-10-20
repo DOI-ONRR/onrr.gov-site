@@ -185,6 +185,8 @@ function sync(open) {
     resetForm() // start each session fresh (clears a prior success/error state)
     dlg.showModal()
     document.body.style.overflow = 'hidden' // lock background scroll while open
+    // Open signal — pair with feedback_submit to measure the open→submit completion rate.
+    trackEvent('feedback_open', { page_path: window.location.pathname + window.location.search })
   } else if (!open && dlg.open) {
     dlg.close()
   }

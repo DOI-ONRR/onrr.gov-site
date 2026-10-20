@@ -53,6 +53,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   // (/charts/<ds>/export, /items/<t>?export=csv, /assets/<id>?download, blob:) and carry no
   // download attribute, so they never match here and stay owned by dataset_download. We also
   // don't match on the `?download` query (that's the curated-file dataset card) to keep it that way.
+  // A link's registrable domain (last two labels, e.g. www.onrr.gov → onrr.gov). Good enough for
+  // the all-.gov link space here: it treats our own subdomains (data.onrr.gov) as internal while
+  // flagging real exits (search.usa.gov, pay.gov) as outbound.
+  const registrable = (host) => host.split('.').slice(-2).join('.')
   const FILE_EXTENSIONS = new Set([
     'pdf', 'csv', 'xls', 'xlsx', 'xlsm', 'doc', 'docx', 'ppt', 'pptx',
     'txt', 'rtf', 'zip', '7z', 'gz', 'xml', 'json',
@@ -61,7 +65,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     'click',
     (e) => {
       // Ignore modified clicks handled by the browser's own open-in-new-tab/save behavior path;
-      // we still track plain left-clicks, which is where downloads overwhelmingly happen.
+      // we still track plain left-clicks, which is where downloads/exits overwhelmingly happen.
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
       const a = e.target?.closest?.('a[href]')
       if (!a) return
@@ -73,16 +77,33 @@ export default defineNuxtPlugin((nuxtApp) => {
       const ext = segment.includes('.') ? segment.split('.').pop().toLowerCase() : ''
       const isDoc = url.pathname.startsWith('/document/') // CMS document endpoint
       const isFile = FILE_EXTENSIONS.has(ext) || isDoc || a.hasAttribute('download')
-      if (!isFile) return
+      const linkText = (a.textContent || '').trim().slice(0, 100)
 
-      window.dataLayer.push({
-        event: 'file_download',
-        file_name: segment || url.pathname,
-        file_extension: ext,
-        link_url: url.href,
-        link_text: (a.textContent || '').trim().slice(0, 100),
-        page_path: router.currentRoute.value.fullPath,
-      })
+      // File download takes precedence over outbound — a cross-domain PDF is still best counted as
+      // a file_download — so the two events stay mutually exclusive (no double-fire on one click).
+      if (isFile) {
+        window.dataLayer.push({
+          event: 'file_download',
+          file_name: segment || url.pathname,
+          file_extension: ext,
+          link_url: url.href,
+          link_text: linkText,
+          page_path: router.currentRoute.value.fullPath,
+        })
+        return
+      }
+
+      // Outbound click: a link that leaves ONRR's own domains (report & pay, other agencies,
+      // Search.gov results, etc.) — exits that no page_view would ever capture.
+      if (registrable(url.hostname) !== registrable(location.hostname)) {
+        window.dataLayer.push({
+          event: 'outbound_click',
+          link_url: url.href,
+          link_domain: url.hostname,
+          link_text: linkText,
+          page_path: router.currentRoute.value.fullPath,
+        })
+      }
     },
     true, // capture: run before any content handler that might stopPropagation
   )

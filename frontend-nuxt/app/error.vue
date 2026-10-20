@@ -17,6 +17,18 @@ const code = computed(() => props.error?.statusCode)
 const is404 = computed(() => code.value === 404)
 const is503 = computed(() => code.value === 503)
 
+// Report 404s to analytics — the single best signal for broken internal links, dead CMS slugs,
+// and bad inbound links. Client-only (dataLayer lives in the browser); the attempted URL comes
+// from window.location so it's accurate even on a hard SSR-thrown 404. Only 404s, not outages.
+const { trackEvent } = useAnalytics()
+onMounted(() => {
+  if (!is404.value) return
+  trackEvent('page_not_found', {
+    page_path: window.location.pathname + window.location.search,
+    referrer: document.referrer || undefined,
+  })
+})
+
 const heading = computed(() => {
   if (is404.value) return 'Page not found'
   if (is503.value) return 'Service temporarily unavailable'

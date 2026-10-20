@@ -9,6 +9,7 @@
     action="https://search.usa.gov/search"
     accept-charset="UTF-8"
     method="get"
+    @submit="onSubmit"
   >
     <input type="hidden" name="affiliate" value="onrr.gov">
     <label class="usa-sr-only" :for="inputId">Search ONRR.gov</label>
@@ -34,6 +35,18 @@
 defineProps({
   inputId: { type: String, default: 'search-field' },
 })
+
+// Search navigates off-site to Search.gov, so the submit is our only chance to record it — and
+// "what people search for" is a direct content-gap signal. We don't preventDefault; the native
+// GET proceeds and the synchronous dataLayer push lands first. A `search` event with
+// `search_term` is GA4's recommended shape (search_term is a built-in GA4 dimension).
+const { trackEvent } = useAnalytics()
+const route = useRoute()
+function onSubmit(e) {
+  const term = (e.target?.query?.value || '').trim()
+  if (!term) return // empty submit — nothing to record
+  trackEvent('search', { search_term: term, page_path: route.fullPath })
+}
 </script>
 
 <style lang="scss" scoped>
