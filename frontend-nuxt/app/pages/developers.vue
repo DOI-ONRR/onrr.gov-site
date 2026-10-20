@@ -15,7 +15,8 @@
 const { dataApiBase } = useRuntimeConfig().public
 
 useHead({
-  title: 'Data API — ONRR',
+  // The "| ONRR" suffix is added by the global titleTemplate in app.vue.
+  title: 'Data API',
   meta: [
     {
       name: 'description',

@@ -8,6 +8,15 @@ const { data, error } = await useAsyncQuery(getPageBySlug, { slug: null })
 throwOnCmsError(error)
 const page = computed(() => data.value?.page?.[0])
 
+// Home: use the CMS meta_title if set, else fall back to the org name (via app.vue's
+// titleTemplate) rather than "Home".
+useHead({
+  title: () => page.value?.meta_title || null,
+})
+useSeoMeta({
+  description: () => page.value?.meta_description || null,
+})
+
 const heroTitle = computed(
   () => page.value?.hero_title || '',
 )

@@ -48,6 +48,19 @@ if (!page.value && !fallbackTopic.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
+// Document title (SEO + analytics page_title): CMS meta_title or the page title; the org
+// suffix comes from the global titleTemplate in app.vue. The contact-topic fallback uses
+// the topic name.
+useHead({
+  title: () =>
+    page.value?.meta_title ||
+    page.value?.title ||
+    (fallbackTopic.value ? `${fallbackTopic.value.title} contacts` : null),
+})
+useSeoMeta({
+  description: () => page.value?.meta_description || null,
+})
+
 // A page with an associated dataset_metadata record renders as a dataset page
 // (DatasetView) instead of the standard page_blocks layout — and drops the sidenav.
 const isDataset = computed(() => !!page.value?.dataset_metadata)

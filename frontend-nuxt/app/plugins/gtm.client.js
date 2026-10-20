@@ -12,7 +12,7 @@
 // Pages trigger). If this container is shared with a non-SPA app whose Google Tag already
 // sends an automatic pageview on load, condition the trigger on `navigation_type` equals
 // `spa` so the landing page isn't counted twice. Custom events go through useAnalytics().
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((nuxtApp) => {
   const { gtmId } = useRuntimeConfig().public
   if (!gtmId) return // analytics disabled (no container configured for this env)
 
@@ -27,16 +27,20 @@ export default defineNuxtPlugin(() => {
 
   // Page view on the initial (hydrated) route and every in-app navigation. The first fire
   // is the landing view (navigation_type: 'initial'); the rest are SPA navigations ('spa').
-  // Wait a tick so the new page's <title> (set via useHead) is in place before we read it.
+  // `page:finish` fires after the new page has rendered, but useHead/unhead flushes the
+  // <title> to the DOM on a later animation frame — so we wait two frames before reading
+  // document.title, otherwise a SPA navigation records the *previous* page's title.
+  const router = useRouter()
   let firstView = true
-  useRouter().afterEach(async (to) => {
-    await nextTick()
-    window.dataLayer.push({
-      event: 'page_view',
-      page_path: to.fullPath,
-      page_title: document.title,
-      navigation_type: firstView ? 'initial' : 'spa',
-    })
-    firstView = false
+  nuxtApp.hook('page:finish', () => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      window.dataLayer.push({
+        event: 'page_view',
+        page_path: router.currentRoute.value.fullPath,
+        page_title: document.title,
+        navigation_type: firstView ? 'initial' : 'spa',
+      })
+      firstView = false
+    }))
   })
 })
