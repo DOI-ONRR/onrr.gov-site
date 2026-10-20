@@ -4,6 +4,7 @@ const { EventEmitter } = require('node:events');
 const {
   classifyRequest,
   hashClient,
+  datasetTag,
   buildLogRecord,
   buildGa4Payload,
   apiUsageMiddleware,
@@ -58,8 +59,19 @@ test('hashClient never emits the raw ip', () => {
   assert.match(h, /^[0-9a-f]{12}$/);
 });
 
+// --- datasetTag --------------------------------------------------------------
+test('datasetTag yields a single analyzer-safe token (underscores, no hyphens/colons)', () => {
+  assert.equal(datasetTag('revenue'), 'revenue');
+  assert.equal(datasetTag('federal-revenue-by-company'), 'federal_revenue_by_company');
+  assert.equal(datasetTag('Federal-Sales'), 'federal_sales'); // lowercased
+  assert.equal(datasetTag(''), 'index');     // API root
+  assert.equal(datasetTag(undefined), 'index');
+  // the resulting token has no characters the standard analyzer would split on
+  assert.doesNotMatch(datasetTag('federal-sales'), /[^a-z0-9_]/);
+});
+
 // --- buildLogRecord / buildGa4Payload ----------------------------------------
-test('buildLogRecord shapes the record and labels the index', () => {
+test('buildLogRecord shapes the record, labels the index, and emits search tags', () => {
   const rec = buildLogRecord({
     now: 0, dataset: '', via: 'host', method: 'GET', status: 200,
     durationMs: 12, bytes: 345, query: 'limit=5', ua: 'curl/8', client: 'abc123',
@@ -71,6 +83,15 @@ test('buildLogRecord shapes the record and labels the index', () => {
   assert.equal(rec.duration_ms, 12);
   assert.equal(rec.bytes, 345);
   assert.equal(rec.query, 'limit=5');
+  assert.equal(rec.tags, 'ds_index via_host st_200 m_get');
+});
+
+test('buildLogRecord tags normalize a hyphenated dataset into one token', () => {
+  const rec = buildLogRecord({
+    now: 0, dataset: 'federal-sales', via: 'alias', method: 'GET', status: 404,
+    durationMs: 1, bytes: 0, query: '', ua: '', client: 'x',
+  });
+  assert.equal(rec.tags, 'ds_federal_sales via_alias st_404 m_get');
 });
 
 test('buildGa4Payload keeps params low-cardinality and maps unknown client', () => {

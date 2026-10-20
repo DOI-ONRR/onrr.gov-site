@@ -61,7 +61,22 @@ function buildLogRecord({ now, dataset, via, method, status, durationMs, bytes, 
     query: query || '',
     ua: ua || '',
     client,
+    // Flat, single-token tags so OpenSearch full-text search can count by dimension precisely
+    // without JSON field parsing. Its standard analyzer keeps underscores inside a token but
+    // splits on `-`/`:`/`"`/space, so each `ds_…`/`via_…`/`st_…`/`m_…` is one searchable term that
+    // can't collide with query-string content. In Discover: count a dataset with
+    // `@message: "ds_revenue"`, errors with `st_503`, or combine (`ds_revenue st_404`); pick
+    // @timestamp → Visualize for a per-dataset count over time. Dataset names are normalized to
+    // alphanumerics+underscore (e.g. federal-sales → ds_federal_sales) so they stay one token.
+    tags: `ds_${datasetTag(dataset)} via_${via} st_${status} m_${String(method || '').toLowerCase()}`,
   };
+}
+
+// Normalize a dataset name into a single analyzer-safe token body (lowercase, non-alphanumerics
+// collapsed to underscore). Empty (the API index) becomes 'index'.
+function datasetTag(dataset) {
+  const t = String(dataset || 'index').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+  return t || 'index';
 }
 
 // The GA4 Measurement Protocol body. Params are kept low-cardinality (no raw query string) so the
@@ -170,4 +185,4 @@ function apiUsageMiddleware(opts = {}) {
   };
 }
 
-module.exports = { classifyRequest, hashClient, buildLogRecord, buildGa4Payload, sendGa4, apiUsageMiddleware };
+module.exports = { classifyRequest, hashClient, datasetTag, buildLogRecord, buildGa4Payload, sendGa4, apiUsageMiddleware };
