@@ -14,6 +14,7 @@ const INSERT_CHUNK_SIZE = 500;
 const YIELD_EVERY = 500;
 import {
   transformRevenueRecord,
+  parseRevenueAmount,
   summarizeNativeAmericanRevenue,
   buildPeriodRecords,
   buildLocationRecord,
@@ -56,13 +57,24 @@ export async function processRevenueUpdate(fileId, context, options = {}) {
     // Step 3 - Transform each record using revenue transformers
     const transformedRecords = [];
     let transformCount = 0;
-    for (const record of records) {
-      let transformed = transformRevenueRecord(record);
+    for (let idx = 0; idx < records.length; idx++) {
+      let transformed = transformRevenueRecord(records[idx]);
 
-      // Skip records filtered out by transformations
+      // Skip records filtered out by transformations (e.g. an empty / all-comma line)
       if (transformed === null) {
         result.recordsSkipped++;
         continue;
+      }
+
+      // Reject string-formatted amounts (e.g. "$8,722.00") by failing the whole load with a
+      // clear message, rather than letting parseFloat produce NaN and corrupt the fact table.
+      // This runs before any inserts, so a bad file writes nothing. Normalizing here (grouping
+      // commas stripped) also keeps the downstream summarize/insert math consistent. Empty rows
+      // are filtered out above, so a blank amount never reaches here.
+      try {
+        transformed.revenue = String(parseRevenueAmount(transformed.revenue));
+      } catch (err) {
+        throw new Error(`Revenue file rejected (record ${idx + 1}): ${err.message}`);
       }
 
       transformedRecords.push(transformed);

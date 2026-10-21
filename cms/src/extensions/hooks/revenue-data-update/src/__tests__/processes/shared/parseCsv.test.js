@@ -60,6 +60,22 @@ describe('parseCsv', async () => {
     expect(result).toHaveLength(2);
   });
 
+  it('should skip all-comma lines (every field empty)', async () => {
+    const csv = 'Name,Age,City\nJohn,30,NYC\n,,\nJane,25,LA';
+    const result = await parseCsv(csv);
+
+    expect(result).toHaveLength(2);
+    expect(result[0]).toEqual({ Name: 'John', Age: '30', City: 'NYC' });
+    expect(result[1]).toEqual({ Name: 'Jane', Age: '25', City: 'LA' });
+  });
+
+  it('should skip an all-comma line with more commas than headers', async () => {
+    const csv = 'Name,Age\nJohn,30\n,,,,,,\nJane,25';
+    const result = await parseCsv(csv);
+
+    expect(result).toHaveLength(2);
+  });
+
   it('should handle newlines within quoted fields', async () => {
     const csv = 'Name,Address\nJohn,"123 Main St\nApt 4"';
     const result = await parseCsv(csv);

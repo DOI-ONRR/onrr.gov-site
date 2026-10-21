@@ -164,6 +164,63 @@ describe('processRevenueUpdate', () => {
     });
   });
 
+  describe('amount validation', () => {
+    const recordWithRevenue = (revenue) => ({
+      accept_date: '1/1/2026',
+      land_class_code: 'Federal',
+      land_category_code_desc: 'Offshore',
+      state: '',
+      county_code_desc: '',
+      fips_code: '',
+      agency_state_region_code_desc: 'GULF OF AMERICA',
+      revenue_type: 'Royalties',
+      mineral_production_code_desc: 'Oil & Gas',
+      commodity: 'Oil',
+      product_code_desc: 'Oil',
+      revenue,
+    });
+
+    it('rejects a string-formatted amount and fails with a clear message', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([recordWithRevenue('$8,722.00')]);
+
+      const result = await processRevenueUpdate('test-file-id', mockContext);
+
+      expect(result.success).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors[0].message).toMatch(/Invalid revenue amount "\$8,722\.00"/);
+      expect(result.errors[0].message).toMatch(/record 1/);
+    });
+
+    it('rejects before writing anything to the database', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([
+        recordWithRevenue('1000.00'),
+        recordWithRevenue('$8,722.00'),
+      ]);
+
+      const result = await processRevenueUpdate('test-file-id', mockContext);
+
+      expect(result.success).toBe(false);
+      expect(mockFundService.createOne).not.toHaveBeenCalled();
+      expect(mockLocationService.createOne).not.toHaveBeenCalled();
+      expect(mockPeriodService.createOne).not.toHaveBeenCalled();
+      expect(mockRevenueService.createMany).not.toHaveBeenCalled();
+    });
+
+    it('accepts a comma-grouped amount and normalizes it', async () => {
+      getFileContents.mockResolvedValue('');
+      parseCsv.mockReturnValue([recordWithRevenue('8,722.00')]);
+
+      const result = await processRevenueUpdate('test-file-id', mockContext);
+
+      expect(result.success).toBe(true);
+      const inserted = mockRevenueService.createMany.mock.calls.flatMap((c) => c[0]);
+      expect(inserted).toHaveLength(1);
+      expect(inserted[0].amount).toBe(8722);
+    });
+  });
+
   describe('Native American aggregation', () => {
     it('should aggregate Indian land class records', async () => {
       getFileContents.mockResolvedValue('');

@@ -38,8 +38,10 @@ export async function parseCsv(csvString, fieldMap = null) {
   for (let i = 1; i < lines.length; i++) {
     const values = parseLine(lines[i]);
 
-    // Skip empty lines
-    if (values.length === 0 || (values.length === 1 && values[0] === '')) {
+    // Skip blank lines — including an all-comma line (",,,,,,") that parses to several empty
+    // fields, not just a single empty value. (`[].every` is true, so a truly empty line is
+    // skipped too.) A row with no value in any column carries no data.
+    if (values.every((v) => v === '')) {
       continue;
     }
 
