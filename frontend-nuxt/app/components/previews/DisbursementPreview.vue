@@ -293,8 +293,13 @@ const urlQuery = computed(() => {
 useUrlFilterSync(() => urlQuery.value, ready, ['groupBy', 'fromYear', 'toYear', 'recipients', 'sources', 'states', 'commodities'])
 
 // --- pivot data ---------------------------------------------------------------
+// Key by grain: this component serves both the monthly and fiscal-year disbursement pages, so a
+// static key would make both pages share one useAsyncData entry — navigating between them leaves
+// the refresh/watch bound to the first page's instance, and the second page's filter changes stop
+// refetching. Keying by periodParam (like the options fetch above and the sibling previews) gives
+// each grain its own entry. See also prod-pivot / rev-pivot.
 const { data: pivot, pending } = await useAsyncData(
-  'disb-pivot',
+  `disb-pivot-${periodParam.value}`,
   async () => {
     if (!ready.value) return null
     const { query, empty } = filterQuery.value
