@@ -215,6 +215,13 @@ function measureDimCol() {
   dimW.value = max ? Math.ceil(max + 44) : 0
 }
 
+// The flat table's sticky first column can keep fallback-font row metrics on the first paint,
+// leaving its row rule a hair out of step with each row until something forces a repaint (any
+// re-layout — nav, zoom, a filter change — fixes it). Bump this key once web fonts settle to
+// trigger one clean tbody repaint on load, with no user interaction (see FederalSalesPreview /
+// FederalRevenueByCompanyPreview, which already do this).
+const tbodyKey = ref(0)
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
   if (theadRef.value) {
@@ -224,6 +231,10 @@ onMounted(() => {
     theadObserver.observe(theadRef.value)
   }
   measureDimCol()
+  // document.fonts.ready is already resolved when fonts are cached, so this fires immediately then.
+  if (import.meta.client && document.fonts?.ready) {
+    document.fonts.ready.then(() => { tbodyKey.value++; nextTick(measureDimCol) })
+  }
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
@@ -429,6 +440,7 @@ function downloadCsv() {
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
   a.download = `${periodParam.value}-production.csv`
+  trackDatasetDownload(route, 'preview_csv')
   a.click()
   URL.revokeObjectURL(a.href)
 }
@@ -657,7 +669,7 @@ if (datasetExport) {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody :key="tbodyKey">
           <tr v-if="!pending && !groups.length">
             <td :colspan="years.length + (grouped ? 2 : 1)">No records match the current filters.</td>
           </tr>
@@ -857,13 +869,18 @@ if (datasetExport) {
 .pivot .subtotal-label { font-weight: 700; }
 
 // --- Annual flat table (no breakout) ------------------------------------------
-// Use the separated border model for this table only. Product names wrap here, and in
-// border-collapse mode a wrapped (taller) cell drops its bottom border (a Chromium quirk);
-// separated borders paint per-cell and stay put. Scoped to `.pivot--flat` so the monthly
-// and disbursement tables keep border-collapse (their sticky-header seam fix depends on it).
+// Three real quirks here (all verified in-browser), so no single built-in border does the job:
+//  - `border-collapse: separate` mis-paints the sticky Product column's cell borders on any
+//    RE-LAYOUT (switching Period, or loading with ?period= pre-applied): rules drop / double.
+//  - `border-collapse: collapse` fixes that, but then a wrapped (taller) product cell drops its
+//    bottom border (a Chromium quirk — the reason `separate` was originally tried).
+//  - an inset `box-shadow` row rule survives both of those, but renders as 0/2px on HiDPI
+//    (Retina) displays, so it looks dropped/doubled there (while fine on a DPR-1 screen).
+// So stay collapsed (robust with the sticky column, like the grouped tables) and draw the row
+// rule as a pixel-snapped 1px ::after element on the cells (below). (_tables.scss' violet
+// border-bottom still draws the heavier 2px rule under the non-wrapping thead, left as-is.)
 .pivot--flat table {
-  border-collapse: inherit;
-  border-spacing: 0;
+  border-collapse: collapse;
 }
 
 // Product column sticks to the left as well, so the (often long) product name stays
@@ -884,7 +901,27 @@ if (datasetExport) {
   color: #1b1b1b;
 }
 .pivot--flat .prod-row > th,
-.pivot--flat .prod-row > td { background: #fff; }
+.pivot--flat .prod-row > td {
+  background: #fff;
+  border-bottom: 0;
+}
+// Row rule as a pixel-snapped 1px element. A real border-bottom drops on a wrapped cell under
+// collapse, and an inset box-shadow renders as 0/2px on HiDPI (Retina) displays — both verified
+// in-browser. An absolutely-positioned 1px child snaps to the device-pixel grid, so it stays
+// crisp while surviving wrapping, re-layout and horizontal scroll. Only the non-sticky year cells
+// need the positioning context; the sticky Product column (<th>) is already a positioned box.
+.pivot--flat .prod-row > td { position: relative; }
+.pivot--flat .prod-row > th::after,
+.pivot--flat .prod-row > td::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: $onrr-violet;
+  pointer-events: none;
+}
 .pivot--flat .prod-row.row-alt > th,
 .pivot--flat .prod-row.row-alt > td { background: #f5f5f5; }
 

@@ -6,6 +6,7 @@
  */
 
 import { ignoreEmptyRevenue } from './ignoreEmptyRevenue.js';
+import { parseRevenueAmount } from './parseRevenueAmount.js';
 import { sanitizeNulls } from './sanitizeNulls.js';
 import { sanitizeFipsCode } from './sanitizeFipsCode.js';
 import { transformCommodity } from './transformCommodity.js';
@@ -19,6 +20,7 @@ import { buildFundRecord } from './buildFundRecord.js';
 
 export {
   ignoreEmptyRevenue,
+  parseRevenueAmount,
   sanitizeNulls,
   sanitizeFipsCode,
   transformCommodity,

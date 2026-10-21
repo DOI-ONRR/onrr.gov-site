@@ -190,6 +190,13 @@ function measureDimCol() {
   dimW.value = max ? Math.ceil(max + 44) : 0
 }
 
+// The flat table's sticky first column can keep fallback-font row metrics on the first paint,
+// leaving its row rule a hair out of step with each row until something forces a repaint (any
+// re-layout — nav, zoom, a filter change — fixes it). Bump this key once web fonts settle to
+// trigger one clean tbody repaint on load, with no user interaction (see FederalSalesPreview /
+// FederalRevenueByCompanyPreview, which already do this).
+const tbodyKey = ref(0)
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
   if (theadRef.value) {
@@ -199,6 +206,10 @@ onMounted(() => {
     theadObserver.observe(theadRef.value)
   }
   measureDimCol()
+  // document.fonts.ready is already resolved when fonts are cached, so this fires immediately then.
+  if (import.meta.client && document.fonts?.ready) {
+    document.fonts.ready.then(() => { tbodyKey.value++; nextTick(measureDimCol) })
+  }
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
@@ -353,6 +364,7 @@ function downloadCsv() {
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
   a.download = `${periodParam.value}-revenue.csv`
+  trackDatasetDownload(route, 'preview_csv')
   a.click()
   URL.revokeObjectURL(a.href)
 }
@@ -554,7 +566,7 @@ if (datasetExportFilter) {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody :key="tbodyKey">
           <tr v-if="!pending && !groups.length">
             <td :colspan="years.length + (grouped ? 2 : 1)">No records match the current filters.</td>
           </tr>
@@ -753,9 +765,11 @@ if (datasetExportFilter) {
 .pivot .subtotal-label { font-weight: 700; }
 
 // --- Annual flat table --------------------------------------------------------
+// Collapsed border model with a pixel-snapped ::after row rule — see ProductionPreview for the
+// full rationale (separate mis-paints the sticky column on re-layout; collapse drops wrapped-cell
+// borders; an inset box-shadow drops/doubles on HiDPI/Retina).
 .pivot--flat table {
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
 }
 .pivot--flat .dim-col,
 .pivot--flat .dim-cell {
@@ -773,7 +787,25 @@ if (datasetExportFilter) {
   color: #1b1b1b;
 }
 .pivot--flat .prod-row > th,
-.pivot--flat .prod-row > td { background: #fff; }
+.pivot--flat .prod-row > td {
+  background: #fff;
+  border-bottom: 0;
+}
+// Row rule as a pixel-snapped 1px ::after (not border-bottom/box-shadow) — see ProductionPreview.
+// Only the non-sticky year cells need the positioning context; the sticky first column (<th>) is
+// already a positioned box.
+.pivot--flat .prod-row > td { position: relative; }
+.pivot--flat .prod-row > th::after,
+.pivot--flat .prod-row > td::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: $onrr-violet;
+  pointer-events: none;
+}
 .pivot--flat .prod-row.row-alt > th,
 .pivot--flat .prod-row.row-alt > td { background: #f5f5f5; }
 

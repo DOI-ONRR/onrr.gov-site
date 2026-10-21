@@ -9,7 +9,9 @@ const { data: menuData, error: menuError } = await useAsyncQuery(getMenuByLabel,
 })
 throwOnCmsError(menuError)
 
-</script> 
+useHead({ title: 'Revenue Data' })
+
+</script>
 
 <template>
   <section class="grid-container usa-section margin-top-4">

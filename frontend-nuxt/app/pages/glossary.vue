@@ -12,6 +12,8 @@ const { data, error } = await useAsyncQuery(getGlossaryTerms)
 throwOnCmsError(error)
 const terms = computed(() => data.value?.glossary_terms ?? [])
 
+useHead({ title: 'Glossary' })
+
 // Filter state.
 const query = ref('')
 const category = ref('')

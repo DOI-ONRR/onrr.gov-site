@@ -2,9 +2,20 @@ const express = require('express');
 const https = require('https');
 const { URL } = require('url');
 const { securityHeaders } = require('./security-headers');
+const { apiUsageMiddleware } = require('./api-analytics');
 
 const app = express();
 app.use(express.json());
+
+// Public data-API usage analytics (data.onrr.gov/<dataset> and onrr.gov/data/<dataset>). Logs one
+// structured JSON line per API request to stdout; also emits a GA4 Measurement Protocol event when
+// GA4_API_MEASUREMENT_ID + GA4_API_SECRET are set (use a separate GA4 property from the site's).
+// No-op for every non-data request, and fully guarded so it can't affect the proxied response.
+app.use(apiUsageMiddleware({
+  salt: process.env.API_USAGE_SALT,
+  measurementId: process.env.GA4_API_MEASUREMENT_ID,
+  apiSecret: process.env.GA4_API_SECRET,
+}));
 
 const CMS_HOST = process.env.CMS_HOST;
 const FRONTEND_HOST = process.env.FRONTEND_HOST;

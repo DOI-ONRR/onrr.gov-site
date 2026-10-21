@@ -84,6 +84,10 @@ export default defineNuxtConfig({
       // for the documented base URL and the "Run" example links. Override per-env with
       // NUXT_PUBLIC_DATA_API_BASE if the subdomain differs before DNS is live.
       dataApiBase: process.env.NUXT_PUBLIC_DATA_API_BASE || 'https://data.onrr.gov',
+      // Google Tag Manager container (GTM-XXXXXXX), read at RUNTIME so each env sets its
+      // own via NUXT_PUBLIC_GTM_ID (none in dev/local). Empty = analytics disabled; see
+      // app/plugins/gtm.client.js.
+      gtmId: process.env.NUXT_PUBLIC_GTM_ID || '',
     },
   },
 })

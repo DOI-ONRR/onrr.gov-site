@@ -1,5 +1,5 @@
 <template>
-  <nav class="usa-nav">
+  <nav ref="navEl" class="usa-nav">
     <div class="navrow">
       <ul class="usa-nav__primary usa-accordion" aria-label="Primary site navigation">
         <li
@@ -110,6 +110,39 @@ function sectionColumns(item) {
 function toggle(id) {
   openMenuId.value = openMenuId.value === id ? null : id
 }
+
+const navEl = ref(null)
+
+// Close the open megamenu and return focus to the button that opened it, so a
+// keyboard user who pressed Escape lands back on the trigger (USWDS accordion behavior).
+function closeMenu() {
+  if (openMenuId.value === null) return
+  const opener = navEl.value?.querySelector('.usa-accordion__button[aria-expanded="true"]')
+  openMenuId.value = null
+  opener?.focus()
+}
+
+// Click anywhere outside the nav closes the open megamenu. The toggle buttons and the
+// submenu panel live inside <nav>, so their clicks are ignored here (the trigger's own
+// @click handles toggling); only a click in the page outside the nav closes it.
+function onDocumentClick(event) {
+  if (openMenuId.value === null) return
+  if (!navEl.value?.contains(event.target)) openMenuId.value = null
+}
+
+function onDocumentKeydown(event) {
+  if (event.key === 'Escape') closeMenu()
+}
+
+onMounted(() => {
+  document.addEventListener('click', onDocumentClick)
+  document.addEventListener('keydown', onDocumentKeydown)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onDocumentClick)
+  document.removeEventListener('keydown', onDocumentKeydown)
+})
 
 const route = useRoute()
 

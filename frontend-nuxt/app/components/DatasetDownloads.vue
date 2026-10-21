@@ -123,6 +123,14 @@ function humanSize(bytes) {
 
 // --- Card 3: filtered selection, published by the active preview --------------
 const previewExport = inject('datasetPreviewExport', ref(null))
+
+// --- Analytics: a download is the headline conversion on a dataset page -------
+// The cards are real <a href> file downloads, so a synchronous dataLayer push on click lands
+// before the browser starts the transfer. trackDatasetDownload (shared with the previews' in-table
+// CSV button) sends the same `dataset` slug useUrlFilterSync emits on dataset_filter, so the two
+// events join into a filter→download funnel per dataset.
+const route = useRoute()
+const trackDownload = (downloadType, fileFormat) => trackDatasetDownload(route, downloadType, fileFormat)
 </script>
 
 <template>
@@ -132,7 +140,7 @@ const previewExport = inject('datasetPreviewExport', ref(null))
       <div class="download-card padding-2">
         <h3 class="margin-top-0 font-heading-sm">Full dataset (CSV)</h3>
         <p class="dl-size">{{ recordCount ? `All ${recordCount.toLocaleString()} records` : 'All records' }}</p>
-        <a class="usa-button" :href="csvHref">Download CSV</a>
+        <a class="usa-button" :href="csvHref" @click="trackDownload('full_csv', 'csv')">Download CSV</a>
       </div>
     </div>
 
@@ -141,7 +149,7 @@ const previewExport = inject('datasetPreviewExport', ref(null))
       <div class="download-card padding-2">
         <h3 class="margin-top-0 font-heading-sm">Full dataset ({{ f.format || 'file' }})</h3>
         <p class="dl-size">All records with data dictionary{{ f.size ? ` · ${f.size}` : '' }}</p>
-        <a class="usa-button usa-button--outline" :href="f.href">Download {{ f.format || 'file' }}</a>
+        <a class="usa-button usa-button--outline" :href="f.href" @click="trackDownload('curated', f.format)">Download {{ f.format || 'file' }}</a>
       </div>
     </div>
 
@@ -154,6 +162,7 @@ const previewExport = inject('datasetPreviewExport', ref(null))
           v-if="previewExport.ready && previewExport.href"
           class="usa-button usa-button--outline"
           :href="previewExport.href"
+          @click="trackDownload('filtered_csv', 'csv')"
         >Download filtered CSV</a>
         <button v-else type="button" class="usa-button usa-button--outline" disabled>Download filtered CSV</button>
       </div>

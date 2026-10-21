@@ -341,6 +341,7 @@ function downloadCsv() {
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }))
   a.download = 'federal-sales.csv'
+  trackDatasetDownload(route, 'preview_csv')
   a.click()
   URL.revokeObjectURL(a.href)
 }
@@ -502,7 +503,7 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody :key="tbodyKey">
           <tr v-if="!pending && !groups.length">
             <td :colspan="colspanEmpty">No records match the current filters.</td>
           </tr>
@@ -676,9 +677,11 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
 .pivot .subtotal-label { font-weight: 700; }
 
 // --- Flat table ---------------------------------------------------------------
+// Collapsed border model with a pixel-snapped ::after row rule — see ProductionPreview for the
+// full rationale (separate mis-paints the sticky column on re-layout; collapse drops wrapped-cell
+// borders; an inset box-shadow drops/doubles on HiDPI/Retina).
 .pivot--flat table {
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
 }
 .pivot--flat .dim-col,
 .pivot--flat .dim-cell {
@@ -696,7 +699,25 @@ const colspanEmpty = computed(() => MEASURES.length + (grouped.value ? 2 : 1))
   color: #1b1b1b;
 }
 .pivot--flat .prod-row > th,
-.pivot--flat .prod-row > td { background: #fff; }
+.pivot--flat .prod-row > td {
+  background: #fff;
+  border-bottom: 0;
+}
+// Row rule as a pixel-snapped 1px ::after (not border-bottom/box-shadow) — see ProductionPreview.
+// Only the non-sticky year cells need the positioning context; the sticky first column (<th>) is
+// already a positioned box.
+.pivot--flat .prod-row > td { position: relative; }
+.pivot--flat .prod-row > th::after,
+.pivot--flat .prod-row > td::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: $onrr-violet;
+  pointer-events: none;
+}
 .pivot--flat .prod-row.row-alt > th,
 .pivot--flat .prod-row.row-alt > td { background: #f5f5f5; }
 

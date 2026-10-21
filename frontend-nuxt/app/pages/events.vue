@@ -5,6 +5,8 @@ const { data, error } = await useAsyncQuery(getEvents)
 throwOnCmsError(error)
 const events = computed(() => data.value?.events ?? [])
 
+useHead({ title: 'Events' })
+
 // The query already sorts by event_start_date; grouping preserves that order.
 const training = computed(() => events.value.filter((e) => e.event_category === 'reporter_training'))
 const outreach = computed(() => events.value.filter((e) => e.event_category === 'indian_outreach'))

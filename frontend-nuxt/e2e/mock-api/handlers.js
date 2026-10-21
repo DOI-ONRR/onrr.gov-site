@@ -16,6 +16,7 @@ import { productionYearlyPage, productionMonthlyPage, productionOptions, product
 import { revenuePage, revenueOptions, revenuePivot, revenueCount } from '../fixtures/revenue-preview.js'
 import { federalSalesPage, federalSalesOptions, federalSalesPivot, federalSalesCount, federalSalesTimeseries } from '../fixtures/federal-sales.js'
 import { federalRevenueByCompanyPage, federalRevenueByCompanyOptions, federalRevenueByCompanyPivot, federalRevenueByCompanyCount } from '../fixtures/federal-revenue-by-company.js'
+import { mainMenu } from '../fixtures/navigation.js'
 
 /**
  * Each handler has:
@@ -64,6 +65,12 @@ export const handlers = [
   {
     match: (query, op) => op === 'GetMenuByLabel',
     resolve: () => revenueDataFixtures.menuData,
+  },
+
+  // Primary navigation (GetMenus, filtered to menu: 'main') — NavigationMenu.vue.
+  {
+    match: (query, op) => op === 'GetMenus',
+    resolve: () => mainMenu,
   },
 
   // Glossary terms (glossary page)

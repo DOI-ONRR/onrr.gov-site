@@ -93,7 +93,9 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
                 <a v-if="step.url" :href="step.url" class="usa-link step-link">{{ step.label }}</a>
                 <template v-else>{{ step.label }}</template>
               </h2>
-              <p v-if="step.body" class="step-body margin-top-05">{{ step.body }}</p>
+              <p v-if="step.body" 
+                class="step-body margin-top-05"
+                v-html="sanitizeHtml(resolveImages(step.body))"></p>
               <p v-if="step.meta" class="step-meta">{{ step.meta }}</p>
             </li>
           </ol>
@@ -210,7 +212,7 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
 }
 
 .journey-content :deep(.step-body) {
-  max-width: 60ch;
+  max-width: 80ch;
 }
 
 .journey-content :deep(.step-meta) {

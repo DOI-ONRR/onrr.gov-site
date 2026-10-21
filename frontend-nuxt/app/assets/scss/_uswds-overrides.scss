@@ -125,3 +125,7 @@
     padding: 0.6rem 0.9rem; height: auto; min-height: 0; }
   .navrow .usa-search { display: none; }
 }
+
+.usa-process-list__item {
+  max-width: 80ch !important;
+}

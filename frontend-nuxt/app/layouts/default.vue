@@ -21,6 +21,8 @@ import MastHead from '~/components/MastHead.vue';
 
     <SiteFooter />
   </div>
+
+  <FeedbackButton />
 </template>
 
 <style lang="scss" scoped>

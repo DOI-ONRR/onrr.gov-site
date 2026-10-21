@@ -17,6 +17,23 @@ const code = computed(() => props.error?.statusCode)
 const is404 = computed(() => code.value === 404)
 const is503 = computed(() => code.value === 503)
 
+// Report errors to analytics. Client-only (dataLayer lives in the browser); the URL comes from
+// window.location so it's accurate even on a hard SSR-thrown error. Two distinct events:
+//   - page_not_found (404): content signal — broken internal links, dead CMS slugs, bad inbound.
+//   - page_error (503/500/other): user-impact signal — how many sessions hit an outage, and where
+//     (e.g. "how many users were affected by last week's CMS outage"). NOTE: this is a dashboard
+//     metric, not an outage alarm — it lags, and it only fires when our own error page renders
+//     (a CloudFront/route-service outage never runs this JS), so it undercounts total downtime.
+const { trackEvent } = useAnalytics()
+onMounted(() => {
+  const page_path = window.location.pathname + window.location.search
+  if (is404.value) {
+    trackEvent('page_not_found', { page_path, referrer: document.referrer || undefined })
+  } else {
+    trackEvent('page_error', { error_code: code.value ?? 0, page_path })
+  }
+})
+
 const heading = computed(() => {
   if (is404.value) return 'Page not found'
   if (is503.value) return 'Service temporarily unavailable'
