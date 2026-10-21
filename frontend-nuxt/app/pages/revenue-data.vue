@@ -131,11 +131,10 @@ useHead({ title: 'Revenue Data' })
       </div>
       <div class="tablet:grid-col-4 margin-bottom-2">
         <div class="ds-card padding-3">
-          <h3 class="font-heading-md">Reference data</h3>
-          <p class="ds-desc">Commodities, periods, funds, and locations — the shared reference lists
-            that power filters across every dataset.</p>
-          <p class="ds-meta">Updated as needed · API</p>
-          <a class="usa-button usa-button--unstyled ds-cta" href="#">About the reference data</a>
+          <h3 class="font-heading-md">Production by disposition</h3>
+          <p class="ds-desc">Historical sales data reported on Form ONRR-2014 and Form ONRR-4430 for federal lands, federal waters, and Native American lands.</p>
+          <p class="ds-meta">Updated as needed</p>
+          <a class="usa-button usa-button--outline ds-cta" href="/revenue-data/production-by-disposition">Production disposition by month</a>
         </div>
       </div>
     </div>

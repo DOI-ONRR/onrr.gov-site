@@ -16383,7 +16383,17 @@ fields:
       group: null
       hidden: false
       interface: select-dropdown
-      note: null
+      note: >-
+        Grain this dataset page represents, used by the revenue-data-update
+        process to route its coverage_end / dataset_last_updated write on a
+        successful load. The process matches dataset_metadata rows by
+        source_collection and this field: a monthly load
+        (revenue_data_update.period = monthly or true-up) stamps rows set to
+        monthly or both; a calendar-year or fiscal-year load stamps rows set to
+        yearly or both. Use both when one page is refreshed by every load (e.g.
+        revenue, and disbursements — which load monthly + annual together); use
+        monthly / yearly to point a load at a single page (e.g.
+        monthly-production vs yearly-production).
       options:
         choices:
           - text: Both
