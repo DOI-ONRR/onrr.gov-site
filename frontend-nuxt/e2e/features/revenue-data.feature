@@ -23,7 +23,7 @@ Feature: Revenue Data landing page
     And the dataset card "Revenue" is visible
     And the dataset card "Federal sales" is visible
     And the dataset card "Revenue by company" is visible
-    And the dataset card "Reference data" is visible
+    And the dataset card "Production by disposition" is visible
 
   Scenario: Active dataset cards link to their preview pages
     Given I navigate to the revenue data page
@@ -34,6 +34,7 @@ Feature: Revenue Data landing page
     And the dataset card "Revenue" links to "/revenue-data/revenue-by-commodity"
     And the dataset card "Federal sales" links to "/revenue-data/federal-sales"
     And the dataset card "Revenue by company" links to "/revenue-data/federal-revenue-by-company"
+    And the dataset card "Production by disposition" links to "/revenue-data/production-by-disposition"
 
   Scenario: About this data section is visible
     Given I navigate to the revenue data page
