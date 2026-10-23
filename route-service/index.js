@@ -53,9 +53,14 @@ const DOCS_URL = 'https://onrr.gov/developers';
 
 function proxyRequest(req, res, options, isGraphQL = false) {
   const proxyRequest = https.request(options, (proxyRes) => {
+    // Pass the upstream response straight through — status, headers and body — including 4xx/5xx,
+    // so the frontend's own error page (e.g. the Nuxt 404) reaches the browser instead of a
+    // generic "Error from external server" string, and the CMS's structured errors reach API
+    // consumers. This also guarantees the upstream body is always consumed: the old >=400
+    // short-circuit returned without draining proxyRes, leaving an orphaned socket that later
+    // fired a spurious 'timeout'. Server-side errors are still logged for observability.
     if (proxyRes.statusCode >= 400) {
-      console.error("External Server Error", proxyRes.statusCode);
-      return res.status(proxyRes.statusCode).send("Error from external server");
+      console.error('Upstream responded', proxyRes.statusCode, req.method, req.originalUrl);
     }
 
     // Keep the upstream CSP (e.g. Directus's default-src 'none' on /assets) and
