@@ -4,6 +4,7 @@ const { URL } = require('url');
 const { securityHeaders } = require('./security-headers');
 const { apiUsageMiddleware } = require('./api-analytics');
 const { createRedirectStore, buildLocation } = require('./redirects');
+const { downloadAnalyticsMiddleware } = require('./download-analytics');
 
 const app = express();
 app.use(express.json());
@@ -150,6 +151,17 @@ app.use(async (req, res, next) => {
   const search = qIndex >= 0 ? req.originalUrl.slice(qIndex) : '';
   return res.redirect(301, buildLocation(target, search));
 });
+
+// Server-side file-download tracking (see download-analytics.js). After the redirect middleware
+// so a 301'd path never counts; before the proxy so it observes every proxied document delivery.
+// Fills the client listener's blind spot (direct/deep-link/crawler hits) and feeds the same GA4
+// web property, de-duped by Referer. No-op unless the GA4_WEB_* vars are set (cf set-env).
+app.use(downloadAnalyticsMiddleware({
+  salt: process.env.API_USAGE_SALT,
+  measurementId: process.env.GA4_WEB_MEASUREMENT_ID,
+  apiSecret: process.env.GA4_WEB_API_SECRET,
+  ownHosts: ['onrr.gov'],
+}));
 
 app.all('*', (req, res) => {
   const requestedPath = req.originalUrl.split('?')[0];
