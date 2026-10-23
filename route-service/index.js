@@ -3,6 +3,7 @@ const https = require('https');
 const { URL } = require('url');
 const { securityHeaders } = require('./security-headers');
 const { apiUsageMiddleware } = require('./api-analytics');
+const { createRedirectStore, buildLocation } = require('./redirects');
 
 const app = express();
 app.use(express.json());
@@ -25,6 +26,13 @@ const PROXY_PATHS = [
   '/assets', '/items', '/document', '/press-releases',
   '/reporter-letters', '/unbundling'
 ];
+
+// Published Directus redirects, cached in-process. Only consulted for requests the route-service
+// would otherwise proxy to the CMS (the PROXY_PATHS above) — those bypass the redirect-aware
+// frontends, so a redirect whose old_url sits under a proxy prefix (e.g. the bare
+// /press-releases) can only be enforced here. The CMS is reached the same way as every other
+// proxied request: https on the internal CMS_HOST:PORT.
+const redirectStore = createRedirectStore({ cmsBaseUrl: `https://${CMS_HOST}:${PORT}` });
 
 // Public data API. Friendly dataset names -> the denormalized flat collections in the CMS.
 // Exposed two ways, both mapping here: the `data.onrr.gov` subdomain (host-based, e.g.
@@ -121,6 +129,27 @@ function handleDataApi(req, res, seg) {
   };
   proxyRequest(req, res, options);
 }
+
+// Redirect enforcement for proxy-prefix paths (see redirectStore above). Runs before the proxy
+// catch-all so an exact-path redirect (e.g. bare /press-releases -> /about/public-affairs) wins,
+// while a real proxied file (/press-releases/<file>.pdf — no matching row) falls through
+// untouched. GET/HEAD only; the public data API (data host / /data alias) is never content, so
+// it is skipped. Never throws: redirectStore.resolve fails open to no-match.
+app.use(async (req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+  const host = (req.headers.host || '').split(':')[0].toLowerCase();
+  if (host.split('.')[0] === 'data') return next();
+
+  const requestedPath = req.originalUrl.split('?')[0];
+  if (!PROXY_PATHS.some(path => requestedPath.startsWith(path))) return next();
+
+  const target = await redirectStore.resolve(requestedPath);
+  if (!target) return next();
+
+  const qIndex = req.originalUrl.indexOf('?');
+  const search = qIndex >= 0 ? req.originalUrl.slice(qIndex) : '';
+  return res.redirect(301, buildLocation(target, search));
+});
 
 app.all('*', (req, res) => {
   const requestedPath = req.originalUrl.split('?')[0];
