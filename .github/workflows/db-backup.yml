@@ -63,7 +63,7 @@ jobs:
           aws --version
 
       - name: Install CF CLI
-        uses: doi-onrr/oddd-actions/.github/actions/cf-install@c1dc8be771d2f239f13a5c4fca870c5fd5600b8f # v1
+        uses: doi-onrr/oddd-actions/.github/actions/cf-install@7cd2801f3e21d2a5936bb38156616285582acc3c # v1
 
       - name: Install cg-manage-rds (pipx)
         run: |
