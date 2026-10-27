@@ -3,6 +3,8 @@ const https = require('https');
 const { URL } = require('url');
 const { securityHeaders } = require('./security-headers');
 const { apiUsageMiddleware } = require('./api-analytics');
+const { createRedirectStore, buildLocation } = require('./redirects');
+const { downloadAnalyticsMiddleware } = require('./download-analytics');
 
 const app = express();
 app.use(express.json());
@@ -26,6 +28,13 @@ const PROXY_PATHS = [
   '/reporter-letters', '/unbundling'
 ];
 
+// Published Directus redirects, cached in-process. Only consulted for requests the route-service
+// would otherwise proxy to the CMS (the PROXY_PATHS above) — those bypass the redirect-aware
+// frontends, so a redirect whose old_url sits under a proxy prefix (e.g. the bare
+// /press-releases) can only be enforced here. The CMS is reached the same way as every other
+// proxied request: https on the internal CMS_HOST:PORT.
+const redirectStore = createRedirectStore({ cmsBaseUrl: `https://${CMS_HOST}:${PORT}` });
+
 // Public data API. Friendly dataset names -> the denormalized flat collections in the CMS.
 // Exposed two ways, both mapping here: the `data.onrr.gov` subdomain (host-based, e.g.
 // data.onrr.gov/disbursements) and a path alias on the main domain (onrr.gov/data/
@@ -44,9 +53,14 @@ const DOCS_URL = 'https://onrr.gov/developers';
 
 function proxyRequest(req, res, options, isGraphQL = false) {
   const proxyRequest = https.request(options, (proxyRes) => {
+    // Pass the upstream response straight through — status, headers and body — including 4xx/5xx,
+    // so the frontend's own error page (e.g. the Nuxt 404) reaches the browser instead of a
+    // generic "Error from external server" string, and the CMS's structured errors reach API
+    // consumers. This also guarantees the upstream body is always consumed: the old >=400
+    // short-circuit returned without draining proxyRes, leaving an orphaned socket that later
+    // fired a spurious 'timeout'. Server-side errors are still logged for observability.
     if (proxyRes.statusCode >= 400) {
-      console.error("External Server Error", proxyRes.statusCode);
-      return res.status(proxyRes.statusCode).send("Error from external server");
+      console.error('Upstream responded', proxyRes.statusCode, req.method, req.originalUrl);
     }
 
     // Keep the upstream CSP (e.g. Directus's default-src 'none' on /assets) and
@@ -121,6 +135,38 @@ function handleDataApi(req, res, seg) {
   };
   proxyRequest(req, res, options);
 }
+
+// Redirect enforcement for proxy-prefix paths (see redirectStore above). Runs before the proxy
+// catch-all so an exact-path redirect (e.g. bare /press-releases -> /about/public-affairs) wins,
+// while a real proxied file (/press-releases/<file>.pdf — no matching row) falls through
+// untouched. GET/HEAD only; the public data API (data host / /data alias) is never content, so
+// it is skipped. Never throws: redirectStore.resolve fails open to no-match.
+app.use(async (req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+  const host = (req.headers.host || '').split(':')[0].toLowerCase();
+  if (host.split('.')[0] === 'data') return next();
+
+  const requestedPath = req.originalUrl.split('?')[0];
+  if (!PROXY_PATHS.some(path => requestedPath.startsWith(path))) return next();
+
+  const target = await redirectStore.resolve(requestedPath);
+  if (!target) return next();
+
+  const qIndex = req.originalUrl.indexOf('?');
+  const search = qIndex >= 0 ? req.originalUrl.slice(qIndex) : '';
+  return res.redirect(301, buildLocation(target, search));
+});
+
+// Server-side file-download tracking (see download-analytics.js). After the redirect middleware
+// so a 301'd path never counts; before the proxy so it observes every proxied document delivery.
+// Fills the client listener's blind spot (direct/deep-link/crawler hits) and feeds the same GA4
+// web property, de-duped by Referer. No-op unless the GA4_WEB_* vars are set (cf set-env).
+app.use(downloadAnalyticsMiddleware({
+  salt: process.env.API_USAGE_SALT,
+  measurementId: process.env.GA4_WEB_MEASUREMENT_ID,
+  apiSecret: process.env.GA4_WEB_API_SECRET,
+  ownHosts: ['onrr.gov'],
+}));
 
 app.all('*', (req, res) => {
   const requestedPath = req.originalUrl.split('?')[0];
