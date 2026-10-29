@@ -79,3 +79,34 @@ jobs:
           name: playwright-report
           path: frontend-nuxt/playwright-report
           retention-days: 14
+
+  # TEMPORARY (redesign go-live): deploy the Nuxt frontend to the `onrr-frontend`
+  # app (dev space) once e2e tests pass on redesign/main. This is what replaces
+  # the manual `cf push` / cherry-pick flow. frontend-nuxt/manifest.yml points
+  # NUXT_PUBLIC_API_URL at upgrade-onrr-cms, so the upgrade CMS + onrr-frontend
+  # form one stack. Remove this job once redesign/main is merged into dev.
+  deploy-nuxt:
+    needs: e2e-tests
+    if: github.event_name == 'push' && github.ref_name == 'redesign/main'
+    runs-on: ubuntu-latest
+    # CF credentials live in the non-prod environment (prod is main-only).
+    environment: non-prod
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+
+      - name: Deploy onrr-frontend to the dev space
+        working-directory: frontend-nuxt
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+          cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s dev
+          cf push --strategy=rolling -f manifest.yml
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_ORG: ${{ secrets.CF_ORG }}

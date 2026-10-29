@@ -7,6 +7,11 @@ name: Frontend Pipeline
 on:
   push:
     paths: 'frontend/**'
+    # TEMPORARY (redesign go-live): the redesign uses the Nuxt frontend
+    # (frontend-nuxt/), so don't build/deploy the legacy Vue2 frontend on
+    # redesign/main at all. Remove this ignore once redesign/main merges to dev.
+    branches-ignore:
+      - redesign/main
 
   workflow_dispatch:
 
