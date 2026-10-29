@@ -4,7 +4,11 @@ applications:
   command: ./node_modules/.bin/directus start
   instances: 1
   disk_quota: 5G
-  memory: 1536M
+  # 2G matches dev/preview/prod: the nodejs_buildpack compiles the full Directus
+  # dependency tree during staging in a container sized to this value, and that
+  # peak exceeds 1536M on Directus 12.6.0 (OOM-killed staging). Runtime sits far
+  # lower (~400M), same as the other 2G envs.
+  memory: 2G
   buildpacks:
     - nodejs_buildpack
   services:
