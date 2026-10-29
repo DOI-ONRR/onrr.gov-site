@@ -32,6 +32,14 @@ fi
 if [ "$branch" == "upgrade-directus" ]; then
     space="dev"
     manifest="upgrade.manifest.yml"
+elif [ "$branch" == "redesign/main" ]; then
+    # TEMPORARY (redesign go-live): while the redesign lives on redesign/main,
+    # deploy its CMS and route-service to the upgrade-* apps in the dev space
+    # instead of preview-*. The legacy frontend/ pipeline is skipped on this
+    # branch at the workflow level (see frontend.yml), so it never reaches here.
+    # Remove this branch once redesign/main is merged into dev.
+    space="dev"
+    manifest="upgrade.manifest.yml"
 elif [ "$branch" == "dev" ]; then
     space="dev"
     manifest="dev.manifest.yml"
