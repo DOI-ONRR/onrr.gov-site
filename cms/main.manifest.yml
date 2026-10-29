@@ -16,8 +16,8 @@ applications:
     - dev-onrr-s3
     - onrr-redis
   env:
-    # Production mode; also makes the buildpack omit the pruned devDeps during staging
-    # (deps are vendored — see .github/workflows/cms.yml).
+    # Production mode; also makes the buildpack's staging install omit devDependencies
+    # (npm-check-updates/npm-run-all), keeping it leaner.
     NODE_ENV: production
     CONFIG_PATH: ./config.js
     CORS_ORIGIN: https://dev-onrr-cms.app.cloud.gov

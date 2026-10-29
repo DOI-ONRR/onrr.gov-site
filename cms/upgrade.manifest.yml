@@ -4,20 +4,20 @@ applications:
   command: ./node_modules/.bin/directus start
   instances: 1
   disk_quota: 5G
-  # 1G: dependencies are now vendored (see .github/workflows/cms.yml), so staging only
-  # runs `npm rebuild`, not a full install+build of the Directus 12.6.0 tree — the
-  # container no longer needs 2G to stage. Runtime sits ~400M. (Canary: dev/preview/prod
-  # stay at 2G until this is validated here, then drop to 1G too.)
-  memory: 1G
+  # 4G is a STAGING size, not a runtime one. The nodejs_buildpack installs the full
+  # Directus 12.6.0 tree and compiles isolated-vm (its V8 sandbox dep) during staging,
+  # in a container sized to this value; that compile OOM-kills at 2G (exit 223) and
+  # needs ~4G. Runtime only uses ~400M, so deploy.sh scales this app back to 1G right
+  # after a successful push (stage big, run small) to keep dev-space memory quota sane.
+  memory: 4G
   buildpacks:
     - nodejs_buildpack
   services:
     - upgrade-onrr-psql
     - upgrade-onrr-s3
   env:
-    # Run Directus in production mode; also makes the cloud.gov buildpack omit the
-    # pruned devDeps during staging (deps are vendored — see cms.yml), so it rebuilds
-    # the vendored tree instead of fetching the missing devDeps over the network.
+    # Run Directus in production mode; also makes the cloud.gov buildpack's staging
+    # install omit devDependencies (npm-check-updates/npm-run-all), keeping it leaner.
     NODE_ENV: production
     CONFIG_PATH: ./config.js
     UPSTREAM_URL: https://preview-onrr-cms.app.cloud.gov

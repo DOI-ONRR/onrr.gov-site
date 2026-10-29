@@ -67,21 +67,15 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      # Vendor production dependencies for deploy: strip devDeps (npm-check-updates,
-      # npm-run-all and their trees) so the shipped node_modules is lean, then tar it
-      # alongside the built extensions. On cloud.gov the nodejs_buildpack then only runs
-      # `npm rebuild` (native addons) instead of installing+building the whole Directus
-      # tree during staging — the latter OOM-kills the staging container on Directus
-      # 12.6.0. Built here on linux/amd64 to match the cflinuxfs4 stack; the manifests
-      # set NODE_ENV=production so the buildpack omits the pruned devDeps rather than
-      # fetching them over the network.
-      - name: Prune root dependencies to production for vendoring
-        run: npm prune --omit=dev
-        working-directory: cms
-
-      - name: Create CMS deploy tarball (built extensions + vendored prod node_modules)
+      - name: Create CMS deploy tarball (built extensions only)
         run: |
-          tar -czf cms-deploy.tar.gz cms/extensions cms/node_modules
+          # Archive only the built Directus extensions. node_modules is NOT vendored:
+          # cloud.gov's nodejs_buildpack runs the dependency install itself during
+          # staging (NODE_ENV=production on the manifests omits devDeps). Vendoring was
+          # tried and reverted — the buildpack still forces `npm rebuild`, which chokes
+          # compiling isolated-vm (Directus 12.6.0's sandbox dep); a plain install at
+          # adequate staging memory is the proven path (see cms/upgrade.manifest.yml).
+          tar -czf cms-deploy.tar.gz cms/extensions
 
       - name: Upload CMS deploy tarball
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

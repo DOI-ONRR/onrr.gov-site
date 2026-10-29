@@ -68,7 +68,17 @@ exit_code=$?
 if [ $exit_code -ne 0 ]; then
   echo "Error: cf push failed with exit code $exit_code"
   exit $exit_code
-else
-  echo "manifest $manifest successfully deployed."
-  exit 0
 fi
+
+# The upgrade env stages Directus 12.6.0 with a plain buildpack install, which needs
+# ~4G to compile isolated-vm (see cms/upgrade.manifest.yml). Runtime only uses ~400M,
+# so scale back to 1G once staging is done — stage big, run small — to free dev-space
+# memory quota. Non-fatal: a scale failure leaves the app up (just larger), so it must
+# not fail the deploy. TEMPORARY, tied to the redesign/main routing above.
+if [ "$manifest" == "upgrade.manifest.yml" ]; then
+  echo "Scaling upgrade-onrr-cms runtime back to 1G after staging..."
+  cf scale upgrade-onrr-cms -m 1G -f || echo "Warning: scale-down failed; app remains at staging memory."
+fi
+
+echo "manifest $manifest successfully deployed."
+exit 0
