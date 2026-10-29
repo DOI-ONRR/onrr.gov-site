@@ -15,6 +15,9 @@ applications:
     - preview-onrr-s3
     - preview-onrr-redis
   env:
+    # Production mode; also makes the buildpack omit the pruned devDeps during staging
+    # (deps are vendored — see .github/workflows/cms.yml).
+    NODE_ENV: production
     CONFIG_PATH: ./config.js
     UPSTREAM_URL: https://dev-onrr-cms.app.cloud.gov
     DIRECTUS_PUBLIC_HOST: https://preview-onrr-cms.app.cloud.gov

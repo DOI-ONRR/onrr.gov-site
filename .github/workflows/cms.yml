@@ -67,10 +67,21 @@ jobs:
         run: npm run build:all
         working-directory: cms
 
-      - name: Create CMS deploy tarball (node_modules + built extensions only)
+      # Vendor production dependencies for deploy: strip devDeps (npm-check-updates,
+      # npm-run-all and their trees) so the shipped node_modules is lean, then tar it
+      # alongside the built extensions. On cloud.gov the nodejs_buildpack then only runs
+      # `npm rebuild` (native addons) instead of installing+building the whole Directus
+      # tree during staging — the latter OOM-kills the staging container on Directus
+      # 12.6.0. Built here on linux/amd64 to match the cflinuxfs4 stack; the manifests
+      # set NODE_ENV=production so the buildpack omits the pruned devDeps rather than
+      # fetching them over the network.
+      - name: Prune root dependencies to production for vendoring
+        run: npm prune --omit=dev
+        working-directory: cms
+
+      - name: Create CMS deploy tarball (built extensions + vendored prod node_modules)
         run: |
-          # Archive only the built Directus extensions
-          tar -czf cms-deploy.tar.gz cms/extensions
+          tar -czf cms-deploy.tar.gz cms/extensions cms/node_modules
 
       - name: Upload CMS deploy tarball
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
