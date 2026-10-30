@@ -1,10 +1,36 @@
-# Keeps the GitHub Actions pinned by commit SHA in .github/workflows current
-# (fix/4325). Dependabot updates both the SHA and its `# vX.Y.Z` comment.
-# Minor/patch releases are grouped into one weekly PR; new major versions
-# arrive as separate PRs to review on their own. PRs target dev, which is
-# promoted to main as usual.
+# Dependabot configuration.
+#
+# Two kinds of updates, which behave differently:
+#
+#   * Version updates (routine dependency bumps): only happen for an ecosystem that is
+#     configured in an `updates:` block below. Right now only github-actions has them
+#     enabled -- grouped into one weekly PR, targeting dev (promoted to main as usual).
+#
+#   * Security updates (CVE-driven): enabled at the repo level and run regardless of
+#     this file, ALWAYS against the default branch (main). By default they arrive as one
+#     PR per advisory, which is the noise we are cutting here.
+#
+# The npm blocks below exist ONLY to GROUP the security-update PRs into one batch per
+# directory (`applies-to: security-updates` + `patterns: ["*"]`). Two deliberate choices:
+#
+#   * `open-pull-requests-limit: 0` keeps npm *version* updates OFF, so grouping the
+#     security PRs does not also switch on a stream of routine version bumps. Flip this
+#     to a positive number (and add a version-updates group) later if we want those too.
+#
+#   * We do NOT set `target-branch` on the npm blocks. Setting it would stop the config
+#     from applying to security updates (those must target the default branch), which is
+#     the opposite of what we want.
+#
+# Grouped security updates require the dependency graph, Dependabot alerts, and Dependabot
+# security updates to be enabled for the repo (they are). Nested cms extension manifests
+# (cms/src/extensions/*/*) are NOT covered here -- add a `directories:` glob if desired.
 version: 2
 updates:
+  # Keeps the GitHub Actions pinned by commit SHA in .github/workflows current
+  # (fix/4325). Dependabot updates both the SHA and its `# vX.Y.Z` comment.
+  # Minor/patch releases are grouped into one weekly PR; new major versions
+  # arrive as separate PRs to review on their own. PRs target dev, which is
+  # promoted to main as usual.
   - package-ecosystem: github-actions
     directory: /
     target-branch: dev
@@ -19,3 +45,48 @@ updates:
           - patch
     commit-message:
       prefix: "chore(actions)"
+
+  # --- npm: group security-update PRs per directory; version updates stay off ---
+  - package-ecosystem: npm
+    directory: /frontend-nuxt
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      frontend-nuxt-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      frontend-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /route-service
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      route-service-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  - package-ecosystem: npm
+    directory: /cms
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      cms-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
