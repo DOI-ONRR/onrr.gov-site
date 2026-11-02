@@ -22,8 +22,8 @@
 #     the opposite of what we want.
 #
 # Grouped security updates require the dependency graph, Dependabot alerts, and Dependabot
-# security updates to be enabled for the repo (they are). Nested cms extension manifests
-# (cms/src/extensions/*/*) are NOT covered here -- add a `directories:` glob if desired.
+# security updates to be enabled for the repo (they are). The cms block uses a `directories:`
+# glob so nested extension manifests (cms/src/extensions/<type>/<name>) are covered too.
 version: 2
 updates:
   # Keeps the GitHub Actions pinned by commit SHA in .github/workflows current
@@ -80,8 +80,17 @@ updates:
         patterns:
           - "*"
 
+  # The cms app and every extension sub-package (each has its own
+  # package.json/package-lock.json under cms/src/extensions/<type>/<name>).
+  # The `*/*` glob folds those nested manifests into the cms-security
+  # grouping instead of one standalone PR per sub-package. Note: Dependabot
+  # groups security updates PER directory, so each directory with a pending
+  # advisory still gets its own grouped PR -- this batches the deps WITHIN a
+  # directory (e.g. onrr-flows's several bumps into one), not across them.
   - package-ecosystem: npm
-    directory: /cms
+    directories:
+      - /cms
+      - /cms/src/extensions/*/*
     schedule:
       interval: weekly
     open-pull-requests-limit: 0
