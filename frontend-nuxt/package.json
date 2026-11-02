@@ -41,7 +41,7 @@
   },
   "//overrides": "Security patches (fix/4322): undici 7.x is pulled in by cheerio via @uswds/compile (build tooling; Nuxt itself uses undici 8), and postcss 8.x by sanitize-html, which ships in the server bundle (the app never parses style attributes with it). Remove each once the dependents require fixed versions.",
   "overrides": {
-    "undici@^7": "7.30.0",
+    "undici@^7": "7.30.1",
     "postcss@^8": "8.5.29"
   }
 }
