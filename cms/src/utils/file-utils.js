@@ -53,6 +53,9 @@ export const parseFileIndexZones = (payload, file) => {
             `${rows[0][0]}, ${getMonthFromString(rows[0][3], rows[0][0])}, 01`
         )
         let date = new Date(fDate.getFullYear(), fDate.getMonth(), fDate.getDate())
+        // Stamp the snapshot month/year onto each embedded item (YYYY-MM-01) so an
+        // embedded-source data_table can render it as a `date` column (month_year format).
+        const itemDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-01`
         let indexZoneItems = []
 
         rows.forEach(row => {
@@ -60,6 +63,7 @@ export const parseFileIndexZones = (payload, file) => {
             nObj.abbreviation = row[1]
             nObj.index_zone = row[2]
             nObj.price = row[4]
+            nObj.date = itemDate
 
             indexZoneItems.push(nObj)
         })
@@ -85,6 +89,9 @@ export const parseFileIndianGasMajorPortion = (payload, file) => {
             fDate.getMonth(),
             fDate.getDate()
         );
+        // Stamp the snapshot month/year onto each embedded item (YYYY-MM-01) so an
+        // embedded-source data_table can render it as a `date` column (month_year format).
+        const itemDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-01`;
         let indexZoneItems = [];
 
         rows.forEach((row) => {
@@ -96,6 +103,7 @@ export const parseFileIndianGasMajorPortion = (payload, file) => {
             nObj.designatedArea = row[0];
             nObj.price = row[3];
             nObj.dueDate = formattedDueDate;
+            nObj.date = itemDate;
 
             indexZoneItems.push(nObj);
         });
@@ -121,6 +129,9 @@ export const parseFileIbmp = (payload, file) => {
             fDate.getMonth(),
             fDate.getDate()
         );
+        // Stamp the snapshot month/year onto each embedded item (YYYY-MM-01) so an
+        // embedded-source data_table can render it as a `date` column (month_year format).
+        const itemDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-01`;
         let lineItems = [];
 
         rows.forEach((row) => {
@@ -132,6 +143,7 @@ export const parseFileIbmp = (payload, file) => {
             nObj.asphaltic63 = row[6];
             nObj.blackWax64 = row[7];
             nObj.yellowWax65 = row[8];
+            nObj.date = itemDate;
 
             lineItems.push(nObj);
         });

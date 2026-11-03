@@ -148,6 +148,7 @@ function cellClass(c) {
 .as-of {
   font-size: 0.85rem;
   color: #565c65;
+  font-weight: bold;
 }
 
 // Scrollable bordered wrapper (mockup .price-table-wrap).
