@@ -93,7 +93,15 @@ function fileRef(value) {
   return typeof value === 'object' ? value.filename_download || null : value
 }
 
-const isNum = (c) => c.align === 'right'
+// Column alignment. `right` keeps the numeric treatment (.num = right-aligned, tabular
+// figures, nowrap); `center` centers; `left`/unset is the default. Applied to header and
+// body cells alike.
+function cellClass(c) {
+  return {
+    num: c.align === 'right',
+    'align-center': c.align === 'center',
+  }
+}
 </script>
 
 <template>
@@ -107,7 +115,7 @@ const isNum = (c) => c.align === 'right'
         <caption v-if="block.caption" :class="{ 'usa-sr-only': !block.show_caption }">{{ block.caption }}</caption>
         <thead>
           <tr>
-            <th v-for="(c, ci) in cols" :key="ci" scope="col" :class="{ num: isNum(c) }">{{ c.label }}</th>
+            <th v-for="(c, ci) in cols" :key="ci" scope="col" :class="cellClass(c)">{{ c.label }}</th>
           </tr>
         </thead>
         <tbody>
@@ -117,7 +125,7 @@ const isNum = (c) => c.align === 'right'
               v-for="(c, ci) in cols"
               :key="ci"
               :scope="ci === 0 ? 'row' : null"
-              :class="{ num: isNum(c) }"
+              :class="cellClass(c)"
             >
               <a
                 v-if="c.format === 'download' && fileRef(row[c.field])"
@@ -150,6 +158,8 @@ const isNum = (c) => c.align === 'right'
   thead th { white-space: nowrap; }
   // right-aligned numeric cells, tabular figures (mockup td.num / th.num)
   .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  // center-aligned columns (e.g. a file-download link column)
+  .align-center { text-align: center; }
 }
 
 // Footnote / download line (mockup .dl-line).
