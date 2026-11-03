@@ -133,6 +133,12 @@ function buildChart() {
   if (!chartEl.value || !Highcharts) return
   const { categories, series, xAxisTitle } = chartData.value
   Highcharts.chart(chartEl.value, {
+    accessibility: {
+      enabled: true,
+      description:
+        `Stacked column chart of ${selectedProduct.value} production volume by source, grouped by ${xAxisTitle.toLowerCase()}.` +
+        (series.length ? ` Sources: ${series.map(s => s.name).join(', ')}.` : ''),
+    },
     chart: {
       type: 'column',
       events: {
@@ -169,7 +175,7 @@ function buildChart() {
 let Highcharts = null
 
 onMounted(async () => {
-  Highcharts = (await import('highcharts')).default
+  Highcharts = await useHighcharts()
   buildChart()
 })
 

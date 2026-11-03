@@ -49,10 +49,22 @@ function options() {
   // that index instead.
   const cats = props.categories.map(String)
   const xLabel = (x) => cats[x] ?? x
+  const names = props.series.map((s) => s.name).filter(Boolean)
   return {
     chart: { type: 'line', height: props.height, spacingTop: 8, spacingBottom: 6, style: { fontFamily: 'inherit' } },
     title: { text: null },
     credits: { enabled: false },
+    accessibility: {
+      enabled: true,
+      description: [
+        names.length <= 1
+          ? `Line chart of ${names[0] || 'values'} over time.`
+          : `Line chart comparing ${names.length} series over time: ${names.join(', ')}.`,
+        cats.length ? `Spanning ${cats[0]} to ${cats[cats.length - 1]}.` : '',
+        isCurrency.value ? 'Values are in U.S. dollars.' : '',
+      ].filter(Boolean).join(' '),
+      point: { valuePrefix: isCurrency.value ? '$' : '' },
+    },
     legend: { enabled: props.showLegend },
     colors: props.colors,
     xAxis: { categories: props.categories.map(String), tickmarkPlacement: 'on', tickLength: 4, labels: { style: { fontSize: '0.7rem' } } },
@@ -73,7 +85,7 @@ function options() {
 
 async function render() {
   if (!el.value || !props.series.length) return
-  if (!Highcharts) Highcharts = (await import('highcharts')).default
+  if (!Highcharts) Highcharts = await useHighcharts()
   if (chart) chart.destroy()
   chart = Highcharts.chart(el.value, options())
 }

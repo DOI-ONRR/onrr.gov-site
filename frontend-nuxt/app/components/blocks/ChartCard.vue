@@ -452,10 +452,37 @@ const chartOptions = computed(() => {
   const yTick = Number(card.value.y_tick_interval)
   if (Number.isFinite(yTick) && yTick > 0) yAxisPrimary.tickInterval = yTick
 
+  // Screen-reader summary of the chart: effective title + chart type + axes + series,
+  // then the authored takeaway (with its {tokens} resolved) when one is present.
+  const a11yDescription = (() => {
+    const parts = []
+    if (displayTitle.value) parts.push(displayTitle.value)
+    const typeName = ({ bar: 'Bar', column: 'Column', line: 'Line', spline: 'Line', area: 'Area', areaspline: 'Area', pie: 'Pie', scatter: 'Scatter' }[card.value.chart_type] || 'Column') + ' chart'
+    parts.push(typeName)
+    if (card.value.x_axis_label) parts.push(`horizontal axis ${card.value.x_axis_label}`)
+    if (card.value.y_axis_label) parts.push(`vertical axis ${card.value.y_axis_label}`)
+    if (series.length) parts.push(`${series.length} series: ${series.map((s) => s.name).join(', ')}`)
+    if (renderedTakeaway.value) parts.push(renderedTakeaway.value)
+    return parts.join('. ') + '.'
+  })()
+
   const options = {
     chart,
     title: { text: null },
     credits: { enabled: false },
+    // Reuse the per-series value formatting (currency/percent/units) so screen readers
+    // announce the same formatted value the tooltip shows, not a raw number.
+    accessibility: {
+      enabled: true,
+      description: a11yDescription,
+      point: {
+        descriptionFormatter(point) {
+          const name = point.series?.name
+          const cat = point.category ?? point.name ?? point.x
+          return `${name}, ${cat}: ${formatValue(point.y, seriesFmt[name])}`
+        },
+      },
+    },
     xAxis,
     yAxis: [
       yAxisPrimary,
@@ -691,14 +718,7 @@ let chartInstance = null
 async function buildChart() {
   if (!chartEl.value || !showChart.value || !hasData.value) return
   if (!Highcharts) {
-    Highcharts = (await import('highcharts')).default
-    if (card.value.enable_export) {
-      try {
-        await import('highcharts/modules/exporting')
-      } catch (e) {
-        // Exporting module unavailable — chart still renders without the menu.
-      }
-    }
+    Highcharts = await useHighcharts({ exporting: card.value.enable_export })
   }
   chartInstance = Highcharts.chart(chartEl.value, chartOptions.value)
 }

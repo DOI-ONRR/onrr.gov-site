@@ -134,6 +134,13 @@ function buildChart() {
   if (!chartEl.value || !Highcharts) return
   const { categories, series, xAxisTitle } = chartData.value
   Highcharts.chart(chartEl.value, {
+    accessibility: {
+      enabled: true,
+      description:
+        `Stacked column chart of disbursements in U.S. dollars, broken out by ${selectedBreakout.value.toLowerCase()} and grouped by ${xAxisTitle.toLowerCase()}.` +
+        (series.length ? ` Breakout categories: ${series.map(s => s.name).join(', ')}.` : ''),
+      point: { valuePrefix: '$' },
+    },
     chart: {
       type: 'column',
       events: {
@@ -170,7 +177,7 @@ function buildChart() {
 let Highcharts = null
 
 onMounted(async () => {
-  Highcharts = (await import('highcharts')).default
+  Highcharts = await useHighcharts()
   buildChart()
 })
 
