@@ -27,7 +27,11 @@ const { data: rawData } = await useAsyncData(`data-table-${props.block.id}`, asy
   // Embedded source: fetch the array field (+ sort field). Flat source: the columns.
   const fetchFields = sourceField.value
     ? [sourceField.value, props.block.sort_field].filter(Boolean)
-    : cols.value.map((c) => c.field)
+    : cols.value.flatMap((c) =>
+        // Download columns point at a file relation; fetch the name /document/ serves by
+        // (serveFileByName matches on filename_download) rather than the bare relation id.
+        c.format === 'download' ? [`${c.field}.filename_download`] : [c.field],
+      )
   if (!fetchFields.length) return []
   // fields/sort are comma-separated; filter is a JSON string (Directus REST parses it).
   const query = { fields: fetchFields.join(','), limit: props.block.row_limit || -1 }
@@ -81,6 +85,14 @@ function formatCell(value, format) {
   }
 }
 
+// A download column's cell is the fetched file object ({ filename_download }); an embedded
+// JSON source may already carry the name as a plain string. Returns the filename that
+// /document/ resolves (serveFileByName matches filename_download), or null when no file.
+function fileRef(value) {
+  if (!value) return null
+  return typeof value === 'object' ? value.filename_download || null : value
+}
+
 const isNum = (c) => c.align === 'right'
 </script>
 
@@ -100,10 +112,20 @@ const isNum = (c) => c.align === 'right'
         </thead>
         <tbody>
           <tr v-for="(row, ri) in rows" :key="ri">
-            <template v-for="(c, ci) in cols" :key="ci">
-              <th v-if="ci === 0" scope="row" :class="{ num: isNum(c) }">{{ formatCell(row[c.field], c.format) }}</th>
-              <td v-else :class="{ num: isNum(c) }">{{ formatCell(row[c.field], c.format) }}</td>
-            </template>
+            <component
+              :is="ci === 0 ? 'th' : 'td'"
+              v-for="(c, ci) in cols"
+              :key="ci"
+              :scope="ci === 0 ? 'row' : null"
+              :class="{ num: isNum(c) }"
+            >
+              <a
+                v-if="c.format === 'download' && fileRef(row[c.field])"
+                :href="`/document/${fileRef(row[c.field])}`"
+                class="usa-link"
+              >{{ c.link_label || 'Download' }}</a>
+              <template v-else-if="c.format !== 'download'">{{ formatCell(row[c.field], c.format) }}</template>
+            </component>
           </tr>
         </tbody>
       </table>
