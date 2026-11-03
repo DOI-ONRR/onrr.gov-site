@@ -465,7 +465,7 @@ const colspanEmpty = computed(() => years.value.length + (grouped.value ? 2 : 1)
 
     <!-- Top-companies note when the table is capped -->
     <p v-if="truncated && !pending" class="truncation-note margin-top-0 margin-bottom-1">
-      Showing the top {{ groups.length }} companies by total revenue of {{ (pivot?.totalCompanies || 0).toLocaleString() }}. Search for a company above to find others.
+      Showing the top {{ groups.length }} companies by total revenue. Search for a company above to find others.
     </p>
 
     <!-- Table: Company [| breakout] | one column per year -->
