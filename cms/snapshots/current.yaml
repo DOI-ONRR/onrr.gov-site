@@ -1,5 +1,5 @@
 version: 1
-directus: 12.4.1
+directus: 12.6.0
 vendor: postgres
 collections:
   - collection: API
@@ -14801,6 +14801,8 @@ fields:
                     value: month_year
                   - text: Percent
                     value: percent
+                  - text: File download
+                    value: download
               type: string
             name: format
             type: string
@@ -14818,6 +14820,14 @@ fields:
                     value: center
               type: string
             name: align
+            type: string
+          - field: link_label
+            meta:
+              field: link_label
+              interface: input
+              note: Link text for a File download column (defaults to "Download")
+              type: string
+            name: link_label
             type: string
       readonly: false
       required: false
