@@ -106,6 +106,10 @@ jobs:
           sudo apt-get install cf8-cli
           cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s dev
           cf push --strategy=rolling -f manifest.yml
+          # Reclaim build-sized memory: the manifest stages at 2G because the Nuxt/Vite
+          # production build OOMs below that, but the SSR server needs far less at runtime
+          # (~85M observed). Scale to 512M after a successful push (-f: restart, no prompt).
+          cf scale onrr-frontend -m 512M -f
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
