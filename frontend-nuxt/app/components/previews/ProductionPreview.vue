@@ -376,12 +376,16 @@ watch(years, (ys) => {
 })
 
 // Publish a coherent pivot payload for the reactive chart — small multiples of the top N
-// products by breadth of reporting (the endpoint returns groups ranked by record count, so
-// the top N is unit-independent rather than dominated by large-magnitude units). The chart
-// always uses product-level totals (g.byYear), so a table breakout doesn't change it.
+// products by total volume. The endpoint ranks groups by record count (unit-independent),
+// but this chart deliberately re-ranks by raw volume before taking the top N, so the panes
+// reflect magnitude even though production units differ across products (bbl/mcf/ton/kwh…).
+// Small multiples give each pane its own axis, so the mixed units aren't compared directly.
+// The chart always uses product-level totals (g.byYear), so a table breakout doesn't change it.
 const chartPayload = computed(() => {
   const p = pivot.value
   if (!ready.value || !p) return null
+  // Copy before sorting so the table's group order (record-count ranked) is untouched.
+  const byVolume = [...(p.groups || [])].sort((a, b) => (b.total || 0) - (a.total || 0))
   return {
     empty: !p.groups?.length,
     periodType: periodType.value,
@@ -390,7 +394,7 @@ const chartPayload = computed(() => {
     groupBy: 'product',
     groupByLabel: 'Product',
     years: p.years || [],
-    groups: (p.groups || []).slice(0, CHART_TOP_N),
+    groups: byVolume.slice(0, CHART_TOP_N),
   }
 })
 const previewChart = inject('datasetPreviewChart', null)
