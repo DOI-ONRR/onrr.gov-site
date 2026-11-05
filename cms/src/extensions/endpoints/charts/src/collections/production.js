@@ -27,7 +27,7 @@ const REGION_EXPR = `COALESCE(NULLIF("l"."state_name", ''), "l"."offshore_region
 // Optional secondary breakout for the annual table: the ?breakout= value maps to the
 // location field that becomes a sub-row under each product. Anything else = no breakout.
 const BREAKOUT_FIELDS = {
-	land_category: '"l"."land_category"',
+	land_type: '"l"."land_type"',
 	state: '"l"."state_name"',
 	county: '"l"."county"',
 };
@@ -48,8 +48,8 @@ function applyProductionFilters(q, { periodType, from, to, fromYear, toYear, lan
 		if (fromYear) q.whereRaw(`${yr} >= ?`, [Number(fromYear)]);
 		if (toYear) q.whereRaw(`${yr} <= ?`, [Number(toYear)]);
 	}
-	// Land is filtered either by the combined land_type (monthly) or by land_class +
-	// land_category separately (annual) — whichever the caller sends.
+	// Land is filtered by the combined land_type for every grain. (land_class / land_category
+	// are still accepted for backward compatibility with older saved links.)
 	if (Array.isArray(landTypes) && landTypes.length) q.whereIn('l.land_type', landTypes);
 	if (Array.isArray(landClasses) && landClasses.length) q.whereIn('l.land_class', landClasses);
 	if (Array.isArray(landCategories) && landCategories.length) q.whereIn('l.land_category', landCategories);
