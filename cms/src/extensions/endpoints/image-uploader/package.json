@@ -24,7 +24,7 @@
 		"build-local": "directus-extension build; cp ./dist/index.js ../../../../extensions/directus-extension-image-uploader/dist; docker restart directus"
 	},
 	"devDependencies": {
-		"@directus/extensions-sdk": "^17.1.4"
+		"@directus/extensions-sdk": "^18.1.1"
 	},
 	"dependencies": {
 		"@directus/sdk": "^21.3.0",
