@@ -44,17 +44,18 @@ describe('transformFundType', () => {
     };
     const result = transformFundType(record);
     expect(result.fund_type).toBe('State - OCS Gulf');
-    // nrrd's transform_fund_type leaves disbursement_type unchanged (only fund_type is suffixed).
-    expect(result.disbursement_type).toBe('GoMESA');
+    // Mirrors nrrd: the 'GoMESA' feed spelling is normalized to the canonical 'OCS Gulf'.
+    expect(result.disbursement_type).toBe('OCS Gulf');
   });
 
-  it('should append " - OCS Gulf" suffix when disbursement_type is "OCS Gulf"', () => {
+  it('should append " - OCS Gulf" suffix and keep disbursement_type when it is "OCS Gulf"', () => {
     const record = {
       fund_type: 'State',
       disbursement_type: 'OCS Gulf'
     };
     const result = transformFundType(record);
     expect(result.fund_type).toBe('State - OCS Gulf');
+    // 'OCS Gulf' is the canonical value, so it stays 'OCS Gulf'.
     expect(result.disbursement_type).toBe('OCS Gulf');
   });
 
