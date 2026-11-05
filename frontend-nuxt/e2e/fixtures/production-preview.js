@@ -107,6 +107,20 @@ export function productionPivot(period, breakout) {
   const periodType = period === 'calendar-year' ? 'Calendar Year' : 'Fiscal Year'
   const years = [2022, 2023, 2024]
 
+  if (breakout === 'land_type') {
+    const bgroup = (key) => ({
+      key,
+      total: 90,
+      recordCount: 6,
+      byYear: { 2022: 30, 2023: 30, 2024: 30 },
+      rows: [
+        { key: 'Federal onshore', byYear: { 2022: 20, 2023: 20, 2024: 20 } },
+        { key: 'Federal offshore', byYear: { 2022: 10, 2023: 10, 2024: 10 } },
+      ],
+    })
+    return { groupBy: 'product', periodType, breakout: 'land_type', years, groups: [bgroup('Gas (mcf)'), bgroup('Oil (bbl)')], grandTotal: 180, recordCount: 12 }
+  }
+
   if (breakout === 'state') {
     const bgroup = (key) => ({
       key,

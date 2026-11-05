@@ -7,11 +7,10 @@ Feature: Production dataset preview
     And the production pivot has year column "2023"
     And the production pivot is a flat table
 
-  Scenario: The annual filters are Period, Land class, Land category, Region and Commodity
+  Scenario: The annual filters are Period, Land type, Region and Commodity
     Given I navigate to the yearly production dataset page
     Then the production filter "Period" is present
-    And the production filter "Land class" is present
-    And the production filter "Land category" is present
+    And the production filter "Land type" is present
     And the production filter "State/Offshore Region" is present
     And the production filter "Product" is present
 
@@ -20,6 +19,13 @@ Feature: Production dataset preview
     Then the production chart title contains "fiscal year"
     When I set the production period to "Calendar year"
     Then the production chart title contains "calendar year"
+
+  Scenario: Breaking out by Land Type groups the table with a Land Type column
+    Given I navigate to the yearly production dataset page
+    When I set the production breakout to "Land Type"
+    Then the production pivot has group band "Gas (mcf)"
+    And the production pivot has column header "Land Type"
+    And the production pivot has detail row "Federal onshore"
 
   Scenario: Breaking out by State groups the table with a State column
     Given I navigate to the yearly production dataset page
