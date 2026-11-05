@@ -6,13 +6,13 @@
 
     Monthly — From/To month, Land type, Product; grouped table (Product -> month detail
               rows) with collapsible groups; chart = small multiples per product.
-    Yearly  — a Period filter (Fiscal year / Calendar year) + From/To year, Land class,
-              Land category, State/Offshore Region, Product; flat table (Product | one
-              column per year); chart = small multiples of the TOP N products by breadth of
-              reporting. An export_filter of Fiscal Year or Calendar Year just sets the
-              Period default; the user switches between them in-page.
+    Yearly  — a Period filter (Fiscal year / Calendar year) + From/To year, Land type,
+              State/Offshore Region, Product; flat table (Product | one column per year);
+              chart = small multiples of the TOP N products by breadth of reporting. An
+              export_filter of Fiscal Year or Calendar Year just sets the Period default;
+              the user switches between them in-page.
 
-  The yearly grain also offers an optional "Break out by" (Land Category / State / County):
+  The yearly grain also offers an optional "Break out by" (Land Type / State / County):
   when set, the flat table becomes grouped — Product turns into a collapsible band with one
   sub-row per breakout value (plus a product subtotal), like the monthly month rows.
 
@@ -68,7 +68,7 @@ function volume(v) {
 // --- optional secondary breakout (annual only) --------------------------------
 const BREAKOUT_OPTIONS = [
   { value: '', label: 'None' },
-  { value: 'land_category', label: 'Land Category' },
+  { value: 'land_type', label: 'Land Type' },
   { value: 'state', label: 'State' },
   { value: 'county', label: 'County' },
 ]
@@ -95,17 +95,13 @@ const monthlyYears = computed(() => {
   return [...set].sort((a, b) => a - b)
 })
 const landTypeOptions = computed(() => options.value?.landTypes || [])
-const landClassOptions = computed(() => options.value?.landClasses || [])
-const landCategoryOptions = computed(() => options.value?.landCategories || [])
 const regionOptions = computed(() => options.value?.regions || [])
 const productOptions = computed(() => options.value?.products || [])
 
 // --- filter state (seeded to full range / all-selected once options load) -----
-const filters = reactive({ fromYear: '', toYear: '', landTypes: [], landClasses: [], landCategories: [], regions: [], products: [] })
+const filters = reactive({ fromYear: '', toYear: '', landTypes: [], regions: [], products: [] })
 
 const landAllSelected = computed(() => landTypeOptions.value.length > 0 && filters.landTypes.length === landTypeOptions.value.length)
-const landClassAllSelected = computed(() => landClassOptions.value.length > 0 && filters.landClasses.length === landClassOptions.value.length)
-const landCategoryAllSelected = computed(() => landCategoryOptions.value.length > 0 && filters.landCategories.length === landCategoryOptions.value.length)
 const regionAllSelected = computed(() => regionOptions.value.length > 0 && filters.regions.length === regionOptions.value.length)
 const productAllSelected = computed(() => productOptions.value.length > 0 && filters.products.length === productOptions.value.length)
 
@@ -116,8 +112,6 @@ const summarize = (all, arr, allLabel) => {
   return `${arr.length} selected`
 }
 const landSummary = computed(() => summarize(landAllSelected.value, filters.landTypes, 'All land types'))
-const landClassSummary = computed(() => summarize(landClassAllSelected.value, filters.landClasses, 'All land classes'))
-const landCategorySummary = computed(() => summarize(landCategoryAllSelected.value, filters.landCategories, 'All land categories'))
 const regionSummary = computed(() => summarize(regionAllSelected.value, filters.regions, 'All regions'))
 const productSummary = computed(() => summarize(productAllSelected.value, filters.products, 'All products'))
 
@@ -125,13 +119,11 @@ function seedFilters() {
   if (isMonthly.value) {
     filters.fromYear = monthlyYears.value[0] ?? ''
     filters.toYear = monthlyYears.value[monthlyYears.value.length - 1] ?? ''
-    filters.landTypes = [...landTypeOptions.value]
   } else {
     filters.fromYear = yearOptions.value[0] ?? ''
     filters.toYear = yearOptions.value[yearOptions.value.length - 1] ?? ''
-    filters.landClasses = [...landClassOptions.value]
-    filters.landCategories = [...landCategoryOptions.value]
   }
+  filters.landTypes = [...landTypeOptions.value]
   filters.regions = [...regionOptions.value]
   filters.products = [...productOptions.value]
 }
@@ -152,11 +144,8 @@ function applyQueryToFilters() {
     const sel = optionList.filter((o) => req.includes(o))
     if (sel.length) filters[target] = sel
   }
-  if (isMonthly.value) {
-    applyMulti('landTypes', landTypeOptions.value, 'landTypes')
-  } else {
-    applyMulti('landClasses', landClassOptions.value, 'landClasses')
-    applyMulti('landCategories', landCategoryOptions.value, 'landCategories')
+  applyMulti('landTypes', landTypeOptions.value, 'landTypes')
+  if (!isMonthly.value) {
     applyMulti('regions', regionOptions.value, 'regions')
   }
   applyMulti('products', productOptions.value, 'products')
@@ -172,30 +161,20 @@ watchEffect(() => {
 
 // --- multi-select dropdowns ---------------------------------------------------
 const landOpen = ref(false)
-const landClassOpen = ref(false)
-const landCategoryOpen = ref(false)
 const regionOpen = ref(false)
 const productOpen = ref(false)
 const landRef = ref(null)
-const landClassRef = ref(null)
-const landCategoryRef = ref(null)
 const regionRef = ref(null)
 const productRef = ref(null)
 const toggleIn = (arr, v) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v])
 function toggleLand(v) { filters.landTypes = toggleIn(filters.landTypes, v) }
-function toggleLandClass(v) { filters.landClasses = toggleIn(filters.landClasses, v) }
-function toggleLandCategory(v) { filters.landCategories = toggleIn(filters.landCategories, v) }
 function toggleRegion(v) { filters.regions = toggleIn(filters.regions, v) }
 function toggleProduct(v) { filters.products = toggleIn(filters.products, v) }
 function toggleAllLand() { filters.landTypes = landAllSelected.value ? [] : [...landTypeOptions.value] }
-function toggleAllLandClasses() { filters.landClasses = landClassAllSelected.value ? [] : [...landClassOptions.value] }
-function toggleAllLandCategories() { filters.landCategories = landCategoryAllSelected.value ? [] : [...landCategoryOptions.value] }
 function toggleAllRegions() { filters.regions = regionAllSelected.value ? [] : [...regionOptions.value] }
 function toggleAllProducts() { filters.products = productAllSelected.value ? [] : [...productOptions.value] }
 function handleClickOutside(e) {
   if (landRef.value && !landRef.value.contains(e.target)) landOpen.value = false
-  if (landClassRef.value && !landClassRef.value.contains(e.target)) landClassOpen.value = false
-  if (landCategoryRef.value && !landCategoryRef.value.contains(e.target)) landCategoryOpen.value = false
   if (regionRef.value && !regionRef.value.contains(e.target)) regionOpen.value = false
   if (productRef.value && !productRef.value.contains(e.target)) productOpen.value = false
 }
@@ -255,9 +234,9 @@ function toggleAll() {
 
 // --- filter query -------------------------------------------------------------
 const selectionEmpty = computed(() => {
-  if (!filters.products.length) return true
-  if (isMonthly.value) return !filters.landTypes.length
-  return !filters.landClasses.length || !filters.landCategories.length || !filters.regions.length
+  if (!filters.products.length || !filters.landTypes.length) return true
+  if (isAnnual.value && !filters.regions.length) return true
+  return false
 })
 const filterQuery = computed(() => {
   const query = { period: periodParam.value }
@@ -272,13 +251,8 @@ const filterQuery = computed(() => {
     if (filters.toYear && filters.toYear !== ys[ys.length - 1]) query.toYear = String(filters.toYear)
   }
   if (!selectionEmpty.value) {
-    if (isMonthly.value) {
-      if (filters.landTypes.length < landTypeOptions.value.length) query.landTypes = filters.landTypes.join(',')
-    } else {
-      if (filters.landClasses.length < landClassOptions.value.length) query.landClasses = filters.landClasses.join(',')
-      if (filters.landCategories.length < landCategoryOptions.value.length) query.landCategories = filters.landCategories.join(',')
-      if (filters.regions.length < regionOptions.value.length) query.regions = filters.regions.join(',')
-    }
+    if (filters.landTypes.length < landTypeOptions.value.length) query.landTypes = filters.landTypes.join(',')
+    if (isAnnual.value && filters.regions.length < regionOptions.value.length) query.regions = filters.regions.join(',')
     if (filters.products.length < productOptions.value.length) query.products = filters.products.join(',')
   }
   if (hasBreakout.value) query.breakout = breakout.value
@@ -295,18 +269,13 @@ const urlQuery = computed(() => {
   if (filters.fromYear && filters.fromYear !== ys[0]) q.fromYear = String(filters.fromYear)
   if (filters.toYear && filters.toYear !== ys[ys.length - 1]) q.toYear = String(filters.toYear)
   const emit = (arr, optionList, name) => { if (arr.length > 0 && arr.length < optionList.length) q[name] = arr.join(',') }
-  if (isMonthly.value) {
-    emit(filters.landTypes, landTypeOptions.value, 'landTypes')
-  } else {
-    emit(filters.landClasses, landClassOptions.value, 'landClasses')
-    emit(filters.landCategories, landCategoryOptions.value, 'landCategories')
-    emit(filters.regions, regionOptions.value, 'regions')
-  }
+  emit(filters.landTypes, landTypeOptions.value, 'landTypes')
+  if (isAnnual.value) emit(filters.regions, regionOptions.value, 'regions')
   emit(filters.products, productOptions.value, 'products')
   if (hasBreakout.value) q.breakout = breakout.value
   return q
 })
-useUrlFilterSync(() => urlQuery.value, ready, ['period', 'fromYear', 'toYear', 'landTypes', 'landClasses', 'landCategories', 'regions', 'products', 'breakout'])
+useUrlFilterSync(() => urlQuery.value, ready, ['period', 'fromYear', 'toYear', 'landTypes', 'regions', 'products', 'breakout'])
 
 // --- pivot data ---------------------------------------------------------------
 const { data: pivot, pending } = await useAsyncData(
@@ -517,8 +486,8 @@ if (datasetExport) {
           </div>
         </template>
 
-        <!-- Monthly: single Land type multi-select -->
-        <div v-if="isMonthly" class="field field--wide">
+        <!-- Land type multi-select (both grains) -->
+        <div class="field field--wide">
           <label class="usa-label margin-top-0" for="p-land">Land type</label>
           <div ref="landRef" class="multi-select">
             <button id="p-land" type="button" class="usa-select multi-select__trigger" :aria-expanded="landOpen" @click="landOpen = !landOpen">
@@ -534,42 +503,6 @@ if (datasetExport) {
             </ul>
           </div>
         </div>
-
-        <!-- Annual: Land class + Land category multi-selects -->
-        <template v-else>
-          <div class="field field--wide">
-            <label class="usa-label margin-top-0" for="p-land-class">Land class</label>
-            <div ref="landClassRef" class="multi-select">
-              <button id="p-land-class" type="button" class="usa-select multi-select__trigger" :aria-expanded="landClassOpen" @click="landClassOpen = !landClassOpen">
-                <span :class="{ 'multi-select__placeholder': landClassAllSelected }">{{ landClassSummary }}</span>
-              </button>
-              <ul v-show="landClassOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
-                <li role="option" :aria-selected="landClassAllSelected" class="multi-select__option multi-select__option--all" :class="{ 'multi-select__option--selected': landClassAllSelected }" @click="toggleAllLandClasses">
-                  <input type="checkbox" :checked="landClassAllSelected" tabindex="-1" class="multi-select__checkbox"> Select all
-                </li>
-                <li v-for="v in landClassOptions" :key="v" role="option" :aria-selected="filters.landClasses.includes(v)" class="multi-select__option" :class="{ 'multi-select__option--selected': filters.landClasses.includes(v) }" @click="toggleLandClass(v)">
-                  <input type="checkbox" :checked="filters.landClasses.includes(v)" tabindex="-1" class="multi-select__checkbox"> {{ v }}
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="field field--wide">
-            <label class="usa-label margin-top-0" for="p-land-category">Land category</label>
-            <div ref="landCategoryRef" class="multi-select">
-              <button id="p-land-category" type="button" class="usa-select multi-select__trigger" :aria-expanded="landCategoryOpen" @click="landCategoryOpen = !landCategoryOpen">
-                <span :class="{ 'multi-select__placeholder': landCategoryAllSelected }">{{ landCategorySummary }}</span>
-              </button>
-              <ul v-show="landCategoryOpen" class="multi-select__dropdown" role="listbox" aria-multiselectable="true">
-                <li role="option" :aria-selected="landCategoryAllSelected" class="multi-select__option multi-select__option--all" :class="{ 'multi-select__option--selected': landCategoryAllSelected }" @click="toggleAllLandCategories">
-                  <input type="checkbox" :checked="landCategoryAllSelected" tabindex="-1" class="multi-select__checkbox"> Select all
-                </li>
-                <li v-for="v in landCategoryOptions" :key="v" role="option" :aria-selected="filters.landCategories.includes(v)" class="multi-select__option" :class="{ 'multi-select__option--selected': filters.landCategories.includes(v) }" @click="toggleLandCategory(v)">
-                  <input type="checkbox" :checked="filters.landCategories.includes(v)" tabindex="-1" class="multi-select__checkbox"> {{ v }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </template>
 
         <!-- State / Offshore Region multi-select (annual grains only) -->
         <div v-if="isAnnual" class="field field--wide">
