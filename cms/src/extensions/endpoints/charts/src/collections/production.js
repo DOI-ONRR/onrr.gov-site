@@ -59,6 +59,18 @@ function applyProductionFilters(q, { periodType, from, to, fromYear, toYear, lan
 	}
 }
 
+// Land classes hidden from the PREVIEW only — its table, chart, inline "Download CSV", and the
+// record count (everything productionPivot feeds). The rows stay in the collection and are
+// deliberately NOT excluded from the dataset download files (filtered-selection / full-dataset
+// CSV via productionRecords, or the XLSX workbooks) or the public data API. That's why this lives
+// in productionPivot and never in applyProductionFilters, which the exports also call. Null-safe:
+// rows with no location (land_class NULL) are kept.
+const PREVIEW_EXCLUDED_LAND_CLASSES = ['Mixed Exploratory'];
+function excludePreviewLandClasses(q) {
+	if (!PREVIEW_EXCLUDED_LAND_CLASSES.length) return;
+	q.where((b) => b.whereNotIn('l.land_class', PREVIEW_EXCLUDED_LAND_CLASSES));
+}
+
 export async function productionPivot(database, opts = {}) {
 	const { periodType } = opts;
 	const isMonthly = periodType === 'Monthly';
@@ -80,6 +92,7 @@ export async function productionPivot(database, opts = {}) {
 
 	const aggQ = base().select(...cols);
 	applyProductionFilters(aggQ, opts);
+	excludePreviewLandClasses(aggQ);
 	aggQ.groupByRaw(
 		isMonthly
 			? `"c"."product", ${yr}, EXTRACT(MONTH FROM "p"."period_date")`
@@ -90,6 +103,7 @@ export async function productionPivot(database, opts = {}) {
 
 	const countQ = base().count(`${table}.id as n`);
 	applyProductionFilters(countQ, opts);
+	excludePreviewLandClasses(countQ);
 
 	const [rows, countRow] = await Promise.all([aggQ, countQ.first()]);
 

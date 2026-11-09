@@ -87,6 +87,22 @@ describe('productionPivot', () => {
     expect(called(db, 'whereRaw', (a) => String(a[0]).includes('fiscal_year'))).toBe(true); // year range on fiscal_year
     expect(called(db, 'whereRaw', (a) => String(a[0]).includes('COALESCE'))).toBe(true); // region expr
   });
+
+  it('excludes the preview-hidden land classes (Mixed Exploratory) on both pivot queries', async () => {
+    const db = makeDb([], 0);
+    await productionPivot(db, { periodType: 'Fiscal Year' });
+    // Applied as a grouped where(callback) on the agg query AND the count query (so the preview
+    // record count matches), never via applyProductionFilters (which the CSV exports also use).
+    const fnWheres = db.calls.filter((c) => c[0] === 'where' && typeof c[1] === 'function');
+    expect(fnWheres.length).toBeGreaterThanOrEqual(2); // aggQ + countQ
+    // The callback excludes the hidden land classes from the pivot.
+    const sub = [];
+    const subBuilder = {
+      whereNotIn: (...a) => { sub.push(['whereNotIn', ...a]); return subBuilder; },
+    };
+    fnWheres[0][1](subBuilder);
+    expect(sub.some((c) => c[0] === 'whereNotIn' && c[1] === 'l.land_class' && c[2].includes('Mixed Exploratory'))).toBe(true);
+  });
 });
 
 describe('revenuePivot', () => {
