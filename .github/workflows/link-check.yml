@@ -12,7 +12,9 @@ permissions:
 
 jobs:
   crawl-and-check:
-    runs-on: ubuntu-latest
+    # Pinned to a Playwright-supported OS: ubuntu-latest moved to 26.04, which Playwright
+    # can't install browsers on. (Matches the E2E job pin in frontend-nuxt.yml.)
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository

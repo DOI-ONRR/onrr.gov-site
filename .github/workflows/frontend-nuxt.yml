@@ -27,7 +27,10 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'push' ||
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest moved to 26.04, which Playwright 1.59 can't install browsers on
+    # ("does not support chromium on ubuntu26.04-x64"). We can't bump Playwright past the
+    # <1.60 playwright-bdd cap, so run E2E on a Playwright-supported OS instead.
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
