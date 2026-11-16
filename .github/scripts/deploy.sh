@@ -51,13 +51,12 @@ else
     manifest="preview.manifest.yml"
 fi
 
-wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-
-echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-
-sudo apt-get update
-
-sudo apt-get install cf8-cli
+# Install the Cloud Foundry CLI straight from the release tarball. We used to add the CF
+# apt repo + signing key, but CF rotated the repo key (apt failed with NO_PUBKEY
+# 172B5989FCD21EF8, so cf8-cli wouldn't install). The binary download has no apt/GPG
+# dependency and won't break on a key rotation.
+curl -fsSL "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v8&source=github" | sudo tar -zx -C /usr/local/bin
+cf version
 
 cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s "$space"
 

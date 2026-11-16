@@ -100,10 +100,11 @@ jobs:
       - name: Deploy onrr-frontend to the dev space
         working-directory: frontend-nuxt
         run: |
-          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          sudo apt-get update
-          sudo apt-get install cf8-cli
+          # Install the CF CLI from the release tarball. CF rotated the apt repo signing key,
+          # so the old apt-key/apt-get install broke with NO_PUBKEY; the binary download has no
+          # apt/GPG dependency.
+          curl -fsSL "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v8&source=github" | sudo tar -zx -C /usr/local/bin
+          cf version
           cf login -u "$CF_USERNAME" -p "$CF_PASSWORD" -a api.fr.cloud.gov -o "$CF_ORG" -s dev
           cf push --strategy=rolling -f manifest.yml
           # Reclaim build-sized memory: the manifest stages at 2G because the Nuxt/Vite
