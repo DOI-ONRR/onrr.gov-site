@@ -90,7 +90,12 @@ jobs:
   # form one stack. Remove this job once redesign/main is merged into dev.
   deploy-nuxt:
     needs: e2e-tests
-    if: github.event_name == 'push' && github.ref_name == 'redesign/main'
+    # Deploy on a push to redesign/main, or on a manual run of this workflow against it
+    # (workflow_dispatch) — the push trigger only fires on frontend-nuxt/** changes, so a
+    # manual dispatch is the way to deploy after a CI-only change.
+    if: >-
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      && github.ref_name == 'redesign/main'
     runs-on: ubuntu-latest
     # CF credentials live in the non-prod environment (prod is main-only).
     environment: non-prod
