@@ -73,7 +73,7 @@ export const DATASETS = {
 			const out = [];
 			for (const rec of data) {
 				const { year, month } = ym(rec.date);
-				for (const z of jarr(rec.index_zones)) out.push({ indexZone: `${z.index_zone} (${z.abbreviation})`, year, month, price: z.price });
+				for (const z of jarr(rec.index_zones)) out.push({ indexZone: z.index_zone, abbreviation: z.abbreviation, year, month, price: z.price });
 			}
 			return out;
 		},
