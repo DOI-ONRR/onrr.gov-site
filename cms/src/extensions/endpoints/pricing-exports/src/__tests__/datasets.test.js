@@ -21,6 +21,12 @@ describe('pricing-exports datasets', () => {
 		]);
 	});
 
+	it('derives year/month from a JS Date (knex returns pg `date` as a Date, not a string)', () => {
+		// Local-midnight Date, as node-postgres builds a `date` column.
+		const rows = DATASETS.nymex.flatten([{ date: new Date(2024, 10, 1), average: 2.5, roll: 0.1 }]);
+		expect(rows).toEqual([{ year: 2024, month: 'November', average: 2.5, roll: 0.1 }]);
+	});
+
 	it('builds a readable workbook buffer with the expected header + first data row', () => {
 		const cfg = DATASETS.nymex;
 		const buf = buildWorkbook(cfg.flatten([{ date: '2024-01-01', average: 2.5, roll: 0.1 }]), cfg.columns, cfg.sheet);

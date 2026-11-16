@@ -6,18 +6,38 @@
 // `index_zones` and `ibmp_line_items` are JSON-array columns; knex returns them already parsed,
 // but jarr() also tolerates a JSON string just in case.
 
-// Split a Directus date (YYYY-MM-DD…) into the {year, long-month} the pricing tables display.
-// Parsed from the string in UTC so the month/year never shift with the server timezone.
-function ym(dateStr) {
-	const [y, m] = String(dateStr).slice(0, 10).split('-').map(Number);
-	const month = new Date(Date.UTC(y || 1970, (m || 1) - 1, 1)).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
-	return { year: y, month };
+// Split a Directus date into the {year, long-month} the pricing tables display. knex returns a
+// pg `date` column as a JS Date (local midnight), while jsonb/string values arrive as
+// 'YYYY-MM-DD'; handle both. A Date uses its local calendar fields (pg builds it that way); a
+// string is parsed by its characters — neither path shifts the month/year by timezone.
+function ym(value) {
+	let year;
+	let monthIndex; // 0-11
+	if (value instanceof Date) {
+		year = value.getFullYear();
+		monthIndex = value.getMonth();
+	} else {
+		const [y, m] = String(value).slice(0, 10).split('-').map(Number);
+		year = y;
+		monthIndex = (m || 1) - 1;
+	}
+	const month = new Date(Date.UTC(year || 1970, monthIndex, 1)).toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
+	return { year, month };
 }
 
-// Format a due date as MM/DD/YYYY (blank when empty/invalid).
+// Format a due date as MM/DD/YYYY (blank when empty/invalid). Handles a Date or a YYYY-MM-DD string.
 function dueDate(value) {
 	if (!value) return '';
-	const [y, m, d] = String(value).slice(0, 10).split('-').map(Number);
+	let y;
+	let m;
+	let d;
+	if (value instanceof Date) {
+		y = value.getFullYear();
+		m = value.getMonth() + 1;
+		d = value.getDate();
+	} else {
+		[y, m, d] = String(value).slice(0, 10).split('-').map(Number);
+	}
 	if (!y || !m || !d) return '';
 	return `${String(m).padStart(2, '0')}/${String(d).padStart(2, '0')}/${y}`;
 }
