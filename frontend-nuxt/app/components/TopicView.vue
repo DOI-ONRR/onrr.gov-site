@@ -253,9 +253,11 @@ function goToSection(id) {
 
 // "On this page" left rail (adopted from the learn-page mockup): sticky, with a gray
 // left rail whose active-section segment turns blue via each link's own left border.
+// Offset `top` by the pinned header bar (--onrr-sticky-offset, published by the default
+// layout) plus a 1rem gap, so the rail clears the sticky nav instead of tucking under it.
 .onpage {
   position: sticky;
-  top: 1rem;
+  top: calc(var(--onrr-sticky-offset, 3.6rem) + 1rem);
   font-size: 0.9rem;
 }
 

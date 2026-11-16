@@ -240,10 +240,12 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
   margin-bottom: 3rem;
 }
 
-// On this page rail (sticky, left border, active marker).
+// On this page rail (sticky, left border, active marker). Offset `top` by the pinned
+// header bar (--onrr-sticky-offset, published by the default layout) plus a 1rem gap so
+// the rail clears the sticky nav instead of tucking under it.
 .onpage {
   position: sticky;
-  top: 1rem;
+  top: calc(var(--onrr-sticky-offset, 3.6rem) + 1rem);
   font-size: 0.9rem;
 }
 .onpage-title {

@@ -3,6 +3,23 @@
 /* Cap the reading measure so the wider container doesn't stretch prose. */
 .usa-intro { max-width: 62ch; }
 
+/* --- Sticky nav bar: the nav row stays pinned to the top on scroll while the masthead
+   scrolls away. The whole extended header is sticky, offset UP by the masthead's measured
+   height (--onrr-masthead-height, set on the header by the default layout; 8rem fallback
+   before hydration), so the masthead slides off-screen and the nav row lands at top:0.
+   The desktop megamenu is absolutely positioned against .usa-nav (inside the header), so it
+   stays anchored to the pinned bar. z-index 500 keeps the header above page content and the
+   mobile nav .usa-overlay (z-index 400). Desktop only; the <64em mobile rule below pins the
+   whole header at top:0 instead (there is no standalone nav bar — the menu is a hamburger in
+   the masthead, which must stay reachable). --- */
+@media (min-width: 64em) {
+  .usa-header--extended {
+    position: sticky;
+    top: calc(-1 * var(--onrr-masthead-height, 8rem));
+    z-index: 500;
+  }
+}
+
 @media (min-width: 64em) {
   /* Center the nav row and align it with the rest of the page. `.navrow` replaced
      USWDS's `.usa-nav-container`, which had supplied the site max-width + centered
@@ -40,8 +57,10 @@
      the 8 sections + search sit on one line on wide screens. --- */
 @media (min-width: 64em) {
   /* Bottom rule under the nav row. USWDS's extended header only ships a border-top
-     (the masthead/nav divider); this mirrors it on the bottom edge. */
-  .usa-header--extended .usa-nav { border-bottom: 1px solid #dfe1e2; }
+     (the masthead/nav divider); this mirrors it on the bottom edge. The white background
+     makes the nav row opaque so page content can't bleed through it once it's the sticky
+     pinned bar (the header and .usa-nav are otherwise transparent). */
+  .usa-header--extended .usa-nav { border-bottom: 1px solid #dfe1e2; background-color: #fff; }
 
   .usa-header--extended .usa-nav__primary .usa-nav__link {
     display: inline-flex; align-items: center; padding-left: 1rem; padding-right: 1rem;
@@ -98,8 +117,10 @@
   /* Drawer opens BELOW the header (IRS behavior) so SEARCH and CLOSE stay visible.
      z-index lifts the header (and the nav + masthead controls inside it) above the
      .usa-overlay (z-index 400), so the overlay dims only the content behind the menu
-     rather than covering the menu itself. */
-  .usa-header--extended { position: relative; z-index: 500; }
+     rather than covering the menu itself. sticky top:0 pins the whole header (with the
+     hamburger) on mobile; sticky still establishes the containing block the drawer's
+     absolute `top:100%` anchors to, exactly as the former `position: relative` did. */
+  .usa-header--extended { position: sticky; top: 0; z-index: 500; }
   .usa-nav { position: absolute; top: 100%; bottom: auto; left: 0; right: auto; width: 100%; max-width: none;
     height: auto; max-height: 75vh; overflow-y: auto; z-index: 400; padding: 0 1rem; border-left: 0;
     box-shadow: 0 8px 16px rgba(0,0,0,0.15); animation: none; }
