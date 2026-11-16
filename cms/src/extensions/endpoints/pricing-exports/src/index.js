@@ -33,7 +33,7 @@ export default (router, context) => {
 				.select(cfg.select)
 				.where('status', 'published')
 				.orderBy(cfg.order[0], cfg.order[1]);
-			const buf = buildWorkbook(cfg.flatten(data), cfg.columns, cfg.sheet);
+			const buf = await buildWorkbook(cfg.flatten(data), cfg.columns, cfg.sheet);
 			res.setHeader('Content-Type', XLSX_TYPE);
 			res.setHeader('Content-Disposition', `attachment; filename="${cfg.filename}"`);
 			res.setHeader('Cache-Control', 'public, max-age=300');

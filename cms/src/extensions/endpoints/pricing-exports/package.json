@@ -26,10 +26,11 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
-		"xlsx": "^0.18.5"
+		"exceljs": "^4.4.0"
 	},
 	"devDependencies": {
 		"@directus/extensions-sdk": "^18.0.5",
-		"vitest": "^2.1.9"
+		"vitest": "^2.1.9",
+		"xlsx": "^0.18.5"
 	}
 }

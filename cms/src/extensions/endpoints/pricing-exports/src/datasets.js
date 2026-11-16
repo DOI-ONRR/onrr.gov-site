@@ -44,6 +44,11 @@ function dueDate(value) {
 
 const jarr = (v) => (Array.isArray(v) ? v : typeof v === 'string' && v ? JSON.parse(v) : []);
 
+// Excel number formats. Prices render as USD to 2 decimals to match the on-screen tables
+// (toLocaleString currency); years are plain integers (no thousands comma on "2024").
+const USD = '$#,##0.00';
+const YEAR = '0';
+
 export const DATASETS = {
 	nymex: {
 		collection: 'NYMEX',
@@ -51,10 +56,10 @@ export const DATASETS = {
 		order: ['date', 'asc'],
 		flatten: (data) => data.map((r) => ({ ...ym(r.date), average: r.average, roll: r.roll })),
 		columns: [
-			{ key: 'year', label: 'Year' },
+			{ key: 'year', label: 'Year', numFmt: YEAR },
 			{ key: 'month', label: 'Month' },
-			{ key: 'average', label: 'Calendar Month Avg.' },
-			{ key: 'roll', label: 'NYMEX Roll' },
+			{ key: 'average', label: 'Calendar Month Avg.', numFmt: USD },
+			{ key: 'roll', label: 'NYMEX Roll', numFmt: USD },
 		],
 		filename: 'nymex-price-history.xlsx',
 		sheet: 'NYMEX',
@@ -73,9 +78,9 @@ export const DATASETS = {
 		},
 		columns: [
 			{ key: 'indexZone', label: 'Index Zone' },
-			{ key: 'year', label: 'Year' },
+			{ key: 'year', label: 'Year', numFmt: YEAR },
 			{ key: 'month', label: 'Month' },
-			{ key: 'price', label: 'Price' },
+			{ key: 'price', label: 'Price', numFmt: USD },
 		],
 		filename: 'indian-gas-index-zone-prices.xlsx',
 		sheet: 'Index Zone Prices',
@@ -94,9 +99,9 @@ export const DATASETS = {
 		},
 		columns: [
 			{ key: 'designatedArea', label: 'Designated Area' },
-			{ key: 'year', label: 'Year' },
+			{ key: 'year', label: 'Year', numFmt: YEAR },
 			{ key: 'month', label: 'Month' },
-			{ key: 'price', label: 'Price' },
+			{ key: 'price', label: 'Price', numFmt: USD },
 			{ key: 'dueDate', label: 'Due Date', format: (v) => dueDate(v) },
 		],
 		filename: 'indian-gas-major-portion-prices.xlsx',
@@ -126,14 +131,14 @@ export const DATASETS = {
 		},
 		columns: [
 			{ key: 'designatedArea', label: 'Designated Area' },
-			{ key: 'year', label: 'Year' },
+			{ key: 'year', label: 'Year', numFmt: YEAR },
 			{ key: 'month', label: 'Month' },
-			{ key: 'condensate02', label: 'Condensate (02)' },
-			{ key: 'sweet61', label: 'Sweet (61)' },
-			{ key: 'sour62', label: 'Sour (62)' },
-			{ key: 'asphaltic63', label: 'Asphaltic (63)' },
-			{ key: 'blackWax64', label: 'Black Wax (64)' },
-			{ key: 'yellowWax65', label: 'Yellow Wax (65)' },
+			{ key: 'condensate02', label: 'Condensate (02)', numFmt: USD },
+			{ key: 'sweet61', label: 'Sweet (61)', numFmt: USD },
+			{ key: 'sour62', label: 'Sour (62)', numFmt: USD },
+			{ key: 'asphaltic63', label: 'Asphaltic (63)', numFmt: USD },
+			{ key: 'blackWax64', label: 'Black Wax (64)', numFmt: USD },
+			{ key: 'yellowWax65', label: 'Yellow Wax (65)', numFmt: USD },
 		],
 		filename: 'indian-oil-ibmp-prices.xlsx',
 		sheet: 'IBMP Prices',
