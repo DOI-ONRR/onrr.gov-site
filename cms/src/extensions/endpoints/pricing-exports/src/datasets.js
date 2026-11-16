@@ -47,6 +47,7 @@ const jarr = (v) => (Array.isArray(v) ? v : typeof v === 'string' && v ? JSON.pa
 // Excel number formats. Prices render as USD to 2 decimals to match the on-screen tables
 // (toLocaleString currency); years are plain integers (no thousands comma on "2024").
 const USD = '$#,##0.00';
+const USDP = '#,##0.00';
 const YEAR = '0';
 
 export const DATASETS = {
@@ -77,9 +78,10 @@ export const DATASETS = {
 			return out;
 		},
 		columns: [
-			{ key: 'indexZone', label: 'Index Zone' },
 			{ key: 'year', label: 'Year', numFmt: YEAR },
 			{ key: 'month', label: 'Month' },
+			{ key: 'abbreviation', label: 'Abbreviation' },
+			{ key: 'indexZone', label: 'Index Zone' },
 			{ key: 'price', label: 'Price', numFmt: USD },
 		],
 		filename: 'indian-gas-index-zone-prices.xlsx',
@@ -130,15 +132,15 @@ export const DATASETS = {
 			return out;
 		},
 		columns: [
-			{ key: 'designatedArea', label: 'Designated Area' },
 			{ key: 'year', label: 'Year', numFmt: YEAR },
 			{ key: 'month', label: 'Month' },
-			{ key: 'condensate02', label: 'Condensate (02)', numFmt: USD },
-			{ key: 'sweet61', label: 'Sweet (61)', numFmt: USD },
-			{ key: 'sour62', label: 'Sour (62)', numFmt: USD },
-			{ key: 'asphaltic63', label: 'Asphaltic (63)', numFmt: USD },
-			{ key: 'blackWax64', label: 'Black Wax (64)', numFmt: USD },
-			{ key: 'yellowWax65', label: 'Yellow Wax (65)', numFmt: USD },
+			{ key: 'designatedArea', label: 'Row Labels' },
+			{ key: 'condensate02', label: '02', numFmt: USDP },
+			{ key: 'sweet61', label: '61', numFmt: USDP },
+			{ key: 'sour62', label: '62', numFmt: USDP },
+			{ key: 'asphaltic63', label: '63', numFmt: USDP },
+			{ key: 'blackWax64', label: '64', numFmt: USDP },
+			{ key: 'yellowWax65', label: '65', numFmt: USDP },
 		],
 		filename: 'indian-oil-ibmp-prices.xlsx',
 		sheet: 'IBMP Prices',

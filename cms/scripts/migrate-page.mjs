@@ -17,12 +17,17 @@
  * that sets session_replication_role = replica so FK checks and the pages URL/other triggers
  * are bypassed (source values — including url — are preserved verbatim, order-independent).
  *
- * Values are serialized server-side with quote_nullable(col::text): a text literal inserted
- * into a typed column is re-parsed by Postgres, so uuid/jsonb/timestamptz/arrays round-trip.
+ * Each row is serialized server-side with to_jsonb() and re-materialized on import via
+ * jsonb_populate_record(NULL::<table>, ...): types round-trip (uuid/jsonb/timestamptz/arrays),
+ * and the rowtype is resolved against the TARGET, so columns the source has but the target
+ * lacks are dropped and columns only the target has default to NULL (tolerates schema drift).
  *
  * NOT copied (warned instead — handle separately): dataset_metadata, handbook, hero_image
  * (a file row needs its S3 object too), and the parent page (must already exist in target,
  * or the parent FK dangles — it is preserved as-is here).
+ *
+ * Collections/columns absent from the source (e.g. an instance without hub_chart or
+ * dataset_metadata) are detected and skipped with a warning rather than aborting the run.
  *
  * Usage:
  *   SOURCE_DSN='postgres://user:pass@host:5432/db' PAGE_ID='<uuid>' \
@@ -61,14 +66,17 @@ const collected = new Map();   // table -> Set(id)
 const visited = new Set();     // "collection:id"
 const add = (t, id) => { (collected.get(t) ?? collected.set(t, new Set()).get(t)).add(id); };
 
+const existingTables = new Set();        // public tables present in the source DB (populated in buildJunctionMap)
+const hasTable = (t) => existingTables.has(t);
+
 async function buildJunctionMap() {
   const { rows } = await client.query(`SELECT many_collection, many_field, one_collection, one_allowed_collections FROM directus_relations`);
-  const existing = new Set((await client.query(
-    `SELECT table_name FROM information_schema.tables WHERE table_schema='public'`)).rows.map((r) => r.table_name));
+  for (const r of (await client.query(
+    `SELECT table_name FROM information_schema.tables WHERE table_schema='public'`)).rows) existingTables.add(r.table_name);
   // M2A junction = a table with a many_field='item' row (carries allowed collections).
   const junctions = [];
   for (const r of rows.filter((x) => x.many_field === 'item')) {
-    if (!existing.has(r.many_collection)) { log(`warn: junction ${r.many_collection} in directus_relations but table missing; skipping`); continue; }
+    if (!hasTable(r.many_collection)) { log(`warn: junction ${r.many_collection} in directus_relations but table missing; skipping`); continue; }
     const parent = rows.find((x) => x.many_collection === r.many_collection && x.many_field !== 'item');
     if (!parent) { log(`warn: junction ${r.many_collection} has no parent relation; skipping`); continue; }
     junctions.push({ table: r.many_collection, parentCol: parent.many_field, parentCollection: parent.one_collection });
@@ -94,9 +102,18 @@ async function walk(byParent) {
     add(coll, id);
 
     if (coll === 'pages') {
-      const { rows } = await client.query(`SELECT hub_chart, dataset_metadata, handbook, hero_image, parent FROM pages WHERE id=$1`, [id]);
-      const p = rows[0] || {};
-      if (p.hub_chart) queue.push(['chart_cards', p.hub_chart]);
+      // Select only columns that exist — an instance may lack hub_chart, dataset_metadata,
+      // etc. if those fields/collections were never created. Absent columns read as undefined,
+      // so the guards below naturally skip them.
+      const pageCols = new Set(await tableColumns('pages'));
+      const wanted = ['hub_chart', 'dataset_metadata', 'handbook', 'hero_image', 'parent'].filter((c) => pageCols.has(c));
+      const p = wanted.length
+        ? (await client.query(`SELECT ${wanted.map((c) => `"${c}"`).join(', ')} FROM pages WHERE id=$1`, [id])).rows[0] || {}
+        : {};
+      if (p.hub_chart) {
+        if (hasTable('chart_cards')) queue.push(['chart_cards', p.hub_chart]);
+        else log(`warn: page references hub_chart=${p.hub_chart} but chart_cards table is missing; skipping.`);
+      }
       for (const [f, note] of [['dataset_metadata', 'dataset_metadata (+ its data_dictionary/files/charts)'], ['handbook', 'handbook'], ['hero_image', 'hero_image file (needs its S3 object too)']])
         if (p[f]) log(`note: page references ${note} = ${p[f]} — NOT copied; migrate separately if needed.`);
       if (p.parent) log(`note: parent = ${p.parent} — preserved as-is; ensure it exists in the target (FK).`);
@@ -104,9 +121,16 @@ async function walk(byParent) {
 
     for (const j of byParent[coll] ?? []) {
       const { rows } = await client.query(`SELECT id, item, collection FROM "${j.table}" WHERE "${j.parentCol}"=$1`, [id]);
-      for (const r of rows) { add(j.table, r.id); if (r.item && r.collection) queue.push([r.collection, r.item]); }
+      for (const r of rows) {
+        add(j.table, r.id);
+        if (r.item && r.collection) {
+          if (hasTable(r.collection)) queue.push([r.collection, r.item]);
+          else log(`warn: ${j.table} row ${r.id} references missing collection ${r.collection}; skipping.`);
+        }
+      }
     }
     for (const o of FOLLOW_O2M[coll] ?? []) {
+      if (!hasTable(o.table)) { log(`warn: ${coll} O2M child table ${o.table} is missing; skipping.`); continue; }
       const { rows } = await client.query(`SELECT id FROM "${o.table}" WHERE "${o.fk}"=$1`, [id]);
       for (const r of rows) add(o.table, r.id);
     }
@@ -124,10 +148,12 @@ async function emit(junctionTables) {
   for (const table of tables) {
     const ids = [...collected.get(table)];
     if (!ids.length) continue;
-    const cols = await tableColumns(table);
-    const colList = cols.map((c) => `"${c}"`).join(', ');
-    const valExpr = cols.map((c) => `quote_nullable(("${c}")::text)`).join(` || ',' || `);
-    const q = `SELECT 'INSERT INTO "${table}" (${colList}) VALUES (' || ${valExpr} || ') ON CONFLICT (id) DO NOTHING;' AS stmt FROM "${table}" WHERE id = ANY($1::uuid[]) ORDER BY id`;
+    if (!hasTable(table)) { out(`-- ${table} skipped (${ids.length}) — table missing in source`); continue; }
+    // Serialize each row to jsonb and re-materialize it on import via
+    // jsonb_populate_record(NULL::<table>, ...). The rowtype is resolved against the TARGET,
+    // so columns the source has but the target lacks are dropped, and columns only the target
+    // has default to NULL — the import tolerates column-level schema drift between instances.
+    const q = `SELECT 'INSERT INTO "${table}" SELECT * FROM jsonb_populate_record(NULL::"${table}", ' || quote_literal(to_jsonb(t)::text) || '::jsonb) ON CONFLICT (id) DO NOTHING;' AS stmt FROM "${table}" t WHERE id = ANY($1::uuid[]) ORDER BY id`;
     const { rows } = await client.query(q, [ids]);
     out(`-- ${table} (${rows.length})`);
     for (const r of rows) out(r.stmt);
