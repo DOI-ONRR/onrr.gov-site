@@ -67,7 +67,9 @@ const { resolveImages } = useCmsContent()
     margin: 0 0 0.4rem;
   }
 
-  :deep(a) { color: $onrr-blue; }
+  // Exclude .usa-button so an <a class="usa-button"> keeps its own button text color
+  // (white / variant color) instead of being repainted as a link.
+  :deep(a:not(.usa-button)) { color: $onrr-blue; }
 
   :deep(p),
   :deep(li) { font-size: 0.93rem; color: #3d4551; }

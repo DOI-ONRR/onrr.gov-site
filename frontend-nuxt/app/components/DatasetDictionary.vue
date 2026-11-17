@@ -120,7 +120,8 @@ const slug = (s) =>
   :deep(ul), :deep(ol) { margin: 0.25rem 0 0.5rem; padding-left: 1.25rem; }
   :deep(ul:last-child), :deep(ol:last-child) { margin-bottom: 0; }
   :deep(li) { margin-bottom: 0.15rem; }
-  :deep(a) { color: $onrr-violet; }
+  // Exclude .usa-button so a button-styled link keeps its button text color.
+  :deep(a:not(.usa-button)) { color: $onrr-violet; }
 }
 
 // Sub-value rows: indented term, muted, lighter weight.

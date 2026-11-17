@@ -331,8 +331,10 @@ function goToSection(id) {
     margin-bottom: 0.4rem;
   }
 
-  // Ensure links read as links even if the editor didn't add usa-link.
-  :deep(a) {
+  // Ensure links read as links even if the editor didn't add usa-link. Exclude
+  // .usa-button so a button-styled link keeps its button appearance (no link
+  // color/underline).
+  :deep(a:not(.usa-button)) {
     color: $onrr-violet;
     text-decoration: underline;
   }
