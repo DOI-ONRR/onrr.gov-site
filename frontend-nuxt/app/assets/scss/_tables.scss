@@ -4,7 +4,16 @@
 @use "uswds-theme" as *;
 @use "onrr-colors" as *;
 
-.usa-table {
+// `.usa-prose .usa-table` is listed alongside the bare class so this look also wins
+// inside CMS rich-text (v-html'd into `.usa-prose`). There, USWDS's prose package
+// emits `.usa-prose > .usa-table …` (@include usa-table-styles under `.usa-prose > `),
+// which is TWO classes + a type and out-specifies a plain `.usa-table …` rule — so a
+// table that merely carries `class="usa-table"` in the editor reverts to the stock
+// bordered/gray USWDS look. Matching `.usa-prose .usa-table …` ties that specificity,
+// and because this file is @forward'd after usa-prose in styles.scss, the tie resolves
+// to us. (DataTable.vue renders outside `.usa-prose`, so the bare class already wins there.)
+.usa-table,
+.usa-prose .usa-table {
   border: 0;
   background-color: transparent;
 
