@@ -68,7 +68,7 @@ const dataHeading = computed(() => props.page?.data_heading || null)
             <div
               v-for="block in introBlocks"
               :key="block.id"
-              class="usa-prose hub-intro margin-bottom-0"
+              :class="['usa-prose', 'hub-intro', 'margin-bottom-0', { 'usa-prose--plain-headings': block.item?.plain_headings }]"
               v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
             />
           </div>

@@ -1,4 +1,20 @@
+@use "uswds-theme" as *;
+
 .usa-tag { white-space: nowrap; }
+
+/* `plain_headings` opt-out for CMS prose (content_blocks.plain_headings): swap the serif
+   editorial heading font for the standard sans family, keeping the prose size/weight/rhythm.
+   USWDS styles prose headings as `.usa-prose > h2/h3/h4` (child combinator, @include h2…,
+   which sets the serif heading family). This modifier is co-applied with `.usa-prose` on the
+   block's own div; the direct-child selectors mirror USWDS's and out-specify them
+   (0,2,1 vs 0,1,1), and this partial is @forward'd last so source order favors it too. */
+.usa-prose--plain-headings {
+  & > h2,
+  & > h3,
+  & > h4 {
+    font-family: family('sans');
+  }
+}
 
 /* Cap the reading measure so the wider container doesn't stretch prose. */
 .usa-intro { max-width: 62ch; }

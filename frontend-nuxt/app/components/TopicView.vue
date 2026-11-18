@@ -166,7 +166,7 @@ function goToSection(id) {
           >
             <div
               v-if="block.item?.__typename === 'content_blocks'"
-              class="usa-prose"
+              :class="['usa-prose', { 'usa-prose--plain-headings': block.item?.plain_headings }]"
               v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
             />
             <TabsBlock

@@ -5,4 +5,5 @@ fragment contentBlockFields on content_blocks {
   block_content
   block_content_html
   equal_col_height
+  plain_headings
 }
