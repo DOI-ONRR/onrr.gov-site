@@ -54,36 +54,38 @@ const referencesHeading = computed(() => props.page?.journey_references_heading 
       <div class="tablet:grid-col-8">
         <h1 class="margin-top-05 margin-bottom-2">{{ page?.hero_title || page?.title }}</h1>
         <div class="journey-content">
-          <div
-            v-for="block in blocks"
-            :key="block.id"
-            class="margin-bottom-3"
-          >
+          <div class="grid-row grid-gap">
             <div
-              v-if="block.item?.__typename === 'content_blocks'"
-              class="usa-prose"
-              v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
-            />
-            <TabsBlock
-              v-else-if="block.item?.__typename === 'tab_blocks'"
-              :block="block.item"
-            />
-            <ExpansionPanelBlock
-              v-else-if="block.item?.__typename === 'expansion_panels'"
-              :block="block.item"
-            />
-            <CardBlock
-              v-else-if="block.item?.__typename === 'card_blocks'"
-              :block="block.item"
-            />
-            <CollectionBlock
-              v-else-if="block.item?.__typename === 'collection_blocks'"
-              :block="block.item"
-            />
-            <ChartCard
-              v-else-if="block.item?.__typename === 'chart_cards'"
-              :block="block.item"
-            />
+              v-for="block in blocks"
+              :key="block.id"
+              :class="[`grid-col-${block.item?.block_v_col || 12}`, 'margin-bottom-3']"
+            >
+              <div
+                v-if="block.item?.__typename === 'content_blocks'"
+                class="usa-prose"
+                v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
+              />
+              <TabsBlock
+                v-else-if="block.item?.__typename === 'tab_blocks'"
+                :block="block.item"
+              />
+              <ExpansionPanelBlock
+                v-else-if="block.item?.__typename === 'expansion_panels'"
+                :block="block.item"
+              />
+              <CardBlock
+                v-else-if="block.item?.__typename === 'card_blocks'"
+                :block="block.item"
+              />
+              <CollectionBlock
+                v-else-if="block.item?.__typename === 'collection_blocks'"
+                :block="block.item"
+              />
+              <ChartCard
+                v-else-if="block.item?.__typename === 'chart_cards'"
+                :block="block.item"
+              />
+            </div>
           </div>
 
           <!-- The journey: an ordered list of steps rendered as a USWDS process list. -->

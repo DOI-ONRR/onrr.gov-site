@@ -158,48 +158,50 @@ function goToSection(id) {
       <h1 class="margin-top-05 margin-bottom-2">{{ page?.hero_title || page?.title }}</h1>
 
       <div ref="contentEl" class="topic-content" :class="{ 'topic-content--sections': isSections, 'topic-content--full-measure': page?.full_width_prose }">
-        <div
-          v-for="block in blocks"
-          :key="block.id"
-          class="margin-bottom-3"
-        >
+        <div class="grid-row grid-gap">
           <div
-            v-if="block.item?.__typename === 'content_blocks'"
-            class="usa-prose"
-            v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
-          />
-          <TabsBlock
-            v-else-if="block.item?.__typename === 'tab_blocks'"
-            :block="block.item"
-          />
-          <ExpansionPanelBlock
-            v-else-if="block.item?.__typename === 'expansion_panels'"
-            :block="block.item"
-          />
-          <CardBlock
-            v-else-if="block.item?.__typename === 'card_blocks'"
-            :block="block.item"
-          />
-          <CollectionBlock
-            v-else-if="block.item?.__typename === 'collection_blocks'"
-            :block="block.item"
-          />
-          <ChartCard
-            v-else-if="block.item?.__typename === 'chart_cards'"
-            :block="block.item"
-          />
-          <PayGovForm
-            v-else-if="block.item?.__typename === 'pay_gov_forms'"
-            :block="block.item"
-          />
-          <ContactBox
-            v-else-if="block.item?.__typename === 'contact_boxes'"
-            :block="block.item"
-          />
-          <DataTable
-            v-else-if="block.item?.__typename === 'data_tables'"
-            :block="block.item"
-          />
+            v-for="block in blocks"
+            :key="block.id"
+            :class="[`grid-col-${block.item?.block_v_col || 12}`, 'margin-bottom-3']"
+          >
+            <div
+              v-if="block.item?.__typename === 'content_blocks'"
+              class="usa-prose"
+              v-html="sanitizeHtml(resolveImages(block.item.block_content_html))"
+            />
+            <TabsBlock
+              v-else-if="block.item?.__typename === 'tab_blocks'"
+              :block="block.item"
+            />
+            <ExpansionPanelBlock
+              v-else-if="block.item?.__typename === 'expansion_panels'"
+              :block="block.item"
+            />
+            <CardBlock
+              v-else-if="block.item?.__typename === 'card_blocks'"
+              :block="block.item"
+            />
+            <CollectionBlock
+              v-else-if="block.item?.__typename === 'collection_blocks'"
+              :block="block.item"
+            />
+            <ChartCard
+              v-else-if="block.item?.__typename === 'chart_cards'"
+              :block="block.item"
+            />
+            <PayGovForm
+              v-else-if="block.item?.__typename === 'pay_gov_forms'"
+              :block="block.item"
+            />
+            <ContactBox
+              v-else-if="block.item?.__typename === 'contact_boxes'"
+              :block="block.item"
+            />
+            <DataTable
+              v-else-if="block.item?.__typename === 'data_tables'"
+              :block="block.item"
+            />
+          </div>
         </div>
 
         <!-- Related box: component owns the heading + styling; editor supplies the

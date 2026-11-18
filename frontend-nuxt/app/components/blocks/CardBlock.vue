@@ -14,10 +14,11 @@ const { resolveImages } = useCmsContent()
           v-if="block.block_content_html"
           v-html="sanitizeHtml(resolveImages(block.block_content_html))"
         />
-        <template v-if="block.card_content_blocks?.length">
+        <div v-if="block.card_content_blocks?.length" class="grid-row grid-gap">
           <div
             v-for="child in block.card_content_blocks"
             :key="child.id"
+            :class="`grid-col-${child.item?.block_v_col || 12}`"
           >
             <div
               v-if="child.item?.__typename === 'content_blocks'"
@@ -28,7 +29,7 @@ const { resolveImages } = useCmsContent()
               :block="child.item"
             />
           </div>
-        </template>
+        </div>
       </div>
     </div>
   </div>

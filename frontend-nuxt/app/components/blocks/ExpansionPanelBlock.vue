@@ -67,22 +67,25 @@ function toggle(id) {
         class="usa-accordion__content usa-prose"
         :hidden="!expandedPanels.has(panel.id)"
       >
-        <div
-          v-for="child in panel.blocks"
-          :key="child.id"
-        >
+        <div class="grid-row grid-gap">
           <div
-            v-if="child.item?.__typename === 'content_blocks'"
-            v-html="sanitizeHtml(resolveImages(child.item.block_content_html))"
-          />
-          <CardBlock
-            v-else-if="child.item?.__typename === 'card_blocks'"
-            :block="child.item"
-          />
-          <CollectionBlock
-            v-else-if="child.item?.__typename === 'collection_blocks'"
-            :block="child.item"
-          />
+            v-for="child in panel.blocks"
+            :key="child.id"
+            :class="`grid-col-${child.item?.block_v_col || 12}`"
+          >
+            <div
+              v-if="child.item?.__typename === 'content_blocks'"
+              v-html="sanitizeHtml(resolveImages(child.item.block_content_html))"
+            />
+            <CardBlock
+              v-else-if="child.item?.__typename === 'card_blocks'"
+              :block="child.item"
+            />
+            <CollectionBlock
+              v-else-if="child.item?.__typename === 'collection_blocks'"
+              :block="child.item"
+            />
+          </div>
         </div>
       </div>
     </template>
