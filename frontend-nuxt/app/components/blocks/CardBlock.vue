@@ -7,7 +7,7 @@ const { resolveImages } = useCmsContent()
 </script>
 
 <template>
-  <div class="usa-card">
+  <div class="usa-card" :class="{ 'usa-card--natural-height': block.equal_col_height === false }">
     <div class="usa-card__container">
       <div class="usa-card__body">
         <div
@@ -42,6 +42,18 @@ const { resolveImages } = useCmsContent()
 .usa-card {
   height: 100%;
   @include u-margin-bottom(0);
+}
+
+// `equal_col_height` opt-out (card_blocks.equal_col_height). By default a card fills
+// its grid column (height:100%) so it matches the height of siblings in the same
+// grid-row — e.g. a content block beside it. When the editor sets the flag to false,
+// release the card to its natural height instead. null/true keep the equal-height
+// default, so existing content is unchanged. The descendant selector outranks the
+// base `.usa-card__container { height:100% }` (0,2,0 > 0,1,0); the root rule ties the
+// base and wins on source order.
+.usa-card--natural-height,
+.usa-card--natural-height .usa-card__container {
+  height: auto;
 }
 
 .usa-card__container {
