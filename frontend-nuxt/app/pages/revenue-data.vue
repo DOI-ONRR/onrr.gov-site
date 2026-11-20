@@ -59,7 +59,7 @@ useHead({ title: 'Revenue Data' })
         <ChartCardByKey chart-key="disbursements-top-states" />
       </div>
     </div>
-    <p class="margin-top-1">Want the story behind these numbers? <a class="usa-link" href="../learn-page/index.html">How revenue works</a>
+    <p class="margin-top-1">Want the story behind these numbers? <a class="usa-link" href="/how-revenue-works">How revenue works</a>
       explains the path from production to disbursement in plain language.</p>
   </section>
 

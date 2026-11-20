@@ -141,7 +141,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', syncActiveSection))
             <p class="lede margin-top-0">
               ONRR outreach offices in Oklahoma City, Denver, and Farmington attend these events. See
               also the
-              <NuxtLink class="usa-link" to="/indian-resources">Indian Resources</NuxtLink> section.
+              <NuxtLink class="usa-link" to="/indian">Indian Resources</NuxtLink> page.
             </p>
             <template v-if="outreach.length">
               <article v-for="ev in outreach" :key="ev.id" class="event-card">
