@@ -10741,7 +10741,7 @@ fields:
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
     schema:
       name: slug
       table: contact_topics
@@ -10776,7 +10776,7 @@ fields:
       readonly: false
       required: true
       searchable: true
-      sort: 8
+      sort: 9
       special: null
       translations: null
       validation: null
@@ -10816,7 +10816,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 9
+      sort: 10
       special: null
       translations: null
       validation: null
@@ -10827,6 +10827,48 @@ fields:
       table: contact_topics
       data_type: text
       default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: contact_topics
+    field: exclude_from_hub
+    type: boolean
+    meta:
+      collection: contact_topics
+      conditions: null
+      display: null
+      display_options: null
+      field: exclude_from_hub
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Exclude
+      readonly: false
+      required: false
+      searchable: true
+      sort: 8
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: exclude_from_hub
+      table: contact_topics
+      data_type: boolean
+      default_value: false
       max_length: null
       numeric_precision: null
       numeric_scale: null
@@ -31947,7 +31989,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 4
+      sort: 5
       special: null
       translations: null
       validation: null
@@ -32786,7 +32828,7 @@ fields:
       translations: null
       validation: null
       validation_message: null
-      width: full
+      width: half
     schema:
       name: topic_variant
       table: pages
@@ -32834,7 +32876,7 @@ fields:
       readonly: true
       required: false
       searchable: true
-      sort: 2
+      sort: 3
       special: null
       translations: null
       validation: null
@@ -32878,7 +32920,7 @@ fields:
       readonly: false
       required: false
       searchable: true
-      sort: 3
+      sort: 4
       special:
         - cast-boolean
       translations: null
@@ -32887,6 +32929,47 @@ fields:
       width: half
     schema:
       name: full_width_prose
+      table: pages
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: pages
+    field: toc_subheadings
+    type: boolean
+    meta:
+      collection: pages
+      conditions: null
+      display: null
+      display_options: null
+      field: toc_subheadings
+      group: topic
+      hidden: false
+      interface: boolean
+      note: When enabled, h3s will be included in the "On this page" section.
+      options: null
+      readonly: false
+      required: false
+      searchable: true
+      sort: 2
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: toc_subheadings
       table: pages
       data_type: boolean
       default_value: false

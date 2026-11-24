@@ -15,6 +15,7 @@ fragment pageFields on pages {
   topic_variant
   content_columns
   full_width_prose
+  toc_subheadings
   handbook {
     id
     title

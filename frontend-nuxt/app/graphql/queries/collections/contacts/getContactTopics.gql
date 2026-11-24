@@ -1,5 +1,11 @@
 query GetContactTopics {
-  contact_topics(sort: ["sort"]) {
+  contact_topics(
+    # Drive the hub's topic router. `exclude_from_hub` hides a topic from the hub
+    # (e.g. it's surfaced only via a stacked contacts block or a direct link); `_neq: true`
+    # keeps false/unset topics. The per-topic page /about/contact/[slug] stays reachable.
+    sort: ["sort"]
+    filter: { exclude_from_hub: { _neq: true } }
+  ) {
     id
     slug
     title

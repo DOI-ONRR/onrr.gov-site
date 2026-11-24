@@ -59,18 +59,25 @@ function buildSections() {
   }
   const out = []
   let current = null
-  // <h2> sections + top-level accordion headings (now <h3>), in document order.
-  for (const el of root.querySelectorAll('h2, .usa-accordion__heading')) {
+  // <h2> sections + top-level accordion headings (now <h3>), in document order. Pages that
+  // opt in (toc_subheadings → .topic-content--toc-subheadings) also surface plain <h3>s as a
+  // sub-level, for contacts pages whose outline is h2 sections split into h3 subsections.
+  const includeSubheadings = root.classList.contains('topic-content--toc-subheadings')
+  const selector = includeSubheadings ? 'h2, h3, .usa-accordion__heading' : 'h2, .usa-accordion__heading'
+  for (const el of root.querySelectorAll(selector)) {
     const text = el.textContent.trim()
     if (!text) continue
-    const isAccordion = !el.matches('h2')
-    // Only TOP-LEVEL accordions — skip those inside tabs, cards, or nested accordions
-    // (hidden or outside the page's primary outline).
-    if (isAccordion && el.closest('[role="tabpanel"], .usa-card, .usa-accordion__content')) continue
+    // Accordion headings are themselves <h3>, so classify them FIRST to avoid double-counting
+    // them as plain subheadings. Anything left that isn't an <h2> is a plain <h3> sub-level.
+    const isAccordion = el.matches('.usa-accordion__heading')
+    const isSub = !isAccordion && !el.matches('h2')
+    // Only TOP-LEVEL entries — skip accordion/subheadings inside tabs, cards, or nested
+    // accordions (hidden or outside the page's primary outline).
+    if ((isAccordion || isSub) && el.closest('[role="tabpanel"], .usa-card, .usa-accordion__content')) continue
     const id = ensureId(el, text)
-    if (isAccordion) {
+    if (isAccordion || isSub) {
       if (current) current.children.push({ id, text })
-      else out.push({ id, text, children: [] }) // accordion before any h2
+      else out.push({ id, text, children: [] }) // sub-level before any h2
     } else {
       current = { id, text, children: [] }
       out.push(current)
@@ -157,7 +164,7 @@ function goToSection(id) {
       <p v-if="eyebrow && !isSections" class="topic-eyebrow margin-bottom-0">{{ eyebrow }}</p>
       <h1 class="margin-top-05 margin-bottom-2">{{ page?.hero_title || page?.title }}</h1>
 
-      <div ref="contentEl" class="topic-content" :class="{ 'topic-content--sections': isSections, 'topic-content--full-measure': page?.full_width_prose }">
+      <div ref="contentEl" class="topic-content" :class="{ 'topic-content--sections': isSections, 'topic-content--full-measure': page?.full_width_prose, 'topic-content--toc-subheadings': page?.toc_subheadings }">
         <div class="grid-row grid-gap">
           <div
             v-for="block in blocks"
